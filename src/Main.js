@@ -11,18 +11,9 @@ import AdminComponent from "./Resources/AdminComponent";
 import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
 import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
-import ParticleBox from './Resources/ParticleBox';
 import Router from "./Router";
-import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { Twitter } from 'react-feather';
-import { GitHub } from 'react-feather';
-import { Mail } from 'react-feather';
-import { Send } from "react-feather";
-import { Menu } from 'react-feather';
-import { User } from 'react-feather';
-import { Settings } from 'react-feather';
+import { Twitter, GitHub, Mail, Send, Menu, User, Settings } from 'react-feather';
 import {
   BrowserView,
   MobileView,
@@ -65,39 +56,94 @@ class Main extends Component {
       return (
         <div>
           <HashRouter>
-          
+
+
 
             <div className="imageForm">
-              <button
-                className="imageButton"
-                title="Back to Home!"
-                onClick={() => { this.toggleMenu("basic") }}
-              >
-                <img
-                  className="downSizeLogo"
-                  src={require("./Resources/pruf ar long.png")}
-                  alt="Pruf Logo" />
-              </button>
+              <div>
+                {this.state.noAddrMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/PrufReadOnly.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.assetHolderMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/PrufTokenHolder.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.assetHolderUserMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/PrufAssetMinter.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.assetClassHolderMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/PrufACAdmin.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.authorizedUserMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/PrufTokenMinter.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.basicMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/PrufBasic.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+              </div>
             </div>
             <div>
               <div className="BannerForm">
-                <div className="currentMenuOption">
-                  <div>
-                    {this.state.noAddrMenuBool === true && (<div className="currentMenuOptionContent"> Read Only Access</div>)}
-                    {this.state.assetHolderMenuBool === true && (<div className="currentMenuOptionContent">Token Minter Menu</div>)}
-                    {this.state.assetHolderUserMenuBool === true && (<div className="currentMenuOptionContent">Token Holder Menu</div>)}
-                    {this.state.assetClassHolderMenuBool === true && (<div className="currentMenuOptionContent">AC Admin Menu</div>)}
-                    {this.state.authorizedUserMenuBool === true && (<div className="currentMenuOptionContent">Asset Minter Menu</div>)}
-                    {this.state.basicMenuBool === true && (<div className="currentMenuOptionContent">Basic Menu</div>)}
-                  </div>
-                </div>
                 <div className="hamburgerMenu">
                   <a className="hamburgerMenu-content" ><Menu size={35} onClick={() => { this.hamburgerMenu() }} /></a>
                 </div>
                 {this.state.hamburgerMenu !== undefined && (
                   <div className="hamburgerDropdown">
                     <div className="mediaLink">
-                      <a className="mediaLinkContent"><GitHub size={20} onClick={() => { window.open("https://github.com/Prufio/PRUF", "_blank") }} /></a>
+                      <a className="mediaLinkContent"><GitHub size={20} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
                       <a className="mediaLinkContent"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io ", "_blank") }} /></a>
                       <a className="mediaLinkContent"><Twitter size={20} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
                       <a className="mediaLinkContent" ><Send size={20} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
@@ -331,8 +377,8 @@ class Main extends Component {
                       }
 
                       .btn-toggle {
-                        background: #002a40;
-                        color: #fff;
+                        background-color: #002a40;
+                        color: #ffffff;
                         height: 3rem;
                         width: 17.3rem;
                         margin-top: -0.2rem;
@@ -341,16 +387,16 @@ class Main extends Component {
                         font-size: 1.4rem;
                       }
                       btn-toggle:hover {
-                        background: #23b6ff;
-                        color: #fff;
+                        background-color: #23b6ff;
+                        color: #ffffff !important;
                       }
                       .btn-toggle:focus {
-                        background: #23b6ff;
-                        color: #fff;
+                        background-color: #23b6ff;
+                        color: #ffffff !important;
                       }
                       .btn-toggle:active {
-                        background: #23b6ff;
-                        color: #fff;
+                        background-color: #23b6ff;
+                        color: #ffffff !important;
                       }
                    `}
               </style>
@@ -362,7 +408,7 @@ class Main extends Component {
             <NavLink to="/">
             </NavLink>
           </HashRouter>
-        
+
 
         </div >
       );
@@ -575,7 +621,7 @@ class Main extends Component {
       window.ipfsCounter = 0;
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-                        
+
       window.assetTokenInfo = {
         assetClass: undefined,
         idxHash: undefined,
@@ -678,7 +724,7 @@ class Main extends Component {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("https://pruf.io/assets/images/pruf-u-logo-192x255.png")
         }
-        else if(tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length > 0){
+        else if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length > 0) {
           tempDisplayArray.push(Object.values(tempDescArray[j].photo)[0])
         }
         else {

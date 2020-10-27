@@ -162,6 +162,8 @@ div {
 
 .active {
   background-color: #00a8ff;
+  border-radius: 0.5rem;
+  color: #002a40 !important;
 }
 
 .formFont {
@@ -1321,9 +1323,9 @@ div {
 .QRdisplay-footer {
   display: flex;
   height: 3rem;
-  width: 10rem;
+  width: 8rem;
   margin-top: 21rem;
-  margin-left: 89.9%;
+  margin-left: 55.05rem;
   background-color: #ffffff;
   /* background-color: #005480; */
   border-radius: 0rem 0rem 1rem 1rem;
@@ -1518,9 +1520,14 @@ div {
 }
 
 .currentMenuOptionContent {
+  display: flex;
+  width: 30rem;
+  height: fit-content;
+  margin-left: -10rem;
   font-size: 1.8rem;
   font-weight: bold;
   color: white;
+  position: absolute;
 }
 
 .siteInfoBox {

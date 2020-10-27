@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
-import FormLabel from "react-bootstrap/FormLabel";
 import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
 
 class NewRecordNC extends Component {

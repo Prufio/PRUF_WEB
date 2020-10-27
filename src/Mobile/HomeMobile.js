@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import "../index.css";
-import { Twitter } from 'react-feather';
-import { GitHub } from 'react-feather';
-import { Mail } from 'react-feather';
-import { Video } from "react-feather";
+import { Twitter, Video, Mail, GitHub } from 'react-feather';
+
 
 class HomeMobile extends Component {
   constructor(props) {

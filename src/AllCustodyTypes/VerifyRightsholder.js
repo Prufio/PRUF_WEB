@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, ArrowRightCircle, Grid, CornerUpLeft, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
+
 class VerifyRightHolder extends Component {
   constructor(props) {
     super(props);

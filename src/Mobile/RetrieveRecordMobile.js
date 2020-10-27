@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import ListGroup from "react-bootstrap/ListGroup";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
 import QrReader from 'react-qr-reader'
 import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle } from "react-feather";
 

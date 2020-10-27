@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
+import { Home, XSquare, CheckCircle } from 'react-feather'
 
 
 class ModifyDescriptionNC extends Component {
