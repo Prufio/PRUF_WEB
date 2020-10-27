@@ -359,7 +359,7 @@ class AddNoteNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txHash === "" && (
+        {this.state.transaction === false && (
           <div className="assetSelectedResults">
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
