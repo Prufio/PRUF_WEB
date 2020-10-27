@@ -48,16 +48,18 @@ class DiscardAssetNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
+      if (Number(window.sentPacket.status) !== 59) {
+        window.sentPacket = undefined;
+        alert("Asset is not discardable! Owner must set status to discardable.");
+        return window.location.href = "/#/asset-dashboard"
+      }
+
       this.setState({ name: window.sentPacket.name })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
       console.log("Stat", window.sentPacket.status)
-      if (window.sentPacket.status !== "Discardable") {
-        window.sentPacket = undefined;
-        alert("Asset is not discardable! Owner must set status to discardable.");
-        return window.location.href = "/#/asset-dashboard"
-      }
+      
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }

@@ -50,15 +50,7 @@ class DecrementCounterNC extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
 
-      this.setState({ 
-        name: window.sentPacket.name,
-        idxHash: window.sentPacket.idxHash,
-        countDownStart: window.sentPacket.countPair[1],
-        count: window.sentPacket.countPair[0],
-        assetClass: window.sentPacket.assetClass,
-        status: window.sentPacket.status,
-       })
-
+      
       if (Number(window.sentPacket.status) === 53 || Number(window.sentPacket.status) === 54) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentPacket = undefined;
@@ -70,6 +62,16 @@ class DecrementCounterNC extends Component {
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
+
+      this.setState({ 
+        name: window.sentPacket.name,
+        idxHash: window.sentPacket.idxHash,
+        countDownStart: window.sentPacket.countPair[1],
+        count: window.sentPacket.countPair[0],
+        assetClass: window.sentPacket.assetClass,
+        status: window.sentPacket.status,
+       })
+
 
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })

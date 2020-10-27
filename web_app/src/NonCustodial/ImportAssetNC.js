@@ -54,17 +54,20 @@ class ImportAssetNC extends Component {
       this.setState({ assetClassSelected: false })
     }
     if (window.sentPacket !== undefined) {
+      
+      if (Number(window.sentPacket.status) !== 70) {
+        console.log("SentPacketStatus :", window.sentPacket.status)
+        alert("Asset is not exported! Owner must export the assset in order to import.");
+         window.sentPacket = undefined;
+        return window.location.href = "/#/asset-dashboard"
+      }
+
       this.setState({ name: window.sentPacket.name })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ packetAssetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
 
-      if (window.sentPacket.status !== "Exported") {
-        console.log("1SentPacketStatus :", window.sentPacket.status)
-        alert("Asset is not exported! Owner must export the assset in order to import.");
-         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
-      }
+      
 
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
