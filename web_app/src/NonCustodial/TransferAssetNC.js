@@ -74,7 +74,7 @@ class ModifyDescriptionNC extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) !== 51) {
+      if (window.sentPacket.status !== "Transferrable") {
         alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
