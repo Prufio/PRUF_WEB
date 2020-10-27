@@ -57,10 +57,6 @@ class ModifyRightsHolder extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      this.setState({ name: window.sentPacket.name })
-      this.setState({ idxHash: window.sentPacket.idxHash })
-      this.setState({ assetClass: window.sentPacket.assetClass })
-      this.setState({ status: window.sentPacket.status })
       if (Number(window.sentPacket.status) === 3 || Number(window.sentPacket.status) === 4 || Number(window.sentPacket.status) === 53 || Number(window.sentPacket.status) === 54) {
         alert("Cannot edit asset in lost or stolen status");
          window.sentPacket = undefined;
@@ -72,6 +68,11 @@ class ModifyRightsHolder extends Component {
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
+      this.setState({ name: window.sentPacket.name })
+      this.setState({ idxHash: window.sentPacket.idxHash })
+      this.setState({ assetClass: window.sentPacket.assetClass })
+      this.setState({ status: window.sentPacket.status })
+      
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
