@@ -542,6 +542,8 @@ class Main extends Component {
 
       console.log("SA: In setUpAssets")
 
+      if(this.props.globalBalances.assetBalance === "0"){return console.log("No assets held")}
+
       let tempDescObj = {}
       let tempDescriptionsArray = [];
       let tempNamesArray = [];
@@ -696,6 +698,8 @@ class Main extends Component {
         _web3.eth.getAccounts().then((e) => {
           if (self.props.globalAddr !== e[0]) {
 
+            if(e[0] === undefined){ return self.props.setGlobalAddr(null) }
+
             self.props.setMenuInfo({
               basicMenuBool: true,
               assetHolderMenuBool: false,
@@ -734,7 +738,7 @@ class Main extends Component {
       console.log("Setting up contracts")
 
       if (window.ethereum !== undefined) {
-        if (this.props.globalAddr !== undefined) {
+        if (this.props.globalAddr !== "") {
           await this.props.setMenuInfo({
             noAddrMenuBool: false,
             assetHolderMenuBool: false,
@@ -745,8 +749,8 @@ class Main extends Component {
           }, 'basic')
         }
 
-        else if (this.props.globalAddr === "") {
-          await this.params.setMenuInfo({
+        else if (this.props.globalAddr === "" && window.ethereum === undefined) {
+          await this.props.setMenuInfo({
             noAddrMenuBool: true,
             assetHolderMenuBool: false,
             assetClassHolderMenuBool: false,
@@ -784,7 +788,7 @@ class Main extends Component {
 
     this.state = {
       IPFS: require("ipfs-mini"),
-      addr: undefined,
+      addr: "",
       web3: null,
       menuInfo: { bools: {
         assetHolderMenuBool: false,
@@ -863,7 +867,18 @@ class Main extends Component {
 
       this.props.setIPFS(_ipfs);
 
-      _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); this.props.setGlobalAddr(e[0]) });
+      _web3.eth.getAccounts().then((e) => { 
+      if(e[0] === undefined){ 
+        this.props.setGlobalAddr(""); console.log("changing to ''")
+        this.setState({ addr: "" });
+      }
+
+      else{
+        this.props.setGlobalAddr(e[0]); console.log("Changing to ", e [0])
+        this.setState({ addr: e[0] });
+      } 
+      });
+      
       window.addEventListener("accountListener", this.acctChanger());
       this.setState({ hasMounted: true })
     }
@@ -891,6 +906,7 @@ class Main extends Component {
 
       this.props.setIPFS(_ipfs);
 
+      window.addEventListener("accountListener", this.acctChanger());
       this.setState({ hasMounted: true })
     }
 
