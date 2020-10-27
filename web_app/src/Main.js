@@ -68,7 +68,7 @@ class Main extends Component {
               <div>
                 <div className="BannerForm">
                   <ul className="header">
-                    {this.props.contracts !== undefined && (
+                    {this.state.contracts !== undefined && (
                       <nav>
                         {this.state.menuInfo.bools.noAddrMenuBool === true && (<NoAddressComponent />)}
                       </nav>
@@ -496,6 +496,7 @@ class Main extends Component {
     this.setUpAssets = async () => {
 
       console.log(this.props.globalBalances)
+      console.log(this.state.contracts)
 
       await this.props.setHasAssets(true);
       window.ipfsCounter = 0;
@@ -513,7 +514,6 @@ class Main extends Component {
 
       if (window.recount === true) {
         window.recount = false
-        await this.props.setBalances({})
         let tempETHBal = await window.utils.getETHBalance(this.props.globalAddr, this.props.web3)
         await this.props.setEthBalance(tempETHBal);
         return this.setUpTokenVals(true)
@@ -536,7 +536,7 @@ class Main extends Component {
 
       if (this.props.globalBalances === {}) {
         console.log("balances undefined, trying to get them...");
-        if (this.props.globalAddr === "undefined") { return this.forceUpdate }
+        if (this.props.globalAddr === "") { return this.forceUpdate }
         return this.setUpTokenVals(true);
       }
 
@@ -548,7 +548,7 @@ class Main extends Component {
       let tempDescriptionsArray = [];
       let tempNamesArray = [];
 
-      let additionalInfo = await window.utils.getAssetTokenInfo(this.props.globalBalances.assetBalance, this.props.contracts, this.props.globalAddr, this.props.web3) 
+      let additionalInfo = await window.utils.getAssetTokenInfo(this.props.globalBalances.assetBalance, this.state.contracts, this.props.globalAddr, this.props.web3) 
 
       await this.setState({additionalTokenInfo: additionalInfo})
 
@@ -659,8 +659,9 @@ class Main extends Component {
     this.setUpTokenVals = async (willSetup) => {
       
       console.log("STV: Setting up balances")
-      console.log(this.props.contracts)
-      const balsObject = await window.utils.determineTokenBalance(this.props.globalAddr, this.props.contracts)
+      console.log(this.state.contracts)
+
+      const balsObject = await window.utils.determineTokenBalance(this.props.globalAddr, this.state.contracts)
       await this.props.setBalances(balsObject.bals)
       await this.props.setHolderBools(balsObject.bools)
 
@@ -689,13 +690,14 @@ class Main extends Component {
       });
     };
 
-    this.acctChanger = async () => {//Handle an address change, update state accordingly
+    this.addrChanger = async () => {//Handle an address change, update state accordingly
       const ethereum = window.ethereum;
       const self = this;
+      let tempAddr = "";
       var _web3 = require("web3");
       _web3 = new Web3(_web3.givenProvider);
       ethereum.on("accountsChanged", function (accounts) {
-        _web3.eth.getAccounts().then((e) => {
+        _web3.eth.getAccounts().then( async (e) => {
           if (self.props.globalAddr !== e[0]) {
 
             if(e[0] === undefined){ return self.props.setGlobalAddr(null) }
@@ -712,15 +714,17 @@ class Main extends Component {
 
             if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#" }
 
-            self.props.setGlobalAddr(e[0]);
-            self.props.setGlobalAssetClass(null);
-            self.props.setIsAuthUser(false);
-            self.props.setIsACAdmin(false);
-            self.setState({ addr: e[0] });
+            await self.props.setGlobalAddr(e[0])
+            await self.props.setGlobalAssetClass(null);
+            await self.props.setIsAuthUser(false);
+            await self.props.setIsACAdmin(false);
+            await self.setState({ addr: e[0] });
+
+
+            console.log("///////in addrChanger////////")
+
             window.recount = true;
             window.resetInfo = true;
-
-            console.log("///////in acctChanger////////");
           }
           else { console.log("Something bit in the acct listener, but no changes made.") }
         });
@@ -729,16 +733,16 @@ class Main extends Component {
 
 
 
-    this.setUpContractEnvironment = async (_web3) => {
+    this.setUpContractEnvironment = async (_web3, addr) => {
       if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
       window.isSettingUpContracts = true;
-
+      console.log(addr)
       const self = this;
 
       console.log("Setting up contracts")
 
       if (window.ethereum !== undefined) {
-        if (this.props.globalAddr !== "") {
+        if (addr !== "") {
           await this.props.setMenuInfo({
             noAddrMenuBool: false,
             assetHolderMenuBool: false,
@@ -749,7 +753,7 @@ class Main extends Component {
           }, 'basic')
         }
 
-        else if (this.props.globalAddr === "" && window.ethereum === undefined) {
+        else if (addr === "" && window.ethereum === undefined) {
           await this.props.setMenuInfo({
             noAddrMenuBool: true,
             assetHolderMenuBool: false,
@@ -760,11 +764,11 @@ class Main extends Component {
           }, 'noAddr')
         }
 
-        let tempContracts = await buildContracts(_web3)
-        await this.props.setContracts(tempContracts)
-
-        if (this.props.globalAddr !== "") {
-          let tempETHBal = await window.utils.getETHBalance(this.props.globalAddr, this.props.web3)
+        if (addr !== "") {
+          let tempContracts = await buildContracts(_web3)
+          await this.props.setContracts(tempContracts)
+          await this.setState({contracts: tempContracts})
+          let tempETHBal = await window.utils.getETHBalance(addr, _web3)
           this.props.setEthBalance(tempETHBal);
           this.setUpTokenVals(true)
         }
@@ -773,11 +777,10 @@ class Main extends Component {
         console.log("bools...", this.props.holderBools.assetHolderBool, this.props.holderBools.assetClassHolderBool, this.props.holderBools.IDHolderBool)
         window.isSettingUpContracts = false;
         return this.setState({ runWatchDog: true })
-      }
+        }
 
       else {
         window.isSettingUpContracts = true;
-        await this.props.setContracts(buildContracts(_web3))
         window.isSettingUpContracts = false;
         return this.setState({ runWatchDog: true })
       }
@@ -826,6 +829,7 @@ class Main extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     console.log(this.props.menuInfo);
     this.toggleMenu('basic')
+    let tempAddr = "";
 
     buildWindowUtils()
     window.isSettingUpContracts = false;
@@ -853,7 +857,20 @@ class Main extends Component {
       const ethereum = window.ethereum;
       var _web3 = require("web3");
       _web3 = new Web3(_web3.givenProvider);
-      this.setUpContractEnvironment(_web3)
+      
+      _web3.eth.getAccounts().then((e) => { 
+        if(e[0] === undefined){ 
+          this.props.setGlobalAddr(""); console.log("changing to ''")
+          this.setState({ addr: "" });
+        }
+  
+        else{
+          this.props.setGlobalAddr(e[0]); console.log("Changing to ", e [0])
+          this.setState({ addr: e[0] });
+          tempAddr = e[0]
+        }
+        this.setUpContractEnvironment(_web3, tempAddr) 
+        });
       this.setState({ web3: _web3 });
       this.props.setGlobalWeb3(_web3);
 
@@ -867,26 +884,16 @@ class Main extends Component {
 
       this.props.setIPFS(_ipfs);
 
-      _web3.eth.getAccounts().then((e) => { 
-      if(e[0] === undefined){ 
-        this.props.setGlobalAddr(""); console.log("changing to ''")
-        this.setState({ addr: "" });
-      }
-
-      else{
-        this.props.setGlobalAddr(e[0]); console.log("Changing to ", e [0])
-        this.setState({ addr: e[0] });
-      } 
-      });
       
-      window.addEventListener("accountListener", this.acctChanger());
+      
+      window.addEventListener("accountListener", this.addrChanger());
       this.setState({ hasMounted: true })
     }
     else {
 
       var _web3 = require("web3");
       _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
-      this.setUpContractEnvironment(_web3)
+      this.setUpContractEnvironment(_web3, tempAddr)
       this.props.setGlobalWeb3(_web3);
 
       this.props.setMenuInfo({
@@ -906,7 +913,7 @@ class Main extends Component {
 
       this.props.setIPFS(_ipfs);
 
-      window.addEventListener("accountListener", this.acctChanger());
+      window.addEventListener("accountListener", this.addrChanger());
       this.setState({ hasMounted: true })
     }
 
@@ -965,11 +972,15 @@ class Main extends Component {
       this.setState({ menuInfo: this.props.menuInfo, holderBools: this.props.holderBools})
     } 
 
+    if (this.state.contracts !== this.props.contracts && this.props.contracts !== {} && this.props.contracts !== undefined){
+      this.setState({contracts: this.props.contracts})
+    }
+
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
     console.log("unmounting component");
-    window.removeEventListener("accountListener", this.acctChanger());
+    window.removeEventListener("accountListener", this.addrChanger());
   }
 
   render(

@@ -4,7 +4,30 @@ import Col from "react-bootstrap/Col";
 import bs58 from "bs58";
 import { CheckCircle, Home, XSquare } from 'react-feather'
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 
 class AddNoteNC extends Component {
@@ -25,11 +48,11 @@ class AddNoteNC extends Component {
       var idxHash = this.state.idxHash;
 
       console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
+      console.log("addr: ", this.props.globalAddr);
 
-      await window.contracts.APP_NC.methods
+      await this.props.contracts.APP_NC.methods
         .$addIpfs2Note(idxHash, this.state.hashPath)
-        .send({ from: window.addr })
+        .send({ from: this.props.globalAddr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
@@ -58,13 +81,6 @@ class AddNoteNC extends Component {
     }
 
     this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-        this.setState({ assets: window.assets })
-      }
-
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
-      }
 
       if (this.state.hashPath !== "" && this.state.runWatchDog === true && window.isInTx !== true) {
         this.setInscription()
@@ -396,15 +412,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 

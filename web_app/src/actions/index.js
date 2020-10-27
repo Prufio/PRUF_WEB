@@ -22,7 +22,7 @@ export const setGlobalWeb3 = (web3) => {
 export const setContracts = (contracts) => {
     return {
         type: 'SET_CONTRACTS',
-        payload: { contracts }
+        payload: { contracts: contracts }
     }
 }
 

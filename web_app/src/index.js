@@ -17,11 +17,12 @@ const store = createStore(
 )
 
 ReactDOM.render(
-  <Provider store = {store}>
-    <React.StrictMode>   
+    <React.StrictMode>
+      <Provider store = {store}> 
       <Main />
+      </Provider>
     </React.StrictMode>
-  </Provider>,
+  ,
   document.getElementById("root")
 );
 

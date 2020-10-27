@@ -766,34 +766,40 @@ function buildWindowUtils() {
   }
 
   const _resolveACFromID = async (AC, contracts, addr) => {
-    let temp;
+    let tempACname, costs, authBools
     if (contracts !== undefined) {
       await contracts.AC_MGR.methods
         .getAC_name(AC)
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
           else {
-            temp = _result
+            tempACname = _result
             console.log("resolved AC name ", window.assetClassName, " from AC index ", AC);
 
           }
         });
     }
     let acData = await window.utils.getACData("id", AC)
-    if (addr !== undefined) {
-      await window.utils.checkCreds(acData, AC);
-      await window.utils.getCosts(6, AC);
+
+    if (addr !== "") {
+      authBools = await window.utils.checkCreds(acData, AC, contracts, addr);
+      costs = await window.utils.getCosts(6, AC);
     }
 
-    await console.log("User authLevel: ", window.authLevel);
-    window.assetClassName = temp; //DEV REMOVE ALL window. REFS
-    return (temp)
+    return {
+      costs,
+      authBools,
+      assetClass: tempACname,
+      assetClassInfo: acData,
+    }
+
 
   }
 
-  const _checkCreds = async (acData, AC, contracts, addr, assetClass) => {
-    window.isAuthUser = undefined;
+  const _checkCreds = async (acData, AC, contracts, addr) => {
+
     let custodyType = acData.custodyType
+    let isAuthUser, authLevel, isACAdmin
 
     if (contracts !== undefined) {
 
@@ -814,20 +820,20 @@ function buildWindowUtils() {
 
       if (custodyType === "Custodial") {
         await contracts.AC_MGR.methods
-          .getUserType(window.web3.utils.soliditySha3(addr), assetClass)
+          .getUserType(window.web3.utils.soliditySha3(addr), AC)
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              if (_result === "0" && window.isACAdmin === false) { window.authLevel = "Standard User"; window.isAuthUser = false; }
-              else if (_result === "1" && window.isACAdmin === false) { window.authLevel = "Authorized User"; window.isAuthUser = true; }
-              else if (_result === "9" && window.isACAdmin === false) { window.authLevel = "Robot"; window.isAuthUser = false; }
-              else if (_result === "1" && window.isACAdmin === true) { window.authLevel = "Authorized User/AC Admin"; window.isAuthUser = true; }
-              else if (_result === "9" && window.isACAdmin === true) { window.authLevel = "Robot/AC Admin"; window.isAuthUser = false; }
-              else if (_result === "0" && window.isACAdmin === true) { window.authLevel = "AC Admin"; window.isAuthUser = false; }
+              if (_result === "0" && window.isACAdmin === false) { authLevel = "Standard User"; isAuthUser = false; }
+              else if (_result === "1" && isACAdmin === false) { authLevel = "Authorized User"; isAuthUser = true; }
+              else if (_result === "9" && isACAdmin === false) { authLevel = "Robot"; isAuthUser = false; }
+              else if (_result === "1" && isACAdmin === true) { authLevel = "Authorized User/AC Admin"; isAuthUser = true; }
+              else if (_result === "9" && isACAdmin === true) { authLevel = "Robot/AC Admin"; isAuthUser = false; }
+              else if (_result === "0" && isACAdmin === true) { authLevel = "AC Admin"; isAuthUser = false; }
               console.log(_result)
-              return (window.custodyType = "Custodial")
             }
           });
+          return {isAuthUser, isACAdmin, authLevel}
       }
 
       else if (custodyType === "Non-Custodial") {
@@ -836,14 +842,15 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              if (Number(_result) === 1 && window.isACAdmin === false) { window.authLevel = "Pruf Minter"; window.isAuthUser = false; }
-              else if (Number(_result) !== 1 && window.isACAdmin === true) { window.authLevel = "Pruf User/AC Admin"; window.isAuthUser = false; }
-              else if (Number(_result) === 1 && window.isACAdmin === true) { window.authLevel = "Pruf Minter/AC Admin"; window.isAuthUser = false; }
-              else if (Number(_result) !== 1 && window.isACAdmin === false) { window.authLevel = "Pruf User"; window.isAuthUser = false; }
+              if (Number(_result) === 1 && isACAdmin === false) { authLevel = "Pruf Minter"; isAuthUser = false; }
+              else if (Number(_result) !== 1 && isACAdmin === true) { authLevel = "Pruf User/AC Admin"; isAuthUser = false; }
+              else if (Number(_result) === 1 && isACAdmin === true) { authLevel = "Pruf Minter/AC Admin"; isAuthUser = false; }
+              else if (Number(_result) !== 1 && isACAdmin === false) { authLevel = "Pruf User"; isAuthUser = false; }
               console.log(_result)
-              return (window.custodyType = "Non-Custodial")
             }
           });
+
+          return {isAuthUser, isACAdmin, authLevel}
       }
 
 
@@ -851,7 +858,7 @@ function buildWindowUtils() {
     }
 
     else {
-      console.log("window.contracts object is undefined.")
+      console.log("contracts object is undefined.")
     }
   }
 
@@ -975,9 +982,8 @@ function buildWindowUtils() {
   }
 
   const _getCosts = async (numOfServices, AC, contracts) => {
-    window.costArray = [];
+    let costArray = [];
     if (contracts !== undefined) {
-      //console.log("Getting cost array");
 
       for (var i = 1; i <= numOfServices; i++) {
         await contracts.AC_MGR.methods
@@ -985,21 +991,20 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              //console.log("result in getCosts: ", Object.values(_result));
-              window.costArray.push(Number((Object.values(_result)[1])) + Number((Object.values(_result)[3])))
+              costArray.push(Number((Object.values(_result)[1])) + Number((Object.values(_result)[3])))
             }
           })
       }
 
       //console.log("before setting window-level costs")
 
-      window.costs = {
-        newRecordCost: window.costArray[0],
-        transferAssetCost: window.costArray[1],
-        createNoteCost: window.costArray[2],
-        remintAssetCost: window.costArray[3],
-        changeAssetCost: window.costArray[4],
-        forceTransferCost: window.costArray[5],
+      return {
+        newRecordCost: costArray[0],
+        transferAssetCost: costArray[1],
+        createNoteCost: costArray[2],
+        remintAssetCost: costArray[3],
+        changeAssetCost: costArray[4],
+        forceTransferCost: costArray[5],
       }
 
       //window.utils.checkCreds()
@@ -1007,6 +1012,7 @@ function buildWindowUtils() {
       console.log("window costs object: ", window.costs);
       //console.log("this should come last");
     }
+
     else {
       console.log("Window.contracts object is undefined.")
     }
@@ -1046,7 +1052,9 @@ function buildWindowUtils() {
 
   const _determineTokenBalance = async (addr, contracts) => {
 
-    if (addr !== undefined) {
+    console.log("CONTRACTS: ",contracts)
+
+    if (contracts !== undefined) {
       let _assetClassBal;
       let _assetBal;
       let _IDTokenBal;
@@ -1104,7 +1112,7 @@ function buildWindowUtils() {
           assetBalance: _assetBal,
           IDTokenBalance: _IDTokenBal}
       }
-    }
+    } else{console.log("contracts object undefined")}
   }
   const _getAssetTokenInfo = async (assetBalance, contracts, addr, web3) => {
 
