@@ -4,7 +4,30 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle } from "react-feather";
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 
 class RetrieveRecord extends Component {
@@ -41,7 +64,7 @@ class RetrieveRecord extends Component {
 
     this.getIPFSJSONObject = (lookup) => {
       //console.log(lookup)
-      window.ipfs.cat(lookup, async (error, result) => {
+      this.props.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
           return this.setState({ ipfsObject: undefined })
@@ -154,21 +177,21 @@ class RetrieveRecord extends Component {
     }
 
     this.handlePacket = async () => {
-      let idxHash = window.sentPacket;
+      let idxHash = this.props.sentPacket;
 
       this.setState({
-        idxHash: window.sentPacket.idxHash,
+        idxHash: this.props.sentPacket.idxHash,
         wasSentPacket: true,
-        name: window.sentPacket.name,
-        assetClass: window.sentPacket.assetClass
+        name: this.props.sentPacket.name,
+        assetClass: this.props.sentPacket.assetClass
       })
 
-      window.sentPacket = undefined;
+      this.props.sentPacket = undefined;
       let hash;
       let assetClass;
       let status;
 
-      await window.contracts.STOR.methods.retrieveShortRecord(idxHash)
+      await this.props.contracts.STOR.methods.retrieveShortRecord(idxHash)
         .call((_error, _result) => {
           if (_error) {
             console.log("IN ERROR IN ERROR IN ERROR")
@@ -198,9 +221,9 @@ class RetrieveRecord extends Component {
       let idxHash = String(this.state.result)
       this.setState({ idxHash: idxHash })
       console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
+      console.log("addr: ", this.props.addr);
 
-      await window.contracts.STOR.methods
+      await this.props.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(
           // { from: window.addr },
@@ -226,7 +249,7 @@ class RetrieveRecord extends Component {
             }
           });
 
-      window.assetClass = tempResult[2]
+          this.props.assetClass = tempResult[2]
 
       window.assetInfo = {
         assetClass: tempResult[2],
@@ -234,7 +257,7 @@ class RetrieveRecord extends Component {
         idx: idxHash
       }
       await window.utils.resolveACFromID(tempResult[2])
-      await this.getACData("id", window.assetClass)
+      await this.getACData("id", this.props.assetClass)
 
       console.log(window.authLevel);
 
@@ -250,11 +273,11 @@ class RetrieveRecord extends Component {
       let tempData;
       let tempAC;
 
-      if (window.contracts !== undefined) {
+      if (this.props.contracts !== undefined) {
 
         if (ref === "name") {
           console.log("Using name ref")
-          await window.contracts.AC_MGR.methods
+          await this.props.contracts.AC_MGR.methods
             .resolveAssetClass(ac)
             .call((_error, _result) => {
               if (_error) { console.log("Error: ", _error) }
@@ -268,7 +291,7 @@ class RetrieveRecord extends Component {
 
         else if (ref === "id") { tempAC = ac; }
 
-        await window.contracts.AC_MGR.methods
+        await this.props.contracts.AC_MGR.methods
           .getAC_data(tempAC)
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
@@ -335,7 +358,7 @@ class RetrieveRecord extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
 
-    if (window.sentPacket !== undefined) {
+    if (this.props.sentPacket !== undefined) {
 
       this.handlePacket()
     }
@@ -418,7 +441,7 @@ class RetrieveRecord extends Component {
       let idxHash
 
       if (this.state.Checkbox === false) {
-        idxHash = window.web3.utils.soliditySha3(
+        idxHash = this.props.web3.utils.soliditySha3(
           String(this.state.type),
           String(this.state.manufacturer),
           String(this.state.model),
@@ -426,16 +449,16 @@ class RetrieveRecord extends Component {
         );
         this.setState({ idxHash: idxHash })
         console.log("idxHash", idxHash);
-        console.log("addr: ", window.addr);
+        console.log("addr: ", this.props.addr);
       }
 
       if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw;
         console.log("idxHash", idxHash);
-        console.log("addr: ", window.addr);
+        console.log("addr: ", this.props.addr);
       }
 
-      await window.contracts.STOR.methods
+      await this.props.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(function (_error, _result) {
           if (_error) {
@@ -459,7 +482,7 @@ class RetrieveRecord extends Component {
           }
         });
 
-      window.assetClass = tempResult[2]
+        this.props.assetClass = tempResult[2]
 
       window.assetInfo = {
         assetClass: tempResult[2],
@@ -467,7 +490,7 @@ class RetrieveRecord extends Component {
         idx: idxHash
       }
       await window.utils.resolveACFromID(tempResult[2])
-      await this.getACData("id", window.assetClass)
+      await this.getACData("id", this.props.assetClass)
 
       console.log(window.authLevel);
 
@@ -674,15 +697,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket,
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 

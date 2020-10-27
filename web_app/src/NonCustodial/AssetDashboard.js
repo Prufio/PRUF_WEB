@@ -9,7 +9,30 @@ import { QRCode } from 'react-qrcode-logo';
 import Example from '../Test/Print'
 import { useReactToPrint } from 'react-to-print';
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 
 
@@ -19,12 +42,12 @@ class AssetDashboard extends React.Component {
 
 
     this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-        this.setState({ assets: window.assets })
+      if (this.state.assets !== this.props.assets && this.state.runWatchDog === true) {
+        this.setState({ assets: this.props.assets })
       }
 
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
+      if (this.state.hasLoadedAssets !== this.props.hasLoadedAssets && this.state.runWatchDog === true) {
+        this.setState({ hasLoadedAssets: this.props.hasLoadedAssets })
       }
 
       if (this.state.hasNoAssets !== window.hasNoAssets && this.state.runWatchDog === true) {
@@ -74,7 +97,7 @@ class AssetDashboard extends React.Component {
           await window.utils.resolveACFromID(AC)
           await window.utils.getACData("id", AC)
 
-          await this.setState({ ACname: window.assetClassName });
+          await this.setState({ ACname: this.props.assetClassName });
         }
 
         else {
@@ -87,22 +110,18 @@ class AssetDashboard extends React.Component {
 
           this.setState({ ACname: AC });
           await window.utils.resolveAC(AC);
-          await this.setState({ assetClass: window.assetClass });
+          await this.setState({ assetClass: this.props.assetClass });
         }
 
         return this.setState({ assetClassSelected: true, acData: window.tempACData })
       }
     }
 
-
-
     this.sendPacket = (obj, menu, link) => {
-      window.sentPacket = obj
-      window.menuChange = menu
+      this.props.sentPacket = obj
+      this.props.setMenuInfo(true, menu)
       window.location.href = '/#/' + link
     }
-
-
 
     this.state = {
       addr: undefined,
@@ -131,7 +150,7 @@ class AssetDashboard extends React.Component {
 
   componentDidMount() {
     this.setState({
-      addr: window.addr,
+      addr: this.props.addr,
       runWatchDog: true,
       assetTokenInfo: {}
     })
@@ -352,7 +371,6 @@ class AssetDashboard extends React.Component {
           let component = [];
 
           for (let i = 0; i < obj.ids.length; i++) {
-            //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
             component.push(
               <div key={"asset" + String(i)}>
                 <style type="text/css"> {`
@@ -478,15 +496,53 @@ class AssetDashboard extends React.Component {
 
     return{
       globalAddr: state.globalAddr,
-      web3: state.web3
+      web3: state.web3,
+      assetClass: state.globalAssetClass,
+      assets: state.globalAssets,
+      assetTokenIDs: state.globalAssetTokenIDs,
+      assetTokenInfo: state.globalAssetTokenInfo,
+      globalBalances: state.globalBalances,
+      contracts: state.globalContracts,
+      costs: state.globalCosts,
+      custodyType: state.globalCustodyType,
+      ETHBalance: state.globalETHBalance,
+      hasFetchedBalances: state.hasFetchedBalances,
+      ipfs: state.globalIPFS,
+      ipfsHashArray: state.globalIPFSHashArray,
+      isACAdmin: state.isACAdmin,
+      isAuthUser: state.isAuthUser,
+      menuInfo: state.menuInfo,
+      holderBools: state.holderBools,
+      sentPacket: state.globalSentPacket,
     }
   
   }
   
   const mapDispatchToProps = () => {
     return {
+      setHasLoadedAssets,
+      setHolderBools,
       setGlobalAddr,
       setGlobalWeb3,
+      setIPFS,
+      setContracts,
+      setIsAdmin,
+      setBalances,
+      setMenuInfo,
+      setIsACAdmin,
+      setCustodyType,
+      setEthBalance,
+      setAssets,
+      setAssetsToDefault,
+      setAssetTokenIds,
+      setIPFSHashArray,
+      setHasAssets,
+      setHasFetchedBals,
+      setIPFS,
+      setGlobalAssetClass,
+      setAssetTokenInfo,
+      setIsAuthUser,
+      setCosts
     }
   }
   

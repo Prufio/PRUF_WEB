@@ -4,7 +4,30 @@ import Col from "react-bootstrap/Col";
 import { Home, XSquare, ArrowRightCircle, Grid, CornerUpLeft, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 class VerifyLite extends Component {
   constructor(props) {
@@ -26,7 +49,7 @@ class VerifyLite extends Component {
         }
 
         else if (!this.state.Checkbox) {
-          idxHash = window.web3.utils.soliditySha3(
+          idxHash = this.props.web3.utils.soliditySha3(
             String(this.state.type),
             String(this.state.manufacturer),
             String(this.state.model),
@@ -160,7 +183,7 @@ class VerifyLite extends Component {
       this.setState({ VLresult: "" })
       var idxHash = this.state.idxHash;
 
-      let rgtRaw = window.web3.utils.soliditySha3(
+      let rgtRaw = this.props.web3.utils.soliditySha3(
         String(this.state.first),
         String(this.state.middle),
         String(this.state.surname),
@@ -168,10 +191,10 @@ class VerifyLite extends Component {
         String(this.state.secret)
       );
 
-      let rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtRaw));
+      let rgtHash = this.props.web3.utils.soliditySha3(String(idxHash), String(rgtRaw));
 
       console.log("idxHash", idxHash);
-      console.log("rgtHash", rgtHash);
+      console.log("rgtHash", this.props);
       console.log("addr: ", window.addr);
 
       var doesExist = await window.utils.checkAssetExists(idxHash);
@@ -421,15 +444,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket,
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 

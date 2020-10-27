@@ -2,7 +2,6 @@ import bs58 from "bs58";
 import Button from "react-bootstrap/Button";
 import { QRCode } from 'react-qrcode-logo';
 import React, { useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
 import "./../index.css";
 
 function buildWindowUtils() {

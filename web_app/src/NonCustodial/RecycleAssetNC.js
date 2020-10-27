@@ -5,7 +5,30 @@ import Row from "react-bootstrap/Row";
 import { Home, XSquare, ArrowRightCircle, Grid, CornerUpLeft, Repeat } from "react-feather";
 import QrReader from 'react-qr-reader'
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 class RecycleAssetNC extends Component {
   constructor(props) {
@@ -24,7 +47,7 @@ class RecycleAssetNC extends Component {
         }
 
         else if (!this.state.Checkbox) {
-          idxHash = window.web3.utils.soliditySha3(
+          idxHash = this.props.web3.utils.soliditySha3(
             String(this.state.type),
             String(this.state.manufacturer),
             String(this.state.model),
@@ -99,8 +122,8 @@ class RecycleAssetNC extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-    if (window.assetClass > 0) {
-      this.setState({ assetClass: window.assetClass, assetClassSelected: true })
+    if (this.props.assetClass > 0) {
+      this.setState({ assetClass: this.props.assetClass, assetClassSelected: true })
     }
 
     else {
@@ -181,7 +204,7 @@ class RecycleAssetNC extends Component {
           await window.utils.resolveACFromID(this.state.selectedAssetClass)
           await window.utils.getACData("id", this.state.selectedAssetClass)
 
-          await this.setState({ ACname: window.assetClassName });
+          await this.setState({ ACname: this.props.assetClassName });
         }
 
         else {
@@ -195,7 +218,7 @@ class RecycleAssetNC extends Component {
 
           this.setState({ ACname: this.state.selectedAssetClass });
           await window.utils.resolveAC(this.state.selectedAssetClass);
-          await this.setState({ assetClass: window.assetClass });
+          await this.setState({ assetClass: this.props.assetClass });
         }
         if (this.state.wasSentPacket) {
           let resArray = await window.utils.checkStats(this.state.idxHash, [0, 2])
@@ -203,7 +226,7 @@ class RecycleAssetNC extends Component {
 
           if (Number(resArray[0]) !== 70) {
             alert("Asset is not exported! Owner must export the assset in order to import.");
-             window.sentPacket = undefined;
+            this.props.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
 
@@ -211,7 +234,7 @@ class RecycleAssetNC extends Component {
 
           if (resArray[1] !== destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
-             window.sentPacket = undefined;
+            this.props.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
         }
@@ -263,7 +286,7 @@ class RecycleAssetNC extends Component {
         var idxHash = this.state.result;
       }
       else {
-        var idxHash = window.web3.utils.soliditySha3(
+        var idxHash = this.props.web3.utils.soliditySha3(
           String(this.state.type),
           String(this.state.manufacturer),
           String(this.state.model),
@@ -272,7 +295,7 @@ class RecycleAssetNC extends Component {
       }
       var rgtRaw;
 
-      rgtRaw = window.web3.utils.soliditySha3(
+      rgtRaw = this.props.web3.utils.soliditySha3(
         this.state.first,
         this.state.middle,
         this.state.surname,
@@ -296,22 +319,22 @@ class RecycleAssetNC extends Component {
       console.log(rgtRaw, idxHash)
 
       if (idxHash.length % 2 !== 0) {
-        rgtHash = window.web3.utils.soliditySha3((idxHash + "0"), rgtRaw);
+        rgtHash = this.props.web3.utils.soliditySha3((idxHash + "0"), rgtRaw);
       }
 
       else {
-        rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
+        rgtHash = this.props.web3.utils.soliditySha3(idxHash, rgtRaw);
       }
 
 
 
       console.log("rgtHash", rgtHash);
       console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
+      console.log("addr: ", this.props.addr);
 
-      window.contracts.RCLR.methods
+      this.props.contracts.RCLR.methods
         .$recycle(idxHash, rgtHash, this.state.selectedAssetClass)
-        .send({ from: window.addr, value: window.costs.newRecordCost })
+        .send({ from: this.props.addr, value: this.props.costs.newRecordCost })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
@@ -353,13 +376,13 @@ class RecycleAssetNC extends Component {
           </div>
         )}
         <Form className="Form" id='MainForm'>
-          {window.addr === undefined && (
+          {this.props.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
+          {this.props.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
             <Form.Row>
               <Form.Label className="formFontRow">Asset Class:</Form.Label>
               <Form.Group as={Row} controlId="formGridAC">
@@ -381,7 +404,7 @@ class RecycleAssetNC extends Component {
               </div>
             </Form.Row>
           )}
-          {window.addr > 0 && (
+          {this.props.addr > 0 && (
             <div>
               {!this.state.accessPermitted && this.state.QRreader === false && this.state.assetClassSelected === true && (
                 <>
@@ -627,15 +650,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket,
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 
