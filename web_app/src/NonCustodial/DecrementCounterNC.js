@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Home, XSquare, CheckCircle } from 'react-feather'
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions'
+import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
 
 class DecrementCounterNC extends Component {
   constructor(props) {
