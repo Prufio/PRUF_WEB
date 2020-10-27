@@ -191,7 +191,8 @@ class NewRecordNC extends Component {
           idxHash,
           rgtHash,
           this.state.assetClass,
-          this.state.countDownStart,
+          "100000",
+          // this.state.countDownStart, Countdown Form
           ipfsHash
         )
         .send({ from: window.addr })
@@ -388,7 +389,7 @@ class NewRecordNC extends Component {
                     </Form.Group>
 
                   </Form.Row>
-                  <Form.Row>
+                  {/* <Form.Row>              //Countdown Form
                     <Form.Group as={Col} controlId="formGridLogStartValue">
                       <Form.Label className="formFont">Log Start Value:</Form.Label>
                       <Form.Control
@@ -401,7 +402,7 @@ class NewRecordNC extends Component {
                       />
                     </Form.Group>
 
-                  </Form.Row>
+                  </Form.Row> */}
                   {this.state.transaction === false && (
                   <Form.Row>
                     <div className="submitButtonNR">
