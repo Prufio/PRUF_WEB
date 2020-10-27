@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import bs58 from "bs58";
-import { ArrowRightCircle, Home, XSquare, CheckCircle, UploadCloud, Trash2 } from 'react-feather'
+import { Home, XSquare, CheckCircle, UploadCloud, Trash2 } from 'react-feather'
 
 
 class ModifyDescription extends Component {
@@ -838,7 +837,7 @@ class ModifyDescription extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txHash === "" && (
+        {this.state.transaction === false && (
           <div className="assetSelectedResults">
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
