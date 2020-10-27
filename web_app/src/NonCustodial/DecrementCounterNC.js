@@ -4,23 +4,36 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Home, XSquare, CheckCircle } from 'react-feather'
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 class DecrementCounterNC extends Component {
   constructor(props) {
     super(props);
 
     //State declaration.....................................................................................................
-
-    this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-        this.setState({ assets: window.assets })
-      }
-
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
-      }
-    }, 100)
 
     this.state = {
       addr: "",
@@ -50,30 +63,30 @@ class DecrementCounterNC extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-    if (window.sentPacket !== undefined) {
+    if (this.props.sentPacket !== undefined) {
 
       this.setState({ 
-        name: window.sentPacket.name,
-        idxHash: window.sentPacket.idxHash,
-        countDownStart: window.sentPacket.countPair[1],
-        count: window.sentPacket.countPair[0],
-        assetClass: window.sentPacket.assetClass,
-        status: window.sentPacket.status,
+        name: this.props.sentPacket.name,
+        idxHash: this.props.sentPacket.idxHash,
+        countDownStart: this.props.sentPacket.countPair[1],
+        count: this.props.sentPacket.countPair[0],
+        assetClass: this.props.sentPacket.assetClass,
+        status: this.props.sentPacket.status,
        })
 
-      if (Number(window.sentPacket.status) === 53 || Number(window.sentPacket.status) === 54) {
+      if (Number(this.props.sentPacket.status) === 53 || Number(this.props.sentPacket.status) === 54) {
         alert("Cannot edit asset in lost or stolen status");
-        window.sentPacket = undefined;
+        this.props.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) === 50 || Number(window.sentPacket.status) === 56) {
+      if (Number(this.props.sentPacket.status) === 50 || Number(this.props.sentPacket.status) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
-         window.sentPacket = undefined;
+        this.props.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      window.sentPacket = undefined
+      this.props.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
 
@@ -112,9 +125,9 @@ class DecrementCounterNC extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
-      let countDownStart = await window.utils.checkAssetCounterStart(window.assets.ids[e], [0])
-      let count = await window.utils.checkAssetCount(window.assets.ids[e], [0])
+      let resArray = await window.utils.checkStats(this.props.assets.ids[e], [0])
+      let countDownStart = await window.utils.checkAssetCounterStart(this.props.assets.ids[e], [0])
+      let count = await window.utils.checkAssetCount(this.props.assets.ids[e], [0])
       console.log(resArray)
       console.log(countDownStart)
       console.log(count)
@@ -128,16 +141,16 @@ class DecrementCounterNC extends Component {
       }
 
       this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
+      console.log("Changed component idx to: ", this.props.assets.ids[e])
 
       this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
+        assetClass: this.props.assets.assetClasses[e],
+        idxHash: this.props.assets.ids[e],
+        name: this.props.assets.descriptions[e].name,
+        photos: this.props.assets.descriptions[e].photo,
+        text: this.props.assets.descriptions[e].text,
+        description: this.props.assets.descriptions[e],
+        status: this.props.assets.statuses[e],
         count: count,
         countDownStart: countDownStart,
       })
@@ -152,7 +165,7 @@ class DecrementCounterNC extends Component {
       var idxHash = this.state.idxHash;
 
       console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
+      console.log("addr: ", this.props.addr);
       console.log("Data: ", this.state.countDown);
 
       if (this.state.countDown > this.state.count) {
@@ -163,9 +176,9 @@ class DecrementCounterNC extends Component {
           })
       }
 
-      window.contracts.NP_NC.methods
+      this.props.contracts.NP_NC.methods
         ._decCounter(idxHash, this.state.countDown)
-        .send({ from: window.addr })
+        .send({ from: this.props.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
@@ -200,13 +213,13 @@ class DecrementCounterNC extends Component {
           </div>
         </div>
         <Form className="Form" id='MainForm'>
-          {window.addr === undefined && (
+          {this.props.addr === undefined && (
             <div className="Results">
               <h2>User address unreachable</h2>
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && (
+          {this.props.addr > 0 && (
             <div>
                                           <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
@@ -332,15 +345,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket,
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 

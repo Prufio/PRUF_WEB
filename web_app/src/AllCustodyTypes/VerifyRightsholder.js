@@ -4,7 +4,30 @@ import Col from "react-bootstrap/Col";
 import { Home, XSquare, ArrowRightCircle, Grid, CornerUpLeft, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 class VerifyRightHolder extends Component {
   constructor(props) {
@@ -23,7 +46,7 @@ class VerifyRightHolder extends Component {
         }
 
         else if (!this.state.Checkbox) {
-          idxHash = window.web3.utils.soliditySha3(
+          idxHash = this.props.web3.utils.soliditySha3(
             String(this.state.type),
             String(this.state.manufacturer),
             String(this.state.model),
@@ -162,25 +185,25 @@ class VerifyRightHolder extends Component {
       var idxHash = this.state.idxHash;
 
 
-      let rgtRaw = window.web3.utils.soliditySha3(
+      let rgtRaw = this.props.web3.utils.soliditySha3(
         String(this.state.first),
         String(this.state.middle),
         String(this.state.surname),
         String(this.state.id),
         String(this.state.secret)
       );
-      let rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtRaw));
+      let rgtHash = this.props.web3.utils.soliditySha3(String(idxHash), String(rgtRaw));
 
 
       // var rgtHash = this.state.rgtHash;
 
       console.log("idxHash", idxHash);
       console.log("rgtHash", rgtHash);
-      console.log("addr: ", window.addr);
+      console.log("addr: ", this.props.addr);
 
-      window.contracts.STOR.methods
+      this.props.contracts.STOR.methods
         .blockchainVerifyRightsHolder(idxHash, rgtHash)
-        .send({ from: window.addr })
+        .send({ from: this.props.addr })
         .on("receipt", (receipt) => {
           this.setState({ txHash: receipt.transactionHash });
           this.setState({ transaction: false })
@@ -214,13 +237,13 @@ class VerifyRightHolder extends Component {
           </div>
         )}
         <Form className="Form" id='MainForm'>
-          {window.addr === undefined && (
+          {this.props.addr === undefined && (
             <div className="Results">
               <h2>User address unreachable</h2>
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && (
+          {this.props.addr > 0 && (
             <div>
 
               {this.state.QRreader === false && !this.state.accessPermitted && (
@@ -451,15 +474,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket,
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 

@@ -5,7 +5,30 @@ import Button from "react-bootstrap/Button";
 import returnManufacturers from "../Resources/Manufacturers";
 import { Trash2, Home, XSquare } from 'react-feather'
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 class DiscardAssetNC extends Component {
   constructor(props) {
@@ -14,12 +37,12 @@ class DiscardAssetNC extends Component {
     //State declaration.....................................................................................................
 
     this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
+      if (this.state.assets !== this.props.assets && this.state.runWatchDog === true) {
         this.setState({ assets: window.assets })
       }
 
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
+      if (this.state.hasLoadedAssets !== this.props.hasLoadedAssets && this.state.runWatchDog === true) {
+        this.setState({ hasLoadedAssets: this.props.hasLoadedAssets })
       }
     }, 100)
 
@@ -49,18 +72,18 @@ class DiscardAssetNC extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-    if (window.sentPacket !== undefined) {
-      this.setState({ name: window.sentPacket.name })
-      this.setState({ idxHash: window.sentPacket.idxHash })
-      this.setState({ assetClass: window.sentPacket.assetClass })
-      this.setState({ status: window.sentPacket.status })
-      console.log("Stat", window.sentPacket.status)
-      if (window.sentPacket.status !== "Discardable") {
-        window.sentPacket = undefined;
+    if (this.props.sentPacket !== undefined) {
+      this.setState({ name: this.props.sentPacket.name })
+      this.setState({ idxHash: this.props.sentPacket.idxHash })
+      this.setState({ assetClass: this.props.sentPacket.assetClass })
+      this.setState({ status: this.props.sentPacket.status })
+      console.log("Stat", this.props.sentPacket.status)
+      if (this.props.sentPacket.status !== "Discardable") {
+        this.props.sentPacket = undefined;
         alert("Asset is not discardable! Owner must set status to discardable.");
         return window.location.href = "/#/asset-dashboard"
       }
-      window.sentPacket = undefined
+      this.props.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
 
@@ -87,7 +110,7 @@ class DiscardAssetNC extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
+      let resArray = await window.utils.checkStats(this.props.assets.ids[e], [0])
 
       console.log(resArray)
 
@@ -96,17 +119,17 @@ class DiscardAssetNC extends Component {
       }
 
       this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
+      console.log("Changed component idx to: ", this.props.assets.ids[e])
 
       this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
+        assetClass: this.props.assets.assetClasses[e],
+        idxHash: this.props.assets.ids[e],
+        name: this.props.assets.descriptions[e].name,
+        photos: this.props.assets.descriptions[e].photo,
+        text: this.props.assets.descriptions[e].text,
+        description: this.props.assets.descriptions[e],
+        status: this.props.assets.statuses[e],
+        note: this.props.assets.notes[e]
       })
     }
 
@@ -127,11 +150,11 @@ class DiscardAssetNC extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", this.state.agentAddress);
 
-      window.contracts.A_TKN.methods
+      this.props.contracts.A_TKN.methods
         .discard(
           idxHash
         )
-        .send({ from: window.addr })
+        .send({ from: this.props.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
@@ -164,13 +187,13 @@ class DiscardAssetNC extends Component {
           </div>
         </div>
         <Form className="Form" id='MainForm'>
-          {window.addr === undefined && (
+          {this.props.addr === undefined && (
             <div className="Results">
               <h2>User address unreachable</h2>
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && (
+          {this.props.addr > 0 && (
             <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
@@ -284,15 +307,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket,
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 

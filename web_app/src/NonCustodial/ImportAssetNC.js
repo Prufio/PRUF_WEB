@@ -4,7 +4,30 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Home, XSquare, ArrowRightCircle, CheckCircle } from "react-feather";
 import { connect } from 'react-redux';
-import {setGlobalAddr, setGlobalWeb3} from '../Actions/index'
+import {
+  setHasLoadedAssets,
+  setHolderBools,
+  setGlobalAddr, 
+  setGlobalWeb3,
+  setIPFS,
+  setContracts,
+  setIsAdmin,
+  setBalances,
+  setMenuInfo,
+  setIsACAdmin,
+  setCustodyType,
+  setEthBalance,
+  setAssets,
+  setAssetsToDefault,
+  setAssetTokenIds,
+  setIPFSHashArray,
+  setHasAssets,
+  setHasFetchedBals,
+  setGlobalAssetClass,
+  setAssetTokenInfo,
+  setIsAuthUser,
+  setCosts
+} from '../Actions'
 
 class ImportAssetNC extends Component {
   constructor(props) {
@@ -13,12 +36,12 @@ class ImportAssetNC extends Component {
     //State declaration.....................................................................................................
 
     this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-        this.setState({ assets: window.assets })
+      if (this.state.assets !== this.props.assets && this.state.runWatchDog === true) {
+        this.setState({ assets: this.props.assets })
       }
 
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
+      if (this.state.hasLoadedAssets !== this.props.hasLoadedAssets && this.state.runWatchDog === true) {
+        this.setState({ hasLoadedAssets: this.props.hasLoadedAssets })
       }
     }, 50)
 
@@ -49,27 +72,27 @@ class ImportAssetNC extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-    if (window.assetClass > 0) {
-      this.setState({ assetClass: window.assetClass, assetClassSelected: true })
+    if (this.props.assetClass > 0) {
+      this.setState({ assetClass: this.props.assetClass, assetClassSelected: true })
     }
 
     else {
       this.setState({ assetClassSelected: false })
     }
-    if (window.sentPacket !== undefined) {
-      this.setState({ name: window.sentPacket.name })
-      this.setState({ idxHash: window.sentPacket.idxHash })
-      this.setState({ packetAssetClass: window.sentPacket.assetClass })
-      this.setState({ status: window.sentPacket.status })
+    if (this.props.sentPacket !== undefined) {
+      this.setState({ name: this.props.sentPacket.name })
+      this.setState({ idxHash: this.props.sentPacket.idxHash })
+      this.setState({ packetAssetClass: this.props.sentPacket.assetClass })
+      this.setState({ status: this.props.sentPacket.status })
 
-      if (window.sentPacket.status !== "Exported") {
-        console.log("1SentPacketStatus :", window.sentPacket.status)
+      if (this.props.sentPacket.status !== "Exported") {
+        console.log("1SentPacketStatus :", this.props.sentPacket.status)
         alert("Asset is not exported! Owner must export the assset in order to import.");
-         window.sentPacket = undefined;
+        this.props.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      window.sentPacket = undefined
+      this.props.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
 
@@ -130,7 +153,7 @@ class ImportAssetNC extends Component {
 
           this.setState({ ACname: this.state.selectedAssetClass });
           await window.utils.resolveAC(this.state.selectedAssetClass);
-          await this.setState({ assetClass: window.assetClass });
+          await this.setState({ assetClass: this.props.assetClass });
         }
         if (this.state.wasSentPacket) {
           let resArray = await window.utils.checkStats(this.state.idxHash, [0, 2])
@@ -138,7 +161,7 @@ class ImportAssetNC extends Component {
 
           if (Number(resArray[0]) !== 70) {
             alert("Asset is not exported! Owner must export the assset in order to import.");
-             window.sentPacket = undefined;
+            this.props.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
 
@@ -146,7 +169,7 @@ class ImportAssetNC extends Component {
 
           if (resArray[1] !== destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
-             window.sentPacket = undefined;
+            this.props.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
         }
@@ -174,7 +197,7 @@ class ImportAssetNC extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
+      let resArray = await window.utils.checkStats(this.props.assets.ids[e], [0, 2])
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
@@ -192,7 +215,7 @@ class ImportAssetNC extends Component {
       }
 
       let destinationACData = await window.utils.getACData("id", this.state.assetClass);
-      let originACRoot = window.assets.assetClasses[e]
+      let originACRoot = this.props.assets.assetClasses[e]
 
       console.log(destinationACData.root)
       if (originACRoot !== destinationACData.root) {
@@ -203,17 +226,17 @@ class ImportAssetNC extends Component {
       }
 
       this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
+      console.log("Changed component idx to: ", this.props.assets.ids[e])
 
       return this.setState({
-        currentAssetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
+        currentAssetClass: this.props.assets.assetClasses[e],
+        idxHash: this.props.assets.ids[e],
+        name: this.props.assets.descriptions[e].name,
+        photos: this.props.assets.descriptions[e].photo,
+        text: this.props.assets.descriptions[e].text,
+        description: this.props.assets.descriptions[e],
+        status: this.props.assets.statuses[e],
+        note: this.props.assets.notes[e]
       })
     }
 
@@ -230,11 +253,11 @@ class ImportAssetNC extends Component {
       var idxHash = this.state.idxHash;
 
       console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
+      console.log("addr: ", this.props.addr);
 
-      await window.contracts.APP_NC.methods
+      await this.props.contracts.APP_NC.methods
         .$importAsset(idxHash, this.state.selectedAssetClass)
-        .send({ from: window.addr })
+        .send({ from: this.props.addr })
         .on("error", function (_error) {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
@@ -274,13 +297,13 @@ class ImportAssetNC extends Component {
           </div>
         </div>
         <Form className="Form" id='MainForm'>
-          {window.addr === undefined && (
+          {this.props.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && !this.state.assetClassSelected && (
+          {this.props.addr > 0 && !this.state.assetClassSelected && (
             <>
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
@@ -304,7 +327,7 @@ class ImportAssetNC extends Component {
               </Form.Row>
             </>
           )}
-          {window.addr > 0 && this.state.assetClassSelected && (
+          {this.props.addr > 0 && this.state.assetClassSelected && (
             <div>
               <>
               <Form.Row>
@@ -426,15 +449,53 @@ const mapStateToProps = (state) => {
 
   return{
     globalAddr: state.globalAddr,
-    web3: state.web3
+    web3: state.web3,
+    assetClass: state.globalAssetClass,
+    assets: state.globalAssets,
+    assetTokenIDs: state.globalAssetTokenIDs,
+    assetTokenInfo: state.globalAssetTokenInfo,
+    globalBalances: state.globalBalances,
+    contracts: state.globalContracts,
+    costs: state.globalCosts,
+    custodyType: state.globalCustodyType,
+    ETHBalance: state.globalETHBalance,
+    hasFetchedBalances: state.hasFetchedBalances,
+    ipfs: state.globalIPFS,
+    ipfsHashArray: state.globalIPFSHashArray,
+    isACAdmin: state.isACAdmin,
+    isAuthUser: state.isAuthUser,
+    menuInfo: state.menuInfo,
+    holderBools: state.holderBools,
+    sentPacket: state.globalSentPacket,
   }
 
 }
 
 const mapDispatchToProps = () => {
   return {
+    setHasLoadedAssets,
+    setHolderBools,
     setGlobalAddr,
     setGlobalWeb3,
+    setIPFS,
+    setContracts,
+    setIsAdmin,
+    setBalances,
+    setMenuInfo,
+    setIsACAdmin,
+    setCustodyType,
+    setEthBalance,
+    setAssets,
+    setAssetsToDefault,
+    setAssetTokenIds,
+    setIPFSHashArray,
+    setHasAssets,
+    setHasFetchedBals,
+    setIPFS,
+    setGlobalAssetClass,
+    setAssetTokenInfo,
+    setIsAuthUser,
+    setCosts
   }
 }
 
