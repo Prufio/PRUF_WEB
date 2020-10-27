@@ -21,24 +21,22 @@ class VerifyLite extends Component {
           || this.state.serial === "") {
           return alert("Please fill out all fields before submission")
         }
-
-        else if (!this.state.Checkbox) {
           idxHash = window.web3.utils.soliditySha3(
             String(this.state.type),
             String(this.state.manufacturer),
             String(this.state.model),
             String(this.state.serial),
           );
-        }
-
-        else {
-          idxHash = this.state.result
-        }
       }
-        if (this.state.Checkbox) {
-          idxHash = this.state.idxHash
-        }
-        
+
+      else if (this.state.QRreader === true && !this.state.Checkbox) {
+        idxHash = this.state.result
+      }
+
+      else if (this.state.Checkbox === true) {
+        idxHash = this.state.idxHash
+      }
+
       let doesExist = await window.utils.checkAssetExists(idxHash);
 
       if (!doesExist) {
@@ -156,7 +154,7 @@ class VerifyLite extends Component {
       this.setState({ error: undefined })
       this.setState({ VLresult: "" })
       var idxHash = this.state.idxHash;
-
+      console.log(idxHash)
       let rgtRaw = window.web3.utils.soliditySha3(
         String(this.state.first),
         String(this.state.middle),
@@ -164,6 +162,7 @@ class VerifyLite extends Component {
         String(this.state.id),
         String(this.state.secret)
       );
+      console.log(rgtRaw)
 
       let rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtRaw));
 

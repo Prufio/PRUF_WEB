@@ -316,7 +316,7 @@ function buildWindowUtils() {
 
   const _checkAssetExists = async (idxHash) => {
     let tempBool;
-    console.log(idxHash.substring(0, 2))
+    // console.log(idxHash.substring(0, 2))
     if (idxHash.substring(0, 2) !== "0x") {
       return (false)
     }

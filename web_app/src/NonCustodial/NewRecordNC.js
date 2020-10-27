@@ -171,7 +171,7 @@ class NewRecordNC extends Component {
         this.state.secret
       );
 
-      if (idxHash % 2 !== 0) {
+      if (idxHash.length % 2 !== 0) {
         return (alert("Something went wrong..."))
       }
 

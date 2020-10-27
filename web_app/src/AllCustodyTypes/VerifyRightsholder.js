@@ -11,30 +11,29 @@ class VerifyRightHolder extends Component {
 
     this.accessAsset = async () => {
       let idxHash;
-      if (this.state.QRreader === false && this.state.Checkbox === false) {
+      if (this.state.QRreader === false && !this.state.Checkbox) {
         if (this.state.manufacturer === ""
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
           return alert("Please fill out all fields before submission")
         }
-
-        else if (!this.state.Checkbox) {
           idxHash = window.web3.utils.soliditySha3(
             String(this.state.type),
             String(this.state.manufacturer),
             String(this.state.model),
             String(this.state.serial),
           );
-        }
-
-        else {
-          idxHash = this.state.result
-        }
       }
-      if (this.state.Checkbox) {
+
+      else if (this.state.QRreader === true && !this.state.Checkbox) {
+        idxHash = this.state.result
+      }
+
+      else if (this.state.Checkbox === true) {
         idxHash = this.state.idxHash
       }
+
       let doesExist = await window.utils.checkAssetExists(idxHash);
 
       if (!doesExist) {
