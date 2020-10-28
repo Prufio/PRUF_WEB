@@ -378,7 +378,7 @@ class Main extends Component {
 
                       .btn-toggle {
                         background-color: #002a40;
-                        color: white;
+                        color: #ffffff;
                         height: 3rem;
                         width: 17.3rem;
                         margin-top: -0.2rem;
@@ -388,15 +388,15 @@ class Main extends Component {
                       }
                       btn-toggle:hover {
                         background-color: #23b6ff;
-                        color: white !important;
+                        color: #ffffff !important;
                       }
                       .btn-toggle:focus {
                         background-color: #23b6ff;
-                        color: white !important;
+                        color: #ffffff !important;
                       }
                       .btn-toggle:active {
                         background-color: #23b6ff;
-                        color: white !important;
+                        color: #ffffff !important;
                       }
                    `}
               </style>
