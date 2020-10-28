@@ -775,7 +775,7 @@ class Main extends Component {
       ethereum.on("accountsChanged", function (accounts) {
         _web3.eth.getAccounts().then((e) => {
           if (window.addr !== e[0]) {
-            if(e[0] === undefined) { 
+            if(e[0] === undefined || e[0] === null) { 
               await this.setState({
                 noAddrMenuBool: true,
                 assetHolderMenuBool: false,
@@ -785,9 +785,11 @@ class Main extends Component {
                 hasFetchedBalances: false,
                 routeRequest: "noAddr"
               })
-
-              window.balances = {}
+              window.addr = "";
+              window.balances = {};
+              
              }
+
             window.routeRequest = "basic"
             self.setState({ routeRequest: "basic" });
             self.setState({
