@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Home, XSquare, ArrowRightCircle, CheckCircle } from "react-feather";
+
+
 class ImportAssetNC extends Component {
   constructor(props) {
     super(props);
@@ -365,7 +367,7 @@ class ImportAssetNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txHash === "" && (
+        {this.state.transaction === false && (
           <div className="assetSelectedResults">
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (

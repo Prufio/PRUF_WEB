@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
+import { Home, XSquare, CheckCircle } from 'react-feather'
 
 
 class ModifyDescriptionNC extends Component {
@@ -74,7 +74,7 @@ class ModifyDescriptionNC extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) !== 51) {
+      if (window.sentPacket.status !== "Transferrable") {
         alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
@@ -271,7 +271,6 @@ class ModifyDescriptionNC extends Component {
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  {/* <div className="assetSelectedContentHead"> Asset Description: <span className="assetSelectedContent">{this.state.description}</span> </div> */}
                   <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                 </Form.Group>

@@ -166,6 +166,16 @@ class AddNoteNC extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
+      let resArray = window.utils.checkStats(window.sentPacket.idxHash, [6])
+
+      console.log(resArray)
+      
+      if (resArray[0] !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
+        alert("Note already enscribed on this asset! Cannot overwrite existing note.")
+        window.sentPacket = undefined;
+        return window.location.href = "/#/asset-dashboard"
+      }
+
       this.setState({ name: window.sentPacket.name })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
@@ -241,7 +251,7 @@ class AddNoteNC extends Component {
         alert("Cannot edit asset in lost or stolen status"); return clearForm()
       }
 
-      if (Number(resArray[0]) > 0) {
+      if (resArray[0] !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
         alert("Note already enscribed on this asset! Cannot overwrite existing note."); return clearForm()
       }
 
@@ -284,7 +294,7 @@ class AddNoteNC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && (
+          {window.addr > 0 && !this.state.transaction && (
             <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
@@ -349,7 +359,7 @@ class AddNoteNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txHash === "" && (
+        {this.state.transaction === false && (
           <div className="assetSelectedResults">
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (

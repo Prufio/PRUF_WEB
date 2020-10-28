@@ -154,8 +154,9 @@ class DecrementCounterNC extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       console.log("Data: ", this.state.countDown);
+      console.log("DataReserve: ", this.state.countDownStart);
 
-      if (this.state.countDown > this.state.count) {
+      if (Number(this.state.countDown) > Number(this.state.count)) {
         return alert("Countdown is greater than count reserve! Please ensure data fields are correct before submission."),
           clearForm(),
           this.setState({
@@ -275,7 +276,7 @@ class DecrementCounterNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txHash === "" && (
+        {this.state.transaction === false && (
           <div className="assetSelectedResults">
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (

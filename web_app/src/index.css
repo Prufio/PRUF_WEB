@@ -162,6 +162,8 @@ div {
 
 .active {
   background-color: #00a8ff;
+  border-radius: 0.5rem;
+  color: #002a40 !important;
 }
 
 .formFont {
@@ -1321,9 +1323,9 @@ div {
 .QRdisplay-footer {
   display: flex;
   height: 3rem;
-  width: 10rem;
+  width: 8rem;
   margin-top: 21rem;
-  margin-left: 89.9%;
+  margin-left: 55.05rem;
   background-color: #ffffff;
   /* background-color: #005480; */
   border-radius: 0rem 0rem 1rem 1rem;
@@ -1366,7 +1368,7 @@ div {
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-right: 140rem;
+  margin-right: 94%;
   margin-top: 0.7rem;
 }
 
@@ -1393,7 +1395,7 @@ div {
   justify-content: center;
   flex-direction: row;
   z-index: 1000;
-  margin-right: 160rem;
+  margin-right: 105%;
   margin-top: 4.8rem;
   border-radius: 0rem 0rem 1rem 0rem;
   opacity: 0.9;
@@ -1518,9 +1520,14 @@ div {
 }
 
 .currentMenuOptionContent {
+  display: flex;
+  width: 30rem;
+  height: fit-content;
+  margin-left: -10rem;
   font-size: 1.8rem;
   font-weight: bold;
   color: white;
+  position: absolute;
 }
 
 .siteInfoBox {
@@ -1855,6 +1862,10 @@ div {
   cursor: pointer;
   -webkit-transform: translateX(-3px);
   transform: translateX(-3px);
+}
+
+.loading p{
+  max-width: 35ch !important;
 }
 
 .loading:after {

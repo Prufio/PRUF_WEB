@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, CheckCircle } from 'react-feather'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 class ModifyRecordStatusNC extends Component {
   constructor(props) {
@@ -333,7 +332,7 @@ class ModifyRecordStatusNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txHash === "" && (
+        {this.state.transaction === false && (
           <div className="assetSelectedResults">
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
@@ -347,12 +346,13 @@ class ModifyRecordStatusNC extends Component {
             </Form.Row>
           </div>
         )}
-        {this.state.transaction === true && this.state.txStatus === false && (
+        {this.state.transaction === true && (
           <div className="Results">
             <p className="loading">Transaction In Progress</p>
           </div>)}
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="Results">
+            <div>
             {this.state.txStatus === false && (
               <div>
                 !ERROR! :
@@ -363,9 +363,9 @@ class ModifyRecordStatusNC extends Component {
                 >
                   KOVAN Etherscan:{this.state.txHash}
                 </a>
-                {/* {this.toastTest} */}
               </div>
             )}
+            </div>
             {this.state.txStatus === true && (
               <div>
                 {" "}
