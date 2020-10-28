@@ -205,7 +205,17 @@ class Main extends Component {
                               </Button>
                             )}
 
-                            {this.state.basicMenuBool === false && (
+                            {this.state.routeRequest === "noAddr" && (
+                              <Button
+                              size="lg"
+                              variant="toggle"
+                              onClick={() => { alert("That doesn't direct you anywhere. Login to metamask!"); this.setState({ settingsMenu: undefined })}}
+                            >
+                              Please Log In
+                            </Button>
+                            )}
+
+                            {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
                               <Button
                                 size="lg"
                                 variant="toggle"
@@ -253,7 +263,7 @@ class Main extends Component {
                           )}
                           {this.state.ETHBalance && (
                             <h4>
-                              ETH Balance : {this.state.ETHBalance.substring(0, 6) + " ..."}
+                              ETH Balance : {this.state.ETHBalance.substring(0, 6) }
                             </h4>
                           )}
                           <br></br>
@@ -775,8 +785,11 @@ class Main extends Component {
       ethereum.on("accountsChanged", function (accounts) {
         _web3.eth.getAccounts().then((e) => {
           if (window.addr !== e[0]) {
-            if(e[0] === undefined || e[0] === null) { 
-              await this.setState({
+
+            if (e[0] === undefined || e[0] === null) {
+
+              window.routeRequest = "noAddr"
+              self.setState({
                 noAddrMenuBool: true,
                 assetHolderMenuBool: false,
                 assetClassHolderMenuBool: false,
@@ -785,22 +798,39 @@ class Main extends Component {
                 hasFetchedBalances: false,
                 routeRequest: "noAddr"
               })
+
+              window.ETHBalance = undefined
+              self.setState({
+                assetClassBalance: undefined,
+                assetBalance: undefined,
+                IDTokenBalance: undefined,
+                assetHolderBool: undefined,
+                assetClassHolderBool: undefined,
+                IDHolderBool: undefined,
+                custodyType: undefined,
+                hasFetchedBalances: undefined,
+                ETHBalance: undefined
+              })
+
               window.addr = "";
               window.balances = {};
-              
-             }
 
-            window.routeRequest = "basic"
-            self.setState({ routeRequest: "basic" });
-            self.setState({
-              basicMenuBool: true,
-              assetHolderMenuBool: false,
-              assetHolderUserMenuBool: false,
-              assetClassHolderMenuBool: false,
-              noAddrMenuBool: false,
-              authorizedUserMenuBool: false,
-              settingsMenu: undefined
-            })
+            }
+
+            else {
+              window.routeRequest = "basic"
+              self.setState({ routeRequest: "basic" });
+              self.setState({
+                basicMenuBool: true,
+                assetHolderMenuBool: false,
+                assetHolderUserMenuBool: false,
+                assetClassHolderMenuBool: false,
+                noAddrMenuBool: false,
+                authorizedUserMenuBool: false,
+                settingsMenu: undefined
+              })
+            }
+
 
             if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#" }
 
