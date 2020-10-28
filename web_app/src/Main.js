@@ -776,7 +776,8 @@ class Main extends Component {
         _web3.eth.getAccounts().then((e) => {
           if (window.addr !== e[0]) {
             if(e[0] === undefined || e[0] === null) { 
-              await this.setState({
+              // await 
+              this.setState({
                 noAddrMenuBool: true,
                 assetHolderMenuBool: false,
                 assetClassHolderMenuBool: false,
