@@ -785,9 +785,7 @@ class Main extends Component {
       ethereum.on("accountsChanged", function (accounts) {
         _web3.eth.getAccounts().then((e) => {
           if (window.addr !== e[0]) {
-
             if (e[0] === undefined || e[0] === null) {
-
               window.routeRequest = "noAddr"
               self.setState({
                 noAddrMenuBool: true,
