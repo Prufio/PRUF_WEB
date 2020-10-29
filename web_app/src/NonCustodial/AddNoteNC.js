@@ -40,7 +40,7 @@ class AddNoteNC extends Component {
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
           alert("Something went wrong!")
-          this.clearForm();
+          self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
         })
@@ -216,7 +216,7 @@ class AddNoteNC extends Component {
     };
 
     const publishIPFS2Photo = async () => {
-      if (document.getElementById("ipfs2File").files[0] !== undefined) {
+      if (document.getElementById("ipfs2File").files[0] !== undefined && this.state.idxHash !== undefined) {
         const self = this;
         const reader = new FileReader();
         reader.readAsArrayBuffer(document.getElementById("ipfs2File").files[0])
@@ -236,7 +236,7 @@ class AddNoteNC extends Component {
           });
         }
       }
-      else { alert("No file chosen for upload!") }
+      else { if(document.getElementById("ipfs2File").files[0] === undefined) alert("No file chosen for upload!"); else{alert("Select an asset to modify!")} }
     };
 
     const _checkIn = async (e) => {
@@ -360,7 +360,7 @@ class AddNoteNC extends Component {
                         />
                       </div>
                       {this.state.assetClass !== undefined && (
-                        <Form.Label className="LittleTextAddNote"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} ETH</Form.Label >
+                        <Form.Label className="LittleTextAddNote"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} PRüF</Form.Label >
                       )}
                     </div>
                   </Form.Group>

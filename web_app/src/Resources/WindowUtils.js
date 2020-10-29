@@ -733,8 +733,8 @@ function buildWindowUtils() {
     }
 
     let acData = await window.utils.getACData("id", window.assetClass)
-    await window.utils.checkCreds(acData);
-    await window.utils.getCosts(6, AC);
+    await window.utils.checkCreds(acData, window.assetClass);
+    await window.utils.getCosts(6, window.assetClass);
     await console.log("User authLevel: ", window.authLevel);
     return (window.assetClass)
 

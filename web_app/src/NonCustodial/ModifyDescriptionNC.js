@@ -54,7 +54,7 @@ class ModifyDescription extends Component {
           self.setState({ txStatus: false });
           self.setState({ transaction: false });
           alert("Something went wrong!")
-          this.clearForm();
+          self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false
         })

@@ -569,7 +569,7 @@ class RecycleAssetNC extends Component {
                           onClick={() => { _recycleAsset() }}
                         />
                       </div>
-                      <Form.Label className="LittleTextRecycle"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} ETH</Form.Label>
+                      <Form.Label className="LittleTextRecycle"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
                     </div>
                   </Form.Row>
                 </>

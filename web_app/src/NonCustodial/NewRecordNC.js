@@ -412,7 +412,7 @@ class NewRecordNC extends Component {
                           onClick={() => { _newRecord() }}
                         />
                       </div>
-                      <Form.Label className="LittleTextNewRecord"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRuF</Form.Label>
+                      <Form.Label className="LittleTextNewRecord"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
                     </div>
                   </Form.Row>
                   )}
