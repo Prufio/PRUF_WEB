@@ -209,7 +209,7 @@ class Main extends Component {
                               <Button
                               size="lg"
                               variant="toggle"
-                              onClick={() => { alert("That doesn't direct you anywhere. Login to metamask!"); this.setState({ settingsMenu: undefined })}}
+                              onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!"); this.setState({ settingsMenu: undefined })}}
                             >
                               Please Log In
                             </Button>
@@ -396,7 +396,7 @@ class Main extends Component {
                         font-weight: bold;
                         font-size: 1.4rem;
                       }
-                      btn-toggle:hover {
+                      .btn-toggle:hover {
                         background-color: #23b6ff;
                         color: white !important;
                       }

@@ -128,9 +128,42 @@ class Home extends Component {
               </Form.Row>
             </div>
           )}
-          {window._contracts === undefined && window.addr !== undefined && (<div className="VRText"> <Form.Row><h1 className="loading">Connecting to the Blockchain</h1></Form.Row></div>)}
-          {window._contracts === undefined && window.addr === undefined && (<div className="VRText"> <Form.Row><h1 className="loading">Connecting to the Blockchain</h1></Form.Row></div>)}
-          {window._contracts !== undefined && window.addr === undefined && (<div className="VRText"> <Form.Row><h1 >Unable to Get User Address</h1></Form.Row></div>)}
+          {window._contracts === undefined && window.addr !== undefined && (
+            <div className="VRText">
+              <Form.Row>
+                <h1 className="loading">
+                  Connecting to the Blockchain
+                 </h1>
+              </Form.Row>
+            </div>
+          )}
+          {window._contracts === undefined && window.addr === undefined && (
+            <div className="VRText">
+              <Form.Row>
+                <h1 className="loading">
+                  Connecting to the Blockchain
+                 </h1>
+              </Form.Row>
+            </div>
+          )}
+          {window._contracts !== undefined && window.addr === undefined && (
+            <div className="VRText">
+              <Form.Row>
+                <h1 >
+                  Unable to Get User Address
+                </h1>
+              </Form.Row>
+              <Form.Row>
+                <h2 className="home2ndRow">
+                  Please
+                  <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!")}} className="home2ndRowLink">
+                  Log In
+                  </a>
+                  to Web3 provider.
+                </h2>
+              </Form.Row>
+            </div>
+          )}
         </div>
       </div>
     );

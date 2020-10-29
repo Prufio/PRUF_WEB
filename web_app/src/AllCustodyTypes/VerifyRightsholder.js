@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, Grid, CornerUpLeft, CheckCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyRightHolder extends Component {
@@ -19,12 +19,12 @@ class VerifyRightHolder extends Component {
           || this.state.serial === "") {
           return alert("Please fill out all fields before submission")
         }
-          idxHash = window.web3.utils.soliditySha3(
-            String(this.state.type),
-            String(this.state.manufacturer),
-            String(this.state.model),
-            String(this.state.serial),
-          );
+        idxHash = window.web3.utils.soliditySha3(
+          String(this.state.type),
+          String(this.state.manufacturer),
+          String(this.state.model),
+          String(this.state.serial),
+        );
       }
 
       else if (this.state.QRreader === true && !this.state.Checkbox) {
@@ -300,12 +300,17 @@ class VerifyRightHolder extends Component {
                       />
                     </div>
                   </div>
-                  <div className="submitButton">
-                    <div className="submitButton-content">
-                      <Grid
-                        onClick={() => { QRReader() }}
-                      />
-                    </div>
+                  <div>
+                    <button
+                      onClick={() => { QRReader() }}
+                      className="QRScanButton"
+                    >
+                      <img
+                        className="QRScanImageForm"
+                        title="Asset QR Code"
+                        src={require("../Resources/QRSCANPIC.png")}
+                        alt="Pruf Print" />
+                    </button>
                   </div>
                 </Form.Row>
               )}
@@ -417,7 +422,7 @@ class VerifyRightHolder extends Component {
         </Form>
         {this.state.transaction === true && (
           <div className="Results">
-            <p className="loading">Transaction In Progress</p>
+            <h1 className="loadingh1">Transaction In Progress</h1>
           </div>
         )}
         {this.state.QRreader === false && this.state.transaction === false && (

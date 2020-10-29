@@ -4,7 +4,7 @@ import "./../index.css";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav'
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { RefreshCw, Grid, X, Save, ChevronRight, CornerUpLeft, Home } from "react-feather";
+import { RefreshCw, X, ChevronRight, CornerUpLeft, Home } from "react-feather";
 import { QRCode } from 'react-qrcode-logo';
 import Printer from '../Resources/Print'
 
@@ -246,8 +246,17 @@ class AssetDashboard extends React.Component {
               <div className="card" value="100">
                 <div className="row no-gutters">
                   <div className="assetSelecedInfo">
-                    <div className="mediaLinkADS">
-                      <a className="mediaLinkContentADS" ><Grid onClick={() => { _printQR() }} /></a>
+                    <div>
+                      <button
+                        onClick={() => { _printQR() }}
+                        className="QRButton"
+                      >
+                        <img
+                          className="QRImageForm"
+                          title="Asset QR Code"
+                          src={require("../Resources/QRPIC.png")}
+                          alt="Pruf Print" />
+                      </button>
                     </div>
                     {this.state.printQR && (
                       <div>

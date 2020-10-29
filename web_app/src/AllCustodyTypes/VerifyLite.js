@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, Grid, CornerUpLeft, CheckCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyLite extends Component {
@@ -281,13 +281,18 @@ class VerifyLite extends Component {
                     />
                   </div>
                 </div>
-                <div className="submitButton">
-                  <div className="submitButton-content">
-                    <Grid
-                      onClick={() => { QRReader() }}
-                    />
-                  </div>
-                </div>
+                <div>
+                      <button
+                        onClick={() => { QRReader() }}
+                        className="QRScanButton"
+                      >
+                        <img
+                          className="QRScanImageForm"
+                          title="Asset QR Code"
+                          src={require("../Resources/QRSCANPIC.png")}
+                          alt="Pruf Print" />
+                      </button>
+                    </div>
               </Form.Row>
             )}
 

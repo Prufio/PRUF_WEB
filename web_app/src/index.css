@@ -162,8 +162,8 @@ div {
 
 .active {
   background-color: #00a8ff;
-  border-radius: 0.5rem;
-  color: #002a40 !important;
+  border-radius: 0.3rem;
+  /* color: #002a40 !important; */
 }
 
 .formFont {
@@ -1096,6 +1096,7 @@ div {
   border-style: solid;
   margin-top: 0.7rem;
   margin-left: 0.7rem;
+  border-radius: 0.3rem;
 }
 
 .assetImageButtonSelected:Hover {
@@ -1314,8 +1315,8 @@ div {
   opacity: 0.9;
   flex-direction: column;
   border-radius: 1rem 0rem 0rem 1rem;
-  margin-left: 77.2%;
-  margin-top: 6%;
+  margin-left: 45rem;
+  margin-top: 4rem;
   justify-content: center;
   /* object-fit: fill; */
 }
@@ -1324,8 +1325,8 @@ div {
   display: flex;
   height: 3rem;
   width: 8rem;
-  margin-top: 21rem;
-  margin-left: 55.05rem;
+  margin-top: 21.5rem;
+  margin-left: 54.5rem;
   background-color: #ffffff;
   /* background-color: #005480; */
   border-radius: 0rem 0rem 1rem 1rem;
@@ -1864,8 +1865,14 @@ div {
   transform: translateX(-3px);
 }
 
-.loading p{
+.loadingh1{
   max-width: 35ch !important;
+  font-size: 1.6rem;
+}
+
+.loadingh1:after{
+  content: '  .';
+  animation: dots 1s steps(5, end) infinite;
 }
 
 .loading:after {
@@ -1935,6 +1942,72 @@ div {
   cursor: pointer;
   -webkit-transform: rotate(10deg);
   transform: rotate(10deg);
+}
+
+.QRButton {
+  border: 0px transparent; 
+  border-radius: 50%;
+  background-color: transparent; 
+  object-fit: cover;
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  margin-left: 62rem;
+  margin-top: 1rem;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.QRButton:hover {
+  color: #028ed4;
+  cursor: pointer;
+  -webkit-transform: rotate(10deg);
+  transform: rotate(10deg);
+}
+
+.QRImageForm {
+  /* justify-content: flex-start; */
+  /* margin-right: auto; */
+  display: flex;
+  width: 27px;
+  height: 27px;
+  object-fit: cover;
+  z-index: 5;
+  /* margin-right: 4rem; */
+  /* background-color:#002a40; */
+}
+
+.QRScanButton {
+  border: 0px transparent; 
+  border-radius: 50%;
+  background-color: transparent; 
+  object-fit: cover;
+  width: fit-content;
+  height: fit-content;
+  /* position: absolute; */
+  margin-left: 49.2rem;
+  margin-top: 1rem;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.QRScanButton:hover {
+  color: #028ed4;
+  cursor: pointer;
+  -webkit-transform: translateX(3px);
+  transform: translateX(3px);
+}
+
+.QRScanImageForm {
+  /* justify-content: flex-start; */
+  /* margin-right: auto; */
+  display: flex;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  z-index: 5;
+  /* margin-right: 4rem; */
+  /* background-color:#002a40; */
 }
 
 .PrintImageForm {
@@ -2035,6 +2108,24 @@ div {
 }
 
       /* ---------------------------------------------test------------------------------------------------ */
+
+
+.home2ndRow {
+  font-size: 1.6rem;
+}
+
+.home2ndRowLink {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: white;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.home2ndRowLink:hover {
+  color: #00a8ff;
+  cursor: pointer;
+}
 
 .toastButton {
   position: absolute;

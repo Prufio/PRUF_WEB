@@ -4,11 +4,11 @@ import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
 class ComponentToPrint extends React.Component {
     render() {
         return (
-          <div>
-            {window.utils.generateCardPrint()}
-          </div>
+            <div>
+                {window.utils.generateCardPrint()}
+            </div>
         );
-      }
+    }
 }
 
 
@@ -20,16 +20,16 @@ class Example extends React.Component {
                     <PrintContextConsumer>
                         {({ handlePrint }) => (
                             <div>
-                            <button 
-                            onClick={handlePrint}
-                            className="PrintButton"
-                            >
-                                <img
-                        className="PrintImageForm"
-                        title="Print Asset Info"
-                        src={require("../Resources/print.png")}
-                        alt="Pruf Print" />
-                            </button>
+                                <button
+                                    onClick={handlePrint}
+                                    className="PrintButton"
+                                >
+                                    <img
+                                        className="PrintImageForm"
+                                        title="Print Asset Info"
+                                        src={require("../Resources/print.png")}
+                                        alt="Pruf Print" />
+                                </button>
                             </div>
                         )}
                     </PrintContextConsumer>

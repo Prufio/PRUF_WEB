@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, Grid, CornerUpLeft, Repeat } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleAssetNC extends Component {
@@ -201,7 +201,7 @@ class RecycleAssetNC extends Component {
 
           if (Number(resArray[0]) !== 70) {
             alert("Asset is not exported! Owner must export the assset in order to import.");
-             window.sentPacket = undefined;
+            window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
 
@@ -209,7 +209,7 @@ class RecycleAssetNC extends Component {
 
           if (resArray[1] !== destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
-             window.sentPacket = undefined;
+            window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
         }
@@ -462,12 +462,17 @@ class RecycleAssetNC extends Component {
                       />
                     </div>
                   </div>
-                  <div className="submitButton">
-                    <div className="submitButton-content">
-                      <Grid
-                        onClick={() => { QRReader() }}
-                      />
-                    </div>
+                  <div>
+                    <button
+                      onClick={() => { QRReader() }}
+                      className="QRScanButton"
+                    >
+                      <img
+                        className="QRScanImageForm"
+                        title="Asset QR Code"
+                        src={require("../Resources/QRSCANPIC.png")}
+                        alt="Pruf Print" />
+                    </button>
                   </div>
                 </Form.Row>
               )}
@@ -584,7 +589,7 @@ class RecycleAssetNC extends Component {
         )}
         {this.state.transaction === true && this.state.QRreader === false && (
           <div className="Results">
-            <p className="loading">Transaction In Progress</p>
+            <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
         {this.state.txHash > 0 && this.state.QRreader === false && ( //conditional rendering
           <div className="Results">

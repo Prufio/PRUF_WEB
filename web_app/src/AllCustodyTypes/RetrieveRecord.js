@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
-import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -604,12 +604,17 @@ class RetrieveRecord extends Component {
                         </div>
                       </div>
                     )}
-                    <div className="submitButton">
-                      <div className="submitButton-content">
-                        <Grid
-                          onClick={() => { QRReader() }}
-                        />
-                      </div>
+                    <div>
+                      <button
+                        onClick={() => { QRReader() }}
+                        className="QRScanButton"
+                      >
+                        <img
+                          className="QRScanImageForm"
+                          title="Asset QR Code"
+                          src={require("../Resources/QRSCANPIC.png")}
+                          alt="Pruf Print" />
+                      </button>
                     </div>
                   </Form.Row>
                 </div>
