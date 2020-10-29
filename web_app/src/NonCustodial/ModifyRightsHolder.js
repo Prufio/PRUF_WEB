@@ -331,7 +331,7 @@ class ModifyRightsHolder extends Component {
         )}
         {this.state.transaction === true && (
           <div className="Results">
-            <h1 className="loadingh1">Transaction In Progress</h1>s
+            <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="Results">

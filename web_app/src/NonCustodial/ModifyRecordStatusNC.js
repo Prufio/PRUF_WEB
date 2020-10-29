@@ -88,6 +88,8 @@ class ModifyRecordStatusNC extends Component {
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
             self.setState({ txStatus: false });
             self.setState({ transaction: false });
+            alert("Something went wrong!")
+            self.clearForm();
             console.log(Object.values(_error)[0].transactionHash);
           })
           .on("receipt", (receipt) => {

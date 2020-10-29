@@ -129,8 +129,8 @@ class EscrowManagerNC extends Component {
       console.log("addr: ", window.addr);
       console.log("time: ", this.state.escrowTime, "format: ", this.state.timeFormat);
 
-      if (this.state.newStatus <= 49) { return alert("Cannot set status under 50 in non-custodial AC"), clearForm() }
-      if (this.state.agent.substring(0, 2) !== "0x") { return alert("Agent address invalid"), clearForm() }
+      if (this.state.newStatus <= 49) { this.setState({ transaction: false }); return alert("Cannot set status under 50 in non-custodial AC"), clearForm() }
+      if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); return alert("Agent address invalid"), clearForm() }
 
 
       window.contracts.ECR_NC.methods

@@ -178,6 +178,16 @@ class VerifyRightHolder extends Component {
       window.contracts.STOR.methods
         .blockchainVerifyRightsHolder(idxHash, rgtHash)
         .send({ from: window.addr })
+        .on("error", function (_error) {
+          // self.setState({ NRerror: _error });
+          self.setState({ transaction: false })
+          self.setState({ txHash: Object.values(_error)[0].transactionHash });
+          self.setState({ txStatus: false });
+          alert("Something went wrong!")
+          clearForm();
+          console.log(Object.values(_error)[0].transactionHash);
+          window.isInTx = false;
+        })
         .on("receipt", (receipt) => {
           this.setState({ txHash: receipt.transactionHash });
           this.setState({ transaction: false })
