@@ -81,7 +81,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufTokenHolder.png")}
+                      src={require("./Resources/PrufTokenMinter.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -93,7 +93,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufAssetMinter.png")}
+                      src={require("./Resources/PrufTokenHolder.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -117,7 +117,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufTokenMinter.png")}
+                      src={require("./Resources/PrufAssetMinter.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
