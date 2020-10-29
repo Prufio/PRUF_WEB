@@ -144,7 +144,7 @@ class Main extends Component {
                   <div className="hamburgerDropdown">
                     <div className="mediaLink">
                       <a className="mediaLinkContent"><GitHub size={20} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
-                      <a className="mediaLinkContent"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io ", "_blank") }} /></a>
+                      <a className="mediaLinkContent"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
                       <a className="mediaLinkContent"><Twitter size={20} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
                       <a className="mediaLinkContent" ><Send size={20} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
                     </div>
@@ -207,12 +207,12 @@ class Main extends Component {
 
                             {this.state.routeRequest === "noAddr" && (
                               <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!"); this.setState({ settingsMenu: undefined })}}
-                            >
-                              Please Log In
-                            </Button>
+                                size="lg"
+                                variant="toggle"
+                                onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!"); this.setState({ settingsMenu: undefined }) }}
+                              >
+                                Please Log In
+                              </Button>
                             )}
 
                             {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
@@ -263,7 +263,7 @@ class Main extends Component {
                           )}
                           {this.state.ETHBalance && (
                             <h4>
-                              ETH Balance : {this.state.ETHBalance.substring(0, 6) }
+                              ETH Balance : {this.state.ETHBalance.substring(0, 6)}
                             </h4>
                           )}
                           <br></br>
