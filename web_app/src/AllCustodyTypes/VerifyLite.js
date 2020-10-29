@@ -288,7 +288,7 @@ class VerifyLite extends Component {
                       >
                         <img
                           className="QRScanImageForm"
-                          title="Asset QR Code"
+                          title="Scan QR Code"
                           src={require("../Resources/QRSCANPIC.png")}
                           alt="Pruf Print" />
                       </button>
