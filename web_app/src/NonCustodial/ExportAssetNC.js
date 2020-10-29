@@ -49,7 +49,7 @@ class ExportAssetNC extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
       console.log("stat", window.sentPacket.status)
-      if (Number(window.sentPacket.status) !== 51) {
+      if (Number(window.sentPacket.statusNum) !== 51) {
         alert("Asset is not set to transferrable! Owner must set the status to transferrable before export.");
         window.sentpacket = undefined;
         return window.location.href = "/#/asset-dashboard"

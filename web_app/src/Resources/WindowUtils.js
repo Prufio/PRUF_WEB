@@ -1105,12 +1105,15 @@ function buildWindowUtils() {
     console.log("GATI: In _getAssetTokenInfo")
 
     if (Number(window.balances.assetBalance) > 0) {
-      let tknIDArray = [];
-      let ipfsHashArray = [];
-      let noteArray = []
-      let statuses = [];
-      let countPairs = [];
-      let assetClasses = [];
+       let tknIDArray = [],
+       ipfsHashArray = [],
+       noteArray = [],
+       statuses = [],
+       countPairs = [],
+       assetClasses = [],
+       statusNums = [];
+
+    
 
       for (let i = 0; i < window.balances.assetBalance; i++) {
         await window.contracts.A_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
@@ -1159,6 +1162,7 @@ function buildWindowUtils() {
               else if (_result[0] === "60") { statuses.push("Recyclable") }
               else if (_result[0] === "70") { statuses.push("Exported") }
               else if (_result[0] === "0") { statuses.push("Status Not Set") }
+              statusNums.push(_result[0])
               assetClasses.push(Object.values(_result)[2]);
               countPairs.push([Object.values(_result)[3], Object.values(_result)[4]]);
 
@@ -1179,6 +1183,7 @@ function buildWindowUtils() {
 
       window.assets.assetClasses = assetClasses;
       window.assets.statuses = statuses;
+      window.assets.statusNums = statusNums;
       window.assets.notes = noteArray;
 
     }

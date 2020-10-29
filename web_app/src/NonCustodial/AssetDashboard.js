@@ -388,6 +388,7 @@ class AssetDashboard extends React.Component {
                           assetClass: obj.assetClasses[i],
                           assetClassName: obj.assetClassNames[i],
                           status: obj.statuses[i],
+                          statusNum: obj.statusNums[i],
                           Description: obj.descriptions[i].text.Description,
                           text: obj.descriptions[i].text,
                           photo: obj.descriptions[i].photo
@@ -418,6 +419,7 @@ class AssetDashboard extends React.Component {
                             assetClass: obj.assetClasses[i],
                             assetClassName: obj.assetClassNames[i],
                             status: obj.statuses[i],
+                            statusNum: obj.statusNums[i],
                             description: obj.descriptions[i].text.Description,
                             text: obj.descriptions[i].text,
                             photo: obj.descriptions[i].photo

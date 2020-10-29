@@ -168,7 +168,7 @@ class ModifyRecordStatusNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      if (Number(window.sentPacket.status) === 50 || Number(window.sentPacket.status) === 56) {
+      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"

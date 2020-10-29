@@ -154,13 +154,13 @@ class AddNoteNC extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
       
-      if (Number(window.sentPacket.status) === 3 || Number(window.sentPacket.status) === 4 || Number(window.sentPacket.status) === 53 || Number(window.sentPacket.status) === 54) {
+      if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) === 50 || Number(window.sentPacket.status) === 56) {
+      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
@@ -243,6 +243,8 @@ class AddNoteNC extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
+      document.getElementById("ipfs2File").value = null;
+
       let resArray = await window.utils.checkStats(window.assets.ids[e], [6, 0])
 
       console.log(resArray)
@@ -270,6 +272,7 @@ class AddNoteNC extends Component {
         text: window.assets.descriptions[e].text,
         description: window.assets.descriptions[e],
         status: window.assets.statuses[e],
+        statusNum : window.assets.statusNums[e],
         note: window.assets.notes[e]
       })
 

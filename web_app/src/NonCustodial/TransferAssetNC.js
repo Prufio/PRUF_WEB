@@ -46,39 +46,42 @@ class ModifyDescriptionNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      this.setState({ name: window.sentPacket.name })
-      this.setState({ idxHash: window.sentPacket.idxHash })
-      this.setState({ assetClass: window.sentPacket.assetClass })
-      this.setState({ status: window.sentPacket.status })
-      if (Number(window.sentPacket.status) === 3 || Number(window.sentPacket.status) === 4 || Number(window.sentPacket.status) === 53 || Number(window.sentPacket.status) === 54) {
+      console.log(window.sentPacket.status)
+      if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot transfer asset in lost or stolen status! Please change to transferrable status");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) === 50 || Number(window.sentPacket.status) === 56) {
+      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) === 58) {
+      if (Number(window.sentPacket.statusNum) === 58) {
         alert("Cannot transfer asset in imported status! please change to transferrable status");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) === 70) {
+      if (Number(window.sentPacket.statusNum) === 70) {
         alert("Cannot transfer asset in exported status! please import asset and change to transferrable status");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.status) !== 51) {
+      if (Number(window.sentPacket.statusNum) !== 51) {
         alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status");
          window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
+
+      this.setState({ name: window.sentPacket.name })
+      this.setState({ idxHash: window.sentPacket.idxHash })
+      this.setState({ assetClass: window.sentPacket.assetClass })
+      this.setState({ status: window.sentPacket.status })
+
 
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })

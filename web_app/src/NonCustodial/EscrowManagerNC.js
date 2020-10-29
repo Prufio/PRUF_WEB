@@ -62,7 +62,7 @@ class EscrowManagerNC extends Component {
         this.setState({ isSettingEscrowAble: true })
       }
 
-      if (Number(window.sentPacket.status) === 3 || Number(window.sentPacket.status) === 4 || Number(window.sentPacket.status) === 53 || Number(window.sentPacket.status) === 54) {
+      if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentpacket = undefined;
         return window.location.href = "/#/asset-dashboard"

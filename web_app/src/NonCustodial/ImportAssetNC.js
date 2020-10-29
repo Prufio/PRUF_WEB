@@ -57,7 +57,7 @@ class ImportAssetNC extends Component {
     }
     if (window.sentPacket !== undefined) {
       
-      if (Number(window.sentPacket.status) !== 70) {
+      if (Number(window.sentPacket.statusNum) !== 70) {
         console.log("SentPacketStatus :", window.sentPacket.status)
         alert("Asset is not exported! Owner must export the assset in order to import.");
          window.sentPacket = undefined;
