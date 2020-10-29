@@ -12,6 +12,11 @@ class AddNoteNC extends Component {
 
     //State declaration.....................................................................................................
 
+    this.clearForm = async () => {
+      document.getElementById("MainForm").reset();
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
+    }
+
     this.setInscription = async () => {
       const self = this;
       window.isInTx = true;
@@ -34,6 +39,8 @@ class AddNoteNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
+          alert("Something went wrong!")
+          this.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
         })

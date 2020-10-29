@@ -140,6 +140,8 @@ class EscrowManagerNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
+          alert("Something went wrong!")
+          clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
         .on("receipt", (receipt) => {
@@ -221,9 +223,8 @@ class EscrowManagerNC extends Component {
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
           console.log(Object.values(_error)[0].transactionHash);
-          if (this.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
+          alert("Something went wrong!")
+          clearForm();
         })
         .on("receipt", (receipt) => {
           self.setState({ transaction: false })

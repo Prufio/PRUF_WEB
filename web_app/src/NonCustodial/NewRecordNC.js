@@ -199,6 +199,9 @@ class NewRecordNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
+          alert("Something went wrong!")
+          clearForm();
+          self.setState({ assetClassSelected: false, idxSubmitted: false })
 
         })
         .on("receipt", (receipt) => {
