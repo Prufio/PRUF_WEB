@@ -273,9 +273,24 @@ class Main extends Component {
                             </h4>
                           )}
                           <br></br>
+                          {this.state.prufBalance === undefined && (
+                            <h4>
+                              PRUF Balance : WIP
+                              {/* <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                                Log In
+                              </a> */}
+                            </h4>
+                          )}
+                          {this.state.prufBalance && (
+                            <h4>
+                              PRUF Balance : WIP
+                              {/* {this.state.prufBalance.substring(0, 6)} */}
+                            </h4>
+                          )}
+                          <br></br>
                           {this.state.assetClassBalance === undefined && (
                             <h4>
-                              AssetClass Token Balance: Please
+                              AssetClass Balance: Please
                               <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
                                 Log In
                               </a>
@@ -283,13 +298,13 @@ class Main extends Component {
                           )}
                           {this.state.assetClassBalance && (
                             <h4>
-                              AssetClass Token Balance: {this.state.assetClassBalance}
+                              AssetClass Balance: {this.state.assetClassBalance}
                             </h4>
                           )}
                           <br></br>
                           {this.state.assetBalance === undefined && (
                             <h4>
-                              Asset Token Balance: Please
+                              Asset Balance: Please
                               <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
                                 Log In
                               </a>
@@ -297,7 +312,7 @@ class Main extends Component {
                           )}
                           {this.state.assetBalance && (
                             <h4>
-                              Asset Token Balance:
+                              Asset Balance:
                               <Button
                                 variant="assetDashboard"
                                 title="Asset Dashboard"
@@ -401,7 +416,7 @@ class Main extends Component {
                         background-color: #002a40;
                         color: white;
                         height: 3rem;
-                        width: 17.3rem;
+                        width: 17.25rem;
                         margin-top: -0.2rem;
                         border-radius: 0;
                         font-weight: bold;

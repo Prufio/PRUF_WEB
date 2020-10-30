@@ -407,7 +407,7 @@ class AssetDashboard extends React.Component {
                   <div>
                     <p className="cardName">Name: {obj.names[i]}</p>
                     <p className="cardAc">Asset Class: {obj.assetClassNames[i]}</p>
-                    <p className="card-status">Status: {obj.statuses[i]}</p>
+                    <p className="cardStatus">Status: {obj.statuses[i]}</p>
                     <h4 className="cardIdx">IDX: {obj.ids[i]}</h4>
                     <br></br>
                     <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description: {obj.descriptions[i].text.Description}</h4></div>

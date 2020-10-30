@@ -476,7 +476,7 @@ div {
 .hamburgerDropdownUserInfo {
   display: flex;
   width: 27rem;
-  height: 22rem;
+  height: 26rem;
   color:white;
   background-color: #002a40;
   flex-direction: column;
@@ -1311,10 +1311,11 @@ div {
   margin-top: -0.5rem;
 }
 
-.cardDescription {
+/* .cardDescription {
   font-size: 1.2rem;
   font-weight: bold;
-}
+  margin-left: -1rem;
+} */
 
 .cardIdx {
   font-size: 1rem;
@@ -1327,7 +1328,7 @@ div {
   width: 50rem;
   height: auto;
   word-wrap: normal;
-  margin-left: 0.5rem;
+  margin-left: 0.3rem;
 }
 
 .cardDescriptionForm h4 {
