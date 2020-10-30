@@ -222,15 +222,15 @@ class NewRecordNC extends Component {
     return (//default render
       <div>
         <div>
-          <div className="mediaLinkAD-home">
-            <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+          <div className="mediaLinkADHome">
+            <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="FormHeader">New Record</h2>
-          <div className="mediaLink-clearForm">
-            <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+          <h2 className="formHeader">New Record</h2>
+          <div className="mediaLinkClearForm">
+            <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -252,7 +252,7 @@ class NewRecordNC extends Component {
                 </Form.Group>
 
                 <div className="submitButtonNRAC">
-                  <div className="submitButtonNR-content">
+                  <div className="submitButtonNRContent">
                     <ArrowRightCircle
                       onClick={() => { _setAC() }}
                     />
@@ -324,7 +324,7 @@ class NewRecordNC extends Component {
                   </Form.Row>
 
                   <div className="submitButtonNRCA">
-                    <div className="submitButtonNR-content">
+                    <div className="submitButtonNRContent">
                       <ArrowRightCircle
                         onClick={() => { checkAsset() }}
                       />
@@ -407,12 +407,12 @@ class NewRecordNC extends Component {
                   {this.state.transaction === false && (
                   <Form.Row>
                     <div className="submitButtonNR">
-                      <div className="submitButtonNR-content">
+                      <div className="submitButtonNRContent">
                         <CheckCircle
                           onClick={() => { _newRecord() }}
                         />
                       </div>
-                      <Form.Label className="LittleTextNewRecord"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
+                      <Form.Label className="costTextNewRecord"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
                     </div>
                   </Form.Row>
                   )}
@@ -426,11 +426,11 @@ class NewRecordNC extends Component {
           )}
         </Form>
         {this.state.transaction === true && (
-          <div className="Results">
+          <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
         {this.state.transaction === false && (
-          <div className="Results">
+          <div className="results">
             {this.state.txHash > 0 && ( //conditional rendering
               <div>
                 {this.state.txStatus === false && (

@@ -343,16 +343,16 @@ class RecycleAssetNC extends Component {
       <div>
         {this.state.QRreader === false && (
           <div>
-            <div className="mediaLinkAD-home">
-              <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+            <div className="mediaLinkADHome">
+              <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
-            <h2 className="FormHeader">Recycle Asset</h2>
-            <div className="mediaLink-clearForm">
-              <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+            <h2 className="formHeader">Recycle Asset</h2>
+            <div className="mediaLinkClearForm">
+              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
           </div>
         )}
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -373,7 +373,7 @@ class RecycleAssetNC extends Component {
               </Form.Group>
 
               <div className="submitButtonNRAC">
-                <div className="submitButtonNR-content">
+                <div className="submitButtonNRContent">
                   <ArrowRightCircle
                     onClick={() => { _setAC() }}
                   />
@@ -388,11 +388,11 @@ class RecycleAssetNC extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
-                      className="CheckBox2"
+                      className="checkBox2"
                       id="inlineFormCheck"
                       onChange={() => { Checkbox() }}
                     />
-                    <Form.Label className="CheckBoxformFont">Input Raw Idx Hash</Form.Label>
+                    <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                     {this.state.Checkbox === true && (
                       <Form.Row>
                         <Form.Label className="formFont">Idx Hash:</Form.Label>
@@ -458,7 +458,7 @@ class RecycleAssetNC extends Component {
               {this.state.QRreader === false && !this.state.accessPermitted && this.state.assetClassSelected === true && (
                 <Form.Row>
                   <div className="submitButton">
-                    <div className="submitButton-content">
+                    <div className="submitButtonContent">
                       <ArrowRightCircle
                         onClick={() => { this.accessAsset() }}
                       />
@@ -467,10 +467,10 @@ class RecycleAssetNC extends Component {
                   <div>
                     <button
                       onClick={() => { QRReader() }}
-                      className="QRScanButton"
+                      className="buttonQRScan"
                     >
                       <img
-                        className="QRScanImageForm"
+                        className="scanImageFormQR"
                         title="Scan QR Code"
                         src={require("../Resources/QRSCANPIC.png")}
                         alt="Pruf Print" />
@@ -482,12 +482,12 @@ class RecycleAssetNC extends Component {
               {this.state.QRreader === true && (
                 <div>
                   <div>
-                    <div className="mediaLinkAD-home">
-                      <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+                    <div className="mediaLinkADHome">
+                      <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
-                    <h2 className="FormHeader">Scan QR</h2>
-                    <div className="mediaLink-back">
-                      <a className="mediaLinkContent-back" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                    <h2 className="formHeader">Scan QR</h2>
+                    <div className="mediaLinkBack">
+                      <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                     </div>
                   </div>
                   <div className="QRreader">
@@ -498,7 +498,7 @@ class RecycleAssetNC extends Component {
                       style={{ width: '100%' }}
                     />
                     {this.state.resultIA !== undefined && (
-                      <div className="Results">
+                      <div className="results">
                         {this.state.assetFound}
                       </div>
                     )}
@@ -564,12 +564,12 @@ class RecycleAssetNC extends Component {
                   </Form.Row>
                   <Form.Row>
                     <div className="submitButton">
-                      <div className="submitButton-content">
+                      <div className="submitButtonContent">
                         <Repeat
                           onClick={() => { _recycleAsset() }}
                         />
                       </div>
-                      <Form.Label className="LittleTextRecycle"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
+                      <Form.Label className="costTextRecycle"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
                     </div>
                   </Form.Row>
                 </>
@@ -590,11 +590,11 @@ class RecycleAssetNC extends Component {
           </div>
         )}
         {this.state.transaction === true && this.state.QRreader === false && (
-          <div className="Results">
+          <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
         {this.state.txHash > 0 && this.state.QRreader === false && ( //conditional rendering
-          <div className="Results">
+          <div className="results">
             {this.state.txStatus === false && (
               <div>
                 !ERROR! :

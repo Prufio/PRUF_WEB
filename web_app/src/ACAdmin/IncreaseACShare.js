@@ -67,7 +67,7 @@ class IncreaseACShare extends Component {
 
     return (
       <div>
-        <Form className="Form">
+        <Form className="form">
           {window.addr === undefined && (
             <div className="VRresults">
               <h2>User address unreachable</h2>
@@ -76,7 +76,7 @@ class IncreaseACShare extends Component {
           )}
           {window.addr > 0 && (
             <div>
-              <h2 className="Headertext">Increase Share</h2>
+              <h2 className="headerText">Increase Share</h2>
               <br></br>
               <Form.Group as={Col} controlId="formGridAssetClass">
                 <Form.Label className="formFont">Asset Class :</Form.Label>

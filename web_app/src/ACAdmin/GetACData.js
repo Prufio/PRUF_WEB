@@ -82,7 +82,7 @@ class GetACData extends Component {
 
     return (
       <div>
-        <Form className="Form">
+        <Form className="form">
           {window.addr === undefined && (
             <div className="VRresults">
               <h2>User address unreachable</h2>
@@ -91,7 +91,7 @@ class GetACData extends Component {
           )}
           {window.addr > 0 && (
             <div>
-              <h2 className="Headertext">Search AC Data</h2>
+              <h2 className="headerText">Search AC Data</h2>
               <br></br>
                 <Form.Group as={Col} controlId="formGridType">
                   <Form.Label className="formFont">Asset Class:</Form.Label>
@@ -116,7 +116,7 @@ class GetACData extends Component {
           )}
         </Form>
         {this.state.ACData !== undefined && ( //conditional rendering
-          <div className="Results">
+          <div className="results">
             Asset Class Found!
             <br></br>
             AC : {this.state.ACData.AC}

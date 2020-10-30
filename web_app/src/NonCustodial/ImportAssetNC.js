@@ -269,15 +269,15 @@ class ImportAssetNC extends Component {
     return (
       <div>
         <div>
-          <div className="mediaLinkAD-home">
-            <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+          <div className="mediaLinkADHome">
+            <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="FormHeader">Import Asset</h2>
-          <div className="mediaLink-clearForm">
-            <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+          <h2 className="formHeader">Import Asset</h2>
+          <div className="mediaLinkClearForm">
+            <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -299,7 +299,7 @@ class ImportAssetNC extends Component {
                 </Form.Group>
 
                 <div className="submitButtonNRAC">
-                  <div className="submitButtonNR-content">
+                  <div className="submitButtonNRContent">
                     <ArrowRightCircle
                       onClick={() => { _setAC() }}
                     />
@@ -353,12 +353,12 @@ class ImportAssetNC extends Component {
                   <div>
                     <Form.Row>
                         <div className="submitButton">
-                          <div className="submitButton-content">
+                          <div className="submitButtonContent">
                             <CheckCircle
                               onClick={() => { _importAsset() }}
                             />
                           </div>
-                          <Form.Label className="LittleTextNewRecord">
+                          <Form.Label className="costTextNewRecord">
                             Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF
                           </Form.Label>
                         </div>
@@ -388,11 +388,11 @@ class ImportAssetNC extends Component {
         )}
         {this.state.transaction === true && (
 
-          <div className="Results">
+          <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
         {this.state.txHash > 0 && ( //conditional rendering
-          <div className="Results">
+          <div className="results">
             {this.state.txStatus === false && (
               <div>
                 !ERROR! :

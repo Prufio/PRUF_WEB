@@ -114,7 +114,7 @@ class NewRecord extends Component {
 
     return (//default render
       <div>
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -128,7 +128,7 @@ class NewRecord extends Component {
           )}
           {window.addr > 0 && window.assetClass > 0 && (
             <div>
-              <h2 className="Headertext">New Record</h2>
+              <h2 className="headerText">New Record</h2>
               <br></br>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridType">
@@ -262,7 +262,7 @@ class NewRecord extends Component {
                   >
                     New Record
                     </Button>
-                  <div className="LittleTextNewRecord"> Cost in AC {window.assetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} ETH</div>
+                  <div className="costTextNewRecord"> Cost in AC {window.assetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} ETH</div>
                 </Form.Group>
 
 
@@ -274,7 +274,7 @@ class NewRecord extends Component {
             </div>
           )}
         </Form>
-        <div className="Results">
+        <div className="results">
         {this.state.txHash > 0 && ( //conditional rendering
           <Form.Row>
             {this.state.txStatus === false && (

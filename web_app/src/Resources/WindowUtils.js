@@ -163,11 +163,11 @@ function buildWindowUtils() {
                   </button>
                 </div>
                 <div>
-                  <p className="card-name">Name : {obj.names[i]}</p>
-                  <p className="card-ac">Asset Class : {obj.assetClasses[i]}</p>
+                  <p className="cardName">Name : {obj.names[i]}</p>
+                  <p className="cardAc">Asset Class : {obj.assetClasses[i]}</p>
                   <p className="card-status">Status : {obj.statuses[i]}</p>
                   <br></br>
-                  <div className="cardDescription"><h4 className="card-description">Description : {obj.descriptions[i].text.description}</h4></div>
+                  <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description : {obj.descriptions[i].text.description}</h4></div>
                 </div>
                 <div className="cardButton">
                   <Button
@@ -1247,8 +1247,8 @@ function buildWindowUtils() {
 
   const _generateCardPrint = () => {
     return (
-      <div className="PrintForm">
-        <div className="QRPrint">
+      <div className="printForm">
+        <div className="printQR">
           <QRCode
             value={window.printObj.idxHash}
             size="256"
@@ -1258,13 +1258,13 @@ function buildWindowUtils() {
             logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
           />
         </div>
-        <div className="card-href">https://pruf.io</div>
-        <div className="PrintFormContent">
+        <div className="cardHref">https://pruf.io</div>
+        <div className="printFormContent">
           <img
-            className="PrintImageBackgroundForm"
+            className="printImageBackgroundForm"
             src={require("../Resources/PrufPrintBackground.png")}
             alt="Pruf Print Background" />
-          <div className="QRPrint2">
+          <div className="printQR2">
             <QRCode
               value={window.printObj.idxHash}
               size="160"
@@ -1274,9 +1274,9 @@ function buildWindowUtils() {
               logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
             />
           </div>
-          <p className="card-name-print">Name : {window.printObj.name}</p>
-          <p className="card-ac-print">Asset Class : {window.printObj.assetClass}</p>
-          <h4 className="card-idx-print">IDX : {window.printObj.idxHash}</h4>
+          <p className="cardNamePrint">Name : {window.printObj.name}</p>
+          <p className="cardAcPrint">Asset Class : {window.printObj.assetClass}</p>
+          <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
         </div>
       </div >
     )

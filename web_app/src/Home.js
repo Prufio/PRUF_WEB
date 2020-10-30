@@ -100,7 +100,7 @@ class Home extends Component {
 
     return (
       <div>
-        <div className="home">
+        <div className="homeForm">
           <img className="prufARCroppedForm" src={require("./Resources/Pruf AR (2).png")} alt="Pruf Logo Home" />
           <br></br>
           <div> {window.addr !== undefined && window.assetClass > 0 && (<div>Operating in asset class {window.assetClass} ({window.assetClassName}) as {window.authLevel}</div>)}</div>
@@ -119,7 +119,7 @@ class Home extends Component {
               </Form.Group>
               <Form.Row>
                 <div className="submitButtonHome">
-                  <div className="submitButton-content">
+                  <div className="submitButtonContent">
                     <ArrowRightCircle
                       onClick={() => { _setWindowAC() }}
                     />
@@ -129,7 +129,7 @@ class Home extends Component {
             </div>
           )}
           {window._contracts === undefined && window.addr !== undefined && (
-            <div className="VRText">
+            <div className="text">
               <Form.Row>
                 <h1 className="loading">
                   Connecting to the Blockchain
@@ -138,7 +138,7 @@ class Home extends Component {
             </div>
           )}
           {window._contracts === undefined && window.addr === undefined && (
-            <div className="VRText">
+            <div className="text">
               <Form.Row>
                 <h1 className="loading">
                   Connecting to the Blockchain
@@ -147,7 +147,7 @@ class Home extends Component {
             </div>
           )}
           {window._contracts !== undefined && window.addr === undefined && (
-            <div className="VRText">
+            <div className="text">
               <Form.Row>
                 <h1 >
                   Unable to Get User Address

@@ -7,7 +7,7 @@ import "../index.css";
 class AuthorizedUserComponent extends Component {
     render() {
         return (
-            <Nav className="header">
+            <Nav className="headerForm">
             <li>
                 <NavLink exact to="/">Home</NavLink>
             </li>

@@ -135,7 +135,7 @@ class ForceModifyRecord extends Component {
 
     return (
       <div>
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -149,7 +149,7 @@ class ForceModifyRecord extends Component {
           )}
           {window.addr > 0 && window.assetClass > 0 && (
             <div>
-              <h2 className="Headertext">Force Transfer</h2>
+              <h2 className="headerText">Force Transfer</h2>
               <br></br>
               {!this.state.accessPermitted && (
                 <>
@@ -276,7 +276,7 @@ class ForceModifyRecord extends Component {
                       >
                         Transfer Asset
                   </Button>
-                      <div className="LittleTextModify"> Cost in AC {window.assetClass}: {Number(window.costs.forceTransferCost) / 1000000000000000000} ETH</div>
+                      <div className="costTextModify"> Cost in AC {window.assetClass}: {Number(window.costs.forceTransferCost) / 1000000000000000000} ETH</div>
                     </Form.Group>
                   </Form.Row>
                 </>
@@ -284,7 +284,7 @@ class ForceModifyRecord extends Component {
             </div>
           )}
         </Form>
-        <div className="Results">
+        <div className="results">
           {this.state.txHash > 0 && ( //conditional rendering
             <Form.Row>
               {this.state.txStatus === false && (

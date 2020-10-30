@@ -194,17 +194,17 @@ class DecrementCounterNC extends Component {
     return (
       <div>
         <div>
-          <div className="mediaLinkAD-home">
-            <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+          <div className="mediaLinkADHome">
+            <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="FormHeader">Decrement Counter</h2>
-          <div className="mediaLink-clearForm">
-            <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+          <h2 className="formHeader">Decrement Counter</h2>
+          <div className="mediaLinkClearForm">
+            <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
-            <div className="Results">
+            <div className="results">
               <h2>User address unreachable</h2>
               <h3>Please connect web3 provider.</h3>
             </div>
@@ -267,7 +267,7 @@ class DecrementCounterNC extends Component {
               {this.state.transaction === false && (
                 <Form.Row>
                   <div className="submitButton">
-                    <div className="submitButton-content">
+                    <div className="submitButtonContent">
                       <CheckCircle
                         onClick={() => { _decrementCounter() }}
                       />
@@ -294,11 +294,11 @@ class DecrementCounterNC extends Component {
           </div>
         )}
         {this.state.transaction === true && (
-          <div className="Results">
+          <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
         {this.state.txHash > 0 && ( //conditional rendering
-          <div className="Results">
+          <div className="results">
             {this.state.txStatus === false && (
               <div>
                 !ERROR! :

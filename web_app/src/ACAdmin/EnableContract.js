@@ -71,7 +71,7 @@ class enableContract extends Component {
 
     return (
       <div>
-        <Form className="Form">
+        <Form className="form">
           {window.addr === undefined && (
             <div className="VRresults">
               <h2>User address unreachable</h2>
@@ -79,14 +79,14 @@ class enableContract extends Component {
             </div>
           )}
           {window.assetClass === undefined && (
-            <div className="Results">
+            <div className="results">
               <h2>No asset class selected.</h2>
               <h3>Please select asset class in home page to use forms.</h3>
             </div>
           )}
           {window.addr > 0 && window.assetClass > 0 && (
             <div>
-              <h2 className="Headertext">Enable Contract</h2>
+              <h2 className="headerText">Enable Contract</h2>
               <br></br>
               <Form.Group as={Col} controlId="formGridContractName">
                 <Form.Label className="formFont">Contract Name :</Form.Label>

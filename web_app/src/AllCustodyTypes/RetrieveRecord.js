@@ -89,7 +89,7 @@ class RetrieveRecord extends Component {
         for (let i = 0; i < text.length; i++) {
           component.push(
             <>
-              <h4 key={"text" + String(i)} className="card-description-selected">{textNames[i]}: {text[i]}</h4>
+              <h4 key={"text" + String(i)} className="cardDescriptionSelected">{textNames[i]}: {text[i]}</h4>
               <br />
             </>
           )
@@ -121,14 +121,14 @@ class RetrieveRecord extends Component {
                 <button className="assetImageButton" onClick={() => { openPhotoNT(this.state.selectedImage) }}>
                   <img src={this.state.selectedImage} className="assetImageSelected" />
                 </button>
-                <p className="card-name-selected">Name : {obj.name}</p>
-                <p className="card-ac-selected">Asset Class : {obj.assetClass}</p>
-                <p className="card-status-selected">Status : {status}</p>
+                <p className="cardNameSelected">Name : {obj.name}</p>
+                <p className="cardAcSelected">Asset Class : {obj.assetClass}</p>
+                <p className="cardStatusSelected">Status : {status}</p>
                 <div className="imageSelector">
                   {generateThumbs()}
                 </div>
                 <div className="cardSearchIdxForm">
-                  <h4 className="card-idx-selected">IDX : {obj.idxHash}</h4>
+                  <h4 className="cardIdxSelected">IDX : {obj.idxHash}</h4>
                 </div>
                 <div className="cardDescription-search">
                   {generateTextList()}
@@ -136,7 +136,7 @@ class RetrieveRecord extends Component {
               </div>
               {this.state.moreInfo && (
                 <div className="submitButtonRRQR3">
-                  <div className="submitButtonRRQR3-content">
+                  <div className="submitButtonRRQR3Content">
                     <CornerUpLeft
                       size={35}
                       onClick={() => { this.setState({ moreInfo: false, ipfsObject: undefined, assetObj: undefined, Checkbox: false }) }}
@@ -479,12 +479,12 @@ class RetrieveRecord extends Component {
         <div>
           <div>
             <div>
-              <div className="mediaLinkAD-home">
-                <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+              <div className="mediaLinkADHome">
+                <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
               </div>
               <h2 className="AssetDashboardHeader">Here's What We Found :</h2>
-              <div className="mediaLink-clearForm">
-                <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+              <div className="mediaLinkClearForm">
+                <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
               </div>
             </div>
           </div>
@@ -503,25 +503,25 @@ class RetrieveRecord extends Component {
           {!this.state.moreInfo && this.state.QRreader === false && (
             <div>
               <div>
-                <div className="mediaLinkAD-home">
-                  <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+                <div className="mediaLinkADHome">
+                  <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                 </div>
-                <h2 className="FormHeader">Search Database</h2>
-                <div className="mediaLink-clearForm">
-                  <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+                <h2 className="formHeader">Search Database</h2>
+                <div className="mediaLinkClearForm">
+                  <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                 </div>
               </div>
-              <Form className="Form" id="MainForm">
+              <Form className="form" id="MainForm">
                 <div>
                   {this.state.QRreader === false && (
                     <div>
                       <Form.Check
                         type="checkbox"
-                        className="CheckBox"
+                        className="checkBox"
                         id="inlineFormCheck"
                         onChange={() => { Checkbox() }}
                       />
-                      <Form.Label className="CheckBoxformFont">Input Raw Idx Hash</Form.Label>
+                      <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                       {this.state.Checkbox === true && (
                         <Form.Row>
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
@@ -588,7 +588,7 @@ class RetrieveRecord extends Component {
                   <Form.Row>
                     {this.state.Checkbox === false && (
                       <div className="submitButton">
-                        <div className="submitButton-content">
+                        <div className="submitButtonContent">
                           <ArrowRightCircle
                             onClick={() => { _retrieveRecord() }}
                           />
@@ -597,7 +597,7 @@ class RetrieveRecord extends Component {
                     )}
                     {this.state.Checkbox === true && (
                       <div className="submitButton">
-                        <div className="submitButton-content">
+                        <div className="submitButtonContent">
                           <ArrowRightCircle
                             onClick={() => { _retrieveRecord() }}
                           />
@@ -607,10 +607,10 @@ class RetrieveRecord extends Component {
                     <div>
                       <button
                         onClick={() => { QRReader() }}
-                        className="QRScanButton"
+                        className="buttonQRScan"
                       >
                         <img
-                          className="QRScanImageForm"
+                          className="scanImageFormQR"
                           title="Scan QR Code"
                           src={require("../Resources/QRSCANPIC.png")}
                           alt="Pruf Print" />
@@ -619,19 +619,19 @@ class RetrieveRecord extends Component {
                   </Form.Row>
                 </div>
               </Form>
-              <div className="Results"></div>
+              <div className="results"></div>
             </div>
           )}
 
           {this.state.QRreader === true && (
             <div>
               <div>
-                <div className="mediaLinkAD-home">
-                  <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+                <div className="mediaLinkADHome">
+                  <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                 </div>
-                <h2 className="FormHeader">Search Database</h2>
-                <div className="mediaLink-back">
-                  <a className="mediaLinkContent-back" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                <h2 className="formHeader">Search Database</h2>
+                <div className="mediaLinkBack">
+                  <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                 </div>
               </div>
               <div className="QRreader">
@@ -642,7 +642,7 @@ class RetrieveRecord extends Component {
                   style={{ width: '100%' }}
                 />
                 {this.state.result !== undefined && (
-                  <div className="Results">
+                  <div className="results">
                     {this.state.assetFound}
                   </div>
                 )}
@@ -651,7 +651,7 @@ class RetrieveRecord extends Component {
           )}
 
           {this.state.result[2] === "0" && (
-            <div className="Results">No Asset Found for Given Data</div>
+            <div className="results">No Asset Found for Given Data</div>
           )}
 
           {this.state.moreInfo && ( //conditional rendering

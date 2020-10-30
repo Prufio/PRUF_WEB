@@ -118,7 +118,7 @@ class RetrieveRecordMobile extends Component {
       return (
         <Card style={{ width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
           <div className="submitButtonRRQR3Mobile">
-            <div classname="submitButtonRRQR3-mobile">
+            <div className="submitButtonRRQR3MobileContent">
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
@@ -448,12 +448,12 @@ class RetrieveRecordMobile extends Component {
         <div>
           <div>
             <div>
-              <div className="mediaLinkAD-home">
-                <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/' }} /></a>
+              <div className="mediaLinkADHome">
+                <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
               </div>
               <h2 className="AssetDashboardHeader">Here's What We Found :</h2>
-              <div className="mediaLink-clearForm">
-                <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
+              <div className="mediaLinkClearForm">
+                <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
               </div>
             </div>
           </div>
@@ -471,15 +471,15 @@ class RetrieveRecordMobile extends Component {
         {!this.state.moreInfo && this.state.QRreader === undefined && (
           <div>
             <div>
-              <div className="mediaLinkAD-home">
-                <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/' }} /></a>
+              <div className="mediaLinkADHome">
+                <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
               </div>
-              <h2 className="FormHeaderMobile">Search Database</h2>
-              <div className="mediaLink-clearForm">
-                <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
+              <h2 className="formHeaderMobile">Search Database</h2>
+              <div className="mediaLinkClearForm">
+                <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
               </div>
             </div>
-            <Form className="FormMobile" id="MainForm">
+            <Form className="formMobile" id="MainForm">
               <div>
                 <Form.Row>
                   <Form.Label className="formFont">Type:</Form.Label>
@@ -520,14 +520,14 @@ class RetrieveRecordMobile extends Component {
                 <Form.Row>
                   <Form.Group>
                     <div className="submitButtonRRMobile">
-                      <div className="submitButtonRR-content">
+                      <div className="submitButtonRRContent">
                         <ArrowRightCircle
                           onClick={() => { _retrieveRecord() }}
                         />
                       </div>
                     </div>
                     <div className="submitButtonRRQRMobile">
-                      <div className="submitButtonRRQR-content">
+                      <div className="submitButtonRRQRContent">
                         <Grid
                           onClick={() => { QRReader() }}
                         />
@@ -545,12 +545,12 @@ class RetrieveRecordMobile extends Component {
         {this.state.QRreader === true && (
           <div>
             <div>
-              <div className="mediaLinkAD-home">
-                <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/' }} /></a>
+              <div className="mediaLinkADHome">
+                <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
               </div>
-              <h2 className="FormHeaderMobile">Search Database</h2>
-              <div className="mediaLink-back">
-                <a className="mediaLinkContent-back" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+              <h2 className="formHeaderMobile">Search Database</h2>
+              <div className="mediaLinkBack">
+                <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
               </div>
             </div>
             <div className="QRreader">
@@ -561,7 +561,7 @@ class RetrieveRecordMobile extends Component {
                 style={{ width: '100%' }}
               />
               {this.state.result !== undefined && (
-                <div className="ResultsMobile">
+                <div className="resultsMobile">
                   {this.state.assetFound}
                 </div>
               )}
@@ -570,7 +570,7 @@ class RetrieveRecordMobile extends Component {
         )}
 
         {this.state.result[2] === "0" && (
-          <div className="ResultsMobile">No Asset Found for Given Data</div>
+          <div className="resultsMobile">No Asset Found for Given Data</div>
         )}
 
         {this.state.moreInfo && ( //conditional rendering

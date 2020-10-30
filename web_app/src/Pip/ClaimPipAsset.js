@@ -116,14 +116,14 @@ class ClaimPipAsset extends Component {
             <div>
                 <Form className="CPAform" id='MainForm'>
                     {window.addr === undefined && (
-                        <div className="Results">
+                        <div className="results">
                             <h2>User address unreachable</h2>
                             <h3>Please connect web3 provider.</h3>
                         </div>
                     )}
                     {window.addr > 0 && (
                         <div>
-                            <h2 className="Headertext">Claim Pip Asset</h2>
+                            <h2 className="headerText">Claim Pip Asset</h2>
                             <br></br>
                             <Form.Row>
                                 <Form.Group as={Col} controlId="formGridType">
@@ -249,7 +249,7 @@ class ClaimPipAsset extends Component {
                     )}
                 </Form>
                 {this.state.txHash > 0 && ( //conditional rendering
-                    <div className="Results">
+                    <div className="results">
                         {this.state.txStatus === false && (
                             <div>
                                 !ERROR! :

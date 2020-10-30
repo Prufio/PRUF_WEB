@@ -45,7 +45,7 @@ class AssetDashboard extends React.Component {
     this.setAC = async (AC) => {
       let acDoesExist;
 
-      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero"), this.refresh()}
       else {
         if (
           AC.charAt(0) === "0" ||
@@ -94,6 +94,12 @@ class AssetDashboard extends React.Component {
       window.sentPacket = obj
       window.menuChange = menu
       window.location.href = '/#/' + link
+    }
+
+    this.refresh = () => {
+      window.resetInfo = true;
+      window.recount = true;
+      this.setState({ moreInfo: false, assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] } })
     }
 
     this.state = {
@@ -191,7 +197,7 @@ class AssetDashboard extends React.Component {
         for (let i = 0; i < text.length; i++) {
           component.push(
             <>
-              <h4 key={"TextElement" + String(i)} className="card-description-selected">{textNames[i]}: {text[i]}</h4>
+              <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">{textNames[i]}: {text[i]}</h4>
               <br />
             </>
           )
@@ -249,10 +255,10 @@ class AssetDashboard extends React.Component {
                     <div>
                       <button
                         onClick={() => { _printQR() }}
-                        className="QRButton"
+                        className="buttonQR"
                       >
                         <img
-                          className="QRImageForm"
+                          className="imageFormQR"
                           title="Asset QR Code"
                           src={require("../Resources/QRPIC.png")}
                           alt="Pruf Print" />
@@ -260,7 +266,7 @@ class AssetDashboard extends React.Component {
                     </div>
                     {this.state.printQR && (
                       <div>
-                        <div className="QRdisplay">
+                        <div className="displayQR">
                           <div className="QR">
                             <QRCode
                               value={obj.idxHash}
@@ -272,11 +278,11 @@ class AssetDashboard extends React.Component {
                             />
                           </div>
                         </div>
-                        <div className="QRdisplay-footer">
-                          <div className="mediaLinkQRdisplay">
-                            {/* <a className="mediaLinkQRdisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
+                        <div className="displayFooterQR">
+                          <div className="mediaLinkQRDisplay">
+                            {/* <a className="mediaLinkQRDisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
                             <Printer />
-                            <a className="mediaLinkQRdisplayContent" ><X onClick={() => { _printQR() }} /></a>
+                            <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
                           </div>
                         </div>
                       </div>
@@ -284,22 +290,22 @@ class AssetDashboard extends React.Component {
                     <button className="assetImageButtonSelected" onClick={() => { openPhotoNT(this.state.selectedImage) }}>
                       <img title="View Image" src={this.state.selectedImage} className="assetImageSelected" />
                     </button>
-                    <p className="card-name-selected">Name: {obj.name}</p>
-                    <p className="card-ac-selected">Asset Class: {obj.assetClassName}</p>
-                    <p className="card-status-selected">Status: {obj.status}</p>
+                    <p className="cardNameSelected">Name: {obj.name}</p>
+                    <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
+                    <p className="cardStatusSelected">Status: {obj.status}</p>
                     <div className="imageSelector">
                       {generateThumbs()}
                     </div>
                     <div className="cardSelectedIdxForm">
-                      <h4 className="card-idx-selected">IDX: {obj.idxHash}</h4>
+                      <h4 className="cardIdxSelected">IDX: {obj.idxHash}</h4>
                     </div>
-                    <div className="cardDescription-selected">
+                    <div className="cardDescriptionFormSelected">
                       {generateTextList()}
                     </div>
                   </div>
                   {this.state.moreInfo && (
                     <div className="cardButton2">
-                      <div className="cardButton2-content">
+                      <div className="cardButton2Content">
                         <CornerUpLeft
                           size={35}
                           onClick={() => { this.moreInfo("back") }}
@@ -399,15 +405,15 @@ class AssetDashboard extends React.Component {
                     </button>
                   </div>
                   <div>
-                    <p className="card-name">Name: {obj.names[i]}</p>
-                    <p className="card-ac">Asset Class: {obj.assetClassNames[i]}</p>
+                    <p className="cardName">Name: {obj.names[i]}</p>
+                    <p className="cardAc">Asset Class: {obj.assetClassNames[i]}</p>
                     <p className="card-status">Status: {obj.statuses[i]}</p>
-                    <h4 className="card-idx">IDX: {obj.ids[i]}</h4>
+                    <h4 className="cardIdx">IDX: {obj.ids[i]}</h4>
                     <br></br>
-                    <div className="cardDescription"><h4 className="card-description">Description: {obj.descriptions[i].text.Description}</h4></div>
+                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description: {obj.descriptions[i].text.Description}</h4></div>
                   </div>
                   <div className="cardButton">
-                    <div className="cardButton-content">
+                    <div className="cardButtonContent">
                       <ChevronRight
                         onClick={() => {
                           this.moreInfo({
@@ -443,30 +449,23 @@ class AssetDashboard extends React.Component {
 
     }
 
-
-    const _refresh = () => {
-      window.resetInfo = true;
-      window.recount = true;
-      this.setState({ moreInfo: false, assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] } })
-    }
-
     return (
 
       <div>
         <div>
-          <div className="mediaLinkAD-home">
-            <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+          <div className="mediaLinkADHome">
+            <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
           <h2 className="assetDashboardHeader">My Assets</h2>
-          <div className="mediaLinkAD-refresh">
-            <a className="mediaLinkContentAD-refresh" ><RefreshCw onClick={() => { _refresh() }} /></a>
+          <div className="mediaLinkADRefresh">
+            <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
         </div>
         <div className="assetDashboard">
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && !this.state.moreInfo && (<>{generateAssetDash(this.state.assets)}</>)}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && this.state.moreInfo && (<>{generateAssetInfo(this.state.assetObj)}</>)}
-          {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<div className="VRText"><h2 className="loading">Loading Assets</h2></div>)}
-          {this.state.hasNoAssets && (<div className="VRText"><h2>No Assets Held by User</h2></div>)}
+          {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<div className="text"><h2 className="loading">Loading Assets</h2></div>)}
+          {this.state.hasNoAssets && (<div className="text"><h2>No Assets Held by User</h2></div>)}
         </div>
         <div className="assetDashboardFooter">
         </div>

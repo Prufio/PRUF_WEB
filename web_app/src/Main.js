@@ -31,8 +31,8 @@ class Main extends Component {
           <div>
             <HashRouter>
               <div>
-                <div className="BannerForm">
-                  <ul className="header">
+                <div className="bannerForm">
+                  <ul className="headerForm">
                     {window._contracts !== undefined && (
                       <nav>
                         {this.state.noAddrMenuBool === true && (<NoAddressComponent />)}
@@ -136,9 +136,9 @@ class Main extends Component {
               </div>
             </div>
             <div>
-              <div className="BannerForm">
+              <div className="bannerForm">
                 <div className="hamburgerMenu">
-                  <a className="hamburgerMenu-content" ><Menu size={35} onClick={() => { this.hamburgerMenu() }} /></a>
+                  <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenu() }} /></a>
                 </div>
                 {this.state.hamburgerMenu !== undefined && (
                   <div className="hamburgerDropdown">
@@ -167,10 +167,10 @@ class Main extends Component {
                   </h3>
                     </div>
                     <div className="hamburgerMenuLink">
-                      <a className="hamburgerMenuLink-content-user" ><User size={48} onClick={() => { this.userMenu() }} /></a>
+                      <a className="hamburgerMenuLinkUserContent"><User size={48} onClick={() => { this.userMenu() }} /></a>
                     </div>
                     <div className="hamburgerMenuLink">
-                      <a className="hamburgerMenuLink-content-settings" ><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
+                      <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
                     </div>
                     <div>
                       {this.state.settingsMenu !== undefined && (
@@ -252,13 +252,19 @@ class Main extends Component {
                           )}
                           {this.state.addr === undefined && (
                             <h4>
-                              Currently serving: NOBODY! Log into web3 provider!
+                              Currently Serving : Please
+                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                                Log In
+                              </a>
                             </h4>
                           )}
                           <br></br>
                           {this.state.ETHBalance === undefined && (
                             <h4>
-                              ETH Balance : Please Log In
+                              ETH Balance : Please
+                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                                Log In
+                              </a>
                             </h4>
                           )}
                           {this.state.ETHBalance && (
@@ -269,7 +275,10 @@ class Main extends Component {
                           <br></br>
                           {this.state.assetClassBalance === undefined && (
                             <h4>
-                              AssetClass Token Balance: Please Log In
+                              AssetClass Token Balance: Please
+                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                                Log In
+                              </a>
                             </h4>
                           )}
                           {this.state.assetClassBalance && (
@@ -280,7 +289,10 @@ class Main extends Component {
                           <br></br>
                           {this.state.assetBalance === undefined && (
                             <h4>
-                              Asset Token Balance: Please Log In
+                              Asset Token Balance: Please
+                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                                Log In
+                              </a>
                             </h4>
                           )}
                           {this.state.assetBalance && (
@@ -297,7 +309,10 @@ class Main extends Component {
                           <br></br>
                           {this.state.IDTokenBalance === undefined && (
                             <h4>
-                              ID Token Balance : Please Log In
+                              ID Token Balance : Please
+                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                                Log In
+                              </a>
                             </h4>
                           )}
                           {this.state.IDTokenBalance && (
@@ -311,7 +326,7 @@ class Main extends Component {
                     </div>
                   </div>
                 )}
-                <ul className="header">
+                <ul className="headerForm">
                   {window._contracts !== undefined && (
                     <nav>
                       {this.state.noAddrMenuBool === true && (<NoAddressComponent />)}
@@ -368,7 +383,7 @@ class Main extends Component {
                         margin-top: -0.5rem;
                         // margin-right: 37rem;
                         font-size: 1.6rem;
-                        width: 5rem;
+                        width: fit-content;
                       }
                       .btn-assetDashboard:hover {
                         background-color: transparent;
@@ -380,10 +395,6 @@ class Main extends Component {
                       .btn-assetDashboard:active {
                         background-color: transparent;
                         border: transparent;
-                      }
-
-                      .btn {
-                        color: white;
                       }
 
                       .btn-toggle {

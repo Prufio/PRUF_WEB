@@ -144,7 +144,7 @@ class DecrementCounter extends Component {
 
     return (
       <div>
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -158,7 +158,7 @@ class DecrementCounter extends Component {
           )}
           {window.addr > 0 && window.assetClass > 0 && (
             <div>
-              <h2 className="Headertext">Decrement Counter</h2>
+              <h2 className="headerText">Decrement Counter</h2>
               <br></br>
               {!this.state.accessPermitted && (
                 <>
@@ -309,7 +309,7 @@ class DecrementCounter extends Component {
             </div>
           )}
         </Form>
-        <div className="Results">
+        <div className="results">
         {this.state.txHash > 0 && ( //conditional rendering
           <Form.Row>
             {this.state.txStatus === false && (

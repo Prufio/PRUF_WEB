@@ -132,15 +132,15 @@ class VerifyLiteMobile extends Component {
     return (
       <div>
         <div>
-          <div className="mediaLinkAD-home">
-            <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/' }} /></a>
+          <div className="mediaLinkADHome">
+            <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
           </div>
-          <h2 className="FormHeaderMobile">Verify Lite</h2>
-          <div className="mediaLink-clearForm">
-            <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+          <h2 className="formHeaderMobile">Verify Lite</h2>
+          <div className="mediaLinkClearForm">
+            <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="FormMobile" id='MainForm'>
+        <Form className="formMobile" id='MainForm'>
           <div>
             {!this.state.accessPermitted && (
               <>
@@ -183,7 +183,7 @@ class VerifyLiteMobile extends Component {
                 </Form.Row>
                 <Form.Row>
                   <div className="submitButtonVRHMobile">
-                    <div className="submitButton-content">
+                    <div className="submitButtonContent">
                       <ArrowRightCircle
                         onClick={() => { _accessAsset() }}
                       />
@@ -243,7 +243,7 @@ class VerifyLiteMobile extends Component {
                 </Form.Row>
                 <Form.Row>
                   <div className="submitButtonVRHMobile">
-                    <div className="submitButton-content">
+                    <div className="submitButtonContent">
                       <ArrowRightCircle
                         onClick={() => { _verify() }}
                       />
@@ -254,7 +254,7 @@ class VerifyLiteMobile extends Component {
             )}
           </div>
         </Form>
-        <div className="ResultsMobile">
+        <div className="resultsMobile">
 
           {this.state.result !== "" && ( //conditional rendering
             <Form.Row>

@@ -211,18 +211,18 @@ class VerifyRightHolder extends Component {
       <div>
         {this.state.QRreader === false && (
           <div>
-            <div className="mediaLinkAD-home">
-              <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+            <div className="mediaLinkADHome">
+              <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
-            <h2 className="FormHeader">Deep Verify</h2>
-            <div className="mediaLink-clearForm">
-              <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+            <h2 className="formHeader">Deep Verify</h2>
+            <div className="mediaLinkClearForm">
+              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
           </div>
         )}
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
-            <div className="Results">
+            <div className="results">
               <h2>User address unreachable</h2>
               <h3>Please connect web3 provider.</h3>
             </div>
@@ -234,11 +234,11 @@ class VerifyRightHolder extends Component {
                 <div>
                   <Form.Check
                     type="checkbox"
-                    className="CheckBox"
+                    className="checkBox"
                     id="inlineFormCheck"
                     onChange={() => { Checkbox() }}
                   />
-                  <Form.Label className="CheckBoxformFont">Input Raw Idx Hash</Form.Label>
+                  <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                   {this.state.Checkbox === true && (
                     <Form.Row>
                       <Form.Label className="formFont">Idx Hash:</Form.Label>
@@ -304,7 +304,7 @@ class VerifyRightHolder extends Component {
               {this.state.transaction === false && this.state.QRreader === false && !this.state.accessPermitted && (
                 <Form.Row>
                   <div className="submitButton">
-                    <div className="submitButton-content">
+                    <div className="submitButtonContent">
                       <ArrowRightCircle
                         onClick={() => { this.accessAsset() }}
                       />
@@ -313,10 +313,10 @@ class VerifyRightHolder extends Component {
                   <div>
                     <button
                       onClick={() => { QRReader() }}
-                      className="QRScanButton"
+                      className="buttonQRScan"
                     >
                       <img
-                        className="QRScanImageForm"
+                        className="scanImageFormQR"
                         title="Scan QR Code"
                         src={require("../Resources/QRSCANPIC.png")}
                         alt="Pruf Print" />
@@ -335,12 +335,12 @@ class VerifyRightHolder extends Component {
                    `}
                   </style>
                   <div>
-                    <div className="mediaLinkAD-home">
-                      <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+                    <div className="mediaLinkADHome">
+                      <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
-                    <h2 className="FormHeaderQR">Scan QR</h2>
-                    <div className="mediaLink-back">
-                      <a className="mediaLinkContent-back" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                    <h2 className="formHeaderQR">Scan QR</h2>
+                    <div className="mediaLinkBack">
+                      <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                     </div>
                   </div>
                   <div className="QRreader">
@@ -351,7 +351,7 @@ class VerifyRightHolder extends Component {
                       style={{ width: '100%', height: "100%" }}
                     />
                     {this.state.result !== undefined && (
-                      <div className="Results">
+                      <div className="results">
                         {this.state.assetFound}
                       </div>
                     )}
@@ -417,7 +417,7 @@ class VerifyRightHolder extends Component {
                   {this.state.transaction === false && (
                     <Form.Row>
                       <div className="submitButtonVRH2">
-                        <div className="submitButtonVRH2-content">
+                        <div className="submitButtonVRH2Content">
                           <CheckCircle
                             onClick={() => { _verify() }}
                           />
@@ -431,19 +431,19 @@ class VerifyRightHolder extends Component {
           )}
         </Form>
         {this.state.transaction === true && (
-          <div className="Results">
+          <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>
         )}
         {this.state.QRreader === false && this.state.transaction === false && (
-          <div className="Results">
+          <div className="results">
             {this.state.txHash > 0 && ( //conditional rendering
               <Form.Row>
                 {this.state.DVresult === "Match confirmed"
                   ? "Match Confirmed :"
                   : "No Match Found :"}
                 <a
-                  className="ResultLink"
+                  className="resultLink"
                   href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
                   target="_blank"
                   rel="noopener noreferrer"

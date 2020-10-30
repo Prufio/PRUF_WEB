@@ -22,10 +22,10 @@ class Example extends React.Component {
                             <div>
                                 <button
                                     onClick={handlePrint}
-                                    className="PrintButton"
+                                    className="printButton"
                                 >
                                     <img
-                                        className="PrintImageForm"
+                                        className="printImageForm"
                                         title="Print Asset Info"
                                         src={require("../Resources/print.png")}
                                         alt="Pruf Print" />

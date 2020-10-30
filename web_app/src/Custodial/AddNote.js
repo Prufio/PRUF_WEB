@@ -161,7 +161,7 @@ class AddNote extends Component {
 
     return (
       <div>
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -175,7 +175,7 @@ class AddNote extends Component {
           )}
           {window.addr > 0 && window.assetClass > 0 && (
             <div>
-              <h2 className="Headertext">Add Note</h2>
+              <h2 className="headerText">Add Note</h2>
               <br></br>
               {!this.state.accessPermitted &&(
                 <>
@@ -310,7 +310,7 @@ class AddNote extends Component {
                     >
                       Add Note
                     </Button>
-                    <div className="LittleTextTransfer"> Cost in AC {window.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} ETH</div>
+                    <div className="costTextTransfer"> Cost in AC {window.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} ETH</div>
                   </Form.Group>
                 </Form.Row>
               )}
@@ -334,7 +334,7 @@ class AddNote extends Component {
             </div>
           )}
         </Form>
-        <div className="Results">
+        <div className="results">
         {this.state.txHash > 0 && ( //conditional rendering
           <Form.Row>
             {this.state.txStatus === false && (

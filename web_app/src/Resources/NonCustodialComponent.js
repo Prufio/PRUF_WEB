@@ -7,7 +7,7 @@ import "../index.css";
 class NonCustodialAdminComponent extends Component {
     render() {
         return (
-            <Nav className="header">
+            <Nav className="headerForm">
                 <li>
                     <NavLink exact to="/">Home</NavLink>
                 </li>

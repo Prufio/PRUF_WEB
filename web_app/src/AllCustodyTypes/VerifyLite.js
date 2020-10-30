@@ -190,26 +190,26 @@ class VerifyLite extends Component {
       <div>
         {this.state.QRreader === false && (
           <div>
-            <div className="mediaLinkAD-home">
-              <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+            <div className="mediaLinkADHome">
+              <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
-            <h2 className="FormHeader">Verify Lite</h2>
-            <div className="mediaLink-clearForm">
-              <a className="mediaLinkContent-clearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+            <h2 className="formHeader">Verify Lite</h2>
+            <div className="mediaLinkClearForm">
+              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
           </div>
         )}
-        <Form className="Form" id='MainForm'>
+        <Form className="form" id='MainForm'>
           <div>
             {this.state.QRreader === false && !this.state.accessPermitted && (
               <div>
                 <Form.Check
                   type="checkbox"
-                  className="CheckBox"
+                  className="checkBox"
                   id="inlineFormCheck"
                   onChange={() => { Checkbox() }}
                 />
-                <Form.Label className="CheckBoxformFont">Input Raw Idx Hash</Form.Label>
+                <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                 {this.state.Checkbox === true && (
                   <Form.Row>
                     <Form.Label className="formFont">Idx Hash:</Form.Label>
@@ -275,7 +275,7 @@ class VerifyLite extends Component {
             {this.state.QRreader === false && !this.state.accessPermitted && (
               <Form.Row>
                 <div className="submitButton">
-                  <div className="submitButton-content">
+                  <div className="submitButtonContent">
                     <ArrowRightCircle
                       onClick={() => { this.accessAsset() }}
                     />
@@ -284,10 +284,10 @@ class VerifyLite extends Component {
                 <div>
                       <button
                         onClick={() => { QRReader() }}
-                        className="QRScanButton"
+                        className="buttonQRScan"
                       >
                         <img
-                          className="QRScanImageForm"
+                          className="scanImageFormQR"
                           title="Scan QR Code"
                           src={require("../Resources/QRSCANPIC.png")}
                           alt="Pruf Print" />
@@ -306,12 +306,12 @@ class VerifyLite extends Component {
                    `}
                 </style>
                 <div>
-                  <div className="mediaLinkAD-home">
-                    <a className="mediaLinkContentAD-home" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+                  <div className="mediaLinkADHome">
+                    <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                   </div>
-                  <h2 className="FormHeaderQR">Scan QR</h2>
-                  <div className="mediaLink-back">
-                    <a className="mediaLinkContent-back" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                  <h2 className="formHeaderQR">Scan QR</h2>
+                  <div className="mediaLinkBack">
+                    <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                   </div>
                 </div>
                 <div className="QRreader">
@@ -322,7 +322,7 @@ class VerifyLite extends Component {
                     style={{ width: '100%' }}
                   />
                   {this.state.result !== undefined && (
-                    <div className="Results">
+                    <div className="results">
                       {this.state.assetFound}
                     </div>
                   )}
@@ -387,7 +387,7 @@ class VerifyLite extends Component {
                 </Form.Row>
                 <Form.Row>
                   <div className="submitButtonVRH2">
-                    <div className="submitButtonVRH2-content">
+                    <div className="submitButtonVRH2Content">
                       <CheckCircle
                         onClick={() => { _verify() }}
                       />
@@ -399,7 +399,7 @@ class VerifyLite extends Component {
           </div>
         </Form>
         {this.state.QRreader === false && (
-          <div className="Results">
+          <div className="results">
 
             {this.state.VLresult !== "" && ( //conditional rendering 7
               <Form.Row>

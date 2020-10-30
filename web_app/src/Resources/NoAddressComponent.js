@@ -15,7 +15,7 @@ class NoAddressComponent extends Component {
 
         if (isMobile) {
             return (
-                <Nav className="header">
+                <Nav className="headerForm">
                     <li>
                         <NavLink exact to="/">Home</NavLink>
                     </li>
@@ -30,7 +30,7 @@ class NoAddressComponent extends Component {
         }
         else {
             return (
-                <Nav className="header">
+                <Nav className="headerForm">
                     <li>
                         <NavLink exact to="/">Home</NavLink>
                     </li>

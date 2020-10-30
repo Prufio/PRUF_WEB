@@ -61,7 +61,7 @@ class AddUser extends Component {
 
     return (
       <div>
-        <Form className="Form">
+        <Form className="form">
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
@@ -76,7 +76,7 @@ class AddUser extends Component {
           )}
           {window.addr > 0 && window.assetClass > 0 && (
             <div>
-              <h2 className="Headertext">Add User</h2>
+              <h2 className="headerText">Add User</h2>
               <br></br>
 
               <Form.Group as={Col} controlId="formGridContractName">
