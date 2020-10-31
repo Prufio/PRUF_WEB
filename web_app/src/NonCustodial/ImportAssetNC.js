@@ -159,7 +159,7 @@ class ImportAssetNC extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: undefined, assetClassSelected: false })
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, assetClassSelected: false })
     }
 
     const _checkIn = async (e) => {
@@ -240,7 +240,7 @@ class ImportAssetNC extends Component {
         .on("error", function (_error) {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false });
+          self.setState({ txStatus: false, wasSentPacket: false  });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);

@@ -111,7 +111,7 @@ class DiscardAssetNC extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: ""})
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false  })
     }
 
     const _discardAsset = async () => {//create a new asset record
@@ -135,7 +135,7 @@ class DiscardAssetNC extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false });
+          self.setState({ txStatus: false, wasSentPacket: false  });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);

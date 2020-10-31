@@ -147,7 +147,7 @@ class VerifyRightHolder extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ DVresult: "", accessPermitted: false, transaction: false, txHash: "", Checkbox: false })
+      this.setState({ DVresult: "", accessPermitted: false, transaction: false, txHash: "", Checkbox: false, wasSentPacket: false   })
     }
 
     const _verify = async () => {
