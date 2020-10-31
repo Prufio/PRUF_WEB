@@ -243,10 +243,12 @@ class ModifyDescription extends Component {
       if (type === "photo" || type === "displayImage") {
         console.log("Pushing photo element: ", element)
         window.additionalElementArrays.photo.push(element)
+        this.setState({ count: this.state.count + 1 })
       }
       else if (type === "text" || type === "description") {
         console.log("Pushing text element: ", element)
         window.additionalElementArrays.text.push(element)
+        this.setState({ count: this.state.count + 1 })
       }
 
       else if (type === "nameTag") {
@@ -280,6 +282,7 @@ class ModifyDescription extends Component {
           console.log("Removed", element, "from photo object")
           console.log("oldDescription after edits: ", oldDescription)
           images.push(element)
+          this.setState({ remCount: this.state.remCount + 1 })
         }
         else { alert("Element does not exist in existing photo object") }
       }
@@ -290,6 +293,7 @@ class ModifyDescription extends Component {
           console.log("Removed", element, "from text object")
           console.log("oldDescription after edits: ", oldDescription)
           text.push(element)
+          this.setState({ remCount: this.state.remCount + 1 })
         }
         else { alert("Element does not exist in existing text object") }
       }

@@ -177,7 +177,7 @@ class AddNoteNC extends Component {
 
       console.log(resArray)
       
-      if (resArray[0] !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      if (window.sentPacket.note !== "0") {
         alert("Note already enscribed on this asset! Cannot overwrite existing note.")
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
