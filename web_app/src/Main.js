@@ -13,6 +13,7 @@ import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
+import { QRCode } from 'react-qrcode-logo';
 import { Twitter, GitHub, Mail, Send, Menu, User, Settings } from 'react-feather';
 import {
   BrowserView,
@@ -20,6 +21,7 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
+import Jdenticon from 'react-jdenticon';
 
 class Main extends Component {
   constructor(props) {
@@ -726,20 +728,33 @@ class Main extends Component {
         }
 
       }
+      let identicons = [];
+      for(let e = 0; e < window.aTknIDs.length; e++){
+        identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
+      }
+
+      let identiconsLG = [];
+      for(let e = 0; e < window.aTknIDs.length; e++){
+        identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
+      }
 
       let tempDisplayArray = [];
       for (let j = 0; j < window.aTknIDs.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
-          tempDisplayArray.push("https://pruf.io/assets/images/pruf-u-logo-192x255.png")
+          tempDisplayArray.push("")
         }
+
         else if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length > 0) {
           tempDisplayArray.push(Object.values(tempDescArray[j].photo)[0])
         }
+
         else {
           tempDisplayArray.push(tempDescArray[j].photo.DisplayImage)
         }
       }
 
+      window.assets.identiconsLG = identiconsLG;
+      window.assets.identicons = identicons;
       window.assets.descriptions = tempDescArray;
       window.assets.names = tempNameArray;
       window.assets.displayImages = tempDisplayArray;
@@ -961,6 +976,20 @@ class Main extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     buildWindowUtils()
+
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+          color: [0.36, 0.70],
+          grayscale: [0.24, 0.82]
+      },
+      saturation: {
+          color: 0.75,
+          grayscale: 0.10
+      },
+      backColor: "#ffffffff"
+    };
+
     window.sentPacket = undefined;
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
