@@ -424,8 +424,6 @@ class NewRecordNC extends Component {
 
                 </>
               )}
-
-
             </div>
           )}
         </Form>

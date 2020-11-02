@@ -178,9 +178,6 @@ class Main extends Component {
                         name={window.addr}
                       />
                     </button>
-                    {/* <div className="hamburgerMenuLink">
-                      <a className="hamburgerMenuLinkUserContent"><User size={48} onClick={() => { this.userMenu() }} /></a>
-                    </div> */}
                     <div className="hamburgerMenuLink">
                       <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
                     </div>
@@ -275,7 +272,7 @@ class Main extends Component {
                               <Button
                                 variant="etherscan"
                                 title="Check it out on Etherscan!"
-                                onClick={() => { window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
+                                onClick={() => {this.setState({userMenu: undefined}); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
                                 {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
                               </Button>
                             </h4>
@@ -305,7 +302,7 @@ class Main extends Component {
                               <Button
                                 variant="assetDashboard"
                                 title="Asset Dashboard"
-                                onClick={() => { window.location.href = '/#/asset-dashboard' }}>
+                                onClick={() => {this.setState({userMenu: undefined}); window.location.href = '/#/asset-dashboard'} }>
                                 {this.state.assetBalance}
                               </Button>
                             </h4>
@@ -398,11 +395,12 @@ class Main extends Component {
                         background-color: #002a40;
                         color: white;
                         height: 3rem;
-                        width: 17.25rem;
-                        margin-top: -0.2rem;
+                        width: 18rem;
+                        margin-top: -0rem;
                         border-radius: 0;
                         font-weight: bold;
                         font-size: 1.4rem;
+                        border-radius: 0rem 1rem 1rem 0rem;
                       }
                       .btn-toggle:hover {
                         background-color: #23b6ff;

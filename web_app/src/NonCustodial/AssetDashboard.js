@@ -423,7 +423,7 @@ class AssetDashboard extends React.Component {
                     <p className="cardStatus">Status: {obj.statuses[i]}</p>
                     <h4 className="cardIdx">IDX: {obj.ids[i]}</h4>
                     <br></br>
-                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description: 
+                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description : 
                     {obj.descriptions[i].text.Description !== undefined && (
                       obj.descriptions[i].text.Description.replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')
                     )}

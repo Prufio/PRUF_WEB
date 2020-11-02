@@ -494,10 +494,9 @@ div {
   background-color: #002a40;
   flex-direction: column;
   justify-content: flex-start;
-  padding-top: 0.2rem;
   z-index: 1000;
   font-size: 1.2rem;
-  margin-top: 10rem;
+  margin-top: 11.5rem;
   margin-left: 48rem;
   border-radius: 0rem 1rem 1rem 0rem;
 }
@@ -575,23 +574,17 @@ div {
 }
 
 .imageButtonUser {
-  border: 0px transparent; 
-  border-radius: 50%;
-  background-color: transparent; 
+  border: none;
   object-fit: cover;
   width: fit-content;
   height: fit-content;
   position: absolute;
   margin-top: 1rem;
+  margin-left: -42rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
   z-index: 1000;
   max-width: 60px;
-}
-
-.imageButtonUser:hover {
-  -webkit-transform: translateX(3px);
-  transform: translateX(3px);
 }
 
 .assetImageButton {
@@ -1156,8 +1149,16 @@ div {
   height: 70px;
   object-fit: cover;
   z-index: 1000;
-  background-color:#002a40;
-  margin-left: 9rem;
+  background-color:#085179;
+  -webkit-transition: -webkit-transform .7s ease-in-out;
+  transition:         transform .7s ease-in-out;
+  margin-left: 30rem;
+  border-radius: 50%;
+}
+
+.imageFormUser:hover {
+  -webkit-transform: rotate(8deg);
+  transform: rotate(8deg);
 }
 
 .assetImageMobile {
@@ -1405,7 +1406,7 @@ div {
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-left: 62rem;
+  margin-left: 63rem;
   margin-top: 7rem;
 }
 
