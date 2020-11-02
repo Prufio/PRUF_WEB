@@ -1167,6 +1167,7 @@ div {
   border-style: solid;
   border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
   padding: 0.1rem;
+  position: absolute;
 }
 
 .imageSelectorImage {
@@ -1330,6 +1331,8 @@ div {
   background-color: #002a40;
   margin-left: 9rem;
   margin-top: 4rem;
+  position: absolute;
+  margin-top: 15rem;
 }
 
 .cardSearchIdxForm {
@@ -1363,6 +1366,8 @@ div {
   flex-direction: column;
   border-radius: 0rem 0rem 0.3rem 0.3rem;
   padding-left: 0.5rem;
+  position: absolute;
+  margin-top: 17rem;
 }
 
 .cardButton {

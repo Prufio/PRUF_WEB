@@ -836,7 +836,7 @@ class ModifyDescription extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && (
+        {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (

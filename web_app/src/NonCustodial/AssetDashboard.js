@@ -46,7 +46,7 @@ class AssetDashboard extends React.Component {
     this.setAC = async (AC) => {
       let acDoesExist;
 
-      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero"), this.refresh()}
+      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero"), this.refresh() }
       else {
         if (
           AC.charAt(0) === "0" ||
@@ -290,16 +290,18 @@ class AssetDashboard extends React.Component {
                     )}
 
                     <button className="assetImageButtonSelected">
-                        {this.state.selectedImage !== "" ? 
+                      {this.state.selectedImage !== "" ?
                         (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" />)
                         : (<>{obj.identicon}</>)}
                     </button>
                     <p className="cardNameSelected">Name: {obj.name}</p>
                     <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
                     <p className="cardStatusSelected">Status: {obj.status}</p>
-                    <div className="imageSelector">
-                      {generateThumbs()}
-                    </div>
+                    {images.length !== 0 && (
+                      <div className="imageSelector">
+                        {generateThumbs()}
+                      </div>
+                    )}
                     <div className="cardSelectedIdxForm">
                       <h4 className="cardIdxSelected">IDX: {obj.idxHash}</h4>
                     </div>
@@ -345,7 +347,7 @@ class AssetDashboard extends React.Component {
                 <DropdownButton title="Modify" drop="up" variant="selectedImage">
                   <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "modify-record-status-NC") }}>Modify Status</Dropdown.Item>
                   <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "decrement-counter-NC") }}>Decrement Counter</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "modify-description-NC") }}>Modify Description</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information-NC") }}>Modify Asset Info</Dropdown.Item>
                   <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "add-note-NC") }}>Add Note</Dropdown.Item>
                   <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "force-modify-record-NC") }}>Modify Rightsholder</Dropdown.Item>
                 </DropdownButton>
@@ -406,7 +408,7 @@ class AssetDashboard extends React.Component {
                           identicon: obj.identiconsLG[i]
                         })
                       }}
-                    > 
+                    >
                       {obj.displayImages[i] !== "" && (
                         <img title="View Asset" src={obj.displayImages[i]} className="assetImage" />
                       )}
