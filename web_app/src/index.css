@@ -476,7 +476,7 @@ div {
 .hamburgerDropdownUserInfo {
   display: flex;
   width: 27rem;
-  height: 26rem;
+  height: flex;
   color:white;
   background-color: #002a40;
   flex-direction: column;

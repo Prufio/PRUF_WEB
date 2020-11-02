@@ -156,8 +156,12 @@ class Home extends Component {
               <Form.Row>
                 <h2 className="home2ndRow">
                   Please
-                  <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!")}} className="home2ndRowLink">
-                  Log In
+                  <a onClick={() => {
+                    alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ");
+                    this.setState({ settingsMenu: undefined })
+                    window.ethereum.enable()
+                  }} className="home2ndRowLink">
+                    Log In
                   </a>
                   to Web3 provider.
                 </h2>
