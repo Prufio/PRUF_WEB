@@ -1125,8 +1125,13 @@ function buildWindowUtils() {
             if (_error) {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
             } else {
+              let resStr;
               console.log(window.web3.utils.numberToHex(_result))
-              tknIDArray.push(window.web3.utils.numberToHex(_result));
+              resStr = window.web3.utils.numberToHex(_result);
+              while(resStr.length < 66){
+                resStr = resStr.substring(0,2) + "0" + resStr.substring(2, resStr.length)
+              }
+              tknIDArray.push(resStr)
             }
           });
         //console.log(i)

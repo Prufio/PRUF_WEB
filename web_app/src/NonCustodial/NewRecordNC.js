@@ -169,7 +169,9 @@ class NewRecordNC extends Component {
         this.state.secret
       );
 
-      if (idxHash.length % 2 !== 0) {
+      console.log(idxHash.length)
+
+      if (idxHash.length !== 66) {
         return (alert("Something went wrong..."))
       }
 
