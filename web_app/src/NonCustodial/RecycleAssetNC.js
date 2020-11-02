@@ -478,39 +478,39 @@ class RecycleAssetNC extends Component {
                   </div>
                 </Form.Row>
               )}
-            {this.state.QRreader === true && (
-              <div>
-                <style type="text/css">
-                  {`
+              {this.state.QRreader === true && (
+                <div>
+                  <style type="text/css">
+                    {`
                 .form {
                   background: none !important;
                 }
                    `}
-                </style>
-                <div>
-                  <div className="mediaLinkADHome">
-                    <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
-                  </div>
-                  <h2 className="formHeaderQR">Scan QR</h2>
-                  <div className="mediaLinkBack">
-                    <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
-                  </div>
-                </div>
-                <div className="QRreader">
-                  <QrReader
-                    delay={300}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                    style={{ width: '100%' }}
-                  />
-                  {this.state.result !== undefined && (
-                    <div className="results">
-                      {this.state.assetFound}
+                  </style>
+                  <div>
+                    <div className="mediaLinkADHome">
+                      <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
-                  )}
+                    <h2 className="formHeaderQR">Scan QR</h2>
+                    <div className="mediaLinkBack">
+                      <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                    </div>
+                  </div>
+                  <div className="QRreader">
+                    <QrReader
+                      delay={300}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                      style={{ width: '100%' }}
+                    />
+                    {this.state.result !== undefined && (
+                      <div className="results">
+                        {this.state.assetFound}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
               {this.state.accessPermitted && (
                 <>
                   <Form.Row>
@@ -569,13 +569,15 @@ class RecycleAssetNC extends Component {
 
                   </Form.Row>
                   <Form.Row>
-                    <div className="submitButton">
-                      <div className="submitButtonContent">
-                        <Repeat
-                          onClick={() => { _recycleAsset() }}
-                        />
+                    <div>
+                      <Form.Label className="costText"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
+                      <div className="submitButton">
+                        <div className="submitButtonContent">
+                          <Repeat
+                            onClick={() => { _recycleAsset() }}
+                          />
+                        </div>
                       </div>
-                      <Form.Label className="costTextRecycle"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
                     </div>
                   </Form.Row>
                 </>

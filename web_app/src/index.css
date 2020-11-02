@@ -670,7 +670,7 @@ div {
   background-color: transparent;
   z-index: 1000;
   margin-left: 50rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .submitButtonHome {
@@ -701,7 +701,7 @@ div {
   background-color: transparent;
   z-index: 1000;
   margin-left: 50rem;
-  margin-top: -0.4rem;
+  margin-top: 0.5rem;
 }
 
 .submitButtonNRContent {
@@ -1077,50 +1077,14 @@ div {
   font-family: Tahoma, Geneva, sans-serif;
 }
 
-.costTextModify {
-  display: flex;
-  color: rgb(255, 255, 255);
-  font-size: small;
-  font-family: Tahoma, Geneva, sans-serif;
-  margin-left: 41.4rem;
-}
-
-.costTextTransfer {
-  display: flex;
-  color: rgb(255, 255, 255);
-  font-size: small;
-  font-family: Tahoma, Geneva, sans-serif;
-  margin-left: -1.5rem;
-}
-
-.costTextNewRecord {
+.costText {
   display: flex;
   color: rgb(255, 255, 255);
   font-weight: bold;
   font-size: small;
   font-family: Tahoma, Geneva, sans-serif;
-  margin-left: -27rem;
   margin-top: 0.3rem;
-}
-
-.costTextAddNote {
-  display: flex;
-  color: rgb(255, 255, 255);
-  font-weight: bold;
-  font-size: small;
-  font-family: Tahoma, Geneva, sans-serif;
-  margin-left: -28rem;
-  margin-top: 0.3rem;
-}
-
-.costTextRecycle {
-  display: flex;
-  color: rgb(255, 255, 255);
-  font-weight: bold;
-  font-size: small;
-  font-family: Tahoma, Geneva, sans-serif;
-  margin-left: -31rem;
-  margin-top: 0.3rem;
+  position: absolute;
 }
 
 .checkBoxFormFont {
@@ -1729,4 +1693,50 @@ div {
   font-size: 1.2rem;
   font-weight: bold;
   margin-left: -1rem;
+} */
+
+/* .costTextModify {
+  display: flex;
+  color: rgb(255, 255, 255);
+  font-size: small;
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-left: 41.4rem;
+}
+
+.costTextTransfer {
+  display: flex;
+  color: rgb(255, 255, 255);
+  font-size: small;
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-left: -1.5rem;
+}
+
+.costTextNewRecord {
+  display: flex;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: small;
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-top: 0.3rem;
+  position: absolute;
+}
+
+.costTextAddNote {
+  display: flex;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: small;
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-left: -28rem;
+  margin-top: 0.3rem;
+}
+
+.costTextRecycle {
+  display: flex;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: small;
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-left: -31rem;
+  margin-top: 0.3rem;
 } */

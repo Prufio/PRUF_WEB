@@ -405,16 +405,18 @@ class NewRecordNC extends Component {
 
                   </Form.Row> */}
                   {this.state.transaction === false && (
-                  <Form.Row>
-                    <div className="submitButtonNR">
-                      <div className="submitButtonNRContent">
-                        <CheckCircle
-                          onClick={() => { _newRecord() }}
-                        />
+                    <Form.Row>
+                      <div>
+                        <Form.Label className="costText"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
+                        <div className="submitButtonNR">
+                          <div className="submitButtonNRContent">
+                            <CheckCircle
+                              onClick={() => { _newRecord() }}
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <Form.Label className="costTextNewRecord"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
-                    </div>
-                  </Form.Row>
+                    </Form.Row>
                   )}
                   <br></br>
 

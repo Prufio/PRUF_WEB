@@ -262,7 +262,7 @@ class NewRecord extends Component {
                   >
                     New Record
                     </Button>
-                  <div className="costTextNewRecord"> Cost in AC {window.assetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} ETH</div>
+                  <div className="costText"> Cost in AC {window.assetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} ETH</div>
                 </Form.Group>
 
 

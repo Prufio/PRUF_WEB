@@ -56,11 +56,11 @@ class ImportAssetNC extends Component {
       this.setState({ assetClassSelected: false })
     }
     if (window.sentPacket !== undefined) {
-      
+
       if (Number(window.sentPacket.statusNum) !== 70) {
         console.log("SentPacketStatus :", window.sentPacket.status)
         alert("Asset is not exported! Owner must export the assset in order to import.");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
@@ -69,7 +69,7 @@ class ImportAssetNC extends Component {
       this.setState({ packetAssetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
 
-      
+
 
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
@@ -140,7 +140,7 @@ class ImportAssetNC extends Component {
 
           if (Number(resArray[0]) !== 70) {
             alert("Asset is not exported! Owner must export the assset in order to import.");
-             window.sentPacket = undefined;
+            window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
 
@@ -148,7 +148,7 @@ class ImportAssetNC extends Component {
 
           if (resArray[1] !== destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
-             window.sentPacket = undefined;
+            window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
         }
@@ -240,7 +240,7 @@ class ImportAssetNC extends Component {
         .on("error", function (_error) {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false  });
+          self.setState({ txStatus: false, wasSentPacket: false });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -311,59 +311,59 @@ class ImportAssetNC extends Component {
           {window.addr > 0 && this.state.assetClassSelected && (
             <div>
               <>
-              <Form.Row>
-                <Form.Group as={Col} controlId="formGridAsset">
-                  <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {!this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
+                <Form.Row>
+                  <Form.Group as={Col} controlId="formGridAsset">
+                    <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
+                    {!this.state.wasSentPacket && (
+                      <Form.Control
+                        as="select"
+                        size="lg"
+                        onChange={(e) => { _checkIn(e.target.value) }}
 
-                    >
-                      {this.state.hasLoadedAssets && (
-                        <optgroup className="optgroup">
-                          {window.utils.generateAssets()}
-                        </optgroup>)}
-                      {!this.state.hasLoadedAssets && (
+                      >
+                        {this.state.hasLoadedAssets && (
+                          <optgroup className="optgroup">
+                            {window.utils.generateAssets()}
+                          </optgroup>)}
+                        {!this.state.hasLoadedAssets && (
+                          <optgroup>
+                            <option value="null">
+                              Loading Assets...
+                           </option>
+                          </optgroup>)}
+                      </Form.Control>
+                    )}
+                    {this.state.wasSentPacket && (
+                      <Form.Control
+                        as="select"
+                        size="lg"
+                        onChange={(e) => { _checkIn(e.target.value) }}
+                        disabled
+                      >
                         <optgroup>
                           <option value="null">
-                            Loading Assets...
+                            "{this.state.name}" Please Clear Form to Select Different Asset
                            </option>
-                        </optgroup>)}
-                    </Form.Control>
-                  )}
-                  {this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
-                      disabled
-                    >
-                      <optgroup>
-                        <option value="null">
-                          "{this.state.name}" Please Clear Form to Select Different Asset
-                           </option>
-                      </optgroup>
-                    </Form.Control>
-                  )}
-                </Form.Group>
-              </Form.Row>
+                        </optgroup>
+                      </Form.Control>
+                    )}
+                  </Form.Group>
+                </Form.Row>
                 {this.state.transaction === false && (
-                  <div>
-                    <Form.Row>
-                        <div className="submitButton">
-                          <div className="submitButtonContent">
-                            <CheckCircle
-                              onClick={() => { _importAsset() }}
-                            />
-                          </div>
-                          <Form.Label className="costTextNewRecord">
-                            Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF
+                  <Form.Row>
+                    <div>
+                      <Form.Label className="costText">
+                        Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF
                           </Form.Label>
+                      <div className="submitButton">
+                        <div className="submitButtonContent">
+                          <CheckCircle
+                            onClick={() => { _importAsset() }}
+                          />
                         </div>
-                    </Form.Row>
-                  </div>
+                      </div>
+                    </div>
+                  </Form.Row>
                 )}
               </>
             </div>
