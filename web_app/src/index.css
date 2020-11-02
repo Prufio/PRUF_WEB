@@ -1347,6 +1347,11 @@ div {
   margin-top: 0.3rem;
 }
 
+.cardDescriptionSelectedContent {
+  font-size: 1.6rem;
+  margin-top: 0.3rem;
+}
+
 .cardDescriptionFormSelected {
   display: flex;
   width: 50rem;
@@ -1388,8 +1393,8 @@ div {
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-left: 62rem;
-  margin-top: 45rem;
+  margin-left: 57.5rem;
+  margin-top: 0.5rem;
 }
 
 .cardButton2Content {

@@ -55,7 +55,7 @@ function Router(routeRequest) {
                 <Route path="/transfer-asset" component={TransferAsset} />
                 <Route path="/modify-record-status" component={ModifyRecordStatus} />
                 <Route path="/decrement-counter" component={DecrementCounter} />
-                <Route path="/modify-description" component={ModifyDescription} />
+                <Route path="/modify-asset-information" component={ModifyDescription} />
                 <Route path="/add-note" component={AddNote} />
                 <Route path="/export-asset" component={ExportAsset} />
                 <Route path="/verify-rights-holder" component={VerifyRightsholder} />
@@ -75,7 +75,7 @@ function Router(routeRequest) {
                 <Route path="/transfer-asset-NC" component={TransferAssetNC} />
                 <Route path="/modify-record-status-NC" component={ModifyRecordStatusNC} />
                 <Route path="/decrement-counter-NC" component={DecrementCounterNC} />
-                <Route path="/modify-description-NC" component={ModifyDescriptionNC} />
+                <Route path="/modify-asset-information-NC" component={ModifyDescriptionNC} />
                 <Route path="/add-note-NC" component={AddNoteNC} />
                 <Route path="/import-asset-NC" component={ImportAssetNC} />
                 <Route path="/export-asset-NC" component={ExportAssetNC} />
@@ -97,7 +97,7 @@ function Router(routeRequest) {
                 <Route path="/transfer-asset-NC" component={TransferAssetNC} />
                 <Route path="/modify-record-status-NC" component={ModifyRecordStatusNC} />
                 <Route path="/decrement-counter-NC" component={DecrementCounterNC} />
-                <Route path="/modify-description-NC" component={ModifyDescriptionNC} />
+                <Route path="/modify-asset-information-NC" component={ModifyDescriptionNC} />
                 <Route path="/add-note-NC" component={AddNoteNC} />
                 <Route path="/import-asset-NC" component={ImportAssetNC} />
                 <Route path="/export-asset-NC" component={ExportAssetNC} />
