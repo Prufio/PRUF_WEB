@@ -235,7 +235,7 @@ function buildWindowUtils() {
 
   const _generateNewElementsPreview = (obj) => {
     let component = [];
-    let photoVals = obj.photo;
+    let photoVals = obj.images;
     let textVals = obj.text;
     let name = obj.name;
 

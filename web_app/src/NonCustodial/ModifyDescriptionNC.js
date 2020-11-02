@@ -27,7 +27,22 @@ class ModifyDescription extends Component {
 
     this.clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
+      this.setState({ 
+        idxHash: undefined, 
+        txStatus: false, 
+        txHash: "", 
+        wasSentPacket: false, 
+        count: 1, 
+        remCount: 0, 
+        removedElements: {
+        images: [],
+        text: [],
+      },
+      addedElements: {
+        images: [],
+        text: [],
+        name: ""
+      } })
     }
 
     this.updateDescription = async () => {
@@ -119,6 +134,11 @@ class ModifyDescription extends Component {
         images: [],
         text: [],
       },
+      addedElements: {
+        images: [],
+        text: [],
+        name: ""
+      },
       additionalElementArrays: {
         photo: [],
         text: [],
@@ -189,55 +209,36 @@ class ModifyDescription extends Component {
     }
 
     const _addToMiscArray = async (type) => {
-      let element;
+      let element, text = this.state.addedElements.text, images = this.state.addedElements.images;
       let elementName = this.state.elementName;
       let elementValue = this.state.elementValue;
 
-      elementValue = await elementValue.replace(/'/gi, " QUOTE ");
-      elementValue = await elementValue.replace(/"/g, " QUOTE ");
-      elementName = await elementName.replace(/'/gi, " QUOTE ");
-      elementName = await elementName.replace(/"/g, " QUOTE ");
+      elementValue = await elementValue.replace(/'/gi, "111APOST111");
+      elementValue = await elementValue.replace(/"/g, "111QUOTE111");
+      elementName = await elementName.replace(/'/gi, " ");
+      elementName = await elementName.replace(/"/g, " ");
 
       if (type === "description") {
-        element = ('"Description": ' + '"' + this.state.elementValue + '",')
+        element = ('"Description": ' + '"' + elementValue + '",')
         this.setState({ textCount: this.state.textCount + 1, count: this.state.count + 1 })
       }
 
       else if (type === "displayImage") {
-        element = ('"DisplayImage": ' + '"' + this.state.elementValue + '",')
+        element = ('"DisplayImage": ' + '"' + elementValue + '",')
         this.setState({ imageCount: this.state.imageCount + 1, count: this.state.count + 1 })
       }
 
       else if (elementName === "" && type === "photo") {
-        element = ('"Image' + (String(Object.values(this.state.oldDescription.photo).length + this.state.count)) + '"' + ':' + '"' + this.state.elementValue + '",')
+        element = ('"Image' + (String(Object.values(this.state.oldDescription.photo).length + this.state.count)) + '"' + ':' + '"' + elementValue + '",')
         this.setState({ imageCount: this.state.imageCount + 1, count: this.state.count + 1 })
       }
 
       else if (elementName === "" && type === "text") {
-        element = ('"Text' + (String(Object.values(this.state.oldDescription.text).length + this.state.count)) + '"' + ':' + '"' + this.state.elementValue + '",')
+        element = ('"Text' + (String(Object.values(this.state.oldDescription.text).length + this.state.count)) + '"' + ':' + '"' + elementValue + '",')
         this.setState({ textCount: this.state.textCount + 1, count: this.state.count + 1 })
       }
 
       else {
-/*         elementName.replace(" ", "_");
-        for (let i = 0; i < elementName.length; i++) {
-          if (elementName.charAt(i) === "'") {
-            return alert(" Use of character: ' " + elementName.charAt(i) + " ' not allowed!")
-          }
-
-          if (elementName.charAt(i) === '"') {
-            return alert(" Use of character: ' " + elementName.charAt(i) + " ' not allowed!")
-          }
-        }
-        for (let i = 0; i < elementValue.length; i++) {
-          if (elementValue.charAt(i) === "'") {
-            return alert(" Use of character: ' " + elementValue.charAt(i) + "at position" + String(i) + " ' not allowed!")
-          }
-
-          if (elementValue.charAt(i) === '"') {
-            return alert(" Use of character: ' " + elementValue.charAt(i) + "at position" + String(i) + " ' not allowed!")
-          }
-        } */
         element = ('"' + elementName + '": ' + '"' + elementValue + '",')
       }
 
@@ -248,11 +249,13 @@ class ModifyDescription extends Component {
       if (type === "photo" || type === "displayImage") {
         console.log("Pushing photo element: ", element)
         window.additionalElementArrays.photo.push(element)
+        images.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
         this.setState({ count: this.state.count + 1 })
       }
       else if (type === "text" || type === "description") {
         console.log("Pushing text element: ", element)
         window.additionalElementArrays.text.push(element)
+        text.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
         this.setState({ count: this.state.count + 1 })
       }
 
@@ -265,7 +268,7 @@ class ModifyDescription extends Component {
 
       console.log("Added", element, "to element array")
       console.log("Which now looks like: ", window.additionalElementArrays)
-      this.setState({ elementType: "0", hashPath: "" })
+      this.setState({ elementType: "0", hashPath: "", addedElements: { text: text, images: images, name: this.state.nameTag}})
       return document.getElementById("MainForm").reset();
     }
 
@@ -355,10 +358,7 @@ class ModifyDescription extends Component {
       if (window.additionalElementArrays.name === "") {
         newDescriptionName = {}
       }
-      /* else if (window.additionalElementArrays.name === "" && this.state.oldDescription.name !== undefined){
-        newDescriptionName = this.state.oldDescription.name
-        console.log(newDescriptionName)
-      } */
+      
       else {
         newDescriptionName = { name: window.additionalElementArrays.name }
       }
@@ -847,7 +847,7 @@ class ModifyDescription extends Component {
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                   {this.state.count > 1 && (
                     <div>
-                      {window.utils.generateNewElementsPreview(window.additionalElementArrays)}
+                      {window.utils.generateNewElementsPreview(this.state.addedElements)}
                     </div>
                   )}
                   {this.state.remCount > 1 && (

@@ -198,7 +198,7 @@ class AssetDashboard extends React.Component {
         for (let i = 0; i < text.length; i++) {
           component.push(
             <>
-              <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">{textNames[i]}: <h4 className="cardDescriptionSelectedContent">{text[i]}</h4></h4>
+              <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">{textNames[i]}: <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContent">{text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
               <br />
             </>
           )
@@ -421,7 +421,11 @@ class AssetDashboard extends React.Component {
                     <p className="cardStatus">Status: {obj.statuses[i]}</p>
                     <h4 className="cardIdx">IDX: {obj.ids[i]}</h4>
                     <br></br>
-                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description: {obj.descriptions[i].text.Description}</h4></div>
+                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description: 
+                    {obj.descriptions[i].text.Description !== undefined && (
+                      obj.descriptions[i].text.Description.replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')
+                    )}
+                    </h4></div>
                   </div>
                   <div className="cardButton">
                     <div className="cardButtonContent">
