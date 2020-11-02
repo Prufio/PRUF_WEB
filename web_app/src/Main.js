@@ -209,9 +209,14 @@ class Main extends Component {
                               <Button
                                 size="lg"
                                 variant="toggle"
-                                onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!"); this.setState({ settingsMenu: undefined }) }}
+                                onClick={() => {
+                                  alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ");
+                                  this.setState({ settingsMenu: undefined })
+                                  window.ethereum.enable()
+                                }}
                               >
                                 Please Log In
+
                               </Button>
                             )}
 
@@ -253,7 +258,12 @@ class Main extends Component {
                           {this.state.addr === undefined && (
                             <h4>
                               Currently Serving : Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                              <a onClick={() => {
+                                alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ",
+                                  this.setState({ userMenu: undefined }),
+                                  window.ethereum.enable())
+                              }}
+                                className="userDataLink">
                                 Log In
                               </a>
                             </h4>
@@ -262,7 +272,12 @@ class Main extends Component {
                           {this.state.ETHBalance === undefined && (
                             <h4>
                               ETH Balance : Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                              <a onClick={() => {
+                                alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ",
+                                  this.setState({ userMenu: undefined }),
+                                  window.ethereum.enable())
+                              }}
+                                className="userDataLink">
                                 Log In
                               </a>
                             </h4>
@@ -290,10 +305,15 @@ class Main extends Component {
                           <br></br>
                           {this.state.assetClassBalance === undefined && (
                             <h4>
-                              AssetClass Balance: Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
+                              AssetClass Balance : Please
+                              <a onClick={() => {
+                                alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ",
+                                  this.setState({ userMenu: undefined }),
+                                  window.ethereum.enable())
+                              }}
+                                className="userDataLink">
                                 Log In
-                              </a>
+                            </a>
                             </h4>
                           )}
                           {this.state.assetClassBalance && (
