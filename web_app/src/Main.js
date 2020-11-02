@@ -211,9 +211,14 @@ class Main extends Component {
                               <Button
                                 size="lg"
                                 variant="toggle"
-                                onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!"); this.setState({ settingsMenu: undefined }) }}
+                                onClick={() => {
+                                  alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ");
+                                  this.setState({ settingsMenu: undefined })
+                                  window.ethereum.enable()
+                                }}
                               >
                                 Please Log In
+
                               </Button>
                             )}
 
@@ -241,6 +246,19 @@ class Main extends Component {
                     <div>
                       {this.state.userMenu !== undefined && (
                         <div className="hamburgerDropdownUserInfo">
+                          {this.state.addr === undefined && (
+                            <h4>
+                              Please
+                              <a onClick={() => {
+                                alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ",
+                                  this.setState({ userMenu: undefined }),
+                                  window.ethereum.enable())
+                              }}
+                                className="userDataLink">
+                                Log In
+                              </a>
+                            </h4>
+                          )}
                           {this.state.addr > 0 && (
                             <h4>
                               Currently serving :
@@ -252,66 +270,25 @@ class Main extends Component {
                               </Button>
                             </h4>
                           )}
-                          {this.state.addr === undefined && (
-                            <h4>
-                              Currently Serving : Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
-                                Log In
-                              </a>
-                            </h4>
-                          )}
                           <br></br>
-                          {this.state.ETHBalance === undefined && (
-                            <h4>
-                              ETH Balance : Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
-                                Log In
-                              </a>
-                            </h4>
-                          )}
                           {this.state.ETHBalance && (
                             <h4>
                               ETH Balance : {this.state.ETHBalance.substring(0, 6)}
                             </h4>
                           )}
                           <br></br>
-                          {this.state.prufBalance === undefined && (
-                            <h4>
-                              PRUF Balance : Not Available
-                              {/* <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
-                                Log In
-                              </a> */}
-                            </h4>
-                          )}
                           {this.state.prufBalance && (
                             <h4>
                               PRUF Balance : {this.state.prufBalance}
-                              {/* {this.state.prufBalance.substring(0, 6)} */}
                             </h4>
                           )}
                           <br></br>
-                          {this.state.assetClassBalance === undefined && (
-                            <h4>
-                              AssetClass Balance: Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
-                                Log In
-                              </a>
-                            </h4>
-                          )}
                           {this.state.assetClassBalance && (
                             <h4>
                               AssetClass Balance: {this.state.assetClassBalance}
                             </h4>
                           )}
                           <br></br>
-                          {this.state.assetBalance === undefined && (
-                            <h4>
-                              Asset Balance: Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
-                                Log In
-                              </a>
-                            </h4>
-                          )}
                           {this.state.assetBalance && (
                             <h4>
                               Asset Balance:
@@ -324,14 +301,6 @@ class Main extends Component {
                             </h4>
                           )}
                           <br></br>
-                          {this.state.IDTokenBalance === undefined && (
-                            <h4>
-                              ID Token Balance : Please
-                              <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
-                                Log In
-                              </a>
-                            </h4>
-                          )}
                           {this.state.IDTokenBalance && (
                             <h4>
                               ID Token Balance : {this.state.IDTokenBalance}
@@ -378,9 +347,10 @@ class Main extends Component {
                       .btn-etherscan {
                         background-color: transparent;
                         color: white;
-                        margin-top: -0.5rem;
-                        // margin-right: 37rem;
+                        margin-top: -1.6rem;
                         font-size: 1.5rem;
+                        height: 1.6rem;
+                        width: fit-content;
                       }
                       .btn-etherscan:hover {
                         background-color: transparent;

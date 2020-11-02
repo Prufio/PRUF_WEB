@@ -476,7 +476,7 @@ div {
 .hamburgerDropdownUserInfo {
   display: flex;
   width: 27rem;
-  height: 26rem;
+  height: flex;
   color:white;
   background-color: #002a40;
   flex-direction: column;
@@ -1306,12 +1306,6 @@ div {
   margin-top: -0.5rem;
 }
 
-/* .cardDescription {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-left: -1rem;
-} */
-
 .cardIdx {
   font-size: 1rem;
   font-weight: bold;
@@ -1730,3 +1724,11 @@ div {
 }
 
       /* -------------------------VVV--------------------Depricated------------------------VVV------------------------ */
+
+      
+
+/* .cardDescription {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-left: -1rem;
+} */

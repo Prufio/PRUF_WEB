@@ -329,7 +329,7 @@ class VerifyRightHolder extends Component {
                 <div>
                   <style type="text/css">
                     {`
-                .Form {
+                .form {
                   background: none !important;
                 }
                    `}
