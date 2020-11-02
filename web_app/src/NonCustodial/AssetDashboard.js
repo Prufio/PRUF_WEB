@@ -7,6 +7,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { RefreshCw, X, ChevronRight, CornerUpLeft, Home } from "react-feather";
 import { QRCode } from 'react-qrcode-logo';
 import Printer from '../Resources/Print'
+import Jdenticon from 'react-jdenticon';
 
 
 class AssetDashboard extends React.Component {
@@ -35,11 +36,11 @@ class AssetDashboard extends React.Component {
         this.setState({ selectedImage: e.DisplayImage })
       }
       else {
-        this.setState({ selectedImage: Object.values(e.photo)[0] })
+        this.setState({ selectedImage: "" })
       }
-      this.setState({ assetObj: e, moreInfo: true })
+      this.setState({ assetObj: e, moreInfo: true, identicon: e.identicon })
       window.printObj = e;
-      this.setAC(e.assetClass)
+      //this.setAC(e.assetClass)
     }
 
     this.setAC = async (AC) => {
@@ -287,8 +288,11 @@ class AssetDashboard extends React.Component {
                         </div>
                       </div>
                     )}
+
                     <button className="assetImageButtonSelected" onClick={() => { openPhotoNT(this.state.selectedImage) }}>
-                      <img title="View Image" src={this.state.selectedImage} className="assetImageSelected" />
+                        {this.state.selectedImage !== "" ? 
+                        (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" />)
+                        : (<>{obj.identicon}</>)}
                     </button>
                     <p className="cardNameSelected">Name: {obj.name}</p>
                     <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
@@ -398,11 +402,17 @@ class AssetDashboard extends React.Component {
                           Description: obj.descriptions[i].text.Description,
                           note: obj.notes[i],
                           text: obj.descriptions[i].text,
-                          photo: obj.descriptions[i].photo
+                          photo: obj.descriptions[i].photo,
+                          identicon: obj.identiconsLG[i]
                         })
                       }}
-                    >
-                      <img title="View Asset" src={obj.displayImages[i]} className="assetImage" />
+                    > 
+                      {obj.displayImages[i] !== "" && (
+                        <img title="View Asset" src={obj.displayImages[i]} className="assetImage" />
+                      )}
+                      {obj.displayImages[i] === "" && (
+                        <>{obj.identicons[i]}</>
+                      )}
                     </button>
                   </div>
                   <div>
@@ -430,7 +440,8 @@ class AssetDashboard extends React.Component {
                             description: obj.descriptions[i].text.Description,
                             note: obj.notes[i],
                             text: obj.descriptions[i].text,
-                            photo: obj.descriptions[i].photo
+                            photo: obj.descriptions[i].photo,
+                            identicon: obj.identiconsLG[i]
                           })
                         }}
                         size={35}
