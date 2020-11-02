@@ -276,7 +276,7 @@ class ForceModifyRecord extends Component {
                       >
                         Transfer Asset
                   </Button>
-                      <div className="costTextModify"> Cost in AC {window.assetClass}: {Number(window.costs.forceTransferCost) / 1000000000000000000} ETH</div>
+                      <div className="costText"> Cost in AC {window.assetClass}: {Number(window.costs.forceTransferCost) / 1000000000000000000} ETH</div>
                     </Form.Group>
                   </Form.Row>
                 </>

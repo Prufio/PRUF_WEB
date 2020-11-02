@@ -310,7 +310,7 @@ class AddNote extends Component {
                     >
                       Add Note
                     </Button>
-                    <div className="costTextTransfer"> Cost in AC {window.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} ETH</div>
+                    <div className="costText"> Cost in AC {window.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} ETH</div>
                   </Form.Group>
                 </Form.Row>
               )}

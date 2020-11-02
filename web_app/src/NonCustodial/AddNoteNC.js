@@ -160,23 +160,23 @@ class AddNoteNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      
+
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       let resArray = window.utils.checkStats(window.sentPacket.idxHash, [6])
 
       console.log(resArray)
-      
+
       if (window.sentPacket.note !== "0") {
         alert("Note already enscribed on this asset! Cannot overwrite existing note.")
         window.sentPacket = undefined;
@@ -187,7 +187,7 @@ class AddNoteNC extends Component {
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
-      
+
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
@@ -236,7 +236,7 @@ class AddNoteNC extends Component {
           });
         }
       }
-      else { if(document.getElementById("ipfs2File").files[0] === undefined) alert("No file chosen for upload!"); else{alert("Select an asset to modify!")} }
+      else { if (document.getElementById("ipfs2File").files[0] === undefined) alert("No file chosen for upload!"); else { alert("Select an asset to modify!") } }
     };
 
     const _checkIn = async (e) => {
@@ -279,7 +279,7 @@ class AddNoteNC extends Component {
         text: window.assets.descriptions[e].text,
         description: window.assets.descriptions[e],
         status: window.assets.statuses[e],
-        statusNum : window.assets.statusNums[e],
+        statusNum: window.assets.statusNums[e],
         note: window.assets.notes[e]
       })
 
@@ -352,18 +352,19 @@ class AddNoteNC extends Component {
 
               {this.state.hashPath === "" && this.state.transaction === false && (
                 <Form.Row>
-                  <Form.Group >
+                  <div>
+                    {this.state.assetClass !== undefined && (
+                      <Form.Label className="costText"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} PRüF</Form.Label >
+                    )}
                     <div className="submitButton">
                       <div className="submitButtonContent">
                         <CheckCircle
                           onClick={() => { publishIPFS2Photo() }}
                         />
                       </div>
-                      {this.state.assetClass !== undefined && (
-                        <Form.Label className="costTextAddNote"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} PRüF</Form.Label >
-                      )}
+
                     </div>
-                  </Form.Group>
+                  </div>
                 </Form.Row>
               )}
             </div>
