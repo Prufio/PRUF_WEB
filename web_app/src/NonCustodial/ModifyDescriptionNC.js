@@ -479,7 +479,7 @@ class ModifyDescription extends Component {
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="formHeader">Modify Description</h2>
+          <h2 className="formHeader">Modify Asset Information</h2>
           <div className="mediaLinkClearForm">
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
@@ -559,7 +559,7 @@ class ModifyDescription extends Component {
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridMiscType">
                         <Form.Label className="formFont">
-                          Element Type:
+                          Element:
                         </Form.Label>
                         <Form.Control
                           as="select"
@@ -621,6 +621,7 @@ class ModifyDescription extends Component {
                           placeholder="Name This Text Submission (No Spaces)"
                           onChange={(e) => this.setState({ elementName: e.target.value })}
                           size="lg"
+                          maxLength={32}
                         />
                       </Form.Group>
                       <Form.Group as={Col} controlId="formGridMiscValue">
@@ -661,6 +662,7 @@ class ModifyDescription extends Component {
                           placeholder="Type a New NameTag"
                           onChange={(e) => this.setState({ nameTag: e.target.value })}
                           size="lg"
+                          maxLength={32}
                         />
                       </Form.Group>
                     </>
@@ -736,6 +738,7 @@ class ModifyDescription extends Component {
                           placeholder="Name This Image (No Spaces)"
                           onChange={(e) => this.setState({ elementName: e.target.value })}
                           size="lg"
+                          maxLength={32}
                         />
                       </Form.Group>
                       <Form.Group as={Col} controlId="formGridMiscValue">

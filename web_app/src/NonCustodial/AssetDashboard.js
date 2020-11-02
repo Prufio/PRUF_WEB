@@ -198,7 +198,7 @@ class AssetDashboard extends React.Component {
         for (let i = 0; i < text.length; i++) {
           component.push(
             <>
-              <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">{textNames[i]}: {text[i]}</h4>
+              <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">{textNames[i]}: <h4 className="cardDescriptionSelectedContent">{text[i]}</h4></h4>
               <br />
             </>
           )
@@ -289,7 +289,7 @@ class AssetDashboard extends React.Component {
                       </div>
                     )}
 
-                    <button className="assetImageButtonSelected" onClick={() => { openPhotoNT(this.state.selectedImage) }}>
+                    <button className="assetImageButtonSelected">
                         {this.state.selectedImage !== "" ? 
                         (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" />)
                         : (<>{obj.identicon}</>)}
