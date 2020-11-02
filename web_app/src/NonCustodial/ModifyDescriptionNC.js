@@ -193,6 +193,11 @@ class ModifyDescription extends Component {
       let elementName = this.state.elementName;
       let elementValue = this.state.elementValue;
 
+      elementValue = await elementValue.replace(/'/gi, " QUOTE ");
+      elementValue = await elementValue.replace(/"/g, " QUOTE ");
+      elementName = await elementName.replace(/'/gi, " QUOTE ");
+      elementName = await elementName.replace(/"/g, " QUOTE ");
+
       if (type === "description") {
         element = ('"Description": ' + '"' + this.state.elementValue + '",')
         this.setState({ textCount: this.state.textCount + 1, count: this.state.count + 1 })
@@ -214,7 +219,7 @@ class ModifyDescription extends Component {
       }
 
       else {
-        elementName.replace(" ", "_");
+/*         elementName.replace(" ", "_");
         for (let i = 0; i < elementName.length; i++) {
           if (elementName.charAt(i) === "'") {
             return alert(" Use of character: ' " + elementName.charAt(i) + " ' not allowed!")
@@ -224,7 +229,7 @@ class ModifyDescription extends Component {
             return alert(" Use of character: ' " + elementName.charAt(i) + " ' not allowed!")
           }
         }
-        for (let i = 0; i < elementName.length; i++) {
+        for (let i = 0; i < elementValue.length; i++) {
           if (elementValue.charAt(i) === "'") {
             return alert(" Use of character: ' " + elementValue.charAt(i) + "at position" + String(i) + " ' not allowed!")
           }
@@ -232,8 +237,8 @@ class ModifyDescription extends Component {
           if (elementValue.charAt(i) === '"') {
             return alert(" Use of character: ' " + elementValue.charAt(i) + "at position" + String(i) + " ' not allowed!")
           }
-        }
-        element = ('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
+        } */
+        element = ('"' + elementName + '": ' + '"' + elementValue + '",')
       }
 
 
@@ -811,26 +816,6 @@ class ModifyDescription extends Component {
                   <div className="submitButtonContent">
                     <CheckCircle
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {this.state.elementType === "removePhoto" && (
-                <div className="submitButton">
-                  <div className="submitButtonContent">
-                    <Trash2
-                      onClick={() => { _removeElement(this.state.elementType) }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {this.state.elementType === "removeText" && (
-                <div className="submitButton">
-                  <div className="submitButtonContent">
-                    <Trash2
-                      onClick={() => { _removeElement(this.state.elementType) }}
                     />
                   </div>
                 </div>

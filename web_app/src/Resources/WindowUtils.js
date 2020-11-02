@@ -1134,7 +1134,6 @@ function buildWindowUtils() {
               tknIDArray.push(resStr)
             }
           });
-        //console.log(i)
       }
 
       for (let x = 0; x < tknIDArray.length; x++) {
@@ -1143,8 +1142,6 @@ function buildWindowUtils() {
             if (_error) {
               console.log("IN ERROR IN ERROR IN ERROR")
             } else {
-              //console.log(tknIDArray[x])
-              //console.log(_result)
               if (Number(Object.values(_result)[5]) > 0) {
                 ipfsHashArray.push(window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]))
               }
