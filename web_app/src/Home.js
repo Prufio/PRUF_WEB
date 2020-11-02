@@ -51,8 +51,6 @@ class Home extends Component {
     const _setWindowAC = async () => {
       let acDoesExist;
 
-      window.routeRequest = "basic"
-
       if (this.state.assetClass === "0" || this.state.assetClass === undefined) { window.assetClass = undefined; return this.forceUpdate() }
       else {
         if (
