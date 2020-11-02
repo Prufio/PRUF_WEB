@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
+// import Button from "react-bootstrap/Button";
+// import Col from "react-bootstrap/Col";
 import "./index.css";
-import { ArrowRightCircle } from 'react-feather'
+// import { ArrowRightCircle } from 'react-feather'
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -48,62 +48,62 @@ class Home extends Component {
 
   render() {
 
-    const _setWindowAC = async () => {
-      let acDoesExist;
+    // const _setWindowAC = async () => {
+    //   let acDoesExist;
 
-      if (this.state.assetClass === "0" || this.state.assetClass === undefined) { window.assetClass = undefined; return this.forceUpdate() }
-      else {
-        if (
-          this.state.assetClass.charAt(0) === "0" ||
-          this.state.assetClass.charAt(0) === "1" ||
-          this.state.assetClass.charAt(0) === "2" ||
-          this.state.assetClass.charAt(0) === "3" ||
-          this.state.assetClass.charAt(0) === "4" ||
-          this.state.assetClass.charAt(0) === "5" ||
-          this.state.assetClass.charAt(0) === "6" ||
-          this.state.assetClass.charAt(0) === "7" ||
-          this.state.assetClass.charAt(0) === "8" ||
-          this.state.assetClass.charAt(0) === "9"
-        ) {
-          acDoesExist = await window.utils.checkForAC("id", this.state.assetClass);
-          await console.log("Exists?", acDoesExist)
+    //   if (this.state.assetClass === "0" || this.state.assetClass === undefined) { window.assetClass = undefined; return this.forceUpdate() }
+    //   else {
+    //     if (
+    //       this.state.assetClass.charAt(0) === "0" ||
+    //       this.state.assetClass.charAt(0) === "1" ||
+    //       this.state.assetClass.charAt(0) === "2" ||
+    //       this.state.assetClass.charAt(0) === "3" ||
+    //       this.state.assetClass.charAt(0) === "4" ||
+    //       this.state.assetClass.charAt(0) === "5" ||
+    //       this.state.assetClass.charAt(0) === "6" ||
+    //       this.state.assetClass.charAt(0) === "7" ||
+    //       this.state.assetClass.charAt(0) === "8" ||
+    //       this.state.assetClass.charAt(0) === "9"
+    //     ) {
+    //       acDoesExist = await window.utils.checkForAC("id", this.state.assetClass);
+    //       await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.location.href = 'https://www.pruf.io'
-          }
+    //       if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
+    //         window.location.href = 'https://www.pruf.io'
+    //       }
 
-          window.assetClass = this.state.assetClass;
-          await window.utils.resolveACFromID(window.assetClass)
-          await window.utils.getACData("id", window.assetClass)
+    //       window.assetClass = this.state.assetClass;
+    //       await window.utils.resolveACFromID(window.assetClass)
+    //       await window.utils.getACData("id", window.assetClass)
 
-          console.log(window.authLevel);
-          return this.setState({ authLevel: window.authLevel });
-        }
+    //       console.log(window.authLevel);
+    //       return this.setState({ authLevel: window.authLevel });
+    //     }
 
-        else {
-          acDoesExist = await window.utils.checkForAC("name", this.state.assetClass);
-          await console.log("Exists?", acDoesExist)
+    //     else {
+    //       acDoesExist = await window.utils.checkForAC("name", this.state.assetClass);
+    //       await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.location.href = 'https://www.pruf.io'
-          }
+    //       if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
+    //         window.location.href = 'https://www.pruf.io'
+    //       }
 
-          window.assetClassName = this.state.assetClass
-          await window.utils.resolveAC(this.state.assetClass);
+    //       window.assetClassName = this.state.assetClass
+    //       await window.utils.resolveAC(this.state.assetClass);
 
-          return this.setState({ authLevel: window.authLevel });
-        }
-      }
-    }
+    //       return this.setState({ authLevel: window.authLevel });
+    //     }
+    //   }
+    // }
 
     return (
       <div>
         <div className="homeForm">
           <img className="prufARCroppedForm" src={require("./Resources/Pruf AR (2).png")} alt="Pruf Logo Home" />
-          <br></br>
+          {/* <br></br>
           <div> {window.addr !== undefined && window.assetClass > 0 && (<div>Operating in asset class {window.assetClass} ({window.assetClassName}) as {window.authLevel}</div>)}</div>
-          <br></br>
-          {window._contracts !== undefined && window.addr !== undefined && (
+          <br></br> */}
+          {/* {window._contracts !== undefined && window.addr !== undefined && (
             <div>
               <Form.Group as={Col} controlId="formGridAC">
                 <Form.Label className="formFont">Input desired asset class # or name : </Form.Label>
@@ -125,8 +125,8 @@ class Home extends Component {
                 </div>
               </Form.Row>
             </div>
-          )}
-          {window._contracts === undefined && window.addr !== undefined && (
+          )} */}
+          {window._contracts === undefined && (
             <div className="text">
               <Form.Row>
                 <h1 className="loading">
@@ -135,7 +135,7 @@ class Home extends Component {
               </Form.Row>
             </div>
           )}
-          {window._contracts === undefined && window.addr === undefined && (
+          {/* {window._contracts === undefined && window.addr === undefined && (
             <div className="text">
               <Form.Row>
                 <h1 className="loading">
@@ -143,7 +143,7 @@ class Home extends Component {
                  </h1>
               </Form.Row>
             </div>
-          )}
+          )} */}
           {window._contracts !== undefined && window.addr === undefined && (
             <div className="text">
               <Form.Row>
