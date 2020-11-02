@@ -169,9 +169,18 @@ class Main extends Component {
                         October 27, 2020
                   </h3>
                     </div>
-                    <div className="hamburgerMenuLink">
+                    <button
+                      className="imageButtonUser"
+                      onClick={() => { this.userMenu() }}
+                    >
+                      <Robohash
+                        className="imageFormUser"
+                        name={window.addr}
+                      />
+                    </button>
+                    {/* <div className="hamburgerMenuLink">
                       <a className="hamburgerMenuLinkUserContent"><User size={48} onClick={() => { this.userMenu() }} /></a>
-                    </div>
+                    </div> */}
                     <div className="hamburgerMenuLink">
                       <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
                     </div>

@@ -576,6 +576,26 @@ div {
   transform: translateY(-5px);
 }
 
+.imageButtonUser {
+  border: 0px transparent; 
+  border-radius: 50%;
+  background-color: transparent; 
+  object-fit: cover;
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  margin-top: 1rem;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+  z-index: 1000;
+  max-width: 60px;
+}
+
+.imageButtonUser:hover {
+  -webkit-transform: translateX(3px);
+  transform: translateX(3px);
+}
+
 .assetImageButton {
   background-color: transparent; 
   object-fit: cover;
@@ -1130,6 +1150,18 @@ div {
   margin-left: 20rem;
 }
 
+.imageFormUser {
+  justify-content: flex-start;
+  margin-right: auto;
+  display: flex;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  z-index: 1000;
+  background-color:#002a40;
+  margin-left: 9rem;
+}
+
 .assetImageMobile {
   width: 360px;
   height: 360px;
@@ -1659,7 +1691,7 @@ div {
   border-radius: 50%;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
-  margin-top: 18rem;
+  margin-top: 21rem;
   margin-left: -1.7rem;
   position: absolute;
 }
