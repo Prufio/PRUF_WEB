@@ -21,12 +21,12 @@ class VerifyLite extends Component {
           || this.state.serial === "") {
           return alert("Please fill out all fields before submission")
         }
-          idxHash = window.web3.utils.soliditySha3(
-            String(this.state.type),
-            String(this.state.manufacturer),
-            String(this.state.model),
-            String(this.state.serial),
-          );
+        idxHash = window.web3.utils.soliditySha3(
+          String(this.state.type),
+          String(this.state.manufacturer),
+          String(this.state.model),
+          String(this.state.serial),
+        );
       }
 
       else if (this.state.QRreader === true && !this.state.Checkbox) {
@@ -282,17 +282,17 @@ class VerifyLite extends Component {
                   </div>
                 </div>
                 <div>
-                      <button
-                        onClick={() => { QRReader() }}
-                        className="buttonQRScan"
-                      >
-                        <img
-                          className="scanImageFormQR"
-                          title="Scan QR Code"
-                          src={require("../Resources/QRSCANPIC.png")}
-                          alt="Pruf Print" />
-                      </button>
-                    </div>
+                  <button
+                    onClick={() => { QRReader() }}
+                    className="buttonQRScan"
+                  >
+                    <img
+                      className="scanImageFormQR"
+                      title="Scan QR Code"
+                      src={require("../Resources/QRSCANPIC.png")}
+                      alt="Pruf Print" />
+                  </button>
+                </div>
               </Form.Row>
             )}
 
@@ -300,7 +300,7 @@ class VerifyLite extends Component {
               <div>
                 <style type="text/css">
                   {`
-                .Form {
+                .form {
                   background: none !important;
                 }
                    `}

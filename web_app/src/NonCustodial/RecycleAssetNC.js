@@ -478,33 +478,39 @@ class RecycleAssetNC extends Component {
                   </div>
                 </Form.Row>
               )}
-
-              {this.state.QRreader === true && (
+            {this.state.QRreader === true && (
+              <div>
+                <style type="text/css">
+                  {`
+                .form {
+                  background: none !important;
+                }
+                   `}
+                </style>
                 <div>
-                  <div>
-                    <div className="mediaLinkADHome">
-                      <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
-                    </div>
-                    <h2 className="formHeader">Scan QR</h2>
-                    <div className="mediaLinkBack">
-                      <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
-                    </div>
+                  <div className="mediaLinkADHome">
+                    <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                   </div>
-                  <div className="QRreader">
-                    <QrReader
-                      delay={300}
-                      onError={this.handleError}
-                      onScan={this.handleScan}
-                      style={{ width: '100%' }}
-                    />
-                    {this.state.resultIA !== undefined && (
-                      <div className="results">
-                        {this.state.assetFound}
-                      </div>
-                    )}
+                  <h2 className="formHeaderQR">Scan QR</h2>
+                  <div className="mediaLinkBack">
+                    <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                   </div>
                 </div>
-              )}
+                <div className="QRreader">
+                  <QrReader
+                    delay={300}
+                    onError={this.handleError}
+                    onScan={this.handleScan}
+                    style={{ width: '100%' }}
+                  />
+                  {this.state.result !== undefined && (
+                    <div className="results">
+                      {this.state.assetFound}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
               {this.state.accessPermitted && (
                 <>
                   <Form.Row>

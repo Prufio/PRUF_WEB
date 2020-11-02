@@ -278,7 +278,6 @@ class Main extends Component {
                           {this.state.prufBalance && (
                             <h4>
                               PRUF Balance : {this.state.prufBalance}
-                              {/* {this.state.prufBalance.substring(0, 6)} */}
                             </h4>
                           )}
                           <br></br>
@@ -346,9 +345,10 @@ class Main extends Component {
                       .btn-etherscan {
                         background-color: transparent;
                         color: white;
-                        margin-top: -0.5rem;
-                        // margin-right: 37rem;
+                        margin-top: -1.6rem;
                         font-size: 1.5rem;
+                        height: 1.6rem;
+                        width: fit-content;
                       }
                       .btn-etherscan:hover {
                         background-color: transparent;

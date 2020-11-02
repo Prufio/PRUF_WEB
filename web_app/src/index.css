@@ -1166,13 +1166,6 @@ div {
   margin-left: 20rem;
 }
 
-.assetImage {
-  width: 115px;
-  height: 115px;
-  border-width: 3px;
-  border-color: #002a40;
-}
-
 .assetImageMobile {
   width: 360px;
   height: 360px;
