@@ -435,7 +435,6 @@ div {
   background-color: #ffffff;
   position: absolute;
   z-index: 999;
-  opacity: 0.9;
   flex-direction: column;
   border-radius: 1rem 0rem 0rem 1rem;
   margin-left: 45rem;
@@ -454,7 +453,6 @@ div {
   position: absolute;
   z-index: 999;
   justify-content: center;
-  opacity: 0.9;
 }
 
 .hamburgerDropdown {
