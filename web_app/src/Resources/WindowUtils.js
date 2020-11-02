@@ -1049,9 +1049,7 @@ function buildWindowUtils() {
   const _determineTokenBalance = async () => {
 
     if (window.addr !== undefined) {
-      let _assetClassBal;
-      let _assetBal;
-      let _IDTokenBal;
+      let _assetClassBal, _assetBal, _IDTokenBal, _prufTokenBal;
       console.log("getting balance info from token contracts...")
       await window.contracts.A_TKN.methods.balanceOf(window.addr).call((error, result) => {
         if (error) { console.log(error) }
@@ -1066,6 +1064,11 @@ function buildWindowUtils() {
       await window.contracts.ID_TKN.methods.balanceOf(window.addr).call((error, result) => {
         if (error) { console.log(error) }
         else { _IDTokenBal = result; console.log("IDTokenBal", _IDTokenBal); }
+      });
+
+      await window.contracts.UTIL_TKN.methods.balanceOf(window.addr).call((error, result) => {
+        if (error) { console.log(error) }
+        else { _prufTokenBal = window.web3.utils.fromWei(result, 'ether'); console.log("prufTokenBal", _prufTokenBal); }
       });
 
       if (Number(_assetBal) > 0) {
@@ -1092,6 +1095,7 @@ function buildWindowUtils() {
         window.IDHolderBool = false
       }
       window.balances = {
+        prufTokenBalance: _prufTokenBal,
         assetClassBalance: _assetClassBal,
         assetBalance: _assetBal,
         IDTokenBalance: _IDTokenBal

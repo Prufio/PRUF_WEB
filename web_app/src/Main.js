@@ -290,7 +290,7 @@ class Main extends Component {
                           <br></br>
                           {this.state.prufBalance === undefined && (
                             <h4>
-                              PRUF Balance : WIP
+                              PRUF Balance : Not Available
                               {/* <a onClick={() => { alert("That doesn't direct you anywhere. Login to Web3 provider!") }} className="userDataLink">
                                 Log In
                               </a> */}
@@ -298,7 +298,7 @@ class Main extends Component {
                           )}
                           {this.state.prufBalance && (
                             <h4>
-                              PRUF Balance : WIP
+                              PRUF Balance : {this.state.prufBalance}
                               {/* {this.state.prufBalance.substring(0, 6)} */}
                             </h4>
                           )}
@@ -483,6 +483,7 @@ class Main extends Component {
             assetClassBalance: window.balances.assetClassBalance,
             assetBalance: window.balances.assetBalance,
             IDTokenBalance: window.balances.IDTokenBalance,
+            prufBalance: window.balances.prufTokenBalance,
             assetHolderBool: window.assetHolderBool,
             assetClassHolderBool: window.assetClassHolderBool,
             IDHolderBool: window.IDHolderBool,
@@ -700,6 +701,7 @@ class Main extends Component {
           assetClassBalance: window.balances.assetClassBalance,
           assetBalance: window.balances.assetBalance,
           IDTokenBalance: window.balances.IDTokenBalance,
+          prufBalance: window.balances.prufTokenBalance,
           assetHolderBool: window.assetHolderBool,
           assetClassHolderBool: window.assetClassHolderBool,
           IDHolderBool: window.IDHolderBool,
