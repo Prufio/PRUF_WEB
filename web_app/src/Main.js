@@ -22,6 +22,7 @@ import {
   isMobile
 } from "react-device-detect";
 import Jdenticon from 'react-jdenticon';
+import Robohash from 'react-robohash';
 
 class Main extends Component {
   constructor(props) {
