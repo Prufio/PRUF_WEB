@@ -8,40 +8,40 @@ class AuthorizedUserComponent extends Component {
     render() {
         return (
             <Nav className="headerForm">
-            <li>
-                <NavLink exact to="/">Home</NavLink>
-            </li>
-            <li>
-                <NavLink to="/new-record">New</NavLink>
-            </li>
-            <li>
-                <NavLink to="/verify-rights-holder">Verify</NavLink>
-            </li>
-            <li>
-                <NavLink to="/retrieve-record">Search</NavLink>
-            </li>
-            <li>
-                <NavLink to="/transfer-asset">Transfer</NavLink>
-            </li>
-            <li>
-                <NavLink to="/import-asset">Import</NavLink>
-            </li>
-            <li>
-                <NavLink to="/export-asset">Export</NavLink>
-            </li>
-            <li>
-                <NavLink to="/manage-escrow">Escrow</NavLink>
-            </li>
-            <li>
-                <NavDropdown title="Modify">
-                    <NavDropdown.Item id="header-dropdown" as={NavLink} to="/modify-record-status">Modify Status</NavDropdown.Item>
-                    <NavDropdown.Item id="header-dropdown" as={NavLink} to="/decrement-counter">Decrement Counter</NavDropdown.Item>
-                    <NavDropdown.Item id="header-dropdown" as={NavLink} to="/modify-asset-information">Modify Asset Info</NavDropdown.Item>
-                    <NavDropdown.Item id="header-dropdown" as={NavLink} to="/add-note">Add Note</NavDropdown.Item>
-                    <NavDropdown.Item id="header-dropdown" as={NavLink} to="/force-transfer-asset">Modify Rightsholder</NavDropdown.Item>
-                </NavDropdown>
-            </li>
-        </Nav>
+                <li>
+                    <NavLink exact to="/">Home</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/new-record">New</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/verify-rights-holder">Verify</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/retrieve-record">Search</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/transfer-asset">Transfer</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/import-asset">Import</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/export-asset">Export</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/manage-escrow">Escrow</NavLink>
+                </li>
+                <li>
+                    <NavDropdown title="Modify">
+                        <NavDropdown.Item id="header-dropdown" as={NavLink} to="/modify-record-status">Modify Status</NavDropdown.Item>
+                        <NavDropdown.Item id="header-dropdown" as={NavLink} to="/decrement-counter">Decrement Counter</NavDropdown.Item>
+                        <NavDropdown.Item id="header-dropdown" as={NavLink} to="/modify-asset-information">Modify Asset Info</NavDropdown.Item>
+                        <NavDropdown.Item id="header-dropdown" as={NavLink} to="/add-note">Add Note</NavDropdown.Item>
+                        <NavDropdown.Item id="header-dropdown" as={NavLink} to="/force-transfer-asset">Modify Rightsholder</NavDropdown.Item>
+                    </NavDropdown>
+                </li>
+            </Nav>
         )
     }
 }

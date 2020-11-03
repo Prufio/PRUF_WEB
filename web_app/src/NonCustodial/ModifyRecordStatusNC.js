@@ -11,7 +11,7 @@ class ModifyRecordStatusNC extends Component {
     //State declaration.....................................................................................................
 
 
-    
+
     // this.toastTest = async () => {
     //   const notify = () => toast("Wow so easy !");
     //   return (
@@ -87,7 +87,7 @@ class ModifyRecordStatusNC extends Component {
             // self.setState({ NRerror: _error });
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
             self.setState({ txStatus: false });
-            self.setState({ transaction: false, wasSentPacket: false  });
+            self.setState({ transaction: false, wasSentPacket: false });
             alert("Something went wrong!")
             self.clearForm();
             console.log(Object.values(_error)[0].transactionHash);
@@ -113,7 +113,7 @@ class ModifyRecordStatusNC extends Component {
             // self.setState({ NRerror: _error });
             self.setState({ transaction: false })
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
-            self.setState({ txStatus: false, wasSentPacket: false  });
+            self.setState({ txStatus: false, wasSentPacket: false });
             alert("Something went wrong!")
             self.clearForm();
             console.log(Object.values(_error)[0].transactionHash);
@@ -179,14 +179,14 @@ class ModifyRecordStatusNC extends Component {
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
       this.setState({ name: window.sentPacket.name })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
-      
+
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
@@ -314,17 +314,40 @@ class ModifyRecordStatusNC extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridFormat">
                   <Form.Label className="formFont">New Status:</Form.Label>
-                  <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
-                    <optgroup className="optgroup">
-                      <option value="0">Choose a status</option>
-                      <option value="51">Transferrable</option>
-                      <option value="52">Non-transferrable</option>
-                      <option value="53">Stolen</option>
-                      <option value="54">Lost</option>
-                      <option value="59">Discardable</option>
-                      <option value="51">Export-ready</option>
-                    </optgroup>
-                  </Form.Control>
+                  {this.state.transaction === false && (
+                    <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
+                      <optgroup className="optgroup">
+                        <option value="0">Choose a status</option>
+                        <option value="51">Transferrable</option>
+                        <option value="52">Non-transferrable</option>
+                        <option value="53">Stolen</option>
+                        <option value="54">Lost</option>
+                        <option value="59">Discardable</option>
+                        <option value="51">Export-ready</option>
+                      </optgroup>
+                    </Form.Control>
+                  )}
+                  {this.state.transaction === true && (
+                    <Form.Control as="select" size="lg" disabled>
+                      <optgroup className="optgroup">
+                        {this.state.newStatus === "51" && (
+                          <option> Changing Status to Transferable </option>
+                        )}
+                        {this.state.newStatus === "52" && (
+                          <option> Changing Status to Non-transferrable </option>
+                        )}
+                        {this.state.newStatus === "53" && (
+                          <option> Changing Status to Stolen </option>
+                        )}
+                        {this.state.newStatus === "54" && (
+                          <option> Changing Status to Lost </option>
+                        )}
+                        {this.state.newStatus === "59" && (
+                          <option> Changing Status to Discardable </option>
+                        )}
+                      </optgroup>
+                    </Form.Control>
+                  )}
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
@@ -341,10 +364,10 @@ class ModifyRecordStatusNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && (
+        {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
             <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== undefined && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
@@ -362,18 +385,18 @@ class ModifyRecordStatusNC extends Component {
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
             <div>
-            {this.state.txStatus === false && (
-              <div>
-                !ERROR! :
-                <a
-                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  KOVAN Etherscan:{this.state.txHash}
-                </a>
-              </div>
-            )}
+              {this.state.txStatus === false && (
+                <div>
+                  !ERROR! :
+                  <a
+                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    KOVAN Etherscan:{this.state.txHash}
+                  </a>
+                </div>
+              )}
             </div>
             {this.state.txStatus === true && (
               <div>

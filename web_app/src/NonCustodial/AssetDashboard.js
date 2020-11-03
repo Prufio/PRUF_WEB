@@ -235,6 +235,13 @@ class AssetDashboard extends React.Component {
                 border-radius: 0rem 0rem 0.3rem 0.3rem;
               }
 
+              .btn-selectedAsset {
+                background-color: #005480;
+                color: white;
+                font-weight: bold;
+                font-size: 1.2rem;
+              }
+
               .btn-QR {
                 background-color: #002a40;
                 color: white;
@@ -336,8 +343,8 @@ class AssetDashboard extends React.Component {
               </li>
               <li>
                 <DropdownButton title="Export" drop="up" variant="selectedImage">
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "export-asset-NC") }}>Export</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "discard-asset-NC") }}>Discard</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "export-asset-NC") }}>Export</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "discard-asset-NC") }}>Discard</Dropdown.Item>
                 </DropdownButton>
               </li>
               <li>
@@ -345,11 +352,11 @@ class AssetDashboard extends React.Component {
               </li>
               <li>
                 <DropdownButton title="Modify" drop="up" variant="selectedImage">
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "modify-record-status-NC") }}>Modify Status</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "decrement-counter-NC") }}>Decrement Counter</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information-NC") }}>Modify Asset Info</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "add-note-NC") }}>Add Note</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} onClick={() => { this.sendPacket(obj, "NC", "force-modify-record-NC") }}>Modify Rightsholder</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-record-status-NC") }}>Modify Status</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "decrement-counter-NC") }}>Decrement Counter</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information-NC") }}>Modify Asset Info</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "add-note-NC") }}>Add Note</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "force-modify-record-NC") }}>Modify Rightsholder</Dropdown.Item>
                 </DropdownButton>
               </li>
             </Nav>
@@ -423,10 +430,10 @@ class AssetDashboard extends React.Component {
                     <p className="cardStatus">Status: {obj.statuses[i]}</p>
                     <h4 className="cardIdx">IDX: {obj.ids[i]}</h4>
                     <br></br>
-                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description : 
+                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description :
                     {obj.descriptions[i].text.Description !== undefined && (
-                      obj.descriptions[i].text.Description.replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')
-                    )}
+                        obj.descriptions[i].text.Description.replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')
+                      )}
                     </h4></div>
                   </div>
                   <div className="cardButton">

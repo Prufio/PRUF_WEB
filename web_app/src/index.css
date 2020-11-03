@@ -58,10 +58,11 @@ h3 {
 h4 {
   font-size: 1rem;
   word-wrap: normal;
-  white-space: wrap;
+  /* white-space: wrap;
   text-overflow: ellipsis;
-  word-break: initial;
-  overflow-wrap: break-word;
+  word-break: initial; */
+
+  /* overflow-wrap: break-word; */
 }
 
 div {
@@ -103,6 +104,29 @@ div {
   margin-top: 0.25rem;
   display: inline-flex;
   z-index: 5;
+}
+
+.headerSelected {
+  background-color: #002a40;
+  margin-top: 11.51rem;
+  align-items: center;
+  flex-direction: row;
+}
+
+.headerSelected li {
+  display: inline;
+  list-style-type: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  margin: auto;
+}
+
+.headerSelected li a {
+  font-family: Helvetica;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 1.6rem;
 }
 
 #header-dropdown {
@@ -259,29 +283,6 @@ div {
   justify-content: space-evenly;
   border-radius: 0rem 0rem 0.3rem 0.3rem;
   position: absolute;
-}
-
-.headerSelected {
-  background-color: #002a40;
-  margin-top: 11.51rem;
-  align-items: center;
-  flex-direction: row;
-}
-
-.headerSelected li {
-  display: inline;
-  list-style-type: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  margin: auto;
-}
-
-.headerSelected li a {
-  font-family: Helvetica;
-  color: rgb(255, 255, 255);
-  font-weight: bold;
-  font-size: 1.6rem;
 }
 
 .formHeaderQR {
@@ -1379,11 +1380,20 @@ div {
   font-weight: bold;
   font-size: 1.6rem;
   margin-top: 0.3rem;
+  word-wrap: normal;
+}
+
+.cardDescriptionSelected h4 {
+  word-wrap: normal;
+  white-space: wrap;
+  word-break: initial;
+  overflow-wrap: break-word;
 }
 
 .cardDescriptionSelectedContent {
   font-size: 1.6rem;
   margin-top: 0.3rem;
+  word-wrap: normal;
 }
 
 .cardDescriptionFormSelected {

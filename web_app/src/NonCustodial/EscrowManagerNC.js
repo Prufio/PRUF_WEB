@@ -50,16 +50,15 @@ class EscrowManagerNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      let resArray = window.utils.checkStats(window.sentPacket.idxHash, [0])
 
-      console.log("resArray", resArray)
-
-      if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
+      if (Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 50) {
         this.setState({ isSettingEscrowAble: false })
+        console.log("isSettingEscrowAble: false")
       }
 
-      else if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
+      else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 56) {
         this.setState({ isSettingEscrowAble: true })
+        console.log("isSettingEscrowAble: true")
       }
 
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
@@ -109,6 +108,7 @@ class EscrowManagerNC extends Component {
         })
         console.log("escrowData", this.state.escrowData[1])
       }
+
     }
 
     const clearForm = async () => {
@@ -133,13 +133,13 @@ class EscrowManagerNC extends Component {
       if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); return alert("Agent address invalid"), clearForm() }
 
 
-      window.contracts.ECR_NC.methods
+      await window.contracts.ECR_NC.methods
         .setEscrow(idxHash, window.web3.utils.soliditySha3(this.state.agent), window.utils.convertTimeTo(this.state.escrowTime, this.state.timeFormat), this.state.newStatus)
         .send({ from: window.addr })
         .on("error", function (_error) {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false  });
+          self.setState({ txStatus: false, wasSentPacket: false });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -179,12 +179,14 @@ class EscrowManagerNC extends Component {
         alert("Cannot edit asset in lost or stolen status"); return clearForm()
       }
 
-      else if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
+      if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
         this.setState({ isSettingEscrowAble: false })
+        console.log("isSettingEscrowAble: false")
       }
 
-      else if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
+      if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
         this.setState({ isSettingEscrowAble: true })
+        console.log("isSettingEscrowAble: true")
       }
 
       this.setState({ selectedAsset: e })
@@ -214,14 +216,14 @@ class EscrowManagerNC extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
 
-      window.contracts.ECR_NC.methods
+      await window.contracts.ECR_NC.methods
         .endEscrow(idxHash)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false  });
+          self.setState({ txStatus: false, wasSentPacket: false });
           console.log(Object.values(_error)[0].transactionHash);
           alert("Something went wrong!")
           clearForm();
@@ -343,44 +345,89 @@ class EscrowManagerNC extends Component {
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridAgent">
                       <Form.Label className="formFont">Agent Address:</Form.Label>
-                      <Form.Control
-                        placeholder="agent"
-                        required
-                        onChange={(e) => this.setState({ agent: e.target.value })}
-                        size="lg"
-                      />
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          placeholder="Agent Address"
+                          required
+                          onChange={(e) => this.setState({ agent: e.target.value })}
+                          size="lg"
+                        />)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          placeholder={this.state.agent}
+                          required
+                          size="lg"
+                          disabled
+                        />)}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridStatus">
                       <Form.Label className="formFont">Escrow Status:</Form.Label>
-                      <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
-                        <option value="0">Select an Escrow Status</option>
-                        <option value="56">Supervised Escrow</option>
-                        <option value="50">Locked Escrow</option>
-                      </Form.Control>
+                      {this.state.transaction === false && (
+                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
+                          <option value="0">Select an Escrow Status</option>
+                          <option value="56">Supervised Escrow</option>
+                          <option value="50">Locked Escrow</option>
+                        </Form.Control>)}
+                      {this.state.transaction === true && (
+                        <Form.Control as="select" size="lg" disabled >
+                          {this.state.newStatus === "56" && (
+                            <option>Supervised Escrow</option>
+                          )}
+                          {this.state.newStatus === "50" && (
+                            <option>Locked Escrow</option>
+                          )}
+                        </Form.Control>)}
                     </Form.Group>
                   </Form.Row>
 
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridTime">
                       <Form.Label className="formFont">Duration:</Form.Label>
-                      <Form.Control
-                        placeholder="setEscrow duration"
-                        required
-                        onChange={(e) => this.setState({ escrowTime: e.target.value })}
-                        size="lg"
-                      />
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          placeholder="setEscrow duration"
+                          required
+                          onChange={(e) => this.setState({ escrowTime: e.target.value })}
+                          size="lg"
+                        />)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          placeholder={this.state.escrowTime}
+                          required
+                          disabled
+                          size="lg"
+                        />)}
                     </Form.Group>
                     <Form.Group as={Col} controlId="formGridFormat">
                       <Form.Label className="formFont">Time Unit:</Form.Label>
-                      <Form.Control as="select" size="lg" onChange={(e) => this.setState({ timeFormat: e.target.value })}>
-                        <option value="0">Select a time unit</option>
-                        <option value="seconds">Seconds</option>
-                        <option value="minutes">Minutes</option>
-                        <option value="hours">Hours</option>
-                        <option value="days">Days</option>
-                        <option value="weeks">Weeks</option>
-                      </Form.Control>
+                      {this.state.transaction === false && (
+                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ timeFormat: e.target.value })}>
+                          <option value="0">Select a time unit</option>
+                          <option value="seconds">Seconds</option>
+                          <option value="minutes">Minutes</option>
+                          <option value="hours">Hours</option>
+                          <option value="days">Days</option>
+                          <option value="weeks">Weeks</option>
+                        </Form.Control>)}
+                      {this.state.transaction === true && (
+                        <Form.Control as="select" size="lg" disabled>
+                          {this.state.timeFormat === "seconds" && (
+                            <option>Seconds</option>
+                          )}
+                          {this.state.timeFormat === "minutes" && (
+                            <option>Minutes</option>
+                          )}
+                          {this.state.timeFormat === "hours" && (
+                            <option>Hours</option>
+                          )}
+                          {this.state.timeFormat === "days" && (
+                            <option>Days</option>
+                          )}
+                          {this.state.timeFormat === "weeks" && (
+                            <option>Weeks</option>
+                          )}
+                        </Form.Control>)}
                     </Form.Group>
                   </Form.Row>
                   {this.state.transaction === false && (

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import bs58 from "bs58";
-import { ArrowRightCircle, CheckCircle, Home, XSquare } from 'react-feather'
+import { CheckCircle, Home, XSquare } from 'react-feather'
 
 
 class AddNoteNC extends Component {
@@ -25,7 +24,6 @@ class AddNoteNC extends Component {
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ result: "" })
-      this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
 
       console.log("idxHash", idxHash);
@@ -38,7 +36,7 @@ class AddNoteNC extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false });
+          self.setState({ txStatus: false});
           alert("Something went wrong!")
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -187,12 +185,13 @@ class AddNoteNC extends Component {
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
-
+      this.setAC(window.sentPacket.assetClass)
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
 
     this.setState({ runWatchDog: true })
+
   }
 
   componentDidUpdate() {//stuff to do when state updates
@@ -216,6 +215,8 @@ class AddNoteNC extends Component {
     };
 
     const publishIPFS2Photo = async () => {
+
+      this.setState({ transaction: true })
       if (document.getElementById("ipfs2File").files[0] !== undefined && this.state.idxHash !== undefined) {
         const self = this;
         const reader = new FileReader();
@@ -304,7 +305,7 @@ class AddNoteNC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && !this.state.transaction && (
+          {window.addr > 0 &&(
             <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
@@ -332,7 +333,6 @@ class AddNoteNC extends Component {
                     <Form.Control
                       as="select"
                       size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
                       disabled
                     >
                       <optgroup>
@@ -346,7 +346,12 @@ class AddNoteNC extends Component {
               </Form.Row>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridIpfs2File">
+                  {this.state.transaction === false && (
                   <Form.File onChange={(e) => this.setState({ hashPath: "" })} size="lg" className="btn2" id="ipfs2File" />
+                  )}
+                  {this.state.transaction === true && (
+                  <Form.File disabled size="lg" className="btn2" id="ipfs2File"/>
+                  )}
                 </Form.Group>
               </Form.Row>
 
