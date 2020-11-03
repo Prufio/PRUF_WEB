@@ -17,7 +17,10 @@ class AddNoteNC extends Component {
     }
 
     this.setInscription = async () => {
-      if(this.state.hashPath === "" || this.state.idxHash === undefined) return this.clearForm()
+      if(this.state.hashPath === "" || this.state.idxHash === undefined){
+        this.setState({hashPath: "", idxHash: undefined}); 
+        return this.clearForm()
+      } 
       const self = this;
       window.isInTx = true;
 
