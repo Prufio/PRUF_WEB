@@ -244,7 +244,7 @@ class Main extends Component {
                                 variant="toggle"
                                 onClick={() => { this.toggleMenu("authUser") }}
                               >
-                                Asset Minter Menu
+                                Cusdodian Menu
                               </Button>)}
                           </div>
                         </div>

@@ -113,7 +113,7 @@ class EscrowManagerNC extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0" })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0" })
     }
 
     const _setEscrow = async () => {

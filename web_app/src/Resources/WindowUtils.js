@@ -772,12 +772,13 @@ function buildWindowUtils() {
           if (_error) { console.log("Error: ", _error) }
           else {
             temp = _result
-            console.log("resolved AC name ", window.assetClassName, " from AC index ", AC);
+            console.log("resolved AC name ", temp, " from AC index ", AC);
 
           }
         });
     }
     let acData = await window.utils.getACData("id", AC)
+
     if (window.addr !== undefined) {
       await window.utils.checkCreds(acData, AC);
       await window.utils.getCosts(6, AC);
@@ -811,8 +812,9 @@ function buildWindowUtils() {
         });
 
       if (custodyType === "Custodial") {
+        let addrHash = await window.web3.utils.soliditySha3(window.addr)
         await window.contracts.AC_MGR.methods
-          .getUserType(window.web3.utils.soliditySha3(window.addr), window.assetClass)
+          .getUserType(addrHash, AC)
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
@@ -983,7 +985,6 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              //console.log("result in getCosts: ", Object.values(_result));
               window.costArray.push(Number((Object.values(_result)[1])) + Number((Object.values(_result)[3])))
             }
           })
