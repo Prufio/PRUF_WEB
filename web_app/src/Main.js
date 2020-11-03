@@ -13,8 +13,7 @@ import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
-import { QRCode } from 'react-qrcode-logo';
-import { Twitter, GitHub, Mail, Send, Menu, User, Settings } from 'react-feather';
+import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X } from 'react-feather';
 import {
   BrowserView,
   MobileView,
@@ -292,13 +291,13 @@ class Main extends Component {
                           <br></br>
                           {this.state.assetClassBalance && (
                             <h4>
-                              AssetClass Balance: {this.state.assetClassBalance}
+                              AssetClasses : {this.state.assetClassBalance}
                             </h4>
                           )}
                           <br></br>
                           {this.state.assetBalance && (
                             <h4>
-                              Asset Balance:
+                              Assets :
                               <Button
                                 variant="assetDashboard"
                                 title="Asset Dashboard"
@@ -310,7 +309,7 @@ class Main extends Component {
                           <br></br>
                           {this.state.IDTokenBalance && (
                             <h4>
-                              ID Token Balance : {this.state.IDTokenBalance}
+                              Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1"/>)} {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0"/>)}
                             </h4>
                           )}
                           <br></br>

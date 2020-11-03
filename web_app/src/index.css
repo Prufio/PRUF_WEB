@@ -1112,6 +1112,16 @@ div {
   font-size: 1.6rem;
 }
 
+.userIDBalance1{
+  margin-left: 1rem;
+  color: rgb(52, 202, 52);
+}
+
+.userIDBalance0{
+  margin-left: 1rem;
+  color: rgb(201, 59, 59);
+}
+
       /* --------------------VVV-------------------------Images-----------------------VVV------------------------- */
 
 .downSizeLogo{
