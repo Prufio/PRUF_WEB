@@ -247,12 +247,23 @@ class ModifyDescriptionNC extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridTo">
                   <Form.Label className="formFont">To:</Form.Label>
+                  {this.state.transaction === false && (      
                   <Form.Control
                     placeholder="Recipient Address"
                     required
                     onChange={(e) => this.setState({ to: e.target.value })}
                     size="lg"
                   />
+                  )}
+                  {this.state.transaction === true && (                  
+                  <Form.Control
+                    placeholder={this.state.to}
+                    required
+                    onChange={(e) => this.setState({ to: e.target.value })}
+                    size="lg"
+                    disabled
+                  />
+                  )}
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (

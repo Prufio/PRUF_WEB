@@ -50,7 +50,7 @@ class DecrementCounterNC extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
 
-      
+
       if (Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentPacket = undefined;
@@ -59,18 +59,18 @@ class DecrementCounterNC extends Component {
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      this.setState({ 
+      this.setState({
         name: window.sentPacket.name,
         idxHash: window.sentPacket.idxHash,
         countDownStart: window.sentPacket.countPair[1],
         count: window.sentPacket.countPair[0],
         assetClass: window.sentPacket.assetClass,
         status: window.sentPacket.status,
-       })
+      })
 
 
       window.sentPacket = undefined
@@ -164,14 +164,14 @@ class DecrementCounterNC extends Component {
           })
       }
 
-      window.contracts.NP_NC.methods
+      await window.contracts.NP_NC.methods
         ._decCounter(idxHash, this.state.countDown)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false  });
+          self.setState({ txStatus: false, wasSentPacket: false });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -211,7 +211,7 @@ class DecrementCounterNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
-                                          <Form.Row>
+              <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
                   {!this.state.wasSentPacket && (
@@ -219,7 +219,6 @@ class DecrementCounterNC extends Component {
                       as="select"
                       size="lg"
                       onChange={(e) => { _checkIn(e.target.value) }}
-
                     >
                       {this.state.hasLoadedAssets && (
                         <optgroup className="optgroup">
@@ -232,6 +231,7 @@ class DecrementCounterNC extends Component {
                            </option>
                         </optgroup>)}
                     </Form.Control>
+
                   )}
                   {this.state.wasSentPacket && (
                     <Form.Control
@@ -254,14 +254,22 @@ class DecrementCounterNC extends Component {
                   <Form.Label className="formFont">
                     Countdown Amount:
                   </Form.Label>
-                  <Form.Control
-                    placeholder="Countdown Amount"
-                    required
-                    onChange={(e) =>
-                      this.setState({ countDown: e.target.value })
-                    }
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="Countdown Amount"
+                      required
+                      onChange={(e) =>
+                        this.setState({ countDown: e.target.value })
+                      }
+                      size="lg"
+                    />)}
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder={this.state.countDown}
+                      required
+                      disabled
                     size="lg"
-                  />
+                  />)}
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (

@@ -59,20 +59,20 @@ class ModifyRightsHolder extends Component {
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
       this.setState({ name: window.sentPacket.name })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
-      
+
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
@@ -161,14 +161,14 @@ class ModifyRightsHolder extends Component {
       console.log("New rgtHash", newRgtHash);
       console.log("addr: ", window.addr);
 
-      window.contracts.NP_NC.methods
+      await window.contracts.NP_NC.methods
         ._changeRgt(idxHash, newRgtHash)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false  });
+          self.setState({ txStatus: false });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -249,54 +249,94 @@ class ModifyRightsHolder extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridNewFirstName">
                   <Form.Label className="formFont">New First Name:</Form.Label>
-                  <Form.Control
-                    placeholder="New First Name"
-                    required
-                    onChange={(e) => this.setState({ first: e.target.value })}
-                    size="lg"
-                  />
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="New First Name"
+                      required
+                      onChange={(e) => this.setState({ first: e.target.value })}
+                      size="lg"
+                    />)}
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder={this.state.first}
+                      required
+                      size="lg"
+                    />)}
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridNewMiddleName">
                   <Form.Label className="formFont">New Middle Name:</Form.Label>
-                  <Form.Control
-                    placeholder="New Middle Name"
-                    required
-                    onChange={(e) => this.setState({ middle: e.target.value })}
-                    size="lg"
-                  />
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="New Middle Name"
+                      required
+                      onChange={(e) => this.setState({ middle: e.target.value })}
+                      size="lg"
+                    />)}
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder={this.state.middle}
+                      required
+                      disabled
+                      size="lg"
+                    />)}
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridNewLastName">
                   <Form.Label className="formFont">New Last Name:</Form.Label>
-                  <Form.Control
-                    placeholder="New Last Name"
-                    required
-                    onChange={(e) => this.setState({ surname: e.target.value })}
-                    size="lg"
-                  />
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="New Last Name"
+                      required
+                      onChange={(e) => this.setState({ surname: e.target.value })}
+                      size="lg"
+                    />)}
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder={this.state.surname}
+                      required
+                      disabled
+                      size="lg"
+                    />)}
                 </Form.Group>
               </Form.Row>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridNewIdNumber">
                   <Form.Label className="formFont">New ID Number:</Form.Label>
-                  <Form.Control
-                    placeholder="New ID Number"
-                    required
-                    onChange={(e) => this.setState({ id: e.target.value })}
-                    size="lg"
-                  />
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="New ID Number"
+                      required
+                      onChange={(e) => this.setState({ id: e.target.value })}
+                      size="lg"
+                    />)}
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder={this.state.id}
+                      required
+                      disabled
+                      size="lg"
+                    />)}
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridNewPassword">
                   <Form.Label className="formFont">New Password:</Form.Label>
-                  <Form.Control
-                    placeholder="New Password"
-                    type="password"
-                    required
-                    onChange={(e) => this.setState({ secret: e.target.value })}
-                    size="lg"
-                  />
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="New Password"
+                      type="password"
+                      required
+                      onChange={(e) => this.setState({ secret: e.target.value })}
+                      size="lg"
+                    />)}
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder="Password"
+                      type="password"
+                      required
+                      disabled
+                      size="lg"
+                    />)}
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
@@ -315,10 +355,10 @@ class ModifyRightsHolder extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && (
+        {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
             <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== undefined && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>

@@ -60,14 +60,14 @@ class ModifyDescription extends Component {
       console.log("idxHash", this.state.idxHash);
       console.log("addr: ", window.addr);
 
-      window.contracts.NP_NC.methods
+      await window.contracts.NP_NC.methods
         ._modIpfs1(this.state.idxHash, _ipfs1)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          self.setState({ transaction: false, wasSentPacket: false  });
+          self.setState({ transaction: false});
           alert("Something went wrong!")
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -495,7 +495,6 @@ class ModifyDescription extends Component {
             <div>
               {this.state.accessPermitted && (
                 <div>
-                  {this.state.transaction === false && (
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridAsset">
                         <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
@@ -534,27 +533,6 @@ class ModifyDescription extends Component {
                         )}
                       </Form.Group>
                     </Form.Row>
-                  )}
-                  {this.state.transaction === true && (
-                    <Form.Row>
-                      <Form.Group as={Col} controlId="formGridAsset">
-                        <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
-                          disabled
-                        >
-                          {this.state.hasLoadedAssets && (
-                            <optgroup className="optgroup">
-
-                              {window.utils.generateAssets()}
-                            </optgroup>)}
-                          {!this.state.hasLoadedAssets && (<optgroup ><option value="null"> Loading Assets... </option></optgroup>)}
-                        </Form.Control>
-                      </Form.Group>
-                    </Form.Row>
-                  )}
                   {this.state.transaction === false && (
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridMiscType">
@@ -594,16 +572,8 @@ class ModifyDescription extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option value="0">Select Element Type</option>
-                            <option value="nameTag"> Edit Name Tag</option>
-                            <option value="description">Edit Description</option>
-                            <option value="displayImage">Edit Profile Image</option>
-                            <option value="text">Add Custom Text</option>
-                            <option value="photo">Add Custom Image URL</option>
-                            <option value="removeText">Remove Existing Text Element</option>
-                            <option value="removePhoto">Remove Existing Image Element</option>
+                            <option>Updating Asset Details</option>
                           </optgroup>
-
                         </Form.Control>
                       </Form.Group>
                     </Form.Row>
@@ -777,7 +747,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "text" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <CheckCircle
+                    <UploadCloud
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -787,7 +757,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "photo" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <CheckCircle
+                    <UploadCloud
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -797,7 +767,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "displayImage" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <CheckCircle
+                    <UploadCloud
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -807,7 +777,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "description" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <CheckCircle
+                    <UploadCloud
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -817,7 +787,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "nameTag" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <CheckCircle
+                    <UploadCloud
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -827,7 +797,7 @@ class ModifyDescription extends Component {
               {this.state.hashPath === "" && this.state.accessPermitted && this.state.transaction === false && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <UploadCloud
+                    <CheckCircle
                       onClick={() => { publishIPFS1() }}
                     />
                   </div>

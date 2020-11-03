@@ -126,7 +126,7 @@ class DiscardAssetNC extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", this.state.agentAddress);
 
-      window.contracts.A_TKN.methods
+      await window.contracts.A_TKN.methods
         .discard(
           idxHash
         )

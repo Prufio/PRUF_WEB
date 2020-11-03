@@ -54,13 +54,13 @@ class ExportAssetNC extends Component {
         window.sentpacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
-      this.setState({ 
+      this.setState({
         name: window.sentPacket.name,
         idxHash: window.sentPacket.idxHash,
         assetClass: window.sentPacket.assetClass,
         status: window.sentPacket.status
       })
-      
+
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
@@ -130,7 +130,7 @@ class ExportAssetNC extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", this.state.agentAddress);
 
-      window.contracts.NP_NC.methods
+      await window.contracts.NP_NC.methods
         ._exportNC(
           idxHash
         )
@@ -139,7 +139,7 @@ class ExportAssetNC extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false });
+          self.setState({ txStatus: false });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -232,10 +232,10 @@ class ExportAssetNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && (
+        {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
             <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== undefined && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
