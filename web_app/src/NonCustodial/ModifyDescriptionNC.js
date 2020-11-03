@@ -46,6 +46,7 @@ class ModifyDescription extends Component {
     }
 
     this.updateDescription = async () => {
+      if(this.state.hashPath === "" || this.state.idxHash === undefined) return this.clearForm()
       const self = this
 
       this.setState({ txStatus: false });
