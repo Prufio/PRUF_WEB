@@ -154,7 +154,7 @@ class ExportAssetNC extends Component {
           }
         });
 
-      return clearForm(); //clear form inputs
+      return this.setState({ idxHash: undefined, wasSentPacket: false }); //clear form inputs
     };
 
     return (//default render
@@ -181,24 +181,38 @@ class ExportAssetNC extends Component {
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
                   {!this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
+                    <>
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _checkIn(e.target.value) }}
 
-                    >
-                      {this.state.hasLoadedAssets && (
-                        <optgroup className="optgroup">
-                          {window.utils.generateAssets()}
-                        </optgroup>)}
-                      {!this.state.hasLoadedAssets && (
-                        <optgroup>
-                          <option value="null">
-                            Loading Assets...
+                        >
+                          {this.state.hasLoadedAssets && (
+                            <optgroup className="optgroup">
+                              {window.utils.generateAssets()}
+                            </optgroup>)}
+                          {!this.state.hasLoadedAssets && (
+                            <optgroup>
+                              <option value="null">
+                                Loading Assets...
                            </option>
-                        </optgroup>)}
-                    </Form.Control>
+                            </optgroup>)}
+                        </Form.Control>)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          disabled
+                        >
+                          <optgroup className="optgroup">
+                            <option>Exporting: {this.state.idxHash}</option>
+                          </optgroup>
+                        </Form.Control>)}
+                    </>
                   )}
+
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"

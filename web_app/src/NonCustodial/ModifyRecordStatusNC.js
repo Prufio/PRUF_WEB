@@ -68,7 +68,7 @@ class ModifyRecordStatusNC extends Component {
         return alert("Asset already in selected Status! Ensure data fields are correct before submission."),
           document.getElementById("MainForm").reset(),
           this.setState({
-            txStatus: false, txHash: "", transaction: false
+            idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, transaction: false
           })
       }
 
@@ -277,23 +277,36 @@ class ModifyRecordStatusNC extends Component {
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
                   {!this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
+                    <>
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _checkIn(e.target.value) }}
 
-                    >
-                      {this.state.hasLoadedAssets && (
-                        <optgroup className="optgroup">
-                          {window.utils.generateAssets()}
-                        </optgroup>)}
-                      {!this.state.hasLoadedAssets && (
-                        <optgroup>
-                          <option value="null">
-                            Loading Assets...
+                        >
+                          {this.state.hasLoadedAssets && (
+                            <optgroup className="optgroup">
+                              {window.utils.generateAssets()}
+                            </optgroup>)}
+                          {!this.state.hasLoadedAssets && (
+                            <optgroup>
+                              <option value="null">
+                                Loading Assets...
                            </option>
-                        </optgroup>)}
-                    </Form.Control>
+                            </optgroup>)}
+                        </Form.Control>)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          disabled
+                        >
+                          <optgroup className="optgroup">
+                            <option>Modifying: {this.state.idxHash}</option>
+                          </optgroup>
+                        </Form.Control>)}
+                    </>
                   )}
                   {this.state.wasSentPacket && (
                     <Form.Control
@@ -319,11 +332,11 @@ class ModifyRecordStatusNC extends Component {
                       <optgroup className="optgroup">
                         <option value="0">Choose a status</option>
                         <option value="51">Transferrable</option>
-                        <option value="52">Non-transferrable</option>
+                        <option value="52">Non-Transferrable</option>
                         <option value="53">Stolen</option>
                         <option value="54">Lost</option>
                         <option value="59">Discardable</option>
-                        <option value="51">Export-ready</option>
+                        <option value="51">Export-Ready</option>
                       </optgroup>
                     </Form.Control>
                   )}

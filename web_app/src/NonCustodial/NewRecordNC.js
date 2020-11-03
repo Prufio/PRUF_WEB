@@ -337,58 +337,158 @@ class NewRecordNC extends Component {
               )}
               {this.state.idxSubmitted && (
                 <>
+                  {this.state.transaction === true && (
+                    <>
+                      <Form.Row>
+                        <Form.Group as={Col} controlId="formGridNewAssetName">
+                          <Form.Label className="formFont">Name Tag:</Form.Label>
+                          <Form.Control
+                            placeholder={this.state.nameTag}
+                            disabled
+                            size="lg"
+                          />
+                        </Form.Group>
+                      </Form.Row>
+                      <Form.Row>
+                        <Form.Group as={Col} controlId="formGridType">
+                          <Form.Label className="formFont">Type:</Form.Label>
+                          <Form.Control
+                            placeholder={this.state.type}
+                            required
+                            disabled
+                            size="lg"
+                          />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridManufacturer">
+                          <Form.Label className="formFont">Manufacturer:</Form.Label>
+
+                          <Form.Control
+                            placeholder={this.state.manufacturer}
+                            required
+                            disabled
+                            size="lg"
+                          />
+                        </Form.Group>
+
+                      </Form.Row>
+
+                      <Form.Row>
+                        <Form.Group as={Col} controlId="formGridModel">
+                          <Form.Label className="formFont">Model:</Form.Label>
+                          <Form.Control
+                            placeholder={this.state.model}
+                            required
+                            disabled
+                            size="lg"
+                          />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridSerial">
+                          <Form.Label className="formFont">Serial:</Form.Label>
+                          <Form.Control
+                            placeholder={this.state.serial}
+                            required
+                            disabled
+                            size="lg"
+                          />
+                        </Form.Group>
+                      </Form.Row>
+                    </>
+                  )}
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridFirstName">
                       <Form.Label className="formFont">First Name:</Form.Label>
-                      <Form.Control
-                        placeholder="First Name"
-                        required
-                        onChange={(e) => this.setState({ first: e.target.value })}
-                        size="lg"
-                      />
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          placeholder="First Name"
+                          required
+                          onChange={(e) => this.setState({ first: e.target.value })}
+                          size="lg"
+                        />)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          placeholder={this.state.first}
+                          required
+                          disabled
+                          size="lg"
+                        />)}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridMiddleName">
                       <Form.Label className="formFont">Middle Name:</Form.Label>
-                      <Form.Control
-                        placeholder="Middle Name"
-                        required
-                        onChange={(e) => this.setState({ middle: e.target.value })}
-                        size="lg"
-                      />
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          placeholder="Middle Name"
+                          required
+                          onChange={(e) => this.setState({ middle: e.target.value })}
+                          size="lg"
+                        />)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          placeholder={this.state.middle}
+                          required
+                          disabled
+                          size="lg"
+                        />)}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridLastName">
                       <Form.Label className="formFont">Last Name:</Form.Label>
-                      <Form.Control
-                        placeholder="Last Name"
-                        required
-                        onChange={(e) => this.setState({ surname: e.target.value })}
-                        size="lg"
-                      />
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          placeholder="Last Name"
+                          required
+                          onChange={(e) => this.setState({ surname: e.target.value })}
+                          size="lg"
+                        />)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          placeholder={this.state.surname}
+                          required
+                          disabled
+                          size="lg"
+                        />)}
                     </Form.Group>
                   </Form.Row>
 
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridIdNumber">
                       <Form.Label className="formFont">ID Number:</Form.Label>
-                      <Form.Control
-                        placeholder="ID Number"
-                        required
-                        onChange={(e) => this.setState({ id: e.target.value })}
-                        size="lg"
-                      />
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          placeholder="ID Number"
+                          required
+                          onChange={(e) => this.setState({ id: e.target.value })}
+                          size="lg"
+                        />)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          placeholder={this.state.id}
+                          required
+                          disabled
+                          size="lg"
+                        />)}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formGridPassword">
                       <Form.Label className="formFont">Password:</Form.Label>
-                      <Form.Control
-                        placeholder="Password"
-                        type="password"
-                        required
-                        onChange={(e) => this.setState({ secret: e.target.value })}
-                        size="lg"
-                      />
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          placeholder="Password"
+                          type="password"
+                          required
+                          onChange={(e) => this.setState({ secret: e.target.value })}
+                          size="lg"
+                        />)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          placeholder="Password"
+                          type="password"
+                          required
+                          disabled
+                          size="lg"
+                        />)}
                     </Form.Group>
 
                   </Form.Row>

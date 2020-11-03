@@ -188,7 +188,7 @@ class DecrementCounterNC extends Component {
           //Stuff to do when tx confirms
         });
 
-      return clearForm();
+      return this.setState({ idxHash: undefined, wasSentPacket: false });
     };
 
     return (
@@ -215,23 +215,36 @@ class DecrementCounterNC extends Component {
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
                   {!this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
-                    >
-                      {this.state.hasLoadedAssets && (
-                        <optgroup className="optgroup">
-                          {window.utils.generateAssets()}
-                        </optgroup>)}
-                      {!this.state.hasLoadedAssets && (
-                        <optgroup>
-                          <option value="null">
-                            Loading Assets...
-                           </option>
-                        </optgroup>)}
-                    </Form.Control>
+                    <>
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _checkIn(e.target.value) }}
 
+                        >
+                          {this.state.hasLoadedAssets && (
+                            <optgroup className="optgroup">
+                              {window.utils.generateAssets()}
+                            </optgroup>)}
+                          {!this.state.hasLoadedAssets && (
+                            <optgroup>
+                              <option value="null">
+                                Loading Assets...
+                           </option>
+                            </optgroup>)}
+                        </Form.Control>)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          disabled
+                        >
+                          <optgroup className="optgroup">
+                            <option>Modifying: {this.state.idxHash}</option>
+                          </optgroup>
+                        </Form.Control>)}
+                    </>
                   )}
                   {this.state.wasSentPacket && (
                     <Form.Control
@@ -286,10 +299,10 @@ class DecrementCounterNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && (
+        {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
             <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== undefined && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
