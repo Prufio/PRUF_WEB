@@ -93,10 +93,8 @@ class ModifyDescription extends Component {
       window.additionalElementArrays.name = "";
       //self.setState({ accessPermitted: false });
       //self.setState({ oldDescription: undefined });
-      return document.getElementById("MainForm").reset(),
-        self.setState({
-          idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0
-        });
+      self.setState({idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0});
+      return document.getElementById("MainForm").reset()
     };
 
     this.state = {
@@ -220,6 +218,7 @@ class ModifyDescription extends Component {
 
       if (type === "description") {
         element = ('"Description": ' + '"' + elementValue + '",')
+        text.push('"Description": ' + '"' + elementValue + '",')
         this.setState({ textCount: this.state.textCount + 1, count: this.state.count + 1 })
       }
 
@@ -255,8 +254,9 @@ class ModifyDescription extends Component {
       else if (type === "text" || type === "description") {
         console.log("Pushing text element: ", element)
         window.additionalElementArrays.text.push(element)
-        text.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
+        if (type !== "description") {text.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
         this.setState({ count: this.state.count + 1 })
+        }
       }
 
       else if (type === "nameTag") {
@@ -290,9 +290,9 @@ class ModifyDescription extends Component {
           console.log("Removed", element, "from photo object")
           console.log("oldDescription after edits: ", oldDescription)
           images.push(element)
-          this.setState({ remCount: this.state.remCount + 1 })
+          //this.setState({ remCount: this.state.remCount + 1 })
         }
-        else { alert("Element does not exist in existing photo object") }
+        //else { alert("Element does not exist in existing photo object") }
       }
 
       else if (type === "removeText") {
@@ -301,7 +301,7 @@ class ModifyDescription extends Component {
           console.log("Removed", element, "from text object")
           console.log("oldDescription after edits: ", oldDescription)
           text.push(element)
-          this.setState({ remCount: this.state.remCount + 1 })
+          //this.setState({ remCount: this.state.remCount + 1 })
         }
         else { alert("Element does not exist in existing text object") }
       }
