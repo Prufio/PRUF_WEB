@@ -27,22 +27,23 @@ class ModifyDescription extends Component {
 
     this.clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ 
-        idxHash: undefined, 
-        txStatus: false, 
-        txHash: "", 
-        wasSentPacket: false, 
-        count: 1, 
-        remCount: 0, 
+      this.setState({
+        idxHash: undefined,
+        txStatus: false,
+        txHash: "",
+        wasSentPacket: false,
+        count: 1,
+        remCount: 0,
         removedElements: {
-        images: [],
-        text: [],
-      },
-      addedElements: {
-        images: [],
-        text: [],
-        name: ""
-      } })
+          images: [],
+          text: [],
+        },
+        addedElements: {
+          images: [],
+          text: [],
+          name: ""
+        }
+      })
     }
 
     this.updateDescription = async () => {
@@ -71,7 +72,7 @@ class ModifyDescription extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          self.setState({ transaction: false});
+          self.setState({ transaction: false });
           alert("Something went wrong!")
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -158,13 +159,13 @@ class ModifyDescription extends Component {
 
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
@@ -272,7 +273,7 @@ class ModifyDescription extends Component {
 
       console.log("Added", element, "to element array")
       console.log("Which now looks like: ", window.additionalElementArrays)
-      this.setState({ elementType: "0", hashPath: "", addedElements: { text: text, images: images, name: this.state.nameTag}})
+      this.setState({ elementType: "0", hashPath: "", addedElements: { text: text, images: images, name: this.state.nameTag } })
       return document.getElementById("MainForm").reset();
     }
 
@@ -362,7 +363,7 @@ class ModifyDescription extends Component {
       if (window.additionalElementArrays.name === "") {
         newDescriptionName = {}
       }
-      
+
       else {
         newDescriptionName = { name: window.additionalElementArrays.name }
       }
@@ -499,44 +500,57 @@ class ModifyDescription extends Component {
             <div>
               {this.state.accessPermitted && (
                 <div>
-                    <Form.Row>
-                      <Form.Group as={Col} controlId="formGridAsset">
-                        <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                        {!this.state.wasSentPacket && (
-                          <Form.Control
-                            as="select"
-                            size="lg"
-                            onChange={(e) => { _checkIn(e.target.value) }}
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="formGridAsset">
+                      <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
+                      {!this.state.wasSentPacket && (
+                        <>
+                          {this.state.transaction === false && (
+                            <Form.Control
+                              as="select"
+                              size="lg"
+                              onChange={(e) => { _checkIn(e.target.value) }}
 
-                          >
-                            {this.state.hasLoadedAssets && (
+                            >
+                              {this.state.hasLoadedAssets && (
+                                <optgroup className="optgroup">
+                                  {window.utils.generateAssets()}
+                                </optgroup>)}
+                              {!this.state.hasLoadedAssets && (
+                                <optgroup>
+                                  <option value="null">
+                                    Loading Assets...
+                           </option>
+                                </optgroup>)}
+                            </Form.Control>)}
+                          {this.state.transaction === true && (
+                            <Form.Control
+                              as="select"
+                              size="lg"
+                              disabled
+                            >
                               <optgroup className="optgroup">
-                                {window.utils.generateAssets()}
-                              </optgroup>)}
-                            {!this.state.hasLoadedAssets && (
-                              <optgroup>
-                                <option value="null">
-                                  Loading Assets...
+                                <option>Modifying: {this.state.idxHash}</option>
+                              </optgroup>
+                            </Form.Control>)}
+                        </>
+                      )}
+                      {this.state.wasSentPacket && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _checkIn(e.target.value) }}
+                          disabled
+                        >
+                          <optgroup>
+                            <option value="null">
+                              "{this.state.name}" Please Clear Form to Select Different Asset
                                                            </option>
-                              </optgroup>)}
-                          </Form.Control>
-                        )}
-                        {this.state.wasSentPacket && (
-                          <Form.Control
-                            as="select"
-                            size="lg"
-                            onChange={(e) => { _checkIn(e.target.value) }}
-                            disabled
-                          >
-                            <optgroup>
-                              <option value="null">
-                                "{this.state.name}" Please Clear Form to Select Different Asset
-                                                           </option>
-                            </optgroup>
-                          </Form.Control>
-                        )}
-                      </Form.Group>
-                    </Form.Row>
+                          </optgroup>
+                        </Form.Control>
+                      )}
+                    </Form.Group>
+                  </Form.Row>
                   {this.state.transaction === false && (
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridMiscType">

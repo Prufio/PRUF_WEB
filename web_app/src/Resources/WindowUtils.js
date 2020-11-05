@@ -484,7 +484,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "2") {
-      tempStat = "Non-Transferable"
+      tempStat = "Non-Transferrable"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -499,7 +499,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "5") {
-      tempStat = "Transfered"
+      tempStat = "Transferred"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -524,7 +524,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "52") {
-      tempStat = "Non-Transferable"
+      tempStat = "Non-Transferrable"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -539,7 +539,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "55") {
-      tempStat = "Transfered"
+      tempStat = "Transferred"
       console.log("Asset in :", tempStat, "status.")
     }
 

@@ -283,7 +283,7 @@ class EscrowManagerNC extends Component {
                           as="select"
                           size="lg"
                           onChange={(e) => { _checkIn(e.target.value) }}
-
+                          required
                         >
                           {this.state.hasLoadedAssets && (
                             <optgroup className="optgroup">
@@ -305,7 +305,7 @@ class EscrowManagerNC extends Component {
                           disabled
                         >
                           <optgroup>
-                            <option value="null">
+                            <option>
                               "{this.state.name}" Please Clear Form to Select Different Asset
                            </option>
                           </optgroup>
@@ -453,6 +453,9 @@ class EscrowManagerNC extends Component {
                   </Form.Row>
                   {this.state.transaction === false && (
                     <Form.Row>
+                      <Form.Label className="costText">
+                        End Escrow
+                          </Form.Label>
                       <div className="submitButton">
                         <div className="submitButtonContent">
                           <CheckCircle
