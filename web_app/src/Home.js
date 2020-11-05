@@ -128,6 +128,9 @@ class Home extends Component {
           )} */}
           {window._contracts === undefined && (
             <div className="text">
+                <br></br>
+                <br></br>
+                
               <Form.Row>
                 <h1 className="loading">
                   Connecting to the Blockchain

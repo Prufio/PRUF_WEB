@@ -506,7 +506,7 @@ class RetrieveRecord extends Component {
                 <div className="mediaLinkADHome">
                   <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                 </div>
-                <h2 className="formHeader">Search Database</h2>
+                <h2 className="formHeader">Search Assets</h2>
                 <div className="mediaLinkClearForm">
                   <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                 </div>
@@ -586,7 +586,6 @@ class RetrieveRecord extends Component {
                   )}
 
                   <Form.Row>
-                    {this.state.Checkbox === false && (
                       <div className="submitButton">
                         <div className="submitButtonContent">
                           <ArrowRightCircle
@@ -594,16 +593,6 @@ class RetrieveRecord extends Component {
                           />
                         </div>
                       </div>
-                    )}
-                    {this.state.Checkbox === true && (
-                      <div className="submitButton">
-                        <div className="submitButtonContent">
-                          <ArrowRightCircle
-                            onClick={() => { _retrieveRecord() }}
-                          />
-                        </div>
-                      </div>
-                    )}
                     <div>
                       <button
                         onClick={() => { QRReader() }}
@@ -629,7 +618,7 @@ class RetrieveRecord extends Component {
                 <div className="mediaLinkADHome">
                   <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                 </div>
-                <h2 className="formHeader">Search Database</h2>
+                <h2 className="formHeader">Search Assets</h2>
                 <div className="mediaLinkBack">
                   <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                 </div>
