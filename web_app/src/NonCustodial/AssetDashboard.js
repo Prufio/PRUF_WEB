@@ -195,13 +195,29 @@ class AssetDashboard extends React.Component {
 
       const generateTextList = () => {
         let component = [];
+        
         for (let i = 0; i < text.length; i++) {
-          component.push(
-            <>
-              <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">{textNames[i]}: <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContent">{text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+          if(textNames[i] !== "Description"){
+            component.push(
+              <>
+                <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">
+                  {textNames[i]}: 
+                  <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContent">
+                    {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+                <br />
+              </>
+            )
+          }
+          else{
+            component.unshift(<>
+              <h4 key="TextElementDesc" className="cardDescriptionSelected">
+                Description: 
+                <h4 key="nestedTextDesc" className="cardDescriptionSelectedContent">
+                  {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
               <br />
-            </>
-          )
+            </>)
+          }
+          
         }
 
         return component
@@ -372,6 +388,7 @@ class AssetDashboard extends React.Component {
         let component = [];
 
         for (let i = 0; i < obj.ids.length; i++) {
+          console.log()
           //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
           component.push(
             <div key={"asset" + String(i)}>
