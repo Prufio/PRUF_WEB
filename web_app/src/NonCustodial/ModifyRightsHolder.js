@@ -92,6 +92,7 @@ class ModifyRightsHolder extends Component {
     const self = this;
 
     const clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
     }

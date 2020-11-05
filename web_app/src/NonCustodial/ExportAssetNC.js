@@ -114,6 +114,7 @@ class ExportAssetNC extends Component {
     }
 
     const clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false })
     }

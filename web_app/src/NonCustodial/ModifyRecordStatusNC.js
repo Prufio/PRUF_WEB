@@ -134,7 +134,6 @@ class ModifyRecordStatusNC extends Component {
       else { alert("Invalid status input") }
 
       console.log(this.state.txHash);
-      return document.getElementById("MainForm").reset(),
         this.setState({
           idxHash: undefined
         });
@@ -205,19 +204,13 @@ class ModifyRecordStatusNC extends Component {
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
 
-
-    const clearForm = async () => {
-      document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
-    }
-
     const _checkIn = async (e) => {
       this.setState({
         txStatus: false,
         txHash: ""
       })
       if (e === "null" || e === undefined) {
-        return clearForm()
+        return this.clearForm()
       }
       else if (e === "reset") {
         return window.resetInfo = true;
@@ -235,7 +228,7 @@ class ModifyRecordStatusNC extends Component {
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
+        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return this.clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -261,7 +254,7 @@ class ModifyRecordStatusNC extends Component {
           </div>
           <h2 className="formHeader">Modify Asset Status</h2>
           <div className="mediaLinkClearForm">
-            <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+            <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { this.clearForm() }} /></a>
           </div>
         </div>
         <Form className="form" id='MainForm'>

@@ -12,6 +12,7 @@ class AddNoteNC extends Component {
     //State declaration.....................................................................................................
 
     this.clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
     }
@@ -28,13 +29,16 @@ class AddNoteNC extends Component {
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ result: "" })
-      var idxHash = this.state.idxHash;
+      const idxHash = this.state.idxHash;
+      const ipfs2 = this.state.hashPath;
+
+      this.setState({ hashPath: "" })
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
 
       await window.contracts.APP_NC.methods
-        .$addIpfs2Note(idxHash, this.state.hashPath)
+        .$addIpfs2Note(idxHash, ipfs2)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
@@ -59,10 +63,7 @@ class AddNoteNC extends Component {
           //Stuff to do when tx confirms
         });
 
-      this.setState({ hashPath: "" })
-
       console.log(this.state.txHash);
-      return document.getElementById("MainForm").reset();
     }
 
     this.updateAssets = setInterval(() => {

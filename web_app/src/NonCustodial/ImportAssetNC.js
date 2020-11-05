@@ -152,12 +152,13 @@ class ImportAssetNC extends Component {
             return window.location.href = "/#/asset-dashboard"
           }
         }
-
-        return this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" })
+        this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" });
+        return window.assetClass = undefined;  
       }
     }
 
     const clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, assetClassSelected: false })
     }

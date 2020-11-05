@@ -11,6 +11,7 @@ class ModifyDescription extends Component {
     //State declaration.....................................................................................................
 
     this.updateAssets = setInterval(() => {
+
       if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
         this.setState({ assets: window.assets })
       }
@@ -19,13 +20,16 @@ class ModifyDescription extends Component {
         this.setState({ hasLoadedAssets: window.hasLoadedAssets })
       }
 
-      if (this.state.hashPath !== "" && this.state.runWatchDog === true && window.isInTx !== true) {
-        this.updateDescription()
+      if (this.state.hasUploaded && this.state.hashPath !== "" && this.state.runWatchDog === true && window.isInTx !== true) {
+        if(document.getElementById("MainForm") !== null){
+          this.updateDescription()
+        }
       }
 
     }, 100)
 
     this.clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({
         idxHash: undefined,
@@ -47,11 +51,16 @@ class ModifyDescription extends Component {
     }
 
     this.updateDescription = async () => {
+      console.log(this.state.hashPath, this.state.runWatchDog, window.isInTx)
+
       if(this.state.hashPath === "" || this.state.idxHash === undefined){
         this.setState({hashPath: "", idxHash: undefined}); 
         return this.clearForm()
       } 
+      
+      const idxHash = this.state.idxHash;
       const self = this
+      
 
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -60,19 +69,20 @@ class ModifyDescription extends Component {
       this.setState({ transaction: true })
       window.isInTx = true;
 
-      var _ipfs1 = this.state.hashPath;
-
+      const _ipfs1 = this.state.hashPath;
+      this.setState({ hashPath: "", count: 1, textCount: 1, imageCount: 1, hasUploaded: false });
       console.log("idxHash", this.state.idxHash);
       console.log("addr: ", window.addr);
 
       await window.contracts.NP_NC.methods
-        ._modIpfs1(this.state.idxHash, _ipfs1)
+        ._modIpfs1(idxHash, _ipfs1)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
           self.setState({ transaction: false });
+          
           alert("Something went wrong!")
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -92,7 +102,6 @@ class ModifyDescription extends Component {
         });
 
       console.log(this.state.txHash);
-      self.setState({ hashPath: "", count: 1, textCount: 1, imageCount: 1 });
       window.additionalElementArrays.photo = [];
       window.additionalElementArrays.text = [];
       window.additionalElementArrays.name = "";
@@ -108,7 +117,6 @@ class ModifyDescription extends Component {
         name: ""
       }
     });
-      return document.getElementById("MainForm").reset()
     };
 
     this.state = {
@@ -138,6 +146,7 @@ class ModifyDescription extends Component {
       remCount: 1,
       count: 1,
       transaction: false,
+      hasUploaded: false,
       removePhotoElement: "",
       removeTextElement: "",
       imageArray: [],
@@ -210,12 +219,37 @@ class ModifyDescription extends Component {
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
 
+    this.clearForm()
+
+    /* this.setState({
+      idxHash: undefined,
+      txStatus: false,
+      txHash: "",
+      wasSentPacket: false,
+      count: 1,
+      remCount: 0,
+      removedElements: {
+        images: [],
+        text: [],
+      },
+      addedElements: {
+        images: [],
+        text: [],
+        name: ""
+      }
+    })
+    
+    this.setInterval = {}
+
+    this.setState({runWatchDog: false}) */
+
   }
 
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
 
     const clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0, wasSentPacket: false })
     }
@@ -421,7 +455,8 @@ class ModifyDescription extends Component {
         }
         self.setState({
           hashPath: window.utils.getBytes32FromIPFSHash(hash),
-          oldDescription: newDescription
+          oldDescription: newDescription,
+          hasUploaded: true
         });
       });
     }

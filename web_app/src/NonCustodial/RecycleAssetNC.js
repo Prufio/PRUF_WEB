@@ -213,8 +213,8 @@ class RecycleAssetNC extends Component {
             return window.location.href = "/#/asset-dashboard"
           }
         }
-
-        return this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" })
+        this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" }); 
+        return window.assetClass = undefined; 
       }
     }
 
@@ -238,6 +238,7 @@ class RecycleAssetNC extends Component {
     }
 
     const clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false })
     }

@@ -69,6 +69,7 @@ class NewRecordNC extends Component {
     const self = this;
 
     const clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset()
       this.setState({
         txStatus: null
@@ -118,8 +119,8 @@ class NewRecordNC extends Component {
           await window.utils.resolveAC(this.state.selectedAssetClass);
           await this.setState({ assetClass: window.assetClass });
         }
-
-        return this.setState({ assetClassSelected: true })
+        this.setState({ assetClassSelected: true });
+        return window.assetClass = undefined;
       }
     }
 
