@@ -263,6 +263,7 @@ class Main extends Component {
                                 className="userDataLink">
                                 Log In
                               </a>
+                              to View Balances
                             </h4>
                           )}
                           {this.state.addr > 0 && (

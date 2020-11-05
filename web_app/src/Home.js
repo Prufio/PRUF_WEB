@@ -161,7 +161,7 @@ class Home extends Component {
                   }} className="home2ndRowLink">
                     Log In
                   </a>
-                  to Web3 provider.
+                  to Web3 Provider.
                 </h2>
               </Form.Row>
             </div>

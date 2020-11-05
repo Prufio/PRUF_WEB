@@ -94,7 +94,16 @@ class ModifyDescription extends Component {
       window.additionalElementArrays.name = "";
       //self.setState({ accessPermitted: false });
       //self.setState({ oldDescription: undefined });
-      self.setState({idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0});
+      self.setState({idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0, removedElements: {
+        images: [],
+        text: [],
+      },
+      addedElements: {
+        images: [],
+        text: [],
+        name: ""
+      }
+    });
       return document.getElementById("MainForm").reset()
     };
 
@@ -526,7 +535,7 @@ class ModifyDescription extends Component {
                               disabled
                             >
                               <optgroup className="optgroup">
-                                <option>Modifying: {this.state.idxHash}</option>
+                                <option>Modifying: {this.state.name}</option>
                               </optgroup>
                             </Form.Control>)}
                         </>
@@ -823,7 +832,7 @@ class ModifyDescription extends Component {
         {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
             <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== undefined &&(
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>

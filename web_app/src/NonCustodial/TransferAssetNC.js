@@ -49,31 +49,31 @@ class ModifyDescriptionNC extends Component {
       console.log(window.sentPacket.status)
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot transfer asset in lost or stolen status! Please change to transferrable status");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 58) {
         alert("Cannot transfer asset in imported status! please change to transferrable status");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 70) {
         alert("Cannot transfer asset in exported status! please import asset and change to transferrable status");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) !== 51) {
         alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status");
-         window.sentPacket = undefined;
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
@@ -168,7 +168,7 @@ class ModifyDescriptionNC extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false  });
+          self.setState({ txStatus: false, wasSentPacket: false });
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -211,22 +211,36 @@ class ModifyDescriptionNC extends Component {
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
                   {!this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
-                    >
-                      {this.state.hasLoadedAssets && (
-                        <optgroup className="optgroup">
-                          {window.utils.generateAssets()}
-                        </optgroup>)}
-                      {!this.state.hasLoadedAssets && (
-                        <optgroup>
-                          <option value="null">
-                            Loading Assets...
+                    <>
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _checkIn(e.target.value) }}
+                        >
+                          {this.state.hasLoadedAssets && (
+                            <optgroup className="optgroup">
+                              {window.utils.generateAssets()}
+                            </optgroup>)}
+                          {!this.state.hasLoadedAssets && (
+                            <optgroup>
+                              <option value="null">
+                                Loading Assets...
                            </option>
-                        </optgroup>)}
-                    </Form.Control>
+                            </optgroup>)}
+                        </Form.Control>
+                      )}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          disabled
+                        >
+                          <optgroup className="optgroup">
+                            <option>Transfering: {this.state.name}</option>
+                          </optgroup>
+                        </Form.Control>)}
+                    </>
                   )}
                   {this.state.wasSentPacket && (
                     <Form.Control
@@ -247,22 +261,22 @@ class ModifyDescriptionNC extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridTo">
                   <Form.Label className="formFont">To:</Form.Label>
-                  {this.state.transaction === false && (      
-                  <Form.Control
-                    placeholder="Recipient Address"
-                    required
-                    onChange={(e) => this.setState({ to: e.target.value })}
-                    size="lg"
-                  />
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="Recipient Address"
+                      required
+                      onChange={(e) => this.setState({ to: e.target.value })}
+                      size="lg"
+                    />
                   )}
-                  {this.state.transaction === true && (                  
-                  <Form.Control
-                    placeholder={this.state.to}
-                    required
-                    onChange={(e) => this.setState({ to: e.target.value })}
-                    size="lg"
-                    disabled
-                  />
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder={this.state.to}
+                      required
+                      onChange={(e) => this.setState({ to: e.target.value })}
+                      size="lg"
+                      disabled
+                    />
                   )}
                 </Form.Group>
               </Form.Row>

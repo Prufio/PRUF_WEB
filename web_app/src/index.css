@@ -356,6 +356,8 @@ div {
 
 .assetSelectedResults {
   height: flex;
+  max-height: 30rem;
+  overflow-y: auto;
   width: 59rem;
   color: white;
   background-color: #002a40;

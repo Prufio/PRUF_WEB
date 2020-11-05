@@ -243,6 +243,9 @@ function buildWindowUtils() {
       <>
         <br></br>
         <div className="assetSelectedContentHead">
+          <div>
+            ------------------------------------------------------------------------------------------------------------------------------
+          </div>
           New Image Elements:
         </div>
       </>
@@ -262,6 +265,9 @@ function buildWindowUtils() {
     component.push(
       <>
         <div className="assetSelectedContentHead">
+          <div>
+            ------------------------------------------------------------------------------------------------------------------------------
+          </div>
           New Text Elements:
         </div>
       </>
@@ -283,6 +289,9 @@ function buildWindowUtils() {
       <>
         <div key={"newName"}>
           <div className="assetSelectedContentHead">
+            <div>
+              ------------------------------------------------------------------------------------------------------------------------------
+          </div>
             {"New Name: " + name}
           </div>
         </div>
@@ -1110,15 +1119,15 @@ function buildWindowUtils() {
     console.log("GATI: In _getAssetTokenInfo")
 
     if (Number(window.balances.assetBalance) > 0) {
-       let tknIDArray = [],
-       ipfsHashArray = [],
-       noteArray = [],
-       statuses = [],
-       countPairs = [],
-       assetClasses = [],
-       statusNums = [];
+      let tknIDArray = [],
+        ipfsHashArray = [],
+        noteArray = [],
+        statuses = [],
+        countPairs = [],
+        assetClasses = [],
+        statusNums = [];
 
-    
+
 
       for (let i = 0; i < window.balances.assetBalance; i++) {
         await window.contracts.A_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
@@ -1129,8 +1138,8 @@ function buildWindowUtils() {
               let resStr;
               console.log(window.web3.utils.numberToHex(_result))
               resStr = window.web3.utils.numberToHex(_result);
-              while(resStr.length < 66){
-                resStr = resStr.substring(0,2) + "0" + resStr.substring(2, resStr.length)
+              while (resStr.length < 66) {
+                resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
               }
               tknIDArray.push(resStr)
             }

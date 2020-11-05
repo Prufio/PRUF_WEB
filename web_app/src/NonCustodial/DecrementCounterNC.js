@@ -241,7 +241,7 @@ class DecrementCounterNC extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option>Modifying: {this.state.idxHash}</option>
+                            <option>Modifying: {this.state.name}</option>
                           </optgroup>
                         </Form.Control>)}
                     </>
