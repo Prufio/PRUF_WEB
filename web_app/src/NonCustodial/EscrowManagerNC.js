@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { ArrowRightCircle, Home, TrendingUp, XSquare, CheckCircle } from 'react-feather'
+import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
 
 class EscrowManagerNC extends Component {
   constructor(props) {
@@ -130,8 +129,8 @@ class EscrowManagerNC extends Component {
       console.log("addr: ", window.addr);
       console.log("time: ", this.state.escrowTime, "format: ", this.state.timeFormat);
 
-      if (this.state.newStatus <= 49) { this.setState({ transaction: false }); return alert("Cannot set status under 50 in non-custodial AC"), clearForm() }
-      if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); return alert("Agent address invalid"), clearForm() }
+      if (this.state.newStatus <= 49) { this.setState({ transaction: false }); alert("Cannot set status under 50 in non-custodial AC"); return clearForm() }
+      if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); alert("Agent address invalid"); return clearForm() }
 
 
       await window.contracts.ECR_NC.methods

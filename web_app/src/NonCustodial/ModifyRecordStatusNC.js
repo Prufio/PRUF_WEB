@@ -202,8 +202,6 @@ class ModifyRecordStatusNC extends Component {
   }
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
-
     const _checkIn = async (e) => {
       this.setState({
         txStatus: false,

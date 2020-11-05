@@ -8,13 +8,6 @@ class NewRecordNC extends Component {
   constructor(props) {
     super(props);
 
-    //State declaration.....................................................................................................
-    // this.listenForTx = setInterval(() => {
-    //   if(this.state.pendingTx === undefined && this.state.transaction === true) {
-    //     this.setState({pendingTx: Object.values(window.web3.eth.getPendingTransactions())[0]})
-    //   }
-    // }, 100)
-
     this.state = {
       addr: "",
       lookupIPFS1: "",

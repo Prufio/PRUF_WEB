@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { ArrowRightCircle, Home, XSquare, AlertTriangle } from 'react-feather'
+import { Home, XSquare, AlertTriangle } from 'react-feather'
 
 class ModifyRightsHolder extends Component {
   constructor(props) {

@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav'
 import "../index.css";
 import {
-    BrowserView,
-    MobileView,
-    isBrowser,
     isMobile
 } from "react-device-detect";
 

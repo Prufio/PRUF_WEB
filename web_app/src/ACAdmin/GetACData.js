@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import bs58 from "bs58";
 
 class GetACData extends Component {
   constructor(props) {
@@ -45,11 +44,8 @@ class GetACData extends Component {
   }
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
-
     const getAC_data = async () => {
         let ref;
-        let tempData;
 
         if (
             this.state.assetClass.charAt(0) === "0" ||

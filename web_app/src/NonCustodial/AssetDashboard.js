@@ -1,4 +1,4 @@
-import React, { Component, useRef } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import "./../index.css";
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -7,7 +7,6 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { RefreshCw, X, ChevronRight, CornerUpLeft, Home } from "react-feather";
 import { QRCode } from 'react-qrcode-logo';
 import Printer from '../Resources/Print'
-import Jdenticon from 'react-jdenticon';
 
 
 class AssetDashboard extends React.Component {
@@ -161,11 +160,6 @@ class AssetDashboard extends React.Component {
         this.setState({ selectedImage: e })
       }
 
-      const openPhotoNT = (url) => {
-        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-        if (newWindow) { newWindow.opener = null }
-      }
-
       const _printQR = async () => {
         if (this.state.printQR === undefined) {
           this.setState({ printQR: true })
@@ -185,7 +179,7 @@ class AssetDashboard extends React.Component {
         for (let i = 0; i < images.length; i++) {
           component.push(
             <button key={"thumb" + String(i)} value={images[i]} className="assetImageSelectorButton" onClick={() => { showImage(images[i]) }}>
-              <img title="View Image" src={images[i]} className="imageSelectorImage" />
+              <img title="View Image" src={images[i]} className="imageSelectorImage" alt =""/>
             </button>
           )
         }
@@ -314,7 +308,7 @@ class AssetDashboard extends React.Component {
 
                     <button className="assetImageButtonSelected">
                       {this.state.selectedImage !== "" ?
-                        (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" />)
+                        (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt =""/>)
                         : (<>{obj.identicon}</>)}
                     </button>
                     <p className="cardNameSelected">Name: {obj.name}</p>
@@ -434,7 +428,7 @@ class AssetDashboard extends React.Component {
                       }}
                     >
                       {obj.displayImages[i] !== "" && (
-                        <img title="View Asset" src={obj.displayImages[i]} className="assetImage" />
+                        <img title="View Asset" src={obj.displayImages[i]} className="assetImage" alt =""/>
                       )}
                       {obj.displayImages[i] === "" && (
                         <>{obj.identicons[i]}</>
@@ -447,7 +441,7 @@ class AssetDashboard extends React.Component {
                     <p className="cardStatus">Status: {obj.statuses[i]}</p>
                     <h4 className="cardIdx">IDX: {obj.ids[i]}</h4>
                     <br></br>
-                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description :
+                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description : 
                     {obj.descriptions[i].text.Description !== undefined && (
                         obj.descriptions[i].text.Description.replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')
                       )}
@@ -499,7 +493,7 @@ class AssetDashboard extends React.Component {
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="assetDashboardHeader">My Assets</h2>
+          <h2 className="assetDashboardHeader">Your Assets</h2>
           <div className="mediaLinkADRefresh">
             <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>

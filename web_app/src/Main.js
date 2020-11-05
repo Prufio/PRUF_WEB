@@ -15,9 +15,6 @@ import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X } from 'react-feather';
 import {
-  BrowserView,
-  MobileView,
-  isBrowser,
   isMobile
 } from "react-device-detect";
 import Jdenticon from 'react-jdenticon';
@@ -535,7 +532,7 @@ class Main extends Component {
 
       if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
-          console.log("turning on buildready... Window IPFS operation count: ", window.ipfsCounter)
+          //console.log("turning on buildready... Window IPFS operation count: ", window.ipfsCounter)
           this.setState({ buildReady: true })
         }
       }
@@ -790,10 +787,10 @@ class Main extends Component {
           window.ipfsCounter++
           console.log(window.ipfsCounter)
         } else {
-          console.log(lookup, "Here's what we found for asset description: ", result);
+          //console.log(lookup, "Here's what we found for asset description: ", result);
           descElement.push(result)
           window.ipfsCounter++
-          console.log(window.ipfsCounter)
+          //console.log(window.ipfsCounter)
         }
       });
     };
@@ -874,7 +871,6 @@ class Main extends Component {
     this.setUpContractEnvironment = async (_web3) => {
       if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
       window.isSettingUpContracts = true;
-      const self = this;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
         if (window.addr !== undefined) {
@@ -917,7 +913,7 @@ class Main extends Component {
 
 
         console.log("bools...", window.assetHolderBool, window.assetClassHolderBool, window.IDHolderBool)
-        console.log("Wallet balance in ETH: ", window.ETHBalance)
+        //console.log("Wallet balance in ETH: ", window.ETHBalance)
         window.isSettingUpContracts = false;
         return this.setState({ runWatchDog: true })
       }
@@ -984,6 +980,7 @@ class Main extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     buildWindowUtils()
+    let _web3, ipfs;
 
     window.jdenticon_config = {
       hues: [196],
@@ -1023,7 +1020,7 @@ class Main extends Component {
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
       const ethereum = window.ethereum;
-      var _web3 = require("web3");
+      _web3 = require("web3");
       _web3 = new Web3(_web3.givenProvider);
       this.setUpContractEnvironment(_web3)
       this.setState({ web3: _web3 });
@@ -1047,7 +1044,7 @@ class Main extends Component {
     else {
 
       window.ipfsCounter = 0;
-      var _web3 = require("web3");
+      _web3 = require("web3");
       _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
       this.setUpContractEnvironment(_web3)
       this.setState({ web3: _web3 });
@@ -1063,7 +1060,7 @@ class Main extends Component {
         routeRequest: "noAddr"
       })
 
-      var _ipfs = new this.state.IPFS({
+       _ipfs = new this.state.IPFS({
         host: "ipfs.infura.io",
         port: 5001,
         protocol: "https",
