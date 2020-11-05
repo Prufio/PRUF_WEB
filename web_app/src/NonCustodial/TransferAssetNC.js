@@ -145,6 +145,7 @@ class ModifyDescriptionNC extends Component {
     }
 
     const clearForm = async () => {
+      if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
     }
