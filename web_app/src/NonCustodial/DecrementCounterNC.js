@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
+import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 class DecrementCounterNC extends Component {
   constructor(props) {
@@ -42,6 +41,7 @@ class DecrementCounterNC extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -93,12 +93,22 @@ class DecrementCounterNC extends Component {
     const self = this;
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _checkIn = async (e) => {
+      this.setState({help: false})
       this.setState({
         txStatus: false,
         txHash: ""
@@ -145,6 +155,7 @@ class DecrementCounterNC extends Component {
     }
 
     const _decrementCounter = async () => {
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -282,20 +293,35 @@ class DecrementCounterNC extends Component {
                       placeholder={this.state.countDown}
                       required
                       disabled
-                    size="lg"
-                  />)}
+                      size="lg"
+                    />)}
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
-                <Form.Row>
-                  <div className="submitButton">
-                    <div className="submitButtonContent">
-                      <CheckCircle
-                        onClick={() => { _decrementCounter() }}
-                      />
+                <>
+                  <Form.Row>
+                    <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <CheckCircle
+                          onClick={() => { _decrementCounter() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                      Some things have limited lifespans or consumable supplies. PRuF tracks life-limited items using a blockchain countdown counter. This counter only counts down,
+                      and once it gets to zero it cannot be reset.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

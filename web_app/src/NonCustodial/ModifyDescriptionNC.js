@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, CheckCircle, UploadCloud, Trash2 } from 'react-feather'
+import { Home, XSquare, CheckCircle, UploadCloud, Trash2, AlertTriangle } from 'react-feather'
 
 
 class ModifyDescription extends Component {
@@ -46,11 +46,13 @@ class ModifyDescription extends Component {
           images: [],
           text: [],
           name: ""
-        }
+        },
+        help: false
       })
     }
 
     this.updateDescription = async () => {
+      this.setState({help: false})
       console.log(this.state.hashPath, this.state.runWatchDog, window.isInTx)
 
       if(this.state.hashPath === "" || this.state.idxHash === undefined){
@@ -164,6 +166,7 @@ class ModifyDescription extends Component {
         photo: [],
         text: [],
       },
+      help: false
     };
   }
 
@@ -251,10 +254,20 @@ class ModifyDescription extends Component {
     const clearForm = async () => {
       if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0, wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0, wasSentPacket: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _addToMiscArray = async (type) => {
+      this.setState({help: false})
       let element, text = this.state.addedElements.text, images = this.state.addedElements.images;
       let elementName = this.state.elementName;
       let elementValue = this.state.elementValue;
@@ -321,7 +334,7 @@ class ModifyDescription extends Component {
     }
 
     const _removeElement = (type) => {
-
+      this.setState({help: false})
       console.log("Existing description before edits: ", this.state.oldDescription)
       let text = this.state.removedElements.text;
       let images = this.state.removedElements.images;
@@ -372,6 +385,7 @@ class ModifyDescription extends Component {
     }
 
     const publishIPFS1 = async () => {
+      this.setState({help: false})
       console.log(this.state.oldDescription)
       let newDescription;
 
@@ -462,6 +476,7 @@ class ModifyDescription extends Component {
     }
 
     const _checkIn = async (e) => {
+      this.setState({help: false})
       this.setState({
         txStatus: false,
         txHash: ""
@@ -857,13 +872,31 @@ class ModifyDescription extends Component {
               )}
 
               {this.state.hashPath === "" && this.state.accessPermitted && this.state.transaction === false && (
-                <div className="submitButton">
-                  <div className="submitButtonContent">
-                    <CheckCircle
-                      onClick={() => { publishIPFS1() }}
-                    />
+                <>
+                <Form.Row>
+                  <div className="submitButton">
+                    <div className="submitButtonContent">
+                      <CheckCircle
+                        onClick={() => { publishIPFS1() }}
+                      />
+                    </div>
                   </div>
-                </div>
+                  <div className="mediaLinkHelp">
+                    <div className="mediaLinkHelpContent2">
+                      <AlertTriangle
+                        onClick={() => { help() }}
+                      />
+                    </div>
+                  </div>
+                </Form.Row>
+                {this.state.help === true && (
+                  <div className="explainerTextBox2">
+                    Modifing Asset Information allows users to customize a selected assets profile. Information given within this version
+                    of the web application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
+                    identifying data unless it is the intention of the user to make this data public.
+                  </div>
+                )}
+              </>
               )}
             </div>
           )}

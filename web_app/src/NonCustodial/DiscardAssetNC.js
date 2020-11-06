@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { Trash2, Home, XSquare } from 'react-feather'
+import { Trash2, Home, XSquare, AlertTriangle } from 'react-feather'
 
 class DiscardAssetNC extends Component {
   constructor(props) {
@@ -40,6 +39,7 @@ class DiscardAssetNC extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -78,6 +78,7 @@ class DiscardAssetNC extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
+      this.setState({help: false})
       if (e === "null" || e === undefined) { return }
       else if (e === "reset") {
         return window.resetInfo = true;
@@ -112,10 +113,20 @@ class DiscardAssetNC extends Component {
     const clearForm = async () => {
       if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false  })
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _discardAsset = async () => {//create a new asset record
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -226,8 +237,8 @@ class DiscardAssetNC extends Component {
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
-                <Form.Row>
-                  <Form.Group>
+                <>
+                  <Form.Row>
                     <div className="submitButton">
                       <div className="submitButtonContent">
                         <Trash2
@@ -235,8 +246,22 @@ class DiscardAssetNC extends Component {
                         />
                       </div>
                     </div>
-                  </Form.Group>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent2">
+                        <AlertTriangle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                      Discarding an asset requires that the asset is in discardable status. Discarding an asset will burn the asset token
+                      linked to the asset. The individual discarding the asset will recieve a bonus in PRuF tokens once the following user
+                      recycles the asset into their ownership using Recycle Asset.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

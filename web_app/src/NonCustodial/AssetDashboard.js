@@ -4,7 +4,7 @@ import "./../index.css";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav'
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { RefreshCw, X, ChevronRight, CornerUpLeft, Home } from "react-feather";
+import { RefreshCw, X, ChevronRight, CornerUpLeft, Home, Plus } from "react-feather";
 import { QRCode } from 'react-qrcode-logo';
 import Printer from '../Resources/Print'
 import Jdenticon from 'react-jdenticon';
@@ -95,6 +95,21 @@ class AssetDashboard extends React.Component {
       window.sentPacket = obj
       window.menuChange = menu
       window.location.href = '/#/' + link
+    }
+
+    this.newRecord = async () => {
+      await window.utils.determineTokenBalance()
+      console.log("IDholderBool", window.IDHolderBool)
+      if (window.IDHolderBool === false && window.confirm("You are not authorized to mint asset tokens. If you are interested in getting authorized, click ok to route to our website for more information."))
+      {
+        window.open('https://www.pruf.io')
+        return
+      }
+      else if (window.IDHolderBool === true)
+      {
+      window.menuChange = "NC"
+      window.location.href = '/#/new-record-NC'
+    }
     }
 
     this.refresh = () => {
@@ -502,6 +517,9 @@ class AssetDashboard extends React.Component {
           <h2 className="assetDashboardHeader">My Assets</h2>
           <div className="mediaLinkADRefresh">
             <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
+          </div>
+          <div className="mediaLinkADAddAsset">
+            <a className="mediaLinkContentADAddAsset" ><Plus size={35} onClick={() => { this.newRecord() }} /></a>
           </div>
         </div>
         <div className="assetDashboard">

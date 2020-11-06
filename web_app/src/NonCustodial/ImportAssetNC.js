@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, CheckCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CheckCircle, HelpCircle } from "react-feather";
 
 
 class ImportAssetNC extends Component {
@@ -42,6 +42,7 @@ class ImportAssetNC extends Component {
       transaction: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       hasLoadedAssets: false,
+      help: false
     };
   }
 
@@ -153,18 +154,27 @@ class ImportAssetNC extends Component {
           }
         }
         this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" });
-        return window.assetClass = undefined;  
+        return window.assetClass = undefined;
       }
     }
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, assetClassSelected: false })
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, assetClassSelected: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _checkIn = async (e) => {
-
+      this.setState({help: false})
       console.log("Checking in with id: ", e)
       if (e === "null" || e === undefined) {
         return alert("Please select an asset before submission."), clearForm()
@@ -221,6 +231,7 @@ class ImportAssetNC extends Component {
     }
 
     const _importAsset = async () => {
+      this.setState({help: false})
       if (this.state.selectedAsset === undefined && !this.state.wasSentPacket) {
         return alert("Please select an asset before submission."), clearForm()
       }
@@ -364,20 +375,35 @@ class ImportAssetNC extends Component {
                   </Form.Group>
                 </Form.Row>
                 {this.state.transaction === false && (
-                  <Form.Row>
-                    <div>
-                      <Form.Label className="costText">
-                        Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF
+                  <>
+                    <Form.Row>
+                      <div>
+                        <Form.Label className="costText">
+                          Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF
                           </Form.Label>
-                      <div className="submitButton">
-                        <div className="submitButtonContent">
-                          <CheckCircle
-                            onClick={() => { _importAsset() }}
+                        <div className="submitButton">
+                          <div className="submitButtonContent">
+                            <CheckCircle
+                              onClick={() => { _importAsset() }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mediaLinkHelp">
+                        <div className="mediaLinkHelpContent">
+                          <HelpCircle
+                            onClick={() => { help() }}
                           />
                         </div>
                       </div>
-                    </div>
-                  </Form.Row>
+                    </Form.Row>
+                    {this.state.help === true && (
+                      <div className="explainerTextBox2">
+                        Importing an asset requires that the asset has been exported from it's previous asset class, and is being imported into an asset class
+                        within the same catergory. Functionally, importing an asset updates an asset's asset class to whichever is selected by the asset's owner.
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             </div>

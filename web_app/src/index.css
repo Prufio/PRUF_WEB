@@ -1118,6 +1118,38 @@ div {
   align-items: center;
 }
 
+.explainerTextBox {
+  display: flex;
+  background-color: white;
+  color: black;
+  height: 6.5rem;
+  width: 45rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  position: absolute;
+  border-radius: 0rem 1rem 1rem 1rem;
+  margin-top: -5rem;
+  margin-left: 2rem;
+  z-index: 999;
+  opacity: 0.9;
+}
+
+.explainerTextBox2 {
+  display: flex;
+  background-color: white;
+  color: black;
+  height: 4.5rem;
+  width: 45rem;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  position: absolute;
+  border-radius: 1rem 1rem 1rem 1rem;
+  margin-top: -3.3rem;
+  margin-left: 2rem;
+  z-index: 999;
+  opacity: 0.9;
+}
+
 .textMobile {
   color: white;
   font-size: 1.4rem;
@@ -1138,13 +1170,18 @@ div {
   font-family: Tahoma, Geneva, sans-serif;
 }
 
+.homeErrorText {
+margin-top: 3rem;
+margin-bottom: -3rem;
+}
+
 .costText {
   display: flex;
   color: rgb(255, 255, 255);
   font-weight: bold;
   font-size: small;
   font-family: Tahoma, Geneva, sans-serif;
-  margin-top: 0.3rem;
+  margin-top: 2.5rem;
   position: absolute;
 }
 
@@ -1168,6 +1205,8 @@ div {
 
 .home2ndRow {
   font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: -3rem;
 }
 
 .userIDBalance1{
@@ -1622,6 +1661,44 @@ div {
   transform: translateY(-5px);
 }
 
+.mediaLinkHelp {
+  display: flex;
+  width: fit-content;
+  height: 10rem;
+  position: absolute;
+  flex-direction: column;
+  z-index: 999;
+  justify-content: space-between;
+}
+
+.mediaLinkHelpContent {
+  border-radius: 50%;
+  color: #ffffff;
+  -webkit-transition: -webkit-transform .35s ease-in-out;
+  transition:         transform .35s ease-in-out;
+}
+
+.mediaLinkHelpContent:hover {
+  color: #00a8ff;
+  cursor: pointer;
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+}
+
+.mediaLinkHelpContent2 {
+  border-radius: 50%;
+  color: #ff0000;
+  -webkit-transition: -webkit-transform .35s ease-in-out;
+  transition:         transform .35s ease-in-out;
+}
+
+.mediaLinkHelpContent2:hover {
+  color: #00a8ff;
+  cursor: pointer;
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+}
+
 .mediaLinkMobile {
   display: flex;
   width: 250px;
@@ -1666,7 +1743,7 @@ div {
 .mediaLinkADRefresh {
   display: flex;
   height: fit-content;
-  margin-left: 90%;
+  margin-left: 88%;
   position: absolute;
   margin-top: -4rem;
   z-index: 999;
@@ -1684,6 +1761,25 @@ div {
   cursor: pointer;
   -webkit-transform: rotate(150deg);
   transform: rotate(150deg);
+}
+
+.mediaLinkADAddAsset {
+  display: flex;
+  height: fit-content;
+  margin-left: 93%;
+  position: absolute;
+  margin-top: -4.5rem;
+  z-index: 999;
+}
+
+.mediaLinkContentADAddAsset {
+  border-radius: 50%;
+  color: #00a8ff;
+}
+
+.mediaLinkContentADAddAsset:hover {
+  color: #028ed4;
+  cursor: pointer;
 }
 
 .mediaLinkBack {

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { ArrowRightCircle, Home, XSquare, AlertTriangle } from 'react-feather'
+import { Home, CheckCircle, XSquare, AlertTriangle } from 'react-feather'
 
 class ModifyRightsHolder extends Component {
   constructor(props) {
@@ -50,6 +49,7 @@ class ModifyRightsHolder extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -94,10 +94,20 @@ class ModifyRightsHolder extends Component {
     const clearForm = async () => {
       if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _checkIn = async (e) => {
+      this.setState({help: false})
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -140,6 +150,7 @@ class ModifyRightsHolder extends Component {
     }
 
     const _editRgtHash = async () => {
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -354,17 +365,31 @@ class ModifyRightsHolder extends Component {
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
-                <Form.Row>
-                  <Form.Group >
+                <>
+                  <Form.Row>
                     <div className="submitButton">
-                      <div className="submitButtonVRHContent">
-                        <AlertTriangle
+                      <div className="submitButtonContent">
+                        <CheckCircle
                           onClick={() => { _editRgtHash() }}
                         />
                       </div>
                     </div>
-                  </Form.Group>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent2">
+                        <AlertTriangle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                      Modify Rightsholder allows the owner of an asset token to modify the ownership of an item. This does not transfer the asset
+                      token. Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern
+                      that does not contain the data that you provide, encrypted or otherwise.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

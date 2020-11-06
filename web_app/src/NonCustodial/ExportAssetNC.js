@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
+import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 
 class ExportAssetNC extends Component {
@@ -41,6 +40,7 @@ class ExportAssetNC extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -80,6 +80,7 @@ class ExportAssetNC extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
+      this.setState({help: false})
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -114,12 +115,22 @@ class ExportAssetNC extends Component {
     }
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _exportAsset = async () => {//create a new asset record
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -231,8 +242,8 @@ class ExportAssetNC extends Component {
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
-                <Form.Row>
-                  <Form.Group>
+                <>
+                  <Form.Row>
                     <div className="submitButton">
                       <div className="submitButtonContent">
                         <CheckCircle
@@ -240,8 +251,21 @@ class ExportAssetNC extends Component {
                         />
                       </div>
                     </div>
-                  </Form.Group>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox">
+                      Exporting an asset requires that the asset is in a transferrable status. Exporting an asset will remove it from its current
+                      asset class, allowing it to be imported into a new one within the same catergory using Import Asset.
+                    </div>
+                  )}
+                </>
               )}
 
             </div>

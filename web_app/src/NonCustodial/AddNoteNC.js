@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import bs58 from "bs58";
-import { CheckCircle, Home, XSquare } from 'react-feather'
+import { CheckCircle, Home, XSquare, AlertTriangle } from 'react-feather'
 
 
 class AddNoteNC extends Component {
@@ -14,10 +14,11 @@ class AddNoteNC extends Component {
     this.clearForm = async () => {
       if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
 
     this.setInscription = async () => {
+      this.setState({help: false})
       if(this.state.hashPath === "" || this.state.idxHash === undefined){
         this.setState({hashPath: "", idxHash: undefined}); 
         return this.clearForm()
@@ -156,6 +157,7 @@ class AddNoteNC extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -212,7 +214,7 @@ class AddNoteNC extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, assetClass: undefined })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, assetClass: undefined, help: false })
     }
 
     const getBytes32FromIpfsHash = (ipfsListing) => {
@@ -220,6 +222,7 @@ class AddNoteNC extends Component {
     };
 
     const publishIPFS2Photo = async () => {
+      this.setState({help: false})
 
       this.setState({ transaction: true })
       if (document.getElementById("ipfs2File").files[0] !== undefined && this.state.idxHash !== undefined) {
@@ -245,7 +248,17 @@ class AddNoteNC extends Component {
       else { if (document.getElementById("ipfs2File").files[0] === undefined) alert("No file chosen for upload!"); else { alert("Select an asset to modify!") } }
     };
 
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
+    }
+
     const _checkIn = async (e) => {
+      this.setState({help: false})
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -374,6 +387,7 @@ class AddNoteNC extends Component {
               </Form.Row>
 
               {this.state.hashPath === "" && this.state.transaction === false && (
+                <>
                 <Form.Row>
                   <div>
                     {this.state.assetClass !== undefined && (
@@ -385,10 +399,24 @@ class AddNoteNC extends Component {
                           onClick={() => { publishIPFS2Photo() }}
                         />
                       </div>
-
                     </div>
                   </div>
+                  <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent2">
+                        <AlertTriangle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
                 </Form.Row>
+                {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                    Add Note allows users to permanently pair a file to an asset. Information given within this versionof the web 
+                    application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
+                    identifying data unless it is the intention of the user to make this data public.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

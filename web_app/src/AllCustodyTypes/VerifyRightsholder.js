@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyRightHolder extends Component {
@@ -11,6 +11,7 @@ class VerifyRightHolder extends Component {
     //State declaration.....................................................................................................
 
     this.accessAsset = async () => {
+      this.setState({help: false})
       let idxHash;
       if (this.state.QRreader === false && !this.state.Checkbox) {
         if (this.state.manufacturer === ""
@@ -75,6 +76,7 @@ class VerifyRightHolder extends Component {
       isNFA: false,
       transaction: false,
       Checkbox: false,
+      help: false
     };
   }
 
@@ -134,6 +136,15 @@ class VerifyRightHolder extends Component {
       }
     }
 
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
+    }
+
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
@@ -147,10 +158,11 @@ class VerifyRightHolder extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ DVresult: "", accessPermitted: false, transaction: false, txHash: "", Checkbox: false, wasSentPacket: false })
+      this.setState({ DVresult: "", accessPermitted: false, transaction: false, txHash: "", Checkbox: false, wasSentPacket: false, help: false })
     }
 
     const _verify = async () => {
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -302,27 +314,42 @@ class VerifyRightHolder extends Component {
                 </>
               )}
               {this.state.transaction === false && this.state.QRreader === false && !this.state.accessPermitted && (
-                <Form.Row>
-                  <div className="submitButton">
-                    <div className="submitButtonContent">
-                      <ArrowRightCircle
-                        onClick={() => { this.accessAsset() }}
-                      />
+                <>
+                  <Form.Row>
+                    <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <ArrowRightCircle
+                          onClick={() => { this.accessAsset() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => { QRReader() }}
-                      className="buttonQRScan"
-                    >
-                      <img
-                        className="scanImageFormQR"
-                        title="Scan QR Code"
-                        src={require("../Resources/QRSCANPIC.png")}
-                        alt="Pruf Print" />
-                    </button>
-                  </div>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => { QRReader() }}
+                        className="buttonQRScan"
+                      >
+                        <img
+                          className="scanImageFormQR"
+                          title="Scan QR Code"
+                          src={require("../Resources/QRSCANPIC.png")}
+                          alt="Pruf Print" />
+                      </button>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox">
+                          Deep Verify is a function that confirms provenance of an item. As it initiates a blockchain transaction, Deep Verify is secure
+                          despite your browser connection being securily protected. For a less secure, but free provenance check, use Verify Lite
+                    </div>
+                  )}
+                </>
               )}
 
               {this.state.QRreader === true && (
@@ -517,15 +544,30 @@ class VerifyRightHolder extends Component {
                     </Form.Group>
                   </Form.Row>
                   {this.state.transaction === false && (
-                    <Form.Row>
-                      <div className="submitButtonVRH2">
-                        <div className="submitButtonVRH2Content">
-                          <CheckCircle
-                            onClick={() => { _verify() }}
+                    <>
+                      <div className="mediaLinkHelp">
+                        <div className="mediaLinkHelpContent">
+                          <HelpCircle
+                            onClick={() => { help() }}
                           />
                         </div>
                       </div>
-                    </Form.Row>
+                      <Form.Row>
+                        <div className="submitButtonVRH2">
+                          <div className="submitButtonVRH2Content">
+                            <CheckCircle
+                              onClick={() => { _verify() }}
+                            />
+                          </div>
+                        </div>
+                      </Form.Row>
+                      {this.state.help === true && (
+                        <div className="explainerTextBox">
+                          Deep Verify is a function that confirms provenance of an item. As it initiates a blockchain transaction, Deep Verify is secure
+                          despite your browser connection being securily protected. For a less secure, but free provenance check, use Verify Lite
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}

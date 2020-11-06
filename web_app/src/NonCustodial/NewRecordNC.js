@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
+import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 class NewRecordNC extends Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class NewRecordNC extends Component {
       rawIPFSHash: "",
       idxSubmitted: false,
       transaction: false,
+      help: false
     };
   }
 
@@ -69,11 +70,21 @@ class NewRecordNC extends Component {
     const self = this;
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset()
       this.setState({
-        txStatus: null
+        txStatus: null,
+        help: false
       })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _setAC = async () => {
@@ -125,7 +136,7 @@ class NewRecordNC extends Component {
     }
 
     const checkAsset = async () => {
-
+      this.setState({help: false})
       let ipfsObj = { photo: {}, text: {}, name: "" }
 
       if (this.state.nameTag !== "" && this.state.nameTag !== undefined) {
@@ -151,11 +162,15 @@ class NewRecordNC extends Component {
     }
 
     const _newRecord = async () => {//create a new asset record
-      this.setState({ txStatus: false });
-      this.setState({ txHash: "" });
-      this.setState({ error: undefined });
-      this.setState({ result: "" });
-      this.setState({ transaction: true });
+      this.setState({
+        help: false,
+        txStatus: false,
+        txHash: "",
+        error: undefined,
+        result: "",
+        transaction: true
+      })
+
 
       //reset state values before form resubmission
       var idxHash = this.state.idxHash;
@@ -325,15 +340,31 @@ class NewRecordNC extends Component {
                       />
                     </Form.Group>
                   </Form.Row>
-
-                  <div className="submitButtonNRCA">
-                    <div className="submitButtonNRContent">
-                      <ArrowRightCircle
-                        onClick={() => { checkAsset() }}
-                      />
-                    </div>
-                  </div>
-
+                  <>
+                    <Form.Row>
+                      <div className="submitButton">
+                        <div className="submitButtonContent">
+                          <ArrowRightCircle
+                            onClick={() => { checkAsset() }}
+                          />
+                        </div>
+                      </div>
+                      <div className="mediaLinkHelp">
+                        <div className="mediaLinkHelpContent">
+                          <HelpCircle
+                            onClick={() => { help() }}
+                          />
+                        </div>
+                      </div>
+                    </Form.Row>
+                    {this.state.help === true && (
+                      <div className="explainerTextBox2">
+                        New Record creates a unique hash based on the given asset data. The "Name Tag" given within this version
+                        of the web application may be visible to third parties if unencrypted. This data field should not include sensitive or personally
+                        identifying data unless it is the intention of the user to make this data public.
+                      </div>
+                    )}
+                  </>
                 </>
               )}
               {this.state.idxSubmitted && (
@@ -508,21 +539,36 @@ class NewRecordNC extends Component {
 
                   </Form.Row> */}
                   {this.state.transaction === false && (
-                    <Form.Row>
-                      <div>
-                        <Form.Label className="costText"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
-                        <div className="submitButtonNR">
-                          <div className="submitButtonNRContent">
-                            <CheckCircle
-                              onClick={() => { _newRecord() }}
+                    <>
+                      <Form.Row>
+                        <div>
+                          <Form.Label className="costText"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
+                          <div className="submitButtonNR">
+                            <div className="submitButtonNRContent">
+                              <CheckCircle
+                                onClick={() => { _newRecord() }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mediaLinkHelp">
+                          <div className="mediaLinkHelpContent">
+                            <HelpCircle
+                              onClick={() => { help() }}
                             />
                           </div>
                         </div>
-                      </div>
-                    </Form.Row>
+                      </Form.Row>
+                      {this.state.help === true && (
+                        <div className="explainerTextBox2">
+                          Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern that does not
+                          contain the data that you provide, encrypted or otherwise. Creating a record will mint you a unique asset token which is tied to the asset
+                          data the user provided.
+                        </div>
+                      )}
+                    </>
                   )}
-                  <br></br>
-
                 </>
               )}
             </div>
