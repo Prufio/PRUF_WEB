@@ -431,7 +431,7 @@ class VerifyLite extends Component {
                 {this.state.help === true && (
                   <div className="explainerTextBox">
                     Verify Lite is a call function that confirms provenance of an item. As it does not initiate a blockchain transaction, Verify Lite is only
-                    secure if your browser connection is securily protected. For a more secure provenance check, use Deep Verify.
+                    trustable if your browser connection is securily protected. For a more secure provenance check, use Deep Verify.
                   </div>
                 )}
               </>

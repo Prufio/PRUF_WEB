@@ -564,7 +564,7 @@ class VerifyRightHolder extends Component {
                       {this.state.help === true && (
                         <div className="explainerTextBox">
                           Deep Verify is a function that confirms provenance of an item. As it initiates a blockchain transaction, Deep Verify is secure
-                          despite your browser connection being securily protected. For a less secure, but free provenance check, use Verify Lite
+                          despite your browser connection being securily protected. For a less secure but free provenance check, use Verify Lite
                         </div>
                       )}
                     </>
