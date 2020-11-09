@@ -210,7 +210,6 @@ class AddNoteNC extends Component {
   }
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();

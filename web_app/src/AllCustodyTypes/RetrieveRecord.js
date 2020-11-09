@@ -53,7 +53,6 @@ class RetrieveRecord extends Component {
     this.generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
-      let imageNames = Object.keys(obj.photo)
       let textNames = Object.keys(obj.text)
       let status = obj.status;
 
@@ -74,7 +73,7 @@ class RetrieveRecord extends Component {
         for (let i = 0; i < images.length; i++) {
           component.push(
             <button key={"thumb" + String(i)} value={images[i]} className="assetImageSelectorButton" onClick={() => { showImage(images[i]) }}>
-              <img src={images[i]} className="imageSelectorImage" />
+              <img src={images[i]} className="imageSelectorImage" alt =""/>
             </button>
           )
         }
@@ -119,7 +118,7 @@ class RetrieveRecord extends Component {
             <div className="row no-gutters">
               <div className="assetSelecedInfo">
                 <button className="assetImageButton" onClick={() => { openPhotoNT(this.state.selectedImage) }}>
-                  <img src={this.state.selectedImage} className="assetImageSelected" />
+                  <img src={this.state.selectedImage} className="assetImageSelected" alt =""/>
                 </button>
                 <p className="cardNameSelected">Name : {obj.name}</p>
                 <p className="cardAcSelected">Asset Class : {obj.assetClass}</p>
@@ -183,7 +182,7 @@ class RetrieveRecord extends Component {
             status = Object.values(_result)[0]
           }
         })
-
+      this.setState({retrievedAssetClass: assetClass, retrievedStatus: status});
       return this.getIPFSJSONObject(window.utils.getIpfsHashFromBytes32(hash))
 
     }
@@ -303,7 +302,7 @@ class RetrieveRecord extends Component {
       hashPath: "",
       error: undefined,
       NRerror: undefined,
-      result: [],
+      resultArr: [],
       assetClass: undefined,
       ipfs1: "",
       ipfs2: "",
@@ -323,7 +322,7 @@ class RetrieveRecord extends Component {
       ipfsObject: undefined,
       showDescription: false,
       QRreader: false,
-      result: 'No result',
+      result: "",
       QRRR: undefined,
       assetFound: undefined,
       Checkbox: false,
@@ -386,7 +385,6 @@ class RetrieveRecord extends Component {
 
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();

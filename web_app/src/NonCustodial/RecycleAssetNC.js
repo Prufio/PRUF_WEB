@@ -269,11 +269,14 @@ class RecycleAssetNC extends Component {
       this.setState({ error: undefined })
       this.setState({ resultRA: "" })
       this.setState({ transaction: true })
+      var idxHash;
+
       if (this.state.result !== "") {
-        var idxHash = this.state.result;
+        idxHash = this.state.result;
       }
+      
       else {
-        var idxHash = window.web3.utils.soliditySha3(
+        idxHash = window.web3.utils.soliditySha3(
           String(this.state.type),
           String(this.state.manufacturer),
           String(this.state.model),

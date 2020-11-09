@@ -2,12 +2,23 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import { ArrowRightCircle} from 'react-feather'
 
 class IncreaseACShare extends Component {
   constructor(props) {
     super(props);
 
     //State declaration.....................................................................................................
+    this.updateAssets = setInterval(() => {
+      if (this.state.assetClasses !== window.assetsClasses && this.state.runWatchDog === true) {
+        this.setState({ assetClasses: window.assetClasses })
+      }
+
+      if (this.state.hasLoadedAssetClasses !== window.hasLoadedAssetClasses && this.state.runWatchDog === true) {
+        this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
+      }
+    }, 100)
 
     this.state = {
       addr: "",
@@ -16,27 +27,18 @@ class IncreaseACShare extends Component {
       authAddress: "",
       amount: "",
       assetClass: "",
+      hasLoadedAssetClasses: false
     };
   }
 
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-    if (window.assetClass !== undefined) {
-      this.setState({ assetClass: window.assetClass })
-      console.log("updating AC")
-    }
+    this.setState({runWatchDog: true})
   }
 
   componentDidUpdate() {//stuff to do when state updates
-    if (window.assetClass !== undefined && this.state.assetClass < 1) {
-      this.setState({ assetClass: window.assetClass })
-      console.log("updating AC")
-    }
-
-    if (window.assetClass === undefined) {
-      console.log("window not serving AC")
-    }
+   
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
@@ -45,6 +47,16 @@ class IncreaseACShare extends Component {
 
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
+
+    const clearForm = () => {
+      document.getElementById("MainForm").reset();
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+    }
+
+    const _setAC = async (e) => {
+      return this.setState({ assetClass: e, assetClassSelected: true });
+    }
+
     const increaseACShare = () => {
       console.log(this.state.amount)
       console.log(this.state.assetClass)
@@ -57,9 +69,11 @@ class IncreaseACShare extends Component {
         .on("error", function (_error) {
           self.setState({ error: _error });
           self.setState({ result: _error.transactionHash });
+          return clearForm();
         })
         .on("receipt", (receipt) => {
           console.log("tx receipt: ", receipt);
+          return clearForm();
         });
 
       console.log(this.state.txHash);
@@ -74,19 +88,36 @@ class IncreaseACShare extends Component {
               Please connect web3 provider.
             </div>
           )}
-          {window.addr > 0 && (
+          {window.addr > 0 && !this.state.assetClassSelected && (
+            <>
+              <Form.Row>
+                <Form.Label className="formFontRow">Asset Class:</Form.Label>
+                <Form.Group as={Row} controlId="formGridAC">
+                <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _setAC(e.target.value) }}
+
+                        >
+                          {this.state.hasLoadedAssetClasses && (
+                            <optgroup className="optgroup">
+                              {window.utils.generateAssetClasses()}
+                            </optgroup>)}
+                          {!this.state.hasLoadedAssetClasses && (
+                            <optgroup>
+                              <option value="null">
+                                Loading Held Asset Classes...
+                           </option>
+                            </optgroup>)}
+                        </Form.Control>
+                </Form.Group>
+              </Form.Row>
+            </>
+          )}
+          {window.addr > 0 && this.state.assetClassSelected && (
             <div>
               <h2 className="headerText">Increase Share</h2>
               <br></br>
-              <Form.Group as={Col} controlId="formGridAssetClass">
-                <Form.Label className="formFont">Asset Class :</Form.Label>
-                <Form.Control
-                  placeholder="Asset Class"
-                  required
-                  onChange={(e) => this.setState({ assetClass: e.target.value })}
-                  size="lg"
-                />
-              </Form.Group>
               <Form.Group as={Col} controlId="formGridShareIncrease">
                 <Form.Label className="formFont">Share Increase Amount :</Form.Label>
                 <Form.Control

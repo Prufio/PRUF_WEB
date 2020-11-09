@@ -204,16 +204,13 @@ class ModifyRecordStatusNC extends Component {
   }
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
 
 
     const help = async () => {
-      if (this.state.help === false) {
-        this.setState({ help: true })
-      }
-      else {
-        this.setState({ help: false })
-      }
+        
+      if (this.state.help === false) {this.setState({ help: true })}
+        
+      else {this.setState({ help: false })}
     }
 
     const _checkIn = async (e) => {

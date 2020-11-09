@@ -1,8 +1,7 @@
 import bs58 from "bs58";
 import Button from "react-bootstrap/Button";
 import { QRCode } from 'react-qrcode-logo';
-import React, { useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
+import React from 'react';
 import "./../index.css";
 
 function buildWindowUtils() {
@@ -30,7 +29,7 @@ function buildWindowUtils() {
     const hashHex = "1220" + bytes32Hex.slice(2);
     const hashBytes = Buffer.from(hashHex, "hex");
     const hashStr = bs58.encode(hashBytes);
-    console.log("got: ", hashStr, "from: ", bytes32Hex)
+    //console.log("got: ", hashStr, "from: ", bytes32Hex)
     return hashStr;
   };
 
@@ -86,6 +85,25 @@ function buildWindowUtils() {
 
     let newObj = { photoKeys: photoKeyArray, photoValues: photoValueArray, text: textPairsArray }
     return newObj;
+  }
+
+  const _generateAssetClasses = () => {
+    if (window.assetClasses.names.length > 0) {
+      let component = [
+        <option key="noselect" value="null"> Select an asset class </option>];
+
+      for (let i = 0; i < window.assetClasses.ids.length; i++) {
+        component.push(<option size="lg" key={"asset " + String(i)} value={window.assetClasses.ids[i]}>
+          {i + 1}:
+          Name: {window.assetClasses.names[i]},
+          ID: {window.assetClasses.ids[i]}</option>);
+      }
+
+      return component
+    }
+
+    else { return <></> }
+
   }
 
   const _generateAssets = () => {
@@ -159,7 +177,7 @@ function buildWindowUtils() {
                   <button
                     className="imageButton"
                   >
-                    <img src={obj.displayImages[i]} className="assetImage" />
+                    <img src={obj.displayImages[i]} className="assetImage" alt =""/>
                   </button>
                 </div>
                 <div>
@@ -310,7 +328,7 @@ function buildWindowUtils() {
 
     for (let i = 0; i < obj.photoKeys.length; i++) {
       //console.log("adding photo", obj.photoKeys[i])
-      component.push(<div key={String(i)}>{obj.photoKeys[i]}<br></br><img key={"img" + String(i)} src={String(obj.photoValues[i])} /> <br></br></div>);
+      component.push(<div key={String(i)}>{obj.photoKeys[i]}<br></br><img key={"img" + String(i)} src={String(obj.photoValues[i])} alt =""/> <br></br></div>);
     }
 
     component.push(<> <br></br> <h4>Text Values Found:</h4> <br></br> </>);
@@ -760,7 +778,7 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              console.log("resolved AC name ", _result, " from AC index ", assetClasses[i]);
+              //console.log("resolved AC name ", _result, " from AC index ", assetClasses[i]);
               tempArr.push(_result)
             }
           });
@@ -1112,6 +1130,70 @@ function buildWindowUtils() {
       }
     }
   }
+
+  const _getAssetClassTokenInfo = async () => {
+    if (window.balances === undefined) { return }
+    let tknIDArray = [], roots = [], discounts = [], custodyTypes = [], exData = [], names = [];
+    console.log("GACTI: In _getAssetClassTokenInfo")
+
+    if (Number(window.balances.assetClassBalance) > 0) {
+      
+      for (let i = 0; i < window.balances.assetClassBalance; i++) {
+        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
+          .call((_error, _result) => {
+            if (_error) {
+              return (console.log("IN ERROR IN ERROR IN ERROR"))
+            } else {
+              let resStr;
+              //console.log(window.web3.utils.numberToHex(_result))
+              resStr = _result; /* window.web3.utils.numberToHex(_result); */
+              /* while (resStr.length < 66) {
+                resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
+              }*/
+              tknIDArray.push(resStr) 
+            }
+          });
+      }
+      console.log("AC IDs: ", tknIDArray);
+
+      for (let i = 0; i < tknIDArray.length; i ++) {
+        await window.contracts.AC_MGR.methods
+        .getAC_data(tknIDArray[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let _custodyType;
+
+            if (Object.values(_result)[1] === "1") {
+              _custodyType = "Custodial"
+            }
+
+            else {
+              _custodyType = "Non-Custodial"
+            }
+
+              roots.push( Object.values(_result)[0] )
+              custodyTypes.push( _custodyType )
+              discounts.push( Object.values(_result)[2] )
+              exData.push( Object.values(_result)[3] )
+
+          }
+        });
+
+        await window.contracts.AC_MGR.methods
+        .getAC_name(tknIDArray[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
+            names.push(_result)
+          }
+        });
+      }
+  }
+  return {names, custodyTypes, exData, roots, discounts, ids: tknIDArray}
+}
+
   const _getAssetTokenInfo = async () => {
 
     if (window.balances === undefined) { return }
@@ -1136,7 +1218,7 @@ function buildWindowUtils() {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
             } else {
               let resStr;
-              console.log(window.web3.utils.numberToHex(_result))
+              //console.log(window.web3.utils.numberToHex(_result))
               resStr = window.web3.utils.numberToHex(_result);
               while (resStr.length < 66) {
                 resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
@@ -1189,7 +1271,7 @@ function buildWindowUtils() {
 
       await window.utils.getACNames(assetClasses)
 
-      console.log(ipfsHashArray)
+      //console.log(ipfsHashArray)
 
       window.aTknIDs = tknIDArray;
       //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
@@ -1328,6 +1410,7 @@ function buildWindowUtils() {
     convertTimeTo: _convertTimeTo,
     resolveACFromID: _resolveACFromID,
     checkForAC: _checkForAC,
+    getAssetClassTokenInfo: _getAssetClassTokenInfo,
     getDescriptionHash: _getDescriptionHash,
     getEscrowData: _getEscrowData,
     getBytes32FromIPFSHash: _getBytes32FromIPFSHash,
@@ -1343,6 +1426,7 @@ function buildWindowUtils() {
     getACNames: _getACNames,
     getACFromIdx: _getACFromIdx,
     generateAssets: _generateAssets,
+    generateAssetClasses: _generateAssetClasses,
     generateRemoveElements: _generateRemoveElements,
     generateRemElementsPreview: _generateRemElementsPreview,
     getETHBalance: _getETHBalance,

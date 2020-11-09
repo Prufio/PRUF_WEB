@@ -177,7 +177,8 @@ class ImportAssetNC extends Component {
       this.setState({help: false})
       console.log("Checking in with id: ", e)
       if (e === "null" || e === undefined) {
-        return alert("Please select an asset before submission."), clearForm()
+        alert("Please select an asset before submission.") 
+        return clearForm()
       }
       else if (e === "reset") {
         return window.resetInfo = true;
@@ -194,14 +195,16 @@ class ImportAssetNC extends Component {
         this.setState({
           QRreader: false,
         })
-        return alert("Asset does not exist! Ensure data fields are correct before submission."), clearForm()
+        alert("Asset does not exist! Ensure data fields are correct before submission."); 
+        return clearForm()
       }
 
       if (Number(resArray[0]) !== 70) {
         this.setState({
           QRreader: false,
         })
-        return alert("Asset is not exported! Owner must export the assset in order to import."), clearForm()
+        alert("Asset is not exported! Owner must export the assset in order to import.");
+        return clearForm()
       }
 
       let destinationACData = await window.utils.getACData("id", this.state.assetClass);
@@ -233,7 +236,8 @@ class ImportAssetNC extends Component {
     const _importAsset = async () => {
       this.setState({help: false})
       if (this.state.selectedAsset === undefined && !this.state.wasSentPacket) {
-        return alert("Please select an asset before submission."), clearForm()
+        alert("Please select an asset before submission."); 
+        return clearForm()
       }
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });

@@ -42,17 +42,13 @@ async function buildContracts(_web3) {
   let ID_TKN = null;
   let UTIL_TKN = null;
 
-  var _contracts = {
-    content: []
-  };
-
   await STOR.methods
     .resolveContractAddress("NP")
     .call(function (_error, _result) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         NP = new _web3.eth.Contract(NP_ABI, _result);
       }
     }
@@ -63,7 +59,7 @@ async function buildContracts(_web3) {
           if (_error) {
             console.log(_error);
           } else {
-            console.log(_result);
+            //console.log(_result);
             NP_NC = new _web3.eth.Contract(NP_NC_ABI, _result);
           }
         }
@@ -76,7 +72,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         APP = new _web3.eth.Contract(APP_ABI, _result);
       }
     }
@@ -88,7 +84,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         APP_NC = new _web3.eth.Contract(APP_NC_ABI, _result);
       }
     }
@@ -100,7 +96,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result)
+        //console.log(_result)
         AC_MGR = new _web3.eth.Contract(AC_MGR_ABI, _result);
       }
     }
@@ -112,7 +108,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         AC_TKN = new _web3.eth.Contract(AC_TKN_ABI, _result);
       }
     }
@@ -124,7 +120,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         ECR = new _web3.eth.Contract(ECR_ABI, _result);
       }
     }
@@ -136,7 +132,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         ECR_NC = new _web3.eth.Contract(ECR_NC_ABI, _result);
       }
     }
@@ -148,7 +144,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         ECR_MGR = new _web3.eth.Contract(ECR_MGR_ABI, _result);
       }
     }
@@ -160,7 +156,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         A_TKN = new _web3.eth.Contract(A_TKN_ABI, _result);
       }
     }
@@ -172,7 +168,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         RCLR = new _web3.eth.Contract(RCLR_ABI, _result);
       }
     }
@@ -184,7 +180,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         ID_TKN = new _web3.eth.Contract(ID_TKN_ABI, _result);
       }
     }
@@ -196,7 +192,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         UTIL_TKN = new _web3.eth.Contract(UTIL_TKN_ABI, _result);
       }
     }
@@ -208,7 +204,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         PIP = new _web3.eth.Contract(PIP_ABI, _result);
       }
     }
@@ -220,7 +216,7 @@ async function buildContracts(_web3) {
       if (_error) {
         console.log(_error);
       } else {
-        console.log(_result);
+        //console.log(_result);
         VERIFY = new _web3.eth.Contract(VERIFY_ABI, _result);
       }
     }

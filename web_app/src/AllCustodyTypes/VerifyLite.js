@@ -125,8 +125,7 @@ class VerifyLite extends Component {
   }
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
-
+    
     const QRReader = async () => {
       if (this.state.QRreader === false) {
         this.setState({ QRreader: true, assetFound: "", Checkbox: false })

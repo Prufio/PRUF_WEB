@@ -224,28 +224,6 @@ class ModifyDescription extends Component {
 
     this.clearForm()
 
-    /* this.setState({
-      idxHash: undefined,
-      txStatus: false,
-      txHash: "",
-      wasSentPacket: false,
-      count: 1,
-      remCount: 0,
-      removedElements: {
-        images: [],
-        text: [],
-      },
-      addedElements: {
-        images: [],
-        text: [],
-        name: ""
-      }
-    })
-    
-    this.setInterval = {}
-
-    this.setState({runWatchDog: false}) */
-
   }
 
   render() {//render continuously produces an up-to-date stateful document  
@@ -299,7 +277,7 @@ class ModifyDescription extends Component {
       }
 
       else {
-        element = ('"' + elementName + '": ' + '"' + elementValue + '",')
+        element = '"' + elementName + '": ' + '"' + elementValue + '",';
       }
 
 

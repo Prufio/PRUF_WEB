@@ -386,7 +386,7 @@ class ModifyRightsHolder extends Component {
                     <div className="explainerTextBox2">
                       Modify Rightsholder allows the owner of an asset token to modify the ownership of an item. This does not transfer the asset
                       token. Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern
-                      that does not contain the data that you provide, encrypted or otherwise.
+                      that does not contain the data that you provide.
                     </div>
                   )}
                 </>
