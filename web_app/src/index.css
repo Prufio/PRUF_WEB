@@ -1119,7 +1119,6 @@ div {
 }
 
 .explainerTextBox {
-  font-family: 'GT-America',sans-serif !important;
   display: flex;
   background-color: white;
   color: black;
@@ -1128,7 +1127,7 @@ div {
   font-size: 1rem;
   padding: 0.5rem;
   position: absolute;
-  border-radius: 0rem 0.5rem 0.5rem 0.5rem;
+  border-radius: 0rem 1rem 1rem 1rem;
   margin-top: -5rem;
   margin-left: 2rem;
   z-index: 999;
@@ -1144,7 +1143,7 @@ div {
   font-size: 0.9rem;
   padding: 0.5rem;
   position: absolute;
-  border-radius: 0.5rem;
+  border-radius: 1rem 1rem 1rem 1rem;
   margin-top: -3.3rem;
   margin-left: 2rem;
   z-index: 999;
@@ -1976,6 +1975,8 @@ margin-bottom: -3rem;
 }
 
       /* -------------------------VVV--------------------Depricated------------------------VVV------------------------ */
+
+      
 
 /* .cardDescription {
   font-size: 1.2rem;

@@ -11,16 +11,16 @@ class BasicComponent extends Component {
                     <NavLink exact to="/">Home</NavLink>
                 </li> */}
                 <li>
-                    <NavLink className="navBox" to="/asset-dashboard">Asset Dashboard</NavLink>
+                    <NavLink exact to="asset-dashboard">Asset Dashboard</NavLink>
                 </li>
                 <li>
-                    <NavLink className="navBox" to="/verify-lite">Verify Lite</NavLink>
+                    <NavLink to="/verify-lite">Verify Lite</NavLink>
                 </li>
                 <li>
-                    <NavLink className="navBox" to="/verify-rights-holder">Deep Verify</NavLink>
+                    <NavLink to="/verify-rights-holder">Deep Verify</NavLink>
                 </li>
                 <li>
-                    <NavLink className="navBox" to="/retrieve-record">Search</NavLink>
+                    <NavLink to="/retrieve-record">Search</NavLink>
                 </li>
                 </Nav>
         )
