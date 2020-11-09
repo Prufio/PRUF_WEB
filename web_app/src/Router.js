@@ -10,6 +10,7 @@ import AddUser from "./ACAdmin/AddUser"
 import UpdateACName from "./ACAdmin/UpdateACName"
 import GetACData from "./ACAdmin/GetACData"
 import IncreaseACShare from "./ACAdmin/IncreaseACShare"
+import TransferAC from "./ACAdmin/TransferAC"
 
 import RetrieveRecord from "./AllCustodyTypes/RetrieveRecord";
 import VerifyLite from "./AllCustodyTypes/VerifyLite"
@@ -115,6 +116,7 @@ function Router(routeRequest) {
         return (
             <>
                 <Route path="/add-user" component={AddUser} />
+                <Route path="/transfer-ac" component={TransferAC} />
                 <Route path="/enable-contract" component={EnableContract} />
                 <Route path="/set-costs" component={SetCosts} />
                 <Route path="/update-ac-name" component={UpdateACName} />

@@ -21,6 +21,9 @@ class AdminComponent extends Component {
                     <NavLink to="/enable-contract">Enable Contract</NavLink>
                 </li>
                 <li>
+                    <NavLink to="/transfer-ac">Transfer AC</NavLink>
+                </li>
+                <li>
                     <NavDropdown title="AC Data">
                         <NavDropdown.Item id="header-dropdown" as={NavLink} to="/update-ac-name">Update AC Name</NavDropdown.Item>
                         <NavDropdown.Item id="header-dropdown" as={NavLink} to="/get-ac-data">Retrieve AC Data</NavDropdown.Item>
