@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import { ArrowRightCircle} from 'react-feather'
 
 class SetCosts extends Component {
   constructor(props) {
@@ -10,6 +12,16 @@ class SetCosts extends Component {
     //State declaration.....................................................................................................
 
     //Component state declaration
+
+    this.updateAssets = setInterval(() => {
+      if (this.state.assetClasses !== window.assetsClasses && this.state.runWatchDog === true) {
+        this.setState({ assetClasses: window.assetClasses })
+      }
+
+      if (this.state.hasLoadedAssetClasses !== window.hasLoadedAssetClasses && this.state.runWatchDog === true) {
+        this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
+      }
+    }, 100)
 
     this.state = {
       addr: "",
@@ -21,8 +33,8 @@ class SetCosts extends Component {
       assetClass: "",
       web3: null,
       serviceIndex: "",
-
       serviceCost: 0,
+      hasLoadedAssetClasses: false
 
     };
   }
@@ -30,7 +42,7 @@ class SetCosts extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-
+    this.setState({runWatchDog: true})
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
@@ -43,6 +55,15 @@ class SetCosts extends Component {
 
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
+
+    const clearForm = () => {
+      document.getElementById("MainForm").reset();
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+    }
+
+    const _setAC = async (e) => {
+      return this.setState({ assetClass: e, assetClassSelected: true });
+    }
 
     const setCosts = () => {
       window.contracts.AC_MGR.methods
@@ -57,6 +78,7 @@ class SetCosts extends Component {
         .on("error", function (_error) {
           self.setState({ error: _error });
           self.setState({ result: _error.transactionHash });
+          return clearForm();
         })
         .on("receipt", (receipt) => {
           console.log(
@@ -64,6 +86,7 @@ class SetCosts extends Component {
             window.assetClass
           );
           console.log("tx receipt: ", receipt);
+          return clearForm();
         });
 
       console.log(this.state.txHash);
@@ -78,13 +101,33 @@ class SetCosts extends Component {
               Please connect web3 provider.
             </div>
           )}
-          {window.assetClass === undefined && (
-            <div className="results">
-              <h2>No asset class selected.</h2>
-              <h3>Please select asset class in home page to use forms.</h3>
-            </div>
+          {window.addr > 0 && !this.state.assetClassSelected && (
+            <>
+              <Form.Row>
+                <Form.Label className="formFontRow">Asset Class:</Form.Label>
+                <Form.Group as={Row} controlId="formGridAC">
+                <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _setAC(e.target.value) }}
+
+                        >
+                          {this.state.hasLoadedAssetClasses && (
+                            <optgroup className="optgroup">
+                              {window.utils.generateAssetClasses()}
+                            </optgroup>)}
+                          {!this.state.hasLoadedAssetClasses && (
+                            <optgroup>
+                              <option value="null">
+                                Loading Held Asset Classes...
+                           </option>
+                            </optgroup>)}
+                        </Form.Control>
+                </Form.Group>
+              </Form.Row>
+            </>
           )}
-          {window.addr > 0 && window.assetClass > 0 && (
+          {window.addr > 0 && this.state.assetClassSelected && (
             <div>
               <h2 className="headerText">Set Costs</h2>
               <br></br>

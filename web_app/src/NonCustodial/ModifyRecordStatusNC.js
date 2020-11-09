@@ -207,12 +207,10 @@ class ModifyRecordStatusNC extends Component {
 
 
     const help = async () => {
-        this.setState({ help: true })
-      if (this.state.help === false) {
-      }
-      }
-        this.setState({ help: false })
-      else {
+        
+      if (this.state.help === false) {this.setState({ help: true })}
+        
+      else {this.setState({ help: false })}
     }
 
     const _checkIn = async (e) => {

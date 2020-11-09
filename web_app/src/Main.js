@@ -181,7 +181,7 @@ class Main extends Component {
                       {this.state.settingsMenu !== undefined && (
                         <div>
                           <div className="hamburgerDropdownSettings">
-                            {this.state.isACAdmin === true && this.state.assetClassHolderMenuBool === false && (
+                            {this.state.assetClassHolderBool === true && this.state.assetClassHolderMenuBool === false && (
                               <Button
                                 size="lg"
                                 variant="toggle"
@@ -636,6 +636,8 @@ class Main extends Component {
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
 
+      window.assetClasses = { assetClassNames: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [] }
+      window.hasLoadedAssetClasses = false;
       window.assetTokenInfo = {
         assetClass: undefined,
         idxHash: undefined,
@@ -647,6 +649,7 @@ class Main extends Component {
 
       if (window.recount === true) {
         window.aTknIDs = [];
+        window.acTknIDs = [];
         if (window.balances !== undefined) window.balances.assetBalance = undefined;
         window.recount = false
         await window.utils.getETHBalance();
@@ -679,6 +682,7 @@ class Main extends Component {
       let tempNamesArray = [];
 
       await window.utils.getAssetTokenInfo()
+      window.assetClasses = await window.utils.getAssetClassTokenInfo()
 
       if (window.aTknIDs === undefined) { return }
 
@@ -703,6 +707,7 @@ class Main extends Component {
       console.log("window IPFS operation count: ", window.ipfsCounter)
       console.log("window assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
+      window.hasLoadedAssetClasses = true;
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
 
     }

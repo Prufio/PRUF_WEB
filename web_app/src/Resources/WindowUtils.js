@@ -87,6 +87,25 @@ function buildWindowUtils() {
     return newObj;
   }
 
+  const _generateAssetClasses = () => {
+    if (window.assetClasses.names.length > 0) {
+      let component = [
+        <option key="noselect" value="null"> Select an asset class </option>];
+
+      for (let i = 0; i < window.assetClasses.ids.length; i++) {
+        component.push(<option size="lg" key={"asset " + String(i)} value={window.assetClasses.ids[i]}>
+          {i + 1}:
+          Name: {window.assetClasses.names[i]},
+          ID: {window.assetClasses.ids[i]}</option>);
+      }
+
+      return component
+    }
+
+    else { return <></> }
+
+  }
+
   const _generateAssets = () => {
     if (window.assets.names.length > 0) {
       let component = [
@@ -1111,6 +1130,70 @@ function buildWindowUtils() {
       }
     }
   }
+
+  const _getAssetClassTokenInfo = async () => {
+    if (window.balances === undefined) { return }
+    let tknIDArray = [], roots = [], discounts = [], custodyTypes = [], exData = [], names = [];
+    console.log("GACTI: In _getAssetClassTokenInfo")
+
+    if (Number(window.balances.assetClassBalance) > 0) {
+      
+      for (let i = 0; i < window.balances.assetClassBalance; i++) {
+        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
+          .call((_error, _result) => {
+            if (_error) {
+              return (console.log("IN ERROR IN ERROR IN ERROR"))
+            } else {
+              let resStr;
+              //console.log(window.web3.utils.numberToHex(_result))
+              resStr = _result; /* window.web3.utils.numberToHex(_result); */
+              /* while (resStr.length < 66) {
+                resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
+              }*/
+              tknIDArray.push(resStr) 
+            }
+          });
+      }
+      console.log("AC IDs: ", tknIDArray);
+
+      for (let i = 0; i < tknIDArray.length; i ++) {
+        await window.contracts.AC_MGR.methods
+        .getAC_data(tknIDArray[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let _custodyType;
+
+            if (Object.values(_result)[1] === "1") {
+              _custodyType = "Custodial"
+            }
+
+            else {
+              _custodyType = "Non-Custodial"
+            }
+
+              roots.push( Object.values(_result)[0] )
+              custodyTypes.push( _custodyType )
+              discounts.push( Object.values(_result)[2] )
+              exData.push( Object.values(_result)[3] )
+
+          }
+        });
+
+        await window.contracts.AC_MGR.methods
+        .getAC_name(tknIDArray[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
+            names.push(_result)
+          }
+        });
+      }
+  }
+  return {names, custodyTypes, exData, roots, discounts, ids: tknIDArray}
+}
+
   const _getAssetTokenInfo = async () => {
 
     if (window.balances === undefined) { return }
@@ -1327,6 +1410,7 @@ function buildWindowUtils() {
     convertTimeTo: _convertTimeTo,
     resolveACFromID: _resolveACFromID,
     checkForAC: _checkForAC,
+    getAssetClassTokenInfo: _getAssetClassTokenInfo,
     getDescriptionHash: _getDescriptionHash,
     getEscrowData: _getEscrowData,
     getBytes32FromIPFSHash: _getBytes32FromIPFSHash,
@@ -1342,6 +1426,7 @@ function buildWindowUtils() {
     getACNames: _getACNames,
     getACFromIdx: _getACFromIdx,
     generateAssets: _generateAssets,
+    generateAssetClasses: _generateAssetClasses,
     generateRemoveElements: _generateRemoveElements,
     generateRemElementsPreview: _generateRemElementsPreview,
     getETHBalance: _getETHBalance,
