@@ -9,9 +9,6 @@ class AdminComponent extends Component {
         return (
             <Nav className="headerForm">
                 <li>
-                    <NavLink exact to="/">Home</NavLink>
-                </li>
-                <li>
                     <NavLink to="/add-user">Add User</NavLink>
                 </li>
                 <li>

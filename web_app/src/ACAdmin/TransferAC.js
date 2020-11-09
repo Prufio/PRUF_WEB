@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 
@@ -10,15 +11,15 @@ class TransferAC extends Component {
 
     //State declaration.....................................................................................................
 
-    // this.updateAssets = setInterval(() => {
-    //   if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-    //     this.setState({ assets: window.assets })
-    //   }
+    this.updateAssets = setInterval(() => {
+      if (this.state.assetClasses !== window.assetClasses && this.state.runWatchDog === true) {
+        this.setState({ assetClasses: window.assetClasses })
+      }
 
-    //   if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-    //     this.setState({ hasLoadedAssets: window.hasLoadedAssets })
-    //   }
-    // }, 50)
+      if (this.state.hasLoadedAssetClasses !== window.hasLoadedAssetClasses && this.state.runWatchDog === true) {
+        this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
+      }
+    }, 50)
 
     this.state = {
       addr: "",
@@ -46,50 +47,7 @@ class TransferAC extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-//     if (window.sentPacket !== undefined) {
-//       console.log(window.sentPacket.status)
-//       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-//         alert("Cannot transfer asset in lost or stolen status! Please change to transferrable status");
-//         window.sentPacket = undefined;
-//         return window.location.href = "/#/asset-dashboard"
-//       }
-
-//       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-//         alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions");
-//         window.sentPacket = undefined;
-//         return window.location.href = "/#/asset-dashboard"
-//       }
-
-//       if (Number(window.sentPacket.statusNum) === 58) {
-//         alert("Cannot transfer asset in imported status! please change to transferrable status");
-//         window.sentPacket = undefined;
-//         return window.location.href = "/#/asset-dashboard"
-//       }
-
-//       if (Number(window.sentPacket.statusNum) === 70) {
-//         alert("Cannot transfer asset in exported status! please import asset and change to transferrable status");
-//         window.sentPacket = undefined;
-//         return window.location.href = "/#/asset-dashboard"
-//       }
-
-//       if (Number(window.sentPacket.statusNum) !== 51) {
-//         alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status");
-//         window.sentPacket = undefined;
-//         return window.location.href = "/#/asset-dashboard"
-//       }
-
-//       this.setState({ name: window.sentPacket.name })
-//       this.setState({ idxHash: window.sentPacket.idxHash })
-//       this.setState({ assetClass: window.sentPacket.assetClass })
-//       this.setState({ status: window.sentPacket.status })
-
-
-//       window.sentPacket = undefined
-//       this.setState({ wasSentPacket: true })
-//     }
-
-//     this.setState({ runWatchDog: true })
-
+    this.setState({runWatchDog: true})
    }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
@@ -103,64 +61,16 @@ class TransferAC extends Component {
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
 
-    // const _checkIn = async (e) => {
-    //   this.setState({help: false})
-    //   console.log("Checking in with id: ", e)
-    //   if (e === "null" || e === undefined) {
-    //     return clearForm()
-    //   }
-    //   else if (e === "reset") {
-    //     return window.resetInfo = true;
-    //   }
-    //   else if (e === "assetDash") {
-    //     console.log("heading over to dashboard")
-    //     return window.location.href = "/#/asset-dashboard"
-    //   }
-
-    //   let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
-
-    //   console.log(resArray)
-
-
-    //   if (Number(resArray[1]) === 0) {
-    //     alert("Asset does not exist at given IDX"); return clearForm()
-    //   }
-
-    //   if (Number(resArray[0]) !== 51) {
-    //     alert("Asset not in transferrable status"); return clearForm()
-    //   }
-
-    //   this.setState({ selectedAsset: e })
-    //   console.log("Changed component idx to: ", window.assets.ids[e])
-
-    //   return this.setState({
-    //     assetClass: window.assets.assetClasses[e],
-    //     idxHash: window.assets.ids[e],
-    //     name: window.assets.descriptions[e].name,
-    //     photos: window.assets.descriptions[e].photo,
-    //     text: window.assets.descriptions[e].text,
-    //     description: window.assets.descriptions[e],
-    //     status: window.assets.statuses[e],
-    //     note: window.assets.notes[e]
-    //   })
-    //  }
-
-    const clearForm = async () => {
-      if (document.getElementById("MainForm") === null) { return }
+    const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
     }
 
-    // const help = async () => {
-    //   if (this.state.help === false) {
-    //     this.setState({ help: true })
-    //   }
-    //   else {
-    //     this.setState({ help: false })
-    //   }
-    // }
+    const _setAC = async (e) => {
+        return this.setState({ assetClass: e, assetClassSelected: true });
+      }
 
-    const _transferAsset = async () => {
+    const _transferAssetClass = async () => {
       this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -189,12 +99,6 @@ class TransferAC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
-          console.log(receipt.status);
-          // window.resetInfo = true;
-          // window.recount = true;
-          // if (self.state.wasSentPacket) {
-          //   return window.location.href = '/#/asset-dashboard'
-          // }
         });
       console.log(this.state.txHash);
     };
@@ -217,59 +121,34 @@ class TransferAC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && (
-            <div>
-              {/* <Form.Row>
-                <Form.Group as={Col} controlId="formGridAsset">
-                  <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {!this.state.wasSentPacket && (
-                    <>
-                      {this.state.transaction === false && (
-                        <Form.Control
+          {window.addr > 0 && !this.state.assetClassSelected && (
+            <>
+              <Form.Row>
+                <Form.Label className="formFontRow">Asset Class:</Form.Label>
+                <Form.Group as={Row} controlId="formGridAC">
+                <Form.Control
                           as="select"
                           size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
+                          onChange={(e) => { _setAC(e.target.value) }}
+
                         >
-                          {this.state.hasLoadedAssets && (
+                          {this.state.hasLoadedAssetClasses && (
                             <optgroup className="optgroup">
-                              {window.utils.generateAssets()}
+                              {window.utils.generateAssetClasses()}
                             </optgroup>)}
-                          {!this.state.hasLoadedAssets && (
+                          {!this.state.hasLoadedAssetClasses && (
                             <optgroup>
                               <option value="null">
-                                Loading Assets...
+                                Loading Held Asset Classes...
                            </option>
                             </optgroup>)}
                         </Form.Control>
-                      )}
-                      {this.state.transaction === true && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          disabled
-                        >
-                          <optgroup className="optgroup">
-                            <option>Transfering: {this.state.name}</option>
-                          </optgroup>
-                        </Form.Control>)}
-                    </>
-                  )}
-                  {this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
-                      disabled
-                    >
-                      <optgroup>
-                        <option value="null">
-                          "{this.state.name}" Please Clear Form to Select Different Asset
-                           </option>
-                      </optgroup>
-                    </Form.Control>
-                  )}
                 </Form.Group>
-              </Form.Row> */}
+              </Form.Row>
+            </>
+          )}
+          {window.addr > 0 && this.state.assetClassSelected && (
+            <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridTo">
                   <Form.Label className="formFont">To:</Form.Label>
@@ -292,70 +171,22 @@ class TransferAC extends Component {
                   )}
                 </Form.Group>
               </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col} controlId="formGridTo">
-                  <Form.Label className="formFont">AC:</Form.Label>
-                  {this.state.transaction === false && (
-                    <Form.Control
-                      placeholder="Asset Class"
-                      required
-                      onChange={(e) => this.setState({ assetClass: e.target.value })}
-                      size="lg"
-                    />
-                  )}
-                  {this.state.transaction === true && (
-                    <Form.Control
-                      placeholder={this.state.assetClass}
-                      required
-                      size="lg"
-                      disabled
-                    />
-                  )}
-                </Form.Group>
-              </Form.Row>
               {this.state.transaction === false && (
                 <>
                   <Form.Row>
                     <div className="submitButton">
                       <div className="submitButtonContent">
                         <CheckCircle
-                          onClick={() => { _transferAsset() }}
+                          onClick={() => { _transferAssetClass() }}
                         />
                       </div>
                     </div>
-                    {/* <div className="mediaLinkHelp">
-                      <div className="mediaLinkHelpContent">
-                        <HelpCircle
-                          onClick={() => { help() }}
-                        />
-                      </div>
-                    </div> */}
                   </Form.Row>
-                  {/* {this.state.help === true && (
-                    <div className="explainerTextBox2">
-                      Transfer is a function that transfers an asset token to a chosen address. This will remove the current rightsholder from the asset's
-                      record, which will need to be reset once it is recieved. To do this, use Modify Rightsholder
-                    </div>
-                  )} */}
                 </>
               )}
             </div>
           )}
         </Form>
-        {/* {this.state.transaction === false && this.state.txStatus === false && (
-          <div className="assetSelectedResults" id="MainForm">
-            <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
-                <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
-                </Form.Group>
-              )}
-            </Form.Row>
-          </div>
-        )} */}
         {this.state.transaction === true && (
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
