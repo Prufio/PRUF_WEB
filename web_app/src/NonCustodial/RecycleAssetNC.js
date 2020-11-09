@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat, HelpCircle, AlertOctagon } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleAssetNC extends Component {
@@ -12,6 +12,7 @@ class RecycleAssetNC extends Component {
     //State declaration.....................................................................................................
 
     this.accessAsset = async () => {
+      this.setState({help: false})
       let idxHash;
       if (this.state.QRreader === false && this.state.Checkbox === false) {
         if (this.state.manufacturer === ""
@@ -91,6 +92,7 @@ class RecycleAssetNC extends Component {
       transaction: false,
       QRreader: false,
       Checkbox: false,
+      help: false
     };
   }
 
@@ -213,8 +215,8 @@ class RecycleAssetNC extends Component {
             return window.location.href = "/#/asset-dashboard"
           }
         }
-        this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" }); 
-        return window.assetClass = undefined; 
+        this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" });
+        return window.assetClass = undefined;
       }
     }
 
@@ -224,6 +226,15 @@ class RecycleAssetNC extends Component {
       }
       else {
         this.setState({ QRreader: false })
+      }
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
       }
     }
 
@@ -238,13 +249,13 @@ class RecycleAssetNC extends Component {
     }
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
     }
 
     const _recycleAsset = async () => {
-
+      this.setState({help: false})
       if (
         this.state.first === "" ||
         this.state.middle === "" ||
@@ -460,27 +471,43 @@ class RecycleAssetNC extends Component {
                 </>
               )}
               {this.state.QRreader === false && !this.state.accessPermitted && this.state.assetClassSelected === true && (
-                <Form.Row>
-                  <div className="submitButton">
-                    <div className="submitButtonContent">
-                      <ArrowRightCircle
-                        onClick={() => { this.accessAsset() }}
-                      />
+                <>
+                  <Form.Row>
+                    <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <ArrowRightCircle
+                          onClick={() => { this.accessAsset() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => { QRReader() }}
-                      className="buttonQRScan"
-                    >
-                      <img
-                        className="scanImageFormQR"
-                        title="Scan QR Code"
-                        src={require("../Resources/QRSCANPIC.png")}
-                        alt="Pruf Print" />
-                    </button>
-                  </div>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => { QRReader() }}
+                        className="buttonQRScan"
+                      >
+                        <img
+                          className="scanImageFormQR"
+                          title="Scan QR Code"
+                          src={require("../Resources/QRSCANPIC.png")}
+                          alt="Pruf Print" />
+                      </button>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox">
+                      Recycling an asset requires that the asset has been discarded by its previous owner. Recycle can either
+                      take a recreated hash made by providing asset information, an assets unique QR code, or simply the asset's Idx hash.
+                      The address that provides this information will then be able to claim the asset as their own.
+                    </div>
+                  )}
+                </>
               )}
               {this.state.QRreader === true && (
                 <div>
@@ -583,7 +610,20 @@ class RecycleAssetNC extends Component {
                         </div>
                       </div>
                     </div>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <AlertOctagon
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
                   </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                      Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern that does not contain the data that you provide,
+                      encrypted or otherwise.
+                    </div>
+                  )}
                 </>
               )}
             </div>

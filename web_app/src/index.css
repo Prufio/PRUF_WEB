@@ -341,6 +341,20 @@ div {
   font-size: x-large;
 }
 
+.formHeaderMobileVL {
+  height: 4rem;
+  width: 360px;
+  background-color: #002a40;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.96;
+  font-weight: bold;
+  font-size: x-large;
+}
+
 .formMobile {
   height: flex;
   width: 360px;
@@ -348,8 +362,10 @@ div {
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  /* justify-content: flex-start;
+  align-items: flex-start; */
+  justify-content: center;
+  align-items: center;
   opacity: 0.96;
   margin-top: -0.5rem;
 }
@@ -796,11 +812,11 @@ div {
 
 .submitButtonRRMobile {
   display: flex;
-  position: absolute;
+  /* position: absolute; */
   background-color: transparent;
   z-index: 1000;
   margin-left: 280px;
-  margin-top: 0.2rem;
+  margin-top: 0.5rem;
 }
 
 .submitButtonRRContent {
@@ -868,7 +884,7 @@ div {
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-left: 84%;
+  margin-left: 80%;
   margin-top: 2rem;
 }
 
@@ -946,14 +962,31 @@ div {
   transform: translateX(3px);
 }
 
-/* .checkBox {
-  color: rgb(255, 255, 255);
-  font-weight: bold;
-  margin-top: 3rem;
-  font-size: large;
-  height: 1rem;
-  width: 10rem;
-} */
+.buttonQRScanMobile {
+  border: 0px transparent; 
+  border-radius: 50%;
+  background-color: transparent; 
+  object-fit: cover;
+  width: fit-content;
+  height: fit-content;
+  margin-left: 27.7rem;
+  margin-top: 0.7rem;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.buttonQRScanMobile:hover {
+  color: #028ed4;
+  cursor: pointer;
+  -webkit-transform: translateX(3px);
+  transform: translateX(3px);
+}
+
+.checkBoxMobile {
+  color: white;
+  font-size: 2rem;
+  margin-top: -2rem;
+}
 
 .checkBox {
   color: white;
@@ -994,6 +1027,10 @@ div {
   margin-top: -0.5rem;
 }
 
+.QRreaderMobile {
+  margin-top: -0.5rem;
+}
+
 .QR{
   display: flex;
   margin-left: 0.5rem;
@@ -1010,6 +1047,16 @@ div {
 }
 
 .loading:after {
+  content: '  .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+.loadingMobile{
+  max-width: 100ch;
+  font-size: 1.6rem;
+}
+
+.loadingMobile:after {
   content: '  .';
   animation: dots 1s steps(5, end) infinite;
 }
@@ -1071,6 +1118,38 @@ div {
   align-items: center;
 }
 
+.explainerTextBox {
+  display: flex;
+  background-color: white;
+  color: black;
+  height: 6.5rem;
+  width: 45rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  position: absolute;
+  border-radius: 0rem 1rem 1rem 1rem;
+  margin-top: -5rem;
+  margin-left: 2rem;
+  z-index: 999;
+  opacity: 0.9;
+}
+
+.explainerTextBox2 {
+  display: flex;
+  background-color: white;
+  color: black;
+  height: 4.5rem;
+  width: 45rem;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  position: absolute;
+  border-radius: 1rem 1rem 1rem 1rem;
+  margin-top: -3.3rem;
+  margin-left: 2rem;
+  z-index: 999;
+  opacity: 0.9;
+}
+
 .textMobile {
   color: white;
   font-size: 1.4rem;
@@ -1091,13 +1170,18 @@ div {
   font-family: Tahoma, Geneva, sans-serif;
 }
 
+.homeErrorText {
+margin-top: 3rem;
+margin-bottom: -3rem;
+}
+
 .costText {
   display: flex;
   color: rgb(255, 255, 255);
   font-weight: bold;
   font-size: small;
   font-family: Tahoma, Geneva, sans-serif;
-  margin-top: 0.3rem;
+  margin-top: 2.5rem;
   position: absolute;
 }
 
@@ -1110,8 +1194,19 @@ div {
   margin-left: 2.5rem;
 }
 
+.checkBoxFormFontMobile {
+  position: absolute;
+  font-size: 1.5rem;
+  color: rgb(255, 255, 255);
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-top: -2.6rem;
+  margin-left: 2.5rem;
+}
+
 .home2ndRow {
   font-size: 1.6rem;
+  margin-top: 3rem;
+  margin-bottom: -3rem;
 }
 
 .userIDBalance1{
@@ -1408,6 +1503,26 @@ div {
   word-wrap: normal;
 }
 
+.cardDescriptionSelectedMobile {
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-top: 0.3rem;
+  word-wrap: normal;
+}
+
+.cardDescriptionSelectedMobile h4 {
+  word-wrap: normal;
+  white-space: wrap;
+  word-break: initial;
+  overflow-wrap: break-word;
+}
+
+.cardDescriptionSelectedContentMobile {
+  font-size: 1.4rem;
+  margin-top: 0.3rem;
+  word-wrap: normal;
+}
+
 .cardDescriptionFormSelected {
   display: flex;
   width: 50rem;
@@ -1502,6 +1617,16 @@ div {
   position: absolute;
 }
 
+.cardDate {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 30rem;
+  margin-left: 34rem;
+  color: white;
+  z-index: 999;
+  position: absolute;
+}
+
       /* -------------------------VVV--------------------Links------------------------VVV------------------------ */
 
 .resultLink {
@@ -1536,6 +1661,44 @@ div {
   transform: translateY(-5px);
 }
 
+.mediaLinkHelp {
+  display: flex;
+  width: fit-content;
+  height: 10rem;
+  position: absolute;
+  flex-direction: column;
+  z-index: 999;
+  justify-content: space-between;
+}
+
+.mediaLinkHelpContent {
+  border-radius: 50%;
+  color: #ffffff;
+  -webkit-transition: -webkit-transform .35s ease-in-out;
+  transition:         transform .35s ease-in-out;
+}
+
+.mediaLinkHelpContent:hover {
+  color: #00a8ff;
+  cursor: pointer;
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+}
+
+.mediaLinkHelpContent2 {
+  border-radius: 50%;
+  color: #ff0000;
+  -webkit-transition: -webkit-transform .35s ease-in-out;
+  transition:         transform .35s ease-in-out;
+}
+
+.mediaLinkHelpContent2:hover {
+  color: #00a8ff;
+  cursor: pointer;
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+}
+
 .mediaLinkMobile {
   display: flex;
   width: 250px;
@@ -1546,6 +1709,15 @@ div {
 }
 
 .mediaLinkADHome {
+  display: flex;
+  height: fit-content;
+  position: absolute;
+  margin-top: 0.7rem;
+  margin-left: 5%;
+  z-index: 999;
+}
+
+.mediaLinkADHomeMobile {
   display: flex;
   height: fit-content;
   position: absolute;
@@ -1571,7 +1743,7 @@ div {
 .mediaLinkADRefresh {
   display: flex;
   height: fit-content;
-  margin-left: 90%;
+  margin-left: 88%;
   position: absolute;
   margin-top: -4rem;
   z-index: 999;
@@ -1591,10 +1763,38 @@ div {
   transform: rotate(150deg);
 }
 
+.mediaLinkADAddAsset {
+  display: flex;
+  height: fit-content;
+  margin-left: 93%;
+  position: absolute;
+  margin-top: -4.5rem;
+  z-index: 999;
+}
+
+.mediaLinkContentADAddAsset {
+  border-radius: 50%;
+  color: #00a8ff;
+}
+
+.mediaLinkContentADAddAsset:hover {
+  color: #028ed4;
+  cursor: pointer;
+}
+
 .mediaLinkBack {
   display: flex;
   height: fit-content;
   margin-left: 93%;
+  position: absolute;
+  margin-top: -3.7rem;
+  z-index: 999;
+}
+
+.mediaLinkBackMobile {
+  display: flex;
+  height: fit-content;
+  margin-left: 89%;
   position: absolute;
   margin-top: -3.7rem;
   z-index: 999;
@@ -1620,6 +1820,15 @@ div {
   margin-left: 90%;
   position: absolute;
   margin-top: -3.7rem;
+  z-index: 999;
+}
+
+.mediaLinkClearFormMobile {
+  display: flex;
+  height: fit-content;
+  margin-left: 10rem;
+  position: absolute;
+  /* margin-top: -3.7rem; */
   z-index: 999;
 }
 

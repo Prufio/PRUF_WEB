@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, CheckCircle } from 'react-feather'
+import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 
 class ModifyRecordStatusNC extends Component {
@@ -34,10 +34,11 @@ class ModifyRecordStatusNC extends Component {
 
     this.clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
 
     this.modifyStatus = async () => {
+      this.setState({help: false})
       const self = this;
 
       this.setState({ txStatus: false });
@@ -134,9 +135,9 @@ class ModifyRecordStatusNC extends Component {
       else { alert("Invalid status input") }
 
       console.log(this.state.txHash);
-        this.setState({
-          idxHash: undefined
-        });
+      this.setState({
+        idxHash: undefined
+      });
     };
 
     this.updateAssets = setInterval(() => {
@@ -169,6 +170,7 @@ class ModifyRecordStatusNC extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -202,7 +204,19 @@ class ModifyRecordStatusNC extends Component {
   }
 
   render() {//render continuously produces an up-to-date stateful document  
+
+
+    const help = async () => {
+        this.setState({ help: true })
+      if (this.state.help === false) {
+      }
+      }
+        this.setState({ help: false })
+      else {
+    }
+
     const _checkIn = async (e) => {
+      this.setState({help: false})
       this.setState({
         txStatus: false,
         txHash: ""
@@ -355,15 +369,58 @@ class ModifyRecordStatusNC extends Component {
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
-                <Form.Row>
-                  <div className="submitButton">
-                    <div className="submitButtonContent">
-                      <CheckCircle
-                        onClick={() => { this.modifyStatus() }}
-                      />
+                <>
+                  <Form.Row>
+                    <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <CheckCircle
+                          onClick={() => { this.modifyStatus() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && this.state.newStatus === "0" && (
+                    <div className="explainerTextBox2">
+                      Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
+                      unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                    </div>
+                  )}
+                  {this.state.help === true && this.state.newStatus === "51" && (
+                    <div className="explainerTextBox2">
+                      Modifying an assets status to Transferable allows it to be transfered to a different user using Transfer Asset, and allows it to be exported out
+                      of its current asset class using Export Asset.
+                    </div>
+                  )}
+                  {this.state.help === true && this.state.newStatus === "52" && (
+                    <div className="explainerTextBox2">
+                      Modifying an assets status to Non-Transferable locks it from being able to be transfered or modified in most ways throughout the app.
+                    </div>
+                  )}
+                  {this.state.help === true && this.state.newStatus === "53" && (
+                    <div className="explainerTextBox2">
+                      Modifying an assets status to Stolen locks it from being able to be transfered or modified throughout the app. The owner of the asset token
+                      must manually remove it from Stolen status once the asset is found.
+                    </div>
+                  )}
+                  {this.state.help === true && this.state.newStatus === "54" && (
+                    <div className="explainerTextBox2">
+                      Modifying an assets status to Lost locks it from being able to be transfered or modified throughout the app. The owner of the asset token
+                      must manually remove it from Lost status once the asset is found.
+                    </div>
+                  )}
+                  {this.state.help === true && this.state.newStatus === "59" && (
+                    <div className="explainerTextBox2">
+                      Modifying an assets status to Discardable allows it to be discarded for recycling using Discard Asset.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

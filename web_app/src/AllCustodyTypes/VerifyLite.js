@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyLite extends Component {
@@ -13,6 +13,7 @@ class VerifyLite extends Component {
 
 
     this.accessAsset = async () => {
+      this.setState({help: false})
       let idxHash;
       if (this.state.QRreader === false && !this.state.Checkbox) {
         if (this.state.manufacturer === ""
@@ -76,6 +77,7 @@ class VerifyLite extends Component {
       QRreader: false,
       isNFA: false,
       Checkbox: false,
+      help: false
     };
   }
 
@@ -133,6 +135,15 @@ class VerifyLite extends Component {
       }
     }
 
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
+    }
+
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
         this.setState({ Checkbox: true })
@@ -144,10 +155,11 @@ class VerifyLite extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ VLresult: "", accessPermitted: false, Checkbox: false })
+      this.setState({ VLresult: "", accessPermitted: false, Checkbox: false, help: false })
     }
 
     const _verify = async () => {
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -272,27 +284,42 @@ class VerifyLite extends Component {
               </>
             )}
             {this.state.QRreader === false && !this.state.accessPermitted && (
-              <Form.Row>
-                <div className="submitButton">
-                  <div className="submitButtonContent">
-                    <ArrowRightCircle
-                      onClick={() => { this.accessAsset() }}
-                    />
+              <>
+                <Form.Row>
+                  <div className="submitButton">
+                    <div className="submitButtonContent">
+                      <ArrowRightCircle
+                        onClick={() => { this.accessAsset() }}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <button
-                    onClick={() => { QRReader() }}
-                    className="buttonQRScan"
-                  >
-                    <img
-                      className="scanImageFormQR"
-                      title="Scan QR Code"
-                      src={require("../Resources/QRSCANPIC.png")}
-                      alt="Pruf Print" />
-                  </button>
-                </div>
-              </Form.Row>
+                  <div className="mediaLinkHelp">
+                    <div className="mediaLinkHelpContent">
+                      <HelpCircle
+                        onClick={() => { help() }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => { QRReader() }}
+                      className="buttonQRScan"
+                    >
+                      <img
+                        className="scanImageFormQR"
+                        title="Scan QR Code"
+                        src={require("../Resources/QRSCANPIC.png")}
+                        alt="Pruf Print" />
+                    </button>
+                  </div>
+                </Form.Row>
+                {this.state.help === true && (
+                  <div className="explainerTextBox">
+                    Verify Lite is a call function that confirms provenance of an item. As it does not initiate a blockchain transaction, Verify Lite is only
+                    secure if your browser connection is securily protected. For a more secure provenance check, use Deep Verify.
+                  </div>
+                )}
+              </>
             )}
 
             {this.state.QRreader === true && (
@@ -387,12 +414,25 @@ class VerifyLite extends Component {
                 <Form.Row>
                   <div className="submitButtonVRH2">
                     <div className="submitButtonVRH2Content">
-                      <CheckCircle
+                      <HelpCircle
                         onClick={() => { _verify() }}
                       />
                     </div>
                   </div>
+                  <div className="mediaLinkHelp">
+                    <div className="mediaLinkHelpContent">
+                      <HelpCircle
+                        onClick={() => { help() }}
+                      />
+                    </div>
+                  </div>
                 </Form.Row>
+                {this.state.help === true && (
+                  <div className="explainerTextBox">
+                    Verify Lite is a call function that confirms provenance of an item. As it does not initiate a blockchain transaction, Verify Lite is only
+                    trustable if your browser connection is securily protected. For a more secure provenance check, use Deep Verify.
+                  </div>
+                )}
               </>
             )}
           </div>

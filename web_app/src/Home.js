@@ -128,6 +128,9 @@ class Home extends Component {
           )} */}
           {window._contracts === undefined && (
             <div className="text">
+                <br></br>
+                <br></br>
+                
               <Form.Row>
                 <h1 className="loading">
                   Connecting to the Blockchain
@@ -147,7 +150,7 @@ class Home extends Component {
           {window._contracts !== undefined && window.addr === undefined && (
             <div className="text">
               <Form.Row>
-                <h1 >
+                <h1 className="homeErrorText" >
                   Unable to Get User Address
                 </h1>
               </Form.Row>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, HelpCircle } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -151,6 +151,7 @@ class RetrieveRecord extends Component {
     }
 
     this.handlePacket = async () => {
+      this.setState({help: false})
       let idxHash = window.sentPacket;
 
       this.setState({
@@ -187,7 +188,7 @@ class RetrieveRecord extends Component {
     }
 
     this._retrieveRecordQR = async () => {
-
+      this.setState({help: false})
       this.setState({ QRRR: undefined, assetFound: "" })
       const self = this;
       var ipfsHash;
@@ -325,6 +326,7 @@ class RetrieveRecord extends Component {
       QRRR: undefined,
       assetFound: undefined,
       Checkbox: false,
+      help: false
     };
   }
 
@@ -386,12 +388,21 @@ class RetrieveRecord extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ Checkbox: false })
+      this.setState({ Checkbox: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {
-        this.setState({ QRreader: true, assetFound: ""})
+        this.setState({ QRreader: true, assetFound: "" })
       }
       else {
         this.setState({ QRreader: false })
@@ -408,6 +419,7 @@ class RetrieveRecord extends Component {
     }
 
     const _retrieveRecord = async () => {
+      this.setState({help: false})
       const self = this;
       var ipfsHash;
       var tempResult;
@@ -504,7 +516,7 @@ class RetrieveRecord extends Component {
                 <div className="mediaLinkADHome">
                   <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                 </div>
-                <h2 className="formHeader">Search Database</h2>
+                <h2 className="formHeader">Search Assets</h2>
                 <div className="mediaLinkClearForm">
                   <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                 </div>
@@ -584,24 +596,20 @@ class RetrieveRecord extends Component {
                   )}
 
                   <Form.Row>
-                    {this.state.Checkbox === false && (
-                      <div className="submitButton">
-                        <div className="submitButtonContent">
-                          <ArrowRightCircle
-                            onClick={() => { _retrieveRecord() }}
-                          />
-                        </div>
+                    <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <ArrowRightCircle
+                          onClick={() => { _retrieveRecord() }}
+                        />
                       </div>
-                    )}
-                    {this.state.Checkbox === true && (
-                      <div className="submitButton">
-                        <div className="submitButtonContent">
-                          <ArrowRightCircle
-                            onClick={() => { _retrieveRecord() }}
-                          />
-                        </div>
+                    </div>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
+                          onClick={() => { help() }}
+                        />
                       </div>
-                    )}
+                    </div>
                     <div>
                       <button
                         onClick={() => { QRReader() }}
@@ -615,6 +623,12 @@ class RetrieveRecord extends Component {
                       </button>
                     </div>
                   </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox">
+                      Retrieve Record is a function that searches our platform for an asset based on a given Idx hash. This local search engine can either
+                      take a recreated hash made by providing asset information, an assets unique QR code, or simply the asset's Idx hash.
+                    </div>
+                  )}
                 </div>
               </Form>
               <div className="results"></div>
@@ -627,7 +641,7 @@ class RetrieveRecord extends Component {
                 <div className="mediaLinkADHome">
                   <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                 </div>
-                <h2 className="formHeader">Search Database</h2>
+                <h2 className="formHeader">Search Assets</h2>
                 <div className="mediaLinkBack">
                   <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                 </div>

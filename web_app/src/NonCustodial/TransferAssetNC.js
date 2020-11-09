@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, CheckCircle } from 'react-feather'
+import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 
 class ModifyDescriptionNC extends Component {
@@ -39,6 +39,7 @@ class ModifyDescriptionNC extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -103,7 +104,7 @@ class ModifyDescriptionNC extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
-
+      this.setState({help: false})
       console.log("Checking in with id: ", e)
       if (e === "null" || e === undefined) {
         return clearForm()
@@ -145,12 +146,22 @@ class ModifyDescriptionNC extends Component {
     }
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _transferAsset = async () => {
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -282,15 +293,30 @@ class ModifyDescriptionNC extends Component {
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
-                <Form.Row>
-                  <div className="submitButton">
-                    <div className="submitButtonContent">
-                      <CheckCircle
-                        onClick={() => { _transferAsset() }}
-                      />
+                <>
+                  <Form.Row>
+                    <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <CheckCircle
+                          onClick={() => { _transferAsset() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Form.Row>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                      Transfer is a function that transfers an asset token to a chosen address. This will remove the current rightsholder from the asset's
+                      record, which will need to be reset once it is recieved. To do this, use Modify Rightsholder
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

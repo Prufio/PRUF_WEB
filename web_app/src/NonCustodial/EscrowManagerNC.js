@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { ArrowRightCircle, Home, XSquare, CheckCircle } from 'react-feather'
+import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 class EscrowManagerNC extends Component {
   constructor(props) {
@@ -42,6 +42,7 @@ class EscrowManagerNC extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], notes: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
+      help: false
     };
   }
 
@@ -91,6 +92,7 @@ class EscrowManagerNC extends Component {
     const self = this;
 
     const _accessAsset = async () => {
+      this.setState({help: false})
       if (this.state.idxHash === "") {
         return alert("Please Select an Asset From the Dropdown")
       }
@@ -111,12 +113,22 @@ class EscrowManagerNC extends Component {
     }
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0" })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false })
+    }
+
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
+      }
+      else {
+        this.setState({ help: false })
+      }
     }
 
     const _setEscrow = async () => {
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -160,6 +172,7 @@ class EscrowManagerNC extends Component {
     };
 
     const _checkIn = async (e) => {
+      this.setState({help: false})
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -205,6 +218,7 @@ class EscrowManagerNC extends Component {
     }
 
     const _endEscrow = async () => {
+      this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -341,15 +355,30 @@ class EscrowManagerNC extends Component {
                     </Form.Group>
                   </Form.Row>
                   {this.state.transaction === false && (
-                    <Form.Row>
-                      <div className="submitButton">
-                        <div className="submitButtonContent">
-                          <ArrowRightCircle
-                            onClick={() => { _accessAsset() }}
-                          />
+                    <>
+                      <Form.Row>
+                        <div className="submitButton">
+                          <div className="submitButtonContent">
+                            <ArrowRightCircle
+                              onClick={() => { _accessAsset() }}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </Form.Row>
+                        <div className="mediaLinkHelp">
+                          <div className="mediaLinkHelpContent">
+                            <HelpCircle
+                              onClick={() => { help() }}
+                            />
+                          </div>
+                        </div>
+                      </Form.Row>
+                      {this.state.help === true && (
+                        <div className="explainerTextBox2">
+                          Manage Escrow gives you two options, to either end a current escrow, or to set an asset into escrow. Depending on the selected
+                          asset's status, you will be given the appropriate option.
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -444,6 +473,7 @@ class EscrowManagerNC extends Component {
                     </Form.Group>
                   </Form.Row>
                   {this.state.transaction === false && (
+                    <>
                     <Form.Row>
                       <div className="submitButton">
                         <div className="submitButtonContent">
@@ -452,7 +482,21 @@ class EscrowManagerNC extends Component {
                           />
                         </div>
                       </div>
-                    </Form.Row>
+                      <div className="mediaLinkHelp">
+                          <div className="mediaLinkHelpContent">
+                            <HelpCircle
+                              onClick={() => { help() }}
+                            />
+                          </div>
+                        </div>
+                      </Form.Row>
+                      {this.state.help === true && (
+                        <div className="explainerTextBox2">
+                          Setting Escrow gives you two options. Supervised Escrow, which allows the owner of the asset to change the status to lost or stolen during the escrow period,
+                          and Locked Escrow, which disables all modifications of the asset during the escrow period. Both types of escrow can be ended by the assigned agent at any time.
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}
@@ -465,10 +509,8 @@ class EscrowManagerNC extends Component {
                     <h2 className="escrowDetails"> Escrow TimeLock: {this.state.escrowData[2]}</h2>
                   </Form.Row>
                   {this.state.transaction === false && (
+                    <>
                     <Form.Row>
-                      <Form.Label className="costText">
-                        End Escrow
-                          </Form.Label>
                       <div className="submitButton">
                         <div className="submitButtonContent">
                           <CheckCircle
@@ -476,7 +518,21 @@ class EscrowManagerNC extends Component {
                           />
                         </div>
                       </div>
-                    </Form.Row>
+                      <div className="mediaLinkHelp">
+                          <div className="mediaLinkHelpContent">
+                            <HelpCircle
+                              onClick={() => { help() }}
+                            />
+                          </div>
+                        </div>
+                      </Form.Row>
+                      {this.state.help === true && (
+                        <div className="explainerTextBox2">
+                          Ending Escrow during the set escrow period must be done by the assigned agent. If the asset's escrow period
+                          has ended, the asset token holder is then permitted to end it themselves.
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
+import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
+import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle } from "react-feather";
 
 
@@ -23,8 +25,19 @@ class RetrieveRecordMobile extends Component {
             text: tempIPFS.text,
             photo: tempIPFS.photo,
 
-          }, selectedImage: tempIPFS.photo.displayImage, moreInfo: true
+          },
+          moreInfo: true
         })
+        if (tempIPFS.photo.DisplayImage !== undefined) {
+          this.setState({ selectedImage: tempIPFS.photo.DisplayImage })
+        }
+        else if (Object.values(tempIPFS.photo).length > 0) {
+          this.setState({ selectedImage: Object.values(tempIPFS.photo)[0] })
+        }
+
+        else {
+          this.setState({ selectedImage: undefined })
+        }
       }
 
     }, 100)
@@ -50,28 +63,28 @@ class RetrieveRecordMobile extends Component {
       let textNames = Object.keys(obj.text)
       let status = "";
 
-      if (obj.status === "50") { status="In Locked Escrow" }
-      else if (obj.status === "51") { status="Transferrable" }
-      else if (obj.status === "52") { status="Non-Transferrable" }
-      else if (obj.status === "53") { status="MARKED STOLEN" }
-      else if (obj.status === "54") { status="MARKED LOST" }
-      else if (obj.status === "55") { status="Transferred/Unclaimed" }
-      else if (obj.status === "56") { status="In Escrow" }
-      else if (obj.status === "57") { status="Escrow Ended" }
-      else if (obj.status === "58") { status="Locked Escrow Ended" }
-      else if (obj.status === "59") { status="Discardable" }
-      else if (obj.status === "60") { status="Recyclable" }
-      else if (obj.status === "70") { status="Exported" }
-      else if (obj.status === "0") { status="No Status Set" }
-      else if (obj.status === "1") { status="Transferrable" }
-      else if (obj.status === "2") { status="Non-Transferrable" }
-      else if (obj.status === "3") { status="MARKED STOLEN" }
-      else if (obj.status === "4") { status="MARKED LOST" }
-      else if (obj.status === "5") { status="Transferred/Unclaimed" }
-      else if (obj.status === "6") { status="In Escrow" }
-      else if (obj.status === "7") { status="Escrow Ended" }
+      if (obj.status === "50") { status = "In Locked Escrow" }
+      else if (obj.status === "51") { status = "Transferrable" }
+      else if (obj.status === "52") { status = "Non-Transferrable" }
+      else if (obj.status === "53") { status = "MARKED STOLEN" }
+      else if (obj.status === "54") { status = "MARKED LOST" }
+      else if (obj.status === "55") { status = "Transferred/Unclaimed" }
+      else if (obj.status === "56") { status = "In Escrow" }
+      else if (obj.status === "57") { status = "Escrow Ended" }
+      else if (obj.status === "58") { status = "Locked Escrow Ended" }
+      else if (obj.status === "59") { status = "Discardable" }
+      else if (obj.status === "60") { status = "Recyclable" }
+      else if (obj.status === "70") { status = "Exported" }
+      else if (obj.status === "0") { status = "No Status Set" }
+      else if (obj.status === "1") { status = "Transferrable" }
+      else if (obj.status === "2") { status = "Non-Transferrable" }
+      else if (obj.status === "3") { status = "MARKED STOLEN" }
+      else if (obj.status === "4") { status = "MARKED LOST" }
+      else if (obj.status === "5") { status = "Transferred/Unclaimed" }
+      else if (obj.status === "6") { status = "In Escrow" }
+      else if (obj.status === "7") { status = "Escrow Ended" }
 
-      else{status = "Invalid Status Retrieved"}
+      else { status = "Invalid Status Retrieved" }
 
       const showImage = (e) => {
         console.log(this.state.selectedImage)
@@ -83,6 +96,7 @@ class RetrieveRecordMobile extends Component {
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
         if (newWindow) { newWindow.opener = null }
       }
+
 
       const generateThumbs = () => {
         let component = [];
@@ -105,8 +119,8 @@ class RetrieveRecordMobile extends Component {
         for (let i = 0; i < text.length; i++) {
           component.push(
             <>
-              <h4>
-                {textNames[i]}: {text[i]}
+              <h4 className="cardDescriptionSelected">
+                {textNames[i]}: <h4 className="cardDescriptionSelectedContentMobile">{text[i]}</h4>
               </h4>
             </>
           )
@@ -116,29 +130,38 @@ class RetrieveRecordMobile extends Component {
       }
 
       return (
-        <Card style={{ width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
+        <>
+          <Card style={{ width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
+            {this.state.selectedImage !== undefined ?
+              (<Card.Img style={{ width: '340px', height: "340px" }} variant="top" src={this.state.selectedImage} />)
+              : (<>{renderIcon()}</>)}
+
+            <Card.Body>
+              <div className="imageSelectorMobile">
+                {generateThumbs()}
+              </div>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">Name : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.name}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClass}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
+              <Card.Title>{generateTextList()}</Card.Title>
+            </Card.Body>
+          </Card>
           <div className="submitButtonRRQR3Mobile">
             <div className="submitButtonRRQR3MobileContent">
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, ipfsObject: undefined, assetObj: undefined }) }}
+                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false }) }}
               />
             </div>
           </div>
-          <Card.Img style={{ width: '360px', height: "360px" }} variant="top" src={this.state.selectedImage} />
-          <Card.Body>
-            <div className="imageSelectorMobile">
-              {generateThumbs()}
-            </div>
-            <Card.Title>Name : {obj.name}</Card.Title>
-            <Card.Title>Asset Class : {obj.assetClass}</Card.Title>
-            <Card.Title>Asset Status : {status}</Card.Title>
-            <Card.Title>ID : {obj.idxHash}</Card.Title>
-            <Card.Title>Asset Information : <br></br>{generateTextList()}</Card.Title>
-          </Card.Body>
-        </Card>
+        </>
       )
+    }
+
+    const renderIcon = () => {
+      return <Jdenticon size="340" value={this.state.idxHash} />
     }
 
     this.handlePacket = async () => {
@@ -209,7 +232,7 @@ class RetrieveRecordMobile extends Component {
                 let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
                 let fullUrl = knownUrl + hash;
                 console.log(fullUrl);
-                self.setState({ ipfs2: fullUrl, status: Object.values(_result)[0]});
+                self.setState({ ipfs2: fullUrl, status: Object.values(_result)[0] });
               }
             }
           });
@@ -311,10 +334,11 @@ class RetrieveRecordMobile extends Component {
       wasSentPacket: false,
       ipfsObject: undefined,
       showDescription: false,
-      QRreader: undefined,
-      result: 'No result',
+      QRreader: false,
+      result: "",
       QRRR: undefined,
-      assetFound: undefined
+      assetFound: undefined,
+      Checkbox: false,
     };
   }
 
@@ -375,32 +399,54 @@ class RetrieveRecordMobile extends Component {
 
 
     const QRReader = async () => {
-      if (this.state.QRreader === undefined) {
+      if (this.state.QRreader === false) {
         this.setState({ QRreader: true, assetFound: "" })
       }
       else {
-        this.setState({ QRreader: undefined })
+        this.setState({ QRreader: false, Checkbox: false })
       }
     }
 
 
+    const Checkbox = async () => {
+      if (this.state.Checkbox === false) {
+        this.setState({ Checkbox: true })
+      }
+      else {
+        this.setState({ Checkbox: false })
+      }
+    }
 
     const _retrieveRecord = async () => {
       const self = this;
       var ipfsHash;
       var tempResult;
+      let idxHash
 
-      let idxHash = window.web3.utils.soliditySha3(
-        String(this.state.type),
-        String(this.state.manufacturer),
-        String(this.state.model),
-        String(this.state.serial),
-      );
+      if (this.state.Checkbox === false) {
+        idxHash = window.web3.utils.soliditySha3(
+          String(this.state.type),
+          String(this.state.manufacturer),
+          String(this.state.model),
+          String(this.state.serial),
+        );
+        this.setState({ idxHash: idxHash })
+        console.log("idxHash", idxHash);
+        console.log("addr: ", window.addr);
+      }
 
-      this.setState({ idxHash: idxHash })
+      if (this.state.Checkbox === true) {
+        idxHash = this.state.idxHashRaw;
+        console.log("idxHash", idxHash);
+        console.log("addr: ", window.addr);
+      }
 
-      console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
+      let doesExist = await window.utils.checkAssetExists(idxHash);
+
+      if (!doesExist) {
+        return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
+          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, VLresult: "" })
+      }
 
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
@@ -430,7 +476,7 @@ class RetrieveRecordMobile extends Component {
 
       window.assetInfo = {
         assetClass: tempResult[2],
-        status: tempResult[0],
+        status: await window.utils.getStatusString(String(tempResult[0])),
         idx: idxHash
       }
       await window.utils.resolveACFromID(tempResult[2])
@@ -443,101 +489,143 @@ class RetrieveRecordMobile extends Component {
       return this.setState({ authLevel: window.authLevel })
     }
 
-    if (this.state.wasSentPacket === true) {
-      return (
-        <div>
-          <div>
-            <div>
-              <div className="mediaLinkADHome">
-                <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
-              </div>
-              <h2 className="AssetDashboardHeader">Here's What We Found :</h2>
-              <div className="mediaLinkClearForm">
-                <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
-              </div>
-            </div>
-          </div>
-          <div className="assetDashboard">
-            {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
-            {this.state.assetObj === undefined && (<h4 className="loading">Loading Asset</h4>)}
-          </div>
-          <div className="assetDashboardFooter">
-          </div>
-        </div >
-      )
-    }
+    // if (this.state.wasSentPacket === true) {
+    //   return (
+    //     <div>
+    //       <div>
+    //       <div>
+    //           <div className="mediaLinkADHomeMobile">
+    //             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
+    //           </div>
+    //           <h2 className="formHeaderMobile">Here's What we Found</h2>
+    //           <div className="mediaLinkClearForm">
+    //             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
+    //           </div>
+    //         </div>
+    //       </div>
+    //       <div className="assetDashboard">
+    //         {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
+    //         {this.state.assetObj === undefined && (<h4 className="loading">Loading Asset</h4>)}
+    //       </div>
+    //       <div className="assetDashboardFooter">
+    //       </div>
+    //     </div >
+    //   )
+    // }
     return (
       <div>
-        {!this.state.moreInfo && this.state.QRreader === undefined && (
+        {!this.state.moreInfo && this.state.QRreader === false && (
           <div>
             <div>
-              <div className="mediaLinkADHome">
+              <div className="mediaLinkADHomeMobile">
                 <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
               </div>
-              <h2 className="formHeaderMobile">Search Database</h2>
+              <h2 className="formHeaderMobile">Search Assets</h2>
               <div className="mediaLinkClearForm">
                 <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
               </div>
             </div>
             <Form className="formMobile" id="MainForm">
               <div>
-                <Form.Row>
-                  <Form.Label className="formFont">Type:</Form.Label>
-                  <Form.Control
-                    placeholder="Type"
-                    required
-                    onChange={(e) => this.setState({ type: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <Form.Label className="formFont">Manufacturer:</Form.Label>
-                  <Form.Control
-                    placeholder="Manufacturer"
-                    required
-                    onChange={(e) => this.setState({ manufacturer: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <Form.Label className="formFont">Model:</Form.Label>
-                  <Form.Control
-                    placeholder="Model"
-                    required
-                    onChange={(e) => this.setState({ model: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <Form.Label className="formFont">Serial:</Form.Label>
-                  <Form.Control
-                    placeholder="Serial"
-                    required
-                    onChange={(e) => this.setState({ serial: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group>
-                    <div className="submitButtonRRMobile">
-                      <div className="submitButtonRRContent">
-                        <ArrowRightCircle
-                          onClick={() => { _retrieveRecord() }}
+                {this.state.QRreader === false && (
+                  <div>
+                    <Form.Check
+                      type="checkbox"
+                      className="checkBoxMobile"
+                      id="inlineFormCheck"
+                      onChange={() => { Checkbox() }}
+                    />
+                    <Form.Label className="checkBoxFormFontMobile">Input Raw Idx Hash</Form.Label>
+                    {this.state.Checkbox === true && (
+                      <Form.Row>
+                        <Form.Label className="formFont">Idx Hash:</Form.Label>
+                        <Form.Control
+                          placeholder="Idx Hash"
+                          required
+                          onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                          size="lg"
                         />
-                      </div>
-                    </div>
-                    <div className="submitButtonRRQRMobile">
-                      <div className="submitButtonRRQRContent">
-                        <Grid
-                          onClick={() => { QRReader() }}
+                      </Form.Row>
+                    )}
+                  </div>
+                )}
+                {this.state.Checkbox === false && (
+                  <>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridType">
+                        <Form.Label className="formFont">Type:</Form.Label>
+                        <Form.Control
+                          placeholder="Type"
+                          onChange={(e) => this.setState({ type: e.target.value })}
+                          size="lg"
+                          required
                         />
-                      </div>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridManufacturer">
+                        <Form.Label className="formFont">Manufacturer:</Form.Label>
+                        <Form.Control
+                          placeholder="Manufacturer"
+                          onChange={(e) => this.setState({ manufacturer: e.target.value })}
+                          size="lg"
+                        />
+                      </Form.Group>
+
+                    </Form.Row>
+
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridModel">
+                        <Form.Label className="formFont">Model:</Form.Label>
+                        <Form.Control
+                          placeholder="Model"
+                          onChange={(e) => this.setState({ model: e.target.value })}
+                          size="lg"
+                          required
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridSerial">
+                        <Form.Label className="formFont">Serial:</Form.Label>
+                        <Form.Control
+                          placeholder="Serial"
+                          onChange={(e) => this.setState({ serial: e.target.value })}
+                          size="lg"
+                          required
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                  </>
+                )}
+                <Form.Row>
+                  <div className="submitButtonRRMobile">
+                    <div className="submitButtonRRContent">
+                      <ArrowRightCircle
+                        onClick={() => { _retrieveRecord() }}
+                      />
                     </div>
-                  </Form.Group>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => { QRReader() }}
+                      className="buttonQRScanMobile"
+                    >
+                      <img
+                        className="scanImageFormQR"
+                        title="Scan QR Code"
+                        src={require("../Resources/QRSCANPIC.png")}
+                        alt="Pruf Print" />
+                    </button>
+                  </div>
                 </Form.Row>
               </div>
             </Form>
-            <div className="assetDashboardFooterMobile"></div>
+            {this.state.QRreader === false && (
+            <div className="resultsMobile">
+
+            </div>
+            )}
           </div>
         )}
 
@@ -548,8 +636,8 @@ class RetrieveRecordMobile extends Component {
               <div className="mediaLinkADHome">
                 <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
               </div>
-              <h2 className="formHeaderMobile">Search Database</h2>
-              <div className="mediaLinkBack">
+              <h2 className="formHeaderMobile">Search Assets</h2>
+              <div className="mediaLinkBackMobile">
                 <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
               </div>
             </div>
@@ -560,17 +648,13 @@ class RetrieveRecordMobile extends Component {
                 onScan={this.handleScan}
                 style={{ width: '100%' }}
               />
-              {this.state.result !== undefined && (
+              {this.state.result[2] !== "0" && (
                 <div className="resultsMobile">
                   {this.state.assetFound}
                 </div>
               )}
             </div>
           </div>
-        )}
-
-        {this.state.result[2] === "0" && (
-          <div className="resultsMobile">No Asset Found for Given Data</div>
         )}
 
         {this.state.moreInfo && ( //conditional rendering
@@ -582,8 +666,8 @@ class RetrieveRecordMobile extends Component {
               {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
               {this.state.assetObj === undefined && (<h4 className="loading">Loading Asset</h4>)}
             </div>
-            <div className="assetDashboardFooterMobile">
-            </div>
+            {/* <div className="resultsMobile">
+            </div> */}
           </div >
         )}
       </div>

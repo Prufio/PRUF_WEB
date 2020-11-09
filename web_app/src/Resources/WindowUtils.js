@@ -1261,6 +1261,9 @@ function buildWindowUtils() {
   };
 
   const _generateCardPrint = () => {
+
+    var date = Date().toLocaleString();
+
     return (
       <div className="printForm">
         <div className="printQR">
@@ -1274,6 +1277,7 @@ function buildWindowUtils() {
           />
         </div>
         <div className="cardHref">https://pruf.io</div>
+        <div className="cardDate">{ date }</div>
         <div className="printFormContent">
           <img
             className="printImageBackgroundForm"
