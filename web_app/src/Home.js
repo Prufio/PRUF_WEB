@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
-// import Button from "react-bootstrap/Button";
-// import Col from "react-bootstrap/Col";
 import "./index.css";
-// import { ArrowRightCircle } from 'react-feather'
+import { Twitter, GitHub, Mail, Send, } from 'react-feather'
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -99,7 +97,17 @@ class Home extends Component {
     return (
       <div>
         <div className="homeForm">
-          <img className="prufARCroppedForm" src={require("./Resources/Pruf AR (2).png")} alt="Pruf Logo Home" />
+                  <button
+                  className="imageButton"
+                    title="Check out our website!"
+                    onClick={() => { window.open("https://www.pruf.io", "_blank") }}
+                  >
+                    <img
+                    className="prufARCroppedForm"
+                      src={require("./Resources/Pruf AR (2).png")}
+                      alt="Pruf Logo" />
+                  </button>
+          {/* <img className="prufARCroppedForm" src={require("./Resources/Pruf AR (2).png")} alt="Pruf Logo Home" /> */}
           {/* <br></br>
           <div> {window.addr !== undefined && window.assetClass > 0 && (<div>Operating in asset class {window.assetClass} ({window.assetClassName}) as {window.authLevel}</div>)}</div>
           <br></br> */}
@@ -128,9 +136,9 @@ class Home extends Component {
           )} */}
           {window._contracts === undefined && (
             <div className="text">
-                <br></br>
-                <br></br>
-                
+              <br></br>
+              <br></br>
+
               <Form.Row>
                 <h1 className="loading">
                   Connecting to the Blockchain
@@ -169,6 +177,12 @@ class Home extends Component {
               </Form.Row>
             </div>
           )}
+          <div className="mediaLinkHome">
+            <a className="mediaLinkHomeContent"><GitHub size={25} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
+            <a className="mediaLinkHomeContent"><Mail size={25} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
+            <a className="mediaLinkHomeContent"><Twitter size={25} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
+            <a className="mediaLinkHomeContent" ><Send size={25} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
+          </div>
         </div>
       </div>
     );

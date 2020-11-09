@@ -11,6 +11,7 @@ import AdminComponent from "./Resources/AdminComponent";
 import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
 import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
+import ParticleBox from "./Resources/ParticleBox";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X } from 'react-feather';
@@ -56,10 +57,9 @@ class Main extends Component {
         );
       }
       return (
+
         <div>
           <HashRouter>
-
-
 
             <div className="imageForm">
               <div>
@@ -162,10 +162,10 @@ class Main extends Component {
                     </button>
                     <div className="siteInfoBox">
                       <h3 className="siteInfoBoxContent">
-                        Website last updated:
+                        Website Last Updated:
                   </h3>
                       <h3 className="siteInfoBoxContent">
-                        October 27, 2020
+                        November 9, 2020
                   </h3>
                     </div>
                     <button
@@ -272,7 +272,7 @@ class Main extends Component {
                               <Button
                                 variant="etherscan"
                                 title="Check it out on Etherscan!"
-                                onClick={() => {this.setState({userMenu: undefined}); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
+                                onClick={() => { this.setState({ userMenu: undefined }); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
                                 {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
                               </Button>
                             </h4>
@@ -302,7 +302,7 @@ class Main extends Component {
                               <Button
                                 variant="assetDashboard"
                                 title="Asset Dashboard"
-                                onClick={() => {this.setState({userMenu: undefined}); window.location.href = '/#/asset-dashboard'} }>
+                                onClick={() => { this.setState({ userMenu: undefined }); window.location.href = '/#/asset-dashboard' }}>
                                 {this.state.assetBalance}
                               </Button>
                             </h4>
@@ -310,7 +310,7 @@ class Main extends Component {
                           <br></br>
                           {this.state.IDTokenBalance && (
                             <h4>
-                              Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1"/>)} {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0"/>)}
+                              Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)} {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)}
                             </h4>
                           )}
                           <br></br>
@@ -334,8 +334,9 @@ class Main extends Component {
               </div>
             </div>
             <div className="pageForm">
-              <style type="text/css">
-                {`
+              <ParticleBox>
+                <style type="text/css">
+                  {`
                       .btn-primary {
                         background-color: #00a8ff;
                         color: white;
@@ -400,7 +401,7 @@ class Main extends Component {
                         border-radius: 0;
                         font-weight: bold;
                         font-size: 1.4rem;
-                        border-radius: 0rem 1rem 1rem 0rem;
+                        border-radius: 0rem 0.3rem 0.3rem 0rem;
                       }
                       .btn-toggle:hover {
                         background-color: #23b6ff;
@@ -415,7 +416,8 @@ class Main extends Component {
                         color: white !important;
                       }
                    `}
-              </style>
+                </style>
+              </ParticleBox>
               <div>
                 <Route exact path="/" component={Home} />
                 {Router(this.state.routeRequest)}
@@ -737,12 +739,12 @@ class Main extends Component {
 
       }
       let identicons = [];
-      for(let e = 0; e < window.aTknIDs.length; e++){
+      for (let e = 0; e < window.aTknIDs.length; e++) {
         identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
       }
 
       let identiconsLG = [];
-      for(let e = 0; e < window.aTknIDs.length; e++){
+      for (let e = 0; e < window.aTknIDs.length; e++) {
         identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
       }
 
@@ -988,12 +990,12 @@ class Main extends Component {
     window.jdenticon_config = {
       hues: [196],
       lightness: {
-          color: [0.36, 0.70],
-          grayscale: [0.24, 0.82]
+        color: [0.36, 0.70],
+        grayscale: [0.24, 0.82]
       },
       saturation: {
-          color: 0.75,
-          grayscale: 0.10
+        color: 0.75,
+        grayscale: 0.10
       },
       backColor: "#ffffffff"
     };

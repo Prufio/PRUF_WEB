@@ -22,20 +22,20 @@ class ParticleBox extends Component {
                     params={{
                         "particles": {
                             "number": {
-                                "value": 55
+                                "value": 110
                             },
                             "size": {
                                 "value": 4
                             }
                         },
                         "interactivity": {
-                            "detect_on": "window",
+                            // "detect_on": "window",
                             "events": {
                                 "onhover": {
                                     "enable": true,
                                     "mode": "attract"
                                 },
-                                /* "onclick": { "enable": true, "mode": "push" } */
+                                // "onclick": { "enable": true, "mode": "push" }
                             }
                         }
                     }} />

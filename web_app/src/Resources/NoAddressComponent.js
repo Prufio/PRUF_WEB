@@ -31,9 +31,9 @@ class NoAddressComponent extends Component {
         else {
             return (
                 <Nav className="headerForm">
-                    <li>
+                    {/* <li>
                         <NavLink exact to="/">Home</NavLink>
-                    </li>
+                    </li> */}
                     <li>
                         <NavLink to="/retrieve-record">Search</NavLink>
                     </li>

@@ -156,7 +156,7 @@ div {
   color: white;
   display: flex;
   background-color: #002a40;
-  border-radius: 0rem 0rem 1rem 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
   font-weight: bold;
   font-size: 3rem;
   flex-direction: column;
@@ -377,7 +377,7 @@ div {
   width: 59rem;
   color: white;
   background-color: #002a40;
-  border-radius: 0rem 0rem 1rem 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
   font-size: 1.3rem; 
   display: flex;
   padding: 2rem;
@@ -405,7 +405,7 @@ div {
   width: 59rem;
   color: white;
   background-color: #002a40;
-  border-radius: 0rem 0rem 1rem 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
   font-size: 2.2rem;
   display: flex;
   padding: 2rem;
@@ -434,7 +434,7 @@ div {
   width: 50rem;
   background-color: #002a40;
   color: white;
-  border-radius: 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
   font-size: 1.4rem;
   padding: 0.5rem;
   display: flex;
@@ -468,7 +468,7 @@ div {
   margin-top: 21.5rem;
   margin-left: 54.5rem;
   background-color: #ffffff;
-  border-radius: 0rem 0rem 1rem 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
   position: absolute;
   z-index: 999;
   justify-content: center;
@@ -485,7 +485,7 @@ div {
   z-index: 1000;
   margin-right: 105%;
   margin-top: 4.8rem;
-  border-radius: 0rem 0rem 1rem 0rem;
+  border-radius: 0rem 0rem 0.5rem 0rem;
   opacity: 0.9;
 
 }
@@ -494,7 +494,7 @@ div {
   display: flex;
   width: 27rem;
   height: flex;
-  color:white;
+  color: #ffffff;
   background-color: #002a40;
   flex-direction: column;
   justify-content: flex-start;
@@ -599,7 +599,7 @@ div {
   height: fit-content;
   position: absolute;
   margin-top: 1rem;
-  margin-left: -42rem;
+  margin-left: -42.1rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
   z-index: 1000;
@@ -1257,7 +1257,7 @@ margin-bottom: -3rem;
   height: 70px;
   object-fit: cover;
   z-index: 1000;
-  background-color:#085179;
+  background-color: #cccccc;
   -webkit-transition: -webkit-transform .7s ease-in-out;
   transition:         transform .7s ease-in-out;
   margin-left: 30rem;
@@ -1661,6 +1661,20 @@ margin-bottom: -3rem;
   transform: translateY(-5px);
 }
 
+.mediaLinkHomeContent {
+  border-radius: 50%;
+  color: #ffffff;
+  -webkit-transition: -webkit-transform .35s ease-in-out;
+  transition:         transform .35s ease-in-out;
+}
+
+.mediaLinkHomeContent:hover {
+  color: #00a8ff;
+  cursor: pointer;
+  -webkit-transform: rotate(5deg);
+  transform: rotate(5deg);
+}
+
 .mediaLinkHelp {
   display: flex;
   width: fit-content;
@@ -1674,29 +1688,21 @@ margin-bottom: -3rem;
 .mediaLinkHelpContent {
   border-radius: 50%;
   color: #ffffff;
-  -webkit-transition: -webkit-transform .35s ease-in-out;
-  transition:         transform .35s ease-in-out;
 }
 
 .mediaLinkHelpContent:hover {
   color: #00a8ff;
   cursor: pointer;
-  -webkit-transform: translateY(-5px);
-  transform: translateY(-5px);
 }
 
 .mediaLinkHelpContent2 {
   border-radius: 50%;
   color: #ff0000;
-  -webkit-transition: -webkit-transform .35s ease-in-out;
-  transition:         transform .35s ease-in-out;
 }
 
 .mediaLinkHelpContent2:hover {
   color: #00a8ff;
   cursor: pointer;
-  -webkit-transform: translateY(-5px);
-  transform: translateY(-5px);
 }
 
 .mediaLinkMobile {
@@ -1706,6 +1712,15 @@ margin-bottom: -3rem;
   margin-bottom: 20px;
   margin-top: -50px;
   justify-content: space-between;
+}
+
+.mediaLinkHome {
+  display: flex;
+  width: 45rem;
+  height: fit-content;
+  margin-top: 30rem;
+  justify-content: space-between;
+  position: absolute;
 }
 
 .mediaLinkADHome {
