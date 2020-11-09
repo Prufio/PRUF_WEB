@@ -965,6 +965,7 @@ class Main extends Component {
       assetClass: undefined,
       contractArray: [],
       isAuthUser: undefined,
+      hamburgerMenu: true,
       assetHolderBool: false,
       IDHolderBool: false,
       assetClassHolderBool: false,
