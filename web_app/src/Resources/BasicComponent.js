@@ -7,9 +7,9 @@ class BasicComponent extends Component {
     render() {
         return (
         <Nav className="headerForm">
-        <li>
+        {/* <li>
                     <NavLink exact to="/">Home</NavLink>
-                </li>
+                </li> */}
                 <li>
                     <NavLink exact to="asset-dashboard">Asset Dashboard</NavLink>
                 </li>
