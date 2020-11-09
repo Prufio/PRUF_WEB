@@ -331,7 +331,7 @@ class Main extends Component {
               </div>
             </div>
             <div className="pageForm">
-              <ParticleBox>
+              <ParticleBox/>
                 <style type="text/css">
                   {`
                       .btn-primary {
@@ -414,7 +414,6 @@ class Main extends Component {
                       }
                    `}
                 </style>
-              </ParticleBox>
               <div>
                 <Route exact path="/" component={Home} />
                 {Router(this.state.routeRequest)}
