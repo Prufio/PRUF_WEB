@@ -93,10 +93,28 @@ function buildWindowUtils() {
         <option key="noselect" value="null"> Select an asset class </option>];
 
       for (let i = 0; i < window.assetClasses.ids.length; i++) {
-        component.push(<option size="lg" key={"asset " + String(i)} value={window.assetClasses.ids[i]}>
+        component.push(<option size="lg" key={"assetClass " + String(i)} value={window.assetClasses.ids[i]}>
           {i + 1}:
           Name: {window.assetClasses.names[i]},
           ID: {window.assetClasses.ids[i]}</option>);
+      }
+
+      return component
+    }
+
+    else { return <></> }
+
+  }
+
+  const _generateOptionsFromObject = (obj) => {
+    if (Object.keys(obj).length > 0) {
+      let values = Object.values(obj), keys = Object.keys(obj), component = [
+        <option key="noselect" value="null"> Select an option </option>];
+
+      for (let i = 0; i < keys.length; i++) {
+        component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
+          Contract: {keys[i]},
+          </option>);
       }
 
       return component
@@ -1433,6 +1451,7 @@ function buildWindowUtils() {
     generateAssetDash: _generateAssetDash,
     addIPFSJSONObject: _addIPFSJSONObject,
     generateCardPrint: _generateCardPrint,
+    generateOptionsFromObject: _generateOptionsFromObject,
 
   }
 

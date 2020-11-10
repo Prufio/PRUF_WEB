@@ -82,6 +82,17 @@ class enableContract extends Component {
       }
     }
 
+    const _setContract = async (e) => {
+      let authTemp
+
+      switch(e) {
+        case("APP") : {authTemp = "1"}
+        case("APP_NC") : {authTemp = "2"}
+      }
+
+      return this.setState({name: e, authLevel: authTemp})
+    }
+
     const enableContract = () => {
       console.log(this.state.name)
       console.log(this.state.assetClass)
