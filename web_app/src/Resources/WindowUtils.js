@@ -170,7 +170,7 @@ function buildWindowUtils() {
           Name: {window.assets.names[i]},
           ID: {window.assets.ids[i].substring(0, 10) + "..." + window.assets.ids[i].substring(58, 68)} </option>);
       }
-
+      
       return component
     }
 
