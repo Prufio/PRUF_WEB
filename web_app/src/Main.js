@@ -14,10 +14,8 @@ import BasicComponent from "./Resources/BasicComponent";
 import ParticleBox from "./Resources/ParticleBox";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
-import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X } from 'react-feather';
-import {
-  isMobile
-} from "react-device-detect";
+import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'react-feather';
+import { isMobile } from "react-device-detect";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
 
@@ -167,12 +165,19 @@ class Main extends Component {
                     </div>
                     <button
                       className="imageButtonUser"
-                      onClick={() => { this.userMenu() }}
-                    >
+                      onClick={() => { this.userMenu() }}>
+                      {window.addr !== undefined && (
                       <Robohash
                         className="imageFormUser"
                         name={window.addr}
                       />
+                      )} 
+                      {window.addr === undefined && (
+                      <User 
+                        className="imageFormUser" 
+                        size={48}
+                      />
+                      )}
                     </button>
                     <div className="hamburgerMenuLink">
                       <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
