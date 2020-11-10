@@ -169,10 +169,10 @@ class Main extends Component {
                       className="imageButtonUser"
                       onClick={() => { this.userMenu() }}
                     >
-                      <Robohash
+                      {window.addr !== undefined ? (<Robohash
                         className="imageFormUser"
                         name={window.addr}
-                      />
+                      />) : (<>N/A</>)}
                     </button>
                     <div className="hamburgerMenuLink">
                       <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
