@@ -9,13 +9,13 @@ class AdminComponent extends Component {
         return (
             <Nav className="headerForm">
                 <li>
-                    <NavLink to="/add-user">Add User</NavLink>
+                    <NavLink to="/add-user">Authorize User</NavLink>
                 </li>
                 <li>
                     <NavLink to="/set-costs">Set Costs</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/enable-contract">Enable Contract</NavLink>
+                    <NavLink to="/enable-contract">Authorize Contract</NavLink>
                 </li>
                 <li>
                     <NavLink to="/transfer-ac">Transfer AC</NavLink>

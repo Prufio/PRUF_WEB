@@ -483,7 +483,11 @@ div {
   height: 67rem;
   width: 30rem;
   position: absolute;
-  background-color:#002a40;
+  background-image: url(./Resources/DarkBlueBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;  
   justify-content: center;
   flex-direction: row;
   z-index: 1000;
@@ -1237,7 +1241,12 @@ margin-bottom: -3rem;
   padding-left: 2rem;
   object-fit: cover;
   z-index: 5;
-  background-color:#005480;
+  /* background-color:#005480; */
+  background-image: url(./Resources/MediumBlueBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;  
   opacity: 0.95;
 }
 
@@ -1249,7 +1258,7 @@ margin-bottom: -3rem;
   height: 45px;
   object-fit: cover;
   z-index: 5;
-  background-color:#002a40;
+  background-color:transparent;
   margin-left: 20rem;
 }
 
