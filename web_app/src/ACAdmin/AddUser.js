@@ -70,8 +70,10 @@ class AddUser extends Component {
       this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
     }
 
-    const _setAC = async (e) => {
-      return this.setState({ assetClass: e, assetClassSelected: true });
+    const _setAC = (_e) => {
+      const e = JSON.parse(_e);
+      console.log("In setAC", e);
+      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
     }
 
     const help = async () => {
