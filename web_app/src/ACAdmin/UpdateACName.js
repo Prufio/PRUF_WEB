@@ -53,7 +53,8 @@ class UpdateACName extends Component {
     }
 
     const _setAC = async (e) => {
-      return this.setState({ assetClass: e, assetClassSelected: true });
+      this.setState({ assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
+      return console.log(e);
     }
 
     const updateName = async () => {

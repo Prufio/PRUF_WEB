@@ -69,8 +69,10 @@ class enableContract extends Component {
       this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
     }
 
-    const _setAC = async (e) => {
-      return this.setState({ assetClass: e, assetClassSelected: true });
+    const _setAC = (_e) => {
+      const e = JSON.parse(_e);
+      console.log("In setAC", e);
+      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
     }
 
     const help = async () => {
@@ -83,21 +85,53 @@ class enableContract extends Component {
     }
 
     const _setContract = async (e) => {
-      let authTemp
-
-      switch(e) {
-        case("APP") : {authTemp = "1"}
-        case("APP_NC") : {authTemp = "2"}
+      let authTemp, custodyId;
+      
+      if(this.state.custodyType === "CUSTODIAL"){
+        custodyId = 1;
       }
 
+      else{
+        custodyId = 2;
+      }
+
+      switch(e) {
+        case "APP" : 
+          {authTemp = "1"; break;}
+        case "APP_NC" : 
+          {authTemp = "2"; break;}
+        case "NP" : 
+          {authTemp = "1"; break;}
+        case "NP_NC" : 
+          {authTemp = "2"; break;}
+        case "ECR" : 
+          {authTemp = "3"; break;}
+        case "ECR_NC" : 
+          {authTemp = "3"; break;}
+        case "ECR_MGR" : 
+          {authTemp = "3"; break;}
+        case "AC_TKN" : 
+          {authTemp = custodyId; break;}
+        case "A_TKN" : 
+          {if (this.state.root === this.state.assetClass) {authTemp = "1"; break;} else{authTemp = custodyId; break;} }
+        case "AC_MGR" : 
+          {authTemp = custodyId; break;}
+        case "RCLR" : 
+          {authTemp = "3"; break;}
+        default : 
+          {alert("Contract not recognized"); break;}
+      }
+      console.log(e, authTemp);
       return this.setState({name: e, authLevel: authTemp})
     }
 
-    const enableContract = () => {
+    const enableContract = async () => {
+      if(this.state.name < 1) {return alert("Please select a contract to enable")}
       console.log(this.state.name)
       console.log(this.state.assetClass)
       console.log(this.state.authLevel)
-      window.contracts.STOR.methods
+      
+      await window.contracts.STOR.methods
         .enableContractForAC(
           this.state.name,
           this.state.assetClass,
@@ -170,39 +204,29 @@ class enableContract extends Component {
                     <Form.Label className="formFont">Contract Name :</Form.Label>
                     {this.state.transaction === false && (
                       <Form.Control
-                        placeholder="Contract Name"
-                        required
-                        onChange={(e) => this.setState({ name: e.target.value })}
-                        size="lg"
-                      />
+                      as="select"
+                      size="lg"
+                      onChange={(e) => { _setContract(e.target.value) }}
+  
+                    >
+                        <optgroup className="optgroup">
+                          {window.utils.generateOptionsFromObject(window.contracts, "contracts")}
+                        </optgroup>
+                    </Form.Control>
                     )}
                     {this.state.transaction === true && (
                       <Form.Control
-                        placeholder={this.state.name}
-                        disabled
-                        size="lg"
-                      />
-                    )}
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="formGridAsset">
-                    <Form.Label className="formFont">Authorization Level :</Form.Label>
-                    {this.state.transaction === false && (
-                      <Form.Control
-                        placeholder="Authorization Level"
-                        required
-                        type="text"
-                        onChange={(e) => this.setState({ authLevel: e.target.value })}
-                        size="lg"
-                      />
-                    )}
-                    {this.state.transaction === true && (
-                      <Form.Control
-                        placeholder={this.state.authLevel}
-                        disabled
-                        size="lg"
-                      />
+                      as="select"
+                      size="lg"
+                      placeholder={this.state.name}
+                      disabled
+                      onChange={() => {}}
+  
+                    >
+                        <optgroup className="optgroup">
+                          {window.utils.generateOptionsFromObject(window.contracts, "contracts")}
+                        </optgroup>
+                    </Form.Control>
                     )}
                   </Form.Group>
                 </Form.Row>

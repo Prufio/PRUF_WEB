@@ -93,7 +93,13 @@ function buildWindowUtils() {
         <option key="noselect" value="null"> Select an asset class </option>];
 
       for (let i = 0; i < window.assetClasses.ids.length; i++) {
-        component.push(<option size="lg" key={"assetClass " + String(i)} value={window.assetClasses.ids[i]}>
+        let objVal = 
+          '{"id" : ' + '"' + String(window.assetClasses.ids[i]) + '"' + "," 
+          + '"custodyType" : ' + '"' + String(window.assetClasses.custodyTypes[i]) + '"' + ","
+          + '"name" : ' + '"' + String(window.assetClasses.names[i]) + '"' + ","
+          + '"root": ' + '"' + String(window.assetClasses.roots[i]) + '"' + "}"
+
+        component.push(<option size="lg" key={"assetClass " + String(i)} value={objVal}>
           {i + 1}:
           Name: {window.assetClasses.names[i]},
           ID: {window.assetClasses.ids[i]}</option>);
@@ -106,21 +112,48 @@ function buildWindowUtils() {
 
   }
 
-  const _generateOptionsFromObject = (obj) => {
-    if (Object.keys(obj).length > 0) {
-      let values = Object.values(obj), keys = Object.keys(obj), component = [
-        <option key="noselect" value="null"> Select an option </option>];
-
-      for (let i = 0; i < keys.length; i++) {
-        component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
-          Contract: {keys[i]},
-          </option>);
+  const _generateOptionsFromObject = (obj, job) => {
+    switch(job){
+      case("contracts") : {
+        if (Object.keys(obj).length > 0) {
+          let values = Object.values(obj), keys = Object.keys(obj), component = [
+            <option key="noselect" value="null"> Select an option </option>];
+    
+          for (let i = 0, count = 1; i < keys.length; i++) {
+            if(keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR"){
+            component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
+              {count}:
+              Name: {keys[i]},
+              </option>);
+              count++;
+            }
+            else{}
+          }
+    
+          return component
+        }
+    
+        else { return <></> }
       }
-
-      return component
+      default : {
+        if (Object.keys(obj).length > 0) {
+          let values = Object.values(obj), keys = Object.keys(obj), component = [
+            <option key="noselect" value="null"> Select an option </option>];
+    
+          for (let i = 0; i < keys.length; i++) {
+            component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
+              {i + 1}:
+              Name: {keys[i]},
+              </option>);
+          }
+    
+          return component
+        }
+    
+        else { return <></> }
+      }
     }
-
-    else { return <></> }
+    
 
   }
 
