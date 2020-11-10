@@ -6,21 +6,22 @@
 }
 
 body {
-  background-image: url(./Resources/BlueBack.png);
+  background-image: url(./Resources/BlueBackMobile.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
-  background-position: center center fixed;  
+  background-position: center center fixed;
   overflow: hidden;
 }
 
-.mobile_body {
-  background-image: url(./Resources/BlueBack.png);
+/* .mobile_body {
+  background-image: url(./Resources/BlueBackMobile.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
-  background-position: center center fixed;  
-}
+  background-position: center center fixed;
+  overflow: hidden;
+} */
 
 h1,
 h2,
@@ -175,7 +176,11 @@ div {
   width: 360px;
   color: white;
   display: flex;
-  background-color: #002a40;
+  background-image: url(./Resources/DarkBlueBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;  
   border-radius: 0rem 0rem 1rem 1rem;
   font-weight: bold;
   font-size: 3rem;
