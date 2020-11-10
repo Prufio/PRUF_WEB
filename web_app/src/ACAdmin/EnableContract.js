@@ -87,40 +87,55 @@ class enableContract extends Component {
     const _setContract = async (e) => {
       let authTemp, custodyId;
       
-      if(this.state.custodyType === "CUSTODIAL"){
+      if(this.state.custodyType === "Custodial"){
         custodyId = 1;
+        switch(e) {
+          case "APP" : 
+            {authTemp = "1"; break;}
+          case "NP" : 
+            {authTemp = "1"; break;}
+          case "ECR" : 
+            {authTemp = "3"; break;}
+          case "ECR_MGR" : 
+            {authTemp = "3"; break;}
+          case "AC_TKN" : 
+            {authTemp = String(custodyId); break;}
+          case "A_TKN" : 
+            {if (this.state.root === this.state.assetClass) {authTemp = "1"; break;} else{authTemp = String(custodyId); break;} }
+          case "AC_MGR" : 
+            {authTemp = String(custodyId); break;}
+          case "RCLR" : 
+            {authTemp = "3"; break;}
+          default : 
+            {alert("Contract not allowed in asset class"); clearForm(); break;}
+        }
       }
 
       else{
         custodyId = 2;
+        switch(e) {
+          case "APP_NC" : 
+            {authTemp = "2"; break;}
+          case "NP_NC" : 
+            {authTemp = "2"; break;}
+          case "ECR_NC" : 
+            {authTemp = "3"; break;}
+          case "ECR_MGR" : 
+            {authTemp = "3"; break;}
+          case "AC_TKN" : 
+            {authTemp = String(custodyId); break;}
+          case "A_TKN" : 
+            {if (this.state.root === this.state.assetClass) {authTemp = "1"; break;} else{authTemp = String(custodyId); break;} }
+          case "AC_MGR" : 
+            {authTemp = String(custodyId); break;}
+          case "RCLR" : 
+            {authTemp = "3"; break;}
+          default : 
+            {alert("Contract not allowed in asset class"); clearForm(); break;}
+        }
       }
 
-      switch(e) {
-        case "APP" : 
-          {authTemp = "1"; break;}
-        case "APP_NC" : 
-          {authTemp = "2"; break;}
-        case "NP" : 
-          {authTemp = "1"; break;}
-        case "NP_NC" : 
-          {authTemp = "2"; break;}
-        case "ECR" : 
-          {authTemp = "3"; break;}
-        case "ECR_NC" : 
-          {authTemp = "3"; break;}
-        case "ECR_MGR" : 
-          {authTemp = "3"; break;}
-        case "AC_TKN" : 
-          {authTemp = custodyId; break;}
-        case "A_TKN" : 
-          {if (this.state.root === this.state.assetClass) {authTemp = "1"; break;} else{authTemp = custodyId; break;} }
-        case "AC_MGR" : 
-          {authTemp = custodyId; break;}
-        case "RCLR" : 
-          {authTemp = "3"; break;}
-        default : 
-          {alert("Contract not recognized"); break;}
-      }
+      
       console.log(e, authTemp);
       return this.setState({name: e, authLevel: authTemp})
     }
