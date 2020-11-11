@@ -86,6 +86,7 @@ class AddUser extends Component {
     }
 
     const addUser = () => {
+      this.setState({ transaction: true })
       if (Number(this.state.userType) < 1) { return alert("Please select a user type from the dropdown") }
       window.contracts.AC_MGR.methods
         .OO_addUser(
@@ -97,6 +98,7 @@ class AddUser extends Component {
         .on("error", function (_error) {
           self.setState({ error: _error });
           self.setState({ result: _error.transactionHash });
+          this.setState({ transaction: false })
           return clearForm();
         })
         .on("receipt", (receipt) => {
@@ -104,10 +106,10 @@ class AddUser extends Component {
             "user added succesfully under asset class",
             self.state.assetClass
           );
+          this.setState({ transaction: false })
           console.log("tx receipt: ", receipt);
           return clearForm();
         });
-      this.setState({ transaction: true })
       console.log(this.state.txHash);
     };
 

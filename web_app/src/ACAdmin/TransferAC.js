@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { Home, XSquare, CheckCircle, AlertTriangle } from 'react-feather'
 
 
 class TransferAC extends Component {
@@ -66,10 +66,20 @@ class TransferAC extends Component {
       this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
     }
 
-    const _setAC = async (e) => {
-      this.setState({ assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
-      return console.log(e);
+    const help = async () => {
+      if (this.state.help === false) {
+        this.setState({ help: true })
       }
+      else {
+        this.setState({ help: false })
+      }
+    }
+
+    const _setAC = (_e) => {
+      const e = JSON.parse(_e);
+      console.log("In setAC", e);
+      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
+    }
 
     const _transferAssetClass = async () => {
       this.setState({help: false})
@@ -84,7 +94,7 @@ class TransferAC extends Component {
       console.log("AC", this.state.assetClass);
       console.log("addr: ", window.addr);
 
-      window.contracts.AC_TKN.methods
+      await window.contracts.AC_TKN.methods
         .safeTransferFrom(window.addr, this.state.to, this.state.assetClass)
         .send({ from: window.addr })
         .on("error", function (_error) {
@@ -102,6 +112,7 @@ class TransferAC extends Component {
           self.setState({ txStatus: receipt.status });
         });
       console.log(this.state.txHash);
+      return clearForm();
     };
 
     return (
@@ -122,7 +133,7 @@ class TransferAC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 && !this.state.assetClassSelected && (
+                    {window.addr > 0 && !this.state.assetClassSelected && (
             <>
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
@@ -151,9 +162,9 @@ class TransferAC extends Component {
           {window.addr > 0 && this.state.assetClassSelected && (
             <div>
               <Form.Row>
-                <Form.Group as={Col} controlId="formGridTo">
-                  <Form.Label className="formFont">To:</Form.Label>
-                  {this.state.transaction === false && (
+                 <Form.Group as={Col} controlId="formGridTo">
+                   <Form.Label className="formFont">To:</Form.Label>
+                   {this.state.transaction === false && (
                     <Form.Control
                       placeholder="Recipient Address"
                       required
@@ -182,12 +193,38 @@ class TransferAC extends Component {
                         />
                       </div>
                     </div>
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent">
+                        <AlertTriangle
+                          onClick={() => { help() }}
+                        />
+                      </div>
+                    </div>
                   </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                      Transfer AC is a function that transfers an asset class token to a chosen address. This will remove all permissions associated
+                      with asset class management related to this address. Proceed with caution.
+                    </div>
+                  )}
                 </>
               )}
             </div>
           )}
         </Form>
+        {
+          this.state.transaction === false && !this.state.assetClassSelected && (
+            <div className="assetSelectedResults">
+            </div>
+          )
+        }
+        {
+          this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
+            <div className="assetSelectedResults">
+              <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+            </div>
+          )
+        }
         {this.state.transaction === true && (
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>

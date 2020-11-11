@@ -424,6 +424,21 @@ div {
 
 }
 
+.resultsAC {
+  height: flex;
+  width: 59rem;
+  color: white;
+  background-color: #002a40;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  font-size: 2rem;
+  display: flex;
+  padding: 2rem;
+  margin-top: -0.2rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+}
+
 .resultsMobile {
   height: flex;
   width: 360px;
@@ -1159,6 +1174,22 @@ div {
   border-radius: 1rem 1rem 1rem 1rem;
   margin-top: -3.3rem;
   margin-left: 2rem;
+  z-index: 999;
+  opacity: 0.9;
+}
+
+.explainerTextBox3 {
+  display: flex;
+  background-color: white;
+  color: black;
+  height: 4.5rem;
+  width: 45rem;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  position: absolute;
+  border-radius: 1rem 1rem 1rem 1rem;
+  margin-top: 8rem;
+  margin-left: -2rem;
   z-index: 999;
   opacity: 0.9;
 }
