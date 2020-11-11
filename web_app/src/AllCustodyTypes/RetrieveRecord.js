@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, HelpCircle } from "react-feather";
+import { QRCode } from 'react-qrcode-logo';
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, HelpCircle, X } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -50,6 +51,15 @@ class RetrieveRecord extends Component {
       });
     };
 
+    this.printQR = async () => {
+      if (this.state.printQR === undefined) {
+        this.setState({ printQR: true })
+      }
+      else {
+        this.setState({ printQR: undefined })
+      }
+    }
+
     this.generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
@@ -73,7 +83,7 @@ class RetrieveRecord extends Component {
         for (let i = 0; i < images.length; i++) {
           component.push(
             <button key={"thumb" + String(i)} value={images[i]} className="assetImageSelectorButton" onClick={() => { showImage(images[i]) }}>
-              <img src={images[i]} className="imageSelectorImage" alt =""/>
+              <img src={images[i]} className="imageSelectorImage" alt="" />
             </button>
           )
         }
@@ -86,20 +96,36 @@ class RetrieveRecord extends Component {
         let component = [];
 
         for (let i = 0; i < text.length; i++) {
-          component.push(
-            <>
-              <h4 key={"text" + String(i)} className="cardDescriptionSelected">{textNames[i]}: {text[i]}</h4>
+          if (textNames[i] !== "Description") {
+            component.push(
+              <>
+                <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">
+                  {textNames[i]}:
+                  <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContent">
+                    {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+                <br />
+              </>
+            )
+          }
+          else {
+            component.unshift(<>
+              <h4 key="TextElementDesc" className="cardDescriptionSelected">
+                Description:
+                <h4 key="nestedTextDesc" className="cardDescriptionSelectedContent">
+                  {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
               <br />
-            </>
-          )
+            </>)
+          }
+
         }
 
         return component
       }
-
       return (
-        <div className="assetDashboardSelected">
-          <style type="text/css"> {`
+        <div key="selectedAsset">
+          <div>
+            <div className="assetDashboardSelected">
+              <style type="text/css"> {`
   
               .card {
                 width: 100%;
@@ -111,47 +137,134 @@ class RetrieveRecord extends Component {
                 color: white;
                 word-break: break-all;
               }
+
+              .btn-selectedImage {
+                background-color: #005480;
+                color: white;
+                height: 4rem;
+                margin-top: -20rem;
+                margin-left: -0.8rem;
+                font-weight: bold;
+                font-size: 2.2rem;
+                border-radius: 0rem 0rem 0.3rem 0.3rem;
+              }
+
+              .btn-selectedAsset {
+                background-color: #005480;
+                color: white;
+                font-weight: bold;
+                font-size: 1.2rem;
+              }
+
+              .btn-QR {
+                background-color: #002a40;
+                color: white;
+                height: 2rem;
+                width: 17rem;
+                margin-top: auto;
+                // margin-left: -0.8rem;
+                font-weight: bold;
+                font-size: 1rem;
+                border-radius: 0rem 0rem 0.3rem 0.3rem;
+                justify-content: center;
+              }
   
             `}
-          </style>
-          <div className="card" value="100">
-            <div className="row no-gutters">
-              <div className="assetSelecedInfo">
-                <button className="assetImageButton" onClick={() => { openPhotoNT(this.state.selectedImage) }}>
-                  <img src={this.state.selectedImage} className="assetImageSelected" alt =""/>
-                </button>
-                <p className="cardNameSelected">Name : {obj.name}</p>
-                <p className="cardAcSelected">Asset Class : {obj.assetClass}</p>
-                <p className="cardStatusSelected">Status : {status}</p>
-                <div className="imageSelector">
-                  {generateThumbs()}
-                </div>
-                <div className="cardSearchIdxForm">
-                  <h4 className="cardIdxSelected">IDX : {obj.idxHash}</h4>
-                </div>
-                <div className="cardDescription-search">
-                  {generateTextList()}
-                </div>
-              </div>
-              {this.state.moreInfo && (
-                <div className="submitButtonRRQR3">
-                  <div className="submitButtonRRQR3Content">
-                    <CornerUpLeft
-                      size={35}
-                      onClick={() => { this.setState({ moreInfo: false, ipfsObject: undefined, assetObj: undefined, Checkbox: false }) }}
-                    />
-                  </div>
-                </div>
-              )}
+              </style>
+              <div className="card" value="100">
+                <div className="row no-gutters">
+                  <div className="assetSelecedInfo">
+                    <div>
+                      <button
+                        onClick={() => { this.printQR() }}
+                        className="buttonQR"
+                      >
+                        <img
+                          className="imageFormQR"
+                          title="Asset QR Code"
+                          src={require("../Resources/QRPIC.png")}
+                          alt="Pruf Print" />
+                      </button>
+                    </div>
+                    {this.state.printQR && (
+                      <div>
+                        <div className="displayQR">
+                          <div className="QR">
+                            {this.state.idxHashRaw !== "" && (
+                              <QRCode
+                                value={this.state.idxHashRaw}
+                                size="150"
+                                fgColor="#002a40"
+                                logoWidth="35"
+                                logoHeight="46"
+                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                              />
+                            )}
+                            {this.state.idxHashRaw === "" && (
+                              <QRCode
+                                value={obj.idxHash}
+                                size="150"
+                                fgColor="#002a40"
+                                logoWidth="35"
+                                logoHeight="46"
+                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
-            </div>
+                    <button className="assetImageButtonSelected">
+                      {this.state.selectedImage !== "" ?
+                        (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
+                        : (<>{obj.identicon}</>)}
+                    </button>
+                    <p className="cardNameSelected">Name: {obj.name}</p>
+                    <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
+                    <p className="cardStatusSelected">Status: {obj.status}</p>
+                    {images.length !== 0 && (
+                      <div className="imageSelector">
+                        {generateThumbs()}
+                      </div>
+                    )}
+                    {this.state.idxHashRaw !== "" && (
+                      <div className="cardSelectedIdxForm">
+                        <h4 className="cardIdxSelected">IDX : {this.state.idxHashRaw}</h4>
+                      </div>
+                    )}
+                    {this.state.idxHashRaw === "" && (
+                      <div className="cardSelectedIdxForm">
+                        <h4 className="cardIdxSelected">IDX : {obj.idxHash}</h4>
+                      </div>
+                    )}
+                    <div className="cardDescriptionFormSelected">
+                      {generateTextList()}
+                    </div>
+                  </div>
+                  {this.state.moreInfo && (
+                    <div className="cardButton2">
+                      <div className="cardButton2Content">
+                        <CornerUpLeft
+                          size={35}
+                          onClick={() => { this.setState({ moreInfo: false, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "" }) }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+              </div >
+            </div >
           </div>
         </div>
+
+
       )
     }
 
     this.handlePacket = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       let idxHash = window.sentPacket;
 
       this.setState({
@@ -182,13 +295,13 @@ class RetrieveRecord extends Component {
             status = Object.values(_result)[0]
           }
         })
-      this.setState({retrievedAssetClass: assetClass, retrievedStatus: status});
+      this.setState({ retrievedAssetClass: assetClass, retrievedStatus: status });
       return this.getIPFSJSONObject(window.utils.getIpfsHashFromBytes32(hash))
 
     }
 
     this._retrieveRecordQR = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ QRRR: undefined, assetFound: "" })
       const self = this;
       var ipfsHash;
@@ -201,7 +314,6 @@ class RetrieveRecord extends Component {
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(
-          // { from: window.addr },
           function (_error, _result) {
             if (_error) {
               console.log(_error)
@@ -326,6 +438,7 @@ class RetrieveRecord extends Component {
       QRRR: undefined,
       assetFound: undefined,
       Checkbox: false,
+      idxHashRaw: "",
       help: false
     };
   }
@@ -419,7 +532,7 @@ class RetrieveRecord extends Component {
     }
 
     const _retrieveRecord = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       const self = this;
       var ipfsHash;
       var tempResult;
@@ -506,6 +619,7 @@ class RetrieveRecord extends Component {
           </div>
         </div >
       )
+
     }
     else {
       return (
@@ -533,7 +647,7 @@ class RetrieveRecord extends Component {
                       />
                       <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                       {this.state.Checkbox === true && (
-                        <Form.Row>
+                        <Form.Group>
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
                           <Form.Control
                             placeholder="Idx Hash"
@@ -541,7 +655,7 @@ class RetrieveRecord extends Component {
                             onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
                             size="lg"
                           />
-                        </Form.Row>
+                        </Form.Group>
                       )}
                     </div>
                   )}
