@@ -188,7 +188,7 @@ class RetrieveRecord extends Component {
                     </div>
                     {this.state.printQR && (
                       <div>
-                        <div className="displayQR">
+                        <div className="displayQRRR">
                           <div className="QR">
                             {this.state.idxHashRaw !== "" && (
                               <QRCode

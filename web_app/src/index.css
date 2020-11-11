@@ -485,6 +485,20 @@ div {
   justify-content: center;
 }
 
+.displayQRRR {
+  display: flex;
+  width: 17.5rem;
+  height: 17.5rem;
+  background-color: #ffffff;
+  position: absolute;
+  z-index: 999;
+  flex-direction: column;
+  border-radius: 1rem 0rem 1rem 1rem;
+  margin-left: 45rem;
+  margin-top: 4rem;
+  justify-content: center;
+}
+
 .displayFooterQR {
   display: flex;
   height: 3rem;
