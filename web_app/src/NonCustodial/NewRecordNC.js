@@ -67,7 +67,9 @@ class NewRecordNC extends Component {
       document.getElementById("MainForm").reset()
       this.setState({
         txStatus: null,
-        help: false
+        help: false,
+        assetClassSelected: false,
+        idxSubmitted: false,
       })
     }
 
@@ -129,7 +131,7 @@ class NewRecordNC extends Component {
     }
 
     const checkAsset = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       let ipfsObj = { photo: {}, text: {}, name: "" }
 
       if (this.state.nameTag !== "" && this.state.nameTag !== undefined) {
@@ -573,6 +575,11 @@ class NewRecordNC extends Component {
           </div>)}
         {this.state.transaction === false && (
           <div className="results">
+            {
+              this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
+                <div className="assetSelectedContentHead">New Record Being Made in Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+              )
+            }
             {this.state.txHash > 0 && ( //conditional rendering
               <div>
                 {this.state.txStatus === false && (

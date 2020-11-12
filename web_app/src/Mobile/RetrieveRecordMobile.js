@@ -152,7 +152,7 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false }) }}
+                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined }) }}
               />
             </div>
           </div>
@@ -253,7 +253,8 @@ class RetrieveRecordMobile extends Component {
 
       return this.setState({
         authLevel: window.authLevel,
-        QRreader: undefined
+        QRreader: undefined,
+        moreInfo: true,
       })
     }
 
@@ -339,6 +340,7 @@ class RetrieveRecordMobile extends Component {
       QRRR: undefined,
       assetFound: undefined,
       Checkbox: false,
+      moreInfo: false,
     };
   }
 
@@ -486,7 +488,7 @@ class RetrieveRecordMobile extends Component {
 
       await this.getIPFSJSONObject(ipfsHash);
 
-      return this.setState({ authLevel: window.authLevel })
+      return this.setState({ authLevel: window.authLevel, moreInfo: true, })
     }
 
     // if (this.state.wasSentPacket === true) {
@@ -514,7 +516,7 @@ class RetrieveRecordMobile extends Component {
     // }
     return (
       <div>
-        {!this.state.moreInfo && this.state.QRreader === false && (
+        {this.state.moreInfo === false && this.state.QRreader === false && (
           <div>
             <div>
               <div className="mediaLinkADHomeMobile">
@@ -657,7 +659,7 @@ class RetrieveRecordMobile extends Component {
           </div>
         )}
 
-        {this.state.moreInfo && ( //conditional rendering
+        {this.state.moreInfo === true && ( //conditional rendering
           <div>
             <div>
               <h2 className="assetDashboardHeaderMobile">Here's what we found: </h2>
