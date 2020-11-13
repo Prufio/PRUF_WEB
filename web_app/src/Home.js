@@ -96,17 +96,17 @@ class Home extends Component {
 
     return (
       <div>
-        <div className="homeForm">
-                  <button
-                  className="imageButton"
-                    title="Check out our website!"
-                    onClick={() => { window.open("https://www.pruf.io", "_blank") }}
-                  >
-                    <img
-                    className="prufARCroppedForm"
-                      src={require("./Resources/Pruf AR (2).png")}
-                      alt="Pruf Logo" />
-                  </button>
+        <div className="homeFormTestNet">
+          <button
+            className="imageButtonTestNet"
+            title="Check out our website!"
+            onClick={() => { window.open("https://www.pruf.io", "_blank") }}
+          >
+            <img
+              className="prufARCroppedForm"
+              src={require("./Resources/Pruf AR (2).png")}
+              alt="Pruf Logo" />
+          </button>
           {/* <img className="prufARCroppedForm" src={require("./Resources/Pruf AR (2).png")} alt="Pruf Logo Home" /> */}
           {/* <br></br>
           <div> {window.addr !== undefined && window.assetClass > 0 && (<div>Operating in asset class {window.assetClass} ({window.assetClassName}) as {window.authLevel}</div>)}</div>
@@ -140,9 +140,11 @@ class Home extends Component {
               <br></br>
 
               <Form.Row>
-                <h1 className="loading">
-                  Connecting to the Blockchain
+                <div className="homeErrorTextTestNet">
+                  <h1 className="loading">
+                    Connecting to the Blockchain
                  </h1>
+                </div>
               </Form.Row>
             </div>
           )}
@@ -158,12 +160,12 @@ class Home extends Component {
           {window._contracts !== undefined && window.addr === undefined && (
             <div className="text">
               <Form.Row>
-                <h1 className="homeErrorText" >
+                <h1 className="homeErrorTextTestNet" >
                   Unable to Get User Address
                 </h1>
               </Form.Row>
               <Form.Row>
-                <h2 className="home2ndRow">
+                <h2 className="home2ndRowTestNet">
                   Please
                   <a onClick={() => {
                     alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ");
@@ -177,7 +179,14 @@ class Home extends Component {
               </Form.Row>
             </div>
           )}
-          <div className="mediaLinkHome">
+          <div className="homeDisclaimer">
+              Disclaimer: This current version of the PRuF Web Application is in the test net phase, and is to be used for test purposes only. All ethereum 
+              transactions are hosted on the Kovan VEM. Do not use a Web3 provider connected to a main net ethereum address, or your private account information
+              is liable to compromised by third-parties. While live on the test net, this application is not secure. Any information provided is liable to be 
+              compromised by third-parties. Do not input any sensitive information into the application unless your primary intent is to make that information
+              public. PRuF is not liable for theft of any sensitve information or goods rooted from the use of this current version of the application.
+          </div>
+          <div className="mediaLinkHomeTestNet">
             <a className="mediaLinkHomeContent"><GitHub size={25} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
             <a className="mediaLinkHomeContent"><Mail size={25} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
             <a className="mediaLinkHomeContent"><Twitter size={25} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>

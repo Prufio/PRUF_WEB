@@ -171,6 +171,42 @@ div {
   z-index: 2;
 }
 
+.homeFormTestNet {
+  height: 50rem;
+  width: 75rem;
+  color: white;
+  display: flex;
+  background-image: url(./Resources/DarkBlueBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;  
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  font-weight: bold;
+  font-size: 3rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.96;
+  z-index: 2;
+}
+
+.homeDisclaimer {
+  height: 15rem;
+  width: 70rem;
+  color: rgb(0, 0, 0);
+  display: flex;
+  background-color: #cccccc;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 1.4rem;
+  position: absolute;
+  margin-top: 30rem;
+  padding: 0.3rem;
+  opacity: 0.8;
+  z-index: 2;
+}
+
 .homeFormMobile {
   height: flex;
   width: 360px;
@@ -614,6 +650,13 @@ div {
   border: 0px transparent; 
   background-color: transparent; 
   object-fit: cover;
+}
+
+.imageButtonTestNet {
+  border: 0px transparent; 
+  background-color: transparent; 
+  object-fit: cover;
+  margin-bottom: 23rem;
 }
 
 .imageButtonU {
@@ -1233,6 +1276,11 @@ margin-top: 3rem;
 margin-bottom: -3rem;
 }
 
+.homeErrorTextTestNet {
+  margin-top: -22rem;
+  /* margin-bottom: -3rem; */
+  }
+
 .costText {
   display: flex;
   color: rgb(255, 255, 255);
@@ -1264,6 +1312,12 @@ margin-bottom: -3rem;
 .home2ndRow {
   font-size: 1.6rem;
   margin-top: 3rem;
+  margin-bottom: -3rem;
+}
+
+.home2ndRowTestNet {
+  font-size: 1.6rem;
+  margin-top: -19rem;
   margin-bottom: -3rem;
 }
 
@@ -1782,6 +1836,15 @@ margin-bottom: -3rem;
   width: 45rem;
   height: fit-content;
   margin-top: 30rem;
+  justify-content: space-between;
+  position: absolute;
+}
+
+.mediaLinkHomeTestNet {
+  display: flex;
+  width: 45rem;
+  height: fit-content;
+  margin-top: 10rem;
   justify-content: space-between;
   position: absolute;
 }

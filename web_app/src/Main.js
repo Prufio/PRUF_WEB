@@ -312,7 +312,19 @@ class Main extends Component {
                           <br></br>
                           {this.state.IDTokenBalance && (
                             <h4>
-                              Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)} {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)}
+                              Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)}
+                              {this.state.IDTokenBalance === "0" && (
+                                <>
+                                <X className="userIDBalance0" />
+                              <Button
+                                variant="assetDashboard"
+                                title="Asset Dashboard"
+                                onClick={() => { this.mintID() }}>
+                                  Mint ID Token
+                              </Button>
+                              </>
+                              )}
+                              {/* {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)} */}
                             </h4>
                           )}
                           <br></br>
@@ -549,6 +561,35 @@ class Main extends Component {
         this.setState({ buildReady: false })
       }
     }, 100)
+
+     this.mintID = async () => {//create a new asset record
+      const self = this;
+
+      this.setState({
+        help: false,
+        txStatus: false,
+        txHash: "",
+        error: undefined,
+        result: "",
+        transaction: true
+      })
+
+      console.log("addr: ", window.addr);
+
+       await window.contracts.ID_TKN.methods
+        .mintPRUF_IDToken(
+          window.addr,
+          "20"
+        )
+        .send({ from: window.addr })
+        .on("error", function (_error) {
+          self.setState({ transaction: false })
+          alert("Something went wrong!")
+        })
+        .on("receipt", (receipt) => {
+          self.setState({ transaction: false })
+        });
+    }
 
     this.toggleMenu = async (menuChoice) => {
       if (window.menuChange === undefined) {
@@ -1147,9 +1188,9 @@ class Main extends Component {
     //window.removeEventListener("ownerGetter", this.getOwner());
   }
 
-  render(
+  render() {
 
-  ) {//render continuously produces an up-to-date stateful webpage  
+   //render continuously produces an up-to-date stateful webpage  
 
     if (this.state.hasError === true) {
       return (<div><h1>)-:</h1><h2> An error occoured. Ensure you are connected to metamask and reload the page. Mobile support coming soon.</h2></div>)
