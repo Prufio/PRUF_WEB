@@ -104,7 +104,7 @@ class Home extends Component {
           >
             <img
               className="prufARCroppedForm"
-              src={require("./Resources/Pruf AR (2).png")}
+              src={require("./Resources/Images/Pruf AR (2).png")}
               alt="Pruf Logo" />
           </button>
           {/* <img className="prufARCroppedForm" src={require("./Resources/Pruf AR (2).png")} alt="Pruf Logo Home" /> */}
@@ -180,7 +180,7 @@ class Home extends Component {
             </div>
           )}
           <div className="homeDisclaimer">
-              IMPORTANT: This version of the PRuF Web Application is in testing, and is to be used for test and demonstration purposes only. All Ethereum 
+              IMPORTANT : This version of the PRuF Web Application is in testing, and is to be used for test and demonstration purposes only. All Ethereum 
               transactions are hosted on the Kovan EVM. Do not use a Web3 provider connected to a mainnet Ethereum address, or your private account information
               could be compromised. This application is not secure in its current form. Any information provided could be visible to third-parties.
               Do not submit any sensitive information unless your primary intent is to make that information public. 

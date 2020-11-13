@@ -299,7 +299,7 @@ class VerifyLiteMobile extends Component {
                       <img
                         className="scanImageFormQR"
                         title="Scan QR Code"
-                        src={require("../Resources/QRSCANPIC.png")}
+                        src={require("../Resources/Images/QRSCANPIC.png")}
                         alt="Pruf Print" />
                     </button>
                   </div>

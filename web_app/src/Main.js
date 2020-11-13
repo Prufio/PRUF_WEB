@@ -66,7 +66,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufReadOnly.png")}
+                      src={require("./Resources/Images/PrufReadOnly.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -78,7 +78,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufTokenMinter.png")}
+                      src={require("./Resources/Images/PrufTokenMinter.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -90,7 +90,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufTokenHolder.png")}
+                      src={require("./Resources/Images/PrufTokenHolder.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -102,7 +102,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufACAdmin.png")}
+                      src={require("./Resources/Images/PrufACAdmin.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -114,7 +114,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufAssetMinter.png")}
+                      src={require("./Resources/Images/PrufAssetMinter.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -126,7 +126,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/PrufBasic.png")}
+                      src={require("./Resources/Images/PrufBasic.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
@@ -152,7 +152,7 @@ class Main extends Component {
                       <img
                         className="imageFormU"
                         title="Find out More!"
-                        src={require("./Resources/favicon pruf no bg.png")}
+                        src={require("./Resources/Images/favicon pruf no bg.png")}
                         alt="Pruf U" />
                     </button>
                     <div className="siteInfoBox">

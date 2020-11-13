@@ -182,7 +182,7 @@ class RetrieveRecord extends Component {
                         <img
                           className="imageFormQR"
                           title="Asset QR Code"
-                          src={require("../Resources/QRPIC.png")}
+                          src={require("../Resources/Images/QRPIC.png")}
                           alt="Pruf Print" />
                       </button>
                     </div>
@@ -732,7 +732,7 @@ class RetrieveRecord extends Component {
                         <img
                           className="scanImageFormQR"
                           title="Scan QR Code"
-                          src={require("../Resources/QRSCANPIC.png")}
+                          src={require("../Resources/Images/QRSCANPIC.png")}
                           alt="Pruf Print" />
                       </button>
                     </div>

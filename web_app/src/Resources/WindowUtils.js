@@ -1415,7 +1415,7 @@ function buildWindowUtils() {
         <div className="printFormContent">
           <img
             className="printImageBackgroundForm"
-            src={require("../Resources/PrufPrintBackground.png")}
+            src={require("../Resources/Images/PrufPrintBackground.png")}
             alt="Pruf Print Background" />
           <div className="printQR2">
             <QRCode

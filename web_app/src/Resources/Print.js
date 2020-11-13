@@ -27,7 +27,7 @@ class Example extends React.Component {
                                     <img
                                         className="printImageForm"
                                         title="Print Asset Info"
-                                        src={require("../Resources/print.png")}
+                                        src={require("../Resources/Images/print.png")}
                                         alt="Pruf Print" />
                                 </button>
                             </div>

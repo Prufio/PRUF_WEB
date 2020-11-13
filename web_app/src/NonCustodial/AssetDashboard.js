@@ -293,7 +293,7 @@ class AssetDashboard extends React.Component {
                         <img
                           className="imageFormQR"
                           title="Asset QR Code"
-                          src={require("../Resources/QRPIC.png")}
+                          src={require("../Resources/Images/QRPIC.png")}
                           alt="Pruf Print" />
                       </button>
                     </div>

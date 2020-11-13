@@ -6,7 +6,7 @@
 }
 
 body {
-  background-image: url(./Resources/BlueBackMobile.png);
+  background-image: url(./Resources/Images/BlueBackMobile.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -187,7 +187,7 @@ div {
   width: 75rem;
   color: white;
   display: flex;
-  background-image: url(./Resources/DarkBlueBack.png);
+  background-image: url(./Resources/Images/DarkBlueBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -207,7 +207,7 @@ div {
   width: 75rem;
   color: white;
   display: flex;
-  background-image: url(./Resources/DarkBlueBack.png);
+  background-image: url(./Resources/Images/DarkBlueBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -243,7 +243,7 @@ div {
   width: 360px;
   color: white;
   display: flex;
-  background-image: url(./Resources/DarkBlueBack.png);
+  background-image: url(./Resources/Images/DarkBlueBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -584,7 +584,7 @@ div {
   height: 67rem;
   width: 30rem;
   position: absolute;
-  background-image: url(./Resources/DarkBlueBack.png);
+  background-image: url(./Resources/Images/DarkBlueBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -1378,7 +1378,7 @@ margin-bottom: -3rem;
   object-fit: cover;
   z-index: 5;
   /* background-color:#005480; */
-  background-image: url(./Resources/MediumBlueBack.png);
+  background-image: url(./Resources/Images/MediumBlueBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -1407,7 +1407,7 @@ margin-bottom: -3rem;
   object-fit: cover;
   z-index: 1000;
   /* background-color: #cccccc; */
-  background-image: url(./Resources/userBack.png);
+  background-image: url(./Resources/Images/userBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
