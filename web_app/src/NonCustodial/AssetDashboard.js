@@ -99,9 +99,9 @@ class AssetDashboard extends React.Component {
     this.newRecord = async () => {
       await window.utils.determineTokenBalance()
       console.log("IDholderBool", window.IDHolderBool)
-      if (window.IDHolderBool === false && window.confirm("You are not authorized to mint asset tokens. If you are interested in getting authorized, click ok to route to our website for more information."))
+      if (window.IDHolderBool === false && window.confirm("You are not currently authorized to mint asset tokens. If you are interested in getting authorized, click ok to talk to one of our agents."))
       {
-        window.open('https://www.pruf.io')
+        window.open("https://t.me/prufteam", "_blank")
         return
       }
       else if (window.IDHolderBool === true)

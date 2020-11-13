@@ -147,7 +147,7 @@ class Main extends Component {
                     </div>
                     <button
                       className="imageButtonU"
-                      onClick={() => { window.open("https://www.pruf.io", "_blank") }}
+                      onClick={() => { window.open("https://pruf.io", "_blank") }}
                     >
                       <img
                         className="imageFormU"
@@ -160,23 +160,23 @@ class Main extends Component {
                         Website Last Updated:
                   </h3>
                       <h3 className="siteInfoBoxContent">
-                        November 9, 2020
+                        November 13, 2020
                   </h3>
                     </div>
                     <button
                       className="imageButtonUser"
                       onClick={() => { this.userMenu() }}>
                       {window.addr !== undefined && (
-                      <Robohash
-                        className="imageFormUser"
-                        name={window.addr}
-                      />
-                      )} 
+                        <Robohash
+                          className="imageFormUser"
+                          name={window.addr}
+                        />
+                      )}
                       {window.addr === undefined && (
-                      <User 
-                        className="imageFormUser" 
-                        size={48}
-                      />
+                        <User
+                          className="imageFormUser"
+                          size={48}
+                        />
                       )}
                     </button>
                     <div className="hamburgerMenuLink">
@@ -269,65 +269,77 @@ class Main extends Component {
                             </h4>
                           )}
                           {this.state.addr > 0 && (
-                            <h4>
-                              Currently serving :
+                            <>
+                              <h4>
+                                Currently serving :
                               <Button
-                                variant="etherscan"
-                                title="Check it out on Etherscan!"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
-                                {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
-                              </Button>
-                            </h4>
+                                  variant="etherscan"
+                                  title="Check it out on Etherscan!"
+                                  onClick={() => { this.setState({ userMenu: undefined }); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
+                                  {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
+                                </Button>
+                              </h4>
+                              <br></br>
+                            </>
                           )}
-                          <br></br>
                           {this.state.ETHBalance && (
-                            <h4>
-                              ETH Balance : {this.state.ETHBalance.substring(0, 6)}
-                            </h4>
+                            <>
+                              <h4>
+                                ETH Balance : {this.state.ETHBalance.substring(0, 6)}
+                              </h4>
+                              <br></br>
+                            </>
                           )}
-                          <br></br>
                           {this.state.prufBalance && (
-                            <h4>
-                              PRUF Balance : {this.state.prufBalance}
-                            </h4>
+                            <>
+                              <h4>
+                                PRUF Balance : {this.state.prufBalance}
+                              </h4>
+                              <br></br>
+                            </>
                           )}
-                          <br></br>
                           {this.state.assetClassBalance && (
-                            <h4>
-                              AssetClasses : {this.state.assetClassBalance}
-                            </h4>
+                            <>
+                              <h4>
+                                AssetClasses : {this.state.assetClassBalance}
+                              </h4>
+                              <br></br>
+                            </>
                           )}
-                          <br></br>
                           {this.state.assetBalance && (
-                            <h4>
-                              Assets :
+                            <>
+                              <h4>
+                                Assets :
                               <Button
-                                variant="assetDashboard"
-                                title="Asset Dashboard"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.location.href = '/#/asset-dashboard' }}>
-                                {this.state.assetBalance}
-                              </Button>
-                            </h4>
+                                  variant="assetDashboard"
+                                  title="Asset Dashboard"
+                                  onClick={() => { this.setState({ userMenu: undefined }); window.location.href = '/#/asset-dashboard' }}>
+                                  {this.state.assetBalance}
+                                </Button>
+                              </h4>
+                              <br></br>
+                            </>
                           )}
-                          <br></br>
                           {this.state.IDTokenBalance && (
-                            <h4>
-                              Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)}
-                              {this.state.IDTokenBalance === "0" && (
-                                <>
-                                <X className="userIDBalance0" />
-                              <Button
-                                variant="assetDashboard"
-                                title="Asset Dashboard"
-                                onClick={() => { this.mintID() }}>
-                                  Mint ID Token
+                            <>
+                              <h4>
+                                Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)}
+                                {this.state.IDTokenBalance === "0" && (
+                                  <>
+                                    <X className="userIDBalance0" />
+                                    <Button
+                                      variant="assetDashboard"
+                                      title="Asset Dashboard"
+                                      onClick={() => { window.open("https://t.me/prufteam", "_blank") }}>
+                                      Get ID Token
                               </Button>
-                              </>
-                              )}
-                              {/* {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)} */}
-                            </h4>
+                                  </>
+                                )}
+                                {/* {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)} */}
+                              </h4>
+                              <br></br>
+                            </>
                           )}
-                          <br></br>
                         </div>
                       )}
                     </div>
@@ -348,9 +360,9 @@ class Main extends Component {
               </div>
             </div>
             <div className="pageForm">
-              <ParticleBox/>
-                <style type="text/css">
-                  {`
+              <ParticleBox />
+              <style type="text/css">
+                {`
                       .btn-primary {
                         background-color: #00a8ff;
                         color: white;
@@ -430,7 +442,7 @@ class Main extends Component {
                         color: white !important;
                       }
                    `}
-                </style>
+              </style>
               <div>
                 <Route exact path="/" component={Home} />
                 {Router(this.state.routeRequest)}
@@ -561,35 +573,6 @@ class Main extends Component {
         this.setState({ buildReady: false })
       }
     }, 100)
-
-     this.mintID = async () => {//create a new asset record
-      const self = this;
-
-      this.setState({
-        help: false,
-        txStatus: false,
-        txHash: "",
-        error: undefined,
-        result: "",
-        transaction: true
-      })
-
-      console.log("addr: ", window.addr);
-
-       await window.contracts.ID_TKN.methods
-        .mintPRUF_IDToken(
-          window.addr,
-          "20"
-        )
-        .send({ from: window.addr })
-        .on("error", function (_error) {
-          self.setState({ transaction: false })
-          alert("Something went wrong!")
-        })
-        .on("receipt", (receipt) => {
-          self.setState({ transaction: false })
-        });
-    }
 
     this.toggleMenu = async (menuChoice) => {
       if (window.menuChange === undefined) {
@@ -877,7 +860,8 @@ class Main extends Component {
                 IDHolderBool: undefined,
                 custodyType: undefined,
                 hasFetchedBalances: undefined,
-                ETHBalance: undefined
+                ETHBalance: undefined,
+                prufBalance: undefined,
               })
 
               window.addr = "";
@@ -1113,7 +1097,7 @@ class Main extends Component {
         routeRequest: "noAddr"
       })
 
-       _ipfs = new this.state.IPFS({
+      _ipfs = new this.state.IPFS({
         host: "ipfs.infura.io",
         port: 5001,
         protocol: "https",
@@ -1190,7 +1174,7 @@ class Main extends Component {
 
   render() {
 
-   //render continuously produces an up-to-date stateful webpage  
+    //render continuously produces an up-to-date stateful webpage  
 
     if (this.state.hasError === true) {
       return (<div><h1>)-:</h1><h2> An error occoured. Ensure you are connected to metamask and reload the page. Mobile support coming soon.</h2></div>)

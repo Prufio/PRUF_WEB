@@ -192,17 +192,17 @@ div {
 }
 
 .homeDisclaimer {
-  height: 15rem;
+  height: 14rem;
   width: 70rem;
-  color: rgb(0, 0, 0);
+  color: rgb(206, 27, 27);
   display: flex;
-  background-color: #cccccc;
+  background-color: #ffffff;
   border-radius: 0.5rem;
   font-weight: bold;
   font-size: 1.4rem;
   position: absolute;
   margin-top: 30rem;
-  padding: 0.3rem;
+  padding: 0.5rem;
   opacity: 0.8;
   z-index: 2;
 }
@@ -570,7 +570,7 @@ div {
 
 .hamburgerDropdownUserInfo {
   display: flex;
-  width: 27rem;
+  width: 26rem;
   height: flex;
   color: #ffffff;
   background-color: #002a40;
@@ -581,7 +581,7 @@ div {
   padding-top: 1rem;
   padding-left: 1rem;
   border-radius: 0rem 0rem 1rem 0rem;
-  margin-left: 57rem;
+  margin-left: 56rem;
 }
 
 .hamburgerDropdownSettings {
@@ -670,11 +670,12 @@ div {
   margin-top: 53rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
+  z-index: 999;
 }
 
 .imageButtonU:hover {
-  -webkit-transform: translateY(-5px);
-  transform: translateY(-5px);
+  -webkit-transform: translateY(5px);
+  transform: translateY(5px);
 }
 
 .imageButtonUser {
@@ -1361,7 +1362,7 @@ margin-bottom: -3rem;
   width: 45px;
   height: 45px;
   object-fit: cover;
-  z-index: 5;
+  z-index: 999;
   background-color:transparent;
   margin-left: 20rem;
 }
@@ -1374,7 +1375,12 @@ margin-bottom: -3rem;
   height: 70px;
   object-fit: cover;
   z-index: 1000;
-  background-color: #cccccc;
+  /* background-color: #cccccc; */
+  background-image: url(./Resources/userBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;  
   -webkit-transition: -webkit-transform .7s ease-in-out;
   transition:         transform .7s ease-in-out;
   margin-left: 30rem;

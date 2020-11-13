@@ -100,7 +100,7 @@ class Home extends Component {
           <button
             className="imageButtonTestNet"
             title="Check out our website!"
-            onClick={() => { window.open("https://www.pruf.io", "_blank") }}
+            onClick={() => { window.open("https://pruf.io", "_blank") }}
           >
             <img
               className="prufARCroppedForm"
@@ -180,11 +180,11 @@ class Home extends Component {
             </div>
           )}
           <div className="homeDisclaimer">
-              Disclaimer: This current version of the PRuF Web Application is in the test net phase, and is to be used for test purposes only. All ethereum 
-              transactions are hosted on the Kovan VEM. Do not use a Web3 provider connected to a main net ethereum address, or your private account information
-              is liable to compromised by third-parties. While live on the test net, this application is not secure. Any information provided is liable to be 
-              compromised by third-parties. Do not input any sensitive information into the application unless your primary intent is to make that information
-              public. PRuF is not liable for theft of any sensitve information or goods rooted from the use of this current version of the application.
+              IMPORTANT: This version of the PRuF Web Application is in testing, and is to be used for test and demonstration purposes only. All Ethereum 
+              transactions are hosted on the Kovan EVM. Do not use a Web3 provider connected to a mainnet Ethereum address, or your private account information
+              could be compromised. This application is not secure in its current form. Any information provided could be visible to third-parties.
+              Do not submit any sensitive information unless your primary intent is to make that information public. 
+              All information entered here will be lost when the kovan network is reset.
           </div>
           <div className="mediaLinkHomeTestNet">
             <a className="mediaLinkHomeContent"><GitHub size={25} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
