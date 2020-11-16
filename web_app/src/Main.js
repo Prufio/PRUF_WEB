@@ -160,7 +160,7 @@ class Main extends Component {
                         Website Last Updated:
                   </h3>
                       <h3 className="siteInfoBoxContent">
-                        November 13, 2020
+                        November 16, 2020
                   </h3>
                     </div>
                     <button
@@ -175,7 +175,7 @@ class Main extends Component {
                       {window.addr === undefined && (
                         <User
                           className="imageFormUser"
-                          size={48}
+                          size={30}
                         />
                       )}
                     </button>
