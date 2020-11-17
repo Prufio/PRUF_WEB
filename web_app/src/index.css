@@ -232,7 +232,7 @@ div {
   font-weight: bold;
   font-size: 1.4rem;
   position: absolute;
-  margin-top: 30rem;
+  margin-top: 30.5rem;
   padding: 0.5rem;
   opacity: 0.8;
   z-index: 2;
@@ -687,7 +687,7 @@ div {
   border: 0px transparent; 
   background-color: transparent; 
   object-fit: cover;
-  margin-bottom: 23rem;
+  margin-bottom: 22rem;
 }
 
 .imageButtonU {
@@ -1881,7 +1881,7 @@ margin-bottom: -3rem;
   display: flex;
   width: 45rem;
   height: fit-content;
-  margin-top: 10rem;
+  margin-top: 10.5rem;
   justify-content: space-between;
   position: absolute;
 }
