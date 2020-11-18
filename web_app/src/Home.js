@@ -180,11 +180,13 @@ class Home extends Component {
             </div>
           )}
           <div className="homeDisclaimer">
-              IMPORTANT : This version of the PRuF Web Application is in testing, and is to be used for test and demonstration purposes only. All Ethereum 
-              transactions are hosted on the Kovan EVM. Do not use a Web3 provider connected to a mainnet Ethereum address, or your private account information
-              could be compromised. This application is not secure in its current form. Any information provided could be visible to third-parties.
-              Do not submit any sensitive information unless your primary intent is to make that information public. 
-              All information entered here will be lost when the kovan network is reset.
+            {/* Do not use a Web3 provider connected to a mainnet Ethereum address, or your private account information
+              could be compromised.  */}
+            {/* This application is not secure in its current form. */}
+              IMPORTANT : This version of the PRuF Web Application is in testing, and is to be used for test and demonstration purposes only. All Ethereum
+              transactions are hosted on the Kovan EVM. Any information provided within this application may be visible to third-parties. Do not submit 
+              any sensitive information unless your primary intent is to make that information public. All information entered here will be lost when 
+              the kovan network is reset.
           </div>
           <div className="mediaLinkHomeTestNet">
             <a className="mediaLinkHomeContent"><GitHub size={25} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>

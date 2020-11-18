@@ -93,8 +93,8 @@ function buildWindowUtils() {
         <option key="noselect" value="null"> Select an asset class </option>];
 
       for (let i = 0; i < window.assetClasses.ids.length; i++) {
-        let objVal = 
-          '{"id" : ' + '"' + String(window.assetClasses.ids[i]) + '"' + "," 
+        let objVal =
+          '{"id" : ' + '"' + String(window.assetClasses.ids[i]) + '"' + ","
           + '"custodyType" : ' + '"' + String(window.assetClasses.custodyTypes[i]) + '"' + ","
           + '"name" : ' + '"' + String(window.assetClasses.names[i]) + '"' + ","
           + '"root": ' + '"' + String(window.assetClasses.roots[i]) + '"' + "}"
@@ -113,47 +113,47 @@ function buildWindowUtils() {
   }
 
   const _generateOptionsFromObject = (obj, job) => {
-    switch(job){
-      case("contracts") : {
+    switch (job) {
+      case ("contracts"): {
         if (Object.keys(obj).length > 0) {
           let values = Object.values(obj), keys = Object.keys(obj), component = [
             <option key="noselect" value="null"> Select an option </option>];
-    
+
           for (let i = 0, count = 1; i < keys.length; i++) {
-            if(keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR"){
-            component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
-              {count}:
+            if (keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR") {
+              component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
+                {count}:
               Name: {keys[i]},
               </option>);
               count++;
             }
-            else{}
+            else { }
           }
-    
+
           return component
         }
-    
+
         else { return <></> }
       }
-      default : {
+      default: {
         if (Object.keys(obj).length > 0) {
           let values = Object.values(obj), keys = Object.keys(obj), component = [
             <option key="noselect" value="null"> Select an option </option>];
-    
+
           for (let i = 0; i < keys.length; i++) {
             component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
               {i + 1}:
               Name: {keys[i]},
               </option>);
           }
-    
+
           return component
         }
-    
+
         else { return <></> }
       }
     }
-    
+
 
   }
 
@@ -170,7 +170,7 @@ function buildWindowUtils() {
           Name: {window.assets.names[i]},
           ID: {window.assets.ids[i].substring(0, 10) + "..." + window.assets.ids[i].substring(58, 68)} </option>);
       }
-      
+
       return component
     }
 
@@ -200,63 +200,65 @@ function buildWindowUtils() {
 
   }
 
-  const _generateAssetDash = (obj) => {
-    if (obj.names.length > 0) {
-      let component = [];
+  // const _generateAssetDash = (obj) => {
+  //   if (obj.names.length > 0) {
+  //     let component = [];
 
-      for (let i = 0; i < obj.ids.length; i++) {
-        component.push(
-          <div>
-            <style type="text/css"> {`
+  //     for (let i = 0; i < obj.ids.length; i++) {
+  //       component.push(
+  //         <div>
+  //           <style type="text/css"> {`
 
-            .card {
-              width: 100%;
-              max-width: 100%;
-              height: 12rem;
-              max-height: 100%;
-              background-color: #005480;
-              margin-top: 1rem;
-              color: white;
-              word-break: break-all;
-            }
+  //           .card {
+  //             width: 100%;
+  //             max-width: 100%;
+  //             height: 12rem;
+  //             max-height: 100%;
+  //             background-color: #005480;
+  //             margin-top: 1rem;
+  //             color: white;
+  //             word-break: break-all;
+  //           }
 
-          `}
-            </style>
-            <div className="card">
-              <div className="row no-gutters">
-                <div className="col-auto">
-                  <button
-                    className="imageButton"
-                  >
-                    <img src={obj.displayImages[i]} className="assetImage" alt =""/>
-                  </button>
-                </div>
-                <div>
-                  <p className="cardName">Name : {obj.names[i]}</p>
-                  <p className="cardAc">Asset Class : {obj.assetClasses[i]}</p>
-                  <p className="cardStatus">Status : {obj.statuses[i]}</p>
-                  <br></br>
-                  <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description : {obj.descriptions[i].text.description}</h4></div>
-                </div>
-                <div className="cardButton">
-                  <Button
-                    variant="primary"
-                  >
-                    More Info
-              </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }
+  //         `}
+  //           </style>
+  //           <div className="card">
+  //             <div className="row no-gutters">
+  //               <div className="col-auto">
+  //                 <button
+  //                   className="imageButton"
+  //                 >
+  //                   <img src={obj.displayImages[i]} className="assetImage" alt="" />
+  //                 </button>
+  //               </div>
+  //               <div>
+  //                 <p className="cardName">Name : {obj.names[i]}</p>
+  //                 <p className="cardAc">Asset Class : {obj.assetClasses[i]}</p>
+  //                 <p className="cardStatus">Status : {obj.statuses[i]}</p>
+  //                 <br></br>
+  //                 <div className="cardDescriptionForm">
+  //                   <h4 className="cardDescriptionForm">Description : {obj.descriptions[i].text.description}</h4>
+  //                 </div>
+  //               </div>
+  //               <div className="cardButton">
+  //                 <Button
+  //                   variant="primary"
+  //                 >
+  //                   More Info
+  //             </Button>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       );
+  //     }
 
-      return component
-    }
+  //     return component
+  //   }
 
-    else { return <></> }
+  //   else { return <></> }
 
-  }
+  // }
   const _generateRemElementsPreview = (removedObj) => {
     let component = [];
     let text = removedObj.text;
@@ -379,7 +381,7 @@ function buildWindowUtils() {
 
     for (let i = 0; i < obj.photoKeys.length; i++) {
       //console.log("adding photo", obj.photoKeys[i])
-      component.push(<div key={String(i)}>{obj.photoKeys[i]}<br></br><img key={"img" + String(i)} src={String(obj.photoValues[i])} alt =""/> <br></br></div>);
+      component.push(<div key={String(i)}>{obj.photoKeys[i]}<br></br><img key={"img" + String(i)} src={String(obj.photoValues[i])} alt="" /> <br></br></div>);
     }
 
     component.push(<> <br></br> <h4>Text Values Found:</h4> <br></br> </>);
@@ -1188,7 +1190,7 @@ function buildWindowUtils() {
     console.log("GACTI: In _getAssetClassTokenInfo")
 
     if (Number(window.balances.assetClassBalance) > 0) {
-      
+
       for (let i = 0; i < window.balances.assetClassBalance; i++) {
         await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
           .call((_error, _result) => {
@@ -1201,49 +1203,49 @@ function buildWindowUtils() {
               /* while (resStr.length < 66) {
                 resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
               }*/
-              tknIDArray.push(resStr) 
+              tknIDArray.push(resStr)
             }
           });
       }
       console.log("AC IDs: ", tknIDArray);
 
-      for (let i = 0; i < tknIDArray.length; i ++) {
+      for (let i = 0; i < tknIDArray.length; i++) {
         await window.contracts.AC_MGR.methods
-        .getAC_data(tknIDArray[i])
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-            let _custodyType;
-
-            if (Object.values(_result)[1] === "1") {
-              _custodyType = "Custodial"
-            }
-
+          .getAC_data(tknIDArray[i])
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
             else {
-              _custodyType = "Non-Custodial"
+              let _custodyType;
+
+              if (Object.values(_result)[1] === "1") {
+                _custodyType = "Custodial"
+              }
+
+              else {
+                _custodyType = "Non-Custodial"
+              }
+
+              roots.push(Object.values(_result)[0])
+              custodyTypes.push(_custodyType)
+              discounts.push(Object.values(_result)[2])
+              exData.push(Object.values(_result)[3])
+
             }
-
-              roots.push( Object.values(_result)[0] )
-              custodyTypes.push( _custodyType )
-              discounts.push( Object.values(_result)[2] )
-              exData.push( Object.values(_result)[3] )
-
-          }
-        });
+          });
 
         await window.contracts.AC_MGR.methods
-        .getAC_name(tknIDArray[i])
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-            console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
-            names.push(_result)
-          }
-        });
+          .getAC_name(tknIDArray[i])
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
+            else {
+              console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
+              names.push(_result)
+            }
+          });
       }
+    }
+    return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }
-  return {names, custodyTypes, exData, roots, discounts, ids: tknIDArray}
-}
 
   const _getAssetTokenInfo = async () => {
 
@@ -1411,7 +1413,7 @@ function buildWindowUtils() {
           />
         </div>
         <div className="cardHref">https://pruf.io</div>
-        <div className="cardDate">{ date }</div>
+        <div className="cardDate">{date}</div>
         <div className="printFormContent">
           <img
             className="printImageBackgroundForm"
@@ -1481,7 +1483,7 @@ function buildWindowUtils() {
     generateRemoveElements: _generateRemoveElements,
     generateRemElementsPreview: _generateRemElementsPreview,
     getETHBalance: _getETHBalance,
-    generateAssetDash: _generateAssetDash,
+    // generateAssetDash: _generateAssetDash,
     addIPFSJSONObject: _addIPFSJSONObject,
     generateCardPrint: _generateCardPrint,
     generateOptionsFromObject: _generateOptionsFromObject,
