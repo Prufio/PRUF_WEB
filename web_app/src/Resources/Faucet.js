@@ -105,7 +105,7 @@ class Faucet extends Component {
             }
         }
 
-        const mintPRUF = async () => {//create a new asset record
+        const mintPRUF = async () => {
             this.setState({
                 help: false,
                 txStatus: false,
@@ -364,38 +364,32 @@ class Faucet extends Component {
                                     </Form.Row>
                                     {this.state.help === true && this.state.catergory === "null" && (
                                         <div className="explainerTextBox2">
-                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
-                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                            An asset class's catergory will determine the class of assets that will be managed by the asset class token holder's node.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Electronics" && (
                                         <div className="explainerTextBox2">
-                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
-                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                            The Electronics catergory consists of laptops, computers, mobile devices, and any circuits or devices using transistors, or microchips.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Collectables" && (
                                         <div className="explainerTextBox2">
-                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
-                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                            The Collecctables catergory consists of any items valued and sought out by collectors such as playing cards, trinkets and valued nik naks.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Transportation" && (
                                         <div className="explainerTextBox2">
-                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
-                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                            The Transportation catergory consists of bicicles, cars, or any other system or means of transporting people or goods.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Virtual" && (
                                         <div className="explainerTextBox2">
-                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
-                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                            The Virtual catergory consists of any virtual collectables or assets. This includes any non-fungable tokens.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Other" && (
                                         <div className="explainerTextBox2">
-                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
-                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                            The Other catergory covers any unspeccified item not included in the catergories above. Anything.
                                         </div>
                                     )}
                                 </div>
@@ -440,8 +434,8 @@ class Faucet extends Component {
                                     </Form.Row>
                                     {this.state.help === true && (
                                         <div className="explainerTextBox2">
-                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
-                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                            The (fungible) PRüF utility token (PRUF) is used primarily as “gas” for tokenizing, modifying, and transferring assets. In addition to operating functions 
+                                            of the network,it serves as an incentive mechanism for PRüF node operators and network users, as well as the medium for acquiring and upgrading PRüF nodes.
                                         </div>
                                     )}
                                 </div>
