@@ -79,7 +79,7 @@ class Main extends Component {
                   >
                     <img
                       className="downSizeLogo"
-                      src={require("./Resources/Images/PrufReadOnly.png")}
+                      src={require("./Resources/Images/PrufFaucet.png")}
                       alt="Pruf Logo" />
                   </button>
                 )}
