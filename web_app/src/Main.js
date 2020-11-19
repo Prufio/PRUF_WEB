@@ -53,8 +53,6 @@ class Main extends Component {
         );
       }
       return (
-
-        <div>
           <HashRouter>
 
             <div className="imageForm">
@@ -500,9 +498,6 @@ class Main extends Component {
             <NavLink to="/">
             </NavLink>
           </HashRouter>
-
-
-        </div >
       );
     }
 
