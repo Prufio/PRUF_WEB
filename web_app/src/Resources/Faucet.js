@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import { Home, XSquare, CheckCircle, HelpCircle, ArrowRightCircle, CornerUpLeft } from 'react-feather'
 
 class Faucet extends Component {
