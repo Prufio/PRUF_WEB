@@ -8,6 +8,7 @@ import buildWindowUtils from "./Resources/WindowUtils";
 import NonCustodialComponent from "./Resources/NonCustodialComponent";
 import NonCustodialUserComponent from "./Resources/NonCustodialUserComponent";
 import AdminComponent from "./Resources/AdminComponent";
+import FaucetComponent from "./Resources/FaucetComponent";
 import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
 import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
@@ -57,6 +58,18 @@ class Main extends Component {
             <div className="imageForm">
               <div>
                 {this.state.noAddrMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufReadOnly.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                                {this.state.faucetBool === true && (
                   <button
                     className="imageButton"
                     title="Back to Home!"
@@ -206,6 +219,14 @@ class Main extends Component {
                               </Button>
                             )}
 
+                              <Button
+                                size="lg"
+                                variant="toggle"
+                                onClick={() => { this.toggleMenu("faucet") }}
+                              >
+                                Faucet Menu
+                              </Button>
+
                             {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
                               <Button
                                 size="lg"
@@ -286,7 +307,13 @@ class Main extends Component {
                           {this.state.ETHBalance && (
                             <>
                               <h4>
-                                ETH Balance : {this.state.ETHBalance.substring(0, 6)}
+                                KETH Balance : {this.state.ETHBalance.substring(0, 6)}
+                                <Button
+                                  variant="assetDashboard"
+                                  title="Asset Dashboard"
+                                  onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>
+                                  Get KETH
+                              </Button>
                               </h4>
                               <br></br>
                             </>
@@ -295,6 +322,12 @@ class Main extends Component {
                             <>
                               <h4>
                                 PRUF Balance : {this.state.prufBalance}
+                                <Button
+                                  variant="assetDashboard"
+                                  title="Asset Dashboard"
+                                  onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                  Get PRUF
+                              </Button>
                               </h4>
                               <br></br>
                             </>
@@ -302,7 +335,19 @@ class Main extends Component {
                           {this.state.assetClassBalance && (
                             <>
                               <h4>
-                                AssetClasses : {this.state.assetClassBalance}
+                                AssetClasses :
+                                <Button
+                                  variant="assetDashboard"
+                                  title="Asset Dashboard"
+                                  onClick={() => { this.setState({ userMenu: undefined }); window.location.href = '/#/' }}>
+                                  {this.state.assetClassBalance}
+                                </Button>
+                                <Button
+                                  variant="assetDashboard"
+                                  title="Asset Dashboard"
+                                  onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                  Get AC
+                              </Button>
                               </h4>
                               <br></br>
                             </>
@@ -331,8 +376,8 @@ class Main extends Component {
                                     <Button
                                       variant="assetDashboard"
                                       title="Asset Dashboard"
-                                      onClick={() => { window.open("https://t.me/prufteam", "_blank") }}>
-                                      Get ID Token
+                                      onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                      Get ID
                               </Button>
                                   </>
                                 )}
@@ -355,6 +400,7 @@ class Main extends Component {
                       {this.state.assetClassHolderMenuBool === true && (<AdminComponent />)}
                       {this.state.authorizedUserMenuBool === true && (<AuthorizedUserComponent />)}
                       {this.state.basicMenuBool === true && (<BasicComponent />)}
+                      {this.state.faucetBool === true && (<FaucetComponent />)}
                     </nav>
                   )}
                 </ul>
@@ -583,6 +629,7 @@ class Main extends Component {
         window.routeRequest = "ACAdmin"
         await this.setState({ routeRequest: "ACAdmin" });
         await this.setState({
+          faucetBool: false,
           assetClassHolderMenuBool: true,
           assetHolderMenuBool: false,
           assetHolderUserMenuBool: false,
@@ -598,7 +645,24 @@ class Main extends Component {
         window.routeRequest = "basic"
         await this.setState({ routeRequest: "basic" });
         await this.setState({
+          faucetBool: false,
           basicMenuBool: true,
+          assetHolderMenuBool: false,
+          assetHolderUserMenuBool: false,
+          assetClassHolderMenuBool: false,
+          noAddrMenuBool: false,
+          authorizedUserMenuBool: false,
+          settingsMenu: undefined
+        })
+        window.menuChange = undefined;
+      }
+
+      else if (menuChoice === 'faucet') {
+        window.routeRequest = "faucet"
+        await this.setState({ routeRequest: "faucet" });
+        await this.setState({
+          faucetBool: true,          
+          basicMenuBool: false,
           assetHolderMenuBool: false,
           assetHolderUserMenuBool: false,
           assetClassHolderMenuBool: false,
@@ -614,6 +678,7 @@ class Main extends Component {
         window.routeRequest = "NCAdmin"
         await this.setState({ routeRequest: "NCAdmin" })
         await this.setState({
+          faucetBool: false,
           assetHolderMenuBool: true,
           assetHolderUserMenuBool: false,
           basicMenuBool: false,
@@ -630,6 +695,7 @@ class Main extends Component {
         window.routeRequest = "NCUser"
         await this.setState({ routeRequest: "NCUser" })
         await this.setState({
+          faucetBool: false,
           assetHolderMenuBool: false,
           assetHolderUserMenuBool: true,
           basicMenuBool: false,
@@ -645,6 +711,7 @@ class Main extends Component {
         window.routeRequest = "authUser"
         await this.setState({ routeRequest: "authUser" });
         await this.setState({
+          faucetBool: false,
           authorizedUserMenuBool: true,
           assetHolderMenuBool: false,
           assetHolderUserMenuBool: false,
@@ -1002,6 +1069,7 @@ class Main extends Component {
       assetClassHolderMenuBool: false,
       basicMenuBool: false,
       authorizedUserMenuBool: false,
+      faucetBool: false,
       hasFetchedBalances: false,
       isACAdmin: undefined,
       runWatchDog: false,

@@ -820,6 +820,14 @@ div {
   margin-top: 0.5rem;
 }
 
+.submitButtonFaucet {
+  display: flex;
+  background-color: transparent;
+  z-index: 1000;
+  margin-left: 10rem;
+  margin-top: 0.5rem;
+}
+
 .submitButtonHome {
   display: flex;
   position: absolute;
@@ -1330,6 +1338,17 @@ margin-bottom: -3rem;
   font-family: Tahoma, Geneva, sans-serif;
   margin-top: -2.6rem;
   margin-left: 2.5rem;
+}
+
+.formFontFaucet {
+  width: 20rem;
+  position: absolute;
+  font-size: 2rem;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-top: -2.6rem;
+  margin-left: -4rem;
 }
 
 .checkBoxFormFontMobile {
@@ -1996,6 +2015,15 @@ margin-bottom: -3rem;
   display: flex;
   height: fit-content;
   margin-left: 90%;
+  position: absolute;
+  margin-top: -3.7rem;
+  z-index: 999;
+}
+
+.mediaLinkClearForm2 {
+  display: flex;
+  height: fit-content;
+  margin-left: 87%;
   position: absolute;
   margin-top: -3.7rem;
   z-index: 999;

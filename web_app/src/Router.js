@@ -42,7 +42,9 @@ import NewRecordNC from "./NonCustodial/NewRecordNC";
 import TransferAssetNC from "./NonCustodial/TransferAssetNC";
 import AssetDashboard from "./NonCustodial/AssetDashboard"
 import RecycleAssetNC from "./NonCustodial/RecycleAssetNC";
-import DiscardAssetNC from "./NonCustodial/DiscardAssetNC"
+import DiscardAssetNC from "./NonCustodial/DiscardAssetNC";
+
+import Faucet from "./Resources/Faucet";
 
 function Router(routeRequest) {
     if (routeRequest === "authUser") {
@@ -146,6 +148,14 @@ function Router(routeRequest) {
                 <Route path="/retrieve-record" component={RetrieveRecord} />
                 <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
                 <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
+            </>
+        )
+    }
+
+    else if (routeRequest === "faucet") {
+        return (
+            <>
+                <Route path="/faucet" component={Faucet} />
             </>
         )
     }
