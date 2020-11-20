@@ -26,6 +26,7 @@ import TransferAsset from "./Custodial/TransferAsset";
 import EscrowManager from "./Custodial/EscrowManager";
 import ExportAsset from "./Custodial/ExportAsset";
 import ImportAsset from "./Custodial/ImportAsset";
+import LoginToAC from "./Custodial/LoginToAC";
 
 import RetrieveRecordMobile from "./Mobile/RetrieveRecordMobile";
 import VerifyLiteMobile from "./Mobile/VerifyLiteMobile";
@@ -43,6 +44,7 @@ import TransferAssetNC from "./NonCustodial/TransferAssetNC";
 import AssetDashboard from "./NonCustodial/AssetDashboard"
 import RecycleAssetNC from "./NonCustodial/RecycleAssetNC";
 import DiscardAssetNC from "./NonCustodial/DiscardAssetNC";
+
 
 import Faucet from "./Resources/Faucet";
 
@@ -64,6 +66,7 @@ function Router(routeRequest) {
                 <Route path="/manage-escrow" component={EscrowManager} />
                 <Route path="/mint-pip-asset" component={MintPipAsset} />
                 <Route path="/claim-pip-asset" component={ClaimPipAsset} />
+                <Route path="/login" component={LoginToAC} />
             </>
         )
     }

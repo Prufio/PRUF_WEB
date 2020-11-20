@@ -10,11 +10,6 @@ class AuthorizedUserComponent extends Component {
             <Nav className="headerForm">
                 <div className="headerFormContent">
                     <li>
-                        <NavLink exact to="/">Home</NavLink>
-                    </li>
-                </div>
-                <div className="headerFormContent">
-                    <li>
                         <NavLink to="/new-record">New</NavLink>
                     </li>
                 </div>

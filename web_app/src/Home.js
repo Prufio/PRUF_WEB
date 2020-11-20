@@ -107,33 +107,6 @@ class Home extends Component {
               src={require("./Resources/Images/Pruf AR (2).png")}
               alt="Pruf Logo" />
           </button>
-          {/* <img className="prufARCroppedForm" src={require("./Resources/Pruf AR (2).png")} alt="Pruf Logo Home" /> */}
-          {/* <br></br>
-          <div> {window.addr !== undefined && window.assetClass > 0 && (<div>Operating in asset class {window.assetClass} ({window.assetClassName}) as {window.authLevel}</div>)}</div>
-          <br></br> */}
-          {/* {window._contracts !== undefined && window.addr !== undefined && (
-            <div>
-              <Form.Group as={Col} controlId="formGridAC">
-                <Form.Label className="formFont">Input desired asset class # or name : </Form.Label>
-                <Form.Control
-                  placeholder="Asset Class"
-                  required
-                  type="text"
-                  onChange={(e) => this.setState({ assetClass: e.target.value })}
-                  size="lg"
-                />
-              </Form.Group>
-              <Form.Row>
-                <div className="submitButtonHome">
-                  <div className="submitButtonContent">
-                    <ArrowRightCircle
-                      onClick={() => { _setWindowAC() }}
-                    />
-                  </div>
-                </div>
-              </Form.Row>
-            </div>
-          )} */}
           {window._contracts === undefined && (
             <div className="text">
               <br></br>

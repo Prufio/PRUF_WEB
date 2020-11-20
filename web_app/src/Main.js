@@ -10,6 +10,7 @@ import NonCustodialUserComponent from "./Resources/NonCustodialUserComponent";
 import AdminComponent from "./Resources/AdminComponent";
 import FaucetComponent from "./Resources/FaucetComponent";
 import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
+import AuthorizedUserLogin from "./Resources/AuthorizedUserLogin";
 import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
 import ParticleBox from "./Resources/ParticleBox";
@@ -261,7 +262,15 @@ class Main extends Component {
                                 Basic Menu
                               </Button>)}
 
-                            {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
+                            {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
+                              <Button
+                                size="lg"
+                                variant="toggle"
+                                onClick={() => { this.toggleMenu("authUser");}}
+                              >
+                                Cusdodian Sign-In
+                              </Button>)}
+                              {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
                               <Button
                                 size="lg"
                                 variant="toggle"
@@ -398,7 +407,8 @@ class Main extends Component {
                       {this.state.assetHolderMenuBool === true && (<NonCustodialComponent />)}
                       {this.state.assetHolderUserMenuBool === true && (<NonCustodialUserComponent />)}
                       {this.state.assetClassHolderMenuBool === true && (<AdminComponent />)}
-                      {this.state.authorizedUserMenuBool === true && (<AuthorizedUserComponent />)}
+                      {this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserComponent />)}
+                      {!this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserLogin />)}
                       {this.state.basicMenuBool === true && (<BasicComponent />)}
                       {this.state.faucetBool === true && (<FaucetComponent />)}
                     </nav>
@@ -502,7 +512,7 @@ class Main extends Component {
     }
 
     this.updateWatchDog = setInterval(() => {
-      if (this.state.isAuthUser !== window.isAuthUser) {
+      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined) {
         this.setState({ isAuthUser: window.isAuthUser })
       }
 
@@ -721,6 +731,7 @@ class Main extends Component {
           settingsMenu: undefined
         })
         window.menuChange = undefined;
+        if(!this.state.isAuthUser) {window.location.href = '/#/login'}
       }
 
     }
@@ -1059,7 +1070,7 @@ class Main extends Component {
       RCLR: "",
       assetClass: undefined,
       contractArray: [],
-      isAuthUser: undefined,
+      isAuthUser: false,
       hamburgerMenu: true,
       assetHolderBool: false,
       IDHolderBool: false,
