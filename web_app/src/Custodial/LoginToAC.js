@@ -2,17 +2,10 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import "../index.css";
 import Col from "react-bootstrap/Col";
-import { ArrowRightCircle, Twitter, GitHub, Mail, Send, } from 'react-feather'
+import { ArrowRightCircle} from 'react-feather'
 class LoginToAC extends Component {
   constructor(props) {
     super(props);
-
-    this.updateWatchDog = setInterval(() => {
-        if (this.state.watchDog && window.isAuthUser === true && window.location.href !== "/#/") {
-          window.location.href = "/#/"; 
-          this.setState({watchDog: false})
-        }
-      }, 100)
 
     this.state = {
       addr: undefined,
@@ -39,7 +32,7 @@ class LoginToAC extends Component {
 
   componentDidMount() {
     if (window.addr !== undefined) {
-      this.setState({ addr: window.addr, watchDog: true })
+      this.setState({ addr: window.addr})
     }
 
   }
@@ -82,7 +75,7 @@ class LoginToAC extends Component {
           if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
             window.location.href = 'https://www.pruf.io'
           }
-
+          window.useACforCustodial = this.state.assetClass;
           window.assetClass = this.state.assetClass;
           await window.utils.resolveACFromID(window.assetClass)
           await window.utils.getACData("id", window.assetClass)
@@ -96,15 +89,17 @@ class LoginToAC extends Component {
           await console.log("Exists?", acDoesExist)
 
           if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.location.href = 'https://www.pruf.io'
+            window.location.href = 'https://www.pruf.io';
           }
 
           window.assetClassName = this.state.assetClass
-          await window.utils.resolveAC(this.state.assetClass);
+          window.useACforCustodial = await window.utils.resolveAC(this.state.assetClass);
 
-          window.useACforCustodial = window.assetClass;
+          if(window.isAuthUser === true){
+            window.location.href = "/#/"; 
+          }
 
-          return this.setState({ authLevel: window.authLevel, watchDog: false });
+          return this.setState({ authLevel: window.authLevel });
         }
       }
     }

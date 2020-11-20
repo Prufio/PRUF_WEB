@@ -55,6 +55,7 @@ class NewRecordNC extends Component {
   componentWillUnmount() {//stuff do do when component unmounts from the window
 
   }
+
   componentDidUpdate() {//stuff to do on a re-render
 
   }
@@ -153,7 +154,6 @@ class NewRecordNC extends Component {
       }
 
       else { return alert("Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)") }
-
     }
 
     const _newRecord = async () => {//create a new asset record
@@ -227,7 +227,6 @@ class NewRecordNC extends Component {
             return window.location.href = '/#/asset-dashboard'
           }
         });
-      // console.log(Object.values(window.web3.eth.getPendingTransactions()))
 
       this.setState({ assetClassSelected: false, idxSubmitted: false }) //clear form inputs
     }
