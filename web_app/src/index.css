@@ -646,6 +646,12 @@ div {
   font-size: 0.73rem;
 }
 
+.siteInfoBox h3 a:hover{
+  cursor: pointer;
+  text-decoration: line-through !important;
+  text-decoration-color: #ff0000 !important;
+}
+
 .printForm {
   display: flex;
   width: 1000px;
