@@ -176,7 +176,7 @@ class Main extends Component {
                       November 16, 2020
                   </h3>
                     <h3 className="siteInfoBoxContent">
-                      <a onClick={() => { window.location.href = '/#/lounge' }}>
+                      <a onClick={() => { window.location.href = '/#/snake' }}>
                       Version A1.0.9
                       </a>
                   </h3>
