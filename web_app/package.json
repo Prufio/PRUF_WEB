@@ -26,6 +26,7 @@
     "react-robohash": "^1.0.9",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
+    "react-simple-snake": "^0.2.2",
     "react-to-print": "^2.10.3",
     "web3": "^1.2.7"
   },

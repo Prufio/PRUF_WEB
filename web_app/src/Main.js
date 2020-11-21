@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Route, NavLink, HashRouter } from "react-router-dom";
 import Web3 from "web3";
 import Home from "./Home";
+import Snake from "./Snake";
 import HomeMobile from "./Mobile/HomeMobile";
 import buildContracts from "./Resources/Contracts";
 import buildWindowUtils from "./Resources/WindowUtils";
