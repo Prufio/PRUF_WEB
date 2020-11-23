@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d4adcb499c12a26979e5e1a4b7493ec2",
+    "revision": "f3a5414c6a941373b4f17befb0097ea0",
     "url": "./index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/css/2.40563451.chunk.css"
   },
   {
-    "revision": "26b97dc1924a9b955346",
-    "url": "./static/css/main.c802117d.chunk.css"
+    "revision": "9d320bb53cdbb560d16b",
+    "url": "./static/css/main.78d0f3e0.chunk.css"
   },
   {
     "revision": "12c3b1f034dc2337fe51",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/js/2.29e25703.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "26b97dc1924a9b955346",
-    "url": "./static/js/main.18ee0fbd.chunk.js"
+    "revision": "9d320bb53cdbb560d16b",
+    "url": "./static/js/main.630260c8.chunk.js"
   },
   {
     "revision": "8e7b9f5a1be431a611a6",
@@ -36,36 +36,36 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/media/Pruf AR (2).a09bb578.png"
   },
   {
-    "revision": "a19dfa191f13f71eda93285b76e71575",
-    "url": "./static/media/PrufACAdmin.a19dfa19.png"
+    "revision": "f9c9a41c83a22be355fc36f04160700d",
+    "url": "./static/media/PrufACAdmin.f9c9a41c.png"
   },
   {
-    "revision": "7583b219355fcf734eba8b119b2bd071",
-    "url": "./static/media/PrufAssetMinter.7583b219.png"
+    "revision": "09afcee7c8f8f45553a1edb52e1c7319",
+    "url": "./static/media/PrufAssetMinter.09afcee7.png"
   },
   {
-    "revision": "6cc65a69d3394c672e7add545bc4efe7",
-    "url": "./static/media/PrufBasic.6cc65a69.png"
+    "revision": "9f7e2be0fec7ad9302257a236e9fa434",
+    "url": "./static/media/PrufBasic.9f7e2be0.png"
   },
   {
-    "revision": "da338e7b2af616ad5f5c3eea0c2305e6",
-    "url": "./static/media/PrufFaucet.da338e7b.png"
+    "revision": "f6fd0a1c92177700f23a8abf1522ccde",
+    "url": "./static/media/PrufFaucet.f6fd0a1c.png"
   },
   {
     "revision": "b2768b440862c8d77866aab04c7b33ee",
     "url": "./static/media/PrufPrintBackground.b2768b44.png"
   },
   {
-    "revision": "0e5a531e03f242f7ef459f9168f1a7db",
-    "url": "./static/media/PrufReadOnly.0e5a531e.png"
+    "revision": "374d607890479d139b377414881fb598",
+    "url": "./static/media/PrufReadOnly.374d6078.png"
   },
   {
-    "revision": "ca3269e0a4fb89ed0dc93136aeb16700",
-    "url": "./static/media/PrufTokenHolder.ca3269e0.png"
+    "revision": "fd070be4ce4c4ea3bf42684e94897ec6",
+    "url": "./static/media/PrufTokenHolder.fd070be4.png"
   },
   {
-    "revision": "5dbc108566478c10ce2c2639fffb4bf1",
-    "url": "./static/media/PrufTokenMinter.5dbc1085.png"
+    "revision": "f186845b07b5df9c77caca643603647f",
+    "url": "./static/media/PrufTokenMinter.f186845b.png"
   },
   {
     "revision": "57cc72921b561f6d52fd0dfc076b3ac5",
