@@ -250,12 +250,12 @@ class Faucet extends Component {
                     )}
                     {this.state.PRUFmenu === true && this.state.ACmenu === false && (
                         <div className="mediaLinkBack">
-                            <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { this.setState({PRUFmenu: false}) }} /></a>
+                            <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { this.setState({ PRUFmenu: false }) }} /></a>
                         </div>
                     )}
                     {this.state.ACmenu === true && this.state.PRUFmenu === false && (
                         <div className="mediaLinkBack">
-                            <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { this.setState({ACmenu: false}) }} /></a>
+                            <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { this.setState({ ACmenu: false }) }} /></a>
                         </div>
                     )}
                 </div>
@@ -348,7 +348,8 @@ class Faucet extends Component {
                                             <div className="submitButton">
                                                 <div className="submitButtonContent">
                                                     <CheckCircle
-                                                        onClick={() => { mintAC() }}
+                                                        // onClick={() => { mintAC() }}
+                                                        onClick={() => { alert("This function has been disabled for the testing period") }}
                                                     />
                                                 </div>
                                             </div>
@@ -419,7 +420,8 @@ class Faucet extends Component {
                                         <div className="submitButton">
                                             <div className="submitButtonContent">
                                                 <CheckCircle
-                                                    onClick={() => { mintPRUF() }}
+                                                    // onClick={() => { mintPRUF() }}
+                                                    onClick={() => { alert("This function has been disabled for the testing period") }}
                                                 />
                                             </div>
                                         </div>
@@ -433,7 +435,7 @@ class Faucet extends Component {
                                     </Form.Row>
                                     {this.state.help === true && (
                                         <div className="explainerTextBox2">
-                                            The (fungible) PRüF utility token (PRUF) is used primarily as “gas” for tokenizing, modifying, and transferring assets. In addition to operating functions 
+                                            The (fungible) PRüF utility token (PRUF) is used primarily as “gas” for tokenizing, modifying, and transferring assets. In addition to operating functions
                                             of the network,it serves as an incentive mechanism for PRüF node operators and network users, as well as the medium for acquiring and upgrading PRüF nodes.
                                         </div>
                                     )}

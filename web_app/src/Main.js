@@ -222,15 +222,15 @@ class Main extends Component {
                               Token Holder Menu
                             </Button>
                           )}
-
-                          <Button
-                            size="lg"
-                            variant="toggle"
-                            onClick={() => { this.toggleMenu("faucet") }}
-                          >
-                            Faucet Menu
+                          {this.state.faucetBool === false && (
+                            <Button
+                              size="lg"
+                              variant="toggle"
+                              onClick={() => { this.toggleMenu("faucet") }}
+                            >
+                              Faucet Menu
                               </Button>
-
+                          )}
                           {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
                             <Button
                               size="lg"
@@ -321,8 +321,7 @@ class Main extends Component {
                             <h4 className="userStatFont">
                               KETH Balance : {this.state.ETHBalance.substring(0, 6)}
                               <Button
-                                variant="assetDashboard"
-                                title="Asset Dashboard"
+                                variant="userButton"
                                 onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>
                                 Get KETH
                               </Button>
@@ -335,9 +334,8 @@ class Main extends Component {
                             <h4 className="userStatFont">
                               PRUF Balance : {this.state.prufBalance}
                               <Button
-                                variant="assetDashboard"
-                                title="Asset Dashboard"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                variant="userButton"
+                                onClick={() => { this.faucet() }}>
                                 Get PRUF
                               </Button>
                             </h4>
@@ -349,15 +347,13 @@ class Main extends Component {
                             <h4 className="userStatFont">
                               AssetClasses :
                                 <Button
-                                variant="assetDashboard"
-                                title="Asset Dashboard"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.location.href = '/#/' }}>
+                                variant="userButton"
+                                onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
                                 {this.state.assetClassBalance}
                               </Button>
                               <Button
-                                variant="assetDashboard"
-                                title="Asset Dashboard"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                variant="userButton"
+                                onClick={() => { this.faucet() }}>
                                 Get AC
                               </Button>
                             </h4>
@@ -369,8 +365,7 @@ class Main extends Component {
                             <h4 className="userStatFont">
                               Assets :
                               <Button
-                                variant="assetDashboard"
-                                title="Asset Dashboard"
+                                variant="userButton"
                                 onClick={() => { this.setState({ userMenu: undefined }); window.location.href = '/#/asset-dashboard' }}>
                                 {this.state.assetBalance}
                               </Button>
@@ -386,8 +381,7 @@ class Main extends Component {
                                 <>
                                   <X className="userIDBalance0" />
                                   <Button
-                                    variant="assetDashboard"
-                                    title="Asset Dashboard"
+                                    variant="userButton"
                                     onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
                                     Get ID
                               </Button>
@@ -442,7 +436,7 @@ class Main extends Component {
                         background-color: transparent;
                         color: white;
                         margin-top: -1.6rem;
-                        font-size: 1.5rem;
+                        font-size: 1.4rem;
                         height: 1.6rem;
                         width: fit-content;
                       }
@@ -474,6 +468,26 @@ class Main extends Component {
                         background-color: transparent;
                       }
                       .btn-assetDashboard:active {
+                        background-color: transparent;
+                        border: transparent;
+                      }
+
+                      .btn-userButton {
+                        background-color: transparent;
+                        color: white;
+                        margin-top: -0.5rem;
+                        // margin-right: 37rem;
+                        font-size: 1.4rem;
+                        width: fit-content;
+                      }
+                      .btn-userButton:hover {
+                        background-color: transparent;
+                        color: #00a8ff;
+                      }
+                      .btn-userButton:focus {
+                        background-color: transparent;
+                      }
+                      .btn-userButton:active {
                         background-color: transparent;
                         border: transparent;
                       }
@@ -737,6 +751,12 @@ class Main extends Component {
         if (!this.state.isAuthUser) { window.location.href = '/#/login' }
       }
 
+    }
+
+    this.faucet = () => {
+      this.setState({ userMenu: undefined });
+      this.toggleMenu("faucet");
+      window.location.href = '/#/faucet';
     }
 
     this.setUpAssets = async () => {
