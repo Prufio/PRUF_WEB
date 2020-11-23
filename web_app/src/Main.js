@@ -349,7 +349,7 @@ class Main extends Component {
                                 <Button
                                 variant="userButton"
                                 // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                onClick={() => { alert("This functionality has been disabled for the testing period") }}>
+                                onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
                                 {this.state.assetClassBalance}
                               </Button>
                               <Button
@@ -384,7 +384,7 @@ class Main extends Component {
                                   <Button
                                     variant="userButton"
                                     // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
-                                    onClick={() => { alert("This functionality has been disabled for the testing period") }}>
+                                    onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
                                     Get ID
                               </Button>
                                 </>
