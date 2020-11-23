@@ -92,7 +92,7 @@ class ModifyRightsHolder extends Component {
     const self = this;
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
@@ -107,7 +107,7 @@ class ModifyRightsHolder extends Component {
     }
 
     const _checkIn = async (e) => {
-      this.setState({help: false})
+      this.setState({ help: false })
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -150,7 +150,7 @@ class ModifyRightsHolder extends Component {
     }
 
     const _editRgtHash = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -348,19 +348,23 @@ class ModifyRightsHolder extends Component {
                   <Form.Label className="formFont">New Password:</Form.Label>
                   {this.state.transaction === false && (
                     <Form.Control
-                      placeholder="New Password"
-                      type="password"
+                      placeholder="Password"
+                      className="key"
+                      type="text"
                       required
                       onChange={(e) => this.setState({ secret: e.target.value })}
                       size="lg"
+                      autocomplete="off"
                     />)}
                   {this.state.transaction === true && (
                     <Form.Control
                       placeholder="Password"
-                      type="password"
-                      required
+                      className="key"
+                      type="text"
                       disabled
+                      onChange={(e) => this.setState({ secret: e.target.value })}
                       size="lg"
+                      autocomplete="off"
                     />)}
                 </Form.Group>
               </Form.Row>

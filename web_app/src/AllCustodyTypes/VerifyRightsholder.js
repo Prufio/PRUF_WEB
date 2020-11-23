@@ -11,7 +11,7 @@ class VerifyRightHolder extends Component {
     //State declaration.....................................................................................................
 
     this.accessAsset = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       let idxHash;
       if (this.state.QRreader === false && !this.state.Checkbox) {
         if (this.state.manufacturer === ""
@@ -162,7 +162,7 @@ class VerifyRightHolder extends Component {
     }
 
     const _verify = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -252,15 +252,15 @@ class VerifyRightHolder extends Component {
                   />
                   <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                   {this.state.Checkbox === true && (
-                    <Form.Row>
+                    <Form.Group>
                       <Form.Label className="formFont">Idx Hash:</Form.Label>
                       <Form.Control
                         placeholder="Idx Hash"
                         required
-                        onChange={(e) => this.setState({ idxHash: e.target.value })}
+                        onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
                         size="lg"
                       />
-                    </Form.Row>
+                    </Form.Group>
                   )}
                 </div>
               )}
@@ -345,8 +345,8 @@ class VerifyRightHolder extends Component {
                   </Form.Row>
                   {this.state.help === true && (
                     <div className="explainerTextBox">
-                          Deep Verify is a function that confirms provenance of an item. As it initiates a blockchain transaction, Deep Verify is secure
-                          despite your browser connection being securily protected. For a less secure, but free provenance check, use Verify Lite
+                      Deep Verify is a function that confirms provenance of an item. As it initiates a blockchain transaction, Deep Verify is secure
+                      despite your browser connection being securily protected. For a less secure, but free provenance check, use Verify Lite
                     </div>
                   )}
                 </>
@@ -528,18 +528,22 @@ class VerifyRightHolder extends Component {
                       {this.state.transaction === false && (
                         <Form.Control
                           placeholder="Password"
-                          type="password"
+                          className="key"
+                          type="text"
                           required
                           onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
+                          autocomplete="off"
                         />)}
                       {this.state.transaction === true && (
                         <Form.Control
                           placeholder="Password"
-                          type="password"
-                          required
+                          className="key"
+                          type="text"
                           disabled
+                          onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
+                          autocomplete="off"
                         />)}
                     </Form.Group>
                   </Form.Row>

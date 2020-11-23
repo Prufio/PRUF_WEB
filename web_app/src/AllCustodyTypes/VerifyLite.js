@@ -222,15 +222,15 @@ class VerifyLite extends Component {
                 />
                 <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                 {this.state.Checkbox === true && (
-                  <Form.Row>
-                    <Form.Label className="formFont">Idx Hash:</Form.Label>
-                    <Form.Control
-                      placeholder="Idx Hash"
-                      required
-                      onChange={(e) => this.setState({ idxHash: e.target.value })}
-                      size="lg"
-                    />
-                  </Form.Row>
+                  <Form.Group>
+                  <Form.Label className="formFont">Idx Hash:</Form.Label>
+                  <Form.Control
+                    placeholder="Idx Hash"
+                    required
+                    onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
                 )}
               </div>
             )}
@@ -404,17 +404,19 @@ class VerifyLite extends Component {
                     <Form.Label className="formFont">Password:</Form.Label>
                     <Form.Control
                       placeholder="Password"
-                      type="password"
+                      className="key"
+                      type="text"
                       required
                       onChange={(e) => this.setState({ secret: e.target.value })}
                       size="lg"
+                      autocomplete="off"
                     />
                   </Form.Group>
                 </Form.Row>
                 <Form.Row>
                   <div className="submitButtonVRH2">
                     <div className="submitButtonVRH2Content">
-                      <HelpCircle
+                      <CheckCircle
                         onClick={() => { _verify() }}
                       />
                     </div>

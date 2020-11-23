@@ -590,12 +590,14 @@ class RecycleAssetNC extends Component {
                     <Form.Group as={Col} controlId="formGridPassword">
                       <Form.Label className="formFont">Password:</Form.Label>
                       <Form.Control
-                        placeholder="Password"
-                        type="password"
-                        required
-                        onChange={(e) => this.setState({ secret: e.target.value })}
-                        size="lg"
-                      />
+                      placeholder="Password"
+                      className="key"
+                      type="text"
+                      required
+                      onChange={(e) => this.setState({ secret: e.target.value })}
+                      size="lg"
+                      autocomplete="off"
+                    />
                     </Form.Group>
 
                   </Form.Row>

@@ -177,9 +177,9 @@ class Main extends Component {
                   </h3>
                     <h3 className="siteInfoBoxContent">
                       <a onClick={() => { window.location.href = '/#/snake' }}>
-                      Version A1.0.9
+                        Version A1.0.9
                       </a>
-                  </h3>
+                    </h3>
                   </div>
                   <button
                     className="imageButtonUser"
@@ -304,7 +304,7 @@ class Main extends Component {
                         )}
                         {this.state.addr > 0 && (
                           <>
-                            <h4>
+                            <h4 className="userStatFont">
                               Currently serving :
                               <Button
                                 variant="etherscan"
@@ -318,7 +318,7 @@ class Main extends Component {
                         )}
                         {this.state.ETHBalance && (
                           <>
-                            <h4>
+                            <h4 className="userStatFont">
                               KETH Balance : {this.state.ETHBalance.substring(0, 6)}
                               <Button
                                 variant="assetDashboard"
@@ -332,7 +332,7 @@ class Main extends Component {
                         )}
                         {this.state.prufBalance && (
                           <>
-                            <h4>
+                            <h4 className="userStatFont">
                               PRUF Balance : {this.state.prufBalance}
                               <Button
                                 variant="assetDashboard"
@@ -346,7 +346,7 @@ class Main extends Component {
                         )}
                         {this.state.assetClassBalance && (
                           <>
-                            <h4>
+                            <h4 className="userStatFont">
                               AssetClasses :
                                 <Button
                                 variant="assetDashboard"
@@ -366,7 +366,7 @@ class Main extends Component {
                         )}
                         {this.state.assetBalance && (
                           <>
-                            <h4>
+                            <h4 className="userStatFont">
                               Assets :
                               <Button
                                 variant="assetDashboard"
@@ -380,7 +380,7 @@ class Main extends Component {
                         )}
                         {this.state.IDTokenBalance && (
                           <>
-                            <h4>
+                            <h4 className="userStatFont">
                               Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)}
                               {this.state.IDTokenBalance === "0" && (
                                 <>
