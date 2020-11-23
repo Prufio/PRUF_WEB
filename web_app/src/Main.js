@@ -273,14 +273,14 @@ class Main extends Component {
                             >
                               Cusdodian Sign-In
                             </Button>)} */}
-                          {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
+                          {/* {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
                             <Button
                               size="lg"
                               variant="toggle"
                               onClick={() => { this.toggleMenu("authUser") }}
                             >
                               Cusdodian Menu
-                            </Button>)}
+                            </Button>)} */}
                         </div>
                       </div>
                     )}
