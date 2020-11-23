@@ -348,7 +348,8 @@ class Main extends Component {
                               AssetClasses :
                                 <Button
                                 variant="userButton"
-                                onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
+                                // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
+                                onClick={() => { alert("This functionality has been disabled for the testing period") }}>
                                 {this.state.assetClassBalance}
                               </Button>
                               <Button
@@ -366,7 +367,7 @@ class Main extends Component {
                               Assets :
                               <Button
                                 variant="userButton"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.location.href = '/#/asset-dashboard' }}>
+                                onClick={() => { this.assetDashboard() }}>
                                 {this.state.assetBalance}
                               </Button>
                             </h4>
@@ -382,7 +383,8 @@ class Main extends Component {
                                   <X className="userIDBalance0" />
                                   <Button
                                     variant="userButton"
-                                    onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                    // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                    onClick={() => { alert("This functionality has been disabled for the testing period") }}>
                                     Get ID
                               </Button>
                                 </>
@@ -757,6 +759,12 @@ class Main extends Component {
       this.setState({ userMenu: undefined });
       this.toggleMenu("faucet");
       window.location.href = '/#/faucet';
+    }
+
+    this.assetDashboard = () => {
+      this.setState({ userMenu: undefined });
+      this.toggleMenu("basic");
+      window.location.href = '/#/asset-dashboard'
     }
 
     this.setUpAssets = async () => {

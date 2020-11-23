@@ -516,7 +516,10 @@ class AssetDashboard extends React.Component {
             <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
           <div className="mediaLinkADAddAsset">
-            <a className="mediaLinkContentADAddAsset" ><Plus size={35} onClick={() => { this.newRecord() }} /></a>
+            <a className="mediaLinkContentADAddAsset" ><Plus size={35} 
+            // onClick={() => { this.newRecord() }} 
+            onClick={() => { alert("This functionality has been disabled for the testing period") }}/>
+            </a>
           </div>
         </div>
         <div className="assetDashboard">
