@@ -109,7 +109,7 @@ class ModifyDescription extends Component {
       window.additionalElementArrays.name = "";
       //self.setState({ accessPermitted: false });
       //self.setState({ oldDescription: undefined });
-      self.setState({idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0, removedElements: {
+      self.setState({idxHash: undefined, txStatus: undefined, txHash: "", elementType: "0", removedElements: {
         images: [],
         text: [],
       },
@@ -137,7 +137,7 @@ class ModifyDescription extends Component {
       txStatus: false,
       accessPermitted: true,
       idxHash: undefined,
-      elementType: 0,
+      elementType: "0",
       elementName: "",
       elementValue: "",
       nameTag: "",
@@ -232,7 +232,7 @@ class ModifyDescription extends Component {
     const clearForm = async () => {
       if(document.getElementById("MainForm") === null){return}
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", elementType: 0, wasSentPacket: false, help: false })
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", elementType: "0", wasSentPacket: false, help: false })
     }
 
     const help = async () => {
@@ -842,19 +842,19 @@ class ModifyDescription extends Component {
               {this.state.elementType === "nameTag" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <UploadCloud
+                    <CheckCircle
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
                 </div>
               )}
 
-              {this.state.hashPath === "" && this.state.accessPermitted && this.state.transaction === false && (
+              {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && (
                 <>
                 <Form.Row>
                   <div className="submitButton">
                     <div className="submitButtonContent">
-                      <CheckCircle
+                      <UploadCloud
                         onClick={() => { publishIPFS1() }}
                       />
                     </div>
