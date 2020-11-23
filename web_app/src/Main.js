@@ -841,8 +841,8 @@ class Main extends Component {
 
       console.log("Asset setUp Complete. Turning on watchDog.")
       this.setState({ runWatchDog: true })
-      console.log("window IPFS operation count: ", window.ipfsCounter)
-      console.log("window assets: ", window.assets)
+      console.log("IPFS operation count: ", window.ipfsCounter)
+      console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
       window.hasLoadedAssetClasses = true;
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
@@ -851,7 +851,7 @@ class Main extends Component {
 
 
     this.buildAssets = () => {
-      console.log("BA: In buildAssets. Window IPFS operation count: ", window.ipfsCounter)
+      console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
 
@@ -927,7 +927,7 @@ class Main extends Component {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
           descElement.push(undefined)
           window.ipfsCounter++
-          console.log(window.ipfsCounter)
+          //console.log(window.ipfsCounter)
         } else {
           //console.log(lookup, "Here's what we found for asset description: ", result);
           descElement.push(result)
