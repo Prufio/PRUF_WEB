@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import Form from "react-bootstrap/Form";
-import "./index.css";
-import { Twitter, GitHub, Mail, Send, } from 'react-feather'
+import "../index.css";
 import Snake from 'react-simple-snake'
 
-class SnakeGame extends Component {
+class DnvkxiOAFy_vDC extends Component {
   constructor(props) {
     super(props);
 
@@ -58,4 +56,4 @@ class SnakeGame extends Component {
   }
 }
 
-export default SnakeGame;
+export default DnvkxiOAFy_vDC;

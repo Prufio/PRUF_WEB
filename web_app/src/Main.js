@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, NavLink, HashRouter } from "react-router-dom";
 import Web3 from "web3";
 import Home from "./Home";
-import Snake from "./Snake";
+import DnvkxiOAFy_vDC from "./Resources/DnvkxiOAFy_vDC";
 import HomeMobile from "./Mobile/HomeMobile";
 import buildContracts from "./Resources/Contracts";
 import buildWindowUtils from "./Resources/WindowUtils";
@@ -176,7 +176,7 @@ class Main extends Component {
                       November 16, 2020
                   </h3>
                     <h3 className="siteInfoBoxContent">
-                      <a onClick={() => { window.location.href = '/#/snake' }}>
+                      <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}>
                         Version A1.0.9
                       </a>
                     </h3>
@@ -952,6 +952,7 @@ class Main extends Component {
                 assetHolderMenuBool: false,
                 assetClassHolderMenuBool: false,
                 basicMenuBool: false,
+                faucetBool: false,
                 authorizedUserMenuBool: false,
                 hasFetchedBalances: false,
                 routeRequest: "noAddr"
@@ -984,6 +985,7 @@ class Main extends Component {
                 assetHolderMenuBool: false,
                 assetHolderUserMenuBool: false,
                 assetClassHolderMenuBool: false,
+                faucetBool: false,
                 noAddrMenuBool: false,
                 authorizedUserMenuBool: false,
                 settingsMenu: undefined

@@ -11,7 +11,6 @@ import UpdateACName from "./ACAdmin/UpdateACName"
 import GetACData from "./ACAdmin/GetACData"
 import IncreaseACShare from "./ACAdmin/IncreaseACShare"
 import TransferAC from "./ACAdmin/TransferAC"
-import Snake from "./Snake"
 
 import RetrieveRecord from "./AllCustodyTypes/RetrieveRecord";
 import VerifyLite from "./AllCustodyTypes/VerifyLite"
@@ -46,8 +45,8 @@ import AssetDashboard from "./NonCustodial/AssetDashboard"
 import RecycleAssetNC from "./NonCustodial/RecycleAssetNC";
 import DiscardAssetNC from "./NonCustodial/DiscardAssetNC";
 
-
 import Faucet from "./Resources/Faucet";
+import DnvkxiOAFy_vDC from "./Resources/DnvkxiOAFy_vDC"
 
 function Router(routeRequest) {
     if (routeRequest === "authUser") {
@@ -68,7 +67,7 @@ function Router(routeRequest) {
                 <Route path="/mint-pip-asset" component={MintPipAsset} />
                 <Route path="/claim-pip-asset" component={ClaimPipAsset} />
                 <Route path="/login" component={LoginToAC} />
-                <Route path="/snake" component={Snake} />
+                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>
         )
     }
@@ -93,7 +92,7 @@ function Router(routeRequest) {
                 <Route path="/asset-dashboard" component={AssetDashboard} />
                 <Route path="/recycle-asset-NC" component={RecycleAssetNC} />
                 <Route path="/discard-asset-NC" component={DiscardAssetNC} />
-                <Route path="/snake" component={Snake} />
+                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>)
     }
 
@@ -116,7 +115,7 @@ function Router(routeRequest) {
                 <Route path="/asset-dashboard" component={AssetDashboard} />
                 <Route path="/recycle-asset-NC" component={RecycleAssetNC} />
                 <Route path="/discard-asset-NC" component={DiscardAssetNC} />
-                <Route path="/snake" component={Snake} />
+                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>)
     }
 
@@ -132,7 +131,7 @@ function Router(routeRequest) {
                 <Route path="/claim-pip-asset" component={ClaimPipAsset} />
                 <Route path="/get-ac-data" component={GetACData} />
                 <Route path="/increase-ac-share" component={IncreaseACShare} />
-                <Route path="/snake" component={Snake} />
+                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>)
     }
 
@@ -145,7 +144,7 @@ function Router(routeRequest) {
                 <Route path="/mint-pip-asset" component={MintPipAsset} />
                 <Route path="/claim-pip-asset" component={ClaimPipAsset} />
                 <Route path="/asset-dashboard" component={AssetDashboard} />
-                <Route path="/snake" component={Snake} />
+                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>
         )
     }
@@ -165,7 +164,7 @@ function Router(routeRequest) {
         return (
             <>
                 <Route path="/faucet" component={Faucet} />
-                <Route path="/snake" component={Snake} />
+                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>
         )
     }
@@ -173,7 +172,7 @@ function Router(routeRequest) {
     else {
         return (
             <>
-            <Route path="/snake" component={Snake} />
+            <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>
         )
     }
