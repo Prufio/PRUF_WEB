@@ -1252,6 +1252,10 @@ div {
         font-family: 'password';
       }
 
+      .userStatFont {
+        font-size: 1.6rem !important;
+      }
+
 .formFont {
   font-size: large;
   color: rgb(255, 255, 255);
