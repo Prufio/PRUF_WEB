@@ -351,7 +351,7 @@ class EscrowManager extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </div>
             )}
@@ -364,7 +364,7 @@ class EscrowManager extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </div>
             )}

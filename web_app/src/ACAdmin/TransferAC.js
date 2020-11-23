@@ -241,7 +241,7 @@ class TransferAC extends Component {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      KOVAN Etherscan:{this.state.txHash}
+                      TX Hash:{this.state.txHash}
                     </a>
                   </div>
                 )}
@@ -254,7 +254,7 @@ class TransferAC extends Component {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      KOVAN Etherscan:{this.state.txHash}
+                      TX Hash:{this.state.txHash}
                     </a>
                   </div>
                 )}

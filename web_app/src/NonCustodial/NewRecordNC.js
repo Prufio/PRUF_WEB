@@ -586,30 +586,32 @@ class NewRecordNC extends Component {
             {this.state.txHash > 0 && ( //conditional rendering
               <div>
                 {this.state.txStatus === false && (
-                  <div>
-                    !ERROR! :
-                    <a
-                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      KOVAN Etherscan:{this.state.txHash}
-                    </a>
-                  </div>
-                )}
-                {this.state.txStatus === true && (
-                  <div>
-                    {" "}
-                    No Errors Reported :
-                    <a
-                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      KOVAN Etherscan:{this.state.txHash}
-                    </a>
-                  </div>
-                )}
+                <div className="transactionErrorText">
+                  !ERROR! :
+                  <a
+                  className="transactionErrorText"
+                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    TX Hash:{this.state.txHash}
+                  </a>
+                </div>
+              )}
+              {this.state.txStatus === true && (
+                <div className="transactionErrorText">
+                  {" "}
+                No Errors Reported :
+                  <a
+                  className="transactionErrorText"
+                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    TX Hash:{this.state.txHash}
+                  </a>
+                </div>
+              )}
               </div>
             )}
           </div>

@@ -32,7 +32,7 @@ class VerifyLiteMobile extends Component {
       }
 
       else if (this.state.Checkbox === true) {
-        idxHash = this.state.idxHash
+        idxHash = this.state.idxHashRaw
         console.log("IDXTEST3", idxHash)
       }
       console.log("IDXTEST4", idxHash)

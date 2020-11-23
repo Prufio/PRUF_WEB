@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, CheckCircle, UploadCloud, Trash2, AlertTriangle } from 'react-feather'
+import { Home, XSquare, CheckCircle, FilePlus, FileMinus, AlertTriangle } from 'react-feather'
 
 
 class ModifyDescription extends Component {
@@ -109,7 +109,7 @@ class ModifyDescription extends Component {
       window.additionalElementArrays.name = "";
       //self.setState({ accessPermitted: false });
       //self.setState({ oldDescription: undefined });
-      self.setState({idxHash: undefined, txStatus: undefined, txHash: "", elementType: "0", removedElements: {
+      self.setState({idxHash: undefined, elementType: "0", removedElements: {
         images: [],
         text: [],
       },
@@ -714,7 +714,7 @@ class ModifyDescription extends Component {
                       <Form.Row>
                         <div className="submitButton">
                           <div className="submitButtonContent">
-                            <Trash2
+                            <FileMinus
                               onClick={() => { _removeElement(this.state.elementType) }}
                             />
                           </div>
@@ -744,7 +744,7 @@ class ModifyDescription extends Component {
                       <Form.Row>
                         <div className="submitButton">
                           <div className="submitButtonContent">
-                            <Trash2
+                            <FileMinus
                               onClick={() => { _removeElement(this.state.elementType) }}
                             />
                           </div>
@@ -802,7 +802,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "text" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <UploadCloud
+                    <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -812,7 +812,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "photo" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <UploadCloud
+                    <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -822,7 +822,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "displayImage" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <UploadCloud
+                    <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -832,7 +832,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "description" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <UploadCloud
+                    <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
@@ -854,7 +854,7 @@ class ModifyDescription extends Component {
                 <Form.Row>
                   <div className="submitButton">
                     <div className="submitButtonContent">
-                      <UploadCloud
+                      <CheckCircle
                         onClick={() => { publishIPFS1() }}
                       />
                     </div>
@@ -912,27 +912,29 @@ class ModifyDescription extends Component {
           <div className="results">
             <Form.Row>
               {this.state.txStatus === false && (
-                <div>
+                <div className="transactionErrorText">
                   !ERROR! :
                   <a
+                  className="transactionErrorText"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    KOVAN Etherscan:{this.state.txHash}
+                    TX Hash:{this.state.txHash}
                   </a>
                 </div>
               )}
               {this.state.txStatus === true && (
-                <div>
+                <div className="transactionErrorText">
                   {" "}
                 No Errors Reported :
                   <a
+                  className="transactionErrorText"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    KOVAN Etherscan:{this.state.txHash}
+                    TX Hash:{this.state.txHash}
                   </a>
                 </div>
               )}

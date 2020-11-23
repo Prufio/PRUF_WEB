@@ -12,7 +12,7 @@ class RecycleAssetNC extends Component {
     //State declaration.....................................................................................................
 
     this.accessAsset = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       let idxHash;
       if (this.state.QRreader === false && this.state.Checkbox === false) {
         if (this.state.manufacturer === ""
@@ -36,7 +36,7 @@ class RecycleAssetNC extends Component {
         }
       }
       if (this.state.Checkbox) {
-        idxHash = this.state.idxHash
+        idxHash = this.state.idxHashRaw
       }
 
       let resArray = await window.utils.checkStats(idxHash, [0, 2])
@@ -255,7 +255,7 @@ class RecycleAssetNC extends Component {
     }
 
     const _recycleAsset = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       if (
         this.state.first === "" ||
         this.state.middle === "" ||
@@ -274,7 +274,7 @@ class RecycleAssetNC extends Component {
       if (this.state.result !== "") {
         idxHash = this.state.result;
       }
-      
+
       else {
         idxHash = window.web3.utils.soliditySha3(
           String(this.state.type),
@@ -544,6 +544,19 @@ class RecycleAssetNC extends Component {
               )}
               {this.state.accessPermitted && (
                 <>
+                  {this.state.type === "" && (
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridModel">
+                        <Form.Label className="formFont">Idx Hash:</Form.Label>
+                        <Form.Control
+                          placeholder={this.state.idxHash}
+                          required
+                          disabled
+                          size="lg"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                  )}
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridFirstName">
                       <Form.Label className="formFont">First Name:</Form.Label>
@@ -590,14 +603,14 @@ class RecycleAssetNC extends Component {
                     <Form.Group as={Col} controlId="formGridPassword">
                       <Form.Label className="formFont">Password:</Form.Label>
                       <Form.Control
-                      placeholder="Password"
-                      className="key"
-                      type="text"
-                      required
-                      onChange={(e) => this.setState({ secret: e.target.value })}
-                      size="lg"
-                      autocomplete="off"
-                    />
+                        placeholder="Password"
+                        className="key"
+                        type="text"
+                        required
+                        onChange={(e) => this.setState({ secret: e.target.value })}
+                        size="lg"
+                        autocomplete="off"
+                      />
                     </Form.Group>
 
                   </Form.Row>
@@ -650,27 +663,29 @@ class RecycleAssetNC extends Component {
         {this.state.txHash > 0 && this.state.QRreader === false && ( //conditional rendering
           <div className="results">
             {this.state.txStatus === false && (
-              <div>
+              <div className="transactionErrorText">
                 !ERROR! :
                 <a
+                  className="transactionErrorText"
                   href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </div>
             )}
-            {this.state.txStatus === true && this.state.QRreader === false && (
-              <div>
+            {this.state.txStatus === true && (
+              <div className="transactionErrorText">
                 {" "}
                 No Errors Reported :
                 <a
+                  className="transactionErrorText"
                   href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </div>
             )}

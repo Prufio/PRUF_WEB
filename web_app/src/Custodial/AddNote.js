@@ -345,7 +345,7 @@ class AddNote extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </div>
             )}
@@ -358,7 +358,7 @@ class AddNote extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
                 <a>
                   <img src={this.state.hashUrl} alt="" />

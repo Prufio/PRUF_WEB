@@ -204,6 +204,24 @@ class Main extends Component {
                     {this.state.settingsMenu !== undefined && (
                       <div>
                         <div className="hamburgerDropdownSettings">
+                          {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
+                            <Button
+                              size="lg"
+                              variant="toggle"
+                              onClick={() => {
+                                this.setState({ settingsMenu: undefined })
+                                if( window.confirm("That doesn't direct you anywhere. The address logged into the portal does not control any PRüF assets. For more information, click OK to proceed to our website."))
+                                {
+                                  window.open('https://pruf.io')
+                                }
+
+                              }
+                              }
+                            >
+                              No Menu Options
+                            </Button>
+                          )}
+
                           {this.state.assetClassHolderBool === true && this.state.assetClassHolderMenuBool === false && (
                             <Button
                               size="lg"
@@ -222,14 +240,14 @@ class Main extends Component {
                               Token Holder Menu
                             </Button>
                           )}
-                          {this.state.faucetBool === false && (
+                          {this.state.faucetBool === false && this.state.routeRequest === "noAddr" && (
                             <Button
                               size="lg"
                               variant="toggle"
                               onClick={() => { this.toggleMenu("faucet") }}
                             >
                               Faucet Menu
-                              </Button>
+                            </Button>
                           )}
                           {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
                             <Button
@@ -289,13 +307,14 @@ class Main extends Component {
                     {this.state.userMenu !== undefined && (
                       <div className="hamburgerDropdownUserInfo">
                         {this.state.addr === undefined && (
-                          <h4>
+                          <h4 className="userStatFont">
                             Please
-                            <a onClick={() => {
-                              alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ",
-                                this.setState({ userMenu: undefined }),
-                                window.ethereum.enable())
-                            }}
+                            <a
+                              onClick={() => {
+                                alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ",
+                                  this.setState({ userMenu: undefined }),
+                                  window.ethereum.enable())
+                              }}
                               className="userDataLink">
                               Log In
                               </a>
@@ -526,7 +545,7 @@ class Main extends Component {
           </div>
           <NavLink to="/">
           </NavLink>
-        </HashRouter>
+        </HashRouter >
       );
     }
 

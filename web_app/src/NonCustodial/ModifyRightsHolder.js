@@ -419,30 +419,32 @@ class ModifyRightsHolder extends Component {
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
             {this.state.txStatus === false && (
-              <div>
-                !ERROR! :
-                <a
-                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  KOVAN Etherscan:{this.state.txHash}
-                </a>
-              </div>
-            )}
-            {this.state.txStatus === true && (
-              <div>
-                {" "}
+                <div className="transactionErrorText">
+                  !ERROR! :
+                  <a
+                  className="transactionErrorText"
+                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    TX Hash:{this.state.txHash}
+                  </a>
+                </div>
+              )}
+              {this.state.txStatus === true && (
+                <div className="transactionErrorText">
+                  {" "}
                 No Errors Reported :
-                <a
-                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  KOVAN Etherscan:{this.state.txHash}
-                </a>
-              </div>
-            )}
+                  <a
+                  className="transactionErrorText"
+                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    TX Hash:{this.state.txHash}
+                  </a>
+                </div>
+              )}
           </div>
         )}
       </div>

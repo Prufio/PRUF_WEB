@@ -33,7 +33,7 @@ class VerifyRightHolder extends Component {
       }
 
       else if (this.state.Checkbox === true) {
-        idxHash = this.state.idxHash
+        idxHash = this.state.idxHashRaw
       }
 
       let doesExist = await window.utils.checkAssetExists(idxHash);
@@ -346,7 +346,7 @@ class VerifyRightHolder extends Component {
                   {this.state.help === true && (
                     <div className="explainerTextBox">
                       Deep Verify is a function that confirms provenance of an item. As it initiates a blockchain transaction, Deep Verify is secure
-                      despite your browser connection being securily protected. For a less secure, but free provenance check, use Verify Lite
+                      despite your browser connection being securily protected. For a less verifyable, but free provenance check, use Verify Lite
                     </div>
                   )}
                 </>
@@ -566,9 +566,9 @@ class VerifyRightHolder extends Component {
                         </div>
                       </Form.Row>
                       {this.state.help === true && (
-                        <div className="explainerTextBox">
+                        <div className="explainerTextBox2">
                           Deep Verify is a function that confirms provenance of an item. As it initiates a blockchain transaction, Deep Verify is secure
-                          despite your browser connection being securily protected. For a less secure but free provenance check, use Verify Lite
+                          despite your browser connection being securily protected. For a less verifyable but free provenance check, use Verify Lite
                         </div>
                       )}
                     </>
@@ -587,16 +587,18 @@ class VerifyRightHolder extends Component {
           <div className="results">
             {this.state.txHash > 0 && ( //conditional rendering
               <Form.Row>
-                {this.state.DVresult === "Match confirmed"
-                  ? "Match Confirmed :"
-                  : "No Match Found :"}
+                <div className="transactionErrorText">
+                  {this.state.DVresult === "Match confirmed"
+                    ? "Match Confirmed :"
+                    : "No Match Found :"}
+                </div>
                 <a
-                  className="resultLink"
+                  className="transactionErrorText"
                   href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </Form.Row>
             )}

@@ -13,7 +13,7 @@ class VerifyLite extends Component {
 
 
     this.accessAsset = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       let idxHash;
       if (this.state.QRreader === false && !this.state.Checkbox) {
         if (this.state.manufacturer === ""
@@ -35,7 +35,7 @@ class VerifyLite extends Component {
       }
 
       else if (this.state.Checkbox === true) {
-        idxHash = this.state.idxHash
+        idxHash = this.state.idxHashRaw
       }
 
       let doesExist = await window.utils.checkAssetExists(idxHash);
@@ -125,7 +125,7 @@ class VerifyLite extends Component {
   }
 
   render() {//render continuously produces an up-to-date stateful document  
-    
+
     const QRReader = async () => {
       if (this.state.QRreader === false) {
         this.setState({ QRreader: true, assetFound: "", Checkbox: false })
@@ -159,7 +159,7 @@ class VerifyLite extends Component {
     }
 
     const _verify = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -223,14 +223,14 @@ class VerifyLite extends Component {
                 <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                 {this.state.Checkbox === true && (
                   <Form.Group>
-                  <Form.Label className="formFont">Idx Hash:</Form.Label>
-                  <Form.Control
-                    placeholder="Idx Hash"
-                    required
-                    onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Group>
+                    <Form.Label className="formFont">Idx Hash:</Form.Label>
+                    <Form.Control
+                      placeholder="Idx Hash"
+                      required
+                      onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                      size="lg"
+                    />
+                  </Form.Group>
                 )}
               </div>
             )}
@@ -316,7 +316,7 @@ class VerifyLite extends Component {
                 {this.state.help === true && (
                   <div className="explainerTextBox">
                     Verify Lite is a call function that confirms provenance of an item. As it does not initiate a blockchain transaction, Verify Lite is only
-                    secure if your browser connection is securily protected. For a more secure provenance check, use Deep Verify.
+                    trustable if your browser connection is securily protected. For a more verifyable provenance check, use Deep Verify.
                   </div>
                 )}
               </>
@@ -357,6 +357,19 @@ class VerifyLite extends Component {
             )}
             {this.state.accessPermitted && (
               <>
+                {this.state.type === "" && (
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="formGridModel">
+                      <Form.Label className="formFont">Idx Hash:</Form.Label>
+                      <Form.Control
+                        placeholder={this.state.idxHash}
+                        required
+                        disabled
+                        size="lg"
+                      />
+                    </Form.Group>
+                  </Form.Row>
+                )}
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridFirstName">
                     <Form.Label className="formFont">First Name:</Form.Label>
@@ -430,9 +443,9 @@ class VerifyLite extends Component {
                   </div>
                 </Form.Row>
                 {this.state.help === true && (
-                  <div className="explainerTextBox">
+                  <div className="explainerTextBox2">
                     Verify Lite is a call function that confirms provenance of an item. As it does not initiate a blockchain transaction, Verify Lite is only
-                    trustable if your browser connection is securily protected. For a more secure provenance check, use Deep Verify.
+                    secure if your browser connection is securily protected. For a more verifyable provenance check, use Deep Verify.
                   </div>
                 )}
               </>

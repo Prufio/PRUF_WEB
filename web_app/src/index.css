@@ -680,7 +680,7 @@ div {
 
 .active {
   background-color: #00a8ff;
-  border-radius: 0.2rem;
+  /* border-radius: 0.2rem; */
 }
 
 .imageButton {
@@ -1292,7 +1292,7 @@ div {
   font-size: 1rem;
   padding: 0.5rem;
   position: absolute;
-  border-radius: 0rem 1rem 1rem 1rem;
+  border-radius: 0rem 0.5rem 0.5rem 0.5rem;
   margin-top: -5rem;
   margin-left: 2rem;
   z-index: 999;
@@ -1308,7 +1308,7 @@ div {
   font-size: 0.9rem;
   padding: 0.5rem;
   position: absolute;
-  border-radius: 1rem 1rem 1rem 1rem;
+  border-radius: 0.5rem;
   margin-top: -3.3rem;
   margin-left: 2rem;
   z-index: 999;
@@ -1324,7 +1324,7 @@ div {
   font-size: 0.9rem;
   padding: 0.5rem;
   position: absolute;
-  border-radius: 1rem 1rem 1rem 1rem;
+  border-radius: 0.5rem;
   margin-top: 8rem;
   margin-left: -2rem;
   z-index: 999;
@@ -1349,6 +1349,10 @@ div {
   color: rgb(255, 255, 255);
   font-size: 1rem;
   font-family: Tahoma, Geneva, sans-serif;
+}
+
+.transactionErrorText {
+font-size: 1rem;
 }
 
 .homeErrorText {

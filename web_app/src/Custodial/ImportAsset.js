@@ -294,7 +294,7 @@ class ImportAsset extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </div>
             )}
@@ -307,7 +307,7 @@ class ImportAsset extends Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  KOVAN Etherscan:{this.state.txHash}
+                  TX Hash:{this.state.txHash}
                 </a>
               </div>
             )}
