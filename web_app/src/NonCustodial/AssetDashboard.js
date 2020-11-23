@@ -523,7 +523,7 @@ class AssetDashboard extends React.Component {
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && !this.state.moreInfo && (<>{generateAssetDash(this.state.assets)}</>)}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && this.state.moreInfo && (<>{generateAssetInfo(this.state.assetObj)}</>)}
           {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<div className="text"><h2 className="loading">Loading Assets</h2></div>)}
-          {this.state.hasNoAssets && (<div className="text"><h2>No Assets Held by User</h2></div>)}
+          {this.state.hasNoAssets && (<h2 className="textAD">No Assets Held by User</h2>)}
         </div>
         <div className="assetDashboardFooter">
         </div>

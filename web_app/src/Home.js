@@ -113,11 +113,11 @@ class Home extends Component {
               <br></br>
 
               <Form.Row>
-                <div className="homeErrorTextTestNet">
-                  <h1 className="loading">
+                {/* <div className="homeErrorTextTestNet"> */}
+                  <h1 className="loadingHome">
                     Connecting to the Blockchain
                  </h1>
-                </div>
+                {/* </div> */}
               </Form.Row>
             </div>
           )}

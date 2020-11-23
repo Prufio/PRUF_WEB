@@ -647,7 +647,7 @@ div {
 }
 
 .siteInfoBox h3 a:hover{
-  cursor: pointer;
+  /* cursor: pointer; */
   text-decoration: line-through !important;
   text-decoration-color: #ff0000 !important;
 }
@@ -1182,6 +1182,17 @@ div {
   animation: dots 1s steps(5, end) infinite;
 }
 
+.loadingHome {
+  font-size: 3rem;
+  margin-top: -22rem;
+  /* margin-bottom: -3rem; */
+}
+
+.loadingHome:after {
+  content: '  .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
 .loadingMobile{
   max-width: 100ch;
   font-size: 1.6rem;
@@ -1229,6 +1240,18 @@ div {
 
       /* ----------------------VVV-----------------------Text-----------------------VVV------------------------- */
 
+
+      @font-face {
+        font-family: 'password';
+        font-style: Helvetica;
+        /* font-weight: 400; */
+        src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
+      }
+      
+      input.key {
+        font-family: 'password';
+      }
+
 .formFont {
   font-size: large;
   color: rgb(255, 255, 255);
@@ -1245,6 +1268,13 @@ div {
 .text {
   color: white;
   font-size: 1.4rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.textAD {
+  color: white;
+  font-size: 2.5rem;
   justify-content: center;
   align-items: center;
 }

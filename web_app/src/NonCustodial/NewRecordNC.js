@@ -502,18 +502,22 @@ class NewRecordNC extends Component {
                       {this.state.transaction === false && (
                         <Form.Control
                           placeholder="Password"
-                          type="password"
+                          className="key"
+                          type="text"
                           required
                           onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
+                          autocomplete="off"
                         />)}
                       {this.state.transaction === true && (
                         <Form.Control
                           placeholder="Password"
-                          type="password"
-                          required
+                          className="key"
+                          type="text"
                           disabled
+                          onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
+                          autocomplete="off"
                         />)}
                     </Form.Group>
 
