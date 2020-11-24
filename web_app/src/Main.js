@@ -36,8 +36,7 @@ class Main extends Component {
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
                       <nav>
-                        {this.state.noAddrMenuBool === true && (<NoAddressComponent />)}
-                        {this.state.noAddrMenuBool === false && (<NoAddressComponent />)}
+                        <NoAddressComponent />
                       </nav>
                     )}
                   </ul>
