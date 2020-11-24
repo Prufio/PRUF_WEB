@@ -162,7 +162,7 @@ class RetrieveRecordMobile extends Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
               <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
-              <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title>
+              {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>
           <div className="submitButtonRRQR3Mobile">
@@ -170,7 +170,7 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined }) }}
+                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
               />
             </div>
           </div>
