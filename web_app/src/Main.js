@@ -37,7 +37,7 @@ class Main extends Component {
                     {window.contracts !== undefined && (
                       <nav>
                         {this.state.noAddrMenuBool === true && (<NoAddressComponent />)}
-                        {this.state.noAddrMenuBool === false && (<BasicComponent />)}
+                        {this.state.noAddrMenuBool === false && (<NoAddressComponent />)}
                       </nav>
                     )}
                   </ul>
