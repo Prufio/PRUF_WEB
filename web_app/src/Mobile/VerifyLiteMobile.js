@@ -74,6 +74,8 @@ class VerifyLiteMobile extends Component {
       middle: "",
       surname: "",
       id: "",
+      idxHashRaw: undefined,
+      idxHash: undefined,
       secret: "",
       QRreader: false,
       isNFA: false,
@@ -151,7 +153,7 @@ class VerifyLiteMobile extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "" })
+      this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "", idxHashRaw: undefined, idxHash: undefined })
     }
 
     const _verify = async () => {
@@ -159,7 +161,17 @@ class VerifyLiteMobile extends Component {
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ VLresult: "" })
-      var idxHash = this.state.idxHash;
+
+      var idxHash;
+
+      if(this.state.idxHashRaw !== undefined && this.state.idxHash === undefined){
+        idxHash = this.state.idxHashRaw;
+      }
+      else if (this.state.idxHashRaw === undefined && this.state.idxHash !== undefined){
+        idxHash = this.state.idxHash;
+      }
+      else{clearForm(); return alert("Multiple values for idxHash found. Clearing form.")}
+
       console.log(idxHash)
       let rgtRaw = window.web3.utils.soliditySha3(
         String(this.state.first).replace(/\s/g, ''),

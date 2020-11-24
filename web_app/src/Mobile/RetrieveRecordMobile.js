@@ -359,6 +359,8 @@ class RetrieveRecordMobile extends Component {
       assetFound: undefined,
       Checkbox: false,
       moreInfo: false,
+      idxHash: undefined,
+      idxHashRaw: undefined,
     };
   }
 
