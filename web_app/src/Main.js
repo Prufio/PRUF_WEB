@@ -1169,7 +1169,8 @@ class Main extends Component {
     window.menuChange = undefined;
 
 
-    if (window.ethereum !== undefined) {
+    if (!isMobile) {
+
       window.costs = {}
       window.additionalElementArrays = {
         photo: [],
@@ -1208,7 +1209,7 @@ class Main extends Component {
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setState({ hasMounted: true })
     }
-    else {
+    else if (isMobile){ // && window.ethereum === undefined
 
       window.ipfsCounter = 0;
       _web3 = require("web3");
