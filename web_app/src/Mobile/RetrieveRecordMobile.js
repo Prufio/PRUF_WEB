@@ -147,7 +147,7 @@ class RetrieveRecordMobile extends Component {
 
       return (
         <>
-          <Card style={{height:'500px', width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
+          <Card style={{height:'350px', width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
             {this.state.selectedImage !== undefined ?
               (<Card.Img style={{ width: '340px', height: "340px" }} variant="top" src={this.state.selectedImage} />)
               : (<>{renderIcon()}</>)}
