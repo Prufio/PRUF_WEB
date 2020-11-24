@@ -203,7 +203,7 @@ div {
 }
 
 .homeFormTestNet {
-  height: 50rem;
+  height: 45rem;
   width: 75rem;
   color: white;
   display: flex;
@@ -223,7 +223,7 @@ div {
 }
 
 .homeDisclaimer {
-  height: 14rem;
+  height: 12rem;
   width: 70rem;
   color: rgb(206, 27, 27);
   display: flex;
@@ -309,7 +309,7 @@ div {
 
 .assetDashboard {
   height: flex;
-  max-height: 55rem;
+  max-height: 40rem;
   width: 70rem;
   background-color: #002a40;
   padding: 1rem;
@@ -582,7 +582,7 @@ div {
 
 .hamburgerDropdown {
   display: flex;
-  height: 67rem;
+  height: 40rem;
   width: 30rem;
   position: absolute;
   background-image: url(./Resources/Images/DarkBlueBack.png);
@@ -640,7 +640,7 @@ div {
   position: absolute;
   align-items: center;
   margin-left: 20rem;
-  margin-top: 60rem;
+  margin-top: 35rem;
 }
 
 .siteInfoBox h3 {
@@ -705,7 +705,7 @@ div {
   width: fit-content;
   height: fit-content;
   position: absolute;
-  margin-top: 53rem;
+  margin-top: 28rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
   z-index: 999;
@@ -1861,7 +1861,7 @@ margin-bottom: -3rem;
   position: absolute;
   flex-direction: column;
   z-index: 999;
-  margin-top: 40rem;
+  margin-top: 17rem;
   margin-left: 20rem;
   justify-content: space-between;
 }

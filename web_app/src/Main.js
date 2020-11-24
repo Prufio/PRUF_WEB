@@ -170,13 +170,13 @@ class Main extends Component {
                       alt="Pruf U" />
                   </button>
                   <div className="siteInfoBox">
-                    <h3 className="siteInfoBoxContent">
+                    <h3>
                       Website Last Updated:
                   </h3>
-                    <h3 className="siteInfoBoxContent">
+                    <h3>
                       November 16, 2020
                   </h3>
-                    <h3 className="siteInfoBoxContent">
+                    <h3>
                       <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}>
                         Version A1.0.9
                       </a>
