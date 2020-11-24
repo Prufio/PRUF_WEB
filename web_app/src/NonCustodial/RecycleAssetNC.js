@@ -24,10 +24,10 @@ class RecycleAssetNC extends Component {
 
         else if (!this.state.Checkbox) {
           idxHash = window.web3.utils.soliditySha3(
-            String(this.state.type),
-            String(this.state.manufacturer),
-            String(this.state.model),
-            String(this.state.serial),
+            String(this.state.type).replace(/\s/g, ''),
+            String(this.state.manufacturer).replace(/\s/g, ''),
+            String(this.state.model).replace(/\s/g, ''),
+            String(this.state.serial).replace(/\s/g, '')
           );
         }
 
@@ -277,20 +277,20 @@ class RecycleAssetNC extends Component {
 
       else {
         idxHash = window.web3.utils.soliditySha3(
-          String(this.state.type),
-          String(this.state.manufacturer),
-          String(this.state.model),
-          String(this.state.serial),
+          String(this.state.type).replace(/\s/g, ''),
+          String(this.state.manufacturer).replace(/\s/g, ''),
+          String(this.state.model).replace(/\s/g, ''),
+          String(this.state.serial).replace(/\s/g, ''),
         );
       }
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(
-        this.state.first,
-        this.state.middle,
-        this.state.surname,
-        this.state.id,
-        this.state.secret
+        String(this.state.first).replace(/\s/g, ''),
+        String(this.state.middle).replace(/\s/g, ''),
+        String(this.state.surname).replace(/\s/g, ''),
+        String(this.state.id).replace(/\s/g, ''),
+        String(this.state.secret).replace(/\s/g, '')
       );
 
       console.log(idxHash)

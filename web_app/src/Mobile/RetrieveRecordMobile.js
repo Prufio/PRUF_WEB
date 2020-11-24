@@ -15,7 +15,7 @@ class RetrieveRecordMobile extends Component {
       if (this.state.ipfsObject !== undefined && this.state.runWatchDog === true && this.state.assetObj === undefined) {
         let tempIPFS = this.state.ipfsObject;
         console.log(tempIPFS)
-        this.setState({
+        if (this.state.idxHashRaw === undefined){this.setState({
           assetObj: {
             idxHash: this.state.idxHash,
             name: tempIPFS.name,
@@ -27,7 +27,23 @@ class RetrieveRecordMobile extends Component {
 
           },
           moreInfo: true
-        })
+        })}
+        else{
+          this.setState({
+            assetObj: {
+              idxHash: this.state.idxHashRaw,
+              name: tempIPFS.name,
+              assetClass: window.assetInfo.assetClass,
+              status: window.assetInfo.status,
+              description: tempIPFS.text.description,
+              text: tempIPFS.text,
+              photo: tempIPFS.photo,
+  
+            },
+            moreInfo: true
+          })
+        }
+        
         if (tempIPFS.photo.DisplayImage !== undefined) {
           this.setState({ selectedImage: tempIPFS.photo.DisplayImage })
         }
@@ -131,7 +147,7 @@ class RetrieveRecordMobile extends Component {
 
       return (
         <>
-          <Card style={{ width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
+          <Card style={{height:'500px', width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
             {this.state.selectedImage !== undefined ?
               (<Card.Img style={{ width: '340px', height: "340px" }} variant="top" src={this.state.selectedImage} />)
               : (<>{renderIcon()}</>)}
@@ -145,6 +161,8 @@ class RetrieveRecordMobile extends Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
+              <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
+              <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title>
             </Card.Body>
           </Card>
           <div className="submitButtonRRQR3Mobile">
@@ -427,10 +445,10 @@ class RetrieveRecordMobile extends Component {
 
       if (this.state.Checkbox === false) {
         idxHash = window.web3.utils.soliditySha3(
-          String(this.state.type),
-          String(this.state.manufacturer),
-          String(this.state.model),
-          String(this.state.serial),
+          String(this.state.type).replace(/\s/g, ''),
+          String(this.state.manufacturer).replace(/\s/g, ''),
+          String(this.state.model).replace(/\s/g, ''),
+          String(this.state.serial).replace(/\s/g, '')
         );
         this.setState({ idxHash: idxHash })
         console.log("idxHash", idxHash);
@@ -491,29 +509,6 @@ class RetrieveRecordMobile extends Component {
       return this.setState({ authLevel: window.authLevel, moreInfo: true, })
     }
 
-    // if (this.state.wasSentPacket === true) {
-    //   return (
-    //     <div>
-    //       <div>
-    //       <div>
-    //           <div className="mediaLinkADHomeMobile">
-    //             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
-    //           </div>
-    //           <h2 className="formHeaderMobile">Here's What we Found</h2>
-    //           <div className="mediaLinkClearForm">
-    //             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="assetDashboard">
-    //         {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
-    //         {this.state.assetObj === undefined && (<h4 className="loading">Loading Asset</h4>)}
-    //       </div>
-    //       <div className="assetDashboardFooter">
-    //       </div>
-    //     </div >
-    //   )
-    // }
     return (
       <div>
         {this.state.moreInfo === false && this.state.QRreader === false && (

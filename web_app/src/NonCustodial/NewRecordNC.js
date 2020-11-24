@@ -140,10 +140,10 @@ class NewRecordNC extends Component {
       }
 
       let idxHash = window.web3.utils.soliditySha3(
-        this.state.type,
-        this.state.manufacturer,
-        this.state.model,
-        this.state.serial,
+        String(this.state.type).replace(/\s/g, ''),
+        String(this.state.manufacturer).replace(/\s/g, ''),
+        String(this.state.model).replace(/\s/g, ''),
+        String(this.state.serial).replace(/\s/g, '')
       );
 
       let doesExist = await window.utils.checkAssetExists(idxHash);
@@ -173,11 +173,11 @@ class NewRecordNC extends Component {
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(
-        this.state.first,
-        this.state.middle,
-        this.state.surname,
-        this.state.id,
-        this.state.secret
+        String(this.state.first).replace(/\s/g, ''),
+        String(this.state.middle).replace(/\s/g, ''),
+        String(this.state.surname).replace(/\s/g, ''),
+        String(this.state.id).replace(/\s/g, ''),
+        String(this.state.secret).replace(/\s/g, '')
       );
 
       console.log(idxHash.length)

@@ -160,11 +160,11 @@ class ModifyRightsHolder extends Component {
       var newRgtRaw;
 
       newRgtRaw = window.web3.utils.soliditySha3(
-        this.state.first,
-        this.state.middle,
-        this.state.surname,
-        this.state.id,
-        this.state.secret
+        String(this.state.first).replace(/\s/g, ''),
+        String(this.state.middle).replace(/\s/g, ''),
+        String(this.state.surname).replace(/\s/g, ''),
+        String(this.state.id).replace(/\s/g, ''),
+        String(this.state.secret).replace(/\s/g, '')
       );
 
       var newRgtHash = window.web3.utils.soliditySha3(idxHash, newRgtRaw);

@@ -322,8 +322,8 @@ div {
 }
 
 .assetDashboardMobile {
-  height: flex;
-  max-height: 55rem;
+  height: 70rem;
+  max-height: 70rem;
   width: 360px;
   background-color: #002a40;
   padding: 1rem;
@@ -507,7 +507,7 @@ div {
 }
 
 .resultsMobile {
-  height: flex;
+  height: 800px;
   width: 360px;
   color: white;
   background-color: #002a40;

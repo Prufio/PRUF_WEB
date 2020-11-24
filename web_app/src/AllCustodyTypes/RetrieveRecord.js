@@ -540,10 +540,10 @@ class RetrieveRecord extends Component {
 
       if (this.state.Checkbox === false) {
         idxHash = window.web3.utils.soliditySha3(
-          String(this.state.type),
-          String(this.state.manufacturer),
-          String(this.state.model),
-          String(this.state.serial),
+          String(this.state.type).replace(/\s/g, ''),
+          String(this.state.manufacturer).replace(/\s/g, ''),
+          String(this.state.model).replace(/\s/g, ''),
+          String(this.state.serial).replace(/\s/g, ''),
         );
         this.setState({ idxHash: idxHash })
         console.log("idxHash", idxHash);

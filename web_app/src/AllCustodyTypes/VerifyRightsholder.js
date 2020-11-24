@@ -21,10 +21,10 @@ class VerifyRightHolder extends Component {
           return alert("Please fill out all fields before submission")
         }
         idxHash = window.web3.utils.soliditySha3(
-          String(this.state.type),
-          String(this.state.manufacturer),
-          String(this.state.model),
-          String(this.state.serial),
+          String(this.state.type).replace(/\s/g, ''),
+          String(this.state.manufacturer).replace(/\s/g, ''),
+          String(this.state.model).replace(/\s/g, ''),
+          String(this.state.serial).replace(/\s/g, '')
         );
       }
 
@@ -172,11 +172,11 @@ class VerifyRightHolder extends Component {
 
 
       let rgtRaw = window.web3.utils.soliditySha3(
-        String(this.state.first),
-        String(this.state.middle),
-        String(this.state.surname),
-        String(this.state.id),
-        String(this.state.secret)
+        String(this.state.first).replace(/\s/g, ''),
+        String(this.state.middle).replace(/\s/g, ''),
+        String(this.state.surname).replace(/\s/g, ''),
+        String(this.state.id).replace(/\s/g, ''),
+        String(this.state.secret).replace(/\s/g, '')
       );
       let rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtRaw));
 
