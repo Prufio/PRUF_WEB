@@ -235,7 +235,7 @@ class VerifyLiteMobile extends Component {
                     <Form.Label className="formFont">Idx Hash:</Form.Label>
                     <Form.Control
                       placeholder="Idx Hash"
-                      onChange={(e) => this.setState({ idxHash: e.target.value })}
+                      onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
                       size="lg"
                       required
                     />
