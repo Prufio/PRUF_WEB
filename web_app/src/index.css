@@ -433,6 +433,7 @@ div {
 
 .formMobile {
   height: flex;
+  overflow-y: visible;
   width: 360px;
   background-color: #005480;
   padding: 2rem;

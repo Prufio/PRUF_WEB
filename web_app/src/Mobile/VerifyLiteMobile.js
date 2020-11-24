@@ -200,7 +200,7 @@ class VerifyLiteMobile extends Component {
         await this.setState({ VLresult: "0" })
       }
 
-      if (infoMatches) { await this.setState({ VLresult: "170" }); }
+      if (infoMatches) {alert ("Match Confirmed"); await this.setState({ VLresult: "170" }); }
 
       return this.setState({ accessPermitted: false, Checkbox: false });
     };
