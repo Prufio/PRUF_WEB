@@ -162,15 +162,15 @@ class VerifyLiteMobile extends Component {
       this.setState({ error: undefined })
       this.setState({ VLresult: "" })
 
-      var idxHash;
+      var idxHash = this.state.idxHash;
 
-      if(this.state.idxHashRaw !== undefined && this.state.idxHash === undefined){
-        idxHash = this.state.idxHashRaw;
-      }
-      else if (this.state.idxHashRaw === undefined && this.state.idxHash !== undefined){
-        idxHash = this.state.idxHash;
-      }
-      else{clearForm(); return alert("Multiple values for idxHash found. Clearing form.")}
+      // if(this.state.idxHashRaw !== undefined && this.state.idxHash === undefined){
+      //   idxHash = this.state.idxHashRaw;
+      // }
+      // else if (this.state.idxHashRaw === undefined && this.state.idxHash !== undefined){
+      //   idxHash = this.state.idxHash;
+      // }
+      // else{clearForm(); return alert("Multiple values for idxHash found. Clearing form.")}
 
       console.log(idxHash)
       let rgtRaw = window.web3.utils.soliditySha3(
