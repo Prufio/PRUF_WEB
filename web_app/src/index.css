@@ -264,6 +264,7 @@ div {
   max-width: none;
   flex-direction: row;
   justify-content: center;
+  scrollbar-width: none;
   overflow: visible;
   z-index: 2;
 }
@@ -433,7 +434,6 @@ div {
 
 .formMobile {
   height: flex;
-  /* overflow-y: auto; */
   width: 360px;
   background-color: #005480;
   padding: 2rem;

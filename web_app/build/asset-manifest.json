@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "./static/css/main.c0de2d96.chunk.css",
+    "main.css": "./static/css/main.a70fec43.chunk.css",
     "main.js": "./static/js/main.06ed4dc5.chunk.js",
     "main.js.map": "./static/js/main.06ed4dc5.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.17ab6e71.js",
@@ -9,10 +9,10 @@
     "static/js/2.6bac4c56.chunk.js": "./static/js/2.6bac4c56.chunk.js",
     "static/js/2.6bac4c56.chunk.js.map": "./static/js/2.6bac4c56.chunk.js.map",
     "index.html": "./index.html",
-    "precache-manifest.b4fd2491b8b561c6be959e062aa95061.js": "./precache-manifest.b4fd2491b8b561c6be959e062aa95061.js",
+    "precache-manifest.a3e2eb035112e74ee4c10b3bb61761ea.js": "./precache-manifest.a3e2eb035112e74ee4c10b3bb61761ea.js",
     "service-worker.js": "./service-worker.js",
     "static/css/2.40563451.chunk.css.map": "./static/css/2.40563451.chunk.css.map",
-    "static/css/main.c0de2d96.chunk.css.map": "./static/css/main.c0de2d96.chunk.css.map",
+    "static/css/main.a70fec43.chunk.css.map": "./static/css/main.a70fec43.chunk.css.map",
     "static/js/2.6bac4c56.chunk.js.LICENSE.txt": "./static/js/2.6bac4c56.chunk.js.LICENSE.txt",
     "static/media/index.css": "./static/media/BlueBackMobile.3f7c1b45.png",
     "static/media/Pruf AR (2).png": "./static/media/Pruf AR (2).a09bb578.png",
@@ -30,7 +30,7 @@
     "static/js/runtime-main.17ab6e71.js",
     "static/css/2.40563451.chunk.css",
     "static/js/2.6bac4c56.chunk.js",
-    "static/css/main.c0de2d96.chunk.css",
+    "static/css/main.a70fec43.chunk.css",
     "static/js/main.06ed4dc5.chunk.js"
   ]
 }
