@@ -397,7 +397,7 @@ class VerifyLiteMobile extends Component {
                   <Form.Label className="formFont">Password:</Form.Label>
                   <Form.Control
                       placeholder="Password"
-                      className="key"
+                      //className="key"
                       type="text"
                       required
                       onChange={(e) => this.setState({ secret: e.target.value })}
