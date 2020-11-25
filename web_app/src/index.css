@@ -463,6 +463,20 @@ div {
   align-items: flex-start;
 }
 
+.assetSelectedResultsMobile {
+  height: flex;
+  width: 360px;
+  color: white;
+  background-color: #002a40;
+  border-radius: 0rem 0rem 1rem 1rem;
+  font-size: 2.2rem;
+  display: flex;
+  padding: 2rem;
+  margin-top: -0.2rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
 .assetSelectedContentHead {
   color: white;
   font-size: 1.3rem; 
@@ -475,6 +489,12 @@ div {
 .assetSelectedContent {
   color: white;
   font-size: 1.3rem;
+}
+
+.assetSelectedContentMobile {
+  color: white;
+  font-size: 1.3rem;
+  max-width: 10rem;
 }
 
 .results {

@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
-class VerifyLiteMobile extends Component {
+class DeepVerifyMobile extends Component {
   constructor(props) {
     super(props);
 
@@ -40,7 +40,7 @@ class VerifyLiteMobile extends Component {
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, VLresult: "" })
+          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
       }
 
       console.log("idxHash", idxHash);
@@ -60,7 +60,7 @@ class VerifyLiteMobile extends Component {
       addr: "",
       error: undefined,
       error1: undefined,
-      VLresult: "",
+      DVresult: "",
       result: "",
       assetClass: undefined,
       ipfs1: "",
@@ -137,7 +137,7 @@ class VerifyLiteMobile extends Component {
         console.log("TEST", this.state.QRreader)
       }
       else {
-        await this.setState({ QRreader: false,  VLresult: "" })
+        await this.setState({ QRreader: false, DVresult: "" })
         console.log("TEST2", this.state.QRreader)
       }
     }
@@ -153,14 +153,16 @@ class VerifyLiteMobile extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "", idxHashRaw: undefined, idxHash: undefined, VLresult: "" })
+      this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "", idxHashRaw: undefined, idxHash: undefined, DVresult: "" })
     }
 
     const _verify = async () => {
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
-      this.setState({ VLresult: "" })
+      this.setState({ result: "" })
+      this.setState({ transaction: true });
 
       var idxHash = this.state.idxHash;
 
@@ -189,18 +191,32 @@ class VerifyLiteMobile extends Component {
       console.log("addr: ", window.addr);
 
       var doesExist = await window.utils.checkAssetExists(idxHash);
-      var infoMatches = await window.utils.checkMatch(idxHash, rgtHash);
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "" })
+          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "" })
       }
 
-      if (!infoMatches) {
-        await this.setState({ VLresult: "0" })
-      }
-
-      if (infoMatches) {alert ("Match Confirmed"); await this.setState({ VLresult: "170" }); }
+      await window.contracts.STOR.methods
+        .blockchainVerifyRightsHolder(idxHash, rgtHash)
+        .send({ from: window.addr })
+        .on("error", function (_error) {
+          // self.setState({ NRerror: _error });
+          self.setState({ transaction: false })
+          self.setState({ txHash: Object.values(_error)[0].transactionHash });
+          self.setState({ txStatus: false });
+          alert("Something went wrong!")
+          clearForm();
+          console.log(Object.values(_error)[0].transactionHash);
+          window.isInTx = false;
+        })
+        .on("receipt", (receipt) => {
+          this.setState({ txHash: receipt.transactionHash });
+          this.setState({ transaction: false })
+          self.setState({ txStatus: receipt.status });
+          console.log(receipt.events.REPORT.returnValues._msg);
+          this.setState({ DVresult: receipt.events.REPORT.returnValues._msg })
+        });
 
       return this.setState({ accessPermitted: false, Checkbox: false });
     };
@@ -212,7 +228,7 @@ class VerifyLiteMobile extends Component {
             <div className="mediaLinkADHome">
               <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
-            <h2 className="formHeaderMobile">Verify Lite</h2>
+            <h2 className="formHeaderMobile">Deep Verify</h2>
             <div className="mediaLinkClearForm">
               <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
@@ -396,14 +412,14 @@ class VerifyLiteMobile extends Component {
                 <Form.Row>
                   <Form.Label className="formFont">Password:</Form.Label>
                   <Form.Control
-                      placeholder="Password"
-                      className="key"
-                      type="text"
-                      required
-                      onChange={(e) => this.setState({ secret: e.target.value })}
-                      size="lg"
-                      autoComplete="off"
-                    />
+                    placeholder="Password"
+                    className="key"
+                    type="text"
+                    required
+                    onChange={(e) => this.setState({ secret: e.target.value })}
+                    size="lg"
+                    autoComplete="off"
+                  />
                 </Form.Row>
                 <Form.Row>
                   <div className="submitButtonRRMobile">
@@ -418,23 +434,58 @@ class VerifyLiteMobile extends Component {
             )}
           </div>
         </Form>
-        {this.state.QRreader === false && (
-          <div className="resultsMobile">
+        {this.state.QRreader === false && (<>
 
-            {this.state.VLresult !== "" && ( //conditional rendering
-              <Form.Row>
-                {
-                  this.state.VLresult === "170"
-                    ? "Match Confirmed"
-                    : "No Match Found"
-                }
-              </Form.Row>
-            )}
-
-          </div>
+          {this.state.transaction === true && (
+            <div className="resultsMobile">
+              <h1 className="loadingh1">Transaction In Progress</h1>
+            </div>)}
+          {this.state.transaction === false && (
+            <div>
+              {this.state.txHash > 0 && (
+                <div className="resultsMobile">
+                  {this.state.txStatus === false && (
+                    <div className="transactionErrorText">
+                      !ERROR! :
+                      <a
+                        className="transactionErrorText"
+                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        TX Hash:{this.state.txHash}
+                      </a>
+                    </div>
+                  )}
+                  {this.state.txStatus === true && (
+                    <> {" "}
+                      {this.state.DVresult !== "" && (
+                        <div className="transactionErrorText">
+                          {
+                            this.state.DVresult === "Match confirmed"
+                              ? "Match Confirmed"
+                              : "No Match Found"
+                          }
+                        </div>
+                      )}
+                      <br></br>
+                      <a
+                        className="transactionErrorText"
+                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        TX Hash:{this.state.txHash}
+                      </a>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}</>
         )}
       </div>
     );
   }
 }
-export default VerifyLiteMobile;
+export default DeepVerifyMobile;

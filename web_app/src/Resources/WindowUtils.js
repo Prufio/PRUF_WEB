@@ -1129,7 +1129,7 @@ function buildWindowUtils() {
 
   const _determineTokenBalance = async () => {
 
-    if (window.addr !== undefined) {
+    if (window.contracts !== undefined) {
       let _assetClassBal, _assetBal, _IDTokenBal, _prufTokenBal;
       console.log("getting balance info from token contracts...")
       await window.contracts.A_TKN.methods.balanceOf(window.addr).call((error, result) => {

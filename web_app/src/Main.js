@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Route, NavLink, HashRouter } from "react-router-dom";
 import Web3 from "web3";
 import Home from "./Home";
-import DnvkxiOAFy_vDC from "./Resources/DnvkxiOAFy_vDC";
 import HomeMobile from "./Mobile/HomeMobile";
 import buildContracts from "./Resources/Contracts";
 import buildWindowUtils from "./Resources/WindowUtils";
@@ -14,6 +13,7 @@ import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
 import AuthorizedUserLogin from "./Resources/AuthorizedUserLogin";
 import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
+import MobileComponent from "./Resources/MobileComponent";
 import ParticleBox from "./Resources/ParticleBox";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
@@ -36,7 +36,8 @@ class Main extends Component {
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
                       <nav>
-                        <NoAddressComponent />
+                        {this.state.mobileMenuBool === true && (<MobileComponent />)}
+                        {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                       </nav>
                     )}
                   </ul>
@@ -584,6 +585,7 @@ class Main extends Component {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
+            mobileMenuBool: false,
             assetHolderMenuBool: true,
             assetHolderUserMenuBool: false,
             basicMenuBool: false,
@@ -598,6 +600,7 @@ class Main extends Component {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
+            mobileMenuBool: false,
             assetHolderMenuBool: false,
             assetHolderUserMenuBool: true,
             basicMenuBool: false,
@@ -623,13 +626,14 @@ class Main extends Component {
 
       if (this.state.routeRequest !== window.routeRequest && window.menuChange === undefined && window.addr !== undefined) {
         this.setState({
+          mobileMenuBool: false,
           basicMenuBool: true,
           assetHolderMenuBool: false,
           assetHolderUserMenuBool: false,
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          routeRequest: "basic"
+          routeRequest: window.routeRequest
         })
       }
 
@@ -642,7 +646,6 @@ class Main extends Component {
           }
         }
       }
-
 
       if (window.resetInfo === true) {
         window.hasLoadedAssets = false;
@@ -677,6 +680,7 @@ class Main extends Component {
         window.routeRequest = "ACAdmin"
         await this.setState({ routeRequest: "ACAdmin" });
         await this.setState({
+          mobileMenuBool: false,
           faucetBool: false,
           assetClassHolderMenuBool: true,
           assetHolderMenuBool: false,
@@ -693,8 +697,26 @@ class Main extends Component {
         window.routeRequest = "basic"
         await this.setState({ routeRequest: "basic" });
         await this.setState({
+          mobileMenuBool: false,
           faucetBool: false,
           basicMenuBool: true,
+          assetHolderMenuBool: false,
+          assetHolderUserMenuBool: false,
+          assetClassHolderMenuBool: false,
+          noAddrMenuBool: false,
+          authorizedUserMenuBool: false,
+          settingsMenu: undefined
+        })
+        window.menuChange = undefined;
+      }
+
+      else if (menuChoice === 'mobileBasic') {
+        window.routeRequest = "mobileBasic"
+        await this.setState({ routeRequest: "mobileBasic" });
+        await this.setState({
+          mobileMenuBool: true,
+          faucetBool: false,
+          basicMenuBool: false,
           assetHolderMenuBool: false,
           assetHolderUserMenuBool: false,
           assetClassHolderMenuBool: false,
@@ -709,6 +731,7 @@ class Main extends Component {
         window.routeRequest = "faucet"
         await this.setState({ routeRequest: "faucet" });
         await this.setState({
+          mobileMenuBool: false,
           faucetBool: true,
           basicMenuBool: false,
           assetHolderMenuBool: false,
@@ -743,6 +766,7 @@ class Main extends Component {
         window.routeRequest = "NCUser"
         await this.setState({ routeRequest: "NCUser" })
         await this.setState({
+          mobileMenuBool: false,
           faucetBool: false,
           assetHolderMenuBool: false,
           assetHolderUserMenuBool: true,
@@ -759,6 +783,7 @@ class Main extends Component {
         window.routeRequest = "authUser"
         await this.setState({ routeRequest: "authUser" });
         await this.setState({
+          mobileMenuBool: false,
           faucetBool: false,
           authorizedUserMenuBool: true,
           assetHolderMenuBool: false,
@@ -967,6 +992,7 @@ class Main extends Component {
             if (e[0] === undefined || e[0] === null) {
               window.routeRequest = "noAddr"
               self.setState({
+                mobileMenuBool: false,
                 noAddrMenuBool: true,
                 assetHolderMenuBool: false,
                 assetClassHolderMenuBool: false,
@@ -1000,6 +1026,7 @@ class Main extends Component {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
+                mobileMenuBool: false,
                 basicMenuBool: true,
                 assetHolderMenuBool: false,
                 assetHolderUserMenuBool: false,
@@ -1037,8 +1064,9 @@ class Main extends Component {
       window.isSettingUpContracts = true;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (window.addr !== undefined) {
+        if (window.addr !== undefined && !isMobile) {
           await this.setState({
+            mobileMenuBool: false,
             noAddrMenuBool: false,
             assetHolderMenuBool: false,
             assetClassHolderMenuBool: false,
@@ -1051,6 +1079,7 @@ class Main extends Component {
 
         else if (window.addr === undefined) {
           await this.setState({
+            mobileMenuNool: false,
             noAddrMenuBool: true,
             assetHolderMenuBool: false,
             assetClassHolderMenuBool: false,
@@ -1208,8 +1237,38 @@ class Main extends Component {
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setState({ hasMounted: true })
     }
-    else if (isMobile){ // && window.ethereum === undefined
+    else if (isMobile && window.ethereum !== undefined){ 
 
+      window.ipfsCounter = 0;
+      _web3 = require("web3");
+      _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+      this.setUpContractEnvironment(_web3)
+      this.setState({ web3: _web3 });
+      window.web3 = _web3;
+
+      this.setState({
+        mobileMenuBool: true,
+        noAddrMenuBool: false,
+        assetHolderMenuBool: false,
+        assetClassHolderMenuBool: false,
+        basicMenuBool: false,
+        authorizedUserMenuBool: false,
+        hasFetchedBalances: false,
+        routeRequest: "basicMobile"
+      })
+
+      _ipfs = new this.state.IPFS({
+        host: "ipfs.infura.io",
+        port: 5001,
+        protocol: "https",
+      });
+
+      window.ipfs = _ipfs;
+
+      this.setState({ hasMounted: true })
+    }
+
+    else {
       window.ipfsCounter = 0;
       _web3 = require("web3");
       _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");

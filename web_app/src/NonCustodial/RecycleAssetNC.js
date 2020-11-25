@@ -609,7 +609,7 @@ class RecycleAssetNC extends Component {
                         required
                         onChange={(e) => this.setState({ secret: e.target.value })}
                         size="lg"
-                        autocomplete="off"
+                        autoComplete="off"
                       />
                     </Form.Group>
 

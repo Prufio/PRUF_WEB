@@ -221,7 +221,7 @@ class ModifyDescriptionNC extends Component {
             <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
-                  <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
+                  <Form.Label className="formFont"> Select an Asset to Transfer :</Form.Label>
                   {!this.state.wasSentPacket && (
                     <>
                       {this.state.transaction === false && (

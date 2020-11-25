@@ -507,7 +507,7 @@ class NewRecordNC extends Component {
                           required
                           onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
-                          autocomplete="off"
+                          autoComplete="off"
                         />)}
                       {this.state.transaction === true && (
                         <Form.Control
@@ -517,7 +517,7 @@ class NewRecordNC extends Component {
                           disabled
                           onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
-                          autocomplete="off"
+                          autoComplete="off"
                         />)}
                     </Form.Group>
 
