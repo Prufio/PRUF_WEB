@@ -1030,12 +1030,12 @@ div {
   transform: translateX(-3px);
 }
 
-.submitButtonRRQR3Mobile {
+.submitButtonMobileAD {
   display: flex;
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-left: 80%;
+  margin-left: 27rem;
   margin-top: 2rem;
 }
 
@@ -1120,7 +1120,7 @@ div {
   object-fit: cover;
   width: fit-content;
   height: fit-content;
-  margin-left: 27.7rem;
+  margin-left: 27.2rem;
   margin-top: 0.7rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
@@ -1351,6 +1351,22 @@ div {
   opacity: 0.9;
 }
 
+.explainerTextBoxMobile {
+  display: flex;
+  background-color: white;
+  color: black;
+  height: 4.5rem;
+  width: 25rem;
+  font-size: 0.65rem;
+  padding: 0.5rem;
+  position: absolute;
+  border-radius: 0.5rem;
+  margin-top: -3.3rem;
+  margin-left: 2rem;
+  z-index: 999;
+  opacity: 0.9;
+}
+
 .textMobile {
   color: white;
   font-size: 1.4rem;
@@ -1373,6 +1389,10 @@ div {
 
 .transactionErrorText {
 font-size: 1rem;
+}
+
+.transactionErrorTextMobile {
+font-size: 0.6rem;
 }
 
 .homeErrorText {
@@ -1627,6 +1647,41 @@ margin-bottom: -3rem;
   max-width: 100%;
 }
 
+.cardNameMobile {
+  margin-left: 13.5rem;
+  margin-top: -12rem;
+  font-weight: bold;
+  font-size: 1rem;
+  z-index: 1000;
+  max-width: 30ch;
+}
+
+.cardAcMobile  {
+  font-size: 1rem;
+  font-weight: bold;
+  z-index: 1000;
+  margin-left: 13.5rem;
+  margin-top: 1rem;
+  max-width: 30ch;
+}
+
+
+.cardStatusMobile  {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 13.5rem;
+  z-index: 1000;
+  margin-top: 1rem;
+}
+
+.cardIdxMobile  {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 13.5rem;
+  margin-top: 1rem;
+  z-index: 1000;
+}
+
 .cardName {
   margin-left: 0.5rem;
   font-weight: bold;
@@ -1783,6 +1838,16 @@ margin-bottom: -3rem;
   z-index: 1000;
   margin-left: 63rem;
   margin-top: 7rem;
+}
+
+.cardButtonMobile {
+  display: flex;
+  height: 12rem;
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000;
+  margin-left: 30rem;
+  /* margin-top: 4rem; */
 }
 
 .cardButtonContent {

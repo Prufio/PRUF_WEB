@@ -76,8 +76,8 @@ class DeepVerifyMobile extends Component {
       middle: "",
       surname: "",
       id: "",
-      idxHashRaw: undefined,
-      idxHash: undefined,
+      idxHashRaw: "",
+      idxHash: "",
       secret: "",
       QRreader: false,
       isNFA: false,
@@ -161,13 +161,13 @@ class DeepVerifyMobile extends Component {
         Checkbox: false, 
         QRreader: false, 
         assetFound: "", 
-        idxHashRaw: undefined, 
-        idxHash: undefined, 
+        idxHashRaw: "", 
+        idxHash: "", 
         transaction:false, 
         name: "", 
         status: "", 
         assetClass: "", 
-        txHash: undefined,
+        txHash: "",
         txStatus: false, 
         DVresult: "" 
       })
@@ -444,12 +444,12 @@ class DeepVerifyMobile extends Component {
             )}
           </div>
         </Form>
-        {this.state.transaction === false && this.state.txStatus === false && (
+        {this.state.transaction === false && this.state.txStatus === false && this.state.QRreader === false && (
           <div className="assetSelectedResultsMobile">
             <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 34) + "..."}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,28) + "..." + this.state.idxHash.substring(60, 66)}</span> </div>
                   <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
                 </Form.Group>
@@ -468,10 +468,10 @@ class DeepVerifyMobile extends Component {
               {this.state.txHash > 0 && (
                 <div className="resultsMobile">
                   {this.state.txStatus === false && (
-                    <div className="transactionErrorText">
+                    <div className="transactionErrorTextMobile">
                       !ERROR! :
                       <a
-                        className="transactionErrorText"
+                        className="transactionErrorTextMobile"
                         href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -483,17 +483,17 @@ class DeepVerifyMobile extends Component {
                   {this.state.txStatus === true && (
                     <> {" "}
                       {this.state.DVresult !== "" && (
-                        <div className="transactionErrorText">
+                        <div className="transactionErrorTextMobile">
                           {
                             this.state.DVresult === "Match confirmed"
-                              ? "Match Confirmed"
-                              : "No Match Found"
+                              ? "Match Confirmed :"
+                              : "No Match Found :"
                           }
                         </div>
                       )}
                       <br></br>
                       <a
-                        className="transactionErrorText"
+                        className="transactionErrorTextMobile"
                         href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                         target="_blank"
                         rel="noopener noreferrer"

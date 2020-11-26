@@ -33,6 +33,7 @@ import VerifyLiteMobile from "./Mobile/VerifyLiteMobile";
 import DeepVerifyMobile from "./Mobile/DeepVerifyMobile";
 import TransferAssetMobile from "./Mobile/TransferAssetMobile";
 import ModifyRightsHolderMobile from "./Mobile/ModifyRightsHolderMobile";
+import AssetDashboardMobile from "./Mobile/AssetDashboardMobile";
 
 import AddNoteNC from "./NonCustodial/AddNoteNC";
 import DecrementCounterNC from "./NonCustodial/DecrementCounterNC";
@@ -158,6 +159,7 @@ function Router(routeRequest) {
                 <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
                 <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
                 <Route path="/modify-rights-holder-mobile" component={ModifyRightsHolderMobile} />
+                <Route path="/asset-dashboard-mobile" component={AssetDashboardMobile} />
             </>
         )
     }
