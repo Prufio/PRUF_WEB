@@ -34,8 +34,9 @@ class DiscardMobile extends Component {
             model: "",
             serial: "",
             importAgent: "",
-            isNFA: false,
-            txStatus: null,
+            txStatus: false,
+            idxHash: "",
+            transaction: false,
             hasLoadedAssets: false,
             assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
             transaction: false,
@@ -113,7 +114,7 @@ class DiscardMobile extends Component {
         const clearForm = async () => {
             if (document.getElementById("MainForm") === null) { return }
             document.getElementById("MainForm").reset();
-            this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, help: false })
+            this.setState({ idxHash: "", txStatus: false, txHash: "", wasSentPacket: false, help: false })
         }
 
         const help = async () => {
@@ -254,13 +255,13 @@ class DiscardMobile extends Component {
                                             </div>
                                         </div>
                                     </Form.Row>
-                                    {/* {this.state.help === true && (
-                                        <div className="explainerTextBox2">
+                                    {this.state.help === true && (
+                                        <div className="explainerTextBoxMobile">
                                             Discarding an asset requires that the asset is in discardable status. Discarding an asset will burn the asset token
                                             linked to the asset. The individual discarding the asset will recieve a bonus in PRuF tokens once the following user
                                             recycles the asset into their ownership using Recycle Asset.
                                         </div>
-                                    )} */}
+                                    )}
                                 </>
                             )}
                         </div>
@@ -269,9 +270,9 @@ class DiscardMobile extends Component {
                 {this.state.transaction === false && this.state.txStatus === false && (
                     <div className="assetSelectedResultsMobile">
                         <Form.Row>
-                            {this.state.idxHash !== undefined && this.state.txHash === "" && (
+                            {this.state.idxHash !== "" && this.state.txHash === "" && (
                                 <Form.Group>
-                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 34) + "..."}</span> </div>
+                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 28) + "..." + this.state.idxHash.substring(60, 66)}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
@@ -289,10 +290,10 @@ class DiscardMobile extends Component {
                         {this.state.txHash > 0 && ( //conditional rendering
                             <div className="resultsMobile">
                                 {this.state.txStatus === false && (
-                                    <div className="transactionErrorText">
+                                    <div className="transactionErrorTextMobile">
                                         !ERROR! :
                                         <a
-                                            className="transactionErrorText"
+                                            className="transactionErrorTextMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
@@ -302,11 +303,11 @@ class DiscardMobile extends Component {
                                     </div>
                                 )}
                                 {this.state.txStatus === true && (
-                                    <div className="transactionErrorText">
+                                    <div className="transactionErrorTextMobile">
                                         {" "}
         No Errors Reported :
                                         <a
-                                            className="transactionErrorText"
+                                            className="transactionErrorTextMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
