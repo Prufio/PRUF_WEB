@@ -33,6 +33,7 @@ import VerifyLiteMobile from "./Mobile/VerifyLiteMobile";
 import DeepVerifyMobile from "./Mobile/DeepVerifyMobile";
 import TransferAssetMobile from "./Mobile/TransferAssetMobile";
 import ModifyRightsHolderMobile from "./Mobile/ModifyRightsHolderMobile";
+import AssetDashboardMobile from "./Mobile/AssetDashboardMobile";
 import ModifyStatusMobile from "./Mobile/ModifyStatusMobile";
 import DiscardMobile from "./Mobile/DiscardMobile";
 import RecycleMobile from "./Mobile/RecycleMobile";
@@ -162,6 +163,7 @@ function Router(routeRequest) {
                 <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
                 <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
                 <Route path="/modify-rights-holder-mobile" component={ModifyRightsHolderMobile} />
+                <Route path="/asset-dashboard-mobile" component={AssetDashboardMobile} />
                 <Route path="/modify-status-mobile" component={ModifyStatusMobile} />
                 <Route path="/discard-mobile" component={DiscardMobile} />
                 <Route path="/recycle-mobile" component={RecycleMobile} />

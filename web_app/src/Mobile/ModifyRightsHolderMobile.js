@@ -179,7 +179,7 @@ class ModifyRightsHolderMobile extends Component {
         const clearForm = async () => {
             if (document.getElementById("MainForm") === null) { return }
             document.getElementById("MainForm").reset();
-            this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+            this.setState({ idxHash: "", txStatus: false, txHash: "", wasSentPacket: false, help: false })
         }
 
         const help = async () => {
@@ -446,13 +446,13 @@ class ModifyRightsHolderMobile extends Component {
                                             </div>
                                         </div>
                                     </Form.Row>
-                                    {/*                   {this.state.help === true && (
-                    <div className="explainerTextBox2">
-                      Modify Rightsholder allows the owner of an asset token to modify the ownership of an item. This does not editRgtHash the asset
-                      token. Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern
-                      that does not contain the data that you provide.
-                    </div>
-                  )} */}
+                                    {this.state.help === true && (
+                                        <div className="explainerTextBoxMobile">
+                                            Modify Rightsholder allows the owner of an asset token to modify the ownership of an item. This does not editRgtHash the asset
+                                            token. Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern
+                                            that does not contain the data that you provide.
+                                        </div>
+                                    )}
                                 </>
                             )}
                         </div>
@@ -461,9 +461,9 @@ class ModifyRightsHolderMobile extends Component {
                 {this.state.transaction === false && this.state.txStatus === false && (
                     <div className="assetSelectedResultsMobile">
                         <Form.Row>
-                            {this.state.idxHash !== undefined && this.state.txHash === "" && (
+                            {this.state.idxHash !== "" && this.state.txHash === "" && (
                                 <Form.Group>
-                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 34) + "..."}</span> </div>
+                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 28) + "..." + this.state.idxHash.substring(60, 66)}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
@@ -481,10 +481,10 @@ class ModifyRightsHolderMobile extends Component {
                         {this.state.txHash > 0 && ( //conditional rendering
                             <div className="resultsMobile">
                                 {this.state.txStatus === false && (
-                                    <div className="transactionErrorText">
+                                    <div className="transactionErrorTextMobile">
                                         !ERROR! :
                                         <a
-                                            className="transactionErrorText"
+                                            className="transactionErrorTextMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
@@ -494,11 +494,11 @@ class ModifyRightsHolderMobile extends Component {
                                     </div>
                                 )}
                                 {this.state.txStatus === true && (
-                                    <div className="transactionErrorText">
+                                    <div className="transactionErrorTextMobile">
                                         {" "}
                 No Errors Reported :
                                         <a
-                                            className="transactionErrorText"
+                                            className="transactionErrorTextMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
