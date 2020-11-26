@@ -269,8 +269,8 @@ class RecycleAssetNC extends Component {
       this.setState({ error: undefined })
       this.setState({ resultRA: "" })
       this.setState({ transaction: true })
-      var idxHash;
-
+      var idxHash = this.state.idxHash;
+/* 
       if (this.state.result !== "") {
         idxHash = this.state.result;
       }
@@ -282,7 +282,8 @@ class RecycleAssetNC extends Component {
           String(this.state.model).replace(/\s/g, ''),
           String(this.state.serial).replace(/\s/g, ''),
         );
-      }
+      } */
+      
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(
@@ -324,7 +325,7 @@ class RecycleAssetNC extends Component {
 
       window.contracts.RCLR.methods
         .$recycle(idxHash, rgtHash, this.state.selectedAssetClass)
-        .send({ from: window.addr, value: window.costs.newRecordCost })
+        .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })

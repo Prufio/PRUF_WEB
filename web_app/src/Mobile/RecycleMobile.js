@@ -287,6 +287,7 @@ class RecycleMobile extends Component {
           String(this.state.serial).replace(/\s/g, ''),
         );
       } */
+      
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(

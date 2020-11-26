@@ -174,11 +174,11 @@ class Main extends Component {
                       Website Last Updated:
                   </h3>
                     <h3>
-                      November 16, 2020
+                      November 26, 2020
                   </h3>
                     <h3>
                       <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}>
-                        Version A1.0.9
+                        Version A1.1.0
                       </a>
                     </h3>
                   </div>

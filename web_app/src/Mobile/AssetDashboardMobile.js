@@ -201,7 +201,7 @@ class AssetDashboardMobile extends React.Component {
 
         for (let i = 0; i < images.length; i++) {
           component.push(
-            <button value={images[i]} class="assetImageSelectorButtonMobile" onClick={() => { showImage(images[i]) }}>
+            <button key={"button"+String(i)}value={images[i]} className="assetImageSelectorButtonMobile" onClick={() => { showImage(images[i]) }}>
               <img src={images[i]} className="imageSelectorImageMobile" />
             </button>
           )
@@ -243,7 +243,7 @@ class AssetDashboardMobile extends React.Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
-              <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
               {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>

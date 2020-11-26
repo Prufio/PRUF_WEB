@@ -139,8 +139,6 @@ function Router(routeRequest) {
                 <Route path="/claim-pip-asset" component={ClaimPipAsset} />
                 <Route path="/get-ac-data" component={GetACData} />
                 <Route path="/increase-ac-share" component={IncreaseACShare} />
-                <Route path="/transfer-mobile" component={TransferAssetMobile} />
-                <Route path="/deep-verify-mobile" component={DeepVerifyMobile} />
                 <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
 
 
@@ -179,6 +177,11 @@ function Router(routeRequest) {
                 <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
                 <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
                 <Route path="/modify-rights-holder-mobile" component={ModifyRightsHolderMobile} />
+                <Route path="/asset-dashboard-mobile" component={AssetDashboardMobile} />
+                <Route path="/modify-status-mobile" component={ModifyStatusMobile} />
+                <Route path="/discard-mobile" component={DiscardMobile} />
+                <Route path="/recycle-mobile" component={RecycleMobile} />
+                
             </>
         )
     }
