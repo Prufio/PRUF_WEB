@@ -1367,6 +1367,22 @@ div {
   opacity: 0.9;
 }
 
+.explainerTextBoxMobile2 {
+  display: flex;
+  background-color: white;
+  color: black;
+  height: 5.5rem;
+  width: 25rem;
+  font-size: 0.65rem;
+  padding: 0.5rem;
+  position: absolute;
+  border-radius: 0rem 0.5rem 0.5rem 0.5rem;
+  margin-top: -6rem;
+  margin-left: 2rem;
+  z-index: 999;
+  opacity: 0.9;
+}
+
 .textMobile {
   color: white;
   font-size: 1.4rem;

@@ -23,7 +23,7 @@ class RecycleMobile extends Component {
         }
 
         else if (!this.state.Checkbox) {
-            console.log("Here")
+          console.log("Here")
           idxHash = window.web3.utils.soliditySha3(
             String(this.state.type).replace(/\s/g, ''),
             String(this.state.manufacturer).replace(/\s/g, ''),
@@ -33,7 +33,7 @@ class RecycleMobile extends Component {
         }
 
         else {
-            console.log("Here")
+          console.log("Here")
           idxHash = this.state.result
         }
       }
@@ -87,11 +87,11 @@ class RecycleMobile extends Component {
       ipfs1: "",
       txHash: "",
       txStatus: false,
-      isNFA: false,
       type: "",
       manufacturer: "",
       model: "",
       serial: "",
+      idxHash: "",
       transaction: false,
       QRreader: false,
       Checkbox: false,
@@ -255,7 +255,7 @@ class RecycleMobile extends Component {
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
+      this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
     }
 
     const _recycleAsset = async () => {
@@ -275,18 +275,18 @@ class RecycleMobile extends Component {
       this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
 
-/*       if (this.state.result !== "") {
-        idxHash = this.state.result;
-      }
-
-      else {
-        idxHash = window.web3.utils.soliditySha3(
-          String(this.state.type).replace(/\s/g, ''),
-          String(this.state.manufacturer).replace(/\s/g, ''),
-          String(this.state.model).replace(/\s/g, ''),
-          String(this.state.serial).replace(/\s/g, ''),
-        );
-      } */
+      /*       if (this.state.result !== "") {
+              idxHash = this.state.result;
+            }
+      
+            else {
+              idxHash = window.web3.utils.soliditySha3(
+                String(this.state.type).replace(/\s/g, ''),
+                String(this.state.manufacturer).replace(/\s/g, ''),
+                String(this.state.model).replace(/\s/g, ''),
+                String(this.state.serial).replace(/\s/g, ''),
+              );
+            } */
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(
@@ -301,7 +301,7 @@ class RecycleMobile extends Component {
       console.log(this.state.selectedAssetClassW)
       let isSameRoot = await window.utils.checkAssetRootMatch(this.state.selectedAssetClass, this.state.idxHash);
       console.log(isSameRoot)
-      
+
       if (!isSameRoot) {
         this.setState({
           QRreader: false
@@ -360,8 +360,8 @@ class RecycleMobile extends Component {
     };
 
     return (
-        <div>
-            {this.state.QRreader === false && (
+      <div>
+        {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
               <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -372,24 +372,31 @@ class RecycleMobile extends Component {
             </div>
           </div>
         )}
-            <Form className="formMobile" id='MainForm'>
-                {window.addr === undefined && (
-                    <div className="resultsMobile">
-                        <h2>User address unreachable</h2>
-                        <h3>Please connect web3 provider.</h3>
-                    </div>
-                )}
-                {window.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
+        <Form className="formMobile" id='MainForm'>
+          {window.addr === undefined && (
+            <div className="resultsMobile">
+              <h2>User address unreachable</h2>
+              <h3>Please connect web3 provider.</h3>
+            </div>
+          )}
+          {window.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
             <Form.Row>
               <Form.Label className="formFontRow">Asset Class:</Form.Label>
               <Form.Group as={Row} controlId="formGridAC">
 
                 <Form.Control
-                  className="singleFormRow"
-                  placeholder="Submit an asset class name or #"
+                  as="select"
                   onChange={(e) => this.setState({ selectedAssetClass: e.target.value })}
                   size="lg"
-                />
+                >
+                  <optgroup className="optgroup">
+                    <option value="0"> Please Select An Asset Class </option>
+                    <option value="11"> Electronics </option>
+                    <option value="12"> Transportation </option>
+                    <option value="13"> Virtual </option>
+                    <option value="14"> Other </option>
+                  </optgroup>
+                </Form.Control>
               </Form.Group>
 
               <div className="submitButtonRRMobile">
@@ -414,7 +421,7 @@ class RecycleMobile extends Component {
                     />
                     <Form.Label className="checkBoxFormFontMobile">Input Raw Idx Hash</Form.Label>
                     {this.state.Checkbox === true && (
-                      <Form.Row>
+                      <Form.Group>
                         <Form.Label className="formFont">Idx Hash:</Form.Label>
                         <Form.Control
                           placeholder="Idx Hash"
@@ -422,7 +429,7 @@ class RecycleMobile extends Component {
                           onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
                           size="lg"
                         />
-                      </Form.Row>
+                      </Form.Group>
                     )}
                   </div>
                   {this.state.Checkbox === false && (
@@ -437,9 +444,9 @@ class RecycleMobile extends Component {
                             size="lg"
                           />
                         </Form.Group>
-                        
-                        </Form.Row>
-                  <Form.Row>
+
+                      </Form.Row>
+                      <Form.Row>
 
                         <Form.Group as={Col} controlId="formGridManufacturer">
                           <Form.Label className="formFont">Manufacturer:</Form.Label>
@@ -464,8 +471,8 @@ class RecycleMobile extends Component {
                           />
                         </Form.Group>
 
-                        </Form.Row>
-                  <Form.Row>
+                      </Form.Row>
+                      <Form.Row>
 
                         <Form.Group as={Col} controlId="formGridSerial">
                           <Form.Label className="formFont">Serial:</Form.Label>
@@ -511,49 +518,49 @@ class RecycleMobile extends Component {
                       </button>
                     </div>
                   </Form.Row>
-                  {/* {this.state.help === true && (
-                    <div className="explainerTextBox">
+                  {this.state.help === true && (
+                    <div className="explainerTextBoxMobile2">
                       Recycling an asset requires that the asset has been discarded by its previous owner. Recycle can either
                       take a recreated hash made by providing asset information, an assets unique QR code, or simply the asset's Idx hash.
                       The address that provides this information will then be able to claim the asset as their own.
                     </div>
-                  )} */}
+                  )}
                 </>
               )}
               {this.state.QRreader === true && (
-              <div>
-                <style type="text/css">
-                  {`
+                <div>
+                  <style type="text/css">
+                    {`
                 .formMobile {
                   background: none !important;
                   padding: 0rem !important;
                 }
                    `}
-                </style>
-                <div>
-                  <div className="mediaLinkADHome">
-                    <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
-                  </div>
-                  <h2 className="formHeaderMobileVL">Scan QR</h2>
-                  <div className="mediaLinkBackMobile">
-                    <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
-                  </div>
-                </div>
-                <div className="QRreaderMobile">
-                  <QrReader
-                    delay={300}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                    style={{ width: '100%' }}
-                  />
-                  {this.state.result !== undefined && (
-                    <div className="resultsMobile">
-                      {this.state.assetFound}
+                  </style>
+                  <div>
+                    <div className="mediaLinkADHome">
+                      <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
                     </div>
-                  )}
+                    <h2 className="formHeaderMobileVL">Scan QR</h2>
+                    <div className="mediaLinkBackMobile">
+                      <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                    </div>
+                  </div>
+                  <div className="QRreaderMobile">
+                    <QrReader
+                      delay={300}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                      style={{ width: '100%' }}
+                    />
+                    {this.state.result !== undefined && (
+                      <div className="resultsMobile">
+                        {this.state.assetFound}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
               {this.state.accessPermitted && (
                 <>
                   {this.state.type === "" && (
@@ -580,7 +587,7 @@ class RecycleMobile extends Component {
                       />
                     </Form.Group>
 
-                    </Form.Row>
+                  </Form.Row>
                   <Form.Row>
 
                     <Form.Group as={Col} controlId="formGridMiddleName">
@@ -593,7 +600,7 @@ class RecycleMobile extends Component {
                       />
                     </Form.Group>
 
-                    </Form.Row>
+                  </Form.Row>
                   <Form.Row>
 
                     <Form.Group as={Col} controlId="formGridLastName">
@@ -618,7 +625,7 @@ class RecycleMobile extends Component {
                       />
                     </Form.Group>
 
-                    </Form.Row>
+                  </Form.Row>
                   <Form.Row>
 
                     <Form.Group as={Col} controlId="formGridPassword">
@@ -654,69 +661,69 @@ class RecycleMobile extends Component {
                       </div>
                     </div>
                   </Form.Row>
-                  {/* {this.state.help === true && (
-                    <div className="explainerTextBox2">
+                  {this.state.help === true && (
+                    <div className="explainerTextBoxMobile">
                       Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern that does not contain the data that you provide,
                       encrypted or otherwise.
                     </div>
-                  )} */}
+                  )}
                 </>
               )}
             </div>
           )}
         </Form>
-            {this.state.transaction === false && this.state.txStatus === false && (
-                <div className="assetSelectedResultsMobile">
-                    <Form.Row>
-                    {this.state.idxHash !== undefined && this.state.txHash === "" && (
+        {this.state.transaction === false && this.state.txStatus === false && this.state.QRreader === false && (
+          <div className="assetSelectedResultsMobile">
+            <Form.Row>
+              {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 34) + "..."}</span> </div>
                   <div className="assetSelectedContentHead">Being Recycled Into Asset Class: <span className="assetSelectedContent">{this.state.selectedAssetClass}</span> </div>
                 </Form.Group>
               )}
-                    </Form.Row>
-                </div>
-            )}
-            {this.state.transaction === true && (
-                <div className="resultsMobile">
-                    <h1 className="loadingh1">Transaction In Progress</h1>
-                </div>)}
-            {this.state.transaction === false && (
-                <div>
-                    {this.state.txHash > 0 && ( //conditional rendering
-                        <div className="resultsMobile">
-                            {this.state.txStatus === false && (
-                                <div className="transactionErrorText">
-                                    !ERROR! :
-                                    <a
-                                        className="transactionErrorText"
-                                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        TX Hash:{this.state.txHash}
-                                    </a>
-                                </div>
-                            )}
-                            {this.state.txStatus === true && (
-                                <div className="transactionErrorText">
-                                    {" "}
+            </Form.Row>
+          </div>
+        )}
+        {this.state.transaction === true && (
+          <div className="resultsMobile">
+            <h1 className="loadingh1">Transaction In Progress</h1>
+          </div>)}
+        {this.state.transaction === false && (
+          <div>
+            {this.state.txHash > 0 && ( //conditional rendering
+              <div className="resultsMobile">
+                {this.state.txStatus === false && (
+                  <div className="transactionErrorTextMobile">
+                    !ERROR! :
+                    <a
+                      className="transactionErrorTextMobile"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
+                {this.state.txStatus === true && (
+                  <div className="transactionErrorTextMobile">
+                    {" "}
             No Errors Reported :
-                                    <a
-                                        className="transactionErrorText"
-                                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        TX Hash:{this.state.txHash}
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
+                    <a
+                      className="transactionErrorTextMobile"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
+              </div>
             )}
-        </div>
+          </div>
+        )}
+      </div>
     );
   }
 }
