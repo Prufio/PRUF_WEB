@@ -1155,6 +1155,7 @@ class Main extends Component {
       hamburgerMenu: true,
       assetHolderBool: false,
       IDHolderBool: false,
+      mobileMenuBool: false,
       assetClassHolderBool: false,
       assetHolderMenuBool: false,
       assetHolderUserMenuBool: false,

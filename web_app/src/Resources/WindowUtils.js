@@ -396,6 +396,7 @@ function buildWindowUtils() {
 
   const _checkAssetExists = async (idxHash) => {
     let tempBool;
+    let tempObj;
     // console.log(idxHash.substring(0, 2))
     if (idxHash.substring(0, 2) !== "0x") {
       return (false)
@@ -408,14 +409,16 @@ function buildWindowUtils() {
         } else if (
           Object.values(_result)[2] === "0"
         ) {
+          tempObj = undefined
           tempBool = false;
         } else {
+          tempObj = _result;
           tempBool = true;
         }
 
       });
     console.log(tempBool);
-    return tempBool;
+    return {obj: tempObj, exists: tempBool};
   }
 
   const _checkAssetExportable = async (idxHash) => {

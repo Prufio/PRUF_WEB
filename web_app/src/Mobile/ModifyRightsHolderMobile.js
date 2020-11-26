@@ -248,7 +248,7 @@ class ModifyRightsHolderMobile extends Component {
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
-                    <h2 className="formHeaderMobile">editRgtHash Asset</h2>
+                    <h2 className="formHeaderMobile">Modify Rights Holder</h2>
                     <div className="mediaLinkClearForm">
                         <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
@@ -264,7 +264,7 @@ class ModifyRightsHolderMobile extends Component {
                         <div>
                             <Form.Row>
                                 <Form.Group as={Col} controlId="formGridAsset">
-                                    <Form.Label className="formFont"> Select an Asset to editRgtHash :</Form.Label>
+                                    <Form.Label className="formFont"> Select an Asset to Modify:</Form.Label>
                                     {!this.state.wasSentPacket && (
                                         <>
                                             {this.state.transaction === false && (
@@ -315,7 +315,6 @@ class ModifyRightsHolderMobile extends Component {
                             </Form.Row>
                             <Form.Row>
                                 <Form.Group as={Col} controlId="formGridTo">
-                                    <Form.Label className="formFont">To:</Form.Label>
                                     {this.state.transaction === false && (
                                         <>
                                             <Form.Row>

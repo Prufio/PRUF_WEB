@@ -152,6 +152,12 @@ function Router(routeRequest) {
                 <Route path="/claim-pip-asset" component={ClaimPipAsset} />
                 <Route path="/asset-dashboard" component={AssetDashboard} />
                 <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
+
+                <Route path="/transfer-mobile" component={TransferAssetMobile} />
+                <Route path="/deep-verify-mobile" component={DeepVerifyMobile} />
+                <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
+                <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
+                <Route path="/modify-rights-holder-mobile" component={ModifyRightsHolderMobile} />
             </>
         )
     }

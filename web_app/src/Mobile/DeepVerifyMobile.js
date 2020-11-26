@@ -23,20 +23,19 @@ class DeepVerifyMobile extends Component {
           String(this.state.model).replace(/\s/g, ''),
           String(this.state.serial).replace(/\s/g, '')
         );
-        console.log("IDXTEST1", idxHash)
       }
 
       else if (this.state.QRreader === true && this.state.Checkbox === false) {
         idxHash = this.state.result
-        console.log("IDXTEST2", idxHash)
       }
 
       else if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw
-        console.log("IDXTEST3", idxHash)
       }
-      console.log("IDXTEST4", idxHash)
-      let doesExist = await window.utils.checkAssetExists(idxHash);
+     
+      let rawObj = await window.utils.checkAssetExists(idxHash);
+      let infoArr = Object.values(rawObj.obj);
+      let doesExist = rawObj.exists;
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
@@ -48,6 +47,8 @@ class DeepVerifyMobile extends Component {
 
       return this.setState({
         idxHash: idxHash,
+        assetClass: infoArr[2],
+        status: await window.utils.getStatusString(String(infoArr[0])),
         QRreader: false,
         accessPermitted: true
       })
@@ -66,6 +67,7 @@ class DeepVerifyMobile extends Component {
       ipfs1: "",
       txHash: "",
       txStatus: false,
+      transaction: false,
       type: "",
       manufacturer: "",
       model: "",
@@ -153,7 +155,22 @@ class DeepVerifyMobile extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "", idxHashRaw: undefined, idxHash: undefined, DVresult: "" })
+      this.setState({ 
+        result: "", 
+        accessPermitted: false, 
+        Checkbox: false, 
+        QRreader: false, 
+        assetFound: "", 
+        idxHashRaw: undefined, 
+        idxHash: undefined, 
+        transaction:false, 
+        name: "", 
+        status: "", 
+        assetClass: "", 
+        txHash: undefined,
+        txStatus: false, 
+        DVresult: "" 
+      })
     }
 
     const _verify = async () => {
@@ -189,13 +206,6 @@ class DeepVerifyMobile extends Component {
       console.log("idxHash", idxHash);
       console.log("rgtHash", rgtHash);
       console.log("addr: ", window.addr);
-
-      var doesExist = await window.utils.checkAssetExists(idxHash);
-
-      if (!doesExist) {
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "" })
-      }
 
       await window.contracts.STOR.methods
         .blockchainVerifyRightsHolder(idxHash, rgtHash)
@@ -434,6 +444,19 @@ class DeepVerifyMobile extends Component {
             )}
           </div>
         </Form>
+        {this.state.transaction === false && this.state.txStatus === false && (
+          <div className="assetSelectedResultsMobile">
+            <Form.Row>
+              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+                <Form.Group>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 34) + "..."}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
+                </Form.Group>
+              )}
+            </Form.Row>
+          </div>
+        )}
         {this.state.QRreader === false && (<>
 
           {this.state.transaction === true && (
