@@ -33,6 +33,9 @@ import VerifyLiteMobile from "./Mobile/VerifyLiteMobile";
 import DeepVerifyMobile from "./Mobile/DeepVerifyMobile";
 import TransferAssetMobile from "./Mobile/TransferAssetMobile";
 import ModifyRightsHolderMobile from "./Mobile/ModifyRightsHolderMobile";
+import ModifyStatusMobile from "./Mobile/ModifyStatusMobile";
+import DiscardMobile from "./Mobile/DiscardMobile";
+import RecycleMobile from "./Mobile/RecycleMobile";
 
 import AddNoteNC from "./NonCustodial/AddNoteNC";
 import DecrementCounterNC from "./NonCustodial/DecrementCounterNC";
@@ -47,6 +50,7 @@ import TransferAssetNC from "./NonCustodial/TransferAssetNC";
 import AssetDashboard from "./NonCustodial/AssetDashboard"
 import RecycleAssetNC from "./NonCustodial/RecycleAssetNC";
 import DiscardAssetNC from "./NonCustodial/DiscardAssetNC";
+
 
 import Faucet from "./Resources/Faucet";
 import DnvkxiOAFy_vDC from "./Resources/DnvkxiOAFy_vDC"
@@ -158,6 +162,9 @@ function Router(routeRequest) {
                 <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
                 <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
                 <Route path="/modify-rights-holder-mobile" component={ModifyRightsHolderMobile} />
+                <Route path="/modify-status-mobile" component={ModifyStatusMobile} />
+                <Route path="/discard-mobile" component={DiscardMobile} />
+                <Route path="/recycle-mobile" component={RecycleMobile} />
             </>
         )
     }

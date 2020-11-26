@@ -136,7 +136,7 @@ class DiscardAssetNC extends Component {
       var idxHash = this.state.idxHash;
 
       console.log("idxHash", idxHash);
-      console.log("addr: ", this.state.agentAddress);
+      console.log("addr: ", window.addr);
 
       await window.contracts.A_TKN.methods
         .discard(
@@ -187,7 +187,7 @@ class DiscardAssetNC extends Component {
             <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
-                  <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
+                  <Form.Label className="formFont"> Select an Asset to Discard :</Form.Label>
                   {!this.state.wasSentPacket && (
                     <>
                       {this.state.transaction === false && (

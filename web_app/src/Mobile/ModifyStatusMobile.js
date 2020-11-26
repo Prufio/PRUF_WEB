@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import { Home, XSquare, HelpCircle, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
-class ModifyRightsHolderMobile extends Component {
+class ModifyStatusMobile extends Component {
     constructor(props) {
         super(props);
 
@@ -30,6 +30,7 @@ class ModifyRightsHolderMobile extends Component {
             assetClass: undefined,
             ipfs1: "",
             txHash: "",
+            newStatus: "0",
             txStatus: false,
             type: "",
             manufacturer: "",
@@ -248,7 +249,7 @@ class ModifyRightsHolderMobile extends Component {
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
-                    <h2 className="formHeaderMobile">Modify Status</h2>
+                    <h2 className="formHeaderMobile">Modify Rights Holder</h2>
                     <div className="mediaLinkClearForm">
                         <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
@@ -314,117 +315,41 @@ class ModifyRightsHolderMobile extends Component {
                                 </Form.Group>
                             </Form.Row>
                             <Form.Row>
-                                <Form.Group as={Col} controlId="formGridTo">
+                                <Form.Group as={Col} controlId="formGridFormat">
+                                    <Form.Label className="formFont">New Status:</Form.Label>
                                     {this.state.transaction === false && (
-                                        <>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New First Name:</Form.Label>
-                                                <Form.Control
-                                                    placeholder="First Name"
-                                                    required
-                                                    onChange={(e) => this.setState({ first: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New Middle Name:</Form.Label>
-                                                <Form.Control
-                                                    placeholder="Middle Name"
-                                                    required
-                                                    onChange={(e) => this.setState({ middle: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New Last Name:</Form.Label>
-                                                <Form.Control
-                                                    placeholder="Last Name"
-                                                    required
-                                                    onChange={(e) => this.setState({ surname: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New ID Number:</Form.Label>
-                                                <Form.Control
-                                                    placeholder="ID Number"
-                                                    required
-                                                    onChange={(e) => this.setState({ id: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New Password:</Form.Label>
-                                                <Form.Control
-                                                    placeholder="Password"
-                                                    className="key"
-                                                    type="text"
-                                                    required
-                                                    onChange={(e) => this.setState({ secret: e.target.value })}
-                                                    size="lg"
-                                                    autoComplete="off"
-                                                />
-                                            </Form.Row>
-                                        </>
+                                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
+                                            <optgroup className="optgroup">
+                                                <option value="0">Choose a status</option>
+                                                <option value="51">Transferrable</option>
+                                                <option value="52">Non-Transferrable</option>
+                                                <option value="53">Stolen</option>
+                                                <option value="54">Lost</option>
+                                                <option value="59">Discardable</option>
+                                                <option value="51">Export-Ready</option>
+                                            </optgroup>
+                                        </Form.Control>
                                     )}
                                     {this.state.transaction === true && (
-                                        <>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New First Name:</Form.Label>
-                                                <Form.Control
-                                                    placeholder={this.state.first}
-                                                    required
-                                                    disabled
-                                                    onChange={(e) => this.setState({ first: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New Middle Name:</Form.Label>
-                                                <Form.Control
-                                                    placeholder={this.state.middle}
-                                                    required
-                                                    disabled
-                                                    onChange={(e) => this.setState({ middle: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New Last Name:</Form.Label>
-                                                <Form.Control
-                                                    placeholder={this.state.surname}
-                                                    required
-                                                    disabled
-                                                    onChange={(e) => this.setState({ surname: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New ID Number:</Form.Label>
-                                                <Form.Control
-                                                    placeholder={this.state.id}
-                                                    required
-                                                    disabled
-                                                    onChange={(e) => this.setState({ id: e.target.value })}
-                                                    size="lg"
-                                                />
-                                            </Form.Row>
-                                            <Form.Row>
-                                                <Form.Label className="formFont">New Password:</Form.Label>
-                                                <Form.Control
-                                                    placeholder="*******"
-                                                    className="key"
-                                                    type="text"
-                                                    required
-                                                    disabled
-                                                    onChange={(e) => this.setState({ secret: e.target.value })}
-                                                    size="lg"
-                                                    autoComplete="off"
-                                                />
-                                            </Form.Row>
-                                        </>
+                                        <Form.Control as="select" size="lg" disabled>
+                                            <optgroup className="optgroup">
+                                                {this.state.newStatus === "51" && (
+                                                    <option> Changing Status to Transferable </option>
+                                                )}
+                                                {this.state.newStatus === "52" && (
+                                                    <option> Changing Status to Non-transferrable </option>
+                                                )}
+                                                {this.state.newStatus === "53" && (
+                                                    <option> Changing Status to Stolen </option>
+                                                )}
+                                                {this.state.newStatus === "54" && (
+                                                    <option> Changing Status to Lost </option>
+                                                )}
+                                                {this.state.newStatus === "59" && (
+                                                    <option> Changing Status to Discardable </option>
+                                                )}
+                                            </optgroup>
+                                        </Form.Control>
                                     )}
                                 </Form.Group>
                             </Form.Row>
@@ -446,13 +371,40 @@ class ModifyRightsHolderMobile extends Component {
                                             </div>
                                         </div>
                                     </Form.Row>
-                                    {/*                   {this.state.help === true && (
-                    <div className="explainerTextBox2">
-                      Modify Rightsholder allows the owner of an asset token to modify the ownership of an item. This does not editRgtHash the asset
-                      token. Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern
-                      that does not contain the data that you provide.
-                    </div>
-                  )} */}
+                                    {/* {this.state.help === true && this.state.newStatus === "0" && (
+                                        <div className="explainerTextBox2">
+                                            Modifying Asset Status allows the user to manipulate an assets accessablility to certain features, and even set their assets to lost or stolen, making them
+                                            unmodifyable by anybody attempting to manipulate them. Setting an asset to lost or stolen also attatches a red flag to the asset for anybody attempting to buy it.
+                                        </div>
+                                    )}
+                                    {this.state.help === true && this.state.newStatus === "51" && (
+                                        <div className="explainerTextBox2">
+                                            Modifying an assets status to Transferable allows it to be transfered to a different user using Transfer Asset, and allows it to be exported out
+                                            of its current asset class using Export Asset.
+                                        </div>
+                                    )}
+                                    {this.state.help === true && this.state.newStatus === "52" && (
+                                        <div className="explainerTextBox2">
+                                            Modifying an assets status to Non-Transferable locks it from being able to be transfered or modified in most ways throughout the app.
+                                        </div>
+                                    )}
+                                    {this.state.help === true && this.state.newStatus === "53" && (
+                                        <div className="explainerTextBox2">
+                                            Modifying an assets status to Stolen locks it from being able to be transfered or modified throughout the app. The owner of the asset token
+                                            must manually remove it from Stolen status once the asset is found.
+                                        </div>
+                                    )}
+                                    {this.state.help === true && this.state.newStatus === "54" && (
+                                        <div className="explainerTextBox2">
+                                            Modifying an assets status to Lost locks it from being able to be transfered or modified throughout the app. The owner of the asset token
+                                            must manually remove it from Lost status once the asset is found.
+                                        </div>
+                                    )}
+                                    {this.state.help === true && this.state.newStatus === "59" && (
+                                        <div className="explainerTextBox2">
+                                            Modifying an assets status to Discardable allows it to be discarded for recycling using Discard Asset.
+                                        </div>
+                                    )} */}
                                 </>
                             )}
                         </div>
@@ -515,4 +467,4 @@ class ModifyRightsHolderMobile extends Component {
         );
     }
 }
-export default ModifyRightsHolderMobile;
+export default ModifyStatusMobile;

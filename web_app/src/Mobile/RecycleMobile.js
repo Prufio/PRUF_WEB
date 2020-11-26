@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat, HelpCircle, AlertOctagon } from "react-feather";
 import QrReader from 'react-qr-reader'
 
-class RecycleAssetNC extends Component {
+class RecycleMobile extends Component {
   constructor(props) {
     super(props);
 
@@ -23,6 +23,7 @@ class RecycleAssetNC extends Component {
         }
 
         else if (!this.state.Checkbox) {
+            console.log("Here")
           idxHash = window.web3.utils.soliditySha3(
             String(this.state.type).replace(/\s/g, ''),
             String(this.state.manufacturer).replace(/\s/g, ''),
@@ -32,10 +33,12 @@ class RecycleAssetNC extends Component {
         }
 
         else {
+            console.log("Here")
           idxHash = this.state.result
         }
       }
       if (this.state.Checkbox) {
+        console.log("Here")
         idxHash = this.state.idxHashRaw
       }
 
@@ -202,16 +205,17 @@ class RecycleAssetNC extends Component {
           console.log(resArray)
 
           if (Number(resArray[0]) !== 70) {
-            alert("Asset is not exported! Owner must export the assset in order to import.");
+            alert("Asset is not discarded! Owner must export the assset in order to import.");
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
 
           console.log(destinationACData.root)
 
-          if (resArray[1] !== destinationACData.root) {
+          if (resArray[1] != destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
             window.sentPacket = undefined;
+            clearForm()
             return window.location.href = "/#/asset-dashboard"
           }
         }
@@ -269,9 +273,9 @@ class RecycleAssetNC extends Component {
       this.setState({ error: undefined })
       this.setState({ resultRA: "" })
       this.setState({ transaction: true })
-      var idxHash;
+      var idxHash = this.state.idxHash;
 
-      if (this.state.result !== "") {
+/*       if (this.state.result !== "") {
         idxHash = this.state.result;
       }
 
@@ -282,7 +286,7 @@ class RecycleAssetNC extends Component {
           String(this.state.model).replace(/\s/g, ''),
           String(this.state.serial).replace(/\s/g, ''),
         );
-      }
+      } */
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(
@@ -297,6 +301,7 @@ class RecycleAssetNC extends Component {
       console.log(this.state.selectedAssetClassW)
       let isSameRoot = await window.utils.checkAssetRootMatch(this.state.selectedAssetClass, this.state.idxHash);
       console.log(isSameRoot)
+      
       if (!isSameRoot) {
         this.setState({
           QRreader: false
@@ -324,7 +329,7 @@ class RecycleAssetNC extends Component {
 
       window.contracts.RCLR.methods
         .$recycle(idxHash, rgtHash, this.state.selectedAssetClass)
-        .send({ from: window.addr, value: window.costs.newRecordCost })
+        .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
@@ -355,26 +360,26 @@ class RecycleAssetNC extends Component {
     };
 
     return (
-      <div>
-        {this.state.QRreader === false && (
+        <div>
+            {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
               <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
-            <h2 className="formHeader">Recycle Asset</h2>
+            <h2 className="formHeaderMobile">Recycle Asset</h2>
             <div className="mediaLinkClearForm">
               <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
           </div>
         )}
-        <Form className="form" id='MainForm'>
-          {window.addr === undefined && (
-            <div className="errorResults">
-              <h2>User address unreachable</h2>
-              <h3>Please connect web3 provider.</h3>
-            </div>
-          )}
-          {window.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
+            <Form className="formMobile" id='MainForm'>
+                {window.addr === undefined && (
+                    <div className="resultsMobile">
+                        <h2>User address unreachable</h2>
+                        <h3>Please connect web3 provider.</h3>
+                    </div>
+                )}
+                {window.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
             <Form.Row>
               <Form.Label className="formFontRow">Asset Class:</Form.Label>
               <Form.Group as={Row} controlId="formGridAC">
@@ -387,8 +392,8 @@ class RecycleAssetNC extends Component {
                 />
               </Form.Group>
 
-              <div className="submitButtonNRAC">
-                <div className="submitButtonNRContent">
+              <div className="submitButtonRRMobile">
+                <div className="submitButtonRRContent">
                   <ArrowRightCircle
                     onClick={() => { _setAC() }}
                   />
@@ -403,11 +408,11 @@ class RecycleAssetNC extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
-                      className="checkBox2"
+                      className="checkBoxMobile"
                       id="inlineFormCheck"
                       onChange={() => { Checkbox() }}
                     />
-                    <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
+                    <Form.Label className="checkBoxFormFontMobile">Input Raw Idx Hash</Form.Label>
                     {this.state.Checkbox === true && (
                       <Form.Row>
                         <Form.Label className="formFont">Idx Hash:</Form.Label>
@@ -432,6 +437,9 @@ class RecycleAssetNC extends Component {
                             size="lg"
                           />
                         </Form.Group>
+                        
+                        </Form.Row>
+                  <Form.Row>
 
                         <Form.Group as={Col} controlId="formGridManufacturer">
                           <Form.Label className="formFont">Manufacturer:</Form.Label>
@@ -456,6 +464,9 @@ class RecycleAssetNC extends Component {
                           />
                         </Form.Group>
 
+                        </Form.Row>
+                  <Form.Row>
+
                         <Form.Group as={Col} controlId="formGridSerial">
                           <Form.Label className="formFont">Serial:</Form.Label>
                           <Form.Control
@@ -473,8 +484,8 @@ class RecycleAssetNC extends Component {
               {this.state.QRreader === false && !this.state.accessPermitted && this.state.assetClassSelected === true && (
                 <>
                   <Form.Row>
-                    <div className="submitButton">
-                      <div className="submitButtonContent">
+                    <div className="submitButtonRRMobile">
+                      <div className="submitButtonRRContent">
                         <ArrowRightCircle
                           onClick={() => { this.accessAsset() }}
                         />
@@ -490,7 +501,7 @@ class RecycleAssetNC extends Component {
                     <div>
                       <button
                         onClick={() => { QRReader() }}
-                        className="buttonQRScan"
+                        className="buttonQRScanMobile"
                       >
                         <img
                           className="scanImageFormQR"
@@ -500,48 +511,49 @@ class RecycleAssetNC extends Component {
                       </button>
                     </div>
                   </Form.Row>
-                  {this.state.help === true && (
+                  {/* {this.state.help === true && (
                     <div className="explainerTextBox">
                       Recycling an asset requires that the asset has been discarded by its previous owner. Recycle can either
                       take a recreated hash made by providing asset information, an assets unique QR code, or simply the asset's Idx hash.
                       The address that provides this information will then be able to claim the asset as their own.
                     </div>
-                  )}
+                  )} */}
                 </>
               )}
               {this.state.QRreader === true && (
-                <div>
-                  <style type="text/css">
-                    {`
-                .form {
+              <div>
+                <style type="text/css">
+                  {`
+                .formMobile {
                   background: none !important;
+                  padding: 0rem !important;
                 }
                    `}
-                  </style>
-                  <div>
-                    <div className="mediaLinkADHome">
-                      <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
-                    </div>
-                    <h2 className="formHeaderQR">Scan QR</h2>
-                    <div className="mediaLinkBack">
-                      <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
-                    </div>
+                </style>
+                <div>
+                  <div className="mediaLinkADHome">
+                    <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
                   </div>
-                  <div className="QRreader">
-                    <QrReader
-                      delay={300}
-                      onError={this.handleError}
-                      onScan={this.handleScan}
-                      style={{ width: '100%' }}
-                    />
-                    {this.state.result !== undefined && (
-                      <div className="results">
-                        {this.state.assetFound}
-                      </div>
-                    )}
+                  <h2 className="formHeaderMobileVL">Scan QR</h2>
+                  <div className="mediaLinkBackMobile">
+                    <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                   </div>
                 </div>
-              )}
+                <div className="QRreaderMobile">
+                  <QrReader
+                    delay={300}
+                    onError={this.handleError}
+                    onScan={this.handleScan}
+                    style={{ width: '100%' }}
+                  />
+                  {this.state.result !== undefined && (
+                    <div className="resultsMobile">
+                      {this.state.assetFound}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
               {this.state.accessPermitted && (
                 <>
                   {this.state.type === "" && (
@@ -568,6 +580,9 @@ class RecycleAssetNC extends Component {
                       />
                     </Form.Group>
 
+                    </Form.Row>
+                  <Form.Row>
+
                     <Form.Group as={Col} controlId="formGridMiddleName">
                       <Form.Label className="formFont">Middle Name:</Form.Label>
                       <Form.Control
@@ -577,6 +592,9 @@ class RecycleAssetNC extends Component {
                         size="lg"
                       />
                     </Form.Group>
+
+                    </Form.Row>
+                  <Form.Row>
 
                     <Form.Group as={Col} controlId="formGridLastName">
                       <Form.Label className="formFont">Last Name:</Form.Label>
@@ -600,6 +618,9 @@ class RecycleAssetNC extends Component {
                       />
                     </Form.Group>
 
+                    </Form.Row>
+                  <Form.Row>
+
                     <Form.Group as={Col} controlId="formGridPassword">
                       <Form.Label className="formFont">Password:</Form.Label>
                       <Form.Control
@@ -617,8 +638,8 @@ class RecycleAssetNC extends Component {
                   <Form.Row>
                     <div>
                       <Form.Label className="costText"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
-                      <div className="submitButton">
-                        <div className="submitButtonContent">
+                      <div className="submitButtonRRMobile">
+                        <div className="submitButtonRRContent">
                           <Repeat
                             onClick={() => { _recycleAsset() }}
                           />
@@ -633,67 +654,71 @@ class RecycleAssetNC extends Component {
                       </div>
                     </div>
                   </Form.Row>
-                  {this.state.help === true && (
+                  {/* {this.state.help === true && (
                     <div className="explainerTextBox2">
                       Pruf never stores your personal data. The information you provide here will be irreversibly hashed into a unique pattern that does not contain the data that you provide,
                       encrypted or otherwise.
                     </div>
-                  )}
+                  )} */}
                 </>
               )}
             </div>
           )}
         </Form>
-        { this.state.QRreader === false && this.state.transaction === false && this.state.txHash === "" && (
-          <div className="assetSelectedResults">
-            <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+            {this.state.transaction === false && this.state.txStatus === false && (
+                <div className="assetSelectedResultsMobile">
+                    <Form.Row>
+                    {this.state.idxHash !== undefined && this.state.txHash === "" && (
                 <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 34) + "..."}</span> </div>
                   <div className="assetSelectedContentHead">Being Recycled Into Asset Class: <span className="assetSelectedContent">{this.state.selectedAssetClass}</span> </div>
                 </Form.Group>
               )}
-            </Form.Row>
-          </div>
-        )}
-        {this.state.transaction === true && this.state.QRreader === false && (
-          <div className="results">
-            <h1 className="loadingh1">Transaction In Progress</h1>
-          </div>)}
-        {this.state.txHash > 0 && this.state.QRreader === false && ( //conditional rendering
-          <div className="results">
-            {this.state.txStatus === false && (
-              <div className="transactionErrorText">
-                !ERROR! :
-                <a
-                  className="transactionErrorText"
-                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  TX Hash:{this.state.txHash}
-                </a>
-              </div>
+                    </Form.Row>
+                </div>
             )}
-            {this.state.txStatus === true && (
-              <div className="transactionErrorText">
-                {" "}
-                No Errors Reported :
-                <a
-                  className="transactionErrorText"
-                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  TX Hash:{this.state.txHash}
-                </a>
-              </div>
+            {this.state.transaction === true && (
+                <div className="resultsMobile">
+                    <h1 className="loadingh1">Transaction In Progress</h1>
+                </div>)}
+            {this.state.transaction === false && (
+                <div>
+                    {this.state.txHash > 0 && ( //conditional rendering
+                        <div className="resultsMobile">
+                            {this.state.txStatus === false && (
+                                <div className="transactionErrorText">
+                                    !ERROR! :
+                                    <a
+                                        className="transactionErrorText"
+                                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        TX Hash:{this.state.txHash}
+                                    </a>
+                                </div>
+                            )}
+                            {this.state.txStatus === true && (
+                                <div className="transactionErrorText">
+                                    {" "}
+            No Errors Reported :
+                                    <a
+                                        className="transactionErrorText"
+                                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        TX Hash:{this.state.txHash}
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
             )}
-          </div>
-        )}
-      </div>
+        </div>
     );
   }
 }
 
-export default RecycleAssetNC;
+export default RecycleMobile;
