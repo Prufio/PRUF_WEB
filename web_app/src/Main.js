@@ -34,10 +34,11 @@ class Main extends Component {
             <HashRouter>
               <div>
                 <div className="bannerForm">
+                <ClickAwayListener onClickAway={()=>{this.setState({hamburgerMenuMobile: false})}}>
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
-                      <ClickAwayListener onClickAway={()=>{this.setState({hamburgerMenuMobile: false})}}>
-                      <>
+                      
+                        <>
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
@@ -66,11 +67,11 @@ class Main extends Component {
                           )}
                           {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                         </nav>
-                        
-                      </>
-                      </ClickAwayListener>
+                        </>
+                      
                     )}
                   </ul>
+                  </ClickAwayListener>
                 </div>
               </div>
               <div className="pageForm">
@@ -1287,7 +1288,7 @@ class Main extends Component {
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setState({ hasMounted: true })
     }
-    else if (isMobile) {
+    else if (isMobile && _web3.eth.net.getNetworkType() != "main") {
 
       console.log("Here")
 
