@@ -1197,6 +1197,12 @@ class Main extends Component {
     window.location.href = '/#/';
     window.menuChange = undefined;
 
+    _web3 = require("web3");
+    _web3 = new Web3(_web3.givenProvider);
+    this.setUpContractEnvironment(_web3)
+    this.setState({ web3: _web3 });
+    window.web3 = _web3;
+
 
     if (!isMobile) {
 
@@ -1217,11 +1223,6 @@ class Main extends Component {
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
       const ethereum = window.ethereum;
-      _web3 = require("web3");
-      _web3 = new Web3(_web3.givenProvider);
-      this.setUpContractEnvironment(_web3)
-      this.setState({ web3: _web3 });
-      window.web3 = _web3;
 
       ethereum.enable()
 
@@ -1238,7 +1239,7 @@ class Main extends Component {
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setState({ hasMounted: true })
     }
-    else if (isMobile && window.ethereum !== undefined){ 
+    else if (isMobile){ 
 
       window.costs = {}
       window.additionalElementArrays = {
@@ -1257,11 +1258,6 @@ class Main extends Component {
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
       const ethereum = window.ethereum;
-      _web3 = require("web3");
-      _web3 = new Web3(_web3.givenProvider);
-      this.setUpContractEnvironment(_web3)
-      this.setState({ web3: _web3 });
-      window.web3 = _web3;
 
       ethereum.enable()
 
