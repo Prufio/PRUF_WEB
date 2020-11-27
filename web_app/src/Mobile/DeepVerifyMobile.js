@@ -33,9 +33,8 @@ class DeepVerifyMobile extends Component {
         idxHash = this.state.idxHashRaw
       }
      
-      let rawObj = await window.utils.checkAssetExists(idxHash);
-      let infoArr = Object.values(rawObj.obj);
-      let doesExist = rawObj.exists;
+      let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+      let infoArr = Object.values(window.utils.checkAssetExists(idxHash).obj);
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
@@ -107,8 +106,8 @@ class DeepVerifyMobile extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data).exists
-      if (tempBool === true) {
+      let tempBool = await window.utils.checkAssetExists(data)
+      if (tempBool.exists === true) {
         this.setState({
           result: data,
           QRRR: true,

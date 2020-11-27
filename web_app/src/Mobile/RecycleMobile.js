@@ -121,8 +121,8 @@ class RecycleMobile extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data).exists
-      let doesExist = await window.utils.checkAssetExists(data).exists;
+      let tempBool = await window.utils.checkAssetExistsBare(data)
+      let doesExist = await window.utils.checkAssetExistsBare(data);
       if (tempBool === true) {
         this.setState({
           result: data,
@@ -204,7 +204,7 @@ class RecycleMobile extends Component {
           let resArray = await window.utils.checkStats(this.state.idxHash, [0, 2])
           console.log(resArray)
 
-          if (Number(resArray[0]) !== 70) {
+          if (Number(resArray[0]) !== 60) {
             alert("Asset is not discarded! Owner must export the assset in order to import.");
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"

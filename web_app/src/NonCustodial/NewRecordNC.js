@@ -146,7 +146,7 @@ class NewRecordNC extends Component {
         String(this.state.serial).replace(/\s/g, '')
       );
 
-      let doesExist = await window.utils.checkAssetExists(idxHash).exists;
+      let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
       if (!doesExist) {
         this.setState({ idxHash: idxHash, idxSubmitted: true });

@@ -394,6 +394,30 @@ function buildWindowUtils() {
     return component
   }
 
+  const _checkAssetExistsBare = async (idxHash) => {
+    let tempBool;
+    // console.log(idxHash.substring(0, 2))
+    if (idxHash.substring(0, 2) !== "0x") {
+      return (false)
+    }
+    await window.contracts.STOR.methods
+      .retrieveShortRecord(idxHash)
+      .call(function (_error, _result) {
+        if (_error) {
+          return (console.log("IN ERROR IN ERROR IN ERROR"))
+        } else if (
+          Object.values(_result)[2] === "0"
+        ) {
+          tempBool = false;
+        } else {
+          tempBool = true;
+        }
+
+      });
+    console.log(tempBool);
+    return tempBool;
+  }
+
   const _checkAssetExists = async (idxHash) => {
     let tempBool;
     let tempObj;
@@ -1450,6 +1474,7 @@ function buildWindowUtils() {
     resolveAC: _resolveAC,
     checkACName: _checkACName,
     checkAssetExists: _checkAssetExists,
+    checkAssetExistsBare: _checkAssetExistsBare,
     checkStats: _checkStats,
     getStatusString: _getStatusString,
     checkAssetExportable: _checkAssetExportable,

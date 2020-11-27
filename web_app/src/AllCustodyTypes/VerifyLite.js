@@ -38,7 +38,7 @@ class VerifyLite extends Component {
         idxHash = this.state.idxHashRaw
       }
 
-      let doesExist = await window.utils.checkAssetExists(idxHash).exists;
+      let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
@@ -102,7 +102,7 @@ class VerifyLite extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data).exists
+      let tempBool = await window.utils.checkAssetExistsBare(data)
       if (tempBool === true) {
         this.setState({
           result: data,
@@ -181,7 +181,7 @@ class VerifyLite extends Component {
       console.log("rgtHash", rgtHash);
       console.log("addr: ", window.addr);
 
-      var doesExist = await window.utils.checkAssetExists(idxHash).exists;
+      var doesExist = await window.utils.checkAssetExistsBare(idxHash);
       var infoMatches = await window.utils.checkMatch(idxHash, rgtHash);
 
       if (!doesExist) {

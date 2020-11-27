@@ -395,7 +395,7 @@ class RetrieveRecordMobile extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data).exists
+      let tempBool = await window.utils.checkAssetExistsBare(data)
       if (tempBool === true) {
         this.setState({
           result: data,
@@ -463,7 +463,7 @@ class RetrieveRecordMobile extends Component {
         console.log("addr: ", window.addr);
       }
 
-      let doesExist = await window.utils.checkAssetExists(idxHash);
+      let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
