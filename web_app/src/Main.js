@@ -56,7 +56,7 @@ class Main extends Component {
                             />
                           )}
                         </button> */}
-                        <ClickAwayListener onClickAway={()=>{if(this.hamburgerMenuMobile === true) {this.setState({hamburgerMenuMobile: false})}}}>
+                        <ClickAwayListener onClickAway={()=>{if(this.state.hamburgerMenuMobile === true) {this.setState({hamburgerMenuMobile: false})}}}>
                         <nav>
                           {this.state.hamburgerMenuMobile === true && (
                             <div className="hamburgerDropdownMobile">

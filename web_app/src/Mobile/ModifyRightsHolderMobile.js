@@ -248,7 +248,7 @@ class ModifyRightsHolderMobile extends Component {
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
-                    <h2 className="formHeaderMobile">Modify Status</h2>
+                    <h2 className="formHeaderMobile">Modify Rights Holder</h2>
                     <div className="mediaLinkClearForm">
                         <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
