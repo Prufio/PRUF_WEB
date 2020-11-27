@@ -34,7 +34,7 @@ class ModifyRecordStatusNC extends Component {
 
     this.clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+      this.setState({ idxHash: undefined,  transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
 
     this.modifyStatus = async () => {
@@ -58,19 +58,13 @@ class ModifyRecordStatusNC extends Component {
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-          document.getElementById("MainForm").reset(),
-          this.setState({
-            idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, transaction: false
-          })
+          this.clearForm()
 
       }
 
       if (NewStatusString === this.state.status) {
         return alert("Asset already in selected Status! Ensure data fields are correct before submission."),
-          document.getElementById("MainForm").reset(),
-          this.setState({
-            idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, transaction: false
-          })
+        this.clearForm()
       }
 
       if (

@@ -108,9 +108,8 @@ class RetrieveRecordMobile extends Component {
         this.setState({ selectedImage: e })
       }
 
-      const openPhotoNT = (url) => {
-        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-        if (newWindow) { newWindow.opener = null }
+      const renderIcon = () => {
+        return <Jdenticon size="300" value={obj.idxHash} />
       }
 
 
@@ -176,10 +175,6 @@ class RetrieveRecordMobile extends Component {
           </div>
         </>
       )
-    }
-
-    const renderIcon = () => {
-      return <Jdenticon size="340" value={this.state.idxHash} />
     }
 
     this.handlePacket = async () => {

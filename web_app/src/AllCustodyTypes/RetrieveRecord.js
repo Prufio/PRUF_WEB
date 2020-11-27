@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { QRCode } from 'react-qrcode-logo';
+import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, ArrowRightCircle, HelpCircle, X } from "react-feather";
 
 
@@ -72,9 +73,8 @@ class RetrieveRecord extends Component {
         this.setState({ selectedImage: e })
       }
 
-      const openPhotoNT = (url) => {
-        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-        if (newWindow) { newWindow.opener = null }
+      const renderIcon = () => {
+        return <Jdenticon size="340" value={this.state.idxHash} />
       }
 
       const generateThumbs = () => {
@@ -218,7 +218,7 @@ class RetrieveRecord extends Component {
                     <button className="assetImageButtonSelected">
                       {this.state.selectedImage !== "" ?
                         (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
-                        : (<>{obj.identicon}</>)}
+                        : (<>{renderIcon()}</>)}
                     </button>
                     <p className="cardNameSelected">Name: {obj.name}</p>
                     <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>

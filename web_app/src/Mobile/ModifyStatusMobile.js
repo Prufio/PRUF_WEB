@@ -146,7 +146,7 @@ class ModifyStatusMobile extends Component {
             }
             else if (e === "assetDash") {
                 console.log("heading over to dashboard")
-                return window.location.href = "/#/asset-dashboard"
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
@@ -176,7 +176,7 @@ class ModifyStatusMobile extends Component {
         const clearForm = async () => {
             if (document.getElementById("MainForm") === null) { return }
             document.getElementById("MainForm").reset();
-            this.setState({ idxHash: "", txStatus: false, txHash: "", wasSentPacket: false, help: false })
+            this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
         }
 
         const help = async () => {
@@ -209,19 +209,13 @@ class ModifyStatusMobile extends Component {
       
             if (!doesExist) {
               return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-                document.getElementById("MainForm").reset(),
-                this.setState({
-                  idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, transaction: false
-                })
+                this.clearForm()
       
             }
       
             if (NewStatusString === this.state.status) {
               return alert("Asset already in selected Status! Ensure data fields are correct before submission."),
-                document.getElementById("MainForm").reset(),
-                this.setState({
-                  idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, transaction: false
-                })
+                this.clearForm()
             }
       
             if (

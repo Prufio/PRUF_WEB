@@ -145,7 +145,7 @@ class TransferAssetMobile extends Component {
         }
         else if (e === "assetDash") {
           console.log("heading over to dashboard")
-          return window.location.href = "/#/asset-dashboard"
+          return window.location.href = "/#/asset-dashboard-mobile"
         }
   
         let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])

@@ -7,7 +7,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { RefreshCw, X, ChevronRight, CornerUpLeft, Home, Plus } from "react-feather";
 import { QRCode } from 'react-qrcode-logo';
 import { isMobile } from "react-device-detect";
-import Printer from '../Resources/Print'
+import Printer from '../Resources/Print';
 import Card from "react-bootstrap/Card";
 import Jdenticon from 'react-jdenticon';
 

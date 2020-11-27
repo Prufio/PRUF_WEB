@@ -1069,7 +1069,7 @@ class Main extends Component {
 
             }
 
-            else {
+            else if (!isMobile){
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1126,7 +1126,7 @@ class Main extends Component {
         }
 
         else if(isMobile && _web3.eth.net.getNetworkType() != undefined){
-          /* await this.setState({
+           await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
             assetHolderMenuBool: false,
@@ -1135,7 +1135,7 @@ class Main extends Component {
             authorizedUserMenuBool: false,
             hasFetchedBalances: false,
             routeRequest: "basicMobile"
-          }) */
+          }) 
         }
 
         else if (window.addr === undefined) {
@@ -1274,6 +1274,7 @@ class Main extends Component {
         text: [],
         name: ""
       }
+      
       window.assetTokenInfo = {
         assetClass: undefined,
         idxHash: undefined,
@@ -1282,6 +1283,7 @@ class Main extends Component {
         text: undefined,
         status: undefined,
       }
+
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
       const ethereum = window.ethereum;

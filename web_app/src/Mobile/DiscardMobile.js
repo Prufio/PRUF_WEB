@@ -84,8 +84,8 @@ class DiscardMobile extends Component {
             else if (e === "reset") {
                 return window.resetInfo = true;
             }
-            else if (e === "assetDash") {
-                return window.location.href = "/#/asset-dashboard"
+         else if (e === "assetDash") {
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
