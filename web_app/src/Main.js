@@ -1240,12 +1240,30 @@ class Main extends Component {
     }
     else if (isMobile && window.ethereum !== undefined){ 
 
-      window.ipfsCounter = 0;
+      window.costs = {}
+      window.additionalElementArrays = {
+        photo: [],
+        text: [],
+        name: ""
+      }
+      window.assetTokenInfo = {
+        assetClass: undefined,
+        idxHash: undefined,
+        name: undefined,
+        photos: undefined,
+        text: undefined,
+        status: undefined,
+      }
+      window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+      window.resetInfo = false;
+      const ethereum = window.ethereum;
       _web3 = require("web3");
-      _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+      _web3 = new Web3(_web3.givenProvider);
       this.setUpContractEnvironment(_web3)
       this.setState({ web3: _web3 });
       window.web3 = _web3;
+
+      ethereum.enable()
 
       this.setState({
         mobileMenuBool: true,
@@ -1265,6 +1283,9 @@ class Main extends Component {
       });
 
       window.ipfs = _ipfs;
+
+      _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+      window.addEventListener("accountListener", this.acctChanger());
 
       this.setState({ hasMounted: true })
     }
