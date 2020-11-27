@@ -138,7 +138,7 @@ div {
   width: fit-content !important;
 }
 
-.headerFormContent{
+.headerFormContentMobile{
   width: 20rem !important;
 }
 
@@ -767,6 +767,20 @@ div {
   position: absolute;
   margin-top: 1rem;
   margin-left: -42.1rem;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+  z-index: 1000;
+  max-width: 60px;
+}
+
+.imageButtonUserMobile {
+  border: none;
+  object-fit: cover;
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  margin-top: 1rem;
+  margin-right: -20rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
   z-index: 1000;
@@ -2258,7 +2272,7 @@ margin-bottom: -3rem;
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-left: -40;
+  margin-left: -20;
   margin-top: 0.7rem;
 }
 

@@ -36,14 +36,30 @@ class Main extends Component {
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
                       <>
-                        <div className="hamburgerMenu">
+                        <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
+                        <button
+                          className="imageButtonUserMobile"
+                          onClick={() => { this.userMenuMobile() }}>
+                          {window.addr !== undefined && (
+                            <Robohash
+                              className="imageFormUser"
+                              name={window.addr}
+                            />
+                          )}
+                          {window.addr === undefined && (
+                            <User
+                              className="imageFormUser"
+                              size={30}
+                            />
+                          )}
+                        </button>
                         <nav>
                           {this.state.hamburgerMenuMobile === true && (
-                          <div className="hamburgerDropdownMobile">
-                            {this.state.mobileMenuBool === true && (<MobileComponent />)}
-                          </div>
+                            <div className="hamburgerDropdownMobile">
+                              {this.state.mobileMenuBool === true && (<MobileComponent />)}
+                            </div>
                           )}
                           {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                         </nav>
@@ -1189,6 +1205,7 @@ class Main extends Component {
       buildReady: false,
       hasMounted: false,
       routeRequest: "basic",
+      userMenuMobile: false,
     };
   }
 
@@ -1374,6 +1391,17 @@ class Main extends Component {
       }
       else {
         this.setState({ userMenu: undefined })
+      }
+    }
+
+    this.userMenuMobile = async () => {
+      if (this.state.userMenuMobile === false) {
+        this.setState({
+          userMenuMobile: true
+        })
+      }
+      else {
+        this.setState({ userMenuMobile: false })
       }
     }
 
