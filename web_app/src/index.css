@@ -138,6 +138,10 @@ div {
   width: fit-content !important;
 }
 
+.headerFormContent{
+  width: 20rem !important;
+}
+
 .headerSelected {
   background-color: #002a40;
   margin-top: 11.51rem;
@@ -2254,7 +2258,7 @@ margin-bottom: -3rem;
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-left: -20;
+  margin-left: -40;
   margin-top: 0.7rem;
 }
 
