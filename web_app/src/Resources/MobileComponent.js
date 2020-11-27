@@ -40,7 +40,7 @@ class MobileComponent extends Component {
                     </div>
                     <div className="headerFormContentMobile">
                         <li>
-                            <NavLink to="/modify-status-mobile">Modify Rights Holder</NavLink>
+                            <NavLink to="/modify-status-mobile">Modify Status</NavLink>
                         </li>
                     </div>
                     <div className="headerFormContentMobile">
