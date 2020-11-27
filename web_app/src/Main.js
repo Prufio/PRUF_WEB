@@ -40,9 +40,11 @@ class Main extends Component {
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
                         <nav>
+                          {this.state.hamburgerMenuMobile === true && (
                           <div className="hamburgerDropdownMobile">
                             {this.state.mobileMenuBool === true && (<MobileComponent />)}
                           </div>
+                          )}
                           {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                         </nav>
                       </>
