@@ -35,10 +35,17 @@ class Main extends Component {
                 <div className="bannerForm">
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
-                      <nav>
-                        {this.state.mobileMenuBool === true && (<MobileComponent />)}
-                        {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
-                      </nav>
+                      <>
+                        <div className="hamburgerMenu">
+                          <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
+                        </div>
+                        <nav>
+                          <div className="hamburgerDropdownMobile">
+                            {this.state.mobileMenuBool === true && (<MobileComponent />)}
+                          </div>
+                          {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
+                        </nav>
+                      </>
                     )}
                   </ul>
                 </div>
@@ -211,8 +218,7 @@ class Main extends Component {
                               variant="toggle"
                               onClick={() => {
                                 this.setState({ settingsMenu: undefined })
-                                if( window.confirm("That doesn't direct you anywhere. The address logged into the portal does not control any PRüF assets. For more information, click OK to proceed to our website."))
-                                {
+                                if (window.confirm("That doesn't direct you anywhere. The address logged into the portal does not control any PRüF assets. For more information, click OK to proceed to our website.")) {
                                   window.open('https://pruf.io')
                                 }
 
@@ -579,9 +585,9 @@ class Main extends Component {
         this.setState({ menuChange: window.menuChange })
       }
 
-/*       if(this.state.mobileMenuBool){
-        console.log("Here")
-      } */
+      /*       if(this.state.mobileMenuBool){
+              console.log("Here")
+            } */
 
       if (this.state.menuChange !== undefined) {
         window.menuChange = undefined
@@ -1164,6 +1170,7 @@ class Main extends Component {
       contractArray: [],
       isAuthUser: false,
       hamburgerMenu: true,
+      hamburgerMenuMobile: false,
       assetHolderBool: false,
       IDHolderBool: false,
       mobileMenuBool: false,
@@ -1250,7 +1257,7 @@ class Main extends Component {
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setState({ hasMounted: true })
     }
-    else if (isMobile){ 
+    else if (isMobile) {
 
       console.log("Here")
 
@@ -1342,6 +1349,17 @@ class Main extends Component {
       }
       else {
         this.setState({ hamburgerMenu: undefined })
+      }
+    }
+
+    this.hamburgerMenuMobile = async () => {
+      if (this.state.hamburgerMenuMobile === false) {
+        this.setState({
+          hamburgerMenuMobile: true,
+        })
+      }
+      else {
+        this.setState({ hamburgerMenuMobile: false })
       }
     }
 

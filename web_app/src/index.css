@@ -619,6 +619,26 @@ div {
 
 }
 
+.hamburgerDropdownMobile {
+  display: flex;
+  height: 40rem;
+  width: 30rem;
+  position: absolute;
+  background-image: url(./Resources/Images/DarkBlueBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;  
+  justify-content: center;
+  flex-direction: row;
+  z-index: 1000;
+  margin-right: 105%;
+  margin-top: 4.8rem;
+  border-radius: 0rem 0rem 0.5rem 0rem;
+  opacity: 0.9;
+
+}
+
 .hamburgerDropdownUserInfo {
   display: flex;
   width: 26rem;

@@ -12,11 +12,11 @@ class NoAddressComponent extends Component {
         if (isMobile) {
             return (
                 <Nav className="headerForm">
-                    <div className="headerFormContent">
+                    {/* <div className="headerFormContent">
                         <li>
                             <NavLink exact to="/">Home</NavLink>
                         </li>
-                    </div>
+                    </div> */}
                     <div className="headerFormContent">
                         <li>
                             <NavLink to="/retrieve-record-mobile">Search</NavLink>
