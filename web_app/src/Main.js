@@ -36,7 +36,7 @@ class Main extends Component {
                 <div className="bannerForm">
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
-                      <ClickAwayListener onClickAway={()=>{if(this.state.hamburgerMenuMobile === true) {this.setState({hamburgerMenuMobile: false})}}}>
+                      <ClickAwayListener onClickAway={()=>{this.setState({hamburgerMenuMobile: false})}}>
                       <>
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
