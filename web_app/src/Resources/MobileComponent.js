@@ -48,7 +48,7 @@ class MobileComponent extends Component {
                     </div>
                     <div className="headerFormContent">
                         <li>
-                            <NavLink to="/recycle-mobile">Discard</NavLink>
+                            <NavLink to="/discard-mobile">Discard</NavLink>
                         </li>
                     </div>
                 </Nav>
