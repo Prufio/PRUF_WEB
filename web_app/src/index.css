@@ -1077,6 +1077,15 @@ div {
   margin-top: 2rem;
 }
 
+.backButtonMobileAD {
+  display: flex;
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000;
+  margin-left: 29rem;
+  margin-top: 2rem;
+}
+
 .submitButtonRRQR3MobileContent {
   color: rgb(255, 255, 255);
   border-radius: 50%;
@@ -1158,7 +1167,7 @@ div {
   object-fit: cover;
   width: fit-content;
   height: fit-content;
-  margin-left: 27.2rem;
+  margin-left: 28rem;
   margin-top: 0.7rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
