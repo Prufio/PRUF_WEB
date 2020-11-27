@@ -392,10 +392,9 @@ class RecycleMobile extends Component {
                 >
                   <optgroup className="optgroup">
                     <option value="0"> Please Select An Asset Class </option>
-                    <option value="11"> Electronics </option>
+                    <option value="14"> Electronics </option>
                     <option value="12"> Transportation </option>
-                    <option value="13"> Virtual </option>
-                    <option value="14"> Other </option>
+                    <option value="16"> Other </option>
                   </optgroup>
                 </Form.Control>
               </Form.Group>
