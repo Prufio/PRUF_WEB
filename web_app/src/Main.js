@@ -41,7 +41,6 @@ class Main extends Component {
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
-                      </ClickAwayListener>
                         {/* <button
                           className="imageButtonUserMobile"
                           onClick={() => { this.userMenuMobile() }}>
@@ -66,6 +65,7 @@ class Main extends Component {
                           )}
                           {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                         </nav>
+                        </ClickAwayListener>
                       </>
                     )}
                   </ul>
