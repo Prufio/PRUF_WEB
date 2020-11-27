@@ -37,7 +37,6 @@ class Main extends Component {
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
                       <>
-                      <ClickAwayListener onClickAway={()=>{this.setState({hamburgerMenuMobile: false})}}>
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
@@ -57,6 +56,7 @@ class Main extends Component {
                             />
                           )}
                         </button> */}
+                        <ClickAwayListener onClickAway={()=>{this.setState({hamburgerMenuMobile: false})}}>
                         <nav>
                           {this.state.hamburgerMenuMobile === true && (
                             <div className="hamburgerDropdownMobile">
