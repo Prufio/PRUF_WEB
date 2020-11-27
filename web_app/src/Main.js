@@ -1125,6 +1125,19 @@ class Main extends Component {
           })
         }
 
+        else if(isMobile && _web3.eth.net.getNetworkType() != undefined){
+          /* await this.setState({
+            mobileMenuBool: true,
+            noAddrMenuBool: false,
+            assetHolderMenuBool: false,
+            assetClassHolderMenuBool: false,
+            basicMenuBool: false,
+            authorizedUserMenuBool: false,
+            hasFetchedBalances: false,
+            routeRequest: "basicMobile"
+          }) */
+        }
+
         else if (window.addr === undefined) {
           await this.setState({
             mobileMenuBool: false,
