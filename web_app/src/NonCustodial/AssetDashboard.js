@@ -427,6 +427,7 @@ class AssetDashboard extends React.Component {
                 color: white;
                 font-weight: bold;
                 font-size: 1.2rem;
+                border-radius: 0rem !important;
               }
 
               .btn-QR {
