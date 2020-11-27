@@ -231,7 +231,7 @@ class AssetDashboardMobile extends React.Component {
           <>
           <Card style={{height:'350px', width: '340px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
             {this.state.selectedImage !== undefined ?
-              (<Card.Img style={{ width: '320px', height: "320px" }} variant="top" src={this.state.selectedImage} />)
+              (<Card.Img style={{ width: '340px', height: "320px" }} variant="top" src={this.state.selectedImage} />)
               : (<>{renderIcon()}</>)}
 
             <Card.Body>

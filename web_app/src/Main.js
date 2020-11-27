@@ -39,7 +39,7 @@ class Main extends Component {
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
-                        <button
+                        {/* <button
                           className="imageButtonUserMobile"
                           onClick={() => { this.userMenuMobile() }}>
                           {window.addr !== undefined && (
@@ -54,7 +54,7 @@ class Main extends Component {
                               size={30}
                             />
                           )}
-                        </button>
+                        </button> */}
                         <nav>
                           {this.state.hamburgerMenuMobile === true && (
                             <div className="hamburgerDropdownMobile">

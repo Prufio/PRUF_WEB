@@ -773,7 +773,7 @@ div {
   max-width: 60px;
 }
 
-.imageButtonUserMobile {
+/* .imageButtonUserMobile {
   border: none;
   object-fit: cover;
   width: fit-content;
@@ -785,7 +785,7 @@ div {
   transition:         transform .5s ease-in-out;
   z-index: 1000;
   max-width: 30px;
-}
+} */
 
 .assetImageButton {
   background-color: transparent; 
@@ -1576,14 +1576,14 @@ margin-bottom: -3rem;
   border-radius: 50%;
 }
 
-.imageFormUserMobile {
+/* .imageFormUserMobile {
   display: flex;
   width: 35px;
   height: 35px;
   object-fit: cover;
   z-index: 1000;
   /* background-color: #cccccc; */
-  background-image: url(./Resources/Images/userBack.png);
+  /* background-image: url(./Resources/Images/userBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -1591,7 +1591,7 @@ margin-bottom: -3rem;
   -webkit-transition: -webkit-transform .7s ease-in-out;
   transition:         transform .7s ease-in-out;
   border-radius: 50%;
-}
+} */
 
 .imageFormUser:hover {
   -webkit-transform: rotate(8deg);
