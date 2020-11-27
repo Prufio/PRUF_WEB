@@ -146,7 +146,7 @@ class NewRecordNC extends Component {
         String(this.state.serial).replace(/\s/g, '')
       );
 
-      let doesExist = await window.utils.checkAssetExists(idxHash);
+      let doesExist = await window.utils.checkAssetExists(idxHash).exists;
 
       if (!doesExist) {
         this.setState({ idxHash: idxHash, idxSubmitted: true });
@@ -156,7 +156,7 @@ class NewRecordNC extends Component {
       else { return alert("Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)") }
     }
 
-    const _newRecord = async () => {//create a new asset record
+    const _newRecord = async () => { //create a new asset record
       this.setState({
         help: false,
         txStatus: false,

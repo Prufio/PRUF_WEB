@@ -118,8 +118,8 @@ class RecycleAssetNC extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data)
-      let doesExist = await window.utils.checkAssetExists(data);
+      let tempBool = await window.utils.checkAssetExists(data).exists
+      let doesExist = await window.utils.checkAssetExists(data).exists;
       if (tempBool === true) {
         this.setState({
           result: data,

@@ -36,7 +36,7 @@ class VerifyRightHolder extends Component {
         idxHash = this.state.idxHashRaw
       }
 
-      let doesExist = await window.utils.checkAssetExists(idxHash);
+      let doesExist = await window.utils.checkAssetExists(idxHash).exists;
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
@@ -101,7 +101,7 @@ class VerifyRightHolder extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data)
+      let tempBool = await window.utils.checkAssetExists(data).exists
       if (tempBool === true) {
         this.setState({
           result: data,

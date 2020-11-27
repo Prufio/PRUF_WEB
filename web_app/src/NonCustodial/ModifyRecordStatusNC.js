@@ -54,7 +54,7 @@ class ModifyRecordStatusNC extends Component {
       console.log("new stat string", NewStatusString);
       console.log("old stat: ", this.state.status);
 
-      var doesExist = await window.utils.checkAssetExists(idxHash);
+      var doesExist = await window.utils.checkAssetExists(idxHash).exists;
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),

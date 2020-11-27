@@ -36,7 +36,7 @@ class VerifyLiteMobile extends Component {
         console.log("IDXTEST3", idxHash)
       }
       console.log("IDXTEST4", idxHash)
-      let doesExist = await window.utils.checkAssetExists(idxHash);
+      let doesExist = await window.utils.checkAssetExists(idxHash).exists;
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
@@ -105,7 +105,7 @@ class VerifyLiteMobile extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data)
+      let tempBool = await window.utils.checkAssetExists(data).exists
       if (tempBool === true) {
         this.setState({
           result: data,
@@ -188,7 +188,7 @@ class VerifyLiteMobile extends Component {
       console.log("rgtHash", rgtHash);
       console.log("addr: ", window.addr);
 
-      var doesExist = await window.utils.checkAssetExists(idxHash);
+      var doesExist = await window.utils.checkAssetExists(idxHash).exists;
       var infoMatches = await window.utils.checkMatch(idxHash, rgtHash);
 
       if (!doesExist) {

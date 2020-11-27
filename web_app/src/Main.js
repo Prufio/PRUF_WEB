@@ -295,7 +295,7 @@ class Main extends Component {
                             </Button>
                           )}
 
-                          {this.state.routeRequest === "noAddr" && (
+                          {this.state.routeRequest === "noAddr" && window.addr === undefined && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -1111,7 +1111,8 @@ class Main extends Component {
       window.isSettingUpContracts = true;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (window.addr !== undefined && !isMobile) {
+        if (!isMobile) {
+          console.log("Here!")
           await this.setState({
             mobileMenuBool: false,
             noAddrMenuBool: false,
@@ -1248,7 +1249,6 @@ class Main extends Component {
 
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
-    this.setUpContractEnvironment(_web3)
     this.setState({ web3: _web3 });
     window.web3 = _web3;
 
@@ -1286,6 +1286,7 @@ class Main extends Component {
       _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
       window.addEventListener("accountListener", this.acctChanger());
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
+      this.setUpContractEnvironment(_web3)
       this.setState({ hasMounted: true })
     }
     else if (isMobile && _web3.eth.net.getNetworkType() != "main") {
@@ -1311,7 +1312,7 @@ class Main extends Component {
       const ethereum = window.ethereum;
 
       ethereum.enable()
-
+      
       window.routeRequest = "basicMobile";
       this.setState({
         mobileMenuBool: true,
@@ -1333,7 +1334,10 @@ class Main extends Component {
       window.ipfs = _ipfs;
 
       _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+
       window.addEventListener("accountListener", this.acctChanger());
+      this.setUpContractEnvironment(_web3)
+      
 
       this.setState({ hasMounted: true })
     }

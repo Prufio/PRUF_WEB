@@ -108,7 +108,7 @@ class TransferAssetMobile extends Component {
 
   handleScan = async (data) => {
     if (data) {
-      let tempBool = await window.utils.checkAssetExists(data)
+      let tempBool = await window.utils.checkAssetExists(data).exists
       if (tempBool === true) {
         this.setState({
           result: data,
