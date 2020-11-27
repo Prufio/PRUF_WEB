@@ -18,7 +18,7 @@ import ParticleBox from "./Resources/ParticleBox";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'react-feather';
-import { isMobile } from "react-device-detect";
+import { ConsoleView, isMobile } from "react-device-detect";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
 
@@ -579,6 +579,10 @@ class Main extends Component {
         this.setState({ menuChange: window.menuChange })
       }
 
+/*       if(this.state.mobileMenuBool){
+        console.log("Here")
+      } */
+
       if (this.state.menuChange !== undefined) {
         window.menuChange = undefined
         if (this.state.IDHolderBool === true) {
@@ -624,7 +628,7 @@ class Main extends Component {
         this.setState({ ETHBalance: window.ETHBalance })
       }
 
-      if (this.state.routeRequest !== window.routeRequest && window.menuChange === undefined && window.addr !== undefined) {
+      /* if (this.state.routeRequest !== window.routeRequest && window.menuChange === undefined && window.addr !== undefined) {
         this.setState({
           mobileMenuBool: false,
           basicMenuBool: true,
@@ -635,7 +639,8 @@ class Main extends Component {
           authorizedUserMenuBool: false,
           routeRequest: window.routeRequest
         })
-      }
+        console.log("Here")
+      } */
 
       if (window.assets !== undefined) {
         if (window.assets.ids.length > 0 && Object.values(window.assets.descriptions).length === window.aTknIDs.length &&
@@ -670,6 +675,10 @@ class Main extends Component {
     }, 100)
 
     this.toggleMenu = async (menuChoice) => {
+
+      console.log("Here")
+
+
       if (window.menuChange === undefined) {
         window.location.href = '/#/';
       }
@@ -749,6 +758,7 @@ class Main extends Component {
         window.routeRequest = "NCAdmin"
         await this.setState({ routeRequest: "NCAdmin" })
         await this.setState({
+          mobileMenuBool: false,
           faucetBool: false,
           assetHolderMenuBool: true,
           assetHolderUserMenuBool: false,
@@ -990,6 +1000,7 @@ class Main extends Component {
         _web3.eth.getAccounts().then((e) => {
           if (window.addr !== e[0]) {
             if (e[0] === undefined || e[0] === null) {
+              console.log("Here")
               window.routeRequest = "noAddr"
               self.setState({
                 mobileMenuBool: false,
@@ -1079,7 +1090,7 @@ class Main extends Component {
 
         else if (window.addr === undefined) {
           await this.setState({
-            mobileMenuNool: false,
+            mobileMenuBool: false,
             noAddrMenuBool: true,
             assetHolderMenuBool: false,
             assetClassHolderMenuBool: false,
@@ -1205,7 +1216,7 @@ class Main extends Component {
 
 
     if (!isMobile) {
-
+      console.log("Here")
       window.costs = {}
       window.additionalElementArrays = {
         photo: [],
@@ -1241,6 +1252,8 @@ class Main extends Component {
     }
     else if (isMobile){ 
 
+      console.log("Here")
+
       window.costs = {}
       window.additionalElementArrays = {
         photo: [],
@@ -1261,6 +1274,7 @@ class Main extends Component {
 
       ethereum.enable()
 
+      window.routeRequest = "basicMobile";
       this.setState({
         mobileMenuBool: true,
         noAddrMenuBool: false,
@@ -1287,6 +1301,7 @@ class Main extends Component {
     }
 
     else {
+      console.log("Here")
       window.ipfsCounter = 0;
       _web3 = require("web3");
       _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
@@ -1295,6 +1310,7 @@ class Main extends Component {
       window.web3 = _web3;
 
       this.setState({
+        mobileMenuBool: false,
         noAddrMenuBool: true,
         assetHolderMenuBool: false,
         assetClassHolderMenuBool: false,

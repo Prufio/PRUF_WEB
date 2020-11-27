@@ -9,7 +9,6 @@ import {
 class MobileComponent extends Component {
     render() {
 
-        if (isMobile) {
             return (
                 <Nav className="headerForm">
                     <div className="headerFormContent">
@@ -42,9 +41,18 @@ class MobileComponent extends Component {
                             <NavLink to="/modify-rights-holder-mobile">Modify Rights Holder</NavLink>
                         </li>
                     </div>
+                    <div className="headerFormContent">
+                        <li>
+                            <NavLink to="/recycle-mobile">Recycle</NavLink>
+                        </li>
+                    </div>
+                    <div className="headerFormContent">
+                        <li>
+                            <NavLink to="/recycle-mobile">Discard</NavLink>
+                        </li>
+                    </div>
                 </Nav>
             )
-        }
     }
 }
 
