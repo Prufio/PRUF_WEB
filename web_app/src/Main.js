@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, NavLink, HashRouter } from "react-router-dom";
+import { ClickAwayListener } from '@material-ui/core';
 import Web3 from "web3";
 import Home from "./Home";
 import HomeMobile from "./Mobile/HomeMobile";
@@ -27,7 +28,7 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (isMobile) {
+      if (!isMobile) {
         return (
           <div>
             <HashRouter>
@@ -36,9 +37,11 @@ class Main extends Component {
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
                       <>
+                      <ClickAwayListener onClickAway={()=>{this.setState({hamburgerMenuMobile: false})}}>
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
+                      </ClickAwayListener>
                         {/* <button
                           className="imageButtonUserMobile"
                           onClick={() => { this.userMenuMobile() }}>
@@ -176,6 +179,7 @@ class Main extends Component {
               <div className="hamburgerMenu">
                 <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenu() }} /></a>
               </div>
+            
               {this.state.hamburgerMenu !== undefined && (
                 <div className="hamburgerDropdown">
                   <div className="mediaLink">
@@ -207,6 +211,7 @@ class Main extends Component {
                       </a>
                     </h3>
                   </div>
+                  <ClickAwayListener onClickAway={()=>{this.setState({userMenu: undefined})}}>
                   <button
                     className="imageButtonUser"
                     onClick={() => { this.userMenu() }}>
@@ -223,9 +228,12 @@ class Main extends Component {
                       />
                     )}
                   </button>
+                  </ClickAwayListener>
+                  <ClickAwayListener onClickAway={()=>{this.setState({settingsMenu: undefined})}}>
                   <div className="hamburgerMenuLink">
                     <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
                   </div>
+                  </ ClickAwayListener>
                   <div>
                     {this.state.settingsMenu !== undefined && (
                       <div>
@@ -329,6 +337,7 @@ class Main extends Component {
                     )}
                   </div>
                   <div>
+                  
                     {this.state.userMenu !== undefined && (
                       <div className="hamburgerDropdownUserInfo">
                         {this.state.addr === undefined && (
@@ -1241,7 +1250,7 @@ class Main extends Component {
     window.web3 = _web3;
 
 
-    if (!isMobile) {
+    if (isMobile) {
       console.log("Here")
       window.costs = {}
       window.additionalElementArrays = {
@@ -1276,7 +1285,7 @@ class Main extends Component {
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setState({ hasMounted: true })
     }
-    else if (isMobile) {
+    else if (!isMobile) {
 
       console.log("Here")
 
