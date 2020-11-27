@@ -231,7 +231,7 @@ class AssetDashboardMobile extends React.Component {
           <>
           <Card style={{height:'350px', width: '340px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
             {this.state.selectedImage !== "" ?
-              (<Card.Img style={{ width: '300px', height: "280px" }} variant="top" src={this.state.selectedImage} />)
+              (<Card.Img style={{ width: '340px', height: "290px" }} variant="top" src={this.state.selectedImage} />)
               : (<>{renderIcon()}</>)}
 
             <Card.Body>
@@ -247,7 +247,7 @@ class AssetDashboardMobile extends React.Component {
               {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>
-          <div className="submitButtonMobileAD">
+          <div className="backButtonMobileAD">
             <div className="submitButtonRRQR3MobileContent">
               <CornerUpLeft
                 color={"#028ed4"}
