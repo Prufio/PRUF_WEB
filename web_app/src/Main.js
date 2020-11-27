@@ -1104,8 +1104,6 @@ class Main extends Component {
       });
     };
 
-
-
     this.setUpContractEnvironment = async (_web3) => {
       if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
       window.isSettingUpContracts = true;
@@ -1274,7 +1272,7 @@ class Main extends Component {
         text: [],
         name: ""
       }
-      
+
       window.assetTokenInfo = {
         assetClass: undefined,
         idxHash: undefined,
@@ -1300,10 +1298,10 @@ class Main extends Component {
 
       _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
       window.addEventListener("accountListener", this.acctChanger());
-      //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setUpContractEnvironment(_web3)
       this.setState({ hasMounted: true })
     }
+
     else if (isMobile && _web3.eth.net.getNetworkType() != "main") {
 
       console.log("Here")
@@ -1470,8 +1468,6 @@ class Main extends Component {
   componentWillUnmount() {//stuff do do when component unmounts from the window
     console.log("unmounting component");
     window.removeEventListener("accountListener", this.acctChanger());
-    //window.removeEventListener("authLevelListener", this.updateAuthLevel());
-    //window.removeEventListener("ownerGetter", this.getOwner());
   }
 
   render() {
@@ -1479,7 +1475,7 @@ class Main extends Component {
     //render continuously produces an up-to-date stateful webpage  
 
     if (this.state.hasError === true) {
-      return (<div><h1>)-:</h1><h2> An error occoured. Ensure you are connected to metamask and reload the page. Mobile support coming soon.</h2></div>)
+      return (<div><h1>)-:</h1><h2>An error occoured. Please ensure you are connected to an ethereum provider and reload the page.</h2></div>)
     }
 
     return this.renderContent();
