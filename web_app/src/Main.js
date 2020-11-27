@@ -36,6 +36,7 @@ class Main extends Component {
                 <div className="bannerForm">
                   <ul className="headerForm">
                     {window.contracts !== undefined && (
+                      <ClickAwayListener onClickAway={()=>{if(this.state.hamburgerMenuMobile === true) {this.setState({hamburgerMenuMobile: false})}}}>
                       <>
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
@@ -56,7 +57,7 @@ class Main extends Component {
                             />
                           )}
                         </button> */}
-                        <ClickAwayListener onClickAway={()=>{if(this.state.hamburgerMenuMobile === true) {this.setState({hamburgerMenuMobile: false})}}}>
+                        
                         <nav>
                           {this.state.hamburgerMenuMobile === true && (
                             <div className="hamburgerDropdownMobile">
@@ -65,8 +66,9 @@ class Main extends Component {
                           )}
                           {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                         </nav>
-                        </ClickAwayListener>
+                        
                       </>
+                      </ClickAwayListener>
                     )}
                   </ul>
                 </div>
