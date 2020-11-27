@@ -780,7 +780,7 @@ div {
   height: fit-content;
   position: absolute;
   margin-top: 1rem;
-  margin-right: -20rem;
+  margin-right: -10rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
   z-index: 1000;
@@ -2272,7 +2272,7 @@ margin-bottom: -3rem;
   position: absolute;
   background-color: transparent;
   z-index: 1000;
-  margin-left: -20;
+  margin-left: -20rem;
   margin-top: 0.7rem;
 }
 
