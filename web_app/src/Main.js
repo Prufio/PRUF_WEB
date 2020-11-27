@@ -28,7 +28,7 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (!isMobile) {
+      if (isMobile) {
         return (
           <div>
             <HashRouter>
@@ -1250,7 +1250,7 @@ class Main extends Component {
     window.web3 = _web3;
 
 
-    if (isMobile) {
+    if (!isMobile) {
       console.log("Here")
       window.costs = {}
       window.additionalElementArrays = {
@@ -1285,7 +1285,7 @@ class Main extends Component {
       //window.addEventListener("authLevelListener", this.updateAuthLevel());
       this.setState({ hasMounted: true })
     }
-    else if (!isMobile) {
+    else if (isMobile) {
 
       console.log("Here")
 
