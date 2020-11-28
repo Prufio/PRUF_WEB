@@ -42,23 +42,7 @@ class Main extends Component {
                         <div className="hamburgerMenuMobile">
                           <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                         </div>
-                        {/* <button
-                          className="imageButtonUserMobile"
-                          onClick={() => { this.userMenuMobile() }}>
-                          {window.addr !== undefined && (
-                            <Robohash
-                              className="imageFormUser"
-                              name={window.addr}
-                            />
-                          )}
-                          {window.addr === undefined && (
-                            <User
-                              className="imageFormUser"
-                              size={30}
-                            />
-                          )}
-                        </button> */}
-                        
+
                         <nav>
                           {this.state.hamburgerMenuMobile === true && (
                             <div className="hamburgerDropdownMobile">
@@ -203,15 +187,15 @@ class Main extends Component {
                   </button>
                   <div className="siteInfoBox">
                     <h3>
-                      Website Last Updated:
+                      dApp Last Updated:
                   </h3>
                     <h3>
-                      November 26, 2020
+                      November 28, 2020
                   </h3>
                     <h3>
-                      <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}>
-                        Version A1.1.0
-                      </a>
+                      {this.state.routeRequest === "noAddr"
+                      ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.0 </a>
+                      : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.2.0 </a>}
                     </h3>
                   </div>
                   <ClickAwayListener onClickAway={()=>{this.setState({userMenu: undefined})}}>
@@ -265,7 +249,8 @@ class Main extends Component {
                               onClick={() => { this.toggleMenu("ACAdmin") }}
                             >
                               AC Admin Menu
-                            </Button>)}
+                            </Button>
+                          )}
 
                           {this.state.IDHolderBool === false && this.state.assetHolderBool === true && this.state.assetHolderUserMenuBool === false && (
                             <Button
@@ -276,7 +261,8 @@ class Main extends Component {
                               Token Holder Menu
                             </Button>
                           )}
-                          {this.state.faucetBool === false && this.state.routeRequest === "noAddr" && (
+
+                          {this.state.faucetBool === false && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -285,6 +271,7 @@ class Main extends Component {
                               Faucet Menu
                             </Button>
                           )}
+
                           {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
                             <Button
                               size="lg"
@@ -295,7 +282,7 @@ class Main extends Component {
                             </Button>
                           )}
 
-                          {this.state.routeRequest === "noAddr" && window.addr === undefined && (
+                          {/* {this.state.routeRequest === "noAddr" && window.addr === undefined && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -308,7 +295,7 @@ class Main extends Component {
                               Please Log In
 
                             </Button>
-                          )}
+                          )} */}
 
                           {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
                             <Button
@@ -1324,6 +1311,7 @@ class Main extends Component {
       }
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
+
       //const ethereum = window.ethereum;
 
       //ethereum.enable()
