@@ -1263,8 +1263,10 @@ class Main extends Component {
     this.setState({ web3: _web3 });
     window.web3 = _web3;
 
+    //console.log("NETWORK: ", _web3.eth.net.getNetworkType())
 
-    if (!isMobile) {
+
+    if (!isMobile && window.ethereum != undefined) {
       console.log("Here")
       window.costs = {}
       window.additionalElementArrays = {
@@ -1302,7 +1304,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && _web3.eth.net.getNetworkType() != "main") {
+    else if (isMobile && window.ethereum != undefined && _web3.eth.net.getNetworkType() === "private") {
 
       console.log("Here")
 
@@ -1322,9 +1324,9 @@ class Main extends Component {
       }
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
-      const ethereum = window.ethereum;
+      //const ethereum = window.ethereum;
 
-      ethereum.enable()
+      //ethereum.enable()
       
       window.routeRequest = "basicMobile";
       this.setState({
