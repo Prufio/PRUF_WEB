@@ -522,6 +522,12 @@ class RetrieveRecord extends Component {
       }
     }
 
+    const handleKeyPress = (e) => {
+      if (e.keyCode === 13 && this.state.idxHash != undefined) {
+        _retrieveRecord()
+      }
+    };
+
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
         this.setState({ Checkbox: true })
@@ -635,7 +641,7 @@ class RetrieveRecord extends Component {
                   <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                 </div>
               </div>
-              <Form className="form" id="MainForm">
+              <Form className="form" id="MainForm" onKeyPress={handleKeyPress}>
                 <div>
                   {this.state.QRreader === false && (
                     <div>

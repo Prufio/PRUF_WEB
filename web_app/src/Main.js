@@ -231,8 +231,15 @@ class Main extends Component {
                               variant="toggle"
                               onClick={() => {
                                 this.setState({ settingsMenu: undefined })
-                                if (window.confirm("That doesn't direct you anywhere. The address logged into the portal does not control any PRüF assets. For more information, click OK to proceed to our website.")) {
-                                  window.open('https://pruf.io')
+                                if (window.ethereum){
+                                  if (window.confirm("Either you need to log into your ethereum provider, or you do not hold any PRuF assets. Click 'OK' to learn more on our website.")) {
+                                    window.open('https://pruf.io/')
+                                  }
+                                }
+                                else{
+                                  if (window.confirm("You do not currently have a Web3 provider installed. We recommend MetaMask; if you would like to be redirected to their officail site, press 'OK'")){
+                                    window.open('https://metamask.io/')
+                                  }
                                 }
 
                               }
@@ -262,7 +269,7 @@ class Main extends Component {
                             </Button>
                           )}
 
-                          {this.state.faucetBool === false && (
+                          {this.state.faucetBool === false && this.state.routeRequest !== "noAddr" && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -281,21 +288,6 @@ class Main extends Component {
                               Token Minter Menu
                             </Button>
                           )}
-
-                          {/* {this.state.routeRequest === "noAddr" && window.addr === undefined && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => {
-                                alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ");
-                                this.setState({ settingsMenu: undefined })
-                                window.ethereum.enable()
-                              }}
-                            >
-                              Please Log In
-
-                            </Button>
-                          )} */}
 
                           {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
                             <Button
@@ -335,10 +327,11 @@ class Main extends Component {
                             Please
                             <a
                               onClick={() => {
-                                alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ",
-                                  this.setState({ userMenu: undefined }),
-                                  window.ethereum.enable())
-                              }}
+                                this.setState({ userMenu: undefined })
+                                if(window.ethereum) {window.ethereum.enable()}
+                                else {alert("You do not currently have a Web3 provider installed, we recommend MetaMask");}
+                              }
+                              }
                               className="userDataLink">
                               Log In
                               </a>

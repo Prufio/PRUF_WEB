@@ -126,6 +126,13 @@ class DiscardMobile extends Component {
             }
         }
 
+        /* const handleKeyPress = (e) => {
+            //it triggers by pressing the enter key
+          if (e.keyCode === 13 && this.state.idxHash != undefined) {
+            _discardAsset()
+          }
+        }; */
+
         const _discardAsset = async () => {//create a new asset record
             this.setState({ help: false })
             this.setState({ txStatus: false });
@@ -177,7 +184,12 @@ class DiscardMobile extends Component {
                         <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
                 </div>
-                <Form className="formMobile" id='MainForm'>
+                <Form 
+                    className="formMobile" 
+                    id='MainForm'
+                    /* onKeypress={handleKeyPress} */
+                    >
+                    
                     {window.addr === undefined && (
                         <div className="resultsMobile">
                             <h2>User address unreachable</h2>
