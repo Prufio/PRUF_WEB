@@ -1295,7 +1295,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && _web3.givenProvider != undefined) {
+    else if (isMobile && window.ethereum.isMetaMask()) {
 
       console.log(_web3.eth.net.getNetworkType())
 
