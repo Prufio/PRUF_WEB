@@ -1254,6 +1254,7 @@ class Main extends Component {
 
 
     if (!isMobile && window.ethereum != undefined) {
+      console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
       window.additionalElementArrays = {
@@ -1291,7 +1292,9 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && window.ethereum != undefined && _web3.eth.net.getNetworkType() === "private") {
+    else if (isMobile && _web3.eth.net.isListening()) {
+
+      console.log(_web3.eth.net.getNetworkType())
 
       console.log("Here")
 
