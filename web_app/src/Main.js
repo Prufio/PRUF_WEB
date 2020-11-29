@@ -1223,16 +1223,13 @@ class Main extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
+    let _web3, ipfs;
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });
     window.web3 = _web3;
 
-    let peerCount = _web3.eth.net.getPeerCount() 
-    let netType = _web3.eth.net.getNetworkType()
-
     buildWindowUtils()
-    let _web3, ipfs;
 
     window.jdenticon_config = {
       hues: [196],
@@ -1255,8 +1252,10 @@ class Main extends Component {
 
     //console.log("NETWORK: ", _web3.eth.net.getNetworkType())
 
+    let netType = _web3.eth.net.getNetworkType()
 
-    if (!isMobile && window.ethereum != undefined) {
+    if(window.ethereum){
+    if (!isMobile) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1295,7 +1294,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && window.ethereum.isMetaMask()) {
+    else if (isMobile) {
 
       console.log(_web3.eth.net.getNetworkType())
 
@@ -1349,7 +1348,8 @@ class Main extends Component {
       
 
       this.setState({ hasMounted: true })
-    }
+      }
+    } 
 
     else {
       console.log("Here")
@@ -1381,6 +1381,7 @@ class Main extends Component {
 
       this.setState({ hasMounted: true })
     }
+
 
     this.hamburgerMenu = async () => {
       if (this.state.hamburgerMenu === undefined) {
@@ -1454,11 +1455,59 @@ class Main extends Component {
   }
 
   componentDidUpdate() {//stuff to do when state updates
+    if(window.ethereum){
+      if (isMobile) {
+        let _web3 = window.web3;
+
+        console.log(_web3.eth.net.getNetworkType())
+  
+        console.log("Here")
+  
+        window.costs = {}
+        window.additionalElementArrays = {
+          photo: [],
+          text: [],
+          name: ""
+        }
+        window.assetTokenInfo = {
+          assetClass: undefined,
+          idxHash: undefined,
+          name: undefined,
+          photos: undefined,
+          text: undefined,
+          status: undefined,
+        }
+        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+        window.resetInfo = false;
+  
+        //const ethereum = window.ethereum;
+  
+        //ethereum.enable()
+        
+        window.routeRequest = "basicMobile";
+        this.setState({
+          mobileMenuBool: true,
+          noAddrMenuBool: false,
+          assetHolderMenuBool: false,
+          assetClassHolderMenuBool: false,
+          basicMenuBool: false,
+          authorizedUserMenuBool: false,
+          hasFetchedBalances: false,
+          routeRequest: "basicMobile"
+        })
+  
+        _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+  
+        window.addEventListener("accountListener", this.acctChanger());
+        this.setUpContractEnvironment(_web3)
+        
+  
+        this.setState({ hasMounted: true })
+        }
+      }
     if (window.addr !== undefined && !this.state.hasFetchedBalances && window.contracts > 0) {
       this.setUpContractEnvironment(window.web3);
-    }
-
-
+    }  
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
