@@ -1250,6 +1250,9 @@ class Main extends Component {
     this.setState({ web3: _web3 });
     window.web3 = _web3;
 
+    let peerCount = _web3.eth.net.getPeerCount() 
+    let netType = _web3.eth.net.getNetworkType()
+
     //console.log("NETWORK: ", _web3.eth.net.getNetworkType())
 
 
@@ -1292,7 +1295,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && _web3.eth.net.getNetworkType() === "kovan") {
+    else if (isMobile && peerCount > 0) {
 
       console.log(_web3.eth.net.getNetworkType())
 
