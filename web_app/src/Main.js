@@ -651,19 +651,23 @@ class Main extends Component {
         this.setState({ ETHBalance: window.ETHBalance })
       }
 
-      /* if (this.state.routeRequest !== window.routeRequest && window.menuChange === undefined && window.addr !== undefined) {
+      if(isMobile && window.ethereum && window.routeRequest !== "basicMobile"){
+        window.routeRequest = "basicMobile"
         this.setState({
-          mobileMenuBool: false,
-          basicMenuBool: true,
-          assetHolderMenuBool: false,
-          assetHolderUserMenuBool: false,
-          assetClassHolderMenuBool: false,
+          mobileMenuBool: true,
           noAddrMenuBool: false,
+          assetHolderMenuBool: false,
+          assetClassHolderMenuBool: false,
+          basicMenuBool: false,
           authorizedUserMenuBool: false,
-          routeRequest: window.routeRequest
+          hasFetchedBalances: false,
+          routeRequest: "basicMobile"
         })
-        console.log("Here")
-      } */
+  
+        window.web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+  
+        window.addEventListener("accountListener", this.acctChanger());
+      }
 
       if (window.assets !== undefined) {
         if (window.assets.ids.length > 0 && Object.values(window.assets.descriptions).length === window.aTknIDs.length &&
@@ -1230,6 +1234,10 @@ class Main extends Component {
     window.web3 = _web3;
 
     buildWindowUtils()
+    const checkForEthereum = () => {
+      setTimeout(()=>{ if(!window.ethereum) checkForEthereum()}, 1000); 
+    }
+    checkForEthereum();
 
     window.jdenticon_config = {
       hues: [196],
@@ -1294,7 +1302,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile) {
+    else if (isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
 
