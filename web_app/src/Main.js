@@ -1295,7 +1295,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && peerCount > 0) {
+    else if (isMobile && netType === "kovan") {
 
       console.log(_web3.eth.net.getNetworkType())
 
