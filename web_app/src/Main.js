@@ -1254,8 +1254,8 @@ class Main extends Component {
 
     let netType = _web3.eth.net.getNetworkType()
 
-    if(window.ethereum){
-    if (!isMobile) {
+ 
+    if (!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1348,8 +1348,7 @@ class Main extends Component {
       
 
       this.setState({ hasMounted: true })
-      }
-    } 
+      } 
 
     else {
       console.log("Here")
@@ -1455,59 +1454,25 @@ class Main extends Component {
   }
 
   componentDidUpdate() {//stuff to do when state updates
-    if(window.ethereum){
-      if (isMobile) {
-        let _web3 = window.web3;
+    if(!window.ethereum && this.state.hasMounted === true){
 
-        console.log(_web3.eth.net.getNetworkType())
-  
-        console.log("Here")
-  
-        window.costs = {}
-        window.additionalElementArrays = {
-          photo: [],
-          text: [],
-          name: ""
-        }
-        window.assetTokenInfo = {
-          assetClass: undefined,
-          idxHash: undefined,
-          name: undefined,
-          photos: undefined,
-          text: undefined,
-          status: undefined,
-        }
-        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-        window.resetInfo = false;
-  
-        //const ethereum = window.ethereum;
-  
-        //ethereum.enable()
-        
-        window.routeRequest = "basicMobile";
-        this.setState({
-          mobileMenuBool: true,
-          noAddrMenuBool: false,
-          assetHolderMenuBool: false,
-          assetClassHolderMenuBool: false,
-          basicMenuBool: false,
-          authorizedUserMenuBool: false,
-          hasFetchedBalances: false,
-          routeRequest: "basicMobile"
-        })
-  
-        _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
-  
-        window.addEventListener("accountListener", this.acctChanger());
-        this.setUpContractEnvironment(_web3)
-        
-  
-        this.setState({ hasMounted: true })
-        }
-      }
+      window.routeRequest = "noAddr";
+      this.setState({
+        mobileMenuBool: false,
+        noAddrMenuBool: true,
+        assetHolderMenuBool: false,
+        assetClassHolderMenuBool: false,
+        basicMenuBool: false,
+        authorizedUserMenuBool: false,
+        hasFetchedBalances: false,
+        routeRequest: "noAddr"
+      })
+    }
+
     if (window.addr !== undefined && !this.state.hasFetchedBalances && window.contracts > 0) {
       this.setUpContractEnvironment(window.web3);
-    }  
+    }
+
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
