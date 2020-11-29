@@ -1292,7 +1292,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && _web3.eth.net.isListening()) {
+    else if (isMobile && _web3.eth.net.getNetworkType() === "kovan") {
 
       console.log(_web3.eth.net.getNetworkType())
 
