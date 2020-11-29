@@ -1230,7 +1230,7 @@ class Main extends Component {
 
     let peerCount = _web3.eth.net.getPeerCount() 
     let netType = _web3.eth.net.getNetworkType()
-    
+
     buildWindowUtils()
     let _web3, ipfs;
 
@@ -1295,7 +1295,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    else if (isMobile && netType === "kovan") {
+    else if (isMobile && _web3.givenProvider != undefined) {
 
       console.log(_web3.eth.net.getNetworkType())
 
