@@ -1260,7 +1260,7 @@ class Main extends Component {
 
     //console.log("NETWORK: ", _web3.eth.net.getNetworkType())
 
-    let netType = _web3.eth.net.getNetworkType()
+    //let netType = _web3.eth.net.getNetworkType()
 
  
     if (!isMobile && window.ethereum) {
@@ -1462,7 +1462,7 @@ class Main extends Component {
   }
 
   componentDidUpdate() {//stuff to do when state updates
-    if(!window.ethereum && this.state.hasMounted === true){
+    if(!window.ethereum && this.state.hasMounted === true && this.state.routeRequest !== "noAddr"){
 
       window.routeRequest = "noAddr";
       this.setState({
@@ -1485,7 +1485,7 @@ class Main extends Component {
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
     console.log("unmounting component");
-    window.removeEventListener("accountListener", this.acctChanger());
+    //window.removeEventListener("accountListener", this.acctChanger());
   }
 
   render() {
