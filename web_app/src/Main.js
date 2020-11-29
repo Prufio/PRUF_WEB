@@ -1223,6 +1223,14 @@ class Main extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
+    _web3 = require("web3");
+    _web3 = new Web3(_web3.givenProvider);
+    this.setState({ web3: _web3 });
+    window.web3 = _web3;
+
+    let peerCount = _web3.eth.net.getPeerCount() 
+    let netType = _web3.eth.net.getNetworkType()
+    
     buildWindowUtils()
     let _web3, ipfs;
 
@@ -1244,14 +1252,6 @@ class Main extends Component {
     window.hasLoadedAssets = false;
     window.location.href = '/#/';
     window.menuChange = undefined;
-
-    _web3 = require("web3");
-    _web3 = new Web3(_web3.givenProvider);
-    this.setState({ web3: _web3 });
-    window.web3 = _web3;
-
-    let peerCount = _web3.eth.net.getPeerCount() 
-    let netType = _web3.eth.net.getNetworkType()
 
     //console.log("NETWORK: ", _web3.eth.net.getNetworkType())
 
