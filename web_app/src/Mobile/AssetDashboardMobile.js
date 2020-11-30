@@ -193,7 +193,7 @@ class AssetDashboardMobile extends React.Component {
       // }
 
       const renderIcon = () => {
-        return <Jdenticon size="300px" value={obj.idxHash} />
+        return <Jdenticon size="340px" value={obj.idxHash} />
       }
 
       const generateThumbs = () => {
@@ -229,9 +229,9 @@ class AssetDashboardMobile extends React.Component {
 
         return (
           <>
-          <Card style={{height:'350px', width: '340px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
+          <Card style={{height:'370px', width: '340px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
             {this.state.selectedImage !== "" ?
-              (<Card.Img style={{ width: '340px', height: "290px" }} variant="top" src={this.state.selectedImage} />)
+              (<Card.Img style={{ width: '340px', height: "340px" }} variant="top" src={this.state.selectedImage} />)
               : (<>{renderIcon()}</>)}
 
             <Card.Body>
