@@ -241,6 +241,10 @@ class RecycleMobile extends Component {
         this.setState({ help: false })
       }
     }
+    
+    const submitHandler = (e) => {
+      e.preventDefault();
+  }
 
 
     const Checkbox = async () => {
@@ -373,7 +377,7 @@ class RecycleMobile extends Component {
             </div>
           </div>
         )}
-        <Form className="formMobile" id='MainForm'>
+        <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>

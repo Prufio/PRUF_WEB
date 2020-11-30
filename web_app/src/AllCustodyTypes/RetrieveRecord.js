@@ -522,12 +522,9 @@ class RetrieveRecord extends Component {
       }
     }
 
-    const handleKeyPress = (e) => {
+    const submitHandler = (e) => {
       e.preventDefault();
-      if (e.keyCode == 13 && (this.state.idxHash != undefined || this.state.idxHashRaw != undefined)) {
-        _retrieveRecord()
-      }
-    };
+  }
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
@@ -642,7 +639,7 @@ class RetrieveRecord extends Component {
                   <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                 </div>
               </div>
-              <Form className="form" id="MainForm" onKeyPress={handleKeyPress}>
+              <Form className="form" id="MainForm" onSubmit={submitHandler}>
                 <div>
                   {this.state.QRreader === false && (
                     <div>
@@ -657,7 +654,6 @@ class RetrieveRecord extends Component {
                         <Form.Group>
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
                           <Form.Control
-                            onKeyPress={handleKeyPress}
                             placeholder="Idx Hash"
                             required
                             onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
@@ -707,7 +703,6 @@ class RetrieveRecord extends Component {
                         <Form.Group as={Col} controlId="formGridSerial">
                           <Form.Label className="formFont">Serial:</Form.Label>
                           <Form.Control
-                            onKeyPress={handleKeyPress}
                             placeholder="Serial"
                             required
                             onChange={(e) => this.setState({ serial: e.target.value })}
@@ -733,17 +728,12 @@ class RetrieveRecord extends Component {
                         />
                       </div>
                     </div>
-                    <div>
-                      <button
-                        onClick={() => { QRReader() }}
-                        className="buttonQRScan"
-                      >
-                        { <img
-                          className="scanImageFormQR"
-                          title="Scan QR Code"
-                          src={require("../Resources/Images/QRSCANPIC.png")}
-                          alt="Pruf Print" /> }
-                      </button>
+                    <div className="mediaLinkCamera">
+                      <div className="mediaLinkHelpContent">
+                        <Camera
+                          onClick={() => { QRReader() }}
+                        />
+                      </div>
                     </div>
                   </Form.Row>
                   {this.state.help === true && (

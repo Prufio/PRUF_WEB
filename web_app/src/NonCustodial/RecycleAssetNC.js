@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat, HelpCircle, AlertOctagon } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat, HelpCircle, AlertOctagon, Camera } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleAssetNC extends Component {
@@ -488,17 +488,12 @@ class RecycleAssetNC extends Component {
                         />
                       </div>
                     </div>
-                    <div>
-                      <button
-                        onClick={() => { QRReader() }}
-                        className="buttonQRScan"
-                      >
-                        <img
-                          className="scanImageFormQR"
-                          title="Scan QR Code"
-                          src={require("../Resources/Images/QRSCANPIC.png")}
-                          alt="Pruf Print" />
-                      </button>
+                    <div className="mediaLinkCamera">
+                      <div className="mediaLinkHelpContent">
+                        <Camera
+                          onClick={() => { QRReader() }}
+                        />
+                      </div>
                     </div>
                   </Form.Row>
                   {this.state.help === true && (

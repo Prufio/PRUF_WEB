@@ -155,6 +155,10 @@ class VerifyLiteMobile extends Component {
       document.getElementById("MainForm").reset();
       this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "", idxHashRaw: undefined, idxHash: undefined, VLresult: "" })
     }
+    
+    const submitHandler = (e) => {
+      e.preventDefault();
+  }
 
     const _verify = async () => {
       this.setState({ txStatus: false });
@@ -218,7 +222,7 @@ class VerifyLiteMobile extends Component {
             </div>
           </div>
         )}
-        <Form className="formMobile" id='MainForm'>
+        <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
           <div>
 
             {this.state.QRreader === false && !this.state.accessPermitted && (

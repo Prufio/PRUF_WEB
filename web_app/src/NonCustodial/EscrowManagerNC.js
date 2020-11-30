@@ -126,6 +126,10 @@ class EscrowManagerNC extends Component {
         this.setState({ help: false })
       }
     }
+    
+    const submitHandler = (e) => {
+      e.preventDefault();
+  }
 
     const _setEscrow = async () => {
       this.setState({help: false})
@@ -278,7 +282,7 @@ class EscrowManagerNC extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="results">
               <h2>User address unreachable</h2>

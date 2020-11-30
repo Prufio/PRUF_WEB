@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle } from "react-feather";
+import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle, UploadCloud } from "react-feather";
 
 
 class RetrieveRecordMobile extends Component {
@@ -15,20 +15,22 @@ class RetrieveRecordMobile extends Component {
       if (this.state.ipfsObject !== undefined && this.state.runWatchDog === true && this.state.assetObj === undefined) {
         let tempIPFS = this.state.ipfsObject;
         console.log(tempIPFS)
-        if (this.state.idxHashRaw === undefined){this.setState({
-          assetObj: {
-            idxHash: this.state.idxHash,
-            name: tempIPFS.name,
-            assetClass: window.assetInfo.assetClass,
-            status: window.assetInfo.status,
-            description: tempIPFS.text.description,
-            text: tempIPFS.text,
-            photo: tempIPFS.photo,
+        if (this.state.idxHashRaw === undefined) {
+          this.setState({
+            assetObj: {
+              idxHash: this.state.idxHash,
+              name: tempIPFS.name,
+              assetClass: window.assetInfo.assetClass,
+              status: window.assetInfo.status,
+              description: tempIPFS.text.description,
+              text: tempIPFS.text,
+              photo: tempIPFS.photo,
 
-          },
-          moreInfo: true
-        })}
-        else{
+            },
+            moreInfo: true
+          })
+        }
+        else {
           this.setState({
             assetObj: {
               idxHash: this.state.idxHashRaw,
@@ -38,12 +40,12 @@ class RetrieveRecordMobile extends Component {
               description: tempIPFS.text.description,
               text: tempIPFS.text,
               photo: tempIPFS.photo,
-  
+
             },
             moreInfo: true
           })
         }
-        
+
         if (tempIPFS.photo.DisplayImage !== undefined) {
           this.setState({ selectedImage: tempIPFS.photo.DisplayImage })
         }
@@ -144,9 +146,13 @@ class RetrieveRecordMobile extends Component {
         return component
       }
 
+      const submitHandler = (e) => {
+        e.preventDefault();
+      }
+
       return (
         <>
-          <Card style={{height:'350px', width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
+          <Card style={{ height: '350px', width: '360px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
             {this.state.selectedImage !== undefined ?
               (<Card.Img style={{ width: '340px', height: "340px" }} variant="top" src={this.state.selectedImage} />)
               : (<>{renderIcon()}</>)}
@@ -356,7 +362,11 @@ class RetrieveRecordMobile extends Component {
       moreInfo: false,
       idxHash: undefined,
       idxHashRaw: undefined,
+      legacyMode: false,
     };
+
+    this.handleScan = this.handleScan.bind(this)
+    this.openImageDialog = this.openImageDialog.bind(this)
   }
 
   //component state-change events......................................................................................................
@@ -407,6 +417,13 @@ class RetrieveRecordMobile extends Component {
       }
     }
   }
+  handleError(err) {
+    console.error(err)
+    this.setState({ legacyMode: true })
+  }
+  openImageDialog() {
+    this.refs.qrReader1.openImageDialog()
+  }
 
 
   render() {//render continuously produces an up-to-date stateful document  
@@ -432,6 +449,15 @@ class RetrieveRecordMobile extends Component {
       else {
         this.setState({ Checkbox: false })
       }
+    }
+
+    const submitHandler = (e) => {
+      e.preventDefault();
+    }
+
+    const previewStyle = {
+      height: 240,
+      width: 320,
     }
 
     const _retrieveRecord = async () => {
@@ -519,7 +545,7 @@ class RetrieveRecordMobile extends Component {
                 <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
               </div>
             </div>
-            <Form className="formMobile" id="MainForm">
+            <Form className="formMobile" id="MainForm" onSubmit={submitHandler}>
               <div>
                 {this.state.QRreader === false && (
                   <div>
@@ -616,9 +642,9 @@ class RetrieveRecordMobile extends Component {
               </div>
             </Form>
             {this.state.QRreader === false && (
-            <div className="resultsMobile">
+              <div className="resultsMobile">
 
-            </div>
+              </div>
             )}
           </div>
         )}
@@ -637,11 +663,21 @@ class RetrieveRecordMobile extends Component {
             </div>
             <div className="QRreader">
               <QrReader
+                ref="qrReader1"
                 delay={300}
+                previewStyle={previewStyle}
                 onError={this.handleError}
                 onScan={this.handleScan}
                 style={{ width: '100%' }}
+                legacyMode={this.state.legacyMode}
               />
+              {this.state.legacyMode === true && (
+                <div className="uploadImageQR">
+                  <div className="uploadImageQRContent">
+                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                  </div>
+                </div>
+              )}
               {this.state.result[2] !== "0" && (
                 <div className="resultsMobile">
                   {this.state.assetFound}

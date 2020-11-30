@@ -187,6 +187,10 @@ class ModifyStatusMobile extends Component {
                 this.setState({ help: false })
             }
         }
+    
+        const submitHandler = (e) => {
+          e.preventDefault();
+      }
 
         this.modifyStatus = async () => {
             this.setState({help: false})
@@ -296,7 +300,7 @@ class ModifyStatusMobile extends Component {
                         <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
                 </div>
-                <Form className="formMobile" id='MainForm'>
+                <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
                     {window.addr === undefined && (
                         <div className="resultsMobile">
                             <h2>User address unreachable</h2>

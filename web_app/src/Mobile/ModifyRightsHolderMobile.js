@@ -190,6 +190,10 @@ class ModifyRightsHolderMobile extends Component {
                 this.setState({ help: false })
             }
         }
+    
+        const submitHandler = (e) => {
+          e.preventDefault();
+      }
 
         const editRgtHash = async () => {
             this.setState({ help: false })
@@ -253,7 +257,7 @@ class ModifyRightsHolderMobile extends Component {
                         <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
                 </div>
-                <Form className="formMobile" id='MainForm'>
+                <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
                     {window.addr === undefined && (
                         <div className="resultsMobile">
                             <h2>User address unreachable</h2>

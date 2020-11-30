@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, UploadCloud } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class DeepVerifyMobile extends Component {
@@ -32,7 +32,7 @@ class DeepVerifyMobile extends Component {
       else if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw
       }
-     
+
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
       let infoArr = Object.values(window.utils.checkAssetExists(idxHash).obj);
 
@@ -152,23 +152,27 @@ class DeepVerifyMobile extends Component {
       }
     }
 
+    const submitHandler = (e) => {
+      e.preventDefault();
+    }
+
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ 
-        result: "", 
-        accessPermitted: false, 
-        Checkbox: false, 
-        QRreader: false, 
-        assetFound: "", 
-        idxHashRaw: "", 
-        idxHash: "", 
-        transaction:false, 
-        name: "", 
-        status: "", 
-        assetClass: "", 
+      this.setState({
+        result: "",
+        accessPermitted: false,
+        Checkbox: false,
+        QRreader: false,
+        assetFound: "",
+        idxHashRaw: "",
+        idxHash: "",
+        transaction: false,
+        name: "",
+        status: "",
+        assetClass: "",
         txHash: "",
-        txStatus: false, 
-        DVresult: "" 
+        txStatus: false,
+        DVresult: ""
       })
     }
 
@@ -243,7 +247,7 @@ class DeepVerifyMobile extends Component {
             </div>
           </div>
         )}
-        <Form className="formMobile" id='MainForm'>
+        <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
           <div>
 
             {this.state.QRreader === false && !this.state.accessPermitted && (
@@ -369,7 +373,13 @@ class DeepVerifyMobile extends Component {
                     onError={this.handleError}
                     onScan={this.handleScan}
                     style={{ width: '100%' }}
+                    legacyMode={true}
                   />
+                  {/* <div className="uploadImageQR">
+                    <div className="uploadImageQRContent">
+                      <UploadCloud size={60} onClick={() => { openImageDialog }} />
+                    </div>
+                  </div> */}
                   {this.state.result !== undefined && (
                     <div className="resultsMobile">
                       {this.state.assetFound}
@@ -448,7 +458,7 @@ class DeepVerifyMobile extends Component {
             <Form.Row>
               {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                   <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
                 </Form.Group>

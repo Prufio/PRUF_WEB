@@ -36,6 +36,10 @@ class ModifyRecordStatusNC extends Component {
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined,  transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
+    
+    const submitHandler = (e) => {
+      e.preventDefault();
+  }
 
     this.modifyStatus = async () => {
       this.setState({help: false})
@@ -206,6 +210,10 @@ class ModifyRecordStatusNC extends Component {
         
       else {this.setState({ help: false })}
     }
+    
+    const submitHandler = (e) => {
+      e.preventDefault();
+  }
 
     const _checkIn = async (e) => {
       this.setState({help: false})
@@ -261,7 +269,7 @@ class ModifyRecordStatusNC extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { this.clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="results">
               <h2>User address unreachable</h2>
