@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle, Camera } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyRightHolder extends Component {
@@ -330,17 +330,12 @@ class VerifyRightHolder extends Component {
                         />
                       </div>
                     </div>
-                    <div>
-                      <button
-                        onClick={() => { QRReader() }}
-                        className="buttonQRScan"
-                      >
-                        <img
-                          className="scanImageFormQR"
-                          title="Scan QR Code"
-                          src={require("../Resources/Images/QRSCANPIC.png")}
-                          alt="Pruf Print" />
-                      </button>
+                    <div className="mediaLinkCamera">
+                      <div className="mediaLinkHelpContent">
+                        <Camera
+                          onClick={() => { QRReader() }}
+                        />
+                      </div>
                     </div>
                   </Form.Row>
                   {this.state.help === true && (

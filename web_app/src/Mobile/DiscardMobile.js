@@ -84,7 +84,7 @@ class DiscardMobile extends Component {
             else if (e === "reset") {
                 return window.resetInfo = true;
             }
-         else if (e === "assetDash") {
+            else if (e === "assetDash") {
                 return window.location.href = "/#/asset-dashboard-mobile"
             }
 
@@ -126,12 +126,9 @@ class DiscardMobile extends Component {
             }
         }
 
-        /* const handleKeyPress = (e) => {
-            //it triggers by pressing the enter key
-          if (e.keyCode === 13 && this.state.idxHash != undefined) {
-            _discardAsset()
-          }
-        }; */
+        const submitHandler = (e) => {
+            e.preventDefault();
+        }
 
         const _discardAsset = async () => {//create a new asset record
             this.setState({ help: false })
@@ -184,12 +181,12 @@ class DiscardMobile extends Component {
                         <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
                 </div>
-                <Form 
-                    className="formMobile" 
+                <Form
+                    className="formMobile"
                     id='MainForm'
-                    /* onKeypress={handleKeyPress} */
-                    >
-                    
+                    onSubmit={submitHandler}
+                >
+
                     {window.addr === undefined && (
                         <div className="resultsMobile">
                             <h2>User address unreachable</h2>
@@ -284,7 +281,7 @@ class DiscardMobile extends Component {
                         <Form.Row>
                             {this.state.idxHash !== "" && this.state.txHash === "" && (
                                 <Form.Group>
-                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>

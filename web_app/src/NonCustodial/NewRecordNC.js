@@ -155,6 +155,10 @@ class NewRecordNC extends Component {
 
       else { return alert("Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)") }
     }
+    
+    const submitHandler = (e) => {
+      e.preventDefault();
+  }
 
     const _newRecord = async () => { //create a new asset record
       this.setState({
@@ -242,7 +246,7 @@ class NewRecordNC extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>

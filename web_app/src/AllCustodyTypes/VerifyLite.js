@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle, Camera } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyLite extends Component {
@@ -153,6 +153,11 @@ class VerifyLite extends Component {
       }
     }
 
+    
+    const submitHandler = (e) => {
+      e.preventDefault();
+  }
+
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
       this.setState({ VLresult: "", accessPermitted: false, Checkbox: false, help: false })
@@ -210,7 +215,7 @@ class VerifyLite extends Component {
             </div>
           </div>
         )}
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           <div>
             {this.state.QRreader === false && !this.state.accessPermitted && (
               <div>
@@ -300,18 +305,13 @@ class VerifyLite extends Component {
                       />
                     </div>
                   </div>
-                  <div>
-                    <button
-                      onClick={() => { QRReader() }}
-                      className="buttonQRScan"
-                    >
-                      <img
-                        className="scanImageFormQR"
-                        title="Scan QR Code"
-                        src={require("../Resources/Images/QRSCANPIC.png")}
-                        alt="Pruf Print" />
-                    </button>
-                  </div>
+                  <div className="mediaLinkCamera">
+                      <div className="mediaLinkHelpContent">
+                        <Camera
+                          onClick={() => { QRReader() }}
+                        />
+                      </div>
+                    </div>
                 </Form.Row>
                 {this.state.help === true && (
                   <div className="explainerTextBox">

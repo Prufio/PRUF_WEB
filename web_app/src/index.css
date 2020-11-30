@@ -2037,6 +2037,38 @@ margin-bottom: -3rem;
   transition:         transform .35s ease-in-out;
 }
 
+.uploadImageQR {
+  display: flex;
+  width: fit-content;
+  /* height: 10rem; */
+  position: absolute;
+  flex-direction: column;
+  z-index: 3000;
+  margin-top: -20rem;
+  margin-left: 15rem;
+  justify-content: space-between;
+}
+
+.uploadImageQRContent {
+  border-radius: 50%;
+}
+
+.uploadImageQRContent:hover {
+  color: #028ed4;
+}
+
+.mediaLinkCamera {
+  display: flex;
+  width: fit-content;
+  /* height: 10rem; */
+  /* position: absolute; */
+  flex-direction: column;
+  z-index: 999;
+  margin-top: 1rem;
+  margin-left: 50rem;
+  justify-content: space-between;
+}
+
 .errorMediaLink {
   display: flex;
   width: fit-content;
