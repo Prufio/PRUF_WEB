@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, HelpCircle, X } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, X } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -523,7 +523,8 @@ class RetrieveRecord extends Component {
     }
 
     const handleKeyPress = (e) => {
-      if (e.keyCode === 13 && this.state.idxHash != undefined) {
+      e.preventDefault();
+      if (e.keyCode == 13 && (this.state.idxHash != undefined || this.state.idxHashRaw != undefined)) {
         _retrieveRecord()
       }
     };
@@ -656,6 +657,7 @@ class RetrieveRecord extends Component {
                         <Form.Group>
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
                           <Form.Control
+                            onKeyPress={handleKeyPress}
                             placeholder="Idx Hash"
                             required
                             onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
@@ -705,6 +707,7 @@ class RetrieveRecord extends Component {
                         <Form.Group as={Col} controlId="formGridSerial">
                           <Form.Label className="formFont">Serial:</Form.Label>
                           <Form.Control
+                            onKeyPress={handleKeyPress}
                             placeholder="Serial"
                             required
                             onChange={(e) => this.setState({ serial: e.target.value })}
@@ -735,11 +738,11 @@ class RetrieveRecord extends Component {
                         onClick={() => { QRReader() }}
                         className="buttonQRScan"
                       >
-                        <img
+                        { <img
                           className="scanImageFormQR"
                           title="Scan QR Code"
                           src={require("../Resources/Images/QRSCANPIC.png")}
-                          alt="Pruf Print" />
+                          alt="Pruf Print" /> }
                       </button>
                     </div>
                   </Form.Row>

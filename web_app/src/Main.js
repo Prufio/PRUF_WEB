@@ -565,12 +565,22 @@ class Main extends Component {
         </HashRouter >
       );
     }
-
+    //Watchdog which keeps state consistent with other components
     this.updateWatchDog = setInterval(() => {
+      
+      //every tick ensure user auth level/user type is correct
       if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined) {
         this.setState({ isAuthUser: window.isAuthUser })
       }
+      if (this.state.isACAdmin !== window.isACAdmin) {
+        this.setState({ isACAdmin: window.isACAdmin })
+      }
 
+      if (this.state.custodyType !== window.custodyType) {
+        this.setState({ custodyType: window.custodyType })
+      }
+
+      //Reset balance values to reflect in render
       if (window.balances !== undefined) {
         if (
           Object.values(window.balances) !==
@@ -589,16 +599,17 @@ class Main extends Component {
         }
       }
 
+      if (this.state.ETHBalance !== window.ETHBalance) {
+        this.setState({ ETHBalance: window.ETHBalance })
+      }
 
+      // Remote menu switcher
       if (window.menuChange !== undefined) {
         console.log(window.menuChange)
         this.setState({ menuChange: window.menuChange })
       }
 
-      /*       if(this.state.mobileMenuBool){
-              console.log("Here")
-            } */
-
+      //^^^
       if (this.state.menuChange !== undefined) {
         window.menuChange = undefined
         if (this.state.IDHolderBool === true) {
@@ -632,18 +643,7 @@ class Main extends Component {
         }
       }
 
-      if (this.state.isACAdmin !== window.isACAdmin) {
-        this.setState({ isACAdmin: window.isACAdmin })
-      }
-
-      if (this.state.custodyType !== window.custodyType) {
-        this.setState({ custodyType: window.custodyType })
-      }
-
-      if (this.state.ETHBalance !== window.ETHBalance) {
-        this.setState({ ETHBalance: window.ETHBalance })
-      }
-
+      //Catch late window.ethereum injection case (MetaMask mobile)
       if(isMobile && window.ethereum && window.routeRequest !== "basicMobile"){
         window.routeRequest = "basicMobile"
         this.setState({
@@ -662,6 +662,7 @@ class Main extends Component {
         window.addEventListener("accountListener", this.acctChanger());
       }
 
+      //Catch updated assets case and rebuild asset inventory 
       if (window.assets !== undefined) {
         if (window.assets.ids.length > 0 && Object.values(window.assets.descriptions).length === window.aTknIDs.length &&
           window.assets.names.length === 0 && this.state.buildReady === true && window.aTknIDs.length > 0) {
@@ -672,6 +673,7 @@ class Main extends Component {
         }
       }
 
+      //If reset was remotely requested, begin full asset recount  
       if (window.resetInfo === true) {
         window.hasLoadedAssets = false;
         this.setState({ buildReady: false, runWatchDog: false })
@@ -680,20 +682,23 @@ class Main extends Component {
         window.resetInfo = false
       }
 
+      //In the case of a completed recount and rough asset build, make asset info usable for app
       if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
-          //console.log("turning on buildready... Window IPFS operation count: ", window.ipfsCounter)
+          console.log("Assets are ready for rebuild")
           this.setState({ buildReady: true })
         }
       }
 
+      //Assets finished rebuilding, flip rebuild switch
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
-        console.log("Setting buildready to false in watchdog")
+        console.log("Assets finished rebuilding, no longer reaady for rebuild")
         this.setState({ buildReady: false })
       }
     }, 100)
 
+    //Local menu toggler for navlinks
     this.toggleMenu = async (menuChoice) => {
 
       console.log("Here")
@@ -829,18 +834,21 @@ class Main extends Component {
 
     }
 
+    //Faucet bool switch
     this.faucet = () => {
       this.setState({ userMenu: undefined });
       this.toggleMenu("faucet");
       window.location.href = '/#/faucet';
     }
 
+    //dashBoard bool switch
     this.assetDashboard = () => {
       this.setState({ userMenu: undefined });
       this.toggleMenu("basic");
       window.location.href = '/#/asset-dashboard'
     }
 
+    //Set up held assets for rebuild. Recount when necessary
     this.setUpAssets = async () => {
       window.hasNoAssets = false;
       window.ipfsCounter = 0;
@@ -923,7 +931,7 @@ class Main extends Component {
 
     }
 
-
+    //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = () => {
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       let tempDescArray = [];
@@ -983,6 +991,7 @@ class Main extends Component {
       console.log("BA: Assets after rebuild: ", window.assets)
     }
 
+    //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
     this.setUpTokenVals = async (willSetup) => {
       window.balances = undefined
       console.log("STV: Setting up balances")
@@ -994,6 +1003,7 @@ class Main extends Component {
       }
     }
 
+    //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
     this.getIPFSJSONObject = (lookup, descElement) => {
       //console.log(lookup)
       window.ipfs.cat(lookup, async (error, result) => {
@@ -1011,7 +1021,8 @@ class Main extends Component {
       });
     };
 
-    this.acctChanger = async () => {//Handle an address change, update state accordingly
+    //Handle an address change, update state accordingly @DEV check redundancy
+    this.acctChanger = async () => {
       const ethereum = window.ethereum;
       const self = this;
       var _web3 = require("web3");
@@ -1087,7 +1098,8 @@ class Main extends Component {
         });
       });
     };
-
+    
+    //Build contracts for app use. Only storage must be hardcoded, rest are retrieved STOR contract nameSpace
     this.setUpContractEnvironment = async (_web3) => {
       if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
       window.isSettingUpContracts = true;
@@ -1166,7 +1178,6 @@ class Main extends Component {
     }
 
     //Component state declaration
-
     this.state = {
       IPFS: require("ipfs-mini"),
       isSTOROwner: undefined,
@@ -1216,18 +1227,19 @@ class Main extends Component {
       userMenuMobile: false,
     };
   }
-
-  //component state-change events......................................................................................................
-
-  componentDidMount() {//stuff to do when component mounts in window
+  
+  //stuff to do when component mounts in window
+  componentDidMount() {
+    
     let _web3, ipfs;
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });
     window.web3 = _web3;
 
-    buildWindowUtils()
-    const checkForEthereum = () => {
+    buildWindowUtils() // get the utils object and make it globally accessible
+    
+    const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
       setTimeout(()=>{ if(!window.ethereum) checkForEthereum()}, 1000); 
     }
     checkForEthereum();
@@ -1245,17 +1257,14 @@ class Main extends Component {
       backColor: "#ffffffff"
     };
 
+    //Declare a few globals
     window.sentPacket = undefined;
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     window.location.href = '/#/';
     window.menuChange = undefined;
-
-    //console.log("NETWORK: ", _web3.eth.net.getNetworkType())
-
-    //let netType = _web3.eth.net.getNetworkType()
-
- 
+    
+    //Give me the desktop version
     if (!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
@@ -1266,6 +1275,7 @@ class Main extends Component {
         name: ""
       }
 
+      //More globals (eth-is-connected specific)
       window.assetTokenInfo = {
         assetClass: undefined,
         idxHash: undefined,
@@ -1282,7 +1292,7 @@ class Main extends Component {
       ethereum.enable()
 
       var _ipfs = new this.state.IPFS({
-        host: "ipfs.infura.io",
+        host: "ipfs.eternum.io",
         port: 5001,
         protocol: "https",
       });
@@ -1295,6 +1305,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
+    //Give me the mobile ethereum-enabled version
     else if (isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
@@ -1350,7 +1361,8 @@ class Main extends Component {
 
       this.setState({ hasMounted: true })
       } 
-
+    
+    //Give me the read-only version
     else {
       console.log("Here")
       window.ipfsCounter = 0;
@@ -1382,7 +1394,7 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-
+    //hamburgerMenu bool switch @DEV Move to this declarations?
     this.hamburgerMenu = async () => {
       if (this.state.hamburgerMenu === undefined) {
         this.setState({
@@ -1397,6 +1409,7 @@ class Main extends Component {
       }
     }
 
+    //hamburgerMenuMobile bool switch @DEV Move to this declarations?
     this.hamburgerMenuMobile = async () => {
       if (this.state.hamburgerMenuMobile === false) {
         this.setState({
@@ -1408,6 +1421,7 @@ class Main extends Component {
       }
     }
 
+    //userMenu bool switch @DEV Move to this declarations?
     this.userMenu = async () => {
       if (this.state.userMenu === undefined) {
         this.setState({
@@ -1420,6 +1434,7 @@ class Main extends Component {
       }
     }
 
+    //userMenuMobile bool switch @DEV Move to this declarations?
     this.userMenuMobile = async () => {
       if (this.state.userMenuMobile === false) {
         this.setState({
@@ -1431,6 +1446,7 @@ class Main extends Component {
       }
     }
 
+    //settingsMenu bool switch @DEV Move to this declarations?
     this.settingsMenu = async () => {
       if (this.state.settingsMenu === undefined) {
         this.setState({
@@ -1445,16 +1461,18 @@ class Main extends Component {
 
   }
 
+  //Catch default
   componentDidCatch(error, info) {
     console.log(info.componentStack)
   }
 
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
+  //Update state so the next render will show the fallback UI
+  static getDerivedStateFromError(error) { 
     return { hasError: true };
   }
 
-  componentDidUpdate() {//stuff to do when state updates
+  //stuff to do when state updates
+  componentDidUpdate() {
     if(!window.ethereum && this.state.hasMounted === true && this.state.routeRequest !== "noAddr"){
 
       window.routeRequest = "noAddr";
@@ -1476,17 +1494,24 @@ class Main extends Component {
 
   }
 
-  componentWillUnmount() {//stuff do do when component unmounts from the window
+  //stuff do do when component unmounts from the window (should never happen unless tab closed)
+  componentWillUnmount() {
     console.log("unmounting component");
-    //window.removeEventListener("accountListener", this.acctChanger());
   }
 
   render() {
 
     //render continuously produces an up-to-date stateful webpage  
 
-    if (this.state.hasError === true) {
-      return (<div><h1>)-:</h1><h2>An error occoured. Please ensure you are connected to an ethereum provider and reload the page.</h2></div>)
+    if (this.state.hasError) {
+      return (<div><h1>OOPS!</h1>
+      <h2>An error occoured. Please ensure you are connected to an ethereum provider and reload the page.</h2>
+      <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below</h3>
+      <br></br>
+      <div className="errorMediaLink">
+      <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
+      </div>
+      </div>)
     }
 
     return this.renderContent();

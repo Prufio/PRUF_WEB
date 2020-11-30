@@ -37,6 +37,7 @@ import AssetDashboardMobile from "./Mobile/AssetDashboardMobile";
 import ModifyStatusMobile from "./Mobile/ModifyStatusMobile";
 import DiscardMobile from "./Mobile/DiscardMobile";
 import RecycleMobile from "./Mobile/RecycleMobile";
+import ModifyDescriptionMobile from "./Mobile/ModifyDescriptionMobile";
 
 import AddNoteNC from "./NonCustodial/AddNoteNC";
 import DecrementCounterNC from "./NonCustodial/DecrementCounterNC";
@@ -181,6 +182,7 @@ function Router(routeRequest) {
                 <Route path="/modify-status-mobile" component={ModifyStatusMobile} />
                 <Route path="/discard-mobile" component={DiscardMobile} />
                 <Route path="/recycle-mobile" component={RecycleMobile} />
+                <Route path="/modify-description-mobile" component={ModifyDescriptionMobile} />
                 
             </>
         )

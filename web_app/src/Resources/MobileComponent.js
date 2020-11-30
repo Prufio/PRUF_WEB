@@ -58,6 +58,11 @@ class MobileComponent extends Component {
                             <NavLink to="/asset-dashboard-mobile">Asset Dashboard</NavLink>
                         </li>
                     </div>
+                    <div className="headerFormContentMobile">
+                        <li>
+                            <NavLink to="/modify-description-mobile">Modify Asset Info</NavLink>
+                        </li>
+                    </div>
                 </Nav>
             )
     }

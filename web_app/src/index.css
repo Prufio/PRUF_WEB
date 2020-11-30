@@ -2037,6 +2037,25 @@ margin-bottom: -3rem;
   transition:         transform .35s ease-in-out;
 }
 
+.errorMediaLink {
+  display: flex;
+  width: fit-content;
+  height: 10rem;
+  position: absolute;
+  flex-direction: column;
+  z-index: 999;
+  margin-top: 4rem;
+  margin-left: 75rem;
+  justify-content: space-between;
+}
+
+.centeredErrorButtons {
+  border-radius: 50%;
+  color: #ffffff;
+  -webkit-transition: -webkit-transform .35s ease-in-out;
+  transition:         transform .35s ease-in-out;
+}
+
 .mediaLinkContent:hover {
   color: #00a8ff;
   cursor: pointer;
