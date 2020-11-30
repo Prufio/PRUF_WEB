@@ -467,7 +467,7 @@ class ModifyDescription extends Component {
         return window.resetInfo = true;
       }
       else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
