@@ -1292,7 +1292,7 @@ class Main extends Component {
       ethereum.enable()
 
       var _ipfs = new this.state.IPFS({
-        host: "ipfs.eternum.io",
+        host: "ipfs.infura.io",
         port: 5001,
         protocol: "https",
       });
