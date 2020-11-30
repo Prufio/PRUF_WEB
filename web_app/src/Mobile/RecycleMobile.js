@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat, HelpCircle, AlertOctagon } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, Camera, Repeat, HelpCircle, AlertOctagon, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleMobile extends Component {
@@ -95,7 +95,8 @@ class RecycleMobile extends Component {
       transaction: false,
       QRreader: false,
       Checkbox: false,
-      help: false
+      help: false,
+      legacyMode: false,
     };
   }
 
@@ -119,10 +120,11 @@ class RecycleMobile extends Component {
 
   }
 
+
+
   handleScan = async (data) => {
     if (data) {
       let tempBool = await window.utils.checkAssetExistsBare(data)
-      let doesExist = await window.utils.checkAssetExistsBare(data);
       if (tempBool === true) {
         this.setState({
           result: data,
@@ -130,25 +132,21 @@ class RecycleMobile extends Component {
           assetFound: "Asset Found!"
         })
         console.log(data)
-        this.accessAsset()
+        this._retrieveRecordQR()
       }
       else {
         this.setState({
           assetFound: "Asset Not Found",
-          QRreader: false,
         })
-        if (!doesExist) {
-          this.setState({
-            QRreader: false,
-          })
-          return alert("Asset doesnt exist!")
-        }
       }
     }
   }
-
-  handleError = err => {
+  handleError = (err) => {
     console.error(err)
+    this.setState({ legacyMode: true })
+  }
+  openImageDialog() {
+    this.refs.qrReader1.openImageDialog()
   }
 
   render() {//render continuously produces an up-to-date stateful document  
@@ -240,6 +238,12 @@ class RecycleMobile extends Component {
       else {
         this.setState({ help: false })
       }
+    }
+
+    
+    const previewStyle = {
+      height: 240,
+      width: 320,
     }
     
     const submitHandler = (e) => {
@@ -509,17 +513,12 @@ class RecycleMobile extends Component {
                         />
                       </div>
                     </div>
-                    <div>
-                      <button
-                        onClick={() => { QRReader() }}
-                        className="buttonQRScanMobile"
-                      >
-                        <img
-                          className="scanImageFormQR"
-                          title="Scan QR Code"
-                          src={require("../Resources/Images/QRSCANPIC.png")}
-                          alt="Pruf Print" />
-                      </button>
+                    <div className="mediaLinkCameraMobile">
+                      <div className="mediaLinkHelpContent">
+                        <Camera
+                          onClick={() => { QRReader() }}
+                        />
+                      </div>
                     </div>
                   </Form.Row>
                   {this.state.help === true && (
@@ -547,16 +546,26 @@ class RecycleMobile extends Component {
                     </div>
                     <h2 className="formHeaderMobileVL">Scan QR</h2>
                     <div className="mediaLinkBackMobile">
-                      <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                      <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
                     </div>
                   </div>
                   <div className="QRreaderMobile">
-                    <QrReader
-                      delay={300}
-                      onError={this.handleError}
-                      onScan={this.handleScan}
-                      style={{ width: '100%' }}
-                    />
+                  <QrReader
+                ref="qrReader1"
+                delay={300}
+                previewStyle={previewStyle}
+                onError={this.handleError}
+                onScan={this.handleScan}
+                style={{ width: '100%' }}
+                legacyMode={this.state.legacyMode}
+              />
+              {this.state.legacyMode === true && (
+                <div className="uploadImageQR">
+                  <div className="uploadImageQRContent">
+                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                  </div>
+                </div>
+              )}
                     {this.state.result !== undefined && (
                       <div className="resultsMobile">
                         {this.state.assetFound}

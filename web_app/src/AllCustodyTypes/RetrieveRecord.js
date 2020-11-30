@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, X } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, X, CameraOff, UploadCloud } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -247,7 +247,7 @@ class RetrieveRecord extends Component {
                       <div className="cardButton2Content">
                         <CornerUpLeft
                           size={35}
-                          onClick={() => { this.setState({ moreInfo: false, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "" }) }}
+                          onClick={() => { this.setState({ moreInfo: false, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false }) }}
                         />
                       </div>
                     </div>
@@ -439,7 +439,8 @@ class RetrieveRecord extends Component {
       assetFound: undefined,
       Checkbox: false,
       idxHashRaw: "",
-      help: false
+      help: false,
+      legacyMode: false,
     };
   }
 
@@ -491,10 +492,12 @@ class RetrieveRecord extends Component {
       }
     }
   }
-
-  handleError = err => {
-    console.log("Error in scanner")
+  handleError = (err) => {
     console.error(err)
+    this.setState({ legacyMode: true })
+  }
+  openImageDialog() {
+    this.refs.qrReader1.openImageDialog()
   }
 
 
@@ -521,6 +524,11 @@ class RetrieveRecord extends Component {
       else {
         this.setState({ QRreader: false })
       }
+    }
+
+    const previewStyle = {
+      height: 240,
+      width: 320,
     }
 
     const submitHandler = (e) => {
@@ -757,16 +765,26 @@ class RetrieveRecord extends Component {
                 </div>
                 <h2 className="formHeaderQR">Search Assets</h2>
                 <div className="mediaLinkBack">
-                  <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                  <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
                 </div>
               </div>
               <div className="QRreader">
-                <QrReader
-                  delay={300}
-                  onError={this.handleError}
-                  onScan={this.handleScan}
-                  style={{ width: '50rem', height: '50rem' }}
-                />
+              <QrReader
+                ref="qrReader1"
+                delay={300}
+                previewStyle={previewStyle}
+                onError={this.handleError}
+                onScan={this.handleScan}
+                style={{ width: '50rem', height: '50rem' }}
+                legacyMode={this.state.legacyMode}
+              />
+              {this.state.legacyMode === true && (
+                <div className="uploadImageQR">
+                  <div className="uploadImageQRContent">
+                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                  </div>
+                </div>
+              )}
                 {this.state.result !== undefined && (
                   <div className="resultsQR">
                     {this.state.assetFound}

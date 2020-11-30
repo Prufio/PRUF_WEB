@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle, Camera } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle, Camera, UploadCloud, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyLite extends Component {
@@ -77,7 +77,8 @@ class VerifyLite extends Component {
       QRreader: false,
       isNFA: false,
       Checkbox: false,
-      help: false
+      help: false,
+      legacyMode: false,
     };
   }
 
@@ -110,7 +111,7 @@ class VerifyLite extends Component {
           assetFound: "Asset Found!"
         })
         console.log(data)
-        this.accessAsset()
+        this._retrieveRecordQR()
       }
       else {
         this.setState({
@@ -119,9 +120,12 @@ class VerifyLite extends Component {
       }
     }
   }
-
-  handleError = err => {
+  handleError = (err) => {
     console.error(err)
+    this.setState({ legacyMode: true })
+  }
+  openImageDialog() {
+    this.refs.qrReader1.openImageDialog()
   }
 
   render() {//render continuously produces an up-to-date stateful document  
@@ -142,6 +146,11 @@ class VerifyLite extends Component {
       else {
         this.setState({ help: false })
       }
+    }
+
+    const previewStyle = {
+      height: 240,
+      width: 320,
     }
 
     const Checkbox = async () => {
@@ -337,16 +346,26 @@ class VerifyLite extends Component {
                   </div>
                   <h2 className="formHeaderQR">Scan QR</h2>
                   <div className="mediaLinkBack">
-                    <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                    <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
                   </div>
                 </div>
                 <div className="QRreader">
-                  <QrReader
-                    delay={300}
-                    onError={this.handleError}
-                    onScan={this.handleScan}
-                    style={{ width: '50rem', height: '50rem' }}
-                  />
+                <QrReader
+                ref="qrReader1"
+                delay={300}
+                previewStyle={previewStyle}
+                onError={this.handleError}
+                onScan={this.handleScan}
+                style={{ width: '50rem', height: '50rem' }}
+                legacyMode={this.state.legacyMode}
+              />
+              {this.state.legacyMode === true && (
+                <div className="uploadImageQR">
+                  <div className="uploadImageQRContent">
+                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                  </div>
+                </div>
+              )}
                   {this.state.result !== undefined && (
                     <div className="resultsQR">
                       {this.state.assetFound}

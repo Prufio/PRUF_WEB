@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle, UploadCloud } from "react-feather";
+import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle, UploadCloud, Camera, CameraOff } from "react-feather";
 
 
 class RetrieveRecordMobile extends Component {
@@ -112,7 +112,7 @@ class RetrieveRecordMobile extends Component {
       }
 
       const renderIcon = () => {
-        return <Jdenticon size="300" value={obj.idxHash} />
+        return <Jdenticon size="340" value={obj.idxHash} />
       }
 
 
@@ -171,7 +171,7 @@ class RetrieveRecordMobile extends Component {
               {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>
-          <div className="submitButtonRRQR3Mobile">
+          <div className="backButtonMobileAD">
             <div className="submitButtonRRQR3MobileContent">
               <CornerUpLeft
                 color={"#028ed4"}
@@ -629,18 +629,13 @@ class RetrieveRecordMobile extends Component {
                       />
                     </div>
                   </div>
-                  <div>
-                    <button
-                      onClick={() => { QRReader() }}
-                      className="buttonQRScanMobile"
-                    >
-                      <img
-                        className="scanImageFormQR"
-                        title="Scan QR Code"
-                        src={require("../Resources/Images/QRSCANPIC.png")}
-                        alt="Pruf Print" />
-                    </button>
-                  </div>
+                  <div className="mediaLinkCameraMobile">
+                      <div className="mediaLinkHelpContent">
+                        <Camera
+                          onClick={() => { QRReader() }}
+                        />
+                      </div>
+                    </div>
                 </Form.Row>
               </div>
             </Form>
@@ -661,7 +656,7 @@ class RetrieveRecordMobile extends Component {
               </div>
               <h2 className="formHeaderMobile">Search Assets</h2>
               <div className="mediaLinkBackMobile">
-                <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
+                <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
               </div>
             </div>
             <div className="QRreader">
