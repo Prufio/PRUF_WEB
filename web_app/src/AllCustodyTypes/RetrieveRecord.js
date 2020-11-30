@@ -754,7 +754,7 @@ class RetrieveRecord extends Component {
                 <div className="mediaLinkADHome">
                   <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                 </div>
-                <h2 className="formHeader">Search Assets</h2>
+                <h2 className="formHeaderQR">Search Assets</h2>
                 <div className="mediaLinkBack">
                   <a className="mediaLinkContentBack" ><CornerUpLeft onClick={() => { QRReader() }} /></a>
                 </div>
@@ -764,10 +764,10 @@ class RetrieveRecord extends Component {
                   delay={300}
                   onError={this.handleError}
                   onScan={this.handleScan}
-                  style={{ width: '100%' }}
+                  style={{ width: '50rem', height: '50rem' }}
                 />
                 {this.state.result !== undefined && (
-                  <div className="results">
+                  <div className="resultsQR">
                     {this.state.assetFound}
                   </div>
                 )}

@@ -370,10 +370,10 @@ class VerifyRightHolder extends Component {
                       delay={300}
                       onError={this.handleError}
                       onScan={this.handleScan}
-                      style={{ width: '100%', height: "100%" }}
+                      style={{ width: '50rem', height: '50rem' }}
                     />
                     {this.state.result !== undefined && (
-                      <div className="results">
+                      <div className="resultsQR">
                         {this.state.assetFound}
                       </div>
                     )}

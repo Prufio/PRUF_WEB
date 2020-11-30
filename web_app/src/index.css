@@ -368,7 +368,7 @@ div {
 
 .formHeaderQR {
   height: 4rem;
-  width: 59rem;
+  width: 50rem;
   background-color: #002a40;
   color: white;
   display: flex;
@@ -378,7 +378,6 @@ div {
   opacity: 0.96;
   font-weight: bold;
   font-size: x-large;
-  margin-top: -1.5rem;
 }
 
 .formHeader {
@@ -503,6 +502,21 @@ div {
 .results {
   height: flex;
   width: 59rem;
+  color: white;
+  background-color: #002a40;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  font-size: 2.2rem;
+  display: flex;
+  padding: 2rem;
+  margin-top: -0.2rem;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.resultsQR {
+  height: flex;
+  width: 50rem;
   color: white;
   background-color: #002a40;
   border-radius: 0rem 0rem 0.5rem 0.5rem;
