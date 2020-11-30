@@ -170,7 +170,7 @@ class RetrieveRecordMobile extends Component {
               {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>
-          <div className="submitButtonRRQR3Mobile">
+          <div className="backButtonMobileAD">
             <div className="submitButtonRRQR3MobileContent">
               <CornerUpLeft
                 color={"#028ed4"}
