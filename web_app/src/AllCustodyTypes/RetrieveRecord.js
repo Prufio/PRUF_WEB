@@ -493,6 +493,7 @@ class RetrieveRecord extends Component {
   }
 
   handleError = err => {
+    console.log("Error in scanner")
     console.error(err)
   }
 
