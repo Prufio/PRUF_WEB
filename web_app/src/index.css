@@ -2083,6 +2083,18 @@ margin-bottom: -3rem;
   justify-content: space-between;
 }
 
+.mediaLinkCameraMobile {
+  display: flex;
+  width: fit-content;
+  /* height: 10rem; */
+  /* position: absolute; */
+  flex-direction: column;
+  z-index: 999;
+  margin-top: 1rem;
+  margin-left: 28rem;
+  justify-content: space-between;
+}
+
 .errorMediaLink {
   display: flex;
   width: fit-content;
