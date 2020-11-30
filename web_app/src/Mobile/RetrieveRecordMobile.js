@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
-import QrReader from 'react-qr-reader'
+import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle, UploadCloud } from "react-feather";
 
@@ -49,6 +49,7 @@ class RetrieveRecordMobile extends Component {
         if (tempIPFS.photo.DisplayImage !== undefined) {
           this.setState({ selectedImage: tempIPFS.photo.DisplayImage })
         }
+        
         else if (Object.values(tempIPFS.photo).length > 0) {
           this.setState({ selectedImage: Object.values(tempIPFS.photo)[0] })
         }
@@ -417,10 +418,12 @@ class RetrieveRecordMobile extends Component {
       }
     }
   }
+
   handleError = (err) => {
     console.error(err)
     this.setState({ legacyMode: true })
   }
+
   openImageDialog() {
     this.refs.qrReader1.openImageDialog()
   }
