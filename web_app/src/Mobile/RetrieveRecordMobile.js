@@ -175,7 +175,7 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
+                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined, legacyMode: false }) }}
               />
             </div>
           </div>
@@ -417,7 +417,7 @@ class RetrieveRecordMobile extends Component {
       }
     }
   }
-  handleError(err) {
+  handleError = (err) => {
     console.error(err)
     this.setState({ legacyMode: true })
   }
