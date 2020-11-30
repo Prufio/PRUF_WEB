@@ -13,6 +13,11 @@ class MobileComponent extends Component {
                             <NavLink exact to="/">Home</NavLink>
                         </li>
                     </div> */}
+                       <div className="headerFormContentMobile">
+                        <li>
+                            <NavLink to="/asset-dashboard-mobile">Asset Dashboard</NavLink>
+                        </li>
+                    </div>
                     <div className="headerFormContentMobile">
                         <li>
                             <NavLink to="/retrieve-record-mobile">Search</NavLink>
@@ -51,11 +56,6 @@ class MobileComponent extends Component {
                     <div className="headerFormContentMobile">
                         <li>
                             <NavLink to="/discard-mobile">Discard</NavLink>
-                        </li>
-                    </div>
-                    <div className="headerFormContentMobile">
-                        <li>
-                            <NavLink to="/asset-dashboard-mobile">Asset Dashboard</NavLink>
                         </li>
                     </div>
                     <div className="headerFormContentMobile">

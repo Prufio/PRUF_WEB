@@ -779,7 +779,6 @@ class Main extends Component {
       }
 
       else if (menuChoice === 'NC') {
-        console.log(menuChoice)
         window.routeRequest = "NCAdmin"
         await this.setState({ routeRequest: "NCAdmin" })
         await this.setState({
