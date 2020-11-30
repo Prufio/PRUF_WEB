@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, Camera, Repeat, HelpCircle, AlertOctagon, CameraOff } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, Camera, Repeat, HelpCircle, AlertOctagon, CameraOff, UploadCloud } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleMobile extends Component {
