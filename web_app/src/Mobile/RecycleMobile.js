@@ -110,10 +110,12 @@ class RecycleMobile extends Component {
     else {
       this.setState({ assetClassSelected: false })
     }
+    this.setState({ QRReader: false });
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-
+    this.setState({ QRReader: false });
+    this.setState({ runWatchDog: false });
   }
 
   componentDidUpdate() {//stuff to do when state updates

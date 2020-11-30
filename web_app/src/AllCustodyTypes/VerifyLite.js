@@ -85,15 +85,16 @@ class VerifyLite extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-
+    this.setState({ QRReader: false });
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-
+    this.setState({ QRReader: false });
+    this.setState({ runWatchDog: false });
   }
 
   componentDidUpdate() {//stuff to do when state updates
-
+    
   }
 
   static getDerivedStateFromError(error) {

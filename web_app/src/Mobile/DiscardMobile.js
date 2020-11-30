@@ -69,7 +69,7 @@ class DiscardMobile extends Component {
     }
 
     componentWillUnmount() {//stuff do do when component unmounts from the window
-
+        this.setState({ runWatchDog: false });
     }
     componentDidUpdate() {//stuff to do on a re-render
 

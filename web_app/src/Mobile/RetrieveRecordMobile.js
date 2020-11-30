@@ -381,16 +381,16 @@ class RetrieveRecordMobile extends Component {
 
     this.setState({ runWatchDog: true })
 
-
+    this.setState({ QRReader: false });
   }
 
   componentDidUpdate() {//stuff to do when state updates
 
-
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-
+    this.setState({ QRReader: false });
+    this.setState({ runWatchDog: false });
   }
 
   static getDerivedStateFromError(error) {

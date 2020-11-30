@@ -221,7 +221,7 @@ class ModifyDescription extends Component {
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-
+    this.setState({ runWatchDog: false });
     this.clearForm()
 
   }

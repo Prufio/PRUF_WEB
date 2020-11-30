@@ -161,6 +161,10 @@ class AssetDashboardMobile extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.setState({ runWatchDog: false });
+  }
+
   static getDerivedStateFromError(error) {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };

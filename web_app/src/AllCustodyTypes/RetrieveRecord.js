@@ -452,8 +452,8 @@ class RetrieveRecord extends Component {
 
       this.handlePacket()
     }
-
-    this.setState({ runWatchDog: true })
+    this.setState({ QRReader: false });
+    this.setState({ runWatchDog: true });
 
 
   }
@@ -464,7 +464,8 @@ class RetrieveRecord extends Component {
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-
+    this.setState({ QRReader: false });
+    this.setState({ runWatchDog: false });
   }
 
   static getDerivedStateFromError(error) {

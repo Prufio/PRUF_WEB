@@ -206,7 +206,7 @@ class AddNoteNC extends Component {
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-
+    this.setState({ runWatchDog: false });
   }
 
   render() {//render continuously produces an up-to-date stateful document  
