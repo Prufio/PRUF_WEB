@@ -524,11 +524,11 @@ class ModifyDescription extends Component {
         <div>
           <div>
             <div className="mediaLinkADHome">
-              <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+              <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
             <h2 className="formHeaderMobile">Modify Asset Info</h2>
             <div className="mediaLinkClearForm">
-              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { this.clearForm() }} /></a>
+              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { this.clearForm() }} /></a>
             </div>
           </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
@@ -718,7 +718,7 @@ class ModifyDescription extends Component {
 
                       <Form.Row>
                         <div className="submitButtonRRMobile">
-                          <div className="submitButtonContent">
+                          <div className="submitButtonContentMobile">
                             <FileMinus
                               onClick={() => { _removeElement(this.state.elementType) }}
                             />
@@ -748,7 +748,7 @@ class ModifyDescription extends Component {
 
                       <Form.Row>
                         <div className="submitButtonRRMobile">
-                          <div className="submitButtonContent">
+                          <div className="submitButtonContentMobile">
                             <FileMinus
                               onClick={() => { _removeElement(this.state.elementType) }}
                             />
@@ -806,7 +806,7 @@ class ModifyDescription extends Component {
 
               {this.state.elementType === "text" && (
                 <div className="submitButtonRRMobile">
-                  <div className="submitButtonContent">
+                  <div className="submitButtonContentMobile">
                     <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
@@ -816,7 +816,7 @@ class ModifyDescription extends Component {
 
               {this.state.elementType === "photo" && (
                 <div className="submitButtonRRMobile">
-                  <div className="submitButtonContent">
+                  <div className="submitButtonContentMobile">
                     <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
@@ -826,7 +826,7 @@ class ModifyDescription extends Component {
 
               {this.state.elementType === "displayImage" && (
                 <div className="submitButtonRRMobile">
-                  <div className="submitButtonContent">
+                  <div className="submitButtonContentMobile">
                     <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
@@ -836,7 +836,7 @@ class ModifyDescription extends Component {
 
               {this.state.elementType === "description" && (
                 <div className="submitButtonRRMobile">
-                  <div className="submitButtonContent">
+                  <div className="submitButtonContentMobile">
                     <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
@@ -846,7 +846,7 @@ class ModifyDescription extends Component {
 
               {this.state.elementType === "nameTag" && (
                 <div className="submitButtonRRMobile">
-                  <div className="submitButtonContent">
+                  <div className="submitButtonContentMobile">
                     <CheckCircle
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
@@ -858,14 +858,14 @@ class ModifyDescription extends Component {
                 <>
                 <Form.Row>
                   <div className="submitButtonRRMobile">
-                    <div className="submitButtonContent">
+                    <div className="submitButtonContentMobile">
                       <CheckCircle
                         onClick={() => { publishIPFS1() }}
                       />
                     </div>
                   </div>
                   <div className="mediaLinkHelp">
-                    <div className="mediaLinkHelpContent2">
+                    <div className="mediaLinkHelpContentMobile">
                       <AlertTriangle
                         color="white"
                         onClick={() => { help() }}

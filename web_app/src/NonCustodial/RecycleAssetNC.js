@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Repeat, HelpCircle, AlertOctagon, Camera, UploadCloud, CameraOff } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Tag, HelpCircle, AlertOctagon, Camera, UploadCloud, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleAssetNC extends Component {
@@ -629,7 +629,7 @@ class RecycleAssetNC extends Component {
                       <Form.Label className="costText"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
                       <div className="submitButton">
                         <div className="submitButtonContent">
-                          <Repeat
+                          <Tag
                             onClick={() => { _recycleAsset() }}
                           />
                         </div>

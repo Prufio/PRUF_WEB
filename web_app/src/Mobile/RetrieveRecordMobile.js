@@ -559,11 +559,11 @@ class RetrieveRecordMobile extends Component {
           <div>
             <div>
               <div className="mediaLinkADHomeMobile">
-                <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
               </div>
               <h2 className="formHeaderMobile">Search Assets</h2>
               <div className="mediaLinkClearForm">
-                <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
+                <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
               </div>
             </div>
             <Form className="formMobile" id="MainForm" onSubmit={submitHandler}>
@@ -641,14 +641,14 @@ class RetrieveRecordMobile extends Component {
                 )}
                 <Form.Row>
                   <div className="submitButtonRRMobile">
-                    <div className="submitButtonRRContent">
+                    <div className="submitButtonContentMobile">
                       <ArrowRightCircle
                         onClick={() => { _retrieveRecord() }}
                       />
                     </div>
                   </div>
                   <div className="mediaLinkCameraMobile">
-                      <div className="mediaLinkHelpContent">
+                      <div className="mediaLinkHelpContentMobile">
                         <Camera
                           onClick={() => { QRReader() }}
                         />
@@ -670,7 +670,7 @@ class RetrieveRecordMobile extends Component {
           <div>
             <div>
               <div className="mediaLinkADHome">
-                <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
               </div>
               <h2 className="formHeaderMobile">Search Assets</h2>
               <div className="mediaLinkBackMobile">

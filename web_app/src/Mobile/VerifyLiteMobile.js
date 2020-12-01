@@ -16,6 +16,7 @@ class VerifyLiteMobile extends Component {
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
+          return alert("Please fill out all forms before submission")
         }
         idxHash = window.web3.utils.soliditySha3(
           String(this.state.type).replace(/\s/g, ''),
@@ -36,11 +37,18 @@ class VerifyLiteMobile extends Component {
         console.log("IDXTEST3", idxHash)
       }
       console.log("IDXTEST4", idxHash)
+
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+      let tempObj = await window.utils.checkAssetExists(idxHash)
+      
+      let infoArr, acName, tempStatus;
+      infoArr = Object.values(tempObj.obj);
+      acName = await window.utils.getACName(infoArr[2])
+      tempStatus = await window.utils.getStatusString(String(infoArr[0]))
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, VLresult: "" })
+          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
       }
 
       console.log("idxHash", idxHash);
@@ -48,6 +56,8 @@ class VerifyLiteMobile extends Component {
 
       return this.setState({
         idxHash: idxHash,
+        assetClass: acName,
+        status: tempStatus,
         QRreader: false,
         accessPermitted: true
       })
@@ -226,11 +236,11 @@ class VerifyLiteMobile extends Component {
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
-              <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+              <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
             <h2 className="formHeaderMobile">Verify Lite</h2>
             <div className="mediaLinkClearForm">
-              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
           </div>
         )}
@@ -313,14 +323,14 @@ class VerifyLiteMobile extends Component {
               <>
                 <Form.Row>
                   <div className="submitButtonRRMobile">
-                    <div className="submitButtonRRContent">
+                    <div className="submitButtonContentMobile">
                       <ArrowRightCircle
                         onClick={() => { this.accessAsset() }}
                       />
                     </div>
                   </div>
                   <div className="mediaLinkCameraMobile">
-                      <div className="mediaLinkHelpContent">
+                      <div className="mediaLinkHelpContentMobile">
                         <Camera
                           onClick={() => { QRReader() }}
                         />
@@ -342,7 +352,7 @@ class VerifyLiteMobile extends Component {
                 </style>
                 <div>
                   <div className="mediaLinkADHome">
-                    <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                    <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
                   </div>
                   <h2 className="formHeaderMobileVL">Scan QR</h2>
                   <div className="mediaLinkBackMobile">
@@ -428,7 +438,7 @@ class VerifyLiteMobile extends Component {
                 </Form.Row>
                 <Form.Row>
                   <div className="submitButtonRRMobile">
-                    <div className="submitButtonRRContent">
+                    <div className="submitButtonContentMobile">
                       <ArrowRightCircle
                         onClick={() => { _verify() }}
                       />
@@ -443,12 +453,23 @@ class VerifyLiteMobile extends Component {
           <div className="resultsMobile">
 
             {this.state.VLresult !== "" && ( //conditional rendering
+            <>
               <Form.Row>
                 {
                   this.state.VLresult === "170"
                     ? "Match Confirmed"
                     : "No Match Found"
                 }
+              </Form.Row>
+              </>
+            )}
+            {this.state.idxHash != undefined && this.state.VLresult === "" && (
+            <Form.Row>
+                <Form.Group>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
+                </Form.Group> 
               </Form.Row>
             )}
 
