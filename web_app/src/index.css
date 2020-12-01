@@ -659,7 +659,7 @@ div {
 
 .hamburgerDropdownMobile {
   display: flex;
-  height: 50rem;
+  height: 45rem;
   width: 20rem;
   overflow-y: auto;
   overflow-x: hidden;
