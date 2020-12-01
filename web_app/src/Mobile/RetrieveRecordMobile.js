@@ -20,6 +20,7 @@ class RetrieveRecordMobile extends Component {
             assetObj: {
               idxHash: this.state.idxHash,
               name: tempIPFS.name,
+              assetClassName: window.assetInfo.assetClassName,
               assetClass: window.assetInfo.assetClass,
               status: window.assetInfo.status,
               description: tempIPFS.text.description,
@@ -35,6 +36,7 @@ class RetrieveRecordMobile extends Component {
             assetObj: {
               idxHash: this.state.idxHashRaw,
               name: tempIPFS.name,
+              assetClassName: window.assetInfo.assetClassName,
               assetClass: window.assetInfo.assetClass,
               status: window.assetInfo.status,
               description: tempIPFS.text.description,
@@ -135,13 +137,25 @@ class RetrieveRecordMobile extends Component {
         let component = [];
 
         for (let i = 0; i < text.length; i++) {
+        if (textNames[i] !== "Description") {
           component.push(
             <>
-              <h4 className="cardDescriptionSelected">
-                {textNames[i]}: <h4 className="cardDescriptionSelectedContentMobile">{text[i]}</h4>
-              </h4>
-            </>
-          )
+            <h4 key={"TextElement" + String(i)} className="cardDescriptionSelectedMobile">
+              {textNames[i]}:
+              <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContentMobile">
+                {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+            <br />
+          </>
+          )}
+        else{
+          component.unshift(<>
+            <h4 key="TextElementDesc" className="cardDescriptionSelected">
+              Description:
+              <h4 key="nestedTextDesc" className="cardDescriptionSelectedContentMobile">
+                {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+            <br />
+          </>)
+        }
         }
 
         return component
@@ -163,7 +177,7 @@ class RetrieveRecordMobile extends Component {
                 {generateThumbs()}
               </div>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Name : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.name}</h4></Card.Title>
-              <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClass}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
@@ -258,9 +272,11 @@ class RetrieveRecordMobile extends Component {
           });
 
       window.assetClass = tempResult[2]
+      let assetClassName = await window.utils.getACName(tempResult[2])
 
       window.assetInfo = {
         assetClass: tempResult[2],
+        assetClassName: assetClassName,
         status: tempResult[0],
         idx: idxHash
       }
@@ -519,8 +535,10 @@ class RetrieveRecordMobile extends Component {
         });
 
       window.assetClass = tempResult[2]
+      let assetClassName = await window.utils.getACName(tempResult[2])
 
       window.assetInfo = {
+        assetClassName: assetClassName,
         assetClass: tempResult[2],
         status: await window.utils.getStatusString(String(tempResult[0])),
         idx: idxHash

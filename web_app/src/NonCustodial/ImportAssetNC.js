@@ -361,7 +361,7 @@ class ImportAssetNC extends Component {
                             disabled
                           >
                             <optgroup className="optgroup">
-                              <option>Importing: {this.state.idxHash}</option>
+                              <option>Importing "{this.state.idxHash}"</option>
                             </optgroup>
                           </Form.Control>)}
                       </>
@@ -375,7 +375,7 @@ class ImportAssetNC extends Component {
                       >
                         <optgroup>
                           <option value="null">
-                            "{this.state.name}" Please Clear Form to Select Different Asset
+                            Importing "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                         </optgroup>
                       </Form.Control>

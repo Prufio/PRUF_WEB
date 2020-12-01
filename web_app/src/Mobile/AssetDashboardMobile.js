@@ -43,7 +43,6 @@ class AssetDashboardMobile extends React.Component {
       }
       this.setState({ assetObj: e, moreInfo: true, identicon: e.identicon })
       window.printObj = e;
-      //this.setAC(e.assetClass)
     }
 
     this.setAC = async (AC) => {
@@ -219,13 +218,27 @@ class AssetDashboardMobile extends React.Component {
         let component = [];
 
         for (let i = 0; i < text.length; i++) {
-          component.push(
-            <>
-              <h4 className="cardDescriptionSelected">
-                {textNames[i]}: <h4 className="cardDescriptionSelectedContentMobile">{text[i]}</h4>
-              </h4>
-            </>
-          )
+          if(textNames[i] !== "Description"){
+            component.push(
+              <>
+                <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">
+                  {textNames[i]}: 
+                  <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContentMobile">
+                    {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+                <br />
+              </>
+            )
+          }
+          else{
+            component.unshift(<>
+              <h4 key="TextElementDesc" className="cardDescriptionSelected">
+                Description:  
+                <h4 key="nestedTextDesc" className="cardDescriptionSelectedContentMobile">
+                  {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+              <br />
+            </>)
+          }
+          
         }
 
         return component
@@ -243,7 +256,7 @@ class AssetDashboardMobile extends React.Component {
                 {generateThumbs()}
               </div>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Name : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.name}</h4></Card.Title>
-              <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClass}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
@@ -327,14 +340,6 @@ class AssetDashboardMobile extends React.Component {
                     <p className="cardStatusMobile ">Status: {obj.statuses[i]}</p>
                     <h4 className="cardIdxMobile ">IDX: {obj.ids[i].substring(0,22) + "..." + obj.ids[i].substring(60, 66) }</h4>
                     <br></br>
-                    {/* <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description : 
-                    {obj.descriptions[i].text.Description === undefined && (
-                        " None"
-                      )}
-                    {obj.descriptions[i].text.Description !== undefined && (
-                        obj.descriptions[i].text.Description.replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')
-                      )}
-                    </h4></div> */}
                   </div>
                   <div className="cardButtonMobile">
                     <div className="cardButtonContent">

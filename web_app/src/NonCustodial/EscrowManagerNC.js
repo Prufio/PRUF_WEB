@@ -323,7 +323,7 @@ class EscrowManagerNC extends Component {
                               disabled
                             >
                               <optgroup className="optgroup">
-                                <option>Modifying: {this.state.name}</option>
+                                <option>Modifying Escrow of "{this.state.name}"</option>
                               </optgroup>
                             </Form.Control>)}
                         </>
@@ -337,7 +337,7 @@ class EscrowManagerNC extends Component {
                         >
                           <optgroup>
                             <option>
-                              "{this.state.name}" Please Clear Form to Select Different Asset
+                              Modifying "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                           </optgroup>
                         </Form.Control>

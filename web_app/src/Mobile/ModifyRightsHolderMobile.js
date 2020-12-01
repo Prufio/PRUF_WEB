@@ -296,7 +296,7 @@ class ModifyRightsHolderMobile extends Component {
                                                     disabled
                                                 >
                                                     <optgroup className="optgroup">
-                                                        <option>Modifying: {this.state.name}</option>
+                                                        <option>Modifying "{this.state.name}"</option>
                                                     </optgroup>
                                                 </Form.Control>)}
                                         </>
@@ -310,7 +310,7 @@ class ModifyRightsHolderMobile extends Component {
                                         >
                                             <optgroup>
                                                 <option value="null">
-                                                    "{this.state.name}" Please Clear Form to Select Different Asset
+                                                    Modifying "{this.state.name}" Clear Form to Select Different Asset
                                                 </option>
                                             </optgroup>
                                         </Form.Control>

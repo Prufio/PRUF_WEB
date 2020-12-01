@@ -224,7 +224,7 @@ class ExportAssetNC extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option>Exporting: {this.state.idxHash}</option>
+                            <option>Exporting "{this.state.idxHash}"</option>
                           </optgroup>
                         </Form.Control>)}
                     </>
@@ -239,7 +239,7 @@ class ExportAssetNC extends Component {
                     >
                       <optgroup>
                         <option value="null">
-                          "{this.state.name}" Please Clear Form to Select Different Asset
+                          Exporting "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                       </optgroup>
                     </Form.Control>

@@ -20,11 +20,11 @@ class RetrieveRecord extends Component {
             idxHash: this.state.idxHash,
             name: tempIPFS.name,
             assetClass: window.assetInfo.assetClass,
+            assetClassName: window.assetInfo.assetClassName,
             status: window.assetInfo.status,
             description: tempIPFS.text.description,
             text: tempIPFS.text,
             photo: tempIPFS.photo,
-
           }, moreInfo: true
         })
         if (tempIPFS.photo.displayImage !== undefined && tempIPFS.photo.displayImage !== "") {
@@ -74,7 +74,7 @@ class RetrieveRecord extends Component {
       }
 
       const renderIcon = () => {
-        return <Jdenticon size="340" value={this.state.idxHash} />
+        return <Jdenticon size="230" value={this.state.idxHash} />
       }
 
       const generateThumbs = () => {
@@ -216,7 +216,7 @@ class RetrieveRecord extends Component {
                     )}
 
                     <button className="assetImageButtonSelected">
-                      {this.state.selectedImage !== "" ?
+                      {this.state.selectedImage !== "" && this.state.selectedImage != undefined ?
                         (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
                         : (<>{renderIcon()}</>)}
                     </button>
@@ -336,13 +336,16 @@ class RetrieveRecord extends Component {
             }
           });
 
-      window.assetClass = tempResult[2]
+          window.assetClass = tempResult[2]
+          let assetClassName = await window.utils.getACName(tempResult[2])
+    
+          window.assetInfo = {
+            assetClassName: assetClassName,
+            assetClass: tempResult[2],
+            status: await window.utils.getStatusString(String(tempResult[0])),
+            idx: idxHash
+          }
 
-      window.assetInfo = {
-        assetClass: tempResult[2],
-        status: tempResult[0],
-        idx: idxHash
-      }
       await window.utils.resolveACFromID(tempResult[2])
       await this.getACData("id", window.assetClass)
 
@@ -594,13 +597,16 @@ class RetrieveRecord extends Component {
           }
         });
 
-      window.assetClass = tempResult[2]
+       window.assetClass = tempResult[2]
+      let assetClassName = await window.utils.getACName(tempResult[2])
 
       window.assetInfo = {
+        assetClassName: assetClassName,
         assetClass: tempResult[2],
         status: await window.utils.getStatusString(String(tempResult[0])),
         idx: idxHash
       }
+
       await window.utils.resolveACFromID(tempResult[2])
       await this.getACData("id", window.assetClass)
 

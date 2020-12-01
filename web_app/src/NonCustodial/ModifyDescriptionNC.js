@@ -561,7 +561,7 @@ class ModifyDescription extends Component {
                                 <optgroup>
                                   <option value="null">
                                     Loading Assets...
-                           </option>
+                            </option>
                                 </optgroup>)}
                             </Form.Control>)}
                           {this.state.transaction === true && (
@@ -571,7 +571,7 @@ class ModifyDescription extends Component {
                               disabled
                             >
                               <optgroup className="optgroup">
-                                <option>Modifying: {this.state.name}</option>
+                                <option>Modifying "{this.state.name}"</option>
                               </optgroup>
                             </Form.Control>)}
                         </>
@@ -585,7 +585,7 @@ class ModifyDescription extends Component {
                         >
                           <optgroup>
                             <option value="null">
-                              "{this.state.name}" Please Clear Form to Select Different Asset
+                              Modifying "{this.state.name}" Clear Form to Select Different Asset
                                                            </option>
                           </optgroup>
                         </Form.Control>
@@ -846,7 +846,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "nameTag" && (
                 <div className="submitButton">
                   <div className="submitButtonContent">
-                    <CheckCircle
+                    <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>

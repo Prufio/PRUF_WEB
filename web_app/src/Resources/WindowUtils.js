@@ -870,6 +870,25 @@ function buildWindowUtils() {
 
   }
 
+  const _getACName = async (AC) => {
+    let temp;
+    if (window.contracts !== undefined) {
+      await window.contracts.AC_MGR.methods
+        .getAC_name(AC)
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            temp = _result
+            console.log("resolved AC name ", temp, " from AC index ", AC);
+          }
+        });
+        return temp
+    }
+    else{
+      return "Unable to resolve AC name"
+    }
+  }
+
   const _resolveACFromID = async (AC) => {
     let temp;
     if (window.contracts !== undefined) {
@@ -1471,6 +1490,7 @@ function buildWindowUtils() {
     getContracts: _getContracts,
     determineTokenBalance: _determineTokenBalance,
     getACData: _getACData,
+    getACName: _getACName,
     resolveAC: _resolveAC,
     checkACName: _checkACName,
     checkAssetExists: _checkAssetExists,

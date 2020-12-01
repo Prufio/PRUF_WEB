@@ -161,6 +161,7 @@ class DiscardAssetNC extends Component {
           this.setState({ txHash: receipt.transactionHash });
           this.setState({ txStatus: receipt.status });
           window.resetInfo = true;
+          window.recount = true;
           if (this.state.wasSentPacket) {
             return window.location.href = '/#/asset-dashboard'
           }
@@ -219,7 +220,7 @@ class DiscardAssetNC extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option>Discarding: {this.state.name}</option>
+                            <option>Discarding "{this.state.name}"</option>
                           </optgroup>
                         </Form.Control>)}
                     </>
@@ -233,7 +234,7 @@ class DiscardAssetNC extends Component {
                     >
                       <optgroup>
                         <option value="null">
-                          "{this.state.name}" Please Clear Form to Select Different Asset
+                        Discarding "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                       </optgroup>
                     </Form.Control>

@@ -465,7 +465,7 @@ class ModifyDescription extends Component {
       })
 
       if (e === "null" || e === undefined) {
-        return clearForm()
+        return this.clearForm()
       }
       else if (e === "reset") {
         return window.resetInfo = true;
@@ -485,11 +485,11 @@ class ModifyDescription extends Component {
       }
 
       if (Number(resArray[0]) === 54 || Number(resArray[0]) === 53) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        alert("Cannot edit asset in lost or stolen status"); return this.clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
+        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return this.clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -508,6 +508,7 @@ class ModifyDescription extends Component {
       this.setState({
         assetClass: window.assets.assetClasses[e],
         idxHash: window.assets.ids[e],
+        assetClassName: window.assets.assetClassNames[e],
         name: window.assets.descriptions[e].name,
         photos: window.assets.descriptions[e].photo,
         text: window.assets.descriptions[e].text,
@@ -527,7 +528,7 @@ class ModifyDescription extends Component {
             </div>
             <h2 className="formHeaderMobile">Modify Asset Info</h2>
             <div className="mediaLinkClearForm">
-              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { this.clearForm() }} /></a>
             </div>
           </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
@@ -571,7 +572,7 @@ class ModifyDescription extends Component {
                               disabled
                             >
                               <optgroup className="optgroup">
-                                <option>Modifying: {this.state.name}</option>
+                                <option>Modifying "{this.state.name}"</option>
                               </optgroup>
                             </Form.Control>)}
                         </>
@@ -585,7 +586,7 @@ class ModifyDescription extends Component {
                         >
                           <optgroup>
                             <option value="null">
-                              "{this.state.name}" Please Clear Form to Select Different Asset
+                              Modifying "{this.state.name}" Clear Form to Select Different Asset
                                                            </option>
                           </optgroup>
                         </Form.Control>
@@ -886,7 +887,7 @@ class ModifyDescription extends Component {
         {this.state.transaction === false && this.state.txStatus === false &&  (
           <div className="assetSelectedResultsMobile">
             <Form.Row>
-              {this.state.idxHash !== "" && this.state.txHash === "" && (
+              {this.state.idxHash != undefined && this.state.txHash === "" && (
                 <Form.Group>
                 <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                 <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>

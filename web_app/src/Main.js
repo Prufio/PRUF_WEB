@@ -190,12 +190,12 @@ class Main extends Component {
                       dApp Last Updated:
                   </h3>
                     <h3>
-                      November 28, 2020
+                      December 01, 2020
                   </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
-                      ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.0 </a>
-                      : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.2.0 </a>}
+                      ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.3.0 </a>
+                      : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.3.0 </a>}
                     </h3>
                   </div>
                   <ClickAwayListener onClickAway={()=>{this.setState({userMenu: undefined})}}>

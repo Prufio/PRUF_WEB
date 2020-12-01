@@ -253,7 +253,7 @@ class ModifyDescriptionNC extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option>Transfering: {this.state.name}</option>
+                            <option>Transferring "{this.state.name}"</option>
                           </optgroup>
                         </Form.Control>)}
                     </>
@@ -267,7 +267,7 @@ class ModifyDescriptionNC extends Component {
                     >
                       <optgroup>
                         <option value="null">
-                          "{this.state.name}" Please Clear Form to Select Different Asset
+                        Transferring "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                       </optgroup>
                     </Form.Control>
