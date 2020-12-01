@@ -1949,6 +1949,42 @@ margin-bottom: -3rem;
   margin-top: 7rem;
 }
 
+.cardCopyButton {
+  display: flex;
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000;
+  margin-left: 48.5rem;
+  /* margin-top: 7rem; */
+}
+
+.cardCopyButtonContent {
+  color: white;
+  border-radius: 50%;
+}
+
+.cardCopyButtonContent:hover {
+  color: #028ed4;
+}
+
+.cardCopyButtonMobile {
+  display: flex;
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000;
+  margin-left: 4rem;
+  margin-top: -2rem;
+}
+
+.cardCopyButtonMobileContent {
+  color: white;
+  border-radius: 50%;
+}
+
+.cardCopyButtonMobileContent:hover {
+  color: #028ed4;
+}
+
 .cardButtonMobile {
   display: flex;
   height: 12rem;

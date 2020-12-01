@@ -4,7 +4,7 @@ import "./../index.css";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav'
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { RefreshCw, X, ChevronRight, CornerUpLeft, Home, Plus } from "react-feather";
+import { RefreshCw, X, ChevronRight, CornerUpLeft, Home, Plus, Copy } from "react-feather";
 import { QRCode } from 'react-qrcode-logo';
 import { isMobile } from "react-device-detect";
 import Printer from '../Resources/Print';
@@ -18,7 +18,7 @@ class AssetDashboardMobile extends React.Component {
 
 
     this.updateAssets = setInterval(() => {
-      
+
       if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
         this.setState({ assets: window.assets })
       }
@@ -204,7 +204,7 @@ class AssetDashboardMobile extends React.Component {
 
         for (let i = 0; i < images.length; i++) {
           component.push(
-            <button key={"button"+String(i)}value={images[i]} className="assetImageSelectorButtonMobile" onClick={() => { showImage(images[i]) }}>
+            <button key={"button" + String(i)} value={images[i]} className="assetImageSelectorButtonMobile" onClick={() => { showImage(images[i]) }}>
               <img src={images[i]} className="imageSelectorImageMobile" />
             </button>
           )
@@ -218,35 +218,35 @@ class AssetDashboardMobile extends React.Component {
         let component = [];
 
         for (let i = 0; i < text.length; i++) {
-          if(textNames[i] !== "Description"){
+          if (textNames[i] !== "Description") {
             component.push(
               <>
                 <h4 key={"TextElement" + String(i)} className="cardDescriptionSelected">
-                  {textNames[i]}: 
+                  {textNames[i]}:
                   <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContentMobile">
                     {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
                 <br />
               </>
             )
           }
-          else{
+          else {
             component.unshift(<>
               <h4 key="TextElementDesc" className="cardDescriptionSelected">
-                Description:  
+                Description:
                 <h4 key="nestedTextDesc" className="cardDescriptionSelectedContentMobile">
                   {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
               <br />
             </>)
           }
-          
+
         }
 
         return component
       }
 
-        return (
-          <>
-          <Card style={{height:'370px', width: '340px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
+      return (
+        <>
+          <Card style={{ height: '370px', width: '340px', overflowY: "auto", overflowX: "hidden", backgroundColor: "#005480", color: "white" }}>
             {this.state.selectedImage !== "" ?
               (<Card.Img style={{ width: '340px', height: "340px" }} variant="top" src={this.state.selectedImage} />)
               : (<>{renderIcon()}</>)}
@@ -258,7 +258,19 @@ class AssetDashboardMobile extends React.Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Name : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.name}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
-              <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
+              <div className="cardCopyButtonMobile">
+                  <div className="cardCopyButtonMobileContent">
+                    <Copy
+                      size={15}
+                      onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
+                    />
+                  </div>
+                </div>
+              <h4 className="cardDescriptionSelectedContentMobile">
+                {obj.idxHash}
+              </h4>
+              </Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
               {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
@@ -274,7 +286,8 @@ class AssetDashboardMobile extends React.Component {
             </div>
           </div>
         </>
-        )}
+      )
+    }
 
     const generateAssetDash = (obj) => {
       if (obj.names.length > 0) {
@@ -327,7 +340,7 @@ class AssetDashboardMobile extends React.Component {
                       }}
                     >
                       {obj.displayImages[i] !== "" && (
-                        <img title="View Asset" src={obj.displayImages[i]} className="assetImage" alt =""/>
+                        <img title="View Asset" src={obj.displayImages[i]} className="assetImage" alt="" />
                       )}
                       {obj.displayImages[i] === "" && (
                         <>{obj.identicons[i]}</>
@@ -338,7 +351,7 @@ class AssetDashboardMobile extends React.Component {
                     <p className="cardNameMobile ">Name: {obj.names[i]}</p>
                     <p className="cardAcMobile ">Asset Class: {obj.assetClassNames[i]}</p>
                     <p className="cardStatusMobile ">Status: {obj.statuses[i]}</p>
-                    <h4 className="cardIdxMobile ">IDX: {obj.ids[i].substring(0,22) + "..." + obj.ids[i].substring(60, 66) }</h4>
+                    <h4 className="cardIdxMobile ">IDX: {obj.ids[i].substring(0, 22) + "..." + obj.ids[i].substring(60, 66)}</h4>
                     <br></br>
                   </div>
                   <div className="cardButtonMobile">
