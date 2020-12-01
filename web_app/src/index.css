@@ -332,7 +332,7 @@ div {
 }
 
 .assetDashboardMobile {
-  /* height: 70rem; */
+  height: flex;
   max-height: 60rem;
   width: 360px;
   background-color: #002a40;
@@ -341,7 +341,7 @@ div {
   display: flex;
   opacity: 0.96;
   flex-direction: column;
-  overflow-y: visible;
+  overflow-y: auto;
   overflow-x: hidden;
   word-break: break-all;
 }
@@ -644,8 +644,10 @@ div {
 
 .hamburgerDropdownMobile {
   display: flex;
-  /* height: 40rem; */
+  height: 50rem;
   width: 20rem;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: absolute;
   background-image: url(./Resources/Images/DarkBlueBack.png);
   -webkit-backgrount-size: cover;
@@ -2064,6 +2066,11 @@ margin-bottom: -3rem;
   transition:         transform .35s ease-in-out;
 }
 
+.mediaLinkRefreshContent {
+  border-radius: 50%;
+  color: #ffffff;
+}
+
 .uploadImageQR {
   display: flex;
   width: fit-content;
@@ -2132,6 +2139,11 @@ margin-bottom: -3rem;
   cursor: pointer;
   -webkit-transform: translateY(-5px);
   transform: translateY(-5px);
+}
+
+.mediaLinkRefreshContent:hover {
+  color: #dadada;
+  cursor: pointer;
 }
 
 .mediaLinkHomeContent {
