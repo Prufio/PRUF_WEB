@@ -333,7 +333,7 @@ div {
 
 .assetDashboardMobile {
   height: flex;
-  max-height: 60rem;
+  max-height: 50rem;
   width: 360px;
   background-color: #002a40;
   padding: 1rem;
@@ -374,6 +374,21 @@ div {
 .formHeaderQR {
   height: 4rem;
   width: 50rem;
+  background-color: #002a40;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.96;
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.formHeaderQR2 {
+  height: 4rem;
+  width: 50rem;
+  margin-top: -1.5rem;
   background-color: #002a40;
   color: white;
   display: flex;

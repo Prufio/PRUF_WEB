@@ -522,7 +522,7 @@ class RecycleAssetNC extends Component {
                     <div className="mediaLinkADHome">
                       <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
-                    <h2 className="formHeaderQR">Scan QR</h2>
+                    <h2 className="formHeaderQR2">Scan QR</h2>
                     <div className="mediaLinkBack">
                       <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
                     </div>
