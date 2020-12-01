@@ -209,17 +209,11 @@ class ModifyStatusMobile extends Component {
             console.log("new stat string", NewStatusString);
             console.log("old stat: ", this.state.status);
       
-            var doesExist = await window.utils.checkAssetExists(idxHash);
-      
-            if (!doesExist) {
-              return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-                this.clearForm()
-      
-            }
-      
             if (NewStatusString === this.state.status) {
-              return alert("Asset already in selected Status! Ensure data fields are correct before submission."),
-                this.clearForm()
+              alert("Asset already in selected Status! Ensure data fields are correct before submission.");
+              if (document.getElementById("MainForm") === null) { return }
+              document.getElementById("MainForm").reset();
+              return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
             }
       
             if (
@@ -293,11 +287,11 @@ class ModifyStatusMobile extends Component {
             <div>
                 <div>
                     <div className="mediaLinkADHome">
-                        <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+                        <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
                     <h2 className="formHeaderMobile">Modify Asset Status</h2>
                     <div className="mediaLinkClearForm">
-                        <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+                        <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
                 </div>
                 <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
@@ -403,14 +397,14 @@ class ModifyStatusMobile extends Component {
                                 <>
                                     <Form.Row>
                                         <div className="submitButtonRRMobile">
-                                            <div className="submitButtonRRContent">
+                                            <div className="submitButtonContentMobile">
                                                 <CheckCircle
                                                     onClick={() => { this.modifyStatus() }}
                                                 />
                                             </div>
                                         </div>
                                         <div className="mediaLinkHelp">
-                                            <div className="mediaLinkHelpContent">
+                                            <div className="mediaLinkHelpContentMobile">
                                                 <HelpCircle
                                                     onClick={() => { help() }}
                                                 />

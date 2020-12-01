@@ -66,6 +66,11 @@ h4 {
   /* overflow-wrap: break-word; */
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}
+
 div {
   position: relative;
 }
@@ -656,6 +661,9 @@ div {
   margin-top: 4.8rem;
   border-radius: 0rem 0rem 0.5rem 0rem;
   opacity: 0.9;
+  max-height: 40rem;
+  overflow-y: scroll;
+  scrollbar-width: 0;
 
 }
 
@@ -917,6 +925,11 @@ div {
   margin-top: -3.7rem;
 }
 
+.submitButtonContentMobile {
+  color: white;
+  border-radius: 50%;
+}
+
 .submitButtonContent {
   color: white;
   border-radius: 50%;
@@ -1020,8 +1033,8 @@ div {
   /* position: absolute; */
   background-color: transparent;
   z-index: 1000;
-  margin-left: 280px;
-  margin-top: 0.5rem;
+  margin-left: 310px;
+  margin-top: 0.2rem;
 }
 
 .submitButtonRRContent {
@@ -2098,7 +2111,7 @@ margin-bottom: -3rem;
   flex-direction: column;
   z-index: 999;
   margin-top: 1rem;
-  margin-left: 28rem;
+  margin-left: 31rem;
   justify-content: space-between;
 }
 
@@ -2155,6 +2168,11 @@ margin-bottom: -3rem;
   flex-direction: column;
   z-index: 999;
   justify-content: space-between;
+}
+
+.mediaLinkHelpContentMobile {
+  border-radius: 50%;
+  color: #ffffff;
 }
 
 .mediaLinkHelpContent {
@@ -2222,6 +2240,11 @@ margin-bottom: -3rem;
   z-index: 999;
 }
 
+.mediaLinkContentADHomeMobile {
+  border-radius: 50%;
+  color: #00a8ff;
+}
+
 .mediaLinkContentADHome {
   border-radius: 50%;
   color: #00a8ff;
@@ -2251,6 +2274,13 @@ margin-bottom: -3rem;
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
 }
+
+.mediaLinkContentADRefreshMobile {
+  border-radius: 50%;
+  color: #00a8ff;
+}
+
+
 
 .mediaLinkContentADRefresh:hover {
   color: #028ed4;
@@ -2337,6 +2367,11 @@ margin-bottom: -3rem;
   z-index: 999;
 }
 
+.mediaLinkContentClearFormMobile {
+  border-radius: 50%;
+  color: #00a8ff;
+}
+
 .mediaLinkContentClearForm {
   border-radius: 50%;
   color: #00a8ff;
@@ -2395,7 +2430,7 @@ margin-bottom: -3rem;
   color: white;
   border-radius: 50%;
   -webkit-transition: -webkit-transform .5s ease-in-out;
-  transition:         transform .5s ease-in-out;
+  transition: transform .5s ease-in-out;
 }
 
 .hamburgerMenuContent:hover {

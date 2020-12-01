@@ -16,6 +16,7 @@ class DeepVerifyMobile extends Component {
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
+          return alert("Please fill out all forms before submission")
         }
         idxHash = window.web3.utils.soliditySha3(
           String(this.state.type).replace(/\s/g, ''),
@@ -34,7 +35,12 @@ class DeepVerifyMobile extends Component {
       }
 
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
-      let infoArr = Object.values(window.utils.checkAssetExists(idxHash).obj);
+      let tempObj = await window.utils.checkAssetExists(idxHash)
+      
+      let infoArr, acName, tempStatus;
+      infoArr = Object.values(tempObj.obj);
+      acName = await window.utils.getACName(infoArr[2])
+      tempStatus = await window.utils.getStatusString(String(infoArr[0]))
 
       if (!doesExist) {
         return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
@@ -46,8 +52,8 @@ class DeepVerifyMobile extends Component {
 
       return this.setState({
         idxHash: idxHash,
-        assetClass: infoArr[2],
-        status: await window.utils.getStatusString(String(infoArr[0])),
+        assetClass: acName,
+        status: tempStatus,
         QRreader: false,
         accessPermitted: true
       })
@@ -251,11 +257,11 @@ class DeepVerifyMobile extends Component {
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
-              <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+              <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
             <h2 className="formHeaderMobile">Deep Verify</h2>
             <div className="mediaLinkClearForm">
-              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
           </div>
         )}
@@ -338,14 +344,14 @@ class DeepVerifyMobile extends Component {
               <>
                 <Form.Row>
                   <div className="submitButtonRRMobile">
-                    <div className="submitButtonRRContent">
+                    <div className="submitButtonContentMobile">
                       <ArrowRightCircle
                         onClick={() => { this.accessAsset() }}
                       />
                     </div>
                   </div>
                   <div className="mediaLinkCameraMobile">
-                      <div className="mediaLinkHelpContent">
+                      <div className="mediaLinkHelpContentMobile">
                         <Camera
                           onClick={() => { QRReader() }}
                         />
@@ -367,7 +373,7 @@ class DeepVerifyMobile extends Component {
                 </style>
                 <div>
                   <div className="mediaLinkADHome">
-                    <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                    <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
                   </div>
                   <h2 className="formHeaderMobileVL">Scan QR</h2>
                   <div className="mediaLinkBackMobile">
@@ -453,7 +459,7 @@ class DeepVerifyMobile extends Component {
                 </Form.Row>
                 <Form.Row>
                   <div className="submitButtonRRMobile">
-                    <div className="submitButtonRRContent">
+                    <div className="submitButtonContentMobile">
                       <ArrowRightCircle
                         onClick={() => { _verify() }}
                       />

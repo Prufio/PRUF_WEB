@@ -238,11 +238,11 @@ class TransferAssetMobile extends Component {
         <div>
         <div>
           <div className="mediaLinkADHome">
-            <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+            <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
           <h2 className="formHeaderMobile">Transfer Asset</h2>
           <div className="mediaLinkClearForm">
-            <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+            <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
@@ -331,14 +331,14 @@ class TransferAssetMobile extends Component {
                 <>
                   <Form.Row>
                     <div className="submitButtonRRMobile">
-                      <div className="submitButtonRRContent">
+                      <div className="submitButtonContentMobile">
                         <CheckCircle
                           onClick={() => { transfer() }}
                         />
                       </div>
                     </div>
                     <div className="mediaLinkHelp">
-                      <div className="mediaLinkHelpContent">
+                      <div className="mediaLinkHelpContentMobile">
                         <HelpCircle
                           onClick={() => { help() }}
                         />

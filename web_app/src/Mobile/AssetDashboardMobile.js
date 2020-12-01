@@ -389,7 +389,7 @@ class AssetDashboardMobile extends React.Component {
           </div>
           <h2 className="assetDashboardHeaderMobile">Your Assets</h2>
           <div className="mediaLinkADRefresh">
-            <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
+            <a className="mediaLinkContentADRefreshMobile" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
           {/* <div className="mediaLinkADAddAsset">
             <a className="mediaLinkContentADAddAsset" ><Plus size={35} 

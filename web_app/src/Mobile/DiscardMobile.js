@@ -175,11 +175,11 @@ class DiscardMobile extends Component {
             <div>
                 <div>
                     <div className="mediaLinkADHome">
-                        <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+                        <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
                     </div>
                     <h2 className="formHeaderMobile">Discard Asset</h2>
                     <div className="mediaLinkClearForm">
-                        <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+                        <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
                     </div>
                 </div>
                 <Form
@@ -251,14 +251,14 @@ class DiscardMobile extends Component {
                                 <>
                                     <Form.Row>
                                         <div className="submitButtonRRMobile">
-                                            <div className="submitButtonRRContent">
+                                            <div className="submitButtonContentMobile">
                                                 <Trash2
                                                     onClick={() => { _discardAsset() }}
                                                 />
                                             </div>
                                         </div>
                                         <div className="mediaLinkHelp">
-                                            <div className="mediaLinkHelpContent2">
+                                            <div className="mediaLinkHelpContentMobile">
                                                 <AlertTriangle
                                                     onClick={() => { help() }}
                                                 />

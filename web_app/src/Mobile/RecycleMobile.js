@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, Camera, Repeat, HelpCircle, AlertOctagon, CameraOff, UploadCloud } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, Camera, Tag, HelpCircle, AlertOctagon, CameraOff, UploadCloud } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleMobile extends Component {
@@ -375,11 +375,11 @@ class RecycleMobile extends Component {
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
-              <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+              <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
             </div>
             <h2 className="formHeaderMobile">Recycle Asset</h2>
             <div className="mediaLinkClearForm">
-              <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
+              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
             </div>
           </div>
         )}
@@ -410,7 +410,7 @@ class RecycleMobile extends Component {
               </Form.Group>
 
               <div className="submitButtonRRMobile">
-                <div className="submitButtonRRContent">
+                <div className="submitButtonContentMobile">
                   <ArrowRightCircle
                     onClick={() => { _setAC() }}
                   />
@@ -502,21 +502,21 @@ class RecycleMobile extends Component {
                 <>
                   <Form.Row>
                     <div className="submitButtonRRMobile">
-                      <div className="submitButtonRRContent">
+                      <div className="submitButtonContentMobile">
                         <ArrowRightCircle
                           onClick={() => { this.accessAsset() }}
                         />
                       </div>
                     </div>
                     <div className="mediaLinkHelp">
-                      <div className="mediaLinkHelpContent">
+                      <div className="mediaLinkHelpContentMobile">
                         <HelpCircle
                           onClick={() => { help() }}
                         />
                       </div>
                     </div>
                     <div className="mediaLinkCameraMobile">
-                      <div className="mediaLinkHelpContent">
+                      <div className="mediaLinkHelpContentMobile">
                         <Camera
                           onClick={() => { QRReader() }}
                         />
@@ -544,7 +544,7 @@ class RecycleMobile extends Component {
                   </style>
                   <div>
                     <div className="mediaLinkADHome">
-                      <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                      <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
                     </div>
                     <h2 className="formHeaderMobileVL">Scan QR</h2>
                     <div className="mediaLinkBackMobile">
@@ -661,15 +661,15 @@ class RecycleMobile extends Component {
                     <div>
                       <Form.Label className="costText"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF</Form.Label>
                       <div className="submitButtonRRMobile">
-                        <div className="submitButtonRRContent">
-                          <Repeat
+                        <div className="submitButtonContentMobile">
+                          <Tag
                             onClick={() => { _recycleAsset() }}
                           />
                         </div>
                       </div>
                     </div>
                     <div className="mediaLinkHelp">
-                      <div className="mediaLinkHelpContent">
+                      <div className="mediaLinkHelpContentMobile">
                         <AlertOctagon
                           onClick={() => { help() }}
                         />
