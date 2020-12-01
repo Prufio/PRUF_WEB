@@ -866,6 +866,7 @@ class ModifyDescription extends Component {
                   <div className="mediaLinkHelp">
                     <div className="mediaLinkHelpContent2">
                       <AlertTriangle
+                        color="white"
                         onClick={() => { help() }}
                       />
                     </div>

@@ -336,7 +336,7 @@ div {
   display: flex;
   opacity: 0.96;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: visible;
   overflow-x: hidden;
   word-break: break-all;
 }

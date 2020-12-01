@@ -612,7 +612,21 @@ class Main extends Component {
       //^^^
       if (this.state.menuChange !== undefined) {
         window.menuChange = undefined
-        if (this.state.IDHolderBool === true) {
+        if (isMobile && window.ethereum) {
+          window.routeRequest = "basicMobile"
+          this.setState({ routeRequest: "basicMobile" })
+          this.setState({
+            mobileMenuBool: true,
+            assetHolderMenuBool: false,
+            assetHolderUserMenuBool: false,
+            basicMenuBool: false,
+            assetClassHolderMenuBool: false,
+            noAddrMenuBool: false,
+            authorizedUserMenuBool: false
+          })
+        }
+        
+        else if (!isMobile && this.state.IDHolderBool === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -627,7 +641,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (this.state.IDHolderBool === false) {
+        else if (!isMobile && this.state.IDHolderBool === false) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
@@ -639,6 +653,7 @@ class Main extends Component {
             noAddrMenuBool: false,
             authorizedUserMenuBool: false
           })
+
           this.setState({ menuChange: undefined });
         }
       }
