@@ -664,7 +664,7 @@ div {
   overflow-y: auto;
   overflow-x: hidden;
   position: absolute;
-  background-image: url(./Resources/Images/DarkBlueBack.png);
+  background-image: url(./Resources/Images/BlueBackMobile.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
@@ -943,6 +943,15 @@ div {
 .submitButtonContentMobile {
   color: white;
   border-radius: 50%;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.submitButtonContentMobile:active {
+  color: #00a8ff;
+  -webkit-transform: translateX(3px);
+  transform: translateX(3px);
+  
 }
 
 .submitButtonContent {
@@ -2120,6 +2129,15 @@ margin-bottom: -3rem;
 .mediaLinkRefreshContent {
   border-radius: 50%;
   color: #ffffff;
+  -webkit-transition: -webkit-transform 1s;
+  transition:         transform 1s;
+}
+
+.mediaLinkRefreshContent:active {
+  color: #028ed4 !important;
+  cursor: pointer;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .uploadImageQR {

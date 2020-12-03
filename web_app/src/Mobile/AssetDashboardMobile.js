@@ -355,7 +355,7 @@ class AssetDashboardMobile extends React.Component {
                     <br></br>
                   </div>
                   <div className="cardButtonMobile">
-                    <div className="cardButtonContent">
+                    <div className="submitButtonContentMobile">
                       <ChevronRight
                         onClick={() => {
                           this.moreInfo({

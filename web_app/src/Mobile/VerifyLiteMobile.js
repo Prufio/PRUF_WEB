@@ -330,7 +330,7 @@ class VerifyLiteMobile extends Component {
                     </div>
                   </div>
                   <div className="mediaLinkCameraMobile">
-                      <div className="mediaLinkHelpContentMobile">
+                      <div className="submitButtonContentMobile">
                         <Camera
                           onClick={() => { QRReader() }}
                         />
