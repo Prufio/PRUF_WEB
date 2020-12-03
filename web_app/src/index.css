@@ -659,26 +659,27 @@ div {
 
 .hamburgerDropdownMobile {
   display: flex;
-  height: 45rem;
+  max-height: 40rem;
   width: 20rem;
   overflow-y: auto;
   overflow-x: hidden;
   position: absolute;
-  background-image: url(./Resources/Images/BlueBackMobile.png);
+  /* background-image: url(./Resources/Images/BlueBackMobile.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
-  background-position: center center fixed;  
+  background-position: center center fixed;   */
+  background-color: #002a40;
   justify-content: flex-start;
   flex-direction: column;
   z-index: 1000;
   margin-left: -18rem;
   margin-top: 4.8rem;
-  border-radius: 0rem 0rem 0.5rem 0rem;
-  opacity: 0.9;
-  max-height: 40rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  opacity: 0.85;
+  /* max-height: 40rem;
   overflow-y: scroll;
-  scrollbar-width: 0;
+  scrollbar-width: 0; */
 
 }
 
