@@ -470,6 +470,25 @@ div {
   margin-top: -0.5rem;
 }
 
+.userInfoMobile {
+  display: flex;
+  width: 300px;
+  height: 27rem;
+  color: #ffffff;
+  background-color: #002a40;
+  flex-direction: column;
+  justify-content: flex-start;
+  z-index: 1000;
+  font-size: 1.2rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  margin-left: -18rem;
+  margin-top: 4.8rem;
+  position: absolute;
+  opacity: 0.9;
+}
+
 .assetSelectedResults {
   height: flex;
   max-height: 30rem;
@@ -810,7 +829,8 @@ div {
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
   z-index: 1000;
-  max-width: 60px;
+  max-width: 20px;
+  background: none;
 }
 
 /* .imageButtonUserMobile {
@@ -1623,8 +1643,8 @@ margin-bottom: -3rem;
   justify-content: flex-start;
   margin-right: auto;
   display: flex;
-  width: 70px;
-  height: 70px;
+  width: 35px;
+  height: 35px;
   object-fit: cover;
   z-index: 1000;
   /* background-color: #cccccc; */
@@ -1635,7 +1655,7 @@ margin-bottom: -3rem;
   background-position: center center fixed;  
   -webkit-transition: -webkit-transform .7s ease-in-out;
   transition:         transform .7s ease-in-out;
-  margin-left: 30rem;
+  margin-left: 55rem;
   border-radius: 50%;
 }
 
