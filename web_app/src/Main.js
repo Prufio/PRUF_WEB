@@ -222,7 +222,7 @@ class Main extends Component {
                                     PRUF Balance : {this.state.prufBalance}
                                     <Button
                                       variant="userButton"
-                                      onClick={() => { this.faucet() }}>
+                                      onClick={() => {"This functionality has been disabled until Alpha-Testing begins"}}>
                                       Get PRUF
                               </Button>
                                   </h4>
@@ -241,7 +241,7 @@ class Main extends Component {
                                     </Button>
                                     <Button
                                       variant="userButton"
-                                      onClick={() => { this.faucet() }}>
+                                      onClick={() => {"This functionality has been disabled until Alpha-Testing begins"}}>
                                       Get AC
                               </Button>
                                   </h4>
@@ -254,7 +254,7 @@ class Main extends Component {
                                     Assets :
                               <Button
                                       variant="userButton"
-                                      onClick={() => { this.assetDashboard() }}>
+                                      onClick={() => {"This functionality has been disabled until Alpha-Testing begins"}}>
                                       {this.state.assetBalance}
                                     </Button>
                                   </h4>
