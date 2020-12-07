@@ -28,7 +28,7 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (!isMobile) {
+      if (isMobile) {
         return (
           <div>
             <HashRouter>
@@ -56,13 +56,13 @@ class Main extends Component {
                             onClick={() => { this.userMenuMobile() }}>
                             {window.addr !== undefined && (
                               <Robohash
-                                className="imageFormUser"
+                                className="imageFormUserMobile"
                                 name={window.addr}
                               />
                             )}
                             {window.addr === undefined && (
                               <User
-                                className="imageFormUser"
+                                className="imageFormUserMobile"
                                 size={20}
                               />
                             )}
@@ -447,13 +447,13 @@ class Main extends Component {
                       )}
                     </button>
                   </ClickAwayListener>
-                  <ClickAwayListener onClickAway={() => { this.setState({ settingsMenu: undefined }) }}>
+                  <ClickAwayListener onClickAway={() => { this.setState({ settingsMenu: false }) }}>
                     <div className="hamburgerMenuLink">
                       <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
                     </div>
                   </ ClickAwayListener>
                   <div>
-                    {this.state.settingsMenu !== undefined && (
+                    {this.state.settingsMenu === true && (
                       <div>
                         <div className="hamburgerDropdownSettings">
                           {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
@@ -461,7 +461,7 @@ class Main extends Component {
                               size="lg"
                               variant="toggle"
                               onClick={() => {
-                                this.setState({ settingsMenu: undefined })
+                                this.setState({ settingsMenu: false })
                                 if (window.ethereum) {
                                   if (window.confirm("Either you need to log into your ethereum provider, or you do not hold any PRuF assets. Click 'OK' to learn more on our website.")) {
                                     window.open('https://pruf.io/')
@@ -551,7 +551,7 @@ class Main extends Component {
                   </div>
                   <div>
 
-                    {this.state.userMenu !== undefined && (
+                    {this.state.userMenu === true && (
                       <div className="hamburgerDropdownUserInfo">
                         {this.state.addr === undefined && (
                           <h4 className="userStatFont">
@@ -843,7 +843,7 @@ class Main extends Component {
       //^^^
       if (this.state.menuChange !== undefined) {
         window.menuChange = undefined
-        if (!isMobile && window.ethereum) {
+        if (isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
           this.setState({ routeRequest: "basicMobile" })
           this.setState({
@@ -857,7 +857,7 @@ class Main extends Component {
           })
         }
 
-        else if (!!isMobile && this.state.IDHolderBool === true) {
+        else if (!isMobile && this.state.IDHolderBool === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -872,7 +872,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!!isMobile && this.state.IDHolderBool === false) {
+        else if (!isMobile && this.state.IDHolderBool === false) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
@@ -890,7 +890,7 @@ class Main extends Component {
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
-      if (!isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
+      if (isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -968,7 +968,7 @@ class Main extends Component {
           basicMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -985,7 +985,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -1002,7 +1002,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -1019,7 +1019,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -1036,7 +1036,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -1054,7 +1054,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -1071,7 +1071,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           basicMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
         if (!this.state.isAuthUser) { window.location.href = '/#/login' }
@@ -1309,7 +1309,7 @@ class Main extends Component {
 
             }
 
-            else if (!!isMobile) {
+            else if (!isMobile) {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1321,7 +1321,7 @@ class Main extends Component {
                 faucetBool: false,
                 noAddrMenuBool: false,
                 authorizedUserMenuBool: false,
-                settingsMenu: undefined
+                settingsMenu: false
               })
             }
 
@@ -1350,7 +1350,7 @@ class Main extends Component {
       window.isSettingUpContracts = true;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (!!isMobile) {
+        if (!isMobile) {
           console.log("Here!")
           await this.setState({
             mobileMenuBool: false,
@@ -1364,7 +1364,7 @@ class Main extends Component {
           })
         }
 
-        else if (!isMobile && _web3.eth.net.getNetworkType() != undefined) {
+        else if (isMobile && _web3.eth.net.getNetworkType() != undefined) {
           await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
@@ -1471,6 +1471,7 @@ class Main extends Component {
       routeRequest: "basic",
       userMenuMobile: false,
       userMenu: false,
+      settingsMenu: false,
     };
   }
 
@@ -1511,7 +1512,7 @@ class Main extends Component {
     window.menuChange = undefined;
 
     //Give me the desktop version
-    if (!!isMobile && window.ethereum) {
+    if (!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1552,7 +1553,7 @@ class Main extends Component {
     }
 
     //Give me the mobile ethereum-enabled version
-    else if (!isMobile && window.ethereum) {
+    else if (isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
 
@@ -1645,8 +1646,8 @@ class Main extends Component {
       if (this.state.hamburgerMenu === undefined) {
         this.setState({
           hamburgerMenu: true,
-          userMenu: undefined,
-          settingsMenu: undefined
+          userMenu: false,
+          settingsMenu: false
 
         })
       }
@@ -1673,7 +1674,7 @@ class Main extends Component {
       if (this.state.userMenu === false) {
         this.setState({
           userMenu: true,
-          settingsMenu: undefined
+          settingsMenu: false
         })
       }
       else {
@@ -1696,14 +1697,14 @@ class Main extends Component {
 
     //settingsMenu bool switch @DEV Move to this declarations?
     this.settingsMenu = async () => {
-      if (this.state.settingsMenu === undefined) {
+      if (this.state.settingsMenu === false) {
         this.setState({
           settingsMenu: true,
-          userMenu: undefined
+          userMenu: false
         })
       }
       else {
-        this.setState({ settingsMenu: undefined })
+        this.setState({ settingsMenu: false })
       }
     }
 

@@ -829,7 +829,7 @@ div {
   -webkit-transition: -webkit-transform .5s ease-in-out;
   transition:         transform .5s ease-in-out;
   z-index: 1000;
-  max-width: 20px;
+  max-width: 60px;
   background: none;
 }
 
@@ -1640,6 +1640,26 @@ margin-bottom: -3rem;
 }
 
 .imageFormUser {
+  justify-content: flex-start;
+  margin-right: auto;
+  display: flex;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  z-index: 1000;
+  /* background-color: #cccccc; */
+  background-image: url(./Resources/Images/userBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;  
+  -webkit-transition: -webkit-transform .7s ease-in-out;
+  transition:         transform .7s ease-in-out;
+  margin-left: 30rem;
+  border-radius: 50%;
+}
+
+.imageFormUserMobile {
   justify-content: flex-start;
   margin-right: auto;
   display: flex;
