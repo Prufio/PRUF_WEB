@@ -1665,18 +1665,23 @@ margin-bottom: -3rem;
   display: flex;
   width: 35px;
   height: 35px;
-  object-fit: cover;
+  /* object-fit: cover; */
   z-index: 1000;
   /* background-color: #cccccc; */
-  background-image: url(./Resources/Images/userBack.png);
+  /* background-image: url(./Resources/Images/userBack.png);
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
-  background-position: center center fixed;  
-  -webkit-transition: -webkit-transform .7s ease-in-out;
-  transition:         transform .7s ease-in-out;
-  margin-left: 55rem;
-  border-radius: 50%;
+  background-position: center center fixed;   */
+  color: #ffffff;
+  margin-left: 13.5rem;
+  margin-top: 1rem;
+  /* border-radius: 50%; */
+  position: absolute;
+}
+
+.imageFormUserMobile:hover {
+  color: #00a8ff;
 }
 
 /* .imageFormUserMobile {
