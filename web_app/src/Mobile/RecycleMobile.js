@@ -242,15 +242,15 @@ class RecycleMobile extends Component {
       }
     }
 
-    
+
     const previewStyle = {
       height: 240,
       width: 320,
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
 
     const Checkbox = async () => {
@@ -285,19 +285,19 @@ class RecycleMobile extends Component {
       this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
 
-/*       if (this.state.result !== "") {
-        idxHash = this.state.result;
-      }
-
-      else {
-        idxHash = window.web3.utils.soliditySha3(
-          String(this.state.type).replace(/\s/g, ''),
-          String(this.state.manufacturer).replace(/\s/g, ''),
-          String(this.state.model).replace(/\s/g, ''),
-          String(this.state.serial).replace(/\s/g, ''),
-        );
-      } */
+      /*       if (this.state.result !== "") {
+              idxHash = this.state.result;
+            }
       
+            else {
+              idxHash = window.web3.utils.soliditySha3(
+                String(this.state.type).replace(/\s/g, ''),
+                String(this.state.manufacturer).replace(/\s/g, ''),
+                String(this.state.model).replace(/\s/g, ''),
+                String(this.state.serial).replace(/\s/g, ''),
+              );
+            } */
+
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(
@@ -387,7 +387,19 @@ class RecycleMobile extends Component {
           {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please connect web3 provider.</h3>
+              <h3>Please
+                <a
+                  onClick={() => {
+                    this.setState({ userMenu: undefined })
+                    if (window.ethereum) { window.ethereum.enable() }
+                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                  }
+                  }
+                  className="userDataLink">
+                  Log In
+                </a>
+                  to web3 provider.
+                  </h3>
             </div>
           )}
           {window.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
@@ -552,22 +564,22 @@ class RecycleMobile extends Component {
                     </div>
                   </div>
                   <div className="QRreaderMobile">
-                  <QrReader
-                ref="qrReader1"
-                delay={300}
-                previewStyle={previewStyle}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                style={{ width: '100%' }}
-                legacyMode={this.state.legacyMode}
-              />
-              {this.state.legacyMode === true && (
-                <div className="uploadImageQR">
-                  <div className="uploadImageQRContent">
-                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
-                  </div>
-                </div>
-              )}
+                    <QrReader
+                      ref="qrReader1"
+                      delay={300}
+                      previewStyle={previewStyle}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                      style={{ width: '100%' }}
+                      legacyMode={this.state.legacyMode}
+                    />
+                    {this.state.legacyMode === true && (
+                      <div className="uploadImageQR">
+                        <div className="uploadImageQRContent">
+                          <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                        </div>
+                      </div>
+                    )}
                     {this.state.result !== undefined && (
                       <div className="resultsMobile">
                         {this.state.assetFound}
@@ -692,7 +704,7 @@ class RecycleMobile extends Component {
             <Form.Row>
               {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                   <div className="assetSelectedContentHead">Being Recycled Into Asset Class: <span className="assetSelectedContent">{this.state.selectedAssetClass}</span> </div>
                 </Form.Group>
               )}

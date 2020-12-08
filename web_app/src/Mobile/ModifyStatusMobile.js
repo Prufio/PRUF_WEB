@@ -187,101 +187,101 @@ class ModifyStatusMobile extends Component {
                 this.setState({ help: false })
             }
         }
-    
+
         const submitHandler = (e) => {
-          e.preventDefault();
-      }
+            e.preventDefault();
+        }
 
         this.modifyStatus = async () => {
-            this.setState({help: false})
+            this.setState({ help: false })
             const self = this;
-      
+
             this.setState({ txStatus: false });
             this.setState({ txHash: "" });
             this.setState({ error: undefined })
             this.setState({ result: "" })
             this.setState({ transaction: true })
             var idxHash = this.state.idxHash;
-      
+
             console.log("idxHash", idxHash);
             console.log("addr: ", window.addr);
             var NewStatusString = await window.utils.getStatusString(this.state.newStatus)
             console.log("new stat string", NewStatusString);
             console.log("old stat: ", this.state.status);
-      
+
             if (NewStatusString === this.state.status) {
-              alert("Asset already in selected Status! Ensure data fields are correct before submission.");
-              if (document.getElementById("MainForm") === null) { return }
-              document.getElementById("MainForm").reset();
-              return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+                alert("Asset already in selected Status! Ensure data fields are correct before submission.");
+                if (document.getElementById("MainForm") === null) { return }
+                document.getElementById("MainForm").reset();
+                return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
             }
-      
+
             if (
-              this.state.newStatus !== "53" &&
-              this.state.newStatus !== "54" &&
-              this.state.newStatus !== "57" &&
-              this.state.newStatus !== "58" &&
-              Number(this.state.newStatus) < 100 &&
-              Number(this.state.newStatus) > 49) {
-      
-              await window.contracts.NP_NC.methods
-                ._modStatus(idxHash, this.state.newStatus)
-                .send({ from: window.addr })
-                .on("error", function (_error) {
-                  // self.setState({ NRerror: _error });
-                  self.setState({ txHash: Object.values(_error)[0].transactionHash });
-                  self.setState({ txStatus: false });
-                  self.setState({ transaction: false, wasSentPacket: false });
-                  alert("Something went wrong!")
-                  self.clearForm();
-                  console.log(Object.values(_error)[0].transactionHash);
-                })
-                .on("receipt", (receipt) => {
-                  self.setState({ transaction: false });
-                  self.setState({ txHash: receipt.transactionHash });
-                  self.setState({ txStatus: receipt.status });
-                  console.log(receipt.status);
-                  window.resetInfo = true;
-                  if (self.state.wasSentPacket) {
-                    return window.location.href = '/#/asset-dashboard'
-                  }
-                  //Stuff to do when tx confirms
-                });
+                this.state.newStatus !== "53" &&
+                this.state.newStatus !== "54" &&
+                this.state.newStatus !== "57" &&
+                this.state.newStatus !== "58" &&
+                Number(this.state.newStatus) < 100 &&
+                Number(this.state.newStatus) > 49) {
+
+                await window.contracts.NP_NC.methods
+                    ._modStatus(idxHash, this.state.newStatus)
+                    .send({ from: window.addr })
+                    .on("error", function (_error) {
+                        // self.setState({ NRerror: _error });
+                        self.setState({ txHash: Object.values(_error)[0].transactionHash });
+                        self.setState({ txStatus: false });
+                        self.setState({ transaction: false, wasSentPacket: false });
+                        alert("Something went wrong!")
+                        self.clearForm();
+                        console.log(Object.values(_error)[0].transactionHash);
+                    })
+                    .on("receipt", (receipt) => {
+                        self.setState({ transaction: false });
+                        self.setState({ txHash: receipt.transactionHash });
+                        self.setState({ txStatus: receipt.status });
+                        console.log(receipt.status);
+                        window.resetInfo = true;
+                        if (self.state.wasSentPacket) {
+                            return window.location.href = '/#/asset-dashboard'
+                        }
+                        //Stuff to do when tx confirms
+                    });
             }
-      
+
             else if (this.state.newStatus === "53" || this.state.newStatus === "54") {
-              await window.contracts.NP_NC.methods
-                ._setLostOrStolen(idxHash, this.state.newStatus)
-                .send({ from: window.addr })
-                .on("error", function (_error) {
-                  // self.setState({ NRerror: _error });
-                  self.setState({ transaction: false })
-                  self.setState({ txHash: Object.values(_error)[0].transactionHash });
-                  self.setState({ txStatus: false, wasSentPacket: false });
-                  alert("Something went wrong!")
-                  self.clearForm();
-                  console.log(Object.values(_error)[0].transactionHash);
-                })
-                .on("receipt", (receipt) => {
-                  self.setState({ transaction: false })
-                  self.setState({ txHash: receipt.transactionHash });
-                  self.setState({ txStatus: receipt.status });
-                  console.log(receipt.status);
-                  window.resetInfo = true;
-                  if (self.state.wasSentPacket === true) {
-                    return window.location.href = '/#/asset-dashboard'
-                  }
-                  //Stuff to do when tx confirms
-                });
+                await window.contracts.NP_NC.methods
+                    ._setLostOrStolen(idxHash, this.state.newStatus)
+                    .send({ from: window.addr })
+                    .on("error", function (_error) {
+                        // self.setState({ NRerror: _error });
+                        self.setState({ transaction: false })
+                        self.setState({ txHash: Object.values(_error)[0].transactionHash });
+                        self.setState({ txStatus: false, wasSentPacket: false });
+                        alert("Something went wrong!")
+                        self.clearForm();
+                        console.log(Object.values(_error)[0].transactionHash);
+                    })
+                    .on("receipt", (receipt) => {
+                        self.setState({ transaction: false })
+                        self.setState({ txHash: receipt.transactionHash });
+                        self.setState({ txStatus: receipt.status });
+                        console.log(receipt.status);
+                        window.resetInfo = true;
+                        if (self.state.wasSentPacket === true) {
+                            return window.location.href = '/#/asset-dashboard'
+                        }
+                        //Stuff to do when tx confirms
+                    });
             }
-      
+
             else { alert("Invalid status input") }
-      
+
             console.log(this.state.txHash);
             this.setState({
-              idxHash: undefined
+                idxHash: undefined
             });
-          };
+        };
 
         return (
             <div>
@@ -298,7 +298,19 @@ class ModifyStatusMobile extends Component {
                     {window.addr === undefined && (
                         <div className="resultsMobile">
                             <h2>User address unreachable</h2>
-                            <h3>Please connect web3 provider.</h3>
+                            <h3>Please
+                <a
+                                    onClick={() => {
+                                        this.setState({ userMenu: undefined })
+                                        if (window.ethereum) { window.ethereum.enable() }
+                                        else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                                    }
+                                    }
+                                    className="userDataLink">
+                                    Log In
+                </a>
+                  to web3 provider.
+                  </h3>
                         </div>
                     )}
                     {window.addr > 0 && (
@@ -455,7 +467,7 @@ class ModifyStatusMobile extends Component {
                         <Form.Row>
                             {this.state.idxHash !== "" && this.state.txHash === "" && (
                                 <Form.Group>
-                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                                     <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>

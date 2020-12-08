@@ -532,10 +532,22 @@ class ModifyDescription extends Component {
             </div>
           </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-          {window.addr === undefined && (
+        {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please connect web3 provider.</h3>
+              <h3>Please 
+                <a
+                    onClick={() => {
+                    this.setState({ userMenu: undefined })
+                    if (window.ethereum) { window.ethereum.enable() }
+                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                    }
+                    }
+                    className="userDataLink">
+                    Log In
+                </a> 
+                  to web3 provider.
+                  </h3>
             </div>
           )}
         {window.addr > 0 && (
