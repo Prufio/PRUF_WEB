@@ -34,25 +34,218 @@ class Main extends Component {
             <HashRouter>
               <div>
                 <div className="bannerForm">
-                <ClickAwayListener onClickAway={()=>{this.setState({hamburgerMenuMobile: false})}}>
-                  <ul className="headerForm">
-                    {window.contracts !== undefined && (
-                        <>
-                        <div className="hamburgerMenuMobile">
-                          <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
-                        </div>
+                  <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
+                    <ul className="headerForm">
+                      {window.contracts !== undefined && (
 
-                        <nav>
-                          {this.state.hamburgerMenuMobile === true && (
-                            <div className="hamburgerDropdownMobile">
-                              {this.state.mobileMenuBool === true && (<MobileComponent />)}
+                        <>
+                          <div className="hamburgerMenuMobile">
+                            <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
+                          </div>
+
+                          <nav>
+                            {this.state.hamburgerMenuMobile === true && (
+                              <div className="hamburgerDropdownMobile">
+                                {this.state.mobileMenuBool === true && (<MobileComponent />)}
+                              </div>
+                            )}
+                            {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
+                          </nav>
+                          {/* <button
+                            className="imageButtonUser"
+                            onClick={() => { this.userMenuMobile() }}> */}
+                          {/* {window.addr !== undefined && (
+                              <Robohash
+                                className="imageFormUserMobile"
+                                name={window.addr}
+                              />
+                            )} */}
+                          {/* {window.addr === undefined && ( */}
+                          <User
+                            className="imageFormUserMobile"
+                            size={20}
+                            onClick={() => { this.userMenuMobile() }}
+                          />
+                          {/* )} */}
+                          {/* </button> */}
+
+                          <style type="text/css">
+                            {`
+
+                      .btn-etherscanMobile {
+                        background-color: transparent;
+                        color: white;
+                        margin-top: -0.1rem;
+                        font-size: 1.4rem;
+                        // height: 1.6rem;
+                        width: fit-content;
+                      }
+                      .btn-etherscanMobile:hover {
+                        color: #00a8ff;
+                        background-color: transparent;
+                      }
+
+                      .btn-userButton {
+                        background-color: transparent;
+                        color: white;
+                        margin-top: -0.5rem;
+                        // margin-right: 37rem;
+                        font-size: 1.4rem;
+                        width: fit-content;
+                      }
+                      .btn-userButton:hover {
+                        background-color: transparent;
+                        color: #00a8ff;
+                      }
+                      .btn-userButton:focus {
+                        background-color: transparent;
+                      }
+                      .btn-userButton:active {
+                        background-color: transparent;
+                        border: transparent;
+                      }
+
+                      .btn-toggle {
+                        background-color: #002a40;
+                        color: white;
+                        height: 3rem;
+                        width: 18rem;
+                        margin-top: -0rem;
+                        border-radius: 0;
+                        font-weight: bold;
+                        font-size: 1.4rem;
+                        border-radius: 0rem 0.3rem 0.3rem 0rem;
+                      }
+                      .btn-toggle:hover {
+                        background-color: #23b6ff;
+                        color: white !important;
+                      }
+                      .btn-toggle:focus {
+                        background-color: #23b6ff;
+                        color: white !important;
+                      }
+                      .btn-toggle:active {
+                        background-color: #23b6ff;
+                        color: white !important;
+                      }
+                   `}
+                          </style>
+
+                          {this.state.userMenuMobile === true && (
+                            <div className="userInfoMobile">
+                              {this.state.addr === undefined && (
+                                <h4 className="userStatFont">
+                                  Please
+                                  <a
+                                    onClick={() => {
+                                      this.setState({ userMenu: undefined })
+                                      if (window.ethereum) { window.ethereum.enable() }
+                                      else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                                    }
+                                    }
+                                    className="userDataLink">
+                                    Log In
+                              </a>
+                              to View Balances
+                                </h4>
+                              )}
+                              {this.state.addr > 0 && (
+                                <>
+                                  <h4 className="userStatFont">
+                                    Currently serving :
+                              <Button
+                                      variant="etherscanMobile"
+                                      title="Check it out on Etherscan!"
+                                      onClick={() => { this.setState({ userMenu: undefined }); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
+                                      {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
+                                    </Button>
+                                  </h4>
+                                  <br></br>
+                                </>
+                              )}
+                              {this.state.ETHBalance && (
+                                <>
+                                  <h4 className="userStatFont">
+                                    KETH Balance : {this.state.ETHBalance.substring(0, 6)}
+                                    <Button
+                                      variant="userButton"
+                                      onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>
+                                      Get KETH
+                              </Button>
+                                  </h4>
+                                  <br></br>
+                                </>
+                              )}
+                              {this.state.prufBalance && (
+                                <>
+                                  <h4 className="userStatFont">
+                                    PRUF Balance : {this.state.prufBalance}
+                                    <Button
+                                      variant="userButton"
+                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      Get PRUF
+                              </Button>
+                                  </h4>
+                                  <br></br>
+                                </>
+                              )}
+                              {this.state.assetClassBalance && (
+                                <>
+                                  <h4 className="userStatFont">
+                                    AssetClasses :
+                                <Button
+                                      variant="userButton"
+                                      // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
+                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      {this.state.assetClassBalance}
+                                    </Button>
+                                    <Button
+                                      variant="userButton"
+                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      Get AC
+                              </Button>
+                                  </h4>
+                                  <br></br>
+                                </>
+                              )}
+                              {this.state.assetBalance && (
+                                <>
+                                  <h4 className="userStatFont">
+                                    Assets :
+                              <Button
+                                      variant="userButton"
+                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      {this.state.assetBalance}
+                                    </Button>
+                                  </h4>
+                                  <br></br>
+                                </>
+                              )}
+                              {this.state.IDTokenBalance && (
+                                <>
+                                  <h4 className="userStatFont">
+                                    Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)}
+                                    {this.state.IDTokenBalance === "0" && (
+                                      <>
+                                        <X className="userIDBalance0" />
+                                        <Button
+                                          variant="userButton"
+                                          // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                          onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                          Get ID
+                              </Button>
+                                      </>
+                                    )}
+                                    {/* {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)} */}
+                                  </h4>
+                                  <br></br>
+                                </>
+                              )}
                             </div>
                           )}
-                          {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
-                        </nav>
                         </>
-                    )}
-                  </ul>
+                      )}
+                    </ul>
                   </ClickAwayListener>
                 </div>
               </div>
@@ -164,7 +357,7 @@ class Main extends Component {
               <div className="hamburgerMenu">
                 <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenu() }} /></a>
               </div>
-            
+
               {this.state.hamburgerMenu !== undefined && (
                 <div className="hamburgerDropdown">
                   <div className="mediaLink">
@@ -192,35 +385,35 @@ class Main extends Component {
                   </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
-                      ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.3.0 </a>
-                      : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.3.0 </a>}
+                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.3.0 </a>
+                        : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.3.0 </a>}
                     </h3>
                   </div>
-                  <ClickAwayListener onClickAway={()=>{this.setState({userMenu: undefined})}}>
-                  <button
-                    className="imageButtonUser"
-                    onClick={() => { this.userMenu() }}>
-                    {window.addr !== undefined && (
-                      <Robohash
-                        className="imageFormUser"
-                        name={window.addr}
-                      />
-                    )}
-                    {window.addr === undefined && (
-                      <User
-                        className="imageFormUser"
-                        size={30}
-                      />
-                    )}
-                  </button>
+                  <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
+                    <button
+                      className="imageButtonUser"
+                      onClick={() => { this.userMenu() }}>
+                      {window.addr !== undefined && (
+                        <Robohash
+                          className="imageFormUser"
+                          name={window.addr}
+                        />
+                      )}
+                      {window.addr === undefined && (
+                        <User
+                          className="imageFormUser"
+                          size={30}
+                        />
+                      )}
+                    </button>
                   </ClickAwayListener>
-                  <ClickAwayListener onClickAway={()=>{this.setState({settingsMenu: undefined})}}>
-                  <div className="hamburgerMenuLink">
-                    <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
-                  </div>
+                  <ClickAwayListener onClickAway={() => { this.setState({ settingsMenu: false }) }}>
+                    <div className="hamburgerMenuLink">
+                      <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
+                    </div>
                   </ ClickAwayListener>
                   <div>
-                    {this.state.settingsMenu !== undefined && (
+                    {this.state.settingsMenu === true && (
                       <div>
                         <div className="hamburgerDropdownSettings">
                           {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
@@ -228,14 +421,14 @@ class Main extends Component {
                               size="lg"
                               variant="toggle"
                               onClick={() => {
-                                this.setState({ settingsMenu: undefined })
-                                if (window.ethereum){
+                                this.setState({ settingsMenu: false })
+                                if (window.ethereum) {
                                   if (window.confirm("Either you need to log into your ethereum provider, or you do not hold any PRuF assets. Click 'OK' to learn more on our website.")) {
                                     window.open('https://pruf.io/')
                                   }
                                 }
-                                else{
-                                  if (window.confirm("You do not currently have a Web3 provider installed. We recommend MetaMask; if you would like to be redirected to their officail site, press 'OK'")){
+                                else {
+                                  if (window.confirm("You do not currently have a Web3 provider installed. We recommend MetaMask; if you would like to be redirected to their officail site, press 'OK'")) {
                                     window.open('https://metamask.io/')
                                   }
                                 }
@@ -317,8 +510,8 @@ class Main extends Component {
                     )}
                   </div>
                   <div>
-                  
-                    {this.state.userMenu !== undefined && (
+
+                    {this.state.userMenu === true && (
                       <div className="hamburgerDropdownUserInfo">
                         {this.state.addr === undefined && (
                           <h4 className="userStatFont">
@@ -326,8 +519,8 @@ class Main extends Component {
                             <a
                               onClick={() => {
                                 this.setState({ userMenu: undefined })
-                                if(window.ethereum) {window.ethereum.enable()}
-                                else {alert("You do not currently have a Web3 provider installed, we recommend MetaMask");}
+                                if (window.ethereum) { window.ethereum.enable() }
+                                else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
                               }
                               }
                               className="userDataLink">
@@ -565,7 +758,7 @@ class Main extends Component {
     }
     //Watchdog which keeps state consistent with other components
     this.updateWatchDog = setInterval(() => {
-      
+
       //every tick ensure user auth level/user type is correct
       if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined) {
         this.setState({ isAuthUser: window.isAuthUser })
@@ -623,7 +816,7 @@ class Main extends Component {
             authorizedUserMenuBool: false
           })
         }
-        
+
         else if (!isMobile && this.state.IDHolderBool === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
@@ -657,7 +850,7 @@ class Main extends Component {
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
-      if(isMobile && window.ethereum && window.routeRequest !== "basicMobile"){
+      if (isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -669,9 +862,9 @@ class Main extends Component {
           hasFetchedBalances: false,
           routeRequest: "basicMobile"
         })
-  
+
         window.web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
-  
+
         window.addEventListener("accountListener", this.acctChanger());
       }
 
@@ -735,7 +928,7 @@ class Main extends Component {
           basicMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -752,7 +945,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -769,7 +962,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -786,7 +979,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -803,7 +996,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -821,7 +1014,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           authorizedUserMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
       }
@@ -838,7 +1031,7 @@ class Main extends Component {
           assetClassHolderMenuBool: false,
           noAddrMenuBool: false,
           basicMenuBool: false,
-          settingsMenu: undefined
+          settingsMenu: false
         })
         window.menuChange = undefined;
         if (!this.state.isAuthUser) { window.location.href = '/#/login' }
@@ -1076,7 +1269,7 @@ class Main extends Component {
 
             }
 
-            else if (!isMobile){
+            else if (!isMobile) {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1088,7 +1281,7 @@ class Main extends Component {
                 faucetBool: false,
                 noAddrMenuBool: false,
                 authorizedUserMenuBool: false,
-                settingsMenu: undefined
+                settingsMenu: false
               })
             }
 
@@ -1110,7 +1303,7 @@ class Main extends Component {
         });
       });
     };
-    
+
     //Build contracts for app use. Only storage must be hardcoded, rest are retrieved STOR contract nameSpace
     this.setUpContractEnvironment = async (_web3) => {
       if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
@@ -1131,8 +1324,8 @@ class Main extends Component {
           })
         }
 
-        else if(isMobile && _web3.eth.net.getNetworkType() != undefined){
-           await this.setState({
+        else if (isMobile && _web3.eth.net.getNetworkType() != undefined) {
+          await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
             assetHolderMenuBool: false,
@@ -1141,7 +1334,7 @@ class Main extends Component {
             authorizedUserMenuBool: false,
             hasFetchedBalances: false,
             routeRequest: "basicMobile"
-          }) 
+          })
         }
 
         else if (window.addr === undefined) {
@@ -1237,12 +1430,14 @@ class Main extends Component {
       hasMounted: false,
       routeRequest: "basic",
       userMenuMobile: false,
+      userMenu: false,
+      settingsMenu: false,
     };
   }
-  
+
   //stuff to do when component mounts in window
   componentDidMount() {
-    
+
     let _web3, ipfs;
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
@@ -1250,9 +1445,9 @@ class Main extends Component {
     window.web3 = _web3;
 
     buildWindowUtils() // get the utils object and make it globally accessible
-    
+
     const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
-      setTimeout(()=>{ if(!window.ethereum) checkForEthereum()}, 1000); 
+      setTimeout(() => { if (!window.ethereum) checkForEthereum() }, 1000);
     }
     checkForEthereum();
 
@@ -1275,7 +1470,7 @@ class Main extends Component {
     window.hasLoadedAssets = false;
     window.location.href = '/#/';
     window.menuChange = undefined;
-    
+
     //Give me the desktop version
     if (!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
@@ -1344,7 +1539,7 @@ class Main extends Component {
       //const ethereum = window.ethereum;
 
       //ethereum.enable()
-      
+
       window.routeRequest = "basicMobile";
       this.setState({
         mobileMenuBool: true,
@@ -1369,11 +1564,11 @@ class Main extends Component {
 
       window.addEventListener("accountListener", this.acctChanger());
       this.setUpContractEnvironment(_web3)
-      
+
 
       this.setState({ hasMounted: true })
-      } 
-    
+    }
+
     //Give me the read-only version
     else {
       console.log("Here")
@@ -1411,8 +1606,8 @@ class Main extends Component {
       if (this.state.hamburgerMenu === undefined) {
         this.setState({
           hamburgerMenu: true,
-          userMenu: undefined,
-          settingsMenu: undefined
+          userMenu: false,
+          settingsMenu: false
 
         })
       }
@@ -1426,6 +1621,7 @@ class Main extends Component {
       if (this.state.hamburgerMenuMobile === false) {
         this.setState({
           hamburgerMenuMobile: true,
+          userMenuMobile: false
         })
       }
       else {
@@ -1435,14 +1631,14 @@ class Main extends Component {
 
     //userMenu bool switch @DEV Move to this declarations?
     this.userMenu = async () => {
-      if (this.state.userMenu === undefined) {
+      if (this.state.userMenu === false) {
         this.setState({
           userMenu: true,
-          settingsMenu: undefined
+          settingsMenu: false
         })
       }
       else {
-        this.setState({ userMenu: undefined })
+        this.setState({ userMenu: false })
       }
     }
 
@@ -1450,7 +1646,8 @@ class Main extends Component {
     this.userMenuMobile = async () => {
       if (this.state.userMenuMobile === false) {
         this.setState({
-          userMenuMobile: true
+          userMenuMobile: true,
+          hamburgerMenuMobile: false,
         })
       }
       else {
@@ -1460,14 +1657,14 @@ class Main extends Component {
 
     //settingsMenu bool switch @DEV Move to this declarations?
     this.settingsMenu = async () => {
-      if (this.state.settingsMenu === undefined) {
+      if (this.state.settingsMenu === false) {
         this.setState({
           settingsMenu: true,
-          userMenu: undefined
+          userMenu: false
         })
       }
       else {
-        this.setState({ settingsMenu: undefined })
+        this.setState({ settingsMenu: false })
       }
     }
 
@@ -1479,13 +1676,13 @@ class Main extends Component {
   }
 
   //Update state so the next render will show the fallback UI
-  static getDerivedStateFromError(error) { 
+  static getDerivedStateFromError(error) {
     return { hasError: true };
   }
 
   //stuff to do when state updates
   componentDidUpdate() {
-    if(!window.ethereum && this.state.hasMounted === true && this.state.routeRequest !== "noAddr"){
+    if (!window.ethereum && this.state.hasMounted === true && this.state.routeRequest !== "noAddr") {
 
       window.routeRequest = "noAddr";
       this.setState({
@@ -1517,12 +1714,12 @@ class Main extends Component {
 
     if (this.state.hasError) {
       return (<div><h1>OOPS!</h1>
-      <h2>An error occoured. Please ensure you are connected to an ethereum provider and reload the page.</h2>
-      <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below</h3>
-      <br></br>
-      <div className="errorMediaLink">
-      <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
-      </div>
+        <h2>An error occoured. Please ensure you are connected to an ethereum provider and reload the page.</h2>
+        <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below</h3>
+        <br></br>
+        <div className="errorMediaLink">
+          <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
+        </div>
       </div>)
     }
 

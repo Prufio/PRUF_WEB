@@ -470,6 +470,25 @@ div {
   margin-top: -0.5rem;
 }
 
+.userInfoMobile {
+  display: flex;
+  width: 25rem;
+  height: 28rem;
+  color: #ffffff;
+  background-color: #002a40;
+  flex-direction: column;
+  justify-content: flex-start;
+  z-index: 1000;
+  font-size: 1.2rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  margin-left: -18rem;
+  margin-top: 4.8rem;
+  position: absolute;
+  opacity: 0.9;
+}
+
 .assetSelectedResults {
   height: flex;
   max-height: 30rem;
@@ -811,6 +830,7 @@ div {
   transition:         transform .5s ease-in-out;
   z-index: 1000;
   max-width: 60px;
+  background: none;
 }
 
 /* .imageButtonUserMobile {
@@ -1637,6 +1657,31 @@ margin-bottom: -3rem;
   transition:         transform .7s ease-in-out;
   margin-left: 30rem;
   border-radius: 50%;
+}
+
+.imageFormUserMobile {
+  justify-content: flex-start;
+  margin-right: auto;
+  display: flex;
+  width: 35px;
+  height: 35px;
+  /* object-fit: cover; */
+  z-index: 1000;
+  /* background-color: #cccccc; */
+  /* background-image: url(./Resources/Images/userBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
+  background-position: center center fixed;   */
+  color: #ffffff;
+  margin-left: 13.5rem;
+  margin-top: 1rem;
+  /* border-radius: 50%; */
+  position: absolute;
+}
+
+.imageFormUserMobile:hover {
+  color: #00a8ff;
 }
 
 /* .imageFormUserMobile {
