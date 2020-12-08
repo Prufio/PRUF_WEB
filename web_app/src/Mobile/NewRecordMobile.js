@@ -265,7 +265,12 @@ class NewRecordMobile extends Component {
                   </h3>
             </div>
           )}
-          {window.addr > 0 && !this.state.assetClassSelected && (
+          {window.balances.IDTokenBalance == 0 && (
+            <div className="resultsMobile">
+            <h2>User does not hold ID</h2>
+            </div>
+          )}
+          {window.addr > 0 && !this.state.assetClassSelected && window.balances.IDTokenBalance == 1 && (
             <>
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
