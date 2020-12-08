@@ -32,6 +32,10 @@ class HomeMobile extends Component {
 
   componentDidMount() {
 
+    if(window.ethereum){
+      window.ethereum.enable()
+    }
+
   }
 
   componentDidUpdate() {
