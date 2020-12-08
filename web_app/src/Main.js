@@ -28,7 +28,7 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (isMobile) {
+      if (!isMobile) {
         return (
           <div>
             <HashRouter>
@@ -54,19 +54,19 @@ class Main extends Component {
                           {/* <button
                             className="imageButtonUser"
                             onClick={() => { this.userMenuMobile() }}> */}
-                            {/* {window.addr !== undefined && (
+                          {/* {window.addr !== undefined && (
                               <Robohash
                                 className="imageFormUserMobile"
                                 name={window.addr}
                               />
                             )} */}
-                            {/* {window.addr === undefined && ( */}
-                              <User
-                                className="imageFormUserMobile"
-                                size={20}
-                                onClick={() => { this.userMenuMobile() }}
-                              />
-                             {/* )} */}
+                          {/* {window.addr === undefined && ( */}
+                          <User
+                            className="imageFormUserMobile"
+                            size={20}
+                            onClick={() => { this.userMenuMobile() }}
+                          />
+                          {/* )} */}
                           {/* </button> */}
 
                           <style type="text/css">
@@ -89,7 +89,7 @@ class Main extends Component {
                       .btn-etherscan {
                         background-color: transparent;
                         color: white;
-                        margin-top: -1.6rem;
+                        margin-top: -1rem;
                         font-size: 1.4rem;
                         height: 1.6rem;
                         width: fit-content;
@@ -223,7 +223,7 @@ class Main extends Component {
                                     PRUF Balance : {this.state.prufBalance}
                                     <Button
                                       variant="userButton"
-                                      onClick={() => {"This functionality has been disabled until Alpha-Testing begins"}}>
+                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
                                       Get PRUF
                               </Button>
                                   </h4>
@@ -242,7 +242,7 @@ class Main extends Component {
                                     </Button>
                                     <Button
                                       variant="userButton"
-                                      onClick={() => {"This functionality has been disabled until Alpha-Testing begins"}}>
+                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
                                       Get AC
                               </Button>
                                   </h4>
@@ -255,7 +255,7 @@ class Main extends Component {
                                     Assets :
                               <Button
                                       variant="userButton"
-                                      onClick={() => {"This functionality has been disabled until Alpha-Testing begins"}}>
+                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
                                       {this.state.assetBalance}
                                     </Button>
                                   </h4>
@@ -844,7 +844,7 @@ class Main extends Component {
       //^^^
       if (this.state.menuChange !== undefined) {
         window.menuChange = undefined
-        if (isMobile && window.ethereum) {
+        if (!isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
           this.setState({ routeRequest: "basicMobile" })
           this.setState({
@@ -858,7 +858,7 @@ class Main extends Component {
           })
         }
 
-        else if (!isMobile && this.state.IDHolderBool === true) {
+        else if (!!isMobile && this.state.IDHolderBool === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -873,7 +873,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!isMobile && this.state.IDHolderBool === false) {
+        else if (!!isMobile && this.state.IDHolderBool === false) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
@@ -891,7 +891,7 @@ class Main extends Component {
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
-      if (isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
+      if (!isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -1310,7 +1310,7 @@ class Main extends Component {
 
             }
 
-            else if (!isMobile) {
+            else if (!!isMobile) {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1351,7 +1351,7 @@ class Main extends Component {
       window.isSettingUpContracts = true;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (!isMobile) {
+        if (!!isMobile) {
           console.log("Here!")
           await this.setState({
             mobileMenuBool: false,
@@ -1365,7 +1365,7 @@ class Main extends Component {
           })
         }
 
-        else if (isMobile && _web3.eth.net.getNetworkType() != undefined) {
+        else if (!isMobile && _web3.eth.net.getNetworkType() != undefined) {
           await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
@@ -1513,7 +1513,7 @@ class Main extends Component {
     window.menuChange = undefined;
 
     //Give me the desktop version
-    if (!isMobile && window.ethereum) {
+    if (!!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1554,7 +1554,7 @@ class Main extends Component {
     }
 
     //Give me the mobile ethereum-enabled version
-    else if (isMobile && window.ethereum) {
+    else if (!isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
 
