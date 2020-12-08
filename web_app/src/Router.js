@@ -38,6 +38,11 @@ import ModifyStatusMobile from "./Mobile/ModifyStatusMobile";
 import DiscardMobile from "./Mobile/DiscardMobile";
 import RecycleMobile from "./Mobile/RecycleMobile";
 import ModifyDescriptionMobile from "./Mobile/ModifyDescriptionMobile";
+import DecrementMobile from "./Mobile/DecrementMobile";
+import EscrowMobile from "./Mobile/EscrowMobile";
+import ImportMobile from "./Mobile/ImportMobile";
+import ExportMobile from "./Mobile/ExportMobile";
+import NewRecordMobile from "./Mobile/NewRecordMobile";
 
 import AddNoteNC from "./NonCustodial/AddNoteNC";
 import DecrementCounterNC from "./NonCustodial/DecrementCounterNC";
@@ -157,7 +162,7 @@ function Router(routeRequest) {
                 <Route path="/asset-dashboard" component={AssetDashboard} />
                 <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
 
-                <Route path="/transfer-mobile" component={TransferAssetMobile} />
+{/*                 <Route path="/transfer-mobile" component={TransferAssetMobile} />
                 <Route path="/deep-verify-mobile" component={DeepVerifyMobile} />
                 <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
                 <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
@@ -165,7 +170,7 @@ function Router(routeRequest) {
                 <Route path="/asset-dashboard-mobile" component={AssetDashboardMobile} />
                 <Route path="/modify-status-mobile" component={ModifyStatusMobile} />
                 <Route path="/discard-mobile" component={DiscardMobile} />
-                <Route path="/recycle-mobile" component={RecycleMobile} />
+                <Route path="/recycle-mobile" component={RecycleMobile} /> */}
             </>
         )
     }
@@ -183,6 +188,11 @@ function Router(routeRequest) {
                 <Route path="/discard-mobile" component={DiscardMobile} />
                 <Route path="/recycle-mobile" component={RecycleMobile} />
                 <Route path="/modify-description-mobile" component={ModifyDescriptionMobile} />
+                <Route path="/import-mobile" component={ImportMobile} />
+                <Route path="/export-mobile" component={ExportMobile} />
+                <Route path="/escrow-mobile" component={EscrowMobile} />
+                <Route path="/decrement-mobile" component={DecrementMobile} />
+                <Route path="/new-record-mobile" component={NewRecordMobile} />
                 
             </>
         )

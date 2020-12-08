@@ -266,209 +266,218 @@ class DeepVerifyMobile extends Component {
           </div>
         )}
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-          <div>
-
-            {this.state.QRreader === false && !this.state.accessPermitted && (
+        {window.addr === undefined && (
+            <div className="resultsMobile">
+              <h2>User address unreachable</h2>
+              <h3>Please connect web3 provider.</h3>
+            </div>
+            )}
+            {window.addr > 0 && (
               <div>
-                <Form.Check
-                  type="checkbox"
-                  className="checkBoxMobile"
-                  id="inlineFormCheck"
-                  onChange={() => { Checkbox() }}
-                />
-                <Form.Label className="checkBoxFormFontMobile">Input Raw Idx Hash</Form.Label>
-                {this.state.Checkbox === true && (
-                  <Form.Row>
-                    <Form.Label className="formFont">Idx Hash:</Form.Label>
-                    <Form.Control
-                      placeholder="Idx Hash"
-                      onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
-                      size="lg"
-                      required
-                    />
-                  </Form.Row>
-                )}
-              </div>
-            )}
 
-            {!this.state.accessPermitted && this.state.QRreader === false && this.state.Checkbox === false && (
-              <>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="formGridType">
-                    <Form.Label className="formFont">Type:</Form.Label>
-                    <Form.Control
-                      placeholder="Type"
-                      onChange={(e) => this.setState({ type: e.target.value })}
-                      size="lg"
-                      required
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="formGridManufacturer">
-                    <Form.Label className="formFont">Manufacturer:</Form.Label>
-                    <Form.Control
-                      placeholder="Manufacturer"
-                      onChange={(e) => this.setState({ manufacturer: e.target.value })}
-                      size="lg"
-                    />
-                  </Form.Group>
-
-                </Form.Row>
-
-                <Form.Row>
-                  <Form.Group as={Col} controlId="formGridModel">
-                    <Form.Label className="formFont">Model:</Form.Label>
-                    <Form.Control
-                      placeholder="Model"
-                      onChange={(e) => this.setState({ model: e.target.value })}
-                      size="lg"
-                      required
-                    />
-                  </Form.Group>
-                </Form.Row>
-                <Form.Row>
-                  <Form.Group as={Col} controlId="formGridSerial">
-                    <Form.Label className="formFont">Serial:</Form.Label>
-                    <Form.Control
-                      placeholder="Serial"
-                      onChange={(e) => this.setState({ serial: e.target.value })}
-                      size="lg"
-                      required
-                    />
-                  </Form.Group>
-                </Form.Row>
-              </>
-            )}
-            {this.state.QRreader === false && !this.state.accessPermitted && (
-              <>
-                <Form.Row>
-                  <div className="submitButtonRRMobile">
-                    <div className="submitButtonContentMobile">
-                      <ArrowRightCircle
-                        onClick={() => { this.accessAsset() }}
+              {this.state.QRreader === false && !this.state.accessPermitted && (
+                <div>
+                  <Form.Check
+                    type="checkbox"
+                    className="checkBoxMobile"
+                    id="inlineFormCheck"
+                    onChange={() => { Checkbox() }}
+                  />
+                  <Form.Label className="checkBoxFormFontMobile">Input Raw Idx Hash</Form.Label>
+                  {this.state.Checkbox === true && (
+                    <Form.Row>
+                      <Form.Label className="formFont">Idx Hash:</Form.Label>
+                      <Form.Control
+                        placeholder="Idx Hash"
+                        onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                        size="lg"
+                        required
                       />
-                    </div>
-                  </div>
-                  <div className="mediaLinkCameraMobile">
+                    </Form.Row>
+                  )}
+                </div>
+              )}
+  
+              {!this.state.accessPermitted && this.state.QRreader === false && this.state.Checkbox === false && (
+                <>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="formGridType">
+                      <Form.Label className="formFont">Type:</Form.Label>
+                      <Form.Control
+                        placeholder="Type"
+                        onChange={(e) => this.setState({ type: e.target.value })}
+                        size="lg"
+                        required
+                      />
+                    </Form.Group>
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="formGridManufacturer">
+                      <Form.Label className="formFont">Manufacturer:</Form.Label>
+                      <Form.Control
+                        placeholder="Manufacturer"
+                        onChange={(e) => this.setState({ manufacturer: e.target.value })}
+                        size="lg"
+                      />
+                    </Form.Group>
+  
+                  </Form.Row>
+  
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="formGridModel">
+                      <Form.Label className="formFont">Model:</Form.Label>
+                      <Form.Control
+                        placeholder="Model"
+                        onChange={(e) => this.setState({ model: e.target.value })}
+                        size="lg"
+                        required
+                      />
+                    </Form.Group>
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="formGridSerial">
+                      <Form.Label className="formFont">Serial:</Form.Label>
+                      <Form.Control
+                        placeholder="Serial"
+                        onChange={(e) => this.setState({ serial: e.target.value })}
+                        size="lg"
+                        required
+                      />
+                    </Form.Group>
+                  </Form.Row>
+                </>
+              )}
+              {this.state.QRreader === false && !this.state.accessPermitted && (
+                <>
+                  <Form.Row>
+                    <div className="submitButtonRRMobile">
                       <div className="submitButtonContentMobile">
-                        <Camera
-                          onClick={() => { QRReader() }}
+                        <ArrowRightCircle
+                          onClick={() => { this.accessAsset() }}
                         />
                       </div>
                     </div>
-                </Form.Row>
-              </>
-            )}
-
-            {this.state.QRreader === true && (
-              <div>
-                <style type="text/css">
-                  {`
-                .formMobile {
-                  background: none !important;
-                  padding: 0rem !important;
-                }
-                   `}
-                </style>
+                    <div className="mediaLinkCameraMobile">
+                        <div className="submitButtonContentMobile">
+                          <Camera
+                            onClick={() => { QRReader() }}
+                          />
+                        </div>
+                      </div>
+                  </Form.Row>
+                </>
+              )}
+  
+              {this.state.QRreader === true && (
                 <div>
-                  <div className="mediaLinkADHome">
-                    <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                  <style type="text/css">
+                    {`
+                  .formMobile {
+                    background: none !important;
+                    padding: 0rem !important;
+                  }
+                     `}
+                  </style>
+                  <div>
+                    <div className="mediaLinkADHome">
+                      <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                    </div>
+                    <h2 className="formHeaderMobileVL">Scan QR</h2>
+                    <div className="mediaLinkBackMobile">
+                      <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
+                    </div>
                   </div>
-                  <h2 className="formHeaderMobileVL">Scan QR</h2>
-                  <div className="mediaLinkBackMobile">
-                    <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
+                  <div className="QRreaderMobile">
+                  <QrReader
+                  ref="qrReader1"
+                  delay={300}
+                  previewStyle={previewStyle}
+                  onError={this.handleError}
+                  onScan={this.handleScan}
+                  style={{ width: '100%' }}
+                  legacyMode={this.state.legacyMode}
+                />
+                {this.state.legacyMode === true && (
+                  <div className="uploadImageQR">
+                    <div className="uploadImageQRContent">
+                      <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                    </div>
                   </div>
-                </div>
-                <div className="QRreaderMobile">
-                <QrReader
-                ref="qrReader1"
-                delay={300}
-                previewStyle={previewStyle}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                style={{ width: '100%' }}
-                legacyMode={this.state.legacyMode}
-              />
-              {this.state.legacyMode === true && (
-                <div className="uploadImageQR">
-                  <div className="uploadImageQRContent">
-                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                )}
+                    {this.state.result !== undefined && (
+                      <div className="resultsMobile">
+                        {this.state.assetFound}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
-                  {this.state.result !== undefined && (
-                    <div className="resultsMobile">
-                      {this.state.assetFound}
+  
+              {this.state.accessPermitted && (
+                <>
+                  <Form.Row>
+                    <Form.Label className="formFont">First Name:</Form.Label>
+                    <Form.Control
+                      placeholder="First Name"
+                      required
+                      onChange={(e) => this.setState({ first: e.target.value })}
+                      size="lg"
+                    />
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Label className="formFont">Middle Name:</Form.Label>
+                    <Form.Control
+                      placeholder="Middle Name"
+                      required
+                      onChange={(e) => this.setState({ middle: e.target.value })}
+                      size="lg"
+                    />
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Label className="formFont">Last Name:</Form.Label>
+                    <Form.Control
+                      placeholder="Last Name"
+                      required
+                      onChange={(e) => this.setState({ surname: e.target.value })}
+                      size="lg"
+                    />
+                  </Form.Row>
+  
+                  <Form.Row>
+                    <Form.Label className="formFont">ID Number:</Form.Label>
+                    <Form.Control
+                      placeholder="ID Number"
+                      required
+                      onChange={(e) => this.setState({ id: e.target.value })}
+                      size="lg"
+                    />
+                  </Form.Row>
+                  <Form.Row>
+                    <Form.Label className="formFont">Password:</Form.Label>
+                    <Form.Control
+                      placeholder="Password"
+                      className="key"
+                      type="text"
+                      required
+                      onChange={(e) => this.setState({ secret: e.target.value })}
+                      size="lg"
+                      autoComplete="off"
+                    />
+                  </Form.Row>
+                  <Form.Row>
+                    <div className="submitButtonRRMobile">
+                      <div className="submitButtonContentMobile">
+                        <ArrowRightCircle
+                          onClick={() => { _verify() }}
+                        />
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
+                  </Form.Row>
+                </>
+              )}
+            </div>
             )}
-
-            {this.state.accessPermitted && (
-              <>
-                <Form.Row>
-                  <Form.Label className="formFont">First Name:</Form.Label>
-                  <Form.Control
-                    placeholder="First Name"
-                    required
-                    onChange={(e) => this.setState({ first: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <Form.Label className="formFont">Middle Name:</Form.Label>
-                  <Form.Control
-                    placeholder="Middle Name"
-                    required
-                    onChange={(e) => this.setState({ middle: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <Form.Label className="formFont">Last Name:</Form.Label>
-                  <Form.Control
-                    placeholder="Last Name"
-                    required
-                    onChange={(e) => this.setState({ surname: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-
-                <Form.Row>
-                  <Form.Label className="formFont">ID Number:</Form.Label>
-                  <Form.Control
-                    placeholder="ID Number"
-                    required
-                    onChange={(e) => this.setState({ id: e.target.value })}
-                    size="lg"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <Form.Label className="formFont">Password:</Form.Label>
-                  <Form.Control
-                    placeholder="Password"
-                    className="key"
-                    type="text"
-                    required
-                    onChange={(e) => this.setState({ secret: e.target.value })}
-                    size="lg"
-                    autoComplete="off"
-                  />
-                </Form.Row>
-                <Form.Row>
-                  <div className="submitButtonRRMobile">
-                    <div className="submitButtonContentMobile">
-                      <ArrowRightCircle
-                        onClick={() => { _verify() }}
-                      />
-                    </div>
-                  </div>
-                </Form.Row>
-              </>
-            )}
-          </div>
+          
         </Form>
         {this.state.transaction === false && this.state.txStatus === false && this.state.QRreader === false && (
           <div className="assetSelectedResultsMobile">

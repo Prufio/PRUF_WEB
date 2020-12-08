@@ -60,7 +60,7 @@ class NonCustodialAdminComponent extends Component {
                             <NavDropdown.Item id="header-dropdown" as={NavLink} to="/modify-record-status-NC">Modify Status</NavDropdown.Item>
                             <NavDropdown.Item id="header-dropdown" as={NavLink} to="/decrement-counter-NC">Decrement Counter</NavDropdown.Item>
                             <NavDropdown.Item id="header-dropdown" as={NavLink} to="/modify-asset-information-NC">Modify Asset Info</NavDropdown.Item>
-                            <NavDropdown.Item id="header-dropdown" as={NavLink} to="/add-note-NC">Add Note</NavDropdown.Item>
+                            {/* <NavDropdown.Item id="header-dropdown" as={NavLink} to="/add-note-NC">Add Note</NavDropdown.Item> */}
                             <NavDropdown.Item id="header-dropdown" as={NavLink} to="/force-modify-record-NC">Modify Rightsholder</NavDropdown.Item>
                         </NavDropdown>
                     </li>

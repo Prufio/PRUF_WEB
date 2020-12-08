@@ -30,12 +30,17 @@ class MobileComponent extends Component {
                     </div>
                     <div className="headerFormContentMobile">
                         <li>
-                            <NavLink to="/transfer-mobile">Transfer Asset</NavLink>
+                            <NavLink to="/deep-verify-mobile">Deep Verify</NavLink>
                         </li>
                     </div>
                     <div className="headerFormContentMobile">
                         <li>
-                            <NavLink to="/deep-verify-mobile">Deep Verify</NavLink>
+                            <NavLink to="/new-record-mobile">New Asset</NavLink>
+                        </li>
+                    </div>
+                    <div className="headerFormContentMobile">
+                        <li>
+                            <NavLink to="/transfer-mobile">Transfer Asset</NavLink>
                         </li>
                     </div>
                     <div className="headerFormContentMobile">
@@ -61,6 +66,26 @@ class MobileComponent extends Component {
                     <div className="headerFormContentMobile">
                         <li>
                             <NavLink to="/modify-description-mobile">Modify Asset Info</NavLink>
+                        </li>
+                    </div>
+                    <div className="headerFormContentMobile">
+                        <li>
+                            <NavLink to="/escrow-mobile">Manage Escrow</NavLink>
+                        </li>
+                    </div>
+                    <div className="headerFormContentMobile">
+                        <li>
+                            <NavLink to="/decrement-mobile">Decrement Count</NavLink>
+                        </li>
+                    </div>
+                    <div className="headerFormContentMobile">
+                        <li>
+                            <NavLink to="/import-mobile">Import</NavLink>
+                        </li>
+                    </div>
+                    <div className="headerFormContentMobile">
+                        <li>
+                            <NavLink to="/export-mobile">Export</NavLink>
                         </li>
                     </div>
                 </Nav>

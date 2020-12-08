@@ -888,13 +888,13 @@ class ModifyDescription extends Component {
         {this.state.transaction === false && this.state.txStatus === false &&  (
           <div className="assetSelectedResultsMobile">
             <Form.Row>
-              {this.state.idxHash != undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== undefined && this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
                 <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                 <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
                 <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                 <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
-              </Form.Group>
+                </Form.Group>
               )}
             </Form.Row>
           </div>
