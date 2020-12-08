@@ -172,7 +172,7 @@ class Main extends Component {
                                       variant="userButton"
                                       onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>
                                       Get KETH
-                              </Button> */}
+                                  </Button> */}
                                   </h4>
                                   <br></br>
                                 </>
@@ -180,7 +180,7 @@ class Main extends Component {
                               {this.state.prufBalance && (
                                 <>
                                   <h4 className="userStatFont">
-                                    PRUF Balance : {this.state.prufBalance}
+                                    PRUF Balance : ü{this.state.prufBalance}
                                     <Button
                                       variant="userButton"
                                       onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
@@ -560,7 +560,7 @@ class Main extends Component {
                         {this.state.prufBalance && (
                           <>
                             <h4 className="userStatFont">
-                              PRUF Balance : {this.state.prufBalance}
+                              PRUF Balance : ü{this.state.prufBalance}
                               <Button
                                 variant="userButton"
                                 onClick={() => { this.faucet() }}>
