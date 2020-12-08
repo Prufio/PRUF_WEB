@@ -71,59 +71,18 @@ class Main extends Component {
 
                           <style type="text/css">
                             {`
-                      .btn-primary {
-                        background-color: #00a8ff;
-                        color: white;
-                      }
-                      .btn-primary:hover {
-                        background-color: #23b6ff;
-                        color: white;
-                      }
-                      .btn-primary:focus {
-                        background: #00a8ff;
-                      }
-                      .btn-primary:active {
-                        background: #00a8ff;
-                      }
 
-                      .btn-etherscan {
+                      .btn-etherscanMobile {
                         background-color: transparent;
                         color: white;
-                        margin-top: -1rem;
+                        margin-top: -0.1rem;
                         font-size: 1.4rem;
-                        height: 1.6rem;
+                        // height: 1.6rem;
                         width: fit-content;
                       }
-                      .btn-etherscan:hover {
-                        background-color: transparent;
+                      .btn-etherscanMobile:hover {
                         color: #00a8ff;
-                      }
-                      .btn-etherscan:focus {
                         background-color: transparent;
-                      }
-                      .btn-etherscan:active {
-                        background-color: transparent;
-                        border: transparent;
-                      }
-
-                      .btn-assetDashboard {
-                        background-color: transparent;
-                        color: white;
-                        margin-top: -0.5rem;
-                        // margin-right: 37rem;
-                        font-size: 1.6rem;
-                        width: fit-content;
-                      }
-                      .btn-assetDashboard:hover {
-                        background-color: transparent;
-                        color: #00a8ff;
-                      }
-                      .btn-assetDashboard:focus {
-                        background-color: transparent;
-                      }
-                      .btn-assetDashboard:active {
-                        background-color: transparent;
-                        border: transparent;
                       }
 
                       .btn-userButton {
@@ -195,7 +154,7 @@ class Main extends Component {
                                   <h4 className="userStatFont">
                                     Currently serving :
                               <Button
-                                      variant="etherscan"
+                                      variant="etherscanMobile"
                                       title="Check it out on Etherscan!"
                                       onClick={() => { this.setState({ userMenu: undefined }); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
                                       {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
