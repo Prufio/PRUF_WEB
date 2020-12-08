@@ -56,9 +56,11 @@ class HomeMobile extends Component {
           <div className="mediaLinkMobile">
             <a className="mediaLinkContent"><GitHub size={20} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
             <a className="mediaLinkContent"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
-            {window.ethereum === true && (
+            
+            {window.ethereum && (
             <a className="mediaLinkRefreshContent"><RefreshCw size={30} onClick={() => { window.ethereum.enable() /* window.menuChange = "basicMobile" */ }} /></a>
             )}
+
             <a className="mediaLinkContent"><Twitter size={20} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
             <a className="mediaLinkContent" ><Send size={20} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
           </div>
