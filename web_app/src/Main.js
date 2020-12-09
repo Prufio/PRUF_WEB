@@ -181,7 +181,7 @@ class Main extends Component {
                               {this.state.assetClassBalance && (
                                 <>
                                   <h4 className="userStatFont">
-                                    AssetClasses :
+                                    AC Nodekeys :
                                 <Button
                                       variant="userButton"
                                       // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
@@ -562,7 +562,7 @@ class Main extends Component {
                         {this.state.assetClassBalance && (
                           <>
                             <h4 className="userStatFont">
-                              AssetClasses :
+                              AC Nodekeys :
                                 <Button
                                 variant="userButton"
                                 // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
