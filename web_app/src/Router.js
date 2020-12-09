@@ -44,6 +44,7 @@ import ImportMobile from "./Mobile/ImportMobile";
 import ExportMobile from "./Mobile/ExportMobile";
 import NewRecordMobile from "./Mobile/NewRecordMobile";
 
+
 import AddNoteNC from "./NonCustodial/AddNoteNC";
 import DecrementCounterNC from "./NonCustodial/DecrementCounterNC";
 import EscrowManagerNC from "./NonCustodial/EscrowManagerNC";
@@ -193,6 +194,7 @@ function Router(routeRequest) {
                 <Route path="/escrow-mobile" component={EscrowMobile} />
                 <Route path="/decrement-mobile" component={DecrementMobile} />
                 <Route path="/new-record-mobile" component={NewRecordMobile} />
+                <Route path="/faucet" component={Faucet} />
                 
             </>
         )

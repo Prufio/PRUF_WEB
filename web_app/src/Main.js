@@ -171,7 +171,7 @@ class Main extends Component {
                                     PRUF Balance : ü{this.state.prufBalance}
                                     <Button
                                       variant="userButton"
-                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
                                       Get PRUF
                               </Button>
                                   </h4>
@@ -190,7 +190,7 @@ class Main extends Component {
                                     </Button>
                                     <Button
                                       variant="userButton"
-                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
                                       Get AC
                               </Button>
                                   </h4>

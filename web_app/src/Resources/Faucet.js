@@ -88,6 +88,23 @@ class Faucet extends Component {
         }
 
         const ACmenu = async () => {
+            let temp;
+            const self = this;
+            await window.contracts.AC_MGR.methods.currentACtokenInfo().call(
+                function (_error, _result) {
+                    if (_error) {
+                      return (console.log("IN ERROR IN ERROR IN ERROR"))
+                    } 
+                    else {
+                      self.setState({currentACPrice: Object.values(_result)[1]})
+                      return temp = Object.values(_result)[1]
+                    }
+            
+                  }
+            );
+
+            console.log(temp)
+
             if (this.state.ACmenu === false) {
                 this.setState({ ACmenu: true })
             }
@@ -117,8 +134,8 @@ class Faucet extends Component {
 
             let amount;
 
-            if (this.state.amount < "1000") {
-                alert("The minimum amount of PRUF the faucet can provide is 1000. Please input an amount greater than 1000."); return this.clearForm()
+            if (this.state.amount < "10000") {
+                alert("The minimum amount of PRUF the faucet can provide is 1000. Please submit an amount greater than or equal to 10000."); return this.clearForm()
             }
 
             else {
@@ -219,7 +236,7 @@ class Faucet extends Component {
             this.setState({ assetClassSelected: false, idxSubmitted: false }) //clear form inputs
         }
 
-        if(isMobile){//Mobile render
+        if(!isMobile){//Mobile render
             return(
                     <div>
                         <div>
@@ -345,8 +362,8 @@ class Faucet extends Component {
                                             <Form.Row>
                                                 <div>
                                                     <Form.Label className="costText"> Cost of AC :
-                                                    {/* {window.web3.utils.fromWei(String(window.costs.newRecordCost))}  */}
-                                                    PRüF</Form.Label>
+                                                    ü{this.state.currentACPrice}
+                                                    </Form.Label>
                                                     <div className="submitButtonRRMobile">
                                                         <div className="submitButtonContentMobile">
                                                             <CheckCircle
@@ -400,7 +417,7 @@ class Faucet extends Component {
                                         <div>
                                             <Form.Row>
                                                 <Form.Group as={Col} controlId="formGridMiddleName">
-                                                    <Form.Label className="formFont">Amount of PRUF (1000/0.1KETH)</Form.Label>
+                                                    <Form.Label className="formFont">Amount of PRUF (10000/0.1KETH)</Form.Label>
                                                     {this.state.transaction === false && (
                                                         <Form.Control
                                                             placeholder="Amount of PRUF"
@@ -612,8 +629,8 @@ class Faucet extends Component {
                                     <Form.Row>
                                         <div>
                                             <Form.Label className="costText"> Cost of AC :
-                                            {/* {window.web3.utils.fromWei(String(window.costs.newRecordCost))}  */}
-                                            PRüF</Form.Label>
+                                            ü{this.state.currentACPrice}
+                                            </Form.Label>
                                             <div className="submitButton">
                                                 <div className="submitButtonContent">
                                                     <CheckCircle
@@ -667,7 +684,7 @@ class Faucet extends Component {
                                 <div>
                                     <Form.Row>
                                         <Form.Group as={Col} controlId="formGridMiddleName">
-                                            <Form.Label className="formFont">Amount of PRUF (1000/0.1KETH)</Form.Label>
+                                            <Form.Label className="formFont">Amount of PRUF (10000/0.1KETH)</Form.Label>
                                             {this.state.transaction === false && (
                                                 <Form.Control
                                                     placeholder="Amount of PRUF"
