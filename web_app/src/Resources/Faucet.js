@@ -290,7 +290,7 @@ class Faucet extends Component {
                                 <>
                                     {this.state.ACmenu === false && this.state.PRUFmenu === false && (
                                         <div>
-                                            <div className="submitButtonRRMobile">
+                                            {/* <div className="submitButtonRRMobile">
                                                 <div className="submitButtonContentMobile">
                                                     <ArrowRightCircle
                                                         onClick={() => { ACmenu() }}
@@ -298,7 +298,7 @@ class Faucet extends Component {
                                                 </div>
                                             </div>
                                             <Form.Label className="formFontFaucetMobile">Purchase AC</Form.Label>
-                                            <br></br>
+                                            <br></br> */}
                                             <br></br>
                                             <div>
                                                 <div className="submitButtonRRMobile">

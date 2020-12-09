@@ -185,14 +185,14 @@ class Main extends Component {
                                 <Button
                                       variant="userButton"
                                       // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      onClick={() => { alert("This functionality is only available in the desktop application") }}>
                                       {this.state.assetClassBalance}
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                       variant="userButton"
                                       onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
                                       Get AC
-                              </Button>
+                              </Button> */}
                                   </h4>
                                   <br></br>
                                 </>
