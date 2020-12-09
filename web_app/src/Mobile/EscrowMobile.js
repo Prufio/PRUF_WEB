@@ -440,7 +440,7 @@ class EscrowMobile extends Component {
                                 {this.state.hasLoadedAssets && (
                                   <optgroup className="optgroup">
                                     {window.utils.generateAssets()}
-                                    <option value="input">Manual Input</option>
+                                    {/* <option value="input">Manual Input</option> */}
                                   </optgroup>)}
                                 {!this.state.hasLoadedAssets && (
                                   <optgroup>

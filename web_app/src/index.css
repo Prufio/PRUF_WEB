@@ -1580,6 +1580,16 @@ margin-bottom: -3rem;
   margin-left: -4rem;
 }
 
+.formFontFaucetMobile {
+  width: 20rem;
+  position: absolute;
+  font-size: 2rem;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  font-family: Tahoma, Geneva, sans-serif;
+  margin-top: -2.6rem;
+}
+
 .checkBoxFormFontMobile {
   position: absolute;
   font-size: 1.5rem;
