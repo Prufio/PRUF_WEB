@@ -374,8 +374,8 @@ class Main extends Component {
                   </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
-                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.3.0 </a>
-                        : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.3.0 </a>}
+                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.7.0 </a>
+                        : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.7.0 </a>}
                     </h3>
                   </div>
                   <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
@@ -494,6 +494,7 @@ class Main extends Component {
                             >
                               Cusdodian Menu
                             </Button>)} */}
+
                         </div>
                       </div>
                     )}
@@ -1060,6 +1061,7 @@ class Main extends Component {
         status: undefined,
       }
 
+      //Case of recount
       if (window.recount === true) {
         window.aTknIDs = [];
         window.acTknIDs = [];
@@ -1069,6 +1071,7 @@ class Main extends Component {
         return this.setUpTokenVals(true)
       }
 
+      //If there are balances to get, lock them into state
       if (window.balances !== undefined) {
         this.setState({
           assetClassBalance: window.balances.assetClassBalance,
@@ -1083,6 +1086,7 @@ class Main extends Component {
         })
       }
 
+      //Do a full update if the balances are returning undefined at this stage (They should never do this)
       if (window.balances === undefined) {
         console.log("balances undefined, trying to get them...");
         if (window.addr === undefined) { return this.forceUpdate }
@@ -1094,6 +1098,7 @@ class Main extends Component {
       let tempDescriptionsArray = [];
       let tempNamesArray = [];
 
+      //Get all asset token profiles for parsing
       await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
 
@@ -1122,7 +1127,6 @@ class Main extends Component {
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
       window.hasLoadedAssetClasses = true;
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
-
     }
 
     //Rebuild fetched assets, preparing them for use by the app
@@ -1131,6 +1135,7 @@ class Main extends Component {
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
 
+      //Get objects from unparsed asset data for reference in the app 
       for (let i = 0; i < window.aTknIDs.length; i++) {
         //console.log(window.assets.descriptions[i][0])
         if (window.assets.descriptions[i][0] !== undefined) {
@@ -1141,6 +1146,7 @@ class Main extends Component {
         }
       }
 
+      //Get specifically name from the ipfs object of each asset (if it exists)
       let tempNameArray = [];
       for (let x = 0; x < window.aTknIDs.length; x++) {
         if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
@@ -1152,16 +1158,19 @@ class Main extends Component {
 
       }
       let identicons = [];
+      //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {
         identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
       }
 
       let identiconsLG = [];
+      //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {
         identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
       }
 
       let tempDisplayArray = [];
+      //Set up displayImages
       for (let j = 0; j < window.aTknIDs.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("")
@@ -1198,6 +1207,7 @@ class Main extends Component {
     }
 
     //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
+    
     this.getIPFSJSONObject = (lookup, descElement) => {
       //console.log(lookup)
       window.ipfs.cat(lookup, async (error, result) => {
@@ -1370,6 +1380,73 @@ class Main extends Component {
       }
 
     }
+
+        //hamburgerMenu bool switch @DEV Move to this declarations?
+        this.hamburgerMenu = async () => {
+          if (this.state.hamburgerMenu === undefined) {
+            this.setState({
+              hamburgerMenu: true,
+              userMenu: false,
+              settingsMenu: false
+    
+            })
+          }
+          else {
+            this.setState({ hamburgerMenu: undefined })
+          }
+        }
+    
+        //hamburgerMenuMobile bool switch @DEV Move to this declarations?
+        this.hamburgerMenuMobile = async () => {
+          if (this.state.hamburgerMenuMobile === false) {
+            this.setState({
+              hamburgerMenuMobile: true,
+              userMenuMobile: false
+            })
+          }
+          else {
+            this.setState({ hamburgerMenuMobile: false })
+          }
+        }
+    
+        //userMenu bool switch @DEV Move to this declarations?
+        this.userMenu = async () => {
+          if (this.state.userMenu === false) {
+            this.setState({
+              userMenu: true,
+              settingsMenu: false
+            })
+          }
+          else {
+            this.setState({ userMenu: false })
+          }
+        }
+    
+        //userMenuMobile bool switch @DEV Move to this declarations?
+        this.userMenuMobile = async () => {
+          if (this.state.userMenuMobile === false) {
+            this.setState({
+              userMenuMobile: true,
+              hamburgerMenuMobile: false,
+            })
+          }
+          else {
+            this.setState({ userMenuMobile: false })
+          }
+        }
+    
+        //settingsMenu bool switch @DEV Move to this declarations?
+        this.settingsMenu = async () => {
+          if (this.state.settingsMenu === false) {
+            this.setState({
+              settingsMenu: true,
+              userMenu: false
+            })
+          }
+          else {
+            this.setState({ settingsMenu: false })
+          }
+        }
 
     //Component state declaration
     this.state = {
@@ -1590,73 +1667,6 @@ class Main extends Component {
       this.setState({ hasMounted: true })
     }
 
-    //hamburgerMenu bool switch @DEV Move to this declarations?
-    this.hamburgerMenu = async () => {
-      if (this.state.hamburgerMenu === undefined) {
-        this.setState({
-          hamburgerMenu: true,
-          userMenu: false,
-          settingsMenu: false
-
-        })
-      }
-      else {
-        this.setState({ hamburgerMenu: undefined })
-      }
-    }
-
-    //hamburgerMenuMobile bool switch @DEV Move to this declarations?
-    this.hamburgerMenuMobile = async () => {
-      if (this.state.hamburgerMenuMobile === false) {
-        this.setState({
-          hamburgerMenuMobile: true,
-          userMenuMobile: false
-        })
-      }
-      else {
-        this.setState({ hamburgerMenuMobile: false })
-      }
-    }
-
-    //userMenu bool switch @DEV Move to this declarations?
-    this.userMenu = async () => {
-      if (this.state.userMenu === false) {
-        this.setState({
-          userMenu: true,
-          settingsMenu: false
-        })
-      }
-      else {
-        this.setState({ userMenu: false })
-      }
-    }
-
-    //userMenuMobile bool switch @DEV Move to this declarations?
-    this.userMenuMobile = async () => {
-      if (this.state.userMenuMobile === false) {
-        this.setState({
-          userMenuMobile: true,
-          hamburgerMenuMobile: false,
-        })
-      }
-      else {
-        this.setState({ userMenuMobile: false })
-      }
-    }
-
-    //settingsMenu bool switch @DEV Move to this declarations?
-    this.settingsMenu = async () => {
-      if (this.state.settingsMenu === false) {
-        this.setState({
-          settingsMenu: true,
-          userMenu: false
-        })
-      }
-      else {
-        this.setState({ settingsMenu: false })
-      }
-    }
-
   }
 
   //Catch default
@@ -1692,7 +1702,7 @@ class Main extends Component {
 
   }
 
-  //stuff do do when component unmounts from the window (should never happen unless tab closed)
+  //stuff do do when component unmounts from the window (should never happen for main unless tab closed)
   componentWillUnmount() {
     console.log("unmounting component");
   }
