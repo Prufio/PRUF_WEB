@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle, Camera, CameraOff, UploadCloud } from 'react-feather'
+import QrReader from 'react-qr-reader'
 
 class EscrowMobile extends Component {
   constructor(props) {
@@ -19,11 +20,80 @@ class EscrowMobile extends Component {
       }
     }, 100)
 
+
+
+    this.checkIn = async (e) => {
+      let resArray;
+
+      this.setState({ help: false })
+      if (e === "null" || e === undefined) {
+        this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
+      }
+      else if (e === "reset") {
+        return window.resetInfo = true;
+      }
+      else if (e === "input") {
+        console.log("input", e)
+        return this.setState({ input: true });
+      }
+      else if (e === "assetDash") {
+        return window.location.href = "/#/asset-dashboard-mobile"
+      }
+
+      if (this.state.idxHashRaw === "" && this.state.result === "") {
+        resArray = await window.utils.checkStats(window.assets.ids[e], [0])
+      }
+
+      if (this.state.idxHashRaw !== "") {
+        this.setState({ idxHash: e })
+        resArray = await window.utils.checkStats(e, [0])
+      }
+
+      if (this.state.result !== "") {
+        this.setState({ idxHash: e })
+        resArray = await window.utils.checkStats(e, [0])
+      }
+
+      console.log("resArray", resArray)
+
+      if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
+        alert("Cannot edit asset in lost or stolen status"); return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
+      }
+
+      if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
+        this.setState({ isSettingEscrowAble: false })
+        console.log("isSettingEscrowAble: false")
+      }
+
+      if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
+        this.setState({ isSettingEscrowAble: true })
+        console.log("isSettingEscrowAble: true")
+      }
+
+      this.setState({ selectedAsset: e, Checkbox: false, QRreader: false })
+      console.log("Changed component idx to: ", window.assets.ids[e])
+      console.log(this.state.isSettingEscrow)
+
+      if (this.state.idxHashRaw === "" && this.state.result === "") {
+        this.setState({
+          assetClass: window.assets.assetClasses[e],
+          idxHash: window.assets.ids[e],
+          name: window.assets.descriptions[e].name,
+          photos: window.assets.descriptions[e].photo,
+          text: window.assets.descriptions[e].text,
+          description: window.assets.descriptions[e],
+          status: window.assets.statuses[e],
+          note: window.assets.notes[e]
+        })
+      }
+    }
+
     this.state = {
       addr: "",
       costArray: [0],
       error: undefined,
       NRerror: undefined,
+      result: "",
       result1: "",
       result2: "",
       assetClass: undefined,
@@ -42,7 +112,13 @@ class EscrowMobile extends Component {
       hasLoadedAssets: false,
       assets: { descriptions: [0], notes: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
-      help: false
+      help: false,
+      input: false,
+      Checkbox: false,
+      legacyMode: false,
+      idxHash: "",
+      idxHashRaw: "",
+      QRreader: false,
     };
   }
 
@@ -64,7 +140,7 @@ class EscrowMobile extends Component {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentpacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
       this.setState({
         name: window.sentPacket.name,
@@ -88,11 +164,40 @@ class EscrowMobile extends Component {
 
   }
 
+
+
+  handleScan = async (data) => {
+    if (data) {
+      let tempBool = await window.utils.checkAssetExistsBare(data)
+      if (tempBool === true) {
+        this.setState({
+          result: data,
+          QRRR: true,
+          assetFound: "Asset Found!"
+        })
+        console.log(data)
+        this.checkIn(data)
+      }
+      else {
+        this.setState({
+          assetFound: "Asset Not Found",
+        })
+      }
+    }
+  }
+  handleError = (err) => {
+    console.error(err)
+    this.setState({ legacyMode: true })
+  }
+  openImageDialog() {
+    this.refs.qrReader1.openImageDialog()
+  }
+
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
 
     const _accessAsset = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       if (this.state.idxHash === "") {
         return alert("Please Select an Asset From the Dropdown")
       }
@@ -112,10 +217,36 @@ class EscrowMobile extends Component {
 
     }
 
+    const QRReader = async () => {
+      if (this.state.QRreader === false) {
+        await this.setState({ QRreader: true, Checkbox: false, assetFound: "" })
+        console.log("TEST", this.state.QRreader)
+      }
+      else {
+        await this.setState({ QRreader: false, DVresult: "" })
+        console.log("TEST2", this.state.QRreader)
+      }
+    }
+
+
+    const previewStyle = {
+      height: 240,
+      width: 320,
+    }
+
+    const Checkbox = async () => {
+      if (this.state.Checkbox === false) {
+        this.setState({ Checkbox: true })
+      }
+      else {
+        this.setState({ Checkbox: false })
+      }
+    }
+
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false })
+      this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
     }
 
     const help = async () => {
@@ -126,13 +257,13 @@ class EscrowMobile extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _setEscrow = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -167,7 +298,7 @@ class EscrowMobile extends Component {
           console.log(receipt.status);
           window.resetInfo = true;
           if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
+            return window.location.href = '/#/asset-dashboard-mobile'
           }
           //Stuff to do when tx confirms
         });
@@ -175,54 +306,8 @@ class EscrowMobile extends Component {
       return clearForm();
     };
 
-    const _checkIn = async (e) => {
-      this.setState({help: false})
-      if (e === "null" || e === undefined) {
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
-
-      console.log("resArray", resArray)
-
-      if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
-      }
-
-      if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
-        this.setState({ isSettingEscrowAble: false })
-        console.log("isSettingEscrowAble: false")
-      }
-
-      if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
-        this.setState({ isSettingEscrowAble: true })
-        console.log("isSettingEscrowAble: true")
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-      console.log(this.state.isSettingEscrow)
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
-      })
-    }
-
     const _endEscrow = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -253,7 +338,7 @@ class EscrowMobile extends Component {
           console.log(receipt.status);
           window.resetInfo = true;
           if (this.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
+            return window.location.href = '/#/asset-dashboard-mobile'
           }
           //Stuff to do when tx confirms
         });
@@ -273,104 +358,218 @@ class EscrowMobile extends Component {
 
     return (
       <div>
-        <div>
-          <div className="mediaLinkADHome">
-            <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+        {this.state.QRreader === false && (
+          <div>
+            <div className="mediaLinkADHome">
+              <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
+            </div>
+            <h2 className="formHeaderMobile">Manage Escrow</h2>
+            <div className="mediaLinkClearForm">
+              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
+            </div>
           </div>
-          <h2 className="formHeaderMobile">Manage Escrow</h2>
-          <div className="mediaLinkClearForm">
-            <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
-          </div>
-        </div>
+        )}
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-        {window.addr === undefined && (
+          {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
                     else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    Log In
-                </a> 
+                  }
+                  }
+                  className="userDataLink">
+                  Log In
+                </a>
                   to web3 provider.
                   </h3>
             </div>
           )}
           {window.addr > 0 && (
             <div>
-              {!this.state.accessPermitted && (
-                <>
-                  <Form.Row>
-                    <Form.Group as={Col} controlId="formGridAsset">
-                      <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                      {!this.state.wasSentPacket && (
-                        <>
-                          {this.state.transaction === false && (
-                            <Form.Control
-                              as="select"
-                              size="lg"
-                              onChange={(e) => { _checkIn(e.target.value) }}
 
-                            >
-                              {this.state.hasLoadedAssets && (
+              {this.state.QRreader === false && !this.state.accessPermitted && this.state.input === true && this.state.QRreader === false && (
+                <>
+                  <div>
+                    <Form.Check
+                      type="checkbox"
+                      className="checkBoxMobile"
+                      id="inlineFormCheck"
+                      onChange={() => { Checkbox() }}
+                    />
+                    <Form.Label className="checkBoxFormFontMobile">Input Raw Idx Hash</Form.Label>
+                    {this.state.Checkbox === true && (
+                      <>
+                        <Form.Row>
+                          <Form.Label className="formFont">Idx Hash:</Form.Label>
+                          <Form.Control
+                            placeholder="Idx Hash"
+                            onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                            size="lg"
+                            required
+                          />
+                        </Form.Row>
+                        <Form.Row>
+                          <div className="mediaLinkCameraMobile">
+                            <div className="submitButtonContentMobile">
+                              <ArrowRightCircle
+                                onClick={() => { this.checkIn(this.state.idxHashRaw) }}
+                              />
+                            </div>
+                          </div>
+                        </Form.Row>
+                      </>
+                    )}
+                  </div>
+                </>
+              )}
+              {!this.state.accessPermitted && this.state.Checkbox === false && (
+                <>
+                  {this.state.idxHashRaw === "" && this.state.QRreader === false && this.state.result === "" && (
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridAsset">
+                        <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
+                        {!this.state.wasSentPacket && (
+                          <>
+                            {this.state.transaction === false && (
+                              <Form.Control
+                                as="select"
+                                size="lg"
+                                onChange={(e) => { this.checkIn(e.target.value) }}
+
+                              >
+                                {this.state.hasLoadedAssets && (
+                                  <optgroup className="optgroup">
+                                    {window.utils.generateAssets()}
+                                    <option value="input">Manual Input</option>
+                                  </optgroup>)}
+                                {!this.state.hasLoadedAssets && (
+                                  <optgroup>
+                                    <option value="null">
+                                      Loading Assets...
+                           </option>
+                                  </optgroup>)}
+                              </Form.Control>)}
+                            {this.state.transaction === true && (
+                              <Form.Control
+                                as="select"
+                                size="lg"
+                                disabled
+                              >
                                 <optgroup className="optgroup">
-                                  {window.utils.generateAssets()}
-                                </optgroup>)}
-                              {!this.state.hasLoadedAssets && (
-                                <optgroup>
-                                  <option value="null">
-                                    Loading Assets...
+                                  <option>Modifying Escrow of "{this.state.name}"</option>
+                                </optgroup>
+                              </Form.Control>)}
+                          </>
+                        )}
+                        {this.state.wasSentPacket && (
+                          <Form.Control
+                            as="select"
+                            size="lg"
+                            onChange={(e) => { this.checkIn(e.target.value) }}
+                            disabled
+                          >
+                            <optgroup>
+                              <option>
+                                Modifying "{this.state.name}" Clear Form to Select Different Asset
                            </option>
-                                </optgroup>)}
-                            </Form.Control>)}
-                          {this.state.transaction === true && (
-                            <Form.Control
-                              as="select"
-                              size="lg"
-                              disabled
-                            >
-                              <optgroup className="optgroup">
-                                <option>Modifying Escrow of "{this.state.name}"</option>
-                              </optgroup>
-                            </Form.Control>)}
-                        </>
-                      )}
-                      {this.state.wasSentPacket && (
+                            </optgroup>
+                          </Form.Control>
+                        )}
+
+                      </Form.Group>
+                    </Form.Row>
+                  )}
+                  {this.state.QRreader === true && (
+                    <div>
+                      <style type="text/css">
+                        {`
+                                  .formMobile {
+                                  background: none !important;
+                                  padding: 0rem !important;
+                                  }
+                                `}
+                      </style>
+                      <div>
+                        <div className="mediaLinkADHome">
+                          <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                        </div>
+                        <h2 className="formHeaderMobileVL">Scan QR</h2>
+                        <div className="mediaLinkBackMobile">
+                          <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
+                        </div>
+                      </div>
+                      <div className="QRreaderMobile">
+                        <QrReader
+                          ref="qrReader1"
+                          delay={300}
+                          previewStyle={previewStyle}
+                          onError={this.handleError}
+                          onScan={this.handleScan}
+                          style={{ width: '100%' }}
+                          legacyMode={this.state.legacyMode}
+                        />
+                        {this.state.legacyMode === true && (
+                          <div className="uploadImageQR">
+                            <div className="uploadImageQRContent">
+                              <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                            </div>
+                          </div>
+                        )}
+                        {this.state.result !== undefined && (
+                          <div className="resultsMobile">
+                            {this.state.assetFound}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {this.state.idxHashRaw !== "" && (
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridTime">
+                        <Form.Label className="formFont">Asset ID:</Form.Label>
                         <Form.Control
-                          as="select"
-                          size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
+                          placeholder={this.state.idxHashRaw}
+                          required
                           disabled
-                        >
-                          <optgroup>
-                            <option>
-                              Modifying "{this.state.name}" Clear Form to Select Different Asset
-                           </option>
-                          </optgroup>
+                          size="lg"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                  )}
+                  {this.state.result !== "" && this.state.QRreader === false && (
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridTime">
+                        <Form.Label className="formFont">Asset ID:</Form.Label>
+                        <Form.Control
+                          placeholder={this.state.result}
+                          required
+                          disabled
+                          size="lg"
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                  )}
+                  {this.state.QRreader === false && (
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridFormatSetOrEnd">
+                        <Form.Label className="formFont">Set or End?:</Form.Label>
+                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ isSettingEscrow: e.target.value })}>
+                          <option value="0">Select an Action</option>
+                          {this.state.isSettingEscrowAble === true && (
+                            <option value="true">Set Escrow</option>
+                          )}
+                          {this.state.isSettingEscrowAble === false && (
+                            <option value="false">End Escrow</option>
+                          )}
                         </Form.Control>
-                      )}
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row>
-                    <Form.Group as={Col} controlId="formGridFormatSetOrEnd">
-                      <Form.Label className="formFont">Set or End?:</Form.Label>
-                      <Form.Control as="select" size="lg" onChange={(e) => this.setState({ isSettingEscrow: e.target.value })}>
-                        <option value="0">Select an Action</option>
-                        {this.state.isSettingEscrowAble === true && (
-                          <option value="true">Set Escrow</option>
-                        )}
-                        {this.state.isSettingEscrowAble === false && (
-                          <option value="false">End Escrow</option>
-                        )}
-                      </Form.Control>
-                    </Form.Group>
-                  </Form.Row>
-                  {this.state.transaction === false && (
+                      </Form.Group>
+                    </Form.Row>
+                  )}
+                  {this.state.transaction === false && this.state.QRreader === false && (
                     <>
                       <Form.Row>
                         <div className="submitButtonRRMobile">
@@ -388,6 +587,17 @@ class EscrowMobile extends Component {
                           </div>
                         </div>
                       </Form.Row>
+                      {this.state.input === true && this.state.idxHashRaw === "" && this.state.result === "" && (
+                        <Form.Row>
+                          <div className="mediaLinkCameraMobile">
+                            <div className="submitButtonContentMobile">
+                              <Camera
+                                onClick={() => { QRReader() }}
+                              />
+                            </div>
+                          </div>
+                        </Form.Row>
+                      )}
                       {this.state.help === true && (
                         <div className="explainerTextBoxMobile">
                           Manage Escrow gives you two options, to either end a current escrow, or to set an asset into escrow. Depending on the selected
@@ -490,15 +700,15 @@ class EscrowMobile extends Component {
                   </Form.Row>
                   {this.state.transaction === false && (
                     <>
-                    <Form.Row>
-                      <div className="submitButtonRRMobile">
-                        <div className="submitButtonContent">
-                          <CheckCircle
-                            onClick={() => { _setEscrow() }}
-                          />
+                      <Form.Row>
+                        <div className="submitButtonRRMobile">
+                          <div className="submitButtonContent">
+                            <CheckCircle
+                              onClick={() => { _setEscrow() }}
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="mediaLinkHelp">
+                        <div className="mediaLinkHelp">
                           <div className="mediaLinkHelpContent">
                             <HelpCircle
                               onClick={() => { help() }}
@@ -519,22 +729,22 @@ class EscrowMobile extends Component {
               {this.state.accessPermitted && this.state.isSettingEscrow === "false" && (
                 <>
                   <Form.Row>
-                    <h2 className="escrowDetails">Escrow Agent: {this.state.escrowData[1]}</h2>
+                    <h2 className="escrowDetailsMobile">Escrow Agent: {this.state.escrowData[1].substring(0, 18) + "..." + this.state.escrowData[1].substring(48, 66)}</h2>
                   </Form.Row>
                   <Form.Row>
-                    <h2 className="escrowDetails"> Escrow TimeLock: {this.state.escrowData[2]}</h2>
+                    <h2 className="escrowDetailsMobile"> Escrow TimeLock: {this.state.escrowData[2]}</h2>
                   </Form.Row>
                   {this.state.transaction === false && (
                     <>
-                    <Form.Row>
-                      <div className="submitButtonRRMobile">
-                        <div className="submitButtonContent">
-                          <CheckCircle
-                            onClick={() => { _endEscrow() }}
-                          />
+                      <Form.Row>
+                        <div className="submitButtonRRMobile">
+                          <div className="submitButtonContent">
+                            <CheckCircle
+                              onClick={() => { _endEscrow() }}
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="mediaLinkHelp">
+                        <div className="mediaLinkHelp">
                           <div className="mediaLinkHelpContent">
                             <HelpCircle
                               onClick={() => { help() }}
@@ -555,15 +765,12 @@ class EscrowMobile extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txStatus === false && (
+        {this.state.transaction === false && this.state.txStatus === false && this.state.QRreader === false && (
           <div className="assetSelectedResultsMobile">
             <Form.Row>
-              {this.state.idxHash !== undefined && this.state.txHash === "" && (
+              {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                 </Form.Group>
               )}
             </Form.Row>
@@ -579,32 +786,32 @@ class EscrowMobile extends Component {
             {this.state.txHash > 0 && ( //conditional rendering
               <div className="resultsMobile">
                 {this.state.txStatus === false && (
-                <div className="transactionErrorTextMobile">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
-              {this.state.txStatus === true && (
-                <div className="transactionErrorTextMobile">
-                  {" "}
+                  <div className="transactionErrorTextMobile">
+                    !ERROR! :
+                    <a
+                      className="transactionErrorTextMobile"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
+                {this.state.txStatus === true && (
+                  <div className="transactionErrorTextMobile">
+                    {" "}
                 No Errors Reported :
-                  <a
-                  className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
+                    <a
+                      className="transactionErrorTextMobile"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
               </div>
             )}
           </div>

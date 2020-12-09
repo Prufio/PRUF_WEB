@@ -52,7 +52,7 @@ class ExportMobile extends Component {
       if (Number(window.sentPacket.statusNum) !== 51) {
         alert("Asset is not set to transferrable! Owner must set the status to transferrable before export.");
         window.sentpacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
       this.setState({
         name: window.sentPacket.name,
@@ -89,7 +89,7 @@ class ExportMobile extends Component {
         return window.resetInfo = true;
       }
       else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
@@ -167,7 +167,7 @@ class ExportMobile extends Component {
           self.setState({ txStatus: receipt.status });
           window.resetInfo = true;
           if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
+            return window.location.href = '/#/asset-dashboard-mobile'
           }
         });
 

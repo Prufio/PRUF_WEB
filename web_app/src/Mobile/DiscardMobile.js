@@ -51,7 +51,7 @@ class DiscardMobile extends Component {
             if (Number(window.sentPacket.statusNum) !== 59) {
                 window.sentPacket = undefined;
                 alert("Asset is not discardable! Owner must set status to discardable.");
-                return window.location.href = "/#/asset-dashboard"
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             this.setState({ name: window.sentPacket.name })
@@ -85,7 +85,7 @@ class DiscardMobile extends Component {
                 return window.resetInfo = true;
             }
             else if (e === "assetDash") {
-                return window.location.href = "/#/asset-dashboard-mobile"
+                return window.location.href = "/#/asset-dashboard-mobile-mobile"
             }
 
             let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
@@ -164,7 +164,7 @@ class DiscardMobile extends Component {
                     window.resetInfo = true;
                     window.recount = true;
                     if (this.state.wasSentPacket) {
-                        return window.location.href = '/#/asset-dashboard'
+                        return window.location.href = '/#/asset-dashboard-mobile'
                     }
                 });
 

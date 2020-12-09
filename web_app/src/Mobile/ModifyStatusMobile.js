@@ -53,31 +53,31 @@ class ModifyStatusMobile extends Component {
             if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
                 alert("Cannot editRgtHash asset in lost or stolen status! Please change to editRgtHashrable status");
                 window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard"
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
                 alert("Cannot editRgtHash asset in escrow! Please wait until asset has met escrow conditions");
                 window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard"
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) === 58) {
                 alert("Cannot editRgtHash asset in imported status! please change to editRgtHashrable status");
                 window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard"
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) === 70) {
                 alert("Cannot editRgtHash asset in exported status! please import asset and change to editRgtHashrable status");
                 window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard"
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) !== 51) {
                 alert("Cannot editRgtHash asset in a status other than editRgtHashrable! please change asset to editRgtHashrable status");
                 window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard"
+                return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             this.setState({ name: window.sentPacket.name })
@@ -146,7 +146,7 @@ class ModifyStatusMobile extends Component {
             }
             else if (e === "assetDash") {
                 console.log("heading over to dashboard")
-                return window.location.href = "/#/asset-dashboard-mobile"
+                return window.location.href = "/#/asset-dashboard-mobile-mobile"
             }
 
             let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
@@ -243,7 +243,7 @@ class ModifyStatusMobile extends Component {
                         console.log(receipt.status);
                         window.resetInfo = true;
                         if (self.state.wasSentPacket) {
-                            return window.location.href = '/#/asset-dashboard'
+                            return window.location.href = '/#/asset-dashboard-mobile'
                         }
                         //Stuff to do when tx confirms
                     });
@@ -269,7 +269,7 @@ class ModifyStatusMobile extends Component {
                         console.log(receipt.status);
                         window.resetInfo = true;
                         if (self.state.wasSentPacket === true) {
-                            return window.location.href = '/#/asset-dashboard'
+                            return window.location.href = '/#/asset-dashboard-mobile'
                         }
                         //Stuff to do when tx confirms
                     });

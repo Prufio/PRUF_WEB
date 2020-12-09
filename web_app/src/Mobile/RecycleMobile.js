@@ -207,7 +207,7 @@ class RecycleMobile extends Component {
           if (Number(resArray[0]) !== 60) {
             alert("Asset is not discarded! Owner must export the assset in order to import.");
             window.sentPacket = undefined;
-            return window.location.href = "/#/asset-dashboard"
+            return window.location.href = "/#/asset-dashboard-mobile"
           }
 
           console.log(destinationACData.root)
@@ -216,7 +216,7 @@ class RecycleMobile extends Component {
             alert("Import destination AC must have same root as origin!");
             window.sentPacket = undefined;
             clearForm()
-            return window.location.href = "/#/asset-dashboard"
+            return window.location.href = "/#/asset-dashboard-mobile"
           }
         }
         this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" });

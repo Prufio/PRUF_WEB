@@ -228,7 +228,7 @@ class NewRecordMobile extends Component {
           window.resetInfo = true;
           window.recount = true;
           if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
+            return window.location.href = '/#/asset-dashboard-mobile'
           }
         });
 
@@ -403,6 +403,16 @@ class NewRecordMobile extends Component {
                         </Form.Group>
                       </Form.Row>
                       <Form.Row>
+                        <Form.Group as={Col} controlId="formGridNewAssetName">
+                          <Form.Label className="formFont">IDX:</Form.Label>
+                          <Form.Control
+                            placeholder={this.state.idxHash}
+                            disabled
+                            size="lg"
+                          />
+                        </Form.Group>
+                      </Form.Row>
+                      {/* <Form.Row>
                         <Form.Group as={Col} controlId="formGridType">
                           <Form.Label className="formFont">Type:</Form.Label>
                           <Form.Control
@@ -450,7 +460,7 @@ class NewRecordMobile extends Component {
                             size="lg"
                           />
                         </Form.Group>
-                      </Form.Row>
+                      </Form.Row> */}
                     </>
                   )}
                   <Form.Row>
@@ -515,28 +525,30 @@ class NewRecordMobile extends Component {
 
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridIdNumber">
-                      <Form.Label className="formFont">ID Number:</Form.Label>
                       {this.state.transaction === false && (
+                        <>
+                      <Form.Label className="formFont">ID Number:</Form.Label>
                         <Form.Control
                           placeholder="ID Number"
                           required
                           onChange={(e) => this.setState({ id: e.target.value })}
                           size="lg"
-                        />)}
-                      {this.state.transaction === true && (
+                        /></>)}
+                      {/* {this.state.transaction === true && (
                         <Form.Control
                           placeholder={this.state.id}
                           required
                           disabled
                           size="lg"
-                        />)}
+                        />)} */}
                     </Form.Group>
                     </Form.Row>
                         <Form.Row>
 
                     <Form.Group as={Col} controlId="formGridPassword">
-                      <Form.Label className="formFont">Password:</Form.Label>
                       {this.state.transaction === false && (
+                        <>
+                      <Form.Label className="formFont">Password:</Form.Label>
                         <Form.Control
                           placeholder="Password"
                           className="key"
@@ -545,8 +557,8 @@ class NewRecordMobile extends Component {
                           onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
                           autoComplete="off"
-                        />)}
-                      {this.state.transaction === true && (
+                        /></>)}
+                      {/* {this.state.transaction === true && (
                         <Form.Control
                           placeholder="Password"
                           className="key"
@@ -555,7 +567,7 @@ class NewRecordMobile extends Component {
                           onChange={(e) => this.setState({ secret: e.target.value })}
                           size="lg"
                           autoComplete="off"
-                        />)}
+                        />)} */}
                     </Form.Group>
 
                   </Form.Row>
@@ -617,7 +629,7 @@ class NewRecordMobile extends Component {
           <div className="resultsMobile">
             {
               this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
-                <div className="assetSelectedContentHead">New Record Being Made in Asset Class: "<span className="assetSelectedContentMobile">{this.state.ACname}</span>" </div>
+                <div className="assetSelectedContentHead">Selected Asset Class: "<span className="assetSelectedContentMobile">{this.state.ACname}</span>" </div>
               )
             }
             {this.state.txHash > 0 && ( //conditional rendering

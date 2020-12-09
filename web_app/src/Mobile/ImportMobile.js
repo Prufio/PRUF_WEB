@@ -62,7 +62,7 @@ class ImportMobile extends Component {
         console.log("SentPacketStatus :", window.sentPacket.status)
         alert("Asset is not exported! Owner must export the assset in order to import.");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       this.setState({ name: window.sentPacket.name })
@@ -142,7 +142,7 @@ class ImportMobile extends Component {
           if (Number(resArray[0]) !== 70) {
             alert("Asset is not exported! Owner must export the assset in order to import.");
             window.sentPacket = undefined;
-            return window.location.href = "/#/asset-dashboard"
+            return window.location.href = "/#/asset-dashboard-mobile"
           }
 
           console.log(destinationACData.root)
@@ -150,7 +150,7 @@ class ImportMobile extends Component {
           if (resArray[1] !== destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
             window.sentPacket = undefined;
-            return window.location.href = "/#/asset-dashboard"
+            return window.location.href = "/#/asset-dashboard-mobile"
           }
         }
         this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" });
@@ -161,7 +161,7 @@ class ImportMobile extends Component {
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, assetClassSelected: false, help: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, assetClassSelected: false, help: false })
     }
 
     const help = async () => {
@@ -189,7 +189,7 @@ class ImportMobile extends Component {
       }
       else if (e === "assetDash") {
         console.log("heading over to dashboard")
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
@@ -219,7 +219,7 @@ class ImportMobile extends Component {
         this.setState({
           QRreader: false,
         })
-        return alert("Import destination AC must have same root as origin!")
+        return alert("Import destination AC must have same root as origin!"), clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -272,7 +272,7 @@ class ImportMobile extends Component {
           console.log(receipt.status);
           window.resetInfo = true;
           if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
+            return window.location.href = '/#/asset-dashboard-mobile'
           }
           //Stuff to do when tx confirms
         });

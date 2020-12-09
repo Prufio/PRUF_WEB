@@ -54,13 +54,13 @@ class DecrementMobile extends Component {
       if (Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       this.setState({
@@ -124,7 +124,7 @@ class DecrementMobile extends Component {
         return window.resetInfo = true;
       }
       else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
@@ -199,7 +199,7 @@ class DecrementMobile extends Component {
           console.log(receipt.status);
           window.resetInfo = true;
           if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
+            return window.location.href = '/#/asset-dashboard-mobile'
           }
           //Stuff to do when tx confirms
         });
