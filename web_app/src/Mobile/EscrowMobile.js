@@ -324,17 +324,13 @@ class EscrowMobile extends Component {
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
-          self.setState({ transaction: false })
-          self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false });
+          self.setState({ transaction: false, txHash: Object.values(_error)[0].transactionHash, xStatus: false, wasSentPacket: false })
           console.log(Object.values(_error)[0].transactionHash);
           alert("Something went wrong!")
           clearForm();
         })
         .on("receipt", (receipt) => {
-          self.setState({ transaction: false })
-          this.setState({ txHash: receipt.transactionHash });
-          this.setState({ txStatus: receipt.status });
+          self.setState({ transaction: false, txStatus: receipt.status, txHash: receipt.transactionHash })
           console.log(receipt.status);
           window.resetInfo = true;
           if (this.state.wasSentPacket) {
@@ -391,7 +387,7 @@ class EscrowMobile extends Component {
           {window.addr > 0 && (
             <div>
 
-              {this.state.QRreader === false && !this.state.accessPermitted && this.state.input === true && this.state.QRreader === false && (
+              { !this.state.accessPermitted && this.state.input === true && this.state.QRreader === false && (
                 <>
                   <div>
                     <Form.Check
