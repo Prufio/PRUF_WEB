@@ -57,12 +57,12 @@ class EscrowMobile extends Component {
       }
 
       if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
-        this.setState({ isSettingEscrowAble: false })
+        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false"  })
         console.log("isSettingEscrowAble: false")
       }
 
       if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
-        this.setState({ isSettingEscrowAble: true })
+        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true"  })
         console.log("isSettingEscrowAble: true")
       }
 
@@ -169,6 +169,7 @@ class EscrowMobile extends Component {
         this.setState({
           result: data,
           QRRR: true,
+          input: false,
           assetFound: "Asset Found!"
         })
         console.log(data)
@@ -242,7 +243,7 @@ class EscrowMobile extends Component {
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
+      this.setState({ idxHash: "", idxHashRaw: "", result: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
     }
 
     const help = async () => {
@@ -395,7 +396,7 @@ class EscrowMobile extends Component {
                     <Form.Label className="checkBoxFormFontMobile">Manual Input</Form.Label>
                     {this.state.input === true && (
                       <>
-                        <Form.Row>
+                        <Form.Group>
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
                           <Form.Control
                             placeholder="Idx Hash"
@@ -403,7 +404,7 @@ class EscrowMobile extends Component {
                             size="lg"
                             required
                           />
-                        </Form.Row>
+                        </Form.Group>
                         <Form.Row>
                           <div className="mediaLinkCameraMobile">
                             <div className="submitButtonContentMobile">
@@ -412,7 +413,20 @@ class EscrowMobile extends Component {
                               />
                             </div>
                           </div>
+                          <div className="mediaLinkHelp">
+                            <div className="mediaLinkHelpContent">
+                              <HelpCircle
+                                onClick={() => { help() }}
+                              />
+                            </div>
+                          </div>
                         </Form.Row>
+                        {this.state.help === true && (
+                          <div className="explainerTextMobile">
+                            Setting Escrow gives you two options. Supervised Escrow, which allows the owner of the asset to change the status to lost or stolen during the escrow period,
+                            and Locked Escrow, which disables all modifications of the asset during the escrow period. Both types of escrow can be ended by the assigned agent at any time.
+                          </div>
+                        )}
                         <Form.Row>
                           <div className="mediaLinkCameraMobile">
                             <div className="submitButtonContentMobile">
@@ -557,10 +571,10 @@ class EscrowMobile extends Component {
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridFormatSetOrEnd">
                         <Form.Label className="formFont">Set or End?:</Form.Label>
-                        <Form.Control as="select" size="lg" disabled onChange={(e) => this.setState({ isSettingEscrow: e.target.value })}>
-                        {this.state.isSettingEscrowAble === undefined && (
-                          <option value="0">Please Select an Asset</option>
-                        )}
+                        <Form.Control as="select" size="lg" disabled>
+                          {this.state.isSettingEscrowAble === undefined && (
+                            <option value="0">Please Select an Asset</option>
+                          )}
                           {this.state.isSettingEscrowAble === true && (
                             <option value="true">Set Escrow</option>
                           )}
@@ -762,6 +776,9 @@ class EscrowMobile extends Component {
               {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                 </Form.Group>
               )}
             </Form.Row>
