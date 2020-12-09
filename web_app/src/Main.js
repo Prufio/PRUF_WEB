@@ -155,7 +155,7 @@ class Main extends Component {
                               {this.state.ETHBalance && (
                                 <>
                                   <h4 className="userStatFont">
-                                    KETH Balance : {this.state.ETHBalance.substring(0, 6)}
+                                    KETH Balance : Ξ{this.state.ETHBalance.substring(0, 6)}
                                     {/* <Button
                                       variant="userButton"
                                       onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>
@@ -536,7 +536,7 @@ class Main extends Component {
                         {this.state.ETHBalance && (
                           <>
                             <h4 className="userStatFont">
-                              KETH Balance : {this.state.ETHBalance.substring(0, 6)}
+                              KETH Balance : Ξ{this.state.ETHBalance.substring(0, 6)}
                               {/* <Button
                                 variant="userButton"
                                 onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>

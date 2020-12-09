@@ -388,17 +388,17 @@ class Faucet extends Component {
                                             )}
                                             {this.state.help === true && this.state.catergory === "Electronics" && (
                                                 <div className="explainerTextBoxMobile">
-                                                    The Electronics catergory consists of laptops, computers, mobile devices, and any circuits or devices using transistors, or microchips.
+                                                    The Electronics catergory consists of laptops, computers, mobile devices, etc.
                                                 </div>
                                             )}
                                             {this.state.help === true && this.state.catergory === "Collectables" && (
                                                 <div className="explainerTextBoxMobile">
-                                                    The Collecctables catergory consists of any items valued and sought out by collectors such as playing cards, trinkets and valued nik naks.
+                                                    The Collectables catergory consists of any items valued and sought out by collectors such as playing cards, trinkets and valued nik naks.
                                                 </div>
                                             )}
                                             {this.state.help === true && this.state.catergory === "Transportation" && (
                                                 <div className="explainerTextBoxMobile">
-                                                    The Transportation catergory consists of bicicles, cars, or any other system or means of transporting people or goods.
+                                                    The Transportation catergory consists of bicycles, cars, or any other system or means of transporting people or goods.
                                                 </div>
                                             )}
                                             {this.state.help === true && this.state.catergory === "Virtual" && (
@@ -408,7 +408,7 @@ class Faucet extends Component {
                                             )}
                                             {this.state.help === true && this.state.catergory === "Other" && (
                                                 <div className="explainerTextBoxMobile">
-                                                    The Other catergory covers any unspeccified item not included in the catergories above. Anything.
+                                                    The Other catergory covers any unspecified item not included in the catergories above.
                                                 </div>
                                             )}
                                         </div>
@@ -417,7 +417,7 @@ class Faucet extends Component {
                                         <div>
                                             <Form.Row>
                                                 <Form.Group as={Col} controlId="formGridMiddleName">
-                                                    <Form.Label className="formFont">Amount of PRUF (10000/0.1KETH)</Form.Label>
+                                                    <Form.Label className="formFont">Amount of PRUF (ü10000/Ξ0.1)</Form.Label>
                                                     {this.state.transaction === false && (
                                                         <Form.Control
                                                             placeholder="Amount of PRUF"
@@ -655,17 +655,17 @@ class Faucet extends Component {
                                     )}
                                     {this.state.help === true && this.state.catergory === "Electronics" && (
                                         <div className="explainerTextBox2">
-                                            The Electronics catergory consists of laptops, computers, mobile devices, and any circuits or devices using transistors, or microchips.
+                                            The Electronics catergory consists of laptops, computers, mobile devices, etc.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Collectables" && (
                                         <div className="explainerTextBox2">
-                                            The Collecctables catergory consists of any items valued and sought out by collectors such as playing cards, trinkets and valued nik naks.
+                                            The Collectables catergory consists of any items valued and sought out by collectors such as playing cards, trinkets and valued nik naks.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Transportation" && (
                                         <div className="explainerTextBox2">
-                                            The Transportation catergory consists of bicicles, cars, or any other system or means of transporting people or goods.
+                                            The Transportation catergory consists of bicycles, cars, or any other system or means of transporting people or goods.
                                         </div>
                                     )}
                                     {this.state.help === true && this.state.catergory === "Virtual" && (
@@ -675,7 +675,7 @@ class Faucet extends Component {
                                     )}
                                     {this.state.help === true && this.state.catergory === "Other" && (
                                         <div className="explainerTextBox2">
-                                            The Other catergory covers any unspeccified item not included in the catergories above. Anything.
+                                            The Other catergory covers any unspecified item not included in the catergories above.
                                         </div>
                                     )}
                                 </div>
@@ -684,7 +684,7 @@ class Faucet extends Component {
                                 <div>
                                     <Form.Row>
                                         <Form.Group as={Col} controlId="formGridMiddleName">
-                                            <Form.Label className="formFont">Amount of PRUF (10000/0.1KETH)</Form.Label>
+                                            <Form.Label className="formFont">Amount of PRUF (ü10000/Ξ0.1)</Form.Label>
                                             {this.state.transaction === false && (
                                                 <Form.Control
                                                     placeholder="Amount of PRUF"
