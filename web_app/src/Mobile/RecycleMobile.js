@@ -50,14 +50,14 @@ class RecycleMobile extends Component {
       if (Number(resArray[1]) === 0) {
         alert("Asset does not exist at given IDX");
         this.setState({
-          idxHash: undefined, txStatus: undefined, txHash: "", accessPermitted: false, transaction: false
+          idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false
         })
       }
 
       if (Number(resArray[0]) !== 60) {
         alert("Asset not in recyclable status");
         this.setState({
-          idxHash: undefined, txStatus: undefined, txHash: "", accessPermitted: false, transaction: false
+          idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false
         })
       }
 

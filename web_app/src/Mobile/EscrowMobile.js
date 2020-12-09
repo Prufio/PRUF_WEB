@@ -32,10 +32,6 @@ class EscrowMobile extends Component {
       else if (e === "reset") {
         return window.resetInfo = true;
       }
-      else if (e === "input") {
-        console.log("input", e)
-        return this.setState({ input: true });
-      }
       else if (e === "assetDash") {
         return window.location.href = "/#/asset-dashboard-mobile"
       }
@@ -219,7 +215,7 @@ class EscrowMobile extends Component {
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {
-        await this.setState({ QRreader: true, Checkbox: false, assetFound: "" })
+        await this.setState({ QRreader: true, assetFound: "" })
         console.log("TEST", this.state.QRreader)
       }
       else {
@@ -235,11 +231,11 @@ class EscrowMobile extends Component {
     }
 
     const Checkbox = async () => {
-      if (this.state.Checkbox === false) {
-        this.setState({ Checkbox: true })
+      if (this.state.input === false) {
+        this.setState({ input: true })
       }
       else {
-        this.setState({ Checkbox: false })
+        this.setState({ input: false })
       }
     }
 
@@ -387,7 +383,7 @@ class EscrowMobile extends Component {
           {window.addr > 0 && (
             <div>
 
-              { !this.state.accessPermitted && this.state.input === true && this.state.QRreader === false && (
+              { !this.state.accessPermitted && this.state.QRreader === false && (
                 <>
                   <div>
                     <Form.Check
@@ -396,8 +392,8 @@ class EscrowMobile extends Component {
                       id="inlineFormCheck"
                       onChange={() => { Checkbox() }}
                     />
-                    <Form.Label className="checkBoxFormFontMobile">Input Raw Idx Hash</Form.Label>
-                    {this.state.Checkbox === true && (
+                    <Form.Label className="checkBoxFormFontMobile">Manual Input</Form.Label>
+                    {this.state.input === true && (
                       <>
                         <Form.Row>
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
@@ -417,12 +413,65 @@ class EscrowMobile extends Component {
                             </div>
                           </div>
                         </Form.Row>
+                        <Form.Row>
+                          <div className="mediaLinkCameraMobile">
+                            <div className="submitButtonContentMobile">
+                              <Camera
+                                onClick={() => { QRReader() }}
+                              />
+                            </div>
+                          </div>
+                        </Form.Row>
                       </>
                     )}
                   </div>
                 </>
               )}
-              {!this.state.accessPermitted && this.state.Checkbox === false && (
+              {this.state.QRreader === true && (
+                <div>
+                  <style type="text/css">
+                    {`
+                              .formMobile {
+                              background: none !important;
+                              padding: 0rem !important;
+                              }
+                            `}
+                  </style>
+                  <div>
+                    <div className="mediaLinkADHome">
+                      <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
+                    </div>
+                    <h2 className="formHeaderMobileVL">Scan QR</h2>
+                    <div className="mediaLinkBackMobile">
+                      <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
+                    </div>
+                  </div>
+                  <div className="QRreaderMobile">
+                    <QrReader
+                      ref="qrReader1"
+                      delay={300}
+                      previewStyle={previewStyle}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                      style={{ width: '100%' }}
+                      legacyMode={this.state.legacyMode}
+                    />
+                    {this.state.legacyMode === true && (
+                      <div className="uploadImageQR">
+                        <div className="uploadImageQRContent">
+                          <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                        </div>
+                      </div>
+                    )}
+                    {this.state.result !== undefined && (
+                      <div className="resultsMobile">
+                        {this.state.assetFound}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              {!this.state.accessPermitted && this.state.input === false && (
                 <>
                   {this.state.idxHashRaw === "" && this.state.QRreader === false && this.state.result === "" && (
                     <Form.Row>
@@ -440,7 +489,6 @@ class EscrowMobile extends Component {
                                 {this.state.hasLoadedAssets && (
                                   <optgroup className="optgroup">
                                     {window.utils.generateAssets()}
-                                    <option value="input">Manual Input</option>
                                   </optgroup>)}
                                 {!this.state.hasLoadedAssets && (
                                   <optgroup>
@@ -479,50 +527,6 @@ class EscrowMobile extends Component {
                       </Form.Group>
                     </Form.Row>
                   )}
-                  {this.state.QRreader === true && (
-                    <div>
-                      <style type="text/css">
-                        {`
-                                  .formMobile {
-                                  background: none !important;
-                                  padding: 0rem !important;
-                                  }
-                                `}
-                      </style>
-                      <div>
-                        <div className="mediaLinkADHome">
-                          <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/' }} /></a>
-                        </div>
-                        <h2 className="formHeaderMobileVL">Scan QR</h2>
-                        <div className="mediaLinkBackMobile">
-                          <a className="mediaLinkContentBack" ><CameraOff onClick={() => { QRReader() }} /></a>
-                        </div>
-                      </div>
-                      <div className="QRreaderMobile">
-                        <QrReader
-                          ref="qrReader1"
-                          delay={300}
-                          previewStyle={previewStyle}
-                          onError={this.handleError}
-                          onScan={this.handleScan}
-                          style={{ width: '100%' }}
-                          legacyMode={this.state.legacyMode}
-                        />
-                        {this.state.legacyMode === true && (
-                          <div className="uploadImageQR">
-                            <div className="uploadImageQRContent">
-                              <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
-                            </div>
-                          </div>
-                        )}
-                        {this.state.result !== undefined && (
-                          <div className="resultsMobile">
-                            {this.state.assetFound}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
                   {this.state.idxHashRaw !== "" && (
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridTime">
@@ -553,8 +557,10 @@ class EscrowMobile extends Component {
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridFormatSetOrEnd">
                         <Form.Label className="formFont">Set or End?:</Form.Label>
-                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ isSettingEscrow: e.target.value })}>
-                          <option value="0">Select an Action</option>
+                        <Form.Control as="select" size="lg" disabled onChange={(e) => this.setState({ isSettingEscrow: e.target.value })}>
+                        {this.state.isSettingEscrowAble === undefined && (
+                          <option value="0">Please Select an Asset</option>
+                        )}
                           {this.state.isSettingEscrowAble === true && (
                             <option value="true">Set Escrow</option>
                           )}
@@ -583,17 +589,6 @@ class EscrowMobile extends Component {
                           </div>
                         </div>
                       </Form.Row>
-                      {this.state.input === true && this.state.idxHashRaw === "" && this.state.result === "" && (
-                        <Form.Row>
-                          <div className="mediaLinkCameraMobile">
-                            <div className="submitButtonContentMobile">
-                              <Camera
-                                onClick={() => { QRReader() }}
-                              />
-                            </div>
-                          </div>
-                        </Form.Row>
-                      )}
                       {this.state.help === true && (
                         <div className="explainerTextBoxMobile">
                           Manage Escrow gives you two options, to either end a current escrow, or to set an asset into escrow. Depending on the selected
