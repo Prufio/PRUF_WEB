@@ -250,7 +250,7 @@ class NewRecordMobile extends Component {
           {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
                     onClick={() => {
                     this.setState({ userMenu: undefined })
@@ -265,7 +265,7 @@ class NewRecordMobile extends Component {
                   </h3>
             </div>
           )}
-          {window.balances.IDTokenBalance == 0 && (
+          {window.balances.IDTokenBalance == "0" && (
             <div className="resultsMobile">
             <h2>User does not hold ID</h2>
             </div>
