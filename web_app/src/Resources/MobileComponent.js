@@ -8,11 +8,6 @@ class MobileComponent extends Component {
 
             return (
                 <Nav className="headerForm">
-                    {/* <div className="headerFormContent">
-                        <li>
-                            <NavLink exact to="/">Home</NavLink>
-                        </li>
-                    </div> */}
                        <div className="headerFormContentMobile">
                         <li>
                             <NavLink to="/asset-dashboard-mobile">Asset Dashboard</NavLink>
