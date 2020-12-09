@@ -236,7 +236,7 @@ class Faucet extends Component {
             this.setState({ assetClassSelected: false, idxSubmitted: false }) //clear form inputs
         }
 
-        if(!isMobile){//Mobile render
+        if(isMobile){//Mobile render
             return(
                     <div>
                         <div>
