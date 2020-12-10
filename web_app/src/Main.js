@@ -1712,9 +1712,11 @@ class Main extends Component {
     //render continuously produces an up-to-date stateful webpage  
 
     if (this.state.hasError) {
-      return (<div><h1>OOPS!</h1>
-        <h2>An error occoured. Please ensure you are connected to an ethereum provider and reload the page.</h2>
-        <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below</h3>
+      return (
+      <div>
+        <h1> OOPS! </h1>
+        <h2> An error occoured. Please ensure you are connected to an ethereum provider and reload the page. </h2>
+        <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below </h3>
         <br></br>
         <div className="errorMediaLink">
           <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
