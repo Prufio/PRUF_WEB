@@ -1602,10 +1602,6 @@ class Main extends Component {
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
 
-      //const ethereum = window.ethereum;
-
-      //ethereum.enable()
-
       window.routeRequest = "basicMobile";
       this.setState({
         mobileMenuBool: true,
