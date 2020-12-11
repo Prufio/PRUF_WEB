@@ -48,8 +48,8 @@ class DnvkxiOAFy_vDC extends Component {
 
     return (
       <div>
-        <div className="homeFormTestNet">
-        <Snake percentageWidth='80' snakeColor='blue' appleColor='red' startSnakeSize='4'/>
+        <div className="homeFormTestNetS">
+        <Snake percentageWidth='83' snakeColor='blue' appleColor='red' startSnakeSize='4'/>
         </div>
       </div>
     );

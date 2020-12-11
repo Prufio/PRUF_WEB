@@ -372,6 +372,9 @@ class Main extends Component {
                     <h3>
                       December 11, 2020
                   </h3>
+                  <h3>
+                    © pruf.io
+                  </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
                         ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.0.0 </a>
@@ -405,7 +408,7 @@ class Main extends Component {
                     {this.state.settingsMenu === true && (
                       <div>
                         <div className="hamburgerDropdownSettings">
-                          {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
+                          {/* {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -427,7 +430,7 @@ class Main extends Component {
                             >
                               No Menu Options
                             </Button>
-                          )}
+                          )} */}
 
                           {this.state.assetClassHolderBool === true && this.state.assetClassHolderMenuBool === false && (
                             <Button

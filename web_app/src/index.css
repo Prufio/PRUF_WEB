@@ -200,6 +200,26 @@ div {
   -webkit-backgrount-size: cover;
   background-size: cover;
   box-sizing: border-box; 
+  background-position: center center fixed;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  font-weight: bold;
+  font-size: 3rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.96;
+  z-index: 2;
+}
+
+.homeFormTestNetS {
+  height: 51rem;
+  width: 75rem;
+  color: white;
+  display: flex;
+  background-image: url(./Resources/Images/DarkBlueBack.png);
+  -webkit-backgrount-size: cover;
+  background-size: cover;
+  box-sizing: border-box; 
   background-position: center center fixed;  
   border-radius: 0rem 0rem 0.5rem 0.5rem;
   font-weight: bold;
@@ -658,7 +678,7 @@ div {
 
 .hamburgerDropdown {
   display: flex;
-  height: 40rem;
+  height: 41rem;
   width: 30rem;
   position: absolute;
   background-image: url(./Resources/Images/DarkBlueBack.png);
@@ -808,17 +828,18 @@ div {
   height: fit-content;
   position: absolute;
   margin-top: 28rem;
-  -webkit-transition: -webkit-transform .5s ease-in-out;
-  transition:         transform .5s ease-in-out;
+  -webkit-transition: -webkit-transform .4s ease-in-out;
+  transition:         transform .4s ease-in-out;
   z-index: 999;
 }
 
 .imageButtonU:hover {
-  -webkit-transform: translateY(5px);
-  transform: translateY(5px);
+  -webkit-transform: translateY(2px);
+  transform: translateY(2px);
 }
 
 .imageButtonUser {
+  outline:none;
   border: none;
   object-fit: cover;
   width: fit-content;
@@ -1670,10 +1691,12 @@ margin-bottom: -3rem;
   background-size: cover;
   box-sizing: border-box; 
   background-position: center center fixed;  
-  -webkit-transition: -webkit-transform .7s ease-in-out;
-  transition:         transform .7s ease-in-out;
+  -webkit-transition: -webkit-transform .4s ease-in-out;
+  transition:         transform .4s ease-in-out;
   margin-left: 30rem;
   border-radius: 50%;
+  border: 0px transparent;
+  outline:none;
 }
 
 .imageFormUserMobile {
@@ -1719,8 +1742,11 @@ margin-bottom: -3rem;
 } */
 
 .imageFormUser:hover {
-  -webkit-transform: rotate(8deg);
-  transform: rotate(8deg);
+  -webkit-transform: translateX(2px);
+  transform: translateX(2px);
+  outline:none;
+  /* -webkit-transform: rotate(8deg);
+  transform: rotate(8deg); */
 }
 
 .assetImageMobile {
@@ -2610,8 +2636,8 @@ margin-bottom: -3rem;
 .hamburgerMenuLinkContentSettings:hover {
   color: #028ed4;
   cursor: pointer;
-  -webkit-transform: translateX(5px);
-  transform: translateX(5px);
+  -webkit-transform: translateX(2px);
+  transform: translateX(2px);
 }
 
 .home2ndRowLink {
