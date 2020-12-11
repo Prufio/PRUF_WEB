@@ -370,7 +370,7 @@ class Main extends Component {
                       dApp Last Updated:
                   </h3>
                     <h3>
-                      December 01, 2020
+                      December 11, 2020
                   </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
