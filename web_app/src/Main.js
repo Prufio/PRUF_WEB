@@ -374,8 +374,8 @@ class Main extends Component {
                   </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
-                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.7.0 </a>
-                        : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.7.0 </a>}
+                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.0.0 </a>
+                        : <a onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' }}> Version A1.0.0 </a>}
                     </h3>
                   </div>
                   <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
