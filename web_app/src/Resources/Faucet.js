@@ -424,7 +424,7 @@ class Faucet extends Component {
                                         <div>
                                             <Form.Row>
                                                 <Form.Group as={Col} controlId="formGridMiddleName">
-                                                    <Form.Label className="formFont">Amount of PRUF (ü100000/Ξ1 minimum = Ξ0.1)</Form.Label>
+                                                    <Form.Label className="formFont">Amount of PRUF (ü100000/Ξ1)</Form.Label>
                                                     {this.state.transaction === false && (
                                                         <Form.Control
                                                             placeholder="Amount of PRUF"
@@ -440,6 +440,7 @@ class Faucet extends Component {
                                                             size="lg"
                                                         />
                                                     )}
+                                                    <Form.Label className="formFont">(minimum = ü10000)</Form.Label>
                                                 </Form.Group>
                                             </Form.Row>
                                             <Form.Row>
@@ -691,7 +692,7 @@ class Faucet extends Component {
                                 <div>
                                     <Form.Row>
                                         <Form.Group as={Col} controlId="formGridMiddleName">
-                                            <Form.Label className="formFont">Amount of PRUF (ü100000/Ξ1 minimum = Ξ0.1)</Form.Label>
+                                            <Form.Label className="formFont">Amount of PRUF (ü100000/Ξ1)</Form.Label>
                                             {this.state.transaction === false && (
                                                 <Form.Control
                                                     placeholder="Amount of PRUF"
@@ -707,6 +708,7 @@ class Faucet extends Component {
                                                     size="lg"
                                                 />
                                             )}
+                                        <Form.Label className="formFont">(minimum = ü10000)</Form.Label>
                                         </Form.Group>
                                     </Form.Row>
                                     <Form.Row>
