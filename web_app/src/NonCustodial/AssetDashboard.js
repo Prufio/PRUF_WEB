@@ -693,8 +693,9 @@ class AssetDashboard extends React.Component {
           </div>
           <div className="mediaLinkADAddAsset">
             <a className="mediaLinkContentADAddAsset" ><Plus size={35}
-              // onClick={() => { this.newRecord() }} 
-              onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }} />
+              onClick={() => { this.newRecord() }} 
+              // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }} 
+              />
             </a>
           </div>
         </div>

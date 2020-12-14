@@ -99,20 +99,20 @@ class AssetDashboardMobile extends React.Component {
       window.location.href = '/#/' + link
     }
 
-    // this.newRecord = async () => {
-    //   await window.utils.determineTokenBalance()
-    //   console.log("IDholderBool", window.IDHolderBool)
-    //   if (window.IDHolderBool === false && window.confirm("You are not currently authorized to mint asset tokens. If you are interested in getting authorized, click ok to talk to one of our agents."))
-    //   {
-    //     window.open("https://t.me/prufteam", "_blank")
-    //     return
-    //   }
-    //   else if (window.IDHolderBool === true)
-    //   {
-    //   window.menuChange = "NC"
-    //   window.location.href = '/#/new-record-NC'
-    // }
-    // }
+    this.newRecord = async () => {
+      await window.utils.determineTokenBalance()
+      console.log("IDholderBool", window.IDHolderBool)
+      if (window.IDHolderBool === false && window.confirm("You are not currently authorized to mint asset tokens. If you are interested in getting authorized, click ok to talk to one of our agents."))
+      {
+        window.open("https://t.me/prufteam", "_blank")
+        return
+      }
+      else if (window.IDHolderBool === true)
+      {
+      window.menuChange = "mobile"
+      window.location.href = '/#/new-record-mobile'
+    }
+    }
 
     this.refresh = () => {
       window.resetInfo = true;
@@ -401,15 +401,16 @@ class AssetDashboardMobile extends React.Component {
             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
           <h2 className="assetDashboardHeaderMobile">Your Assets</h2>
-          <div className="mediaLinkADRefresh">
+          <div className="mediaLinkADRefreshMobile">
             <a className="mediaLinkContentADRefreshMobile" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
-          {/* <div className="mediaLinkADAddAsset">
+          <div className="mediaLinkADAddAssetMobile">
             <a className="mediaLinkContentADAddAsset" ><Plus size={35} 
-            // onClick={() => { this.newRecord() }} 
-            onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}/>
+            onClick={() => { this.newRecord() }} 
+            // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
+            />
             </a>
-          </div> */}
+          </div>
           {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
