@@ -2426,6 +2426,15 @@ margin-bottom: -3rem;
   z-index: 999;
 }
 
+.mediaLinkADRefreshMobile {
+  display: flex;
+  height: fit-content;
+  margin-left: 29rem;
+  position: absolute;
+  margin-top: -4rem;
+  z-index: 999;
+}
+
 .mediaLinkContentADRefresh {
   border-radius: 50%;
   color: #00a8ff;
@@ -2451,6 +2460,15 @@ margin-bottom: -3rem;
   display: flex;
   height: fit-content;
   margin-left: 93%;
+  position: absolute;
+  margin-top: -4.5rem;
+  z-index: 999;
+}
+
+.mediaLinkADAddAssetMobile {
+  display: flex;
+  height: fit-content;
+  margin-left: 32rem;
   position: absolute;
   margin-top: -4.5rem;
   z-index: 999;

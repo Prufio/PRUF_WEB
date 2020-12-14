@@ -172,7 +172,7 @@ class Main extends Component {
                                     <Button
                                       variant="userButton"
                                       onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
-                                      Get PRUF
+                                      Faucet
                               </Button>
                                   </h4>
                                   <br></br>
@@ -203,7 +203,8 @@ class Main extends Component {
                                     Assets :
                               <Button
                                       variant="userButton"
-                                      onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                      // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
+                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/asset-dashboard-mobile'}}>
                                       {this.state.assetBalance}
                                     </Button>
                                   </h4>
@@ -556,7 +557,7 @@ class Main extends Component {
                               <Button
                                 variant="userButton"
                                 onClick={() => { this.faucet() }}>
-                                Get PRUF
+                                Faucet
                               </Button>
                             </h4>
                             <br></br>
