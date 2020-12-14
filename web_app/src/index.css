@@ -770,7 +770,15 @@ div {
 }
 
 .siteInfoBox h3 a:hover{
-  /* cursor: pointer; */
+  cursor: pointer;
+}
+
+.siteInfoBoxExtra{
+  color: white;
+}
+
+.siteInfoBoxExtra:hover{
+  color: white;
   text-decoration: line-through !important;
   text-decoration-color: #ff0000 !important;
 }
