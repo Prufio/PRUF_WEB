@@ -408,17 +408,11 @@ class RecycleMobile extends Component {
               <Form.Group as={Row} controlId="formGridAC">
 
                 <Form.Control
-                  as="select"
+                  className="singleFormRow"
+                  placeholder="Submit an asset class name or #"
                   onChange={(e) => this.setState({ selectedAssetClass: e.target.value })}
                   size="lg"
-                >
-                  <optgroup className="optgroup">
-                    <option value="0"> Please Select An Asset Class </option>
-                    <option value="14"> Mobile Electronics </option>
-                    <option value="12"> Bicycles </option>
-                    <option value="16"> Other </option>
-                  </optgroup>
-                </Form.Control>
+                />
               </Form.Group>
 
               <div className="submitButtonRRMobile">
