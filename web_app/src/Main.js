@@ -185,7 +185,7 @@ class Main extends Component {
                                 <Button
                                       variant="userButton"
                                       // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                      onClick={() => { alert("This functionality is only available in the desktop application") }}>
+                                      onClick={() => { alert(this.state.assetClassReport) }}>
                                       {this.state.assetClassBalance}
                                     </Button>
                                     {/* <Button
@@ -220,7 +220,7 @@ class Main extends Component {
                                         <Button
                                           variant="userButton"
                                           // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
-                                          onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                          onClick={() => { this.mintID() }}>
                                           Get ID
                               </Button>
                                       </>
@@ -370,7 +370,7 @@ class Main extends Component {
                       dApp Last Updated:
                   </h3>
                     <h3>
-                      December 11, 2020
+                      December 14, 2020
                   </h3>
                   <h3>
                     © pruf.io
@@ -569,7 +569,7 @@ class Main extends Component {
                                 <Button
                                 variant="userButton"
                                 // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                onClick={() => { alert(this.state.assetClassReport) }}>
                                 {this.state.assetClassBalance}
                               </Button>
                               <Button
@@ -604,7 +604,7 @@ class Main extends Component {
                                   <Button
                                     variant="userButton"
                                     // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
-                                    onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}>
+                                    onClick={() => { this.mintID() }}>
                                     Get ID
                               </Button>
                                 </>
@@ -749,6 +749,7 @@ class Main extends Component {
         </HashRouter >
       );
     }
+
     //Watchdog which keeps state consistent with other components
     this.updateWatchDog = setInterval(() => {
 
@@ -1048,7 +1049,8 @@ class Main extends Component {
 
     //Set up held assets for rebuild. Recount when necessary
     this.setUpAssets = async () => {
-      window.hasNoAssets = false;
+      window.hasNoAssets = false; 
+      let report = "AC Nodes Held:\n";
       window.ipfsCounter = 0;
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
@@ -1124,12 +1126,36 @@ class Main extends Component {
       window.assets.ids = window.aTknIDs;
 
       console.log("Asset setUp Complete. Turning on watchDog.")
+
+      //Build an AC report for provisional placeholder on AC node bal
+      for(let i=0; i<window.assetClasses.ids.length; i++){
+        report += ((i+1) + ".) " + window.assetClasses.names[i] 
+          + " " + "\nCustody type: " + window.assetClasses.custodyTypes[i]
+          + "\nroot AC: " + window.assetClasses.roots[i] 
+          + "\nshare: " + window.assetClasses.discounts[i]/100 + "%\n----------\n") 
+      }
+      //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
+      this.setState({assetClassReport: report})
+
       this.setState({ runWatchDog: true })
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
       window.hasLoadedAssetClasses = true;
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
+    }
+
+    this.mintID = async () => {
+      await window.contracts.PARTY.methods
+                .GET_ID()
+                .send({ from: window.addr })
+                .on("error", function (_error) {
+                    alert("Something went wrong when minting ID!")
+                })
+                .on("receipt", (receipt) => {
+                    window.resetInfo = true;
+                    window.recount = true;
+                });
     }
 
     //Rebuild fetched assets, preparing them for use by the app

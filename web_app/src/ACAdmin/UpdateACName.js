@@ -109,6 +109,8 @@ class UpdateACName extends Component {
             self.setState({ transaction: false })
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
+            window.resetInfo = true;
+            window.recount = true;
           });
         return clearForm();
       };

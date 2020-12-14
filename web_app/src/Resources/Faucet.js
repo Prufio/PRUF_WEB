@@ -90,14 +90,14 @@ class Faucet extends Component {
         const ACmenu = async () => {
             let temp;
             const self = this;
-            await window.contracts.AC_MGR.methods.currentACtokenInfo().call(
+            await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
                 function (_error, _result) {
                     if (_error) {
                       return (console.log("IN ERROR IN ERROR IN ERROR"))
                     } 
                     else {
-                      self.setState({currentACPrice: Object.values(_result)[1]})
-                      return temp = Object.values(_result)[1]
+                      self.setState({currentACPrice: window.web3.utils.fromWei(Object.values(_result)[1])})
+                      return temp = window.web3.utils.fromWei(Object.values(_result)[1])
                     }
             
                   }
@@ -111,6 +111,18 @@ class Faucet extends Component {
             else {
                 this.setState({ ACmenu: false })
             }
+
+            await window.contracts.AC_TKN.methods.totalSupply().call(
+                function (_error, _result) {
+                    if (_error) {
+                      return (console.log("IN ERROR IN ERROR IN ERROR"))
+                    } 
+                    else {
+                      self.setState({totalSupply: _result})
+                    }
+            
+                  }
+            );
         }
 
         const PRUFmenu = async () => {
@@ -142,12 +154,8 @@ class Faucet extends Component {
                 amount = window.web3.utils.toWei(String(this.state.amount))
             }
 
-            await window.contracts.FAUCET.methods
-                .PRUFfaucet(
-                    amount,
-                    window.addr
-                )
-                .send({ from: window.addr })
+            await window.web3.eth
+            .sendTransaction({ from: window.addr, to: "0xA837a86dB071c8531AFf1D301C8Fd0f30c2c1E9A",value: amount/100000})
                 .on("error", function (_error) {
                     // self.setState({ NRerror: _error });
                     self.setState({ transaction: false })
@@ -156,7 +164,6 @@ class Faucet extends Component {
                     alert("Something went wrong!")
                     clearForm();
                     self.setState({ assetClassSelected: false, idxSubmitted: false })
-
                 })
                 .on("receipt", (receipt) => {
                     self.setState({ transaction: false })
@@ -207,7 +214,7 @@ class Faucet extends Component {
             }
 
             await window.contracts.AC_MGR.methods
-                .purchaseACtoken(
+                .purchaseACnode(
                     this.state.ACname,
                     root,
                     "2",
@@ -367,8 +374,8 @@ class Faucet extends Component {
                                                     <div className="submitButtonRRMobile">
                                                         <div className="submitButtonContentMobile">
                                                             <CheckCircle
-                                                                // onClick={() => { mintAC() }}
-                                                                onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
+                                                                onClick={() => { mintAC() }}
+                                                                /* onClick={() => { alert("This function has been disabled until Alpha testing begins") }} */
                                                             />
                                                         </div>
                                                     </div>
@@ -439,8 +446,8 @@ class Faucet extends Component {
                                                 <div className="submitButtonRRMobile">
                                                     <div className="submitButtonContentMobile">
                                                         <CheckCircle
-                                                            // onClick={() => { mintPRUF() }}
-                                                            onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
+                                                            onClick={() => { mintPRUF() }}
+                                                            // onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
                                                         />
                                                     </div>
                                                 </div>
@@ -634,8 +641,8 @@ class Faucet extends Component {
                                             <div className="submitButton">
                                                 <div className="submitButtonContent">
                                                     <CheckCircle
-                                                        // onClick={() => { mintAC() }}
-                                                        onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
+                                                        onClick={() => { mintAC() }}
+                                                        //onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
                                                     />
                                                 </div>
                                             </div>
@@ -706,8 +713,8 @@ class Faucet extends Component {
                                         <div className="submitButton">
                                             <div className="submitButtonContent">
                                                 <CheckCircle
-                                                    // onClick={() => { mintPRUF() }}
-                                                    onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
+                                                    onClick={() => { mintPRUF() }}
+                                                    // onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
                                                 />
                                             </div>
                                         </div>

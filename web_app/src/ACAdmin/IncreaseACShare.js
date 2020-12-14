@@ -132,6 +132,8 @@ class IncreaseACShare extends Component {
           .on("receipt", (receipt) => {
             console.log("tx receipt: ", receipt);
             self.setState({ transaction: false })
+            window.resetInfo = true;
+            window.recount = true;
             return clearForm();
           });
 

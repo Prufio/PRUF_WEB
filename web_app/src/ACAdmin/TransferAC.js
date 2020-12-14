@@ -110,8 +110,11 @@ class TransferAC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
+          window.resetInfo = true;
+          window.recount = true;
         });
       console.log(this.state.txHash);
+      
       return clearForm();
     };
 

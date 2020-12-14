@@ -89,8 +89,8 @@ class AddUser extends Component {
       this.setState({ transaction: true })
       if (Number(this.state.userType) < 1) { return alert("Please select a user type from the dropdown") }
       window.contracts.AC_MGR.methods
-        .OO_addUser(
-          this.state.authAddr,
+        .addUser(
+          window.web3.utils.soliditySha3(this.state.authAddr),
           this.state.userType,
           this.state.assetClass
         )

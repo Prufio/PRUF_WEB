@@ -1244,15 +1244,12 @@ function buildWindowUtils() {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
             } else {
               let resStr;
-              //console.log(window.web3.utils.numberToHex(_result))
-              resStr = _result; /* window.web3.utils.numberToHex(_result); */
-              /* while (resStr.length < 66) {
-                resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
-              }*/
+              resStr = _result; 
               tknIDArray.push(resStr)
             }
           });
       }
+      
       console.log("AC IDs: ", tknIDArray);
 
       for (let i = 0; i < tknIDArray.length; i++) {
@@ -1385,7 +1382,7 @@ function buildWindowUtils() {
 
     }
 
-    else { console.log("No assets held by user"); return window.hasNoAssets = true }
+    else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
   }
 
   const _getAssetTokenName = async (ipfs) => {
