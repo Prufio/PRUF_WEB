@@ -21,10 +21,13 @@ async function buildContracts(_web3) {
   const PIP_ABI = abis.PIP;
   const RCLR_ABI = abis.RCLR;
   const UTIL_TKN_ABI = abis.UTIL_TKN;
+  const PARTY_ABI = abis.PARTY
 
-  const STOR_Address = "0x2954A2b78Dcc3923F861D232Da5cDbBfFD9Ce853";
+  const STOR_Address = "0xaEfc4a04E1B40Ef85bDCDeA715Ec5a7d2745226A";
+  const PARTY_Address = "0xA837a86dB071c8531AFf1D301C8Fd0f30c2c1E9A";
 
   const STOR = new _web3.eth.Contract(STOR_ABI, STOR_Address);
+  const PARTY = new _web3.eth.Contract(PARTY_ABI, PARTY_Address);
 
   let APP = null;
   let NP = null;
@@ -238,7 +241,8 @@ async function buildContracts(_web3) {
     RCLR: RCLR,
     PIP: PIP,
     ID_TKN: ID_TKN,
-    UTIL_TKN: UTIL_TKN
+    UTIL_TKN: UTIL_TKN,
+    PARTY: PARTY
   }
 }
 

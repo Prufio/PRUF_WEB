@@ -2,23 +2,9 @@ function returnABIs() {
 
 	const STOR = [
 		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
+			"inputs": [],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
 		},
 		{
 			"anonymous": false,
@@ -56,6 +42,81 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -64,6 +125,32 @@ function returnABIs() {
 			],
 			"name": "Unpaused",
 			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "B320xF_",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
 		},
 		{
 			"inputs": [
@@ -85,6 +172,19 @@ function returnABIs() {
 					"name": "",
 					"type": "uint8"
 				},
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
 				{
 					"internalType": "bytes32",
 					"name": "",
@@ -120,6 +220,19 @@ function returnABIs() {
 			"name": "OO_addContract",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -228,6 +341,110 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
 					"name": "_idxHash",
 					"type": "bytes32"
 				},
@@ -328,19 +545,6 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
 			"name": "pause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
@@ -360,8 +564,19 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -492,6 +707,24 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
 					"name": "_idxHash",
 					"type": "bytes32"
 				},
@@ -525,19 +758,6 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "unpause",
 			"outputs": [],
@@ -548,25 +768,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const APP = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -591,6 +792,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -747,9 +1023,54 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "B320xF_",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -780,9 +1101,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -792,9 +1113,119 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -833,15 +1264,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -858,8 +1283,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -883,14 +1337,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -900,25 +1348,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const NP = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -949,6 +1378,81 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -960,9 +1464,41 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -993,9 +1529,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -1005,9 +1541,15 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -1153,6 +1695,110 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "address",
 					"name": "",
 					"type": "address"
@@ -1186,15 +1832,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -1211,8 +1851,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -1236,14 +1905,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -1253,25 +1916,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const ECR = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -1302,6 +1946,81 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -1313,9 +2032,41 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -1346,9 +2097,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -1358,9 +2109,15 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -1374,6 +2131,110 @@ function returnABIs() {
 			"name": "endEscrow",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -1412,15 +2273,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -1437,8 +2292,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -1518,14 +2402,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -1536,23 +2414,9 @@ function returnABIs() {
 
 	const AC_MGR = [
 		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
+			"inputs": [],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
 		},
 		{
 			"anonymous": false,
@@ -1578,6 +2442,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -1622,31 +2561,114 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
+			"inputs": [],
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
 				{
-					"internalType": "address",
-					"name": "_authAddr",
-					"type": "address"
-				},
-				{
-					"internalType": "uint8",
-					"name": "_userType",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
 				}
 			],
-			"name": "OO_addUser",
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "NODE_MINTER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_L1",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_L2",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_L3",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_L4",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_L5",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_L6",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_L7",
+					"type": "uint256"
+				}
+			],
+			"name": "OO_SetACpricing",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "OO_pause",
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_prufPerShare",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_upperLimit",
+					"type": "uint256"
+				}
+			],
+			"name": "OO_SetACupgrade",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -1679,9 +2701,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -1691,7 +2713,127 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "acPrice_L1",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "acPrice_L2",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "acPrice_L3",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "acPrice_L4",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "acPrice_L5",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "acPrice_L6",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "acPrice_L7",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_addrHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_userType",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "addUser",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -1722,6 +2864,16 @@ function returnABIs() {
 					"internalType": "uint8",
 					"name": "_custodyType",
 					"type": "uint8"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IPFS",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_discount",
+					"type": "uint32"
 				}
 			],
 			"name": "createAssetClass",
@@ -1731,8 +2883,43 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "currentACtokenInfo",
+			"name": "currentACpricingInfo",
 			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
 				{
 					"internalType": "uint256",
 					"name": "",
@@ -1776,6 +2963,11 @@ function returnABIs() {
 					"internalType": "uint32",
 					"name": "",
 					"type": "uint32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
 				}
 			],
 			"stateMutability": "view",
@@ -1814,6 +3006,68 @@ function returnABIs() {
 					"internalType": "string",
 					"name": "",
 					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",
@@ -1885,6 +3139,48 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "uint32",
 					"name": "_assetClass",
 					"type": "uint32"
@@ -1898,9 +3194,9 @@ function returnABIs() {
 			"name": "increaseShare",
 			"outputs": [
 				{
-					"internalType": "bool",
+					"internalType": "uint32",
 					"name": "",
-					"type": "bool"
+					"type": "uint32"
 				}
 			],
 			"stateMutability": "nonpayable",
@@ -1966,15 +3262,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -1985,6 +3275,19 @@ function returnABIs() {
 					"internalType": "bool",
 					"name": "",
 					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "prufPerShare",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",
@@ -2006,9 +3309,14 @@ function returnABIs() {
 					"internalType": "uint8",
 					"name": "_custodyType",
 					"type": "uint8"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IPFS",
+					"type": "bytes32"
 				}
 			],
-			"name": "purchaseACtoken",
+			"name": "purchaseACnode",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -2020,8 +3328,19 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -2048,6 +3367,24 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "address",
 					"name": "_to",
 					"type": "address"
@@ -2064,14 +3401,44 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
+					"internalType": "uint32",
+					"name": "_extData",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
 				}
 			],
-			"name": "transferOwnership",
+			"name": "updateACextendedData",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_IPFS",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "updateACipfs",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -2092,6 +3459,19 @@ function returnABIs() {
 			"name": "updateACname",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "upperLimit",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		}
 	];
@@ -2158,19 +3538,13 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
-					"indexed": true,
+					"indexed": false,
 					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
+					"name": "account",
 					"type": "address"
 				}
 			],
-			"name": "OwnershipTransferred",
+			"name": "Paused",
 			"type": "event"
 		},
 		{
@@ -2184,6 +3558,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -2212,23 +3661,68 @@ function returnABIs() {
 			"type": "event"
 		},
 		{
-			"inputs": [],
-			"name": "OO_resolveContractAddresses",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
+			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": false,
 					"internalType": "address",
-					"name": "_storageAddress",
+					"name": "account",
 					"type": "address"
 				}
 			],
-			"name": "OO_setStorageContract",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "MINTER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -2289,12 +3783,129 @@ function returnABIs() {
 					"type": "uint256"
 				}
 			],
+			"name": "burn",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
+				}
+			],
 			"name": "getApproved",
 			"outputs": [
 				{
 					"internalType": "address",
 					"name": "",
 					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"stateMutability": "view",
@@ -2367,19 +3978,6 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
 			"inputs": [
 				{
 					"internalType": "uint256",
@@ -2393,6 +3991,26 @@ function returnABIs() {
 					"internalType": "address",
 					"name": "",
 					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"stateMutability": "view",
@@ -2428,8 +4046,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -2634,14 +4281,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -2710,19 +4351,13 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
-					"indexed": true,
+					"indexed": false,
 					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
+					"name": "account",
 					"type": "address"
 				}
 			],
-			"name": "OwnershipTransferred",
+			"name": "Paused",
 			"type": "event"
 		},
 		{
@@ -2736,6 +4371,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -2764,6 +4474,71 @@ function returnABIs() {
 			"type": "event"
 		},
 		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "B320xF_",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "MINTER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "OO_resolveContractAddresses",
 			"outputs": [],
@@ -2781,6 +4556,19 @@ function returnABIs() {
 			"name": "OO_setStorageContract",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -2841,6 +4629,19 @@ function returnABIs() {
 					"type": "uint256"
 				}
 			],
+			"name": "burn",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
+				}
+			],
 			"name": "discard",
 			"outputs": [],
 			"stateMutability": "nonpayable",
@@ -2860,6 +4661,110 @@ function returnABIs() {
 					"internalType": "address",
 					"name": "",
 					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"stateMutability": "view",
@@ -2932,19 +4837,6 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
 			"inputs": [
 				{
 					"internalType": "uint256",
@@ -2964,32 +4856,57 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_recipientAddress",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "tokenId",
-					"type": "uint256"
-				}
-			],
-			"name": "reMintAssetToken",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
 			"inputs": [],
-			"name": "renounceOwnership",
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -3239,19 +5156,6 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
 					"internalType": "uint256",
 					"name": "number",
 					"type": "uint256"
@@ -3266,6 +5170,13 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "pure",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -3300,25 +5211,6 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -3339,6 +5231,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -3389,9 +5356,41 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -3422,9 +5421,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -3434,9 +5433,119 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -3498,15 +5607,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -3523,8 +5626,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -3563,19 +5695,6 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
 					"internalType": "uint256",
 					"name": "number",
 					"type": "uint256"
@@ -3591,31 +5710,19 @@ function returnABIs() {
 			],
 			"stateMutability": "pure",
 			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
 		}
 	];
 
 	//............................................................................................................................................
 
 	const APP_NC = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -3640,6 +5747,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -3759,54 +5941,42 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "string",
-					"name": "first",
-					"type": "string"
-				},
-				{
-					"internalType": "string",
-					"name": "middle",
-					"type": "string"
-				},
-				{
-					"internalType": "string",
-					"name": "last",
-					"type": "string"
-				},
-				{
-					"internalType": "string",
-					"name": "id",
-					"type": "string"
-				},
-				{
-					"internalType": "string",
-					"name": "secret",
-					"type": "string"
-				}
-			],
-			"name": "$reMintToken",
+			"inputs": [],
+			"name": "ASSET_TXFR_ROLE",
 			"outputs": [
 				{
-					"internalType": "uint256",
+					"internalType": "bytes32",
 					"name": "",
-					"type": "uint256"
+					"type": "bytes32"
 				}
 			],
-			"stateMutability": "nonpayable",
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -3837,9 +6007,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -3849,9 +6019,119 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -3890,15 +6170,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -3915,8 +6189,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -3940,14 +6243,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -3957,25 +6254,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const NP_NC = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -4006,6 +6284,81 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -4017,9 +6370,41 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4050,9 +6435,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -4062,9 +6447,15 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4203,6 +6594,110 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "address",
 					"name": "",
 					"type": "address"
@@ -4236,15 +6731,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -4261,8 +6750,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -4286,14 +6804,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -4303,25 +6815,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const RCLR = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -4346,6 +6839,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -4386,9 +6954,54 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DISCARD_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4419,9 +7032,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -4431,9 +7044,15 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4452,6 +7071,110 @@ function returnABIs() {
 			"name": "discard",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4490,15 +7213,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -4515,8 +7232,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -4540,14 +7286,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -4557,25 +7297,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const ECR_NC = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -4606,6 +7327,81 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -4617,9 +7413,41 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4650,9 +7478,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -4662,9 +7490,15 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4678,6 +7512,110 @@ function returnABIs() {
 			"name": "endEscrow",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4716,15 +7654,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -4741,8 +7673,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -4794,14 +7755,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -4811,25 +7766,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const VERIFY = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -4860,6 +7796,81 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -4871,9 +7882,41 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -4904,9 +7947,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -4916,9 +7959,15 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -5006,6 +8055,110 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
 					"name": "_idxHash",
 					"type": "bytes32"
 				},
@@ -5072,15 +8225,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -5121,8 +8268,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -5228,14 +8404,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -5245,25 +8415,6 @@ function returnABIs() {
 	//............................................................................................................................................
 
 	const ECR_MGR = [
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "OwnershipTransferred",
-			"type": "event"
-		},
 		{
 			"anonymous": false,
 			"inputs": [
@@ -5294,6 +8445,81 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
 					"indexed": false,
 					"internalType": "address",
 					"name": "account",
@@ -5305,9 +8531,41 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -5338,9 +8596,9 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
 				}
 			],
 			"name": "OO_transferACToken",
@@ -5350,9 +8608,15 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "OO_unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -5366,6 +8630,110 @@ function returnABIs() {
 			"name": "endEscrow",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -5404,15 +8772,9 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -5442,8 +8804,19 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -5608,6 +8981,24 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
 					"name": "_idxHash",
 					"type": "bytes32"
 				},
@@ -5757,14 +9148,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -5833,19 +9218,13 @@ function returnABIs() {
 			"anonymous": false,
 			"inputs": [
 				{
-					"indexed": true,
+					"indexed": false,
 					"internalType": "address",
-					"name": "previousOwner",
-					"type": "address"
-				},
-				{
-					"indexed": true,
-					"internalType": "address",
-					"name": "newOwner",
+					"name": "account",
 					"type": "address"
 				}
 			],
-			"name": "OwnershipTransferred",
+			"name": "Paused",
 			"type": "event"
 		},
 		{
@@ -5859,6 +9238,81 @@ function returnABIs() {
 				}
 			],
 			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
 			"type": "event"
 		},
 		{
@@ -5885,6 +9339,71 @@ function returnABIs() {
 			],
 			"name": "Transfer",
 			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "MINTER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
 		},
 		{
 			"inputs": [
@@ -5944,12 +9463,129 @@ function returnABIs() {
 					"type": "uint256"
 				}
 			],
+			"name": "burn",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
+				}
+			],
 			"name": "getApproved",
 			"outputs": [
 				{
 					"internalType": "address",
 					"name": "",
 					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"stateMutability": "view",
@@ -6017,19 +9653,6 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
 			"inputs": [
 				{
 					"internalType": "uint256",
@@ -6043,6 +9666,26 @@ function returnABIs() {
 					"internalType": "address",
 					"name": "",
 					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"stateMutability": "view",
@@ -6073,8 +9716,37 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "renounceOwnership",
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -6322,14 +9994,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -6522,6 +10188,19 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "DEFAULT_ADMIN_ROLE",
 			"outputs": [
 				{
@@ -6596,6 +10275,19 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_key",
+					"type": "uint256"
+				}
+			],
+			"name": "adminKillTrustedAgent",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -6718,6 +10410,19 @@ function returnABIs() {
 			"name": "burnFrom",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "cap",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -6886,8 +10591,14 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "maxSupply",
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "isColdWallet",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -6899,19 +10610,6 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "max_Supply",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "pure",
-			"type": "function"
-		},
-		{
 			"inputs": [
 				{
 					"internalType": "address",
@@ -6920,7 +10618,7 @@ function returnABIs() {
 				},
 				{
 					"internalType": "uint256",
-					"name": "amount",
+					"name": "_amount",
 					"type": "uint256"
 				}
 			],
@@ -7027,6 +10725,13 @@ function returnABIs() {
 				}
 			],
 			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "setColdWallet",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -7146,6 +10851,24 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_amount",
+					"type": "uint256"
+				}
+			],
+			"name": "trustedAgentBurn",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
 					"name": "_from",
 					"type": "address"
 				},
@@ -7166,19 +10889,8 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_addr",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_amount",
-					"type": "uint256"
-				}
-			],
-			"name": "trustedAgentburn",
+			"inputs": [],
+			"name": "unSetColdWallet",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -7189,6 +10901,579 @@ function returnABIs() {
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
+		}
+	];
+	//............................................................................................................................................
+
+	const PARTY = [
+		{
+			"inputs": [],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Paused",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "addr",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "amount",
+					"type": "uint256"
+				}
+			],
+			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_airdropAmount",
+					"type": "uint256"
+				}
+			],
+			"name": "ADMIN_setAirDropAmount",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address payable",
+					"name": "_address",
+					"type": "address"
+				}
+			],
+			"name": "ADMIN_setPaymentAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_presaleLimit",
+					"type": "uint256"
+				}
+			],
+			"name": "ADMIN_setPresaleLimit",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_address",
+					"type": "address"
+				}
+			],
+			"name": "ADMIN_set_Id_TokenContract",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_address",
+					"type": "address"
+				}
+			],
+			"name": "ADMIN_set_Util_TokenContract",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "AIRDROP_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "BUY_PRUF",
+			"outputs": [],
+			"stateMutability": "payable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "GET_ID",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "WHITELIST_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "airdropAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "balance",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "checkWhitelist",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "payment_address",
+			"outputs": [
+				{
+					"internalType": "address payable",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "presaleCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "presaleLimit",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "tokenId",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_tokensPerEth",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_minEth",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_maxEth",
+					"type": "uint256"
+				}
+			],
+			"name": "whitelist",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "withdraw",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"stateMutability": "payable",
+			"type": "receive"
 		}
 	];
 
@@ -7209,6 +11494,7 @@ function returnABIs() {
 		ECR_MGR: ECR_MGR,
 		ID_TKN: ID_TKN,
 		UTIL_TKN: UTIL_TKN,
+		PARTY: PARTY,
 	};
 
 	//............................................................................................................................................
