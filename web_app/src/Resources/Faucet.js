@@ -424,7 +424,7 @@ class Faucet extends Component {
                                         <div>
                                             <Form.Row>
                                                 <Form.Group as={Col} controlId="formGridMiddleName">
-                                                    <Form.Label className="formFont">Amount of PRUF (ü10000/Ξ0.1)</Form.Label>
+                                                    <Form.Label className="formFont">Amount of PRUF (ü100000/Ξ1 minimum = Ξ0.1)</Form.Label>
                                                     {this.state.transaction === false && (
                                                         <Form.Control
                                                             placeholder="Amount of PRUF"
@@ -691,7 +691,7 @@ class Faucet extends Component {
                                 <div>
                                     <Form.Row>
                                         <Form.Group as={Col} controlId="formGridMiddleName">
-                                            <Form.Label className="formFont">Amount of PRUF (ü10000/Ξ0.1)</Form.Label>
+                                            <Form.Label className="formFont">Amount of PRUF (ü100000/Ξ1 minimum = Ξ0.1)</Form.Label>
                                             {this.state.transaction === false && (
                                                 <Form.Control
                                                     placeholder="Amount of PRUF"
