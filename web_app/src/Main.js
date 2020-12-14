@@ -28,7 +28,7 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (!isMobile) {
+      if (isMobile) {
         return (
           <div>
             <HashRouter>
@@ -798,7 +798,7 @@ class Main extends Component {
       //^^^
       if (this.state.menuChange !== undefined) {
         window.menuChange = undefined
-        if (!isMobile && window.ethereum) {
+        if (isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
           this.setState({ routeRequest: "basicMobile" })
           this.setState({
@@ -812,7 +812,7 @@ class Main extends Component {
           })
         }
 
-        else if (!!isMobile && this.state.IDHolderBool === true) {
+        else if (!isMobile && this.state.IDHolderBool === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -827,7 +827,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!!isMobile && this.state.IDHolderBool === false) {
+        else if (!isMobile && this.state.IDHolderBool === false) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
@@ -845,7 +845,7 @@ class Main extends Component {
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
-      if (!isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
+      if (isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -1299,7 +1299,7 @@ class Main extends Component {
 
             }
 
-            else if (!!isMobile) {
+            else if (!isMobile) {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1340,7 +1340,7 @@ class Main extends Component {
       window.isSettingUpContracts = true;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (!!isMobile) {
+        if (!isMobile) {
           console.log("Here!")
           await this.setState({
             mobileMenuBool: false,
@@ -1354,7 +1354,7 @@ class Main extends Component {
           })
         }
 
-        else if (!isMobile && _web3.eth.net.getNetworkType() != undefined) {
+        else if (isMobile && _web3.eth.net.getNetworkType() != undefined) {
           await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
@@ -1569,7 +1569,7 @@ class Main extends Component {
     window.menuChange = undefined;
 
     //Give me the desktop version
-    if (!!isMobile && window.ethereum) {
+    if (!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1610,7 +1610,7 @@ class Main extends Component {
     }
 
     //Give me the mobile ethereum-enabled version
-    else if (!isMobile && window.ethereum) {
+    else if (isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
 
