@@ -61,7 +61,8 @@ class IncreaseACShare extends Component {
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       hasLoadedAssets: false,
       assetClass: "",
-      help: false
+      help: false,
+      amount: 50
     };
   }
 
@@ -69,6 +70,8 @@ class IncreaseACShare extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     this.setState({ runWatchDog: true })
+    this.setState({ upperLimit: window.AC_UpperLimit})
+    this.setState({ costPerShare: 100*window.web3.utils.fromWei(String(window.AC_CostOfShares))})
   }
 
   componentDidUpdate() {//stuff to do when state updates
@@ -90,7 +93,7 @@ class IncreaseACShare extends Component {
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
+      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, currentShare: e.discount, custodyType: e.custodyType, ACName: e.name, root: e.root });
     }
 
     const help = async () => {
@@ -103,17 +106,14 @@ class IncreaseACShare extends Component {
     }
 
     const increaseACShare = async () => {
-      await console.log("Pruf Bal", this.state.prufBalance)
-      const amount = window.web3.utils.toWei(String(this.state.amount))
-      if(Number(this.state.prufBalance) < this.state.amount) {
-        alert("Sender has insuficceint PRuF token balance")
-        return clearForm()
+      await console.log("Pruf Bal", this.state.prufBalance);
+
+      if(this.state.prufBalance < this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))) {
+        return alert("Insufficient balance!")
       }
-      if(Number(this.state.amount) < "200") {
-        alert("The amount of PRuF sent is below 200. To increase shares, you must send at least 200 PRuF.")
-        return clearForm()
-      }
-      else {
+
+      const amount = window.web3.utils.toWei(String(this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))));
+      
         self.setState({ transaction: true })
         console.log(amount)
         console.log(this.state.assetClass)
@@ -131,14 +131,13 @@ class IncreaseACShare extends Component {
           })
           .on("receipt", (receipt) => {
             console.log("tx receipt: ", receipt);
-            self.setState({ transaction: false })
             window.resetInfo = true;
             window.recount = true;
+            self.setState({ hasLoadedAssetClasses: false, transaction: false })
             return clearForm();
           });
 
         console.log(this.state.txHash);
-      }
     };
 
     return (
@@ -190,23 +189,26 @@ class IncreaseACShare extends Component {
               <>
                 <div>
                   <Form.Group as={Col} controlId="formGridShareIncrease">
-                    <Form.Label className="formFont">Share Increase Amount :</Form.Label>
+                    <Form.Label className="formFont">Desired Share:</Form.Label>
                     {this.state.transaction === false && (
                       <Form.Control
                         placeholder="Share Increase"
                         required
-                        type="text"
+                        type="range"
                         onChange={(e) => this.setState({ amount: e.target.value })}
                         size="lg"
                       />
                     )}
                     {this.state.transaction === true && (
                       <Form.Control
-                        placeholder={this.state.amount}
+                        placeholder={"An increase of " + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare)) + "%"}
                         disabled
                         size="lg"
                       />
                     )}
+                    <Form.Label className="formFont">({this.state.currentShare*0.01 + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))}%)</Form.Label>
+                    <br></br>
+                    <Form.Label className="formFont">Cost: ü{this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))}</Form.Label>
                   </Form.Group>
                 </div>
                 {this.state.transaction === false && (
@@ -232,8 +234,7 @@ class IncreaseACShare extends Component {
                     {this.state.help === true && (
                       <div className="explainerTextBox2">
                         Increase Share allows an asset class admin to upgrade the percentage of each transaction they recieve.
-                        The standard ratio is 30%(AC Admin) 70%(PRuF). For each 1,000 PRuF utility tokens put towards an asset class's share increase,
-                        is a 10% increase on their holder's share. The minimum sent PRuF allotment is 200.
+                        The standard ratio is 51%(AC Admin) 49%(PRuF Network).
                       </div>
                     )}
                   </>

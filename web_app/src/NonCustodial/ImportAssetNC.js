@@ -388,7 +388,7 @@ class ImportAssetNC extends Component {
                     <Form.Row>
                       <div>
                         <Form.Label className="costText">
-                          Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF
+                          Cost to import into AC {this.state.selectedAssetClass}: ü{Number(window.costs.newRecordCost) / 1000000000000000000}
                           </Form.Label>
                         <div className="submitButton">
                           <div className="submitButtonContent">

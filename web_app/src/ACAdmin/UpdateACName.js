@@ -106,11 +106,11 @@ class UpdateACName extends Component {
             console.log(Object.values(_error)[0].transactionHash);
           })
           .on("receipt", (receipt) => {
-            self.setState({ transaction: false })
-            self.setState({ txHash: receipt.transactionHash });
-            self.setState({ txStatus: receipt.status });
             window.resetInfo = true;
             window.recount = true;
+            self.setState({ hasLoadedAssetClasses: false, transaction: false })
+            self.setState({ txHash: receipt.transactionHash });
+            self.setState({ txStatus: receipt.status });
           });
         return clearForm();
       };

@@ -97,6 +97,7 @@ function buildWindowUtils() {
           '{"id" : ' + '"' + String(window.assetClasses.ids[i]) + '"' + ","
           + '"custodyType" : ' + '"' + String(window.assetClasses.custodyTypes[i]) + '"' + ","
           + '"name" : ' + '"' + String(window.assetClasses.names[i]) + '"' + ","
+          + '"discount" : ' + '"' + String(window.assetClasses.discounts[i]) + '"' + ","
           + '"root": ' + '"' + String(window.assetClasses.roots[i]) + '"' + "}"
 
         component.push(<option size="lg" key={"assetClass " + String(i)} value={objVal}>
@@ -1273,6 +1274,24 @@ function buildWindowUtils() {
               discounts.push(Object.values(_result)[2])
               exData.push(Object.values(_result)[3])
 
+            }
+          });
+
+          await window.contracts.AC_MGR.methods
+          .prufPerShare()
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
+            else {
+              window.AC_CostOfShares = _result;
+            }
+          });
+
+          await window.contracts.AC_MGR.methods
+          .upperLimit()
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
+            else {
+              window.AC_UpperLimit = _result;
             }
           });
 

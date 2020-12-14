@@ -161,6 +161,7 @@ class enableContract extends Component {
         .on("receipt", (receipt) => {
           console.log("contract added under authLevel:", self.state.authLevel);
           console.log("tx receipt: ", receipt);
+          self.setState({hasLoadedAssetClasses: false})
           return clearForm();
         });
 

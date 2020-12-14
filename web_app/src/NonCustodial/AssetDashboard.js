@@ -138,6 +138,7 @@ class AssetDashboard extends React.Component {
       assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] },
       contractArray: [],
       hasLoadedAssets: false,
+      hasNoAssets: false,
     };
   }
 

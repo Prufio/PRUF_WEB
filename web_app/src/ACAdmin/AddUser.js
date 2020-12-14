@@ -106,7 +106,7 @@ class AddUser extends Component {
             "user added succesfully under asset class",
             self.state.assetClass
           );
-          this.setState({ transaction: false })
+          this.setState({ hasLoadedAssetClasses: false, transaction: false })
           console.log("tx receipt: ", receipt);
           return clearForm();
         });

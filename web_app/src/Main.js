@@ -876,6 +876,7 @@ class Main extends Component {
 
       //If reset was remotely requested, begin full asset recount  
       if (window.resetInfo === true) {
+        window.hasLoadedAssetClasses = false;
         window.hasLoadedAssets = false;
         this.setState({ buildReady: false, runWatchDog: false })
         console.log("WD: setting up assets (Step one)")
@@ -1129,13 +1130,21 @@ class Main extends Component {
       console.log("Asset setUp Complete. Turning on watchDog.")
 
       //Build an AC report for provisional placeholder on AC node bal
-      for(let i=0; i<window.assetClasses.ids.length; i++){
-        report += ((i+1) + ".) " + window.assetClasses.names[i] 
-          + " " + "\nCustody type: " + window.assetClasses.custodyTypes[i]
-          + "\nroot AC: " + window.assetClasses.roots[i] 
-          + "\nnode ID: " + window.assetClasses.ids[i]
-          + "\nshare: " + window.assetClasses.discounts[i]/100 + "%\n----------\n") 
+      if(window.assetClasses){
+        if(window.assetClasses.ids.length > 0){
+          for(let i=0; i<window.assetClasses.ids.length; i++){
+            report += ((i+1) + ".) " + window.assetClasses.names[i] 
+              + "\nCustody type: " + window.assetClasses.custodyTypes[i]
+              + "\nroot ACN: " + window.assetClasses.roots[i] 
+              + "\nnode ID: " + window.assetClasses.ids[i]
+              + "\nshare: " + window.assetClasses.discounts[i]/100 + "%\n----------\n") 
+          }
+        }
+        else{
+          report = "No AC nodekeys held by user";
+        }
       }
+      
       //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
       this.setState({assetClassReport: report})
 

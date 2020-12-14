@@ -113,7 +113,9 @@ class SetCosts extends Component {
           return clearForm();
         })
         .on("receipt", (receipt) => {
-          self.setState({ transaction: false });
+          window.resetInfo = true;
+            window.recount = true;
+          self.setState({ hasLoadedAssetClasses: false, transaction: false });
           console.log(
             "costs succesfully updated under asset class",
             this.state.assetClass,
