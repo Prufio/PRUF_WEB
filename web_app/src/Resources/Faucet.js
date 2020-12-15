@@ -194,23 +194,23 @@ class Faucet extends Component {
             }
 
             if (this.state.catergory === "Electronics") {
-                root = "1"
+                root = "101"
             }
 
             if (this.state.catergory === "Collectables") {
-                root = "2"
+                root = "102"
             }
 
             if (this.state.catergory === "Transportation") {
-                root = "3"
+                root = "103"
             }
 
             if (this.state.catergory === "Virtual") {
-                root = "4"
+                root = "104"
             }
 
             if (this.state.catergory === "Other") {
-                root = "5"
+                root = "105"
             }
 
             await window.contracts.AC_MGR.methods

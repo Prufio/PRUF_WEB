@@ -26,11 +26,11 @@ class DeepVerifyMobile extends Component {
         );
       }
 
-      else if (this.state.QRreader === true && this.state.Checkbox === false) {
+      if (this.state.QRreader === true && this.state.Checkbox === false) {
         idxHash = this.state.result
       }
 
-      else if (this.state.Checkbox === true) {
+      if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw
       }
 
@@ -123,7 +123,7 @@ class DeepVerifyMobile extends Component {
           assetFound: "Asset Found!"
         })
         console.log(data)
-        this._retrieveRecordQR()
+        this.accessAsset()
       }
       else {
         this.setState({

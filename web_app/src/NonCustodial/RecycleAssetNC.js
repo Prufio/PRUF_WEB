@@ -30,11 +30,12 @@ class RecycleAssetNC extends Component {
             String(this.state.serial).replace(/\s/g, '')
           );
         }
-
-        else {
-          idxHash = this.state.result
-        }
       }
+
+      if (this.state.QRreader) {
+        idxHash = this.state.result
+      }
+      
       if (this.state.Checkbox) {
         idxHash = this.state.idxHashRaw
       }
@@ -130,7 +131,7 @@ class RecycleAssetNC extends Component {
           assetFound: "Asset Found!"
         })
         console.log(data)
-        this._retrieveRecordQR()
+        this.accessAsset()
       }
       else {
         this.setState({
@@ -153,7 +154,7 @@ class RecycleAssetNC extends Component {
     const _setAC = async () => {
       let acDoesExist;
       let destinationACData;
-      this.setState({txHash: ""})
+      this.setState({ txHash: "" })
 
       if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
       else {
@@ -275,20 +276,20 @@ class RecycleAssetNC extends Component {
       this.setState({ resultRA: "" })
       this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
-/* 
-      if (this.state.result !== "") {
-        idxHash = this.state.result;
-      }
-
-      else {
-        idxHash = window.web3.utils.soliditySha3(
-          String(this.state.type).replace(/\s/g, ''),
-          String(this.state.manufacturer).replace(/\s/g, ''),
-          String(this.state.model).replace(/\s/g, ''),
-          String(this.state.serial).replace(/\s/g, ''),
-        );
-      } */
+      /* 
+            if (this.state.result !== "") {
+              idxHash = this.state.result;
+            }
       
+            else {
+              idxHash = window.web3.utils.soliditySha3(
+                String(this.state.type).replace(/\s/g, ''),
+                String(this.state.manufacturer).replace(/\s/g, ''),
+                String(this.state.model).replace(/\s/g, ''),
+                String(this.state.serial).replace(/\s/g, ''),
+              );
+            } */
+
       var rgtRaw;
 
       rgtRaw = window.web3.utils.soliditySha3(
@@ -529,22 +530,22 @@ class RecycleAssetNC extends Component {
                     </div>
                   </div>
                   <div className="QRreader">
-                  <QrReader
-                ref="qrReader1"
-                delay={300}
-                previewStyle={previewStyle}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                style={{ width: '50rem', height: '50rem' }}
-                legacyMode={this.state.legacyMode}
-              />
-              {this.state.legacyMode === true && (
-                <div className="uploadImageQR">
-                  <div className="uploadImageQRContent">
-                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
-                  </div>
-                </div>
-              )}
+                    <QrReader
+                      ref="qrReader1"
+                      delay={300}
+                      previewStyle={previewStyle}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                      style={{ width: '50rem', height: '50rem' }}
+                      legacyMode={this.state.legacyMode}
+                    />
+                    {this.state.legacyMode === true && (
+                      <div className="uploadImageQR">
+                        <div className="uploadImageQRContent">
+                          <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                        </div>
+                      </div>
+                    )}
                     {this.state.result !== undefined && (
                       <div className="resultsQR">
                         {this.state.assetFound}
