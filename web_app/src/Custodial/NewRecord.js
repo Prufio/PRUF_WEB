@@ -449,7 +449,7 @@ class NewRecord extends Component {
                     <>
                       <Form.Row>
                         <div>
-                          <Form.Label className="costText"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
+                          <Form.Label className="costText"> Cost in AC {this.state.assetClass}: {window.web3.utils.fromWei(String(window.costs.newAsset))} PRüF</Form.Label>
                           <div className="submitButtonNR">
                             <div className="submitButtonNRContent">
                               <CheckCircle

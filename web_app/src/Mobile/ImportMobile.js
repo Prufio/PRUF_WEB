@@ -119,7 +119,7 @@ class ImportMobile extends Component {
 
           this.setState({ assetClass: this.state.selectedAssetClass });
           await window.utils.resolveACFromID(this.state.selectedAssetClass)
-          await window.utils.getACData("id", this.state.selectedAssetClass)
+          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
           await this.setState({ ACname: window.assetClassName });
         }
 
@@ -134,7 +134,7 @@ class ImportMobile extends Component {
 
           this.setState({ ACname: this.state.selectedAssetClass });
           await window.utils.resolveAC(this.state.selectedAssetClass);
-          await this.setState({ assetClass: window.assetClass });
+          await this.setState({ assetClass: destinationACData.AC });
         }
         if (this.state.wasSentPacket) {
           let resArray = await window.utils.checkStats(this.state.idxHash, [0, 2])
@@ -213,7 +213,9 @@ class ImportMobile extends Component {
       }
 
       let destinationACData = await window.utils.getACData("id", this.state.assetClass);
+      
       let originACRoot = window.assets.assetClasses[e]
+      console.log(originACRoot)
 
       console.log(destinationACData.root)
       if (originACRoot !== destinationACData.root) {
@@ -256,7 +258,7 @@ class ImportMobile extends Component {
       console.log("addr: ", window.addr);
 
       await window.contracts.APP_NC.methods
-        .$importAsset(idxHash, this.state.selectedAssetClass)
+        .$importAsset(idxHash, this.state.assetClass)
         .send({ from: window.addr })
         .on("error", function (_error) {
           self.setState({ transaction: false })
@@ -400,7 +402,7 @@ class ImportMobile extends Component {
                     <Form.Row>
                       <div>
                         <Form.Label className="costText">
-                          Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newRecordCost) / 1000000000000000000} PRüF
+                          Cost to import into AC {this.state.selectedAssetClass}: {Number(window.costs.newAsset) / 1000000000000000000} PRüF
                           </Form.Label>
                         <div className="submitButtonRRMobile">
                           <div className="submitButtonContent">

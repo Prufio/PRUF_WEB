@@ -6,8 +6,6 @@ import "./../index.css";
 
 function buildWindowUtils() {
 
-  //UTIL_TKN.methods.currentACtokenInfo
-
   const _tenThousandHashesOf = (varToHash) => {
     var tempHash = varToHash;
     for (var i = 0; i < 10000; i++) {
@@ -88,6 +86,9 @@ function buildWindowUtils() {
   }
 
   const _generateAssetClasses = () => {
+
+    if(window.assetClasses.names === undefined){console.log("Generating ACs");return _generateAssetClasses}
+    
     if (window.assetClasses.names.length > 0) {
       let component = [
         <option key="noselect" value="null"> Select an asset class </option>];
@@ -121,14 +122,30 @@ function buildWindowUtils() {
             <option key="noselect" value="null"> Select an option </option>];
 
           for (let i = 0, count = 1; i < keys.length; i++) {
-            if (keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR") {
+            if (keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR" && keys[i] !== "APP" && keys[i] !== "NP" && keys[i] !== "ECR") {
               component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
                 {count}:
-              Name: {keys[i]},
+              Name: {keys[i]}
               </option>);
               count++;
             }
             else { }
+          }
+
+          return component
+        }
+        else { return <></> }
+      }
+      case ("services"): {
+        if (Object.keys(obj).length > 0) {
+          let values = Object.values(obj), keys = Object.keys(obj), component = [
+            <option key="noselect" value="null"> Select an option </option>];
+
+          for (let i = 0; i < keys.length; i++) {
+            component.push(<option size="lg" key={"option " + String(i)} value={i+1}>
+              {i + 1}:
+              Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(String(values[i]))}
+              </option>);
           }
 
           return component
@@ -144,7 +161,7 @@ function buildWindowUtils() {
           for (let i = 0; i < keys.length; i++) {
             component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
               {i + 1}:
-              Name: {keys[i]},
+              Identifier: {keys[i]}
               </option>);
           }
 
@@ -201,65 +218,6 @@ function buildWindowUtils() {
 
   }
 
-  // const _generateAssetDash = (obj) => {
-  //   if (obj.names.length > 0) {
-  //     let component = [];
-
-  //     for (let i = 0; i < obj.ids.length; i++) {
-  //       component.push(
-  //         <div>
-  //           <style type="text/css"> {`
-
-  //           .card {
-  //             width: 100%;
-  //             max-width: 100%;
-  //             height: 12rem;
-  //             max-height: 100%;
-  //             background-color: #005480;
-  //             margin-top: 1rem;
-  //             color: white;
-  //             word-break: break-all;
-  //           }
-
-  //         `}
-  //           </style>
-  //           <div className="card">
-  //             <div className="row no-gutters">
-  //               <div className="col-auto">
-  //                 <button
-  //                   className="imageButton"
-  //                 >
-  //                   <img src={obj.displayImages[i]} className="assetImage" alt="" />
-  //                 </button>
-  //               </div>
-  //               <div>
-  //                 <p className="cardName">Name : {obj.names[i]}</p>
-  //                 <p className="cardAc">Asset Class : {obj.assetClasses[i]}</p>
-  //                 <p className="cardStatus">Status : {obj.statuses[i]}</p>
-  //                 <br></br>
-  //                 <div className="cardDescriptionForm">
-  //                   <h4 className="cardDescriptionForm">Description : {obj.descriptions[i].text.description}</h4>
-  //                 </div>
-  //               </div>
-  //               <div className="cardButton">
-  //                 <Button
-  //                   variant="primary"
-  //                 >
-  //                   More Info
-  //             </Button>
-  //               </div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       );
-  //     }
-
-  //     return component
-  //   }
-
-  //   else { return <></> }
-
-  // }
   const _generateRemElementsPreview = (removedObj) => {
     let component = [];
     let text = removedObj.text;
@@ -694,25 +652,48 @@ function buildWindowUtils() {
   }
 
   const _checkAssetRootMatch = async (AC, idxHash) => {
-    let tempBool;
+    let temp, tempBool;
     if (idxHash.substring(0, 2) !== "0x") {
       return (false)
     }
+
+    if(
+    AC.charAt(0) !== "0" && 
+    AC.charAt(0) !== "1" && 
+    AC.charAt(0) !== "2" && 
+    AC.charAt(0) !== "3" && 
+    AC.charAt(0) !== "4" && 
+    AC.charAt(0) !== "5" && 
+    AC.charAt(0) !== "6" && 
+    AC.charAt(0) !== "7" && 
+    AC.charAt(0) !== "8" && 
+    AC.charAt(0) !== "9"){AC = await window.utils.resolveAC(AC)}
+
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)
       .call(function (_error, _result) {
         if (_error) {
           return (console.log("IN ERROR IN ERROR IN ERROR"))
-        } else if (
-          Object.values(_result)[2] === AC
-        ) {
-          tempBool = true;
+        } else 
+         {
+          console.log(Object.values(_result)[2]) 
+          temp = Object.values(_result)[2];
           window.fetchAC = Object.values(_result)[2];
-        } else {
-          tempBool = false;
         }
       });
 
+
+      await window.contracts.AC_MGR.methods
+      .isSameRootAC(AC, temp)
+      .call(function (_error, _result) {
+        if (_error) {
+          return (console.log("IN ERROR IN ERROR IN ERROR"))
+        } else if (_result === "170"){
+          tempBool = true
+        } else {
+          tempBool = false
+        }
+      });
     console.log(tempBool);
     return tempBool;
   }
@@ -1062,6 +1043,7 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
+              console.log(_result)
               if (Number(_result) > 0) { tempAC = Number(_result) }
               else { return 0 }
             }
@@ -1120,17 +1102,18 @@ function buildWindowUtils() {
       //console.log("before setting window-level costs")
 
       window.costs = {
-        newRecordCost: window.costArray[0],
-        transferAssetCost: window.costArray[1],
-        createNoteCost: window.costArray[2],
-        remintAssetCost: window.costArray[3],
-        changeAssetCost: window.costArray[4],
-        forceTransferCost: window.costArray[5],
+        newAsset: window.costArray[0],
+        transferAsset: window.costArray[1],
+        createNote: window.costArray[2],
+        remintAsset: window.costArray[3],
+        changeAsset: window.costArray[4],
+        forceTransfer: window.costArray[5],
       }
 
       //window.utils.checkCreds()
 
       console.log("window costs object: ", window.costs);
+      return window.costs
       //console.log("this should come last");
     }
     else {

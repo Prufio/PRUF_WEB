@@ -113,7 +113,7 @@ class AssetDashboard extends React.Component {
     this.refresh = () => {
       window.resetInfo = true;
       window.recount = true;
-      this.setState({ moreInfo: false, assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] } })
+      this.setState({ hasLoadedAssets: false, moreInfo: false, assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] } })
     }
 
     this.state = {

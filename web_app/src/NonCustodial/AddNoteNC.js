@@ -390,7 +390,7 @@ class AddNoteNC extends Component {
                 <Form.Row>
                   <div>
                     {this.state.assetClass !== undefined && (
-                      <Form.Label className="costText"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNoteCost) / 1000000000000000000} PRüF</Form.Label >
+                      <Form.Label className="costText"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNote) / 1000000000000000000} PRüF</Form.Label >
                     )}
                     <div className="submitButton">
                       <div className="submitButtonContent">

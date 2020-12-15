@@ -373,12 +373,11 @@ class ModifyStatusMobile extends Component {
                                         <Form.Control required as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
                                             <optgroup className="optgroup">
                                                 <option value="0">Choose a status</option>
-                                                <option value="51">Transferrable</option>
+                                                <option value="51">Transferrable/Exportable</option>
                                                 <option value="52">Non-Transferrable</option>
                                                 <option value="53">Stolen</option>
                                                 <option value="54">Lost</option>
                                                 <option value="59">Discardable</option>
-                                                <option value="51">Export-Ready</option>
                                             </optgroup>
                                         </Form.Control>
                                     )}
