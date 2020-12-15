@@ -50,31 +50,31 @@ class ModifyRightsHolderMobile extends Component {
         if (window.sentPacket !== undefined) {
             console.log(window.sentPacket.status)
             if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-                alert("Cannot editRgtHash asset in lost or stolen status! Please change to editRgtHashrable status");
+                alert("Cannot edit asset in lost or stolen status! Please change to transferable status");
                 window.sentPacket = undefined;
                 return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-                alert("Cannot editRgtHash asset in escrow! Please wait until asset has met escrow conditions");
+                alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
                 window.sentPacket = undefined;
                 return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) === 58) {
-                alert("Cannot editRgtHash asset in imported status! please change to editRgtHashrable status");
+                alert("Cannot edit asset in imported status! please change to transferable status");
                 window.sentPacket = undefined;
                 return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) === 70) {
-                alert("Cannot editRgtHash asset in exported status! please import asset and change to editRgtHashrable status");
+                alert("Cannot edit asset in exported status! please import asset and change to transferable status");
                 window.sentPacket = undefined;
                 return window.location.href = "/#/asset-dashboard-mobile"
             }
 
             if (Number(window.sentPacket.statusNum) !== 51) {
-                alert("Cannot editRgtHash asset in a status other than editRgtHashrable! please change asset to editRgtHashrable status");
+                alert("Cannot edit asset in a status other than transferable! please change asset to transferable status");
                 window.sentPacket = undefined;
                 return window.location.href = "/#/asset-dashboard-mobile"
             }

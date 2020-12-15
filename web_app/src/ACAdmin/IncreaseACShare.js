@@ -105,6 +105,10 @@ class IncreaseACShare extends Component {
       }
     }
 
+    const submitHandler = (e) => {
+      e.preventDefault();
+    }
+
     const increaseACShare = async () => {
       await console.log("Pruf Bal", this.state.prufBalance);
 
@@ -151,7 +155,7 @@ class IncreaseACShare extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>

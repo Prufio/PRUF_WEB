@@ -257,7 +257,7 @@ class RecycleAssetNC extends Component {
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
+      this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
     }
 
     const _recycleAsset = async () => {
@@ -353,12 +353,9 @@ class RecycleAssetNC extends Component {
         });
       console.log(this.state.txHash);
 
-      await this.setState({
-        idxHash: "",
-        accessPermitted: false
+      return this.setState({
+        idxHash: "", assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false
       })
-
-      return clearForm();
     };
 
     return (
@@ -416,7 +413,7 @@ class RecycleAssetNC extends Component {
                     />
                     <Form.Label className="checkBoxFormFont">Input Raw Idx Hash</Form.Label>
                     {this.state.Checkbox === true && (
-                      <Form.Row>
+                      <Form.Group>
                         <Form.Label className="formFont">Idx Hash:</Form.Label>
                         <Form.Control
                           placeholder="Idx Hash"
@@ -424,7 +421,7 @@ class RecycleAssetNC extends Component {
                           onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
                           size="lg"
                         />
-                      </Form.Row>
+                      </Form.Group>
                     )}
                   </div>
                   {this.state.Checkbox === false && (

@@ -85,6 +85,10 @@ class AddUser extends Component {
       }
     }
 
+    const submitHandler = (e) => {
+      e.preventDefault();
+    }
+
     const addUser = () => {
       this.setState({ transaction: true })
       if (Number(this.state.userType) < 1) { return alert("Please select a user type from the dropdown") }
@@ -124,7 +128,7 @@ class AddUser extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>
