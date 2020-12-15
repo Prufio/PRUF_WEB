@@ -82,6 +82,7 @@ class GetACData extends Component {
     }
 
     const getAC_data = async () => {
+      if(this.state.assetClass === undefined) {return}
       let ref;
 
       if (

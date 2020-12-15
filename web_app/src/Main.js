@@ -1096,7 +1096,7 @@ class Main extends Component {
       //Do a full update if the balances are returning undefined at this stage (They should never do this)
       if (window.balances === undefined) {
         console.log("balances undefined, trying to get them...");
-        if (window.addr === undefined) { return this.forceUpdate }
+        //if (window.addr === undefined) { return this.forceUpdate }
         return this.setUpTokenVals(true);
       }
       console.log("SA: In setUpAssets")
@@ -1236,7 +1236,7 @@ class Main extends Component {
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
     this.setUpTokenVals = async (willSetup) => {
-      window.balances = undefined
+      window.balances = {}
       console.log("STV: Setting up balances")
 
       await window.utils.determineTokenBalance()

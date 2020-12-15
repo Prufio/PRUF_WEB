@@ -90,6 +90,7 @@ class AddUser extends Component {
     }
 
     const addUser = () => {
+      
       this.setState({ transaction: true })
       if (Number(this.state.userType) < 1) { return alert("Please select a user type from the dropdown") }
       window.contracts.AC_MGR.methods

@@ -98,6 +98,8 @@ class TransferAC extends Component {
       console.log("AC", this.state.assetClass);
       console.log("addr: ", window.addr);
 
+      if(this.state.assetClass === undefined || this.state.to === undefined) {return}
+
       await window.contracts.AC_TKN.methods
         .safeTransferFrom(window.addr, this.state.to, this.state.assetClass)
         .send({ from: window.addr })

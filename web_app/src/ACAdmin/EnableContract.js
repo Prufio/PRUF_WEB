@@ -147,6 +147,7 @@ class enableContract extends Component {
     const enableContract = async () => {
       this.setState({transaction: true})
       if(this.state.name < 1) {return alert("Please select a contract to enable")}
+      if(this.state.assetClass === undefined) {return}
       console.log(this.state.name)
       console.log(this.state.assetClass)
       console.log(this.state.authLevel)
