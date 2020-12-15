@@ -72,6 +72,12 @@ class RecycleMobile extends Component {
 
     }
 
+    this.clearForm = async () => {
+      if (document.getElementById("MainForm") === null) { return }
+      document.getElementById("MainForm").reset();
+      this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
+    }
+
     this.mounted = false;
     this.state = {
       addr: "",
@@ -183,7 +189,7 @@ class RecycleMobile extends Component {
 
           this.setState({ assetClass: this.state.selectedAssetClass });
           await window.utils.resolveACFromID(this.state.selectedAssetClass)
-          await window.utils.getACData("id", this.state.selectedAssetClass)
+          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
 
           await this.setState({ ACname: window.assetClassName });
         }
@@ -199,7 +205,7 @@ class RecycleMobile extends Component {
 
           this.setState({ ACname: this.state.selectedAssetClass });
           await window.utils.resolveAC(this.state.selectedAssetClass);
-          await this.setState({ assetClass: window.assetClass });
+          await this.setState({ assetClass: destinationACData.AC });
         }
         if (this.state.wasSentPacket) {
           let resArray = await window.utils.checkStats(this.state.idxHash, [0, 2])
@@ -216,7 +222,7 @@ class RecycleMobile extends Component {
           if (resArray[1] != destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
             window.sentPacket = undefined;
-            clearForm()
+            this.clearForm()
             return window.location.href = "/#/asset-dashboard-mobile"
           }
         }
@@ -263,12 +269,6 @@ class RecycleMobile extends Component {
       }
     }
 
-    const clearForm = async () => {
-      if (document.getElementById("MainForm") === null) { return }
-      document.getElementById("MainForm").reset();
-      this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
-    }
-
     const _recycleAsset = async () => {
       this.setState({ help: false })
       if (
@@ -310,7 +310,7 @@ class RecycleMobile extends Component {
       );
 
       console.log(idxHash)
-      console.log(this.state.selectedAssetClassW)
+      console.log(this.state.selectedAssetClass)
       let isSameRoot = await window.utils.checkAssetRootMatch(this.state.selectedAssetClass, this.state.idxHash);
       console.log(isSameRoot)
 
@@ -318,7 +318,7 @@ class RecycleMobile extends Component {
         this.setState({
           QRreader: false
         })
-        return alert("Import destination AC must have same root as previous AC"), clearForm()
+        return alert("Import destination AC must have same root as previous AC"), this.clearForm()
       }
 
       let rgtHash;
@@ -340,7 +340,7 @@ class RecycleMobile extends Component {
       console.log("addr: ", window.addr);
 
       window.contracts.RCLR.methods
-        .$recycle(idxHash, rgtHash, this.state.selectedAssetClass)
+        .$recycle(idxHash, rgtHash, this.state.assetClass)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
@@ -348,7 +348,7 @@ class RecycleMobile extends Component {
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
           alert("Something went wrong!")
-          clearForm();
+          this.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
         .on("receipt", (receipt) => {
@@ -368,7 +368,7 @@ class RecycleMobile extends Component {
         accessPermitted: false
       })
 
-      return clearForm();
+      return this.clearForm();
     };
 
     return (
@@ -380,7 +380,7 @@ class RecycleMobile extends Component {
             </div>
             <h2 className="formHeaderMobile">Recycle Asset</h2>
             <div className="mediaLinkClearForm">
-              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
+              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { this.clearForm() }} /></a>
             </div>
           </div>
         )}

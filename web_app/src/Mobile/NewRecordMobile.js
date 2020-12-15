@@ -41,14 +41,14 @@ class NewRecordMobile extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-
+/* 
     if (window.assetClass > 0) {
       this.setState({ assetClass: window.assetClass, assetClassSelected: true })
     }
 
     else {
       this.setState({ assetClassSelected: false })
-    }
+    } */
 
     if(window.balances !== undefined){
       this.setState({holdsID: window.balances.IDTokenBalance === "1"})
@@ -90,6 +90,7 @@ class NewRecordMobile extends Component {
 
     const _setAC = async () => {
       let acDoesExist;
+      let destinationACData;
       this.setState({txHash: ""})
 
       if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
@@ -115,13 +116,14 @@ class NewRecordMobile extends Component {
 
           this.setState({ assetClass: this.state.selectedAssetClass });
           await window.utils.resolveACFromID(this.state.selectedAssetClass)
-          await window.utils.getACData("id", this.state.selectedAssetClass)
+          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
 
           await this.setState({ ACname: window.assetClassName });
         }
 
         else {
           acDoesExist = await window.utils.checkForAC("name", this.state.selectedAssetClass);
+          destinationACData = await window.utils.getACData("name", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
 
           if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
@@ -130,7 +132,7 @@ class NewRecordMobile extends Component {
 
           this.setState({ ACname: this.state.selectedAssetClass });
           await window.utils.resolveAC(this.state.selectedAssetClass);
-          await this.setState({ assetClass: window.assetClass });
+          await this.setState({ assetClass: destinationACData.AC });
         }
         this.setState({ assetClassSelected: true });
         return window.assetClass = undefined;
