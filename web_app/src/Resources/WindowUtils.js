@@ -1102,12 +1102,12 @@ function buildWindowUtils() {
       //console.log("before setting window-level costs")
 
       window.costs = {
-        newRecordCost: window.costArray[0],
-        transferAssetCost: window.costArray[1],
-        createNoteCost: window.costArray[2],
-        remintAssetCost: window.costArray[3],
-        changeAssetCost: window.costArray[4],
-        forceTransferCost: window.costArray[5],
+        newAsset: window.costArray[0],
+        transferAsset: window.costArray[1],
+        createNote: window.costArray[2],
+        remintAsset: window.costArray[3],
+        changeAsset: window.costArray[4],
+        forceTransfer: window.costArray[5],
       }
 
       //window.utils.checkCreds()

@@ -592,7 +592,7 @@ class NewRecordMobile extends Component {
                     <>
                       <Form.Row>
                         <div>
-                          <Form.Label className="costText"> Cost in AC "{this.state.ACname}": {window.web3.utils.fromWei(String(window.costs.newRecordCost))} PRüF</Form.Label>
+                          <Form.Label className="costText"> Cost in AC "{this.state.ACname}": {window.web3.utils.fromWei(String(window.costs.newAsset))} PRüF</Form.Label>
                           <div className="submitButtonRRMobile">
                             <div className="submitButtonContentMobile">
                               <CheckCircle

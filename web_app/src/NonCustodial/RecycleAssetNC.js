@@ -630,7 +630,7 @@ class RecycleAssetNC extends Component {
                   </Form.Row>
                   <Form.Row>
                     <div>
-                      <Form.Label className="costText"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: ü{Number(window.costs.newRecordCost) / 1000000000000000000}</Form.Label>
+                      <Form.Label className="costText"> Cost To Recycle Asset in AC {this.state.selectedAssetClass}: ü{Number(window.costs.newAsset) / 1000000000000000000}</Form.Label>
                       <div className="submitButton">
                         <div className="submitButtonContent">
                           <Tag
