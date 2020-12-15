@@ -94,6 +94,10 @@ class SetCosts extends Component {
       }
     }
 
+    const submitHandler = (e) => {
+      e.preventDefault();
+    }
+
     const setServiceIndex = (e) => {
       console.log(e)
       this.setState({serviceIndex: e})
@@ -145,7 +149,7 @@ class SetCosts extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>

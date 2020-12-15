@@ -84,6 +84,10 @@ class enableContract extends Component {
       }
     }
 
+    const submitHandler = (e) => {
+      e.preventDefault();
+    }
+
     const _setContract = async (e) => {
       let authTemp, custodyId;
       
@@ -180,7 +184,7 @@ class enableContract extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="errorResults">
               <h2>User address unreachable</h2>

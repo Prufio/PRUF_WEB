@@ -75,6 +75,10 @@ class TransferAC extends Component {
       }
     }
 
+    const submitHandler = (e) => {
+      e.preventDefault();
+    }
+
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
@@ -131,7 +135,7 @@ class TransferAC extends Component {
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
         </div>
-        <Form className="form" id='MainForm'>
+        <Form className="form" id='MainForm' onSubmit={submitHandler}>
           {window.addr === undefined && (
             <div className="results">
               <h2>User address unreachable</h2>
