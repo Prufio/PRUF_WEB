@@ -125,7 +125,7 @@ function buildWindowUtils() {
             if (keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR" && keys[i] !== "APP" && keys[i] !== "NP" && keys[i] !== "ECR") {
               component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
                 {count}:
-              Name: {keys[i]},
+              Name: {keys[i]}
               </option>);
               count++;
             }
@@ -136,6 +136,23 @@ function buildWindowUtils() {
         }
         else { return <></> }
       }
+      case ("services"): {
+        if (Object.keys(obj).length > 0) {
+          let values = Object.values(obj), keys = Object.keys(obj), component = [
+            <option key="noselect" value="null"> Select an option </option>];
+
+          for (let i = 0; i < keys.length; i++) {
+            component.push(<option size="lg" key={"option " + String(i)} value={i+1}>
+              {i + 1}:
+              Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(String(values[i]))}
+              </option>);
+          }
+
+          return component
+        }
+
+        else { return <></> }
+      }
       default: {
         if (Object.keys(obj).length > 0) {
           let values = Object.values(obj), keys = Object.keys(obj), component = [
@@ -144,7 +161,7 @@ function buildWindowUtils() {
           for (let i = 0; i < keys.length; i++) {
             component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
               {i + 1}:
-              Name: {keys[i]},
+              Identifier: {keys[i]}
               </option>);
           }
 
@@ -1096,6 +1113,7 @@ function buildWindowUtils() {
       //window.utils.checkCreds()
 
       console.log("window costs object: ", window.costs);
+      return window.costs
       //console.log("this should come last");
     }
     else {

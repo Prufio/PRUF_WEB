@@ -78,10 +78,11 @@ class SetCosts extends Component {
       this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
     }
 
-    const _setAC = (_e) => {
+    const _setAC = async (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
+      this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
+      return await this.setState({services: window.utils.getCosts(6, e.id)})
     }
 
     const help = async () => {
@@ -91,6 +92,11 @@ class SetCosts extends Component {
       else {
         this.setState({ help: false })
       }
+    }
+
+    const setServiceIndex = (e) => {
+      console.log(e)
+      this.setState({serviceIndex: e})
     }
 
     const setCosts = () => {
@@ -178,22 +184,30 @@ class SetCosts extends Component {
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridService">
                     <Form.Label className="formFont">Service index # :</Form.Label>
-                    {this.state.transaction === false && (
+                    {this.state.transaction === false && window.costs !== undefined && (
                       <Form.Control
-                        placeholder="Service Index Number"
-                        required
-                        onChange={(e) =>
-                          this.setState({ serviceIndex: e.target.value })
-                        }
-                        size="lg"
-                      />
+                      as="select"
+                      size="lg"
+                      onChange={(e) => { setServiceIndex(e.target.value) }}
+                    >
+                        <optgroup className="optgroup">
+                          {window.utils.generateOptionsFromObject(window.costs, "services")}
+                        </optgroup>
+                    </Form.Control>
                     )}
-                    {this.state.transaction === true && (
+                    {this.state.transaction === true || window.costs === undefined && (
                       <Form.Control
-                        placeholder={this.state.serviceIndex}
-                        disabled
-                        size="lg"
-                      />
+                      as="select"
+                      size="lg"
+                      placeholder={this.state.serviceIndex}
+                      disabled
+                      onChange={() => {}}
+  
+                    >
+                        <optgroup className="optgroup">
+                          {window.utils.generateOptionsFromObject(window.costs, "services")}
+                        </optgroup>
+                    </Form.Control>
                     )}
                   </Form.Group>
                 </Form.Row>
