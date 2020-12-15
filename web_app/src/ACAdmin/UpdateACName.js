@@ -120,7 +120,7 @@ class UpdateACName extends Component {
           });
         return this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
       };
-    }
+
 
 
     return (
