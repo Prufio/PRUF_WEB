@@ -106,6 +106,7 @@ class IncreaseACShare extends Component {
     }
 
     const increaseACShare = async () => {
+      
       await console.log("Pruf Bal", this.state.prufBalance);
 
       if(this.state.prufBalance < this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))) {
@@ -113,7 +114,7 @@ class IncreaseACShare extends Component {
       }
 
       const amount = window.web3.utils.toWei(String(this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))));
-      
+      if(this.state.assetClass === undefined || amount === undefined) {return}
         self.setState({ transaction: true })
         console.log(amount)
         console.log(this.state.assetClass)

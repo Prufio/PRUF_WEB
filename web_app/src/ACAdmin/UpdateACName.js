@@ -88,7 +88,9 @@ class UpdateACName extends Component {
       if (alreadyExists) {
         return (alert("AC name already exists! Choose a different name and try again"))
       }
-      else {
+
+      if(this.state.assetClass === undefined || this.state.newACName === undefined) {return}
+
         this.setState({transaction: true})
         await window.contracts.AC_MGR.methods
           .updateACname(
@@ -113,7 +115,6 @@ class UpdateACName extends Component {
             self.setState({ txStatus: receipt.status });
           });
         return clearForm();
-      };
     }
 
 
