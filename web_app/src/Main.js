@@ -371,7 +371,7 @@ class Main extends Component {
                       dApp Last Updated:
                   </h3>
                     <h3>
-                      December 14, 2020
+                      December 15, 2020
                   </h3>
                   <h3>
                     <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
