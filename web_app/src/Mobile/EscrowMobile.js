@@ -66,7 +66,7 @@ class EscrowMobile extends Component {
         console.log("isSettingEscrowAble: true")
       }
 
-      this.setState({ selectedAsset: e, Checkbox: false, QRreader: false })
+      this.setState({ selectedAsset: e, input: false, QRreader: false })
       console.log("Changed component idx to: ", window.assets.ids[e])
       console.log(this.state.isSettingEscrow)
 
@@ -110,7 +110,7 @@ class EscrowMobile extends Component {
       transaction: false,
       help: false,
       input: false,
-      Checkbox: false,
+      input: false,
       legacyMode: false,
       idxHash: "",
       idxHashRaw: "",
@@ -231,7 +231,7 @@ class EscrowMobile extends Component {
       width: 320,
     }
 
-    const Checkbox = async () => {
+    const input = async () => {
       if (this.state.input === false) {
         this.setState({ input: true })
       }
@@ -391,7 +391,7 @@ class EscrowMobile extends Component {
                       type="checkbox"
                       className="checkBoxMobile"
                       id="inlineFormCheck"
-                      onChange={() => { Checkbox() }}
+                      onChange={() => { input() }}
                     />
                     <Form.Label className="checkBoxFormFontMobile">Manual Input</Form.Label>
                     {this.state.input === true && (

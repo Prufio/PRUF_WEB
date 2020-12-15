@@ -27,12 +27,12 @@ class VerifyLiteMobile extends Component {
         console.log("IDXTEST1", idxHash)
       }
 
-      else if (this.state.QRreader === true && this.state.Checkbox === false) {
+      if (this.state.QRreader === true && this.state.Checkbox === false) {
         idxHash = this.state.result
         console.log("IDXTEST2", idxHash)
       }
 
-      else if (this.state.Checkbox === true) {
+      if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw
         console.log("IDXTEST3", idxHash)
       }
@@ -127,7 +127,7 @@ class VerifyLiteMobile extends Component {
           assetFound: "Asset Found!"
         })
         console.log(data)
-        this._retrieveRecordQR()
+        this.accessAsset()
       }
       else {
         this.setState({

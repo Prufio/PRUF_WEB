@@ -31,14 +31,12 @@ class RecycleMobile extends Component {
             String(this.state.serial).replace(/\s/g, '')
           );
         }
+      }
 
-        else {
-          console.log("Here")
-          idxHash = this.state.result
-        }
+      if (this.state.QRreader) {
+        idxHash = this.state.result
       }
       if (this.state.Checkbox) {
-        console.log("Here")
         idxHash = this.state.idxHashRaw
       }
 
@@ -140,7 +138,7 @@ class RecycleMobile extends Component {
           assetFound: "Asset Found!"
         })
         console.log(data)
-        this._retrieveRecordQR()
+        this.accessAsset()
       }
       else {
         this.setState({

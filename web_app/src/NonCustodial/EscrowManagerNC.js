@@ -28,10 +28,10 @@ class EscrowManagerNC extends Component {
       if (e === "null" || e === undefined) {
         this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
       }
-      else if (e === "reset") {
+      if (e === "reset") {
         return window.resetInfo = true;
       }
-      else if (e === "assetDash") {
+      if (e === "assetDash") {
         return window.location.href = "/#/asset-dashboard"
       }
 
@@ -40,7 +40,7 @@ class EscrowManagerNC extends Component {
       }
 
       if (this.state.idxHashRaw !== "") {
-        this.setState({ idxHash: e })
+        this.setState({ idxHash: e})
         resArray = await window.utils.checkStats(e, [0])
       }
 
@@ -65,7 +65,7 @@ class EscrowManagerNC extends Component {
         console.log("isSettingEscrowAble: true")
       }
 
-      this.setState({ selectedAsset: e, Checkbox: false, QRreader: false })
+      this.setState({ selectedAsset: e, input: false, QRreader: false })
       console.log("Changed component idx to: ", window.assets.ids[e])
       console.log(this.state.isSettingEscrow)
 
@@ -109,7 +109,6 @@ class EscrowManagerNC extends Component {
       transaction: false,
       help: false,
       input: false,
-      Checkbox: false,
       legacyMode: false,
       idxHash: "",
       idxHashRaw: "",
@@ -230,7 +229,7 @@ class EscrowManagerNC extends Component {
       width: 320,
     }
 
-    const Checkbox = async () => {
+    const input = async () => {
       if (this.state.input === false) {
         this.setState({ input: true })
       }
@@ -381,7 +380,7 @@ class EscrowManagerNC extends Component {
                       type="checkbox"
                       className="checkBox"
                       id="inlineFormCheck"
-                      onChange={() => { Checkbox() }}
+                      onChange={() => { input() }}
                     />
                     <Form.Label className="checkBoxFormFont">Manual Input</Form.Label>
                     {this.state.input === true && (

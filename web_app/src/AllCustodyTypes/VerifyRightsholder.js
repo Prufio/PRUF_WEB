@@ -114,7 +114,7 @@ class VerifyRightHolder extends Component {
           assetFound: "Asset Found!"
         })
         console.log(data)
-        this._retrieveRecordQR()
+        this.accessAsset()
       }
       else {
         this.setState({
