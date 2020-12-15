@@ -132,17 +132,15 @@ class GetACData extends Component {
             </div>
           )}
           {window.addr > 0 && (
-            <div>
-              <Form.Row as={Col} controlId="formGridType">
-                <Form.Label className="formFont">Asset Class:</Form.Label>
-                <Form.Control
-                  placeholder="Asset Class"
-                  required
-                  onChange={(e) => this.setState({ assetClass: e.target.value })}
-                  size="lg"
-                />
-              </Form.Row>
-            </div>
+                <Form.Group as={Col} controlId="formGridContractName">
+                  <Form.Label className="formFont">Asset Class:</Form.Label>
+                  <Form.Control
+                    placeholder="Asset Class"
+                    required
+                    onChange={(e) => this.setState({ assetClass: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
           )}
           <>
             <Form.Row>

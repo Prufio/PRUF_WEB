@@ -67,7 +67,7 @@ class AddUser extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false })
     }
 
     const _setAC = (_e) => {
@@ -110,9 +110,13 @@ class AddUser extends Component {
             "user added succesfully under asset class",
             self.state.assetClass
           );
-          this.setState({ hasLoadedAssetClasses: false, transaction: false })
+          self.setState({ transaction: false })
+          self.setState({ txHash: receipt.transactionHash });
+          self.setState({ txStatus: receipt.status });
+          self.setState({ hasLoadedAssetClasses: false })
+          window.resetInfo = true;
           console.log("tx receipt: ", receipt);
-          return clearForm();
+          return this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
         });
       console.log(this.state.txHash);
     };

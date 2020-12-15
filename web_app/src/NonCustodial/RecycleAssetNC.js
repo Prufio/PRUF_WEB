@@ -362,7 +362,7 @@ class RecycleAssetNC extends Component {
       console.log(this.state.txHash);
 
       return this.setState({
-        idxHash: "", assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false
+        idxHash: "", Checkbox: false, wasSentPacket: false, help: false, accessPermitted: false
       })
     };
 

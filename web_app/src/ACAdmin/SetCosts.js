@@ -75,7 +75,7 @@ class SetCosts extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false })
     }
 
     const _setAC = async (_e) => {
@@ -125,13 +125,12 @@ class SetCosts extends Component {
         .on("receipt", (receipt) => {
           window.resetInfo = true;
             window.recount = true;
-          self.setState({ hasLoadedAssetClasses: false, transaction: false });
-          console.log(
-            "costs succesfully updated under asset class",
-            this.state.assetClass,
-          );
-          console.log("tx receipt: ", receipt);
-          return clearForm();
+            self.setState({ transaction: false })
+            self.setState({ txHash: receipt.transactionHash });
+            self.setState({ txStatus: receipt.status });
+            self.setState({ hasLoadedAssetClasses: false })
+            console.log("tx receipt: ", receipt);
+            return this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
         });
 
       console.log(this.state.txHash);
@@ -199,18 +198,12 @@ class SetCosts extends Component {
                         </optgroup>
                     </Form.Control>
                     )}
-                    {this.state.transaction === true || window.costs === undefined && (
+                    {this.state.transaction === true && (
                       <Form.Control
-                      as="select"
                       size="lg"
                       placeholder={this.state.serviceIndex}
                       disabled
-                      onChange={() => {}}
-  
                     >
-                        <optgroup className="optgroup">
-                          {window.utils.generateOptionsFromObject(window.costs, "services")}
-                        </optgroup>
                     </Form.Control>
                     )}
                   </Form.Group>

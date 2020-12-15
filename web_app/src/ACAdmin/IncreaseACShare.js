@@ -87,7 +87,7 @@ class IncreaseACShare extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false })
     }
 
     const _setAC = (_e) => {
@@ -131,17 +131,15 @@ class IncreaseACShare extends Component {
             self.setState({ transaction: false })
             self.setState({ error: _error });
             self.setState({ result: _error.transactionHash });
-            return clearForm();
           })
           .on("receipt", (receipt) => {
-            console.log("tx receipt: ", receipt);
-            window.resetInfo = true;
-            window.recount = true;
-            self.setState({ hasLoadedAssetClasses: false, transaction: false })
-            return clearForm();
-          });
-
-        console.log(this.state.txHash);
+              window.resetInfo = true;
+              self.setState({ hasLoadedAssetClasses: false, transaction: false })
+              self.setState({ txHash: receipt.transactionHash });
+              self.setState({ txStatus: receipt.status });
+            });
+            console.log(this.state.txHash);
+          return this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
     };
 
     return (

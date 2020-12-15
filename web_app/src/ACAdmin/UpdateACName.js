@@ -64,7 +64,7 @@ class UpdateACName extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+      this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false })
     }
 
     const help = async () => {
@@ -111,12 +111,12 @@ class UpdateACName extends Component {
           })
           .on("receipt", (receipt) => {
             window.resetInfo = true;
-            window.recount = true;
+            // window.recount = true;
             self.setState({ hasLoadedAssetClasses: false, transaction: false })
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
           });
-        return clearForm();
+        return this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
       };
     }
 
@@ -217,7 +217,7 @@ class UpdateACName extends Component {
           )}
         </Form>
         {
-          this.state.transaction === false && !this.state.assetClassSelected && (
+          this.state.transaction === false && !this.state.assetClassSelected && this.state.txHash === "" && (
             <div className="assetSelectedResults">
             </div>
           )

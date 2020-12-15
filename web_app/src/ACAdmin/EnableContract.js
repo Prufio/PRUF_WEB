@@ -66,7 +66,7 @@ class enableContract extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+      this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false })
     }
 
     const _setAC = (_e) => {
@@ -145,6 +145,7 @@ class enableContract extends Component {
     }
 
     const enableContract = async () => {
+      this.setState({transaction: true})
       if(this.state.name < 1) {return alert("Please select a contract to enable")}
       console.log(this.state.name)
       console.log(this.state.assetClass)
@@ -159,14 +160,20 @@ class enableContract extends Component {
         .send({ from: window.addr })
         .on("error", function (_error) {
           self.setState({ error: _error });
+          self.setState({transaction: false})
           self.setState({ result: _error.transactionHash });
           return clearForm();
         })
         .on("receipt", (receipt) => {
           console.log("contract added under authLevel:", self.state.authLevel);
           console.log("tx receipt: ", receipt);
-          self.setState({hasLoadedAssetClasses: false})
-          return clearForm();
+          self.setState({ transaction: false })
+          self.setState({ txHash: receipt.transactionHash });
+          self.setState({ txStatus: receipt.status });
+          self.setState({ hasLoadedAssetClasses: false })
+          window.resetInfo = true;
+          console.log("tx receipt: ", receipt);
+          return this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
         });
 
       console.log(this.state.txHash);
@@ -236,16 +243,10 @@ class enableContract extends Component {
                     )}
                     {this.state.transaction === true && (
                       <Form.Control
-                      as="select"
                       size="lg"
                       placeholder={this.state.name}
                       disabled
-                      onChange={() => {}}
-  
                     >
-                        <optgroup className="optgroup">
-                          {window.utils.generateOptionsFromObject(window.contracts, "contracts")}
-                        </optgroup>
                     </Form.Control>
                     )}
                   </Form.Group>
@@ -283,7 +284,7 @@ class enableContract extends Component {
           )}
         </Form>
         {
-          this.state.transaction === false && this.state.txHash === "" && !this.state.assetClassSelected && (
+          this.state.transaction === false && !this.state.assetClassSelected && this.state.txHash === "" && (
             <div className="assetSelectedResults">
             </div>
           )
