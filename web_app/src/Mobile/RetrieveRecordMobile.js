@@ -80,7 +80,6 @@ class RetrieveRecordMobile extends Component {
     this.generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
-      // let imageNames = Object.keys(obj.photo) //BS:EXAMINE defined but never used
       let textNames = Object.keys(obj.text)
       let status = ""; //BS:EXAMINE defined but never used
 
@@ -442,10 +441,6 @@ class RetrieveRecordMobile extends Component {
 
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this; //BS:EXAMINE defined but never used
-
-
-
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {

@@ -146,7 +146,6 @@ class VerifyLiteMobile extends Component {
 
 
   render() {//render continuously produces an up-to-date stateful document  
-    // const self = this; //BS:EXAMINE defined but never used
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {

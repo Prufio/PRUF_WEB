@@ -1545,7 +1545,6 @@ class Main extends Component {
   componentDidMount() {
 
     let _web3;
-    // ipfs;  //BS:EXAMINE ipfs defined but never used
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });

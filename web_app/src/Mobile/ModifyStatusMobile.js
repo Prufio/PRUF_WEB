@@ -132,7 +132,6 @@ class ModifyStatusMobile extends Component {
 
 
     render() {//render continuously produces an up-to-date stateful document  
-        // const self = this; //BS:EXAMINE defined but never used
 
         const _checkIn = async (e) => {
             this.setState({ help: false })

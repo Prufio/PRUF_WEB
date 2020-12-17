@@ -207,7 +207,7 @@ class RecycleMobile extends Component {
 
           console.log(destinationACData.root)
 
-          if (resArray[1] != destinationACData.root) {             //BS:EXAMINE !=
+          if (resArray[1] != destinationACData.root) {
             alert("Import destination AC must have same root as origin!");
             window.sentPacket = undefined;
             this.clearForm()

@@ -47,15 +47,6 @@ class ClaimPipAsset extends Component {
     render() {//render continuously produces an up-to-date stateful document  
         const self = this;
 
-        // async function tenThousandHashesOf(varToHash) { //BS:EXAMINE defined but never used
-        //     var tempHash = varToHash;
-        //     for (var i = 0; i < 10000; i++) {
-        //         tempHash = window.web3.utils.soliditySha3(tempHash);
-        //         console.log(tempHash);
-        //     }
-        //     return tempHash;
-        // }
-
         const $claimPipAsset = () => {//create a new asset record
             this.setState({ txStatus: false });
             this.setState({ txHash: "" });

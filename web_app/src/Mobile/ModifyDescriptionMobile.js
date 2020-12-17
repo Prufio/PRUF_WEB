@@ -863,7 +863,7 @@ class ModifyDescription extends Component {
                 </div>
               )}
 
-              {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && ( //BS:EXAMINE elementType == "0"
+              {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && ( 
                 <>
                 <Form.Row>
                   <div className="submitButtonRRMobile">
