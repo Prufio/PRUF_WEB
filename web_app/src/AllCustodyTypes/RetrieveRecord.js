@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, X, CameraOff, UploadCloud } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -65,7 +65,7 @@ class RetrieveRecord extends Component {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
       let textNames = Object.keys(obj.text)
-      let status = obj.status;
+      // let status = obj.status; //BS:EXAMINE defined but never used
 
       const showImage = (e) => {
         console.log(this.state.selectedImage)
@@ -216,7 +216,7 @@ class RetrieveRecord extends Component {
                     )}
 
                     <button className="assetImageButtonSelected">
-                      {this.state.selectedImage !== "" && this.state.selectedImage != undefined ?
+                      {this.state.selectedImage !== "" && this.state.selectedImage != undefined ? //BS:EXAMINE selectedImage != undefined
                         (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
                         : (<>{renderIcon()}</>)}
                     </button>

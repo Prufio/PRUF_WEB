@@ -30,7 +30,6 @@ class AddUser extends Component {
       NRerror: undefined,
       result: "",
       resultIA: "",
-      assetClass: undefined,
       CountDownStart: "",
       ipfs1: "",
       txHash: "",

@@ -91,7 +91,6 @@ class EscrowManagerNC extends Component {
       result: "",
       result1: "",
       result2: "",
-      assetClass: undefined,
       txHash: "",
       txStatus: false,
       type: "",

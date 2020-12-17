@@ -19,7 +19,7 @@ import ParticleBox from "./Resources/ParticleBox";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'react-feather';
-import { ConsoleView, isMobile } from "react-device-detect";
+import { isMobile } from "react-device-detect";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
 
@@ -1544,7 +1544,8 @@ class Main extends Component {
   //stuff to do when component mounts in window
   componentDidMount() {
 
-    let _web3, ipfs;
+    let _web3;
+    // ipfs;  //BS:EXAMINE ipfs defined but never used
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });

@@ -110,7 +110,6 @@ class EscrowMobile extends Component {
       transaction: false,
       help: false,
       input: false,
-      input: false,
       legacyMode: false,
       idxHash: "",
       idxHashRaw: "",

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, UploadCloud, Camera, CameraOff } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class DeepVerifyMobile extends Component {
@@ -43,8 +43,8 @@ class DeepVerifyMobile extends Component {
       tempStatus = await window.utils.getStatusString(String(infoArr[0]))
 
       if (!doesExist) {
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
+        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
+        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
       }
 
       console.log("idxHash", idxHash);

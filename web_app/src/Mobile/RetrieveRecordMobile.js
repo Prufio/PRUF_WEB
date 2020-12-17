@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, Grid, ArrowRightCircle, UploadCloud, Camera, CameraOff } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff } from "react-feather";
 
 
 class RetrieveRecordMobile extends Component {
@@ -80,9 +80,9 @@ class RetrieveRecordMobile extends Component {
     this.generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
-      let imageNames = Object.keys(obj.photo)
+      // let imageNames = Object.keys(obj.photo) //BS:EXAMINE defined but never used
       let textNames = Object.keys(obj.text)
-      let status = "";
+      let status = ""; //BS:EXAMINE defined but never used
 
       if (obj.status === "50") { status = "In Locked Escrow" }
       else if (obj.status === "51") { status = "Transferrable" }
@@ -124,7 +124,7 @@ class RetrieveRecordMobile extends Component {
         for (let i = 0; i < images.length; i++) {
           component.push(
             <button value={images[i]} class="assetImageSelectorButtonMobile" onClick={() => { showImage(images[i]) }}>
-              <img src={images[i]} className="imageSelectorImageMobile" />
+              <img src={images[i]} className="imageSelectorImageMobile" alt="imageSelectorImageMobile"/>
             </button>
           )
         }
@@ -159,10 +159,6 @@ class RetrieveRecordMobile extends Component {
         }
 
         return component
-      }
-
-      const submitHandler = (e) => {
-        e.preventDefault();
       }
 
       return (
@@ -210,8 +206,8 @@ class RetrieveRecordMobile extends Component {
 
       window.sentPacket = undefined;
       let hash;
-      let assetClass;
-      let status;
+      let assetClass; //BS:EXAMINE defined but never used (NEEDED)
+      let status; //BS:EXAMINE defined but never used (NEEDED)
 
       await window.contracts.STOR.methods.retrieveShortRecord(idxHash)
         .call((_error, _result) => {
@@ -240,7 +236,7 @@ class RetrieveRecordMobile extends Component {
       const self = this;
       var ipfsHash;
       var tempResult;
-      let idxHash = String(this.state.result)
+      let idxHash = String(this.state.resultQR)
       this.setState({ idxHash: idxHash })
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -253,9 +249,9 @@ class RetrieveRecordMobile extends Component {
             if (_error) {
               console.log(_error)
               self.setState({ error: _error });
-              self.setState({ result: 0 });
+              self.setState({ resultQR: "" });
             } else {
-              self.setState({ result: Object.values(_result) })
+              self.setState({ resultQR: Object.values(_result) })
               self.setState({ error: undefined });
               tempResult = Object.values(_result);
               if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
@@ -372,7 +368,7 @@ class RetrieveRecordMobile extends Component {
       ipfsObject: undefined,
       showDescription: false,
       QRreader: false,
-      result: "",
+      resultQR: "",
       QRRR: undefined,
       assetFound: undefined,
       Checkbox: false,
@@ -420,7 +416,7 @@ class RetrieveRecordMobile extends Component {
       let tempBool = await window.utils.checkAssetExistsBare(data)
       if (tempBool === true) {
         this.setState({
-          result: data,
+          resultQR: data,
           QRRR: true,
           assetFound: "Asset Found!"
         })
@@ -446,7 +442,7 @@ class RetrieveRecordMobile extends Component {
 
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
+    const self = this; //BS:EXAMINE defined but never used
 
 
 
@@ -506,8 +502,8 @@ class RetrieveRecordMobile extends Component {
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
       if (!doesExist) {
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, VLresult: "" })
+        this.setState({ resultQR: "", accessPermitted: false, Checkbox: false, QRreader: false, VLresult: "" })
+        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
       }
 
       await window.contracts.STOR.methods
@@ -516,7 +512,7 @@ class RetrieveRecordMobile extends Component {
           if (_error) {
             console.log(_error)
             self.setState({ error: _error });
-            self.setState({ result: 0 });
+            self.setState({ result: "" });
           } else {
             self.setState({ result: Object.values(_result) })
             self.setState({ error: undefined });
@@ -694,7 +690,7 @@ class RetrieveRecordMobile extends Component {
                   </div>
                 </div>
               )}
-              {this.state.result[2] !== "0" && (
+              {this.state.resultQR[2] !== "0" && (
                 <div className="resultsMobile">
                   {this.state.assetFound}
                 </div>

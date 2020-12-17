@@ -213,7 +213,8 @@ class ImportMobile extends Component {
         this.setState({
           QRreader: false,
         })
-        return alert("Import destination AC must have same root as origin!"), clearForm()
+        clearForm()
+        return alert("Import destination AC must have same root as origin!")
       }
 
       this.setState({ selectedAsset: e })

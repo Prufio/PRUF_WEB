@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, HelpCircle, CheckCircle } from "react-feather";
-import QrReader from 'react-qr-reader'
 
 class ModifyStatusMobile extends Component {
     constructor(props) {
@@ -133,7 +132,7 @@ class ModifyStatusMobile extends Component {
 
 
     render() {//render continuously produces an up-to-date stateful document  
-        const self = this;
+        // const self = this; //BS:EXAMINE defined but never used
 
         const _checkIn = async (e) => {
             this.setState({ help: false })

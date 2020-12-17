@@ -101,7 +101,7 @@ class TransferAC extends Component {
       if(this.state.assetClass < 1 || this.state.to < 1) {return}
 
       await window.contracts.AC_TKN.methods
-        .safeTransferFrom(window.addr, this.state.to, this.state.assetClass)
+        .safeTransferFrom(window.addr, to, this.state.assetClass)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });

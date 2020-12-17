@@ -207,7 +207,7 @@ class RecycleMobile extends Component {
 
           console.log(destinationACData.root)
 
-          if (resArray[1] != destinationACData.root) {
+          if (resArray[1] != destinationACData.root) {             //BS:EXAMINE !=
             alert("Import destination AC must have same root as origin!");
             window.sentPacket = undefined;
             this.clearForm()
@@ -306,7 +306,8 @@ class RecycleMobile extends Component {
         this.setState({
           QRreader: false
         })
-        return alert("Import destination AC must have same root as previous AC"), this.clearForm()
+        this.clearForm()
+        return alert("Import destination AC must have same root as previous AC")
       }
 
       let rgtHash;

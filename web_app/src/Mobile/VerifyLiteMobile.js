@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Camera, CameraOff, UploadCloud } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, Camera, CameraOff, UploadCloud } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyLiteMobile extends Component {
@@ -47,8 +47,8 @@ class VerifyLiteMobile extends Component {
       tempStatus = await window.utils.getStatusString(String(infoArr[0]))
 
       if (!doesExist) {
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
-          this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
+        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
+        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
       }
 
       console.log("idxHash", idxHash);
@@ -146,7 +146,7 @@ class VerifyLiteMobile extends Component {
 
 
   render() {//render continuously produces an up-to-date stateful document  
-    const self = this;
+    // const self = this; //BS:EXAMINE defined but never used
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {
@@ -218,8 +218,8 @@ class VerifyLiteMobile extends Component {
       var infoMatches = await window.utils.checkMatch(idxHash, rgtHash);
 
       if (!doesExist) {
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission."),
         this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "" })
+        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
       }
 
       if (!infoMatches) {
@@ -463,7 +463,7 @@ class VerifyLiteMobile extends Component {
               </Form.Row>
               </>
             )}
-            {this.state.idxHash != undefined && this.state.VLresult === "" && (
+            {this.state.idxHash !== undefined && this.state.VLresult === "" && (
             <Form.Row>
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>

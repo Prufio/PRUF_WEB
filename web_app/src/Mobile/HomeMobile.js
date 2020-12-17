@@ -52,7 +52,7 @@ class HomeMobile extends Component {
     return (
       <div>
         <div className="homeFormMobile">
-          <img className="prufARCroppedFormMobile" src={require("../Resources/Images/Pruf AR (2).png")} />
+          <img className="prufARCroppedFormMobile" src={require("../Resources/Images/Pruf AR (2).png")} alt="prufARMobile"/>
           <br></br>
           <br></br>
           {window._contracts === undefined && window.addr !== undefined && (<div className="textMobile"> <Form.Row><h1 className="loadingMobile">Connecting to the Blockchain</h1></Form.Row></div>)}

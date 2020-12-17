@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, HelpCircle, CheckCircle } from "react-feather";
-import QrReader from 'react-qr-reader'
 
 class TransferAssetMobile extends Component {
   constructor(props) {

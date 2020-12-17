@@ -46,7 +46,10 @@ class AssetDashboard extends React.Component {
     this.setAC = async (AC) => {
       let acDoesExist;
 
-      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero"), this.refresh() }
+      if (AC === "0" || AC === undefined) {
+        this.refresh() 
+        return alert("Selected AC Cannot be Zero")
+        }
       else {
         if (
           isNaN(AC)

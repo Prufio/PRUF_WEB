@@ -1,13 +1,6 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
 import "./../index.css";
-import Dropdown from 'react-bootstrap/Dropdown';
-import Nav from 'react-bootstrap/Nav'
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import { RefreshCw, X, ChevronRight, CornerUpLeft, Home, Plus, Copy } from "react-feather";
-import { QRCode } from 'react-qrcode-logo';
-import { isMobile } from "react-device-detect";
-import Printer from '../Resources/Print';
+import { RefreshCw, ChevronRight, CornerUpLeft, Home, Plus, Copy } from "react-feather";
 import Card from "react-bootstrap/Card";
 import Jdenticon from 'react-jdenticon';
 
@@ -48,7 +41,10 @@ class AssetDashboardMobile extends React.Component {
     this.setAC = async (AC) => {
       let acDoesExist;
 
-      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero"), this.refresh() }
+      if (AC === "0" || AC === undefined) { 
+        this.refresh() 
+        return alert("Selected AC Cannot be Zero") 
+      }
       else {
         if (
           isNaN(AC)
@@ -199,7 +195,7 @@ class AssetDashboardMobile extends React.Component {
         for (let i = 0; i < images.length; i++) {
           component.push(
             <button key={"button" + String(i)} value={images[i]} className="assetImageSelectorButtonMobile" onClick={() => { showImage(images[i]) }}>
-              <img src={images[i]} className="imageSelectorImageMobile" />
+              <img src={images[i]} className="imageSelectorImageMobile" alt="imageSelectorImage" />
             </button>
           )
         }
