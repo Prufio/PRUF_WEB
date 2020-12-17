@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, CheckCircle, HelpCircle, Camera, UploadCloud, CameraOff } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, CheckCircle, HelpCircle, Camera, UploadCloud, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyRightHolder extends Component {

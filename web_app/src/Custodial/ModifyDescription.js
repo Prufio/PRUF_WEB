@@ -95,9 +95,9 @@ class ModifyDescription extends Component {
       console.log("Existing description before edits: ", this.state.oldDescription)
       let element = (this.state.removeElement)
       let oldDescription = JSON.parse(this.state.oldDescription);
-      let resultDescription;
-      let oldDescriptionPhoto = {photo: oldDescription.photo}
-      let oldDescriptionText = {text: oldDescription.text}
+      // let resultDescription; //BS:EXAMINE defined but never used
+      // let oldDescriptionPhoto = {photo: oldDescription.photo} //BS:EXAMINE defined but never used
+      // let oldDescriptionText = {text: oldDescription.text} //BS:EXAMINE defined but never used
 
 
       if (this.state.element === "") {

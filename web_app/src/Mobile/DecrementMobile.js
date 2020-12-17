@@ -173,11 +173,11 @@ class DecrementMobile extends Component {
       console.log("DataReserve: ", this.state.countDownStart);
 
       if (Number(this.state.countDown) > Number(this.state.count)) {
-        return alert("Countdown is greater than count reserve! Please ensure data fields are correct before submission."),
-          clearForm(),
-          this.setState({
-            transaction: false
-          })
+        clearForm()
+        this.setState({
+          transaction: false
+        })
+        return alert("Countdown is greater than count reserve! Please ensure data fields are correct before submission.")
       }
 
       await window.contracts.NP_NC.methods

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Home, XSquare, ArrowRightCircle, CornerUpLeft, Tag, HelpCircle, AlertOctagon, Camera, UploadCloud, CameraOff } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, Tag, HelpCircle, AlertOctagon, Camera, UploadCloud, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class RecycleAssetNC extends Component {
@@ -262,12 +262,6 @@ class RecycleAssetNC extends Component {
       }
     }
 
-    const clearForm = async () => {
-      if (document.getElementById("MainForm") === null) { return }
-      document.getElementById("MainForm").reset();
-      this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false })
-    }
-
     const _recycleAsset = async () => {
       this.setState({ help: false })
       if (
@@ -316,7 +310,8 @@ class RecycleAssetNC extends Component {
         this.setState({
           QRreader: false
         })
-        return alert("Import destination AC must have same root as previous AC"), this.clearForm()
+        this.clearForm()
+        return alert("Import destination AC must have same root as previous AC")
       }
 
       let rgtHash;

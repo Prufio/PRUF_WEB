@@ -47,7 +47,6 @@ class IncreaseACShare extends Component {
       authAddress: "",
       result: "",
       resultIA: "",
-      assetClass: undefined,
       CountDownStart: "",
       ipfs1: "",
       txHash: "",

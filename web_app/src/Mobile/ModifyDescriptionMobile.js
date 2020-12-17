@@ -229,12 +229,6 @@ class ModifyDescription extends Component {
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
 
-    const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
-      document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", elementType: "0", wasSentPacket: false, help: false })
-    }
-
     const help = async () => {
       if (this.state.help === false) {
         this.setState({ help: true })
@@ -866,7 +860,7 @@ class ModifyDescription extends Component {
                 </div>
               )}
 
-              {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && (
+              {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && ( //BS:EXAMINE elementType == "0"
                 <>
                 <Form.Row>
                   <div className="submitButtonRRMobile">

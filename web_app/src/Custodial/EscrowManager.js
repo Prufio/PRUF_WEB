@@ -62,7 +62,7 @@ class EscrowManager extends Component {
     const self = this;
 
     const _accessAsset = async () => {
-      const self = this;
+      // const self = this; //BS:EXAMINE defined but never used
 
       let idxHash = window.web3.utils.soliditySha3(
         this.state.type,

@@ -1,5 +1,4 @@
 import bs58 from "bs58";
-import Button from "react-bootstrap/Button";
 import { QRCode } from 'react-qrcode-logo';
 import React from 'react';
 import "./../index.css";
@@ -118,7 +117,7 @@ function buildWindowUtils() {
     switch (job) {
       case ("contracts"): {
         if (Object.keys(obj).length > 0) {
-          let values = Object.values(obj), keys = Object.keys(obj), component = [
+          let values = Object.values(obj), keys = Object.keys(obj), component = [  //BS:EXAMINE values defined but never used (NEEDED)
             <option key="noselect" value="null"> Select an option </option>];
 
           for (let i = 0, count = 1; i < keys.length; i++) {
@@ -155,7 +154,7 @@ function buildWindowUtils() {
       }
       default: {
         if (Object.keys(obj).length > 0) {
-          let values = Object.values(obj), keys = Object.keys(obj), component = [
+          let values = Object.values(obj), keys = Object.keys(obj), component = [  //BS:EXAMINE values defined but never used (NEEDED)
             <option key="noselect" value="null"> Select an option </option>];
 
           for (let i = 0; i < keys.length; i++) {

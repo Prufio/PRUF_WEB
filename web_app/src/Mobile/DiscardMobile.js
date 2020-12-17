@@ -39,7 +39,6 @@ class DiscardMobile extends Component {
             transaction: false,
             hasLoadedAssets: false,
             assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
-            transaction: false,
             help: false
         };
     }

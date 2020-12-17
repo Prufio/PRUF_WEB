@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 
 class NewRecord extends Component {
