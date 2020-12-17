@@ -87,8 +87,8 @@ class UpdateACName extends Component {
     }
 
     const updateName = async () => {
-      var alreadyExists = await window.utils.checkACName(this.state.newACName)
-
+      var alreadyExists = await window.utils.checkACName(this.state.newACName);
+      console.log(alreadyExists)
       if (alreadyExists) {
         return (alert("AC name already exists! Choose a different name and try again"))
       }
@@ -176,7 +176,7 @@ class UpdateACName extends Component {
                     <Form.Control
                       placeholder="AC Name"
                       required
-                      onChange={(e) => this.setState({ newACName: e.target.value })}
+                      onChange={(e) => this.setState({ newACName: e.target.value.trim() })}
                       size="lg"
                     />
                   )}

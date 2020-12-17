@@ -367,6 +367,9 @@ class ModifyDescription extends Component {
     }
 
     const publishIPFS1 = async () => {
+
+      if(this.state.idxHash === "" || this.state.idxHash === "null"){return alert("Please select an asset from the dropdown")}
+
       this.setState({help: false})
       console.log(this.state.oldDescription)
       let newDescription;
@@ -661,7 +664,7 @@ class ModifyDescription extends Component {
                       </Form.Label>
                         <Form.Control
                           placeholder="Name This Text Submission (No Spaces)"
-                          onChange={(e) => this.setState({ elementName: e.target.value })}
+                          onChange={(e) => this.setState({ elementName: e.target.value.trim() })}
                           size="lg"
                           maxLength={32}
                         />
@@ -672,7 +675,7 @@ class ModifyDescription extends Component {
                       </Form.Label>
                         <Form.Control
                           placeholder="Text Submission Goes Here"
-                          onChange={(e) => this.setState({ elementValue: e.target.value })}
+                          onChange={(e) => this.setState({ elementValue: e.target.value.trim() })}
                           size="lg"
                         />
                       </Form.Group>
@@ -687,7 +690,7 @@ class ModifyDescription extends Component {
                       </Form.Label>
                         <Form.Control
                           placeholder="Text Submission Goes Here"
-                          onChange={(e) => this.setState({ elementValue: e.target.value })}
+                          onChange={(e) => this.setState({ elementValue: e.target.value.trim() })}
                           size="lg"
                         />
                       </Form.Group>
@@ -702,7 +705,7 @@ class ModifyDescription extends Component {
                       </Form.Label>
                         <Form.Control
                           placeholder="Type a New NameTag"
-                          onChange={(e) => this.setState({ nameTag: e.target.value })}
+                          onChange={(e) => this.setState({ nameTag: e.target.value.trim() })}
                           size="lg"
                           maxLength={32}
                         />
@@ -778,7 +781,7 @@ class ModifyDescription extends Component {
                       </Form.Label>
                         <Form.Control
                           placeholder="Name This Image (No Spaces)"
-                          onChange={(e) => this.setState({ elementName: e.target.value })}
+                          onChange={(e) => this.setState({ elementName: e.target.value.trim() })}
                           size="lg"
                           maxLength={32}
                         />
@@ -789,7 +792,7 @@ class ModifyDescription extends Component {
                       </Form.Label>
                         <Form.Control
                           placeholder="Image URL"
-                          onChange={(e) => this.setState({ elementValue: e.target.value })}
+                          onChange={(e) => this.setState({ elementValue: e.target.value.trim() })}
                           size="lg"
                         />
                       </Form.Group>
@@ -805,7 +808,7 @@ class ModifyDescription extends Component {
                         </Form.Label>
                           <Form.Control
                             placeholder="Image URL"
-                            onChange={(e) => this.setState({ elementValue: e.target.value })}
+                            onChange={(e) => this.setState({ elementValue: e.target.value.trim() })}
                             size="lg"
                           />
                         </Form.Group>

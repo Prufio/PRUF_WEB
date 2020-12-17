@@ -98,7 +98,7 @@ class TransferAC extends Component {
       console.log("AC", this.state.assetClass);
       console.log("addr: ", window.addr);
 
-      if(this.state.assetClass === undefined || this.state.to === undefined) {return}
+      if(this.state.assetClass < 1 || this.state.to < 1) {return}
 
       await window.contracts.AC_TKN.methods
         .safeTransferFrom(window.addr, this.state.to, this.state.assetClass)
@@ -177,7 +177,7 @@ class TransferAC extends Component {
                     <Form.Control
                       placeholder="Recipient Address"
                       required
-                      onChange={(e) => this.setState({ to: e.target.value })}
+                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
                       size="lg"
                     />
                   )}
@@ -185,7 +185,7 @@ class TransferAC extends Component {
                     <Form.Control
                       placeholder={this.state.to}
                       required
-                      onChange={(e) => this.setState({ to: e.target.value })}
+                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
                       size="lg"
                       disabled
                     />

@@ -204,7 +204,8 @@ class TransferAssetMobile extends Component {
         this.setState({ transaction: true });
         var idxHash = this.state.idxHash;
         let to = this.state.to;
-  
+        if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
+        else if(to === "" || to === undefined || !window.web3.utils.isAddress(to)){return alert("Please input a valid 'to' address.")}
         console.log("idxHash", idxHash);
         console.log("addr: ", window.addr);
   
@@ -324,7 +325,7 @@ class TransferAssetMobile extends Component {
                     <Form.Control
                       placeholder="Recipient Address"
                       required
-                      onChange={(e) => this.setState({ to: e.target.value })}
+                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
                       size="lg"
                     />
                   )}
@@ -332,7 +333,7 @@ class TransferAssetMobile extends Component {
                     <Form.Control
                       placeholder={this.state.to}
                       required
-                      onChange={(e) => this.setState({ to: e.target.value })}
+                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
                       size="lg"
                       disabled
                     />

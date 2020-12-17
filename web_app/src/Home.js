@@ -156,7 +156,7 @@ class Home extends Component {
             {/* Do not use a Web3 provider connected to a mainnet Ethereum address, or your private account information
               could be compromised.  */}
             {/* This application is not secure in its current form. */}
-              IMPORTANT : This version of the PRüF Web Application is in testing, and is to be used for test and demonstration purposes only. All Ethereum
+              IMPORTANT : This version of the PRüF Web Application is in alpha, and is to be used for test and demonstration purposes only. All Ethereum
               transactions are hosted on the Kovan EVM. Any information provided within this application may be visible to third-parties. Do not submit 
               any sensitive information unless your primary intent is to make that information public. All information entered here will be lost when 
               the kovan network is reset.

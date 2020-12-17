@@ -49,17 +49,22 @@ class AssetDashboard extends React.Component {
       if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero"), this.refresh() }
       else {
         if (
-          AC.charAt(0) === "0" ||
-          AC.charAt(0) === "1" ||
-          AC.charAt(0) === "2" ||
-          AC.charAt(0) === "3" ||
-          AC.charAt(0) === "4" ||
-          AC.charAt(0) === "5" ||
-          AC.charAt(0) === "6" ||
-          AC.charAt(0) === "7" ||
-          AC.charAt(0) === "8" ||
-          AC.charAt(0) === "9"
+          isNaN(AC)
         ) {
+          acDoesExist = await window.utils.checkForAC("name", AC);
+          await console.log("Exists?", acDoesExist)
+
+          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
+            window.open('https://www.pruf.io')
+          }
+
+          this.setState({ ACname: AC });
+          await window.utils.resolveAC(AC);
+          await this.setState({ assetClass: window.assetClass });
+
+        }
+
+        else {
           acDoesExist = await window.utils.checkForAC("id", AC);
           await console.log("Exists?", acDoesExist)
 
@@ -74,18 +79,6 @@ class AssetDashboard extends React.Component {
           await this.setState({ ACname: window.assetClassName });
         }
 
-        else {
-          acDoesExist = await window.utils.checkForAC("name", AC);
-          await console.log("Exists?", acDoesExist)
-
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
-          }
-
-          this.setState({ ACname: AC });
-          await window.utils.resolveAC(AC);
-          await this.setState({ assetClass: window.assetClass });
-        }
 
         return this.setState({ assetClassSelected: true, acData: window.tempACData })
       }

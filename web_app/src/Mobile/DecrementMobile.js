@@ -167,6 +167,8 @@ class DecrementMobile extends Component {
       this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
 
+      if(this.state.countDown === "" || this.state.countDown === undefined){return alert("Please fill all fields before submission")}
+
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       console.log("Data: ", this.state.countDown);
@@ -300,7 +302,7 @@ class DecrementMobile extends Component {
                       placeholder="Countdown Amount"
                       required
                       onChange={(e) =>
-                        this.setState({ countDown: e.target.value })
+                        this.setState({ countDown: e.target.value.trim() })
                       }
                       size="lg"
                     />)}

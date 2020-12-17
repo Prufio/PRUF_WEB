@@ -204,7 +204,7 @@ class ModifyRightsHolderMobile extends Component {
             this.setState({ transaction: true })
             var idxHash = this.state.idxHash;
             var newRgtRaw;
-
+            if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
             newRgtRaw = window.web3.utils.soliditySha3(
                 String(this.state.first).replace(/\s/g, ''),
                 String(this.state.middle).replace(/\s/g, ''),
@@ -338,7 +338,7 @@ class ModifyRightsHolderMobile extends Component {
                                                 <Form.Control
                                                     placeholder="First Name"
                                                     required
-                                                    onChange={(e) => this.setState({ first: e.target.value })}
+                                                    onChange={(e) => this.setState({ first: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -347,7 +347,7 @@ class ModifyRightsHolderMobile extends Component {
                                                 <Form.Control
                                                     placeholder="Middle Name"
                                                     required
-                                                    onChange={(e) => this.setState({ middle: e.target.value })}
+                                                    onChange={(e) => this.setState({ middle: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -356,7 +356,7 @@ class ModifyRightsHolderMobile extends Component {
                                                 <Form.Control
                                                     placeholder="Last Name"
                                                     required
-                                                    onChange={(e) => this.setState({ surname: e.target.value })}
+                                                    onChange={(e) => this.setState({ surname: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -366,7 +366,7 @@ class ModifyRightsHolderMobile extends Component {
                                                 <Form.Control
                                                     placeholder="ID Number"
                                                     required
-                                                    onChange={(e) => this.setState({ id: e.target.value })}
+                                                    onChange={(e) => this.setState({ id: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -377,7 +377,7 @@ class ModifyRightsHolderMobile extends Component {
                                                     className="key"
                                                     type="text"
                                                     required
-                                                    onChange={(e) => this.setState({ secret: e.target.value })}
+                                                    onChange={(e) => this.setState({ secret: e.target.value.trim() })}
                                                     size="lg"
                                                     autoComplete="off"
                                                 />
@@ -392,7 +392,7 @@ class ModifyRightsHolderMobile extends Component {
                                                     placeholder={this.state.first}
                                                     required
                                                     disabled
-                                                    onChange={(e) => this.setState({ first: e.target.value })}
+                                                    onChange={(e) => this.setState({ first: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -402,7 +402,7 @@ class ModifyRightsHolderMobile extends Component {
                                                     placeholder={this.state.middle}
                                                     required
                                                     disabled
-                                                    onChange={(e) => this.setState({ middle: e.target.value })}
+                                                    onChange={(e) => this.setState({ middle: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -412,7 +412,7 @@ class ModifyRightsHolderMobile extends Component {
                                                     placeholder={this.state.surname}
                                                     required
                                                     disabled
-                                                    onChange={(e) => this.setState({ surname: e.target.value })}
+                                                    onChange={(e) => this.setState({ surname: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -423,7 +423,7 @@ class ModifyRightsHolderMobile extends Component {
                                                     placeholder={this.state.id}
                                                     required
                                                     disabled
-                                                    onChange={(e) => this.setState({ id: e.target.value })}
+                                                    onChange={(e) => this.setState({ id: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             </Form.Row>
@@ -435,7 +435,7 @@ class ModifyRightsHolderMobile extends Component {
                                                     type="text"
                                                     required
                                                     disabled
-                                                    onChange={(e) => this.setState({ secret: e.target.value })}
+                                                    onChange={(e) => this.setState({ secret: e.target.value.trim() })}
                                                     size="lg"
                                                     autoComplete="off"
                                                 />

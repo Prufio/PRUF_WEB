@@ -261,7 +261,7 @@ class VerifyLiteMobile extends Component {
                     <Form.Label className="formFont">Idx Hash:</Form.Label>
                     <Form.Control
                       placeholder="Idx Hash"
-                      onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                      onChange={(e) => this.setState({ idxHashRaw: e.target.value.trim() })}
                       size="lg"
                       required
                     />
@@ -277,7 +277,7 @@ class VerifyLiteMobile extends Component {
                     <Form.Label className="formFont">Type:</Form.Label>
                     <Form.Control
                       placeholder="Type"
-                      onChange={(e) => this.setState({ type: e.target.value })}
+                      onChange={(e) => this.setState({ type: e.target.value.trim() })}
                       size="lg"
                       required
                     />
@@ -288,7 +288,7 @@ class VerifyLiteMobile extends Component {
                     <Form.Label className="formFont">Manufacturer:</Form.Label>
                     <Form.Control
                       placeholder="Manufacturer"
-                      onChange={(e) => this.setState({ manufacturer: e.target.value })}
+                      onChange={(e) => this.setState({ manufacturer: e.target.value.trim() })}
                       size="lg"
                     />
                   </Form.Group>
@@ -300,7 +300,7 @@ class VerifyLiteMobile extends Component {
                     <Form.Label className="formFont">Model:</Form.Label>
                     <Form.Control
                       placeholder="Model"
-                      onChange={(e) => this.setState({ model: e.target.value })}
+                      onChange={(e) => this.setState({ model: e.target.value.trim() })}
                       size="lg"
                       required
                     />
@@ -311,7 +311,7 @@ class VerifyLiteMobile extends Component {
                     <Form.Label className="formFont">Serial:</Form.Label>
                     <Form.Control
                       placeholder="Serial"
-                      onChange={(e) => this.setState({ serial: e.target.value })}
+                      onChange={(e) => this.setState({ serial: e.target.value.trim() })}
                       size="lg"
                       required
                     />
@@ -392,7 +392,7 @@ class VerifyLiteMobile extends Component {
                   <Form.Control
                     placeholder="First Name"
                     required
-                    onChange={(e) => this.setState({ first: e.target.value })}
+                    onChange={(e) => this.setState({ first: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Row>
@@ -401,7 +401,7 @@ class VerifyLiteMobile extends Component {
                   <Form.Control
                     placeholder="Middle Name"
                     required
-                    onChange={(e) => this.setState({ middle: e.target.value })}
+                    onChange={(e) => this.setState({ middle: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Row>
@@ -410,7 +410,7 @@ class VerifyLiteMobile extends Component {
                   <Form.Control
                     placeholder="Last Name"
                     required
-                    onChange={(e) => this.setState({ surname: e.target.value })}
+                    onChange={(e) => this.setState({ surname: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Row>
@@ -420,7 +420,7 @@ class VerifyLiteMobile extends Component {
                   <Form.Control
                     placeholder="ID Number"
                     required
-                    onChange={(e) => this.setState({ id: e.target.value })}
+                    onChange={(e) => this.setState({ id: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Row>
@@ -431,7 +431,7 @@ class VerifyLiteMobile extends Component {
                       className="key"
                       type="text"
                       required
-                      onChange={(e) => this.setState({ secret: e.target.value })}
+                      onChange={(e) => this.setState({ secret: e.target.value.trim() })}
                       size="lg"
                       autoComplete="off"
                     />

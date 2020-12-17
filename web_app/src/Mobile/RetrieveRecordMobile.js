@@ -583,7 +583,7 @@ class RetrieveRecordMobile extends Component {
                         <Form.Control
                           placeholder="Idx Hash"
                           required
-                          onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                          onChange={(e) => this.setState({ idxHashRaw: e.target.value.trim() })}
                           size="lg"
                         />
                       </Form.Row>
@@ -597,7 +597,7 @@ class RetrieveRecordMobile extends Component {
                         <Form.Label className="formFont">Type:</Form.Label>
                         <Form.Control
                           placeholder="Type"
-                          onChange={(e) => this.setState({ type: e.target.value })}
+                          onChange={(e) => this.setState({ type: e.target.value.trim() })}
                           size="lg"
                           required
                         />
@@ -608,7 +608,7 @@ class RetrieveRecordMobile extends Component {
                         <Form.Label className="formFont">Manufacturer:</Form.Label>
                         <Form.Control
                           placeholder="Manufacturer"
-                          onChange={(e) => this.setState({ manufacturer: e.target.value })}
+                          onChange={(e) => this.setState({ manufacturer: e.target.value.trim() })}
                           size="lg"
                         />
                       </Form.Group>
@@ -620,7 +620,7 @@ class RetrieveRecordMobile extends Component {
                         <Form.Label className="formFont">Model:</Form.Label>
                         <Form.Control
                           placeholder="Model"
-                          onChange={(e) => this.setState({ model: e.target.value })}
+                          onChange={(e) => this.setState({ model: e.target.value.trim() })}
                           size="lg"
                           required
                         />
@@ -631,7 +631,7 @@ class RetrieveRecordMobile extends Component {
                         <Form.Label className="formFont">Serial:</Form.Label>
                         <Form.Control
                           placeholder="Serial"
-                          onChange={(e) => this.setState({ serial: e.target.value })}
+                          onChange={(e) => this.setState({ serial: e.target.value.trim() })}
                           size="lg"
                           required
                         />

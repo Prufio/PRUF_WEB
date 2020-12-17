@@ -166,33 +166,8 @@ class RecycleMobile extends Component {
       if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
       else {
         if (
-          this.state.selectedAssetClass.charAt(0) === "0" ||
-          this.state.selectedAssetClass.charAt(0) === "1" ||
-          this.state.selectedAssetClass.charAt(0) === "2" ||
-          this.state.selectedAssetClass.charAt(0) === "3" ||
-          this.state.selectedAssetClass.charAt(0) === "4" ||
-          this.state.selectedAssetClass.charAt(0) === "5" ||
-          this.state.selectedAssetClass.charAt(0) === "6" ||
-          this.state.selectedAssetClass.charAt(0) === "7" ||
-          this.state.selectedAssetClass.charAt(0) === "8" ||
-          this.state.selectedAssetClass.charAt(0) === "9"
+          isNaN(this.state.selectedAssetClass)
         ) {
-          acDoesExist = await window.utils.checkForAC("id", this.state.selectedAssetClass);
-          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
-          await console.log("Exists?", acDoesExist)
-
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
-          }
-
-          this.setState({ assetClass: this.state.selectedAssetClass });
-          await window.utils.resolveACFromID(this.state.selectedAssetClass)
-          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
-
-          await this.setState({ ACname: window.assetClassName });
-        }
-
-        else {
           acDoesExist = await window.utils.checkForAC("name", this.state.selectedAssetClass);
           destinationACData = await window.utils.getACData("name", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
@@ -204,6 +179,21 @@ class RecycleMobile extends Component {
           this.setState({ ACname: this.state.selectedAssetClass });
           await window.utils.resolveAC(this.state.selectedAssetClass);
           await this.setState({ assetClass: destinationACData.AC });
+        }
+
+        else {
+          acDoesExist = await window.utils.checkForAC("id", this.state.selectedAssetClass);
+          await console.log("Exists?", acDoesExist)
+
+          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
+            window.open('https://www.pruf.io')
+          }
+
+          this.setState({ assetClass: this.state.selectedAssetClass });
+          await window.utils.resolveACFromID(this.state.selectedAssetClass)
+          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
+
+          await this.setState({ ACname: window.assetClassName });
         }
         if (this.state.wasSentPacket) {
           let resArray = await window.utils.checkStats(this.state.idxHash, [0, 2])
@@ -409,7 +399,7 @@ class RecycleMobile extends Component {
                 <Form.Control
                   className="singleFormRow"
                   placeholder="Submit an asset class name or #"
-                  onChange={(e) => this.setState({ selectedAssetClass: e.target.value })}
+                  onChange={(e) => this.setState({ selectedAssetClass: e.target.value.trim() })}
                   size="lg"
                 />
               </Form.Group>
@@ -441,7 +431,7 @@ class RecycleMobile extends Component {
                         <Form.Control
                           placeholder="Idx Hash"
                           required
-                          onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                          onChange={(e) => this.setState({ idxHashRaw: e.target.value.trim() })}
                           size="lg"
                         />
                       </Form.Group>
@@ -455,7 +445,7 @@ class RecycleMobile extends Component {
                           <Form.Control
                             placeholder="Type"
                             required
-                            onChange={(e) => this.setState({ type: e.target.value })}
+                            onChange={(e) => this.setState({ type: e.target.value.trim() })}
                             size="lg"
                           />
                         </Form.Group>
@@ -468,7 +458,7 @@ class RecycleMobile extends Component {
                           <Form.Control
                             placeholder="Manufacturer"
                             required
-                            onChange={(e) => this.setState({ manufacturer: e.target.value })}
+                            onChange={(e) => this.setState({ manufacturer: e.target.value.trim() })}
                             size="lg"
                           />
                         </Form.Group>
@@ -481,7 +471,7 @@ class RecycleMobile extends Component {
                           <Form.Control
                             placeholder="Model"
                             required
-                            onChange={(e) => this.setState({ model: e.target.value })}
+                            onChange={(e) => this.setState({ model: e.target.value.trim() })}
                             size="lg"
                           />
                         </Form.Group>
@@ -494,7 +484,7 @@ class RecycleMobile extends Component {
                           <Form.Control
                             placeholder="Serial"
                             required
-                            onChange={(e) => this.setState({ serial: e.target.value })}
+                            onChange={(e) => this.setState({ serial: e.target.value.trim() })}
                             size="lg"
                           />
                         </Form.Group>
@@ -602,7 +592,7 @@ class RecycleMobile extends Component {
                       <Form.Control
                         placeholder="First Name"
                         required
-                        onChange={(e) => this.setState({ first: e.target.value })}
+                        onChange={(e) => this.setState({ first: e.target.value.trim() })}
                         size="lg"
                       />
                     </Form.Group>
@@ -615,7 +605,7 @@ class RecycleMobile extends Component {
                       <Form.Control
                         placeholder="Middle Name"
                         required
-                        onChange={(e) => this.setState({ middle: e.target.value })}
+                        onChange={(e) => this.setState({ middle: e.target.value.trim() })}
                         size="lg"
                       />
                     </Form.Group>
@@ -628,7 +618,7 @@ class RecycleMobile extends Component {
                       <Form.Control
                         placeholder="Last Name"
                         required
-                        onChange={(e) => this.setState({ surname: e.target.value })}
+                        onChange={(e) => this.setState({ surname: e.target.value.trim() })}
                         size="lg"
                       />
                     </Form.Group>
@@ -640,7 +630,7 @@ class RecycleMobile extends Component {
                       <Form.Control
                         placeholder="ID Number"
                         required
-                        onChange={(e) => this.setState({ id: e.target.value })}
+                        onChange={(e) => this.setState({ id: e.target.value.trim() })}
                         size="lg"
                       />
                     </Form.Group>
@@ -655,7 +645,7 @@ class RecycleMobile extends Component {
                         className="key"
                         type="text"
                         required
-                        onChange={(e) => this.setState({ secret: e.target.value })}
+                        onChange={(e) => this.setState({ secret: e.target.value.trim() })}
                         size="lg"
                         autoComplete="off"
                       />

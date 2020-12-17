@@ -274,7 +274,7 @@ class EscrowManagerNC extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       console.log("time: ", this.state.escrowTime, "format: ", this.state.timeFormat);
-
+      if(this.state.agent === undefined || this.state.agent === "" || this.state.escrowTime < 1 || this.state.timeFormat === null){return alert("Please fill all forms before submission")}
       if (this.state.newStatus <= 49) { this.setState({ transaction: false }); alert("Cannot set status under 50 in non-custodial AC"); return clearForm() }
       if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); alert("Agent address invalid"); return clearForm() }
 
@@ -393,7 +393,7 @@ class EscrowManagerNC extends Component {
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
                           <Form.Control
                             placeholder="Idx Hash"
-                            onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                            onChange={(e) => this.setState({ idxHashRaw: e.target.value.trim() })}
                             size="lg"
                             required
                           />
@@ -608,7 +608,7 @@ class EscrowManagerNC extends Component {
                         <Form.Control
                           placeholder="Agent Address"
                           required
-                          onChange={(e) => this.setState({ agent: e.target.value })}
+                          onChange={(e) => this.setState({ agent: e.target.value.trim() })}
                           size="lg"
                         />)}
                       {this.state.transaction === true && (
@@ -647,7 +647,7 @@ class EscrowManagerNC extends Component {
                         <Form.Control
                           placeholder="setEscrow duration"
                           required
-                          onChange={(e) => this.setState({ escrowTime: e.target.value })}
+                          onChange={(e) => this.setState({ escrowTime: e.target.value.trim() })}
                           size="lg"
                         />)}
                       {this.state.transaction === true && (
