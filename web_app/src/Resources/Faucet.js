@@ -143,7 +143,7 @@ class Faucet extends Component {
             }
 
             else {
-                amount = window.web3.utils.toWei(String(this.state.amount))
+                amount = window.web3.utils.toWei(String(Math.round(this.state.amount)))
             }
 
             this.setState({
