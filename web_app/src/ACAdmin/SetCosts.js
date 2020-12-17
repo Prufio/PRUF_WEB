@@ -104,6 +104,7 @@ class SetCosts extends Component {
 
       const serviceCost = window.web3.utils.toWei(String(this.state.serviceCost))
       this.setState({transaction: true})
+      if(serviceCost === "" || this.state.assetClass === "" || this.state.beneficiary === "") {return alert("Please fill out all forms")}
       window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           this.state.assetClass,
@@ -213,7 +214,7 @@ class SetCosts extends Component {
                         placeholder="New Service Cost (PRuF)"
                         required
                         onChange={(e) =>
-                          this.setState({ serviceCost: e.target.value })
+                          this.setState({ serviceCost: e.target.value.trim() })
                         }
                         size="lg"
                       />
@@ -235,7 +236,7 @@ class SetCosts extends Component {
                         placeholder="Beneficiary Address"
                         required
                         onChange={(e) =>
-                          this.setState({ beneficiary: e.target.value })
+                          this.setState({ beneficiary: e.target.value.trim() })
                         }
                         size="lg"
                       />

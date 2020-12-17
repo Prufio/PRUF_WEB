@@ -138,6 +138,7 @@ class DiscardAssetNC extends Component {
       this.setState({ transaction: true })
       //reset state values before form resubmission
       var idxHash = this.state.idxHash;
+      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return alert("Please fill all fields before submission")}
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);

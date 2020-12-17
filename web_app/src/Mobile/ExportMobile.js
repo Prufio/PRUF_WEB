@@ -135,7 +135,7 @@ class ExportMobile extends Component {
   }
 
     const _exportAsset = async () => {//create a new asset record
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -153,7 +153,6 @@ class ExportMobile extends Component {
         )
         .send({ from: window.addr })
         .on("error", function (_error) {
-          // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });

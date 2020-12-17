@@ -163,6 +163,8 @@ class ModifyRightsHolder extends Component {
       var idxHash = this.state.idxHash;
       var newRgtRaw;
 
+      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
+
       newRgtRaw = window.web3.utils.soliditySha3(
         String(this.state.first).replace(/\s/g, ''),
         String(this.state.middle).replace(/\s/g, ''),
@@ -282,7 +284,7 @@ class ModifyRightsHolder extends Component {
                     <Form.Control
                       placeholder="New First Name"
                       required
-                      onChange={(e) => this.setState({ first: e.target.value })}
+                      onChange={(e) => this.setState({ first: e.target.value.trim() })}
                       size="lg"
                     />)}
                   {this.state.transaction === true && (
@@ -299,7 +301,7 @@ class ModifyRightsHolder extends Component {
                     <Form.Control
                       placeholder="New Middle Name"
                       required
-                      onChange={(e) => this.setState({ middle: e.target.value })}
+                      onChange={(e) => this.setState({ middle: e.target.value.trim() })}
                       size="lg"
                     />)}
                   {this.state.transaction === true && (
@@ -317,7 +319,7 @@ class ModifyRightsHolder extends Component {
                     <Form.Control
                       placeholder="New Last Name"
                       required
-                      onChange={(e) => this.setState({ surname: e.target.value })}
+                      onChange={(e) => this.setState({ surname: e.target.value.trim() })}
                       size="lg"
                     />)}
                   {this.state.transaction === true && (
@@ -336,7 +338,7 @@ class ModifyRightsHolder extends Component {
                     <Form.Control
                       placeholder="New ID Number"
                       required
-                      onChange={(e) => this.setState({ id: e.target.value })}
+                      onChange={(e) => this.setState({ id: e.target.value.trim() })}
                       size="lg"
                     />)}
                   {this.state.transaction === true && (
@@ -356,7 +358,7 @@ class ModifyRightsHolder extends Component {
                       className="key"
                       type="text"
                       required
-                      onChange={(e) => this.setState({ secret: e.target.value })}
+                      onChange={(e) => this.setState({ secret: e.target.value.trim() })}
                       size="lg"
                       autoComplete="off"
                     />)}
@@ -366,7 +368,7 @@ class ModifyRightsHolder extends Component {
                       className="key"
                       type="text"
                       disabled
-                      onChange={(e) => this.setState({ secret: e.target.value })}
+                      onChange={(e) => this.setState({ secret: e.target.value.trim() })}
                       size="lg"
                       autoComplete="off"
                     />)}

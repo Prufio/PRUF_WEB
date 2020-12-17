@@ -201,7 +201,7 @@ class ModifyStatusMobile extends Component {
             this.setState({ result: "" })
             this.setState({ transaction: true })
             var idxHash = this.state.idxHash;
-
+            if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
             console.log("idxHash", idxHash);
             console.log("addr: ", window.addr);
             var NewStatusString = await window.utils.getStatusString(this.state.newStatus)

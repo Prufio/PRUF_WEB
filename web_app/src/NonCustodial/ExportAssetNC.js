@@ -143,7 +143,7 @@ class ExportAssetNC extends Component {
       this.setState({ transaction: true })
       //reset state values before form resubmission
       var idxHash = this.state.idxHash;
-
+      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return alert("Please select an asset from the dropdown")}
       console.log("idxHash", idxHash);
       console.log("addr: ", this.state.agentAddress);
 

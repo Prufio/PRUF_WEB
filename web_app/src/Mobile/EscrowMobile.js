@@ -271,7 +271,7 @@ class EscrowMobile extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       console.log("time: ", this.state.escrowTime, "format: ", this.state.timeFormat);
-
+      if(this.state.agent === undefined || this.state.agent === "" || this.state.escrowTime < 1 || this.state.timeFormat === null){return alert("Please fill all forms before submission")}
       if (this.state.newStatus <= 49) { this.setState({ transaction: false }); alert("Cannot set status under 50 in non-custodial AC"); return clearForm() }
       if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); alert("Agent address invalid"); return clearForm() }
 
@@ -399,7 +399,7 @@ class EscrowMobile extends Component {
                           <Form.Label className="formFont">Idx Hash:</Form.Label>
                           <Form.Control
                             placeholder="Idx Hash"
-                            onChange={(e) => this.setState({ idxHashRaw: e.target.value })}
+                            onChange={(e) => this.setState({ idxHashRaw: e.target.value.trim() })}
                             size="lg"
                             required
                           />
@@ -621,7 +621,7 @@ class EscrowMobile extends Component {
                         <Form.Control
                           placeholder="Agent Address"
                           required
-                          onChange={(e) => this.setState({ agent: e.target.value })}
+                          onChange={(e) => this.setState({ agent: e.target.value.trim() })}
                           size="lg"
                         />)}
                       {this.state.transaction === true && (
@@ -636,7 +636,7 @@ class EscrowMobile extends Component {
                     <Form.Group as={Col} controlId="formGridStatus">
                       <Form.Label className="formFont">Escrow Status:</Form.Label>
                       {this.state.transaction === false && (
-                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
+                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value.trim() })}>
                           <option value="0">Select an Escrow Status</option>
                           <option value="56">Supervised Escrow</option>
                           <option value="50">Locked Escrow</option>
@@ -660,7 +660,7 @@ class EscrowMobile extends Component {
                         <Form.Control
                           placeholder="setEscrow duration"
                           required
-                          onChange={(e) => this.setState({ escrowTime: e.target.value })}
+                          onChange={(e) => this.setState({ escrowTime: e.target.value.trim() })}
                           size="lg"
                         />)}
                       {this.state.transaction === true && (
@@ -674,7 +674,7 @@ class EscrowMobile extends Component {
                     <Form.Group as={Col} controlId="formGridFormat">
                       <Form.Label className="formFont">Time Unit:</Form.Label>
                       {this.state.transaction === false && (
-                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ timeFormat: e.target.value })}>
+                        <Form.Control as="select" size="lg" onChange={(e) => this.setState({ timeFormat: e.target.value.trim() })}>
                           <option value="0">Select a time unit</option>
                           <option value="seconds">Seconds</option>
                           <option value="minutes">Minutes</option>

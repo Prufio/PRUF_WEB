@@ -47,6 +47,7 @@ class ModifyRecordStatusNC extends Component {
       this.setState({ result: "" })
       this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
+      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);

@@ -167,6 +167,8 @@ class DecrementCounterNC extends Component {
       this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
 
+      if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){return alert("Please fill all fields before submission")}
+
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       console.log("Data: ", this.state.countDown);
@@ -289,7 +291,7 @@ class DecrementCounterNC extends Component {
                       placeholder="Countdown Amount"
                       required
                       onChange={(e) =>
-                        this.setState({ countDown: e.target.value })
+                        this.setState({ countDown: e.target.value.trim() })
                       }
                       size="lg"
                     />)}

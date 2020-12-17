@@ -657,16 +657,10 @@ function buildWindowUtils() {
     }
 
     if(
-    AC.charAt(0) !== "0" && 
-    AC.charAt(0) !== "1" && 
-    AC.charAt(0) !== "2" && 
-    AC.charAt(0) !== "3" && 
-    AC.charAt(0) !== "4" && 
-    AC.charAt(0) !== "5" && 
-    AC.charAt(0) !== "6" && 
-    AC.charAt(0) !== "7" && 
-    AC.charAt(0) !== "8" && 
-    AC.charAt(0) !== "9"){AC = await window.utils.resolveAC(AC)}
+    isNaN(AC))
+    {
+      AC = await window.utils.resolveAC(AC)
+    }
 
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)

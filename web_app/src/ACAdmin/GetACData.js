@@ -80,25 +80,16 @@ class GetACData extends Component {
     }
 
     const getAC_data = async () => {
-      if(this.state.assetClass === undefined) {return}
+      if(this.state.assetClass === undefined || this.state.assetClass === null) {return}
       let ref;
 
       if (
-        this.state.assetClass.charAt(0) === "0" ||
-        this.state.assetClass.charAt(0) === "1" ||
-        this.state.assetClass.charAt(0) === "2" ||
-        this.state.assetClass.charAt(0) === "3" ||
-        this.state.assetClass.charAt(0) === "4" ||
-        this.state.assetClass.charAt(0) === "5" ||
-        this.state.assetClass.charAt(0) === "6" ||
-        this.state.assetClass.charAt(0) === "7" ||
-        this.state.assetClass.charAt(0) === "8" ||
-        this.state.assetClass.charAt(0) === "9"
+        isNaN(this.state.assetClass)
       ) {
-        ref = "id"
+        ref = "name"
       }
       else {
-        ref = "name"
+        ref = "id"
       }
 
       let acDoesExist = await window.utils.checkForAC(ref, this.state.assetClass);
@@ -136,7 +127,7 @@ class GetACData extends Component {
                   <Form.Control
                     placeholder="Asset Class"
                     required
-                    onChange={(e) => this.setState({ assetClass: e.target.value })}
+                    onChange={(e) => this.setState({ assetClass: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Group>

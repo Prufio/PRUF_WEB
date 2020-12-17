@@ -177,7 +177,7 @@ class AddUser extends Component {
                       <Form.Control
                         placeholder="Authorized Address"
                         required
-                        onChange={(e) => this.setState({ authAddr: e.target.value })}
+                        onChange={(e) => this.setState({ authAddr: e.target.value.trim() })}
                         size="lg"
                       />
                     )}
@@ -197,7 +197,7 @@ class AddUser extends Component {
                       <Form.Control
                         as="select"
                         size="lg"
-                        onChange={(e) => this.setState({ userType: e.target.value })}
+                        onChange={(e) => this.setState({ userType: e.target.value.trim() })}
                         required
                       >
                         <optgroup className="optgroup">

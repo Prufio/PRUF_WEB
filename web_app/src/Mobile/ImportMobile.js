@@ -98,32 +98,8 @@ class ImportMobile extends Component {
       if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
       else {
         if (
-          this.state.selectedAssetClass.charAt(0) === "0" ||
-          this.state.selectedAssetClass.charAt(0) === "1" ||
-          this.state.selectedAssetClass.charAt(0) === "2" ||
-          this.state.selectedAssetClass.charAt(0) === "3" ||
-          this.state.selectedAssetClass.charAt(0) === "4" ||
-          this.state.selectedAssetClass.charAt(0) === "5" ||
-          this.state.selectedAssetClass.charAt(0) === "6" ||
-          this.state.selectedAssetClass.charAt(0) === "7" ||
-          this.state.selectedAssetClass.charAt(0) === "8" ||
-          this.state.selectedAssetClass.charAt(0) === "9"
+          isNaN(this.state.selectedAssetClass)
         ) {
-          acDoesExist = await window.utils.checkForAC("id", this.state.selectedAssetClass);
-          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
-          await console.log("Exists?", acDoesExist)
-
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
-          }
-
-          this.setState({ assetClass: this.state.selectedAssetClass });
-          await window.utils.resolveACFromID(this.state.selectedAssetClass)
-          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
-          await this.setState({ ACname: window.assetClassName });
-        }
-
-        else {
           acDoesExist = await window.utils.checkForAC("name", this.state.selectedAssetClass);
           destinationACData = await window.utils.getACData("name", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
@@ -135,6 +111,21 @@ class ImportMobile extends Component {
           this.setState({ ACname: this.state.selectedAssetClass });
           await window.utils.resolveAC(this.state.selectedAssetClass);
           await this.setState({ assetClass: destinationACData.AC });
+        }
+
+        else {
+          acDoesExist = await window.utils.checkForAC("id", this.state.selectedAssetClass);
+          await console.log("Exists?", acDoesExist)
+
+          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
+            window.open('https://www.pruf.io')
+          }
+
+          this.setState({ assetClass: this.state.selectedAssetClass });
+          await window.utils.resolveACFromID(this.state.selectedAssetClass)
+          destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
+
+          await this.setState({ ACname: window.assetClassName });
         }
         if (this.state.wasSentPacket) {
           let resArray = await window.utils.checkStats(this.state.idxHash, [0, 2])
@@ -242,6 +233,7 @@ class ImportMobile extends Component {
     }
 
     const _importAsset = async () => {
+
       this.setState({help: false})
       if (this.state.selectedAsset === undefined && !this.state.wasSentPacket) {
         alert("Please select an asset before submission."); 
@@ -329,7 +321,7 @@ class ImportMobile extends Component {
                 <Form.Control
                   className="singleFormRow"
                   placeholder="Submit an asset class name or #"
-                  onChange={(e) => this.setState({ selectedAssetClass: e.target.value })}
+                  onChange={(e) => this.setState({ selectedAssetClass: e.target.value.trim() })}
                   size="lg"
                 />
               </Form.Group>

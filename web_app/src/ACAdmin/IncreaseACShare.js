@@ -59,7 +59,7 @@ class IncreaseACShare extends Component {
       transaction: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       hasLoadedAssets: false,
-      assetClass: "",
+      assetClass: undefined,
       help: false,
       amount: 50
     };
@@ -197,7 +197,7 @@ class IncreaseACShare extends Component {
                         placeholder="Share Increase"
                         required
                         type="range"
-                        onChange={(e) => this.setState({ amount: e.target.value })}
+                        onChange={(e) => this.setState({ amount: e.target.value.trim() })}
                         size="lg"
                       />
                     )}
