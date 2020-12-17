@@ -168,7 +168,7 @@ class Main extends Component {
                               {this.state.prufBalance && (
                                 <>
                                   <h4 className="userStatFont">
-                                    PRUF Balance : ü{this.state.prufBalance}
+                                    PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
                                     <Button
                                       variant="userButton"
                                       onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
@@ -553,7 +553,7 @@ class Main extends Component {
                         {this.state.prufBalance && (
                           <>
                             <h4 className="userStatFont">
-                              PRUF Balance : ü{this.state.prufBalance}
+                              PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
                               <Button
                                 variant="userButton"
                                 onClick={() => { this.faucet() }}>

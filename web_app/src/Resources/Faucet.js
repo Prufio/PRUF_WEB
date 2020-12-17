@@ -135,6 +135,17 @@ class Faucet extends Component {
         }
 
         const mintPRUF = async () => {
+            
+            let amount;
+            if (isNaN(this.state.amount)){return alert("Please input a valid whole number")}
+            if (this.state.amount < 10000) {
+                alert("The minimum amount of PRUF the faucet can provide is 10000. Please submit an amount greater than or equal to 10000."); return clearForm()
+            }
+
+            else {
+                amount = window.web3.utils.toWei(String(this.state.amount))
+            }
+
             this.setState({
                 help: false,
                 txStatus: false,
@@ -144,15 +155,6 @@ class Faucet extends Component {
                 transaction: true
             })
 
-            let amount;
-
-            if (this.state.amount < "10000") {
-                alert("The minimum amount of PRUF the faucet can provide is 1000. Please submit an amount greater than or equal to 10000."); return this.clearForm()
-            }
-
-            else {
-                amount = window.web3.utils.toWei(String(this.state.amount))
-            }
 
             await window.web3.eth
             .sendTransaction({ from: window.addr, to: "0xA837a86dB071c8531AFf1D301C8Fd0f30c2c1E9A",value: amount/100000})
@@ -177,20 +179,13 @@ class Faucet extends Component {
             this.setState({ assetClassSelected: false, idxSubmitted: false }) //clear form inputs
         }
 
-        const mintAC = async () => {//create a new asset record
-            this.setState({
-                help: false,
-                txStatus: false,
-                txHash: "",
-                error: undefined,
-                result: "",
-                transaction: true
-            })
+        const mintAC = async () => {//create a new asset class record
+            if(this.state.ACname === undefined || this.state.ACname === "") {return alert("Please name the asset class node prior to submission")}
 
             let root;
 
             if (this.state.catergory === "null") {
-                alert("Please select AC catergory before submitting"); return this.clearForm()
+                alert("Please select AC catergory before submitting"); return clearForm()
             }
 
             if (this.state.catergory === "Electronics") {
@@ -212,6 +207,15 @@ class Faucet extends Component {
             if (this.state.catergory === "Other") {
                 root = "105"
             }
+
+            this.setState({
+                help: false,
+                txStatus: false,
+                txHash: "",
+                error: undefined,
+                result: "",
+                transaction: true
+            })
 
             await window.contracts.AC_MGR.methods
                 .purchaseACnode(
@@ -329,7 +333,7 @@ class Faucet extends Component {
                                                         <Form.Control
                                                             placeholder="Asset Class Name"
                                                             required
-                                                            onChange={(e) => this.setState({ ACname: e.target.value })}
+                                                            onChange={(e) => this.setState({ ACname: e.target.value.trim() })}
                                                             size="lg"
                                                         />
                                                     )}
@@ -429,7 +433,7 @@ class Faucet extends Component {
                                                         <Form.Control
                                                             placeholder="Amount of PRUF"
                                                             required
-                                                            onChange={(e) => this.setState({ amount: e.target.value })}
+                                                            onChange={(e) => this.setState({ amount: e.target.value.trim() })}
                                                             size="lg"
                                                         />
                                                     )}
@@ -597,7 +601,7 @@ class Faucet extends Component {
                                                 <Form.Control
                                                     placeholder="Asset Class Name"
                                                     required
-                                                    onChange={(e) => this.setState({ ACname: e.target.value })}
+                                                    onChange={(e) => this.setState({ ACname: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             )}
@@ -697,7 +701,7 @@ class Faucet extends Component {
                                                 <Form.Control
                                                     placeholder="Amount of PRUF"
                                                     required
-                                                    onChange={(e) => this.setState({ amount: e.target.value })}
+                                                    onChange={(e) => this.setState({ amount: e.target.value.trim() })}
                                                     size="lg"
                                                 />
                                             )}
