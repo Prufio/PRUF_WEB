@@ -15,6 +15,7 @@ import TransferAC from "./ACAdmin/TransferAC"
 import RetrieveRecord from "./AllCustodyTypes/RetrieveRecord";
 import VerifyLite from "./AllCustodyTypes/VerifyLite"
 import VerifyRightsholder from "./AllCustodyTypes/VerifyRightsholder";
+import ACDashboard from "./AllCustodyTypes/ACDashboard";
 
 import AddNote from "./Custodial/AddNote";
 import DecrementCounter from "./Custodial/DecrementCounter";
@@ -162,6 +163,7 @@ function Router(routeRequest) {
                 <Route path="/claim-pip-asset" component={ClaimPipAsset} />
                 <Route path="/asset-dashboard" component={AssetDashboard} />
                 <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
+                <Route path="/ac-dashboard" component={ACDashboard} />
             </>
         )
     }

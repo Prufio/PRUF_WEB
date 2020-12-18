@@ -140,7 +140,9 @@ class Home extends Component {
               <Form.Row>
                 <h2 className="home2ndRowTestNet">
                   Please
-                  <a onClick={() => {
+                  <a
+                    href='/#/'
+                    onClick={() => {
                     alert("That doesn't direct you anywhere. Login to Web3 provider! If you do not have a Web3 provider, we recommend Metamask.io ");
                     this.setState({ settingsMenu: undefined })
                     window.ethereum.enable()
@@ -162,10 +164,10 @@ class Home extends Component {
               the kovan network is reset.
           </div>
           <div className="mediaLinkHomeTestNet">
-            <a className="mediaLinkHomeContent"><GitHub size={25} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
-            <a className="mediaLinkHomeContent"><Mail size={25} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
-            <a className="mediaLinkHomeContent"><Twitter size={25} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
-            <a className="mediaLinkHomeContent" ><Send size={25} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
+            <a href='/#/' className="mediaLinkHomeContent"><GitHub size={25} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
+            <a href='/#/' className="mediaLinkHomeContent"><Mail size={25} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
+            <a href='/#/' className="mediaLinkHomeContent"><Twitter size={25} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
+            <a href='/#/' className="mediaLinkHomeContent" ><Send size={25} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
           </div>
         </div>
       </div>

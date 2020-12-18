@@ -351,6 +351,19 @@ div {
   word-break: break-all;
 }
 
+.ACDashboard {
+  height: flex;
+  max-height: 40rem;
+  width: 70rem;
+  background-color: #002a40;
+  padding: 1rem;
+  margin-top: -1rem;
+  display: flex;
+  opacity: 0.96;
+  flex-direction: column;
+  word-break: break-all;
+}
+
 .assetDashboardMobile {
   height: flex;
   max-height: 40rem;
@@ -368,7 +381,7 @@ div {
 
 .assetDashboardSelected {
   height: flex;
-  max-height: 50rem;
+  max-height: 40rem;
   width: 68rem;
   background-color: #002a40;
   margin-top: -1rem;
@@ -384,6 +397,17 @@ div {
   display: flex;
   width: 68rem;
   height: 4.1rem;
+  margin-top: -0.15rem;
+  background-color: #005480;
+  justify-content: space-evenly;
+  border-radius: 0rem 0rem 0.3rem 0.3rem;
+  position: absolute;
+}
+
+.ACSelectedRouter{
+  display: flex;
+  width: 68rem;
+  height: 3rem;
   margin-top: -0.15rem;
   background-color: #005480;
   justify-content: space-evenly;
@@ -1355,10 +1379,19 @@ div {
 .loadingHome {
   font-size: 3rem;
   margin-top: -22rem;
-  /* margin-bottom: -3rem; */
 }
 
 .loadingHome:after {
+  content: '  .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+.loadingAD {
+  font-size: 2.5rem;
+  color: white;
+}
+
+.loadingAD:after {
   content: '  .';
   animation: dots 1s steps(5, end) infinite;
 }
@@ -2048,17 +2081,17 @@ margin-bottom: -3rem;
 
 .cardDescriptionFormSelected {
   display: flex;
-  width: 50rem;
-  height: 16rem;
+  width: 40rem;
+  height: 10rem;
   background-color: #002a40;
   word-wrap: normal;
   margin-left: 9rem;
   overflow-y: auto;
   flex-direction: column;
-  border-radius: 0rem 0rem 0.3rem 0.3rem;
+  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
   padding-left: 0.5rem;
   position: absolute;
-  margin-top: 17rem;
+  margin-left: 26.5rem;
 }
 
 .cardButton {
@@ -2147,6 +2180,29 @@ margin-bottom: -3rem;
 }
 
 .cardButton2Content:hover {
+  color: #028ed4;
+  cursor: pointer;
+  -webkit-transform: translateX(-3px);
+  transform: translateX(-3px);
+}
+
+.cardButton3 {
+  display: flex;
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000;
+  margin-left: 63rem;
+  margin-top: 0.5rem;
+}
+
+.cardButton3Content {
+  color: white;
+  border-radius: 50%;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.cardButton3Content:hover {
   color: #028ed4;
   cursor: pointer;
   -webkit-transform: translateX(-3px);

@@ -40,7 +40,7 @@ class Main extends Component {
 
                         <>
                           <div className="hamburgerMenuMobile">
-                            <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
+                            <a href='' className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                           </div>
 
                           <nav>
@@ -126,6 +126,7 @@ class Main extends Component {
                                 <h4 className="userStatFont">
                                   Please
                                   <a
+                                   href=''
                                     onClick={() => {
                                       this.setState({ userMenu: undefined })
                                       if (window.ethereum) { window.ethereum.enable() }

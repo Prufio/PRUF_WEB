@@ -10,7 +10,7 @@ import { isMobile } from "react-device-detect";
 import Printer from '../Resources/Print'
 
 
-class AssetDashboard extends React.Component {
+class ACDashboard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -233,7 +233,7 @@ class AssetDashboard extends React.Component {
 
         return component
       }
-      if (isMobile) {
+
         return (
           <div key="selectedAsset">
             <div>
@@ -243,7 +243,7 @@ class AssetDashboard extends React.Component {
               .card {
                 width: 100%;
                 max-width: 100%;
-                height: 50rem;
+                height: 30rem;
                 max-height: 100%;
                 background-color: #005480;
                 margin-top: 0.3rem;
@@ -255,11 +255,10 @@ class AssetDashboard extends React.Component {
                 background-color: #005480;
                 color: white;
                 height: 4rem;
-                margin-top: -20rem;
+                margin-top: -27rem;
                 margin-left: -0.8rem;
                 font-weight: bold;
-                font-size: 2.2rem;
-                border-radius: 0rem 0rem 0.3rem 0.3rem;
+                font-size: 1.46rem;
               }
 
               .btn-selectedAsset {
@@ -287,7 +286,7 @@ class AssetDashboard extends React.Component {
                 <div className="card" value="100">
                   <div className="row no-gutters">
                     <div className="assetSelecedInfo">
-                      <div>
+                      {/* <div>
                         <button
                           onClick={() => { _printQR() }}
                           className="buttonQR"
@@ -315,37 +314,27 @@ class AssetDashboard extends React.Component {
                           </div>
                           <div className="displayFooterQR">
                             <div className="mediaLinkQRDisplay">
-                              {/* <a className="mediaLinkQRDisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
                               <Printer />
                               <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
                             </div>
                           </div>
                         </div>
-                      )}
+                      )} */}
 
                       <button className="assetImageButtonSelected">
-                        {this.state.selectedImage !== "" ?
-                          (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
-                          : (<>{obj.identicon}</>)}
+                        <>{obj.identicon}</>
                       </button>
-                      <p className="cardNameSelected">Name: {obj.name}</p>
-                      <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
-                      <p className="cardStatusSelected">Status: {obj.status}</p>
-                      {images.length !== 0 && (
-                        <div className="imageSelector">
-                          {generateThumbs()}
-                        </div>
-                      )}
-                      <div className="cardSelectedIdxForm">
-                        <h4 className="cardIdxSelected">IDX: {obj.idxHash}</h4>
-                      </div>
+                      <p className="cardNameSelected">Name: {obj.assetClassName}</p>
+                      <p className="cardAcSelected">Node AC ID: {obj.assetClassName}</p>
+                      <p className="cardStatusSelected">Node AC Root: {obj.assetClassName}</p>
+                      <p className="cardStatusSelected">Share Percentage: {obj.assetClassName}</p>
                       <div className="cardDescriptionFormSelected">
                         {generateTextList()}
                       </div>
                     </div>
                     {this.state.moreInfo && (
-                      <div className="cardButton2">
-                        <div className="cardButton2Content">
+                      <div className="cardButton3">
+                        <div className="cardButton3Content">
                           <CornerUpLeft
                             size={35}
                             onClick={() => { this.moreInfo("back") }}
@@ -359,211 +348,30 @@ class AssetDashboard extends React.Component {
               </div >
             </div>
             <div
-              className="assetSelectedRouter"
+              className="ACSelectedRouter"
             >
               <Nav className="headerSelected">
                 <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "transfer-asset-NC") }}>Transfer</Button>
+                    <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "add-user ") }}>Authorize User</Button>
                 </li>
                 <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "import-asset-NC") }}>Import</Button>
+                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "enable-contract") }}>Enable Contract</Button>
                 </li>
                 <li>
-                  <DropdownButton title="Export" drop="up" variant="selectedImage">
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "export-asset-NC") }}>Export</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "discard-asset-NC") }}>Discard</Dropdown.Item>
-                  </DropdownButton>
-                </li>
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "manage-escrow-NC") }}>Escrow</Button>
+                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "transfer-ac") }}>Transfer</Button>
                 </li>
                 <li>
                   <DropdownButton title="Modify" drop="up" variant="selectedImage">
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-record-status-NC") }}>Modify Status</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "decrement-counter-NC") }}>Decrement Counter</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information-NC") }}>Modify Asset Info</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "add-note-NC") }}>Add Note</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "force-modify-record-NC") }}>Modify Rightsholder</Dropdown.Item>
+                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "update-ac-name") }}>Update Name</Dropdown.Item>
+                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "set-costs") }}>Set Costs</Dropdown.Item>
+                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "increase-ac-share") }}>Increase Share</Dropdown.Item>
                   </DropdownButton>
                 </li>
               </Nav>
             </div>
           </div>
-
-
         )
       }
-
-      else {
-        return (
-          <div key="selectedAsset">
-            <div>
-              <div className="assetDashboardSelected">
-                <style type="text/css"> {`
-  
-              .card {
-                width: 100%;
-                max-width: 100%;
-                height: 50rem;
-                max-height: 100%;
-                background-color: #005480;
-                margin-top: 0.3rem;
-                color: white;
-                word-break: break-all;
-              }
-
-              .btn-selectedImage {
-                background-color: #005480;
-                color: white;
-                height: 4rem;
-                margin-top: -20rem;
-                margin-left: -0.8rem;
-                font-weight: bold;
-                font-size: 2.2rem;
-                border-radius: 0rem 0rem 0.3rem 0.3rem;
-              }
-
-              .btn-selectedAsset {
-                background-color: #005480;
-                color: white;
-                font-weight: bold;
-                font-size: 1.2rem;
-                border-radius: 0rem !important;
-              }
-
-              .btn-QR {
-                background-color: #002a40;
-                color: white;
-                height: 2rem;
-                width: 17rem;
-                margin-top: auto;
-                // margin-left: -0.8rem;
-                font-weight: bold;
-                font-size: 1rem;
-                border-radius: 0rem 0rem 0.3rem 0.3rem;
-                justify-content: center;
-              }
-  
-            `}
-                </style>
-                <div className="card" value="100">
-                  <div className="row no-gutters">
-                    <div className="assetSelecedInfo">
-                      <div>
-                        <button
-                          onClick={() => { _printQR() }}
-                          className="buttonQR"
-                        >
-                          <img
-                            className="imageFormQR"
-                            title="Asset QR Code"
-                            src={require("../Resources/Images/QRPIC.png")}
-                            alt="Pruf Print" />
-                        </button>
-                      </div>
-                      {this.state.printQR && (
-                        <div>
-                          <div className="displayQR">
-                            <div className="QR">
-                              <QRCode
-                                value={obj.idxHash}
-                                size="150"
-                                fgColor="#002a40"
-                                logoWidth="35"
-                                logoHeight="46"
-                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                              />
-                            </div>
-                          </div>
-                          <div className="displayFooterQR">
-                            <div className="mediaLinkQRDisplay">
-                              {/* <a className="mediaLinkQRDisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
-                              <Printer />
-                              <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      <button className="assetImageButtonSelected">
-                        {this.state.selectedImage !== "" ?
-                          (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
-                          : (<>{obj.identicon}</>)}
-                      </button>
-                      <p className="cardNameSelected">Name: {obj.name}</p>
-                      <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
-                      <p className="cardStatusSelected">Status: {obj.status}</p>
-                      {images.length !== 0 && (
-                        <div className="imageSelector">
-                          {generateThumbs()}
-                        </div>
-                      )}
-                      <div className="cardSelectedIdxForm">
-                        <h4 className="cardIdxSelected">IDX: {obj.idxHash}</h4>
-                        <div className="cardCopyButton">
-                          <div className="cardCopyButtonContent">
-                            <Copy
-                              size={15}
-                              onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="cardDescriptionFormSelected">
-                        {generateTextList()}
-                      </div>
-                    </div>
-                    {this.state.moreInfo && (
-                      <div className="cardButton2">
-                        <div className="cardButton2Content">
-                          <CornerUpLeft
-                            size={35}
-                            onClick={() => { this.moreInfo("back") }}
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                  </div>
-                </div >
-              </div >
-            </div>
-            <div
-              className="assetSelectedRouter"
-            >
-              <Nav className="headerSelected">
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "transfer-asset-NC") }}>Transfer</Button>
-                </li>
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "import-asset-NC") }}>Import</Button>
-                </li>
-                <li>
-                  <DropdownButton title="Export" drop="up" variant="selectedImage">
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "export-asset-NC") }}>Export</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "discard-asset-NC") }}>Discard</Dropdown.Item>
-                  </DropdownButton>
-                </li>
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "manage-escrow-NC") }}>Escrow</Button>
-                </li>
-                <li>
-                  <DropdownButton title="Modify" drop="up" variant="selectedImage">
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-record-status-NC") }}>Modify Status</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "decrement-counter-NC") }}>Decrement Counter</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information-NC") }}>Modify Asset Info</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "add-note-NC") }}>Add Note</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "force-modify-record-NC") }}>Modify Rightsholder</Dropdown.Item>
-                  </DropdownButton>
-                </li>
-              </Nav>
-            </div>
-          </div>
-
-
-        )
-      }
-    }
 
     const generateAssetDash = (obj) => {
       if (obj.names.length > 0) {
@@ -615,19 +423,14 @@ class AssetDashboard extends React.Component {
                         })
                       }}
                     >
-                      {obj.displayImages[i] !== "" && (
-                        <img title="View Asset" src={obj.displayImages[i]} className="assetImage" alt="" />
-                      )}
-                      {obj.displayImages[i] === "" && (
                         <>{obj.identicons[i]}</>
-                      )}
                     </button>
                   </div>
                   <div>
-                    <p className="cardName">Name: {obj.names[i]}</p>
-                    <p className="cardAc">Asset Class: {obj.assetClassNames[i]}</p>
-                    <p className="cardStatus">Status: {obj.statuses[i]}</p>
-                    <h4 className="cardIdx">IDX: {obj.ids[i]}</h4>
+                    <p className="cardName">Name:</p>
+                    <p className="cardAc">Node AC ID:</p>
+                    <p className="cardStatus">Node AC Root:</p>
+                    <h4 className="cardIdx">Share Percentage: </h4>
                     <br></br>
                     <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description:
                     {obj.descriptions[i].text.Description === undefined && (
@@ -684,7 +487,7 @@ class AssetDashboard extends React.Component {
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="assetDashboardHeader">Your Assets</h2>
+          <h2 className="assetDashboardHeader">Your AC Nodes</h2>
           <div className="mediaLinkADRefresh">
             <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
@@ -696,11 +499,11 @@ class AssetDashboard extends React.Component {
             </a>
           </div>
         </div>
-        <div className="assetDashboard">
+        <div className="ACDashboard">
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && !this.state.moreInfo && (<>{generateAssetDash(this.state.assets)}</>)}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && this.state.moreInfo && (<>{generateAssetInfo(this.state.assetObj)}</>)}
-          {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<h2 className="loadingAD">Loading Assets</h2>)}
-          {this.state.hasNoAssets && (<h2 className="textAD">No Assets Held by User</h2>)}
+          {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<h2 className="loadingAD">Loading ACs</h2>)}
+          {this.state.hasNoAssets && (<h2 className="textAD">No ACs Held by User</h2>)}
         </div>
         <div className="assetDashboardFooter">
         </div>
@@ -710,4 +513,4 @@ class AssetDashboard extends React.Component {
   }
 }
 
-export default AssetDashboard;
+export default ACDashboard;

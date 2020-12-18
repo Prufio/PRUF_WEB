@@ -27,6 +27,11 @@ class BasicComponent extends Component {
                         <NavLink to="/retrieve-record">Search</NavLink>
                     </li>
                 </div>
+                <div className="headerFormContent">
+                    <li>
+                        <NavLink to="/ac-dashboard">AC Dashboard</NavLink>
+                    </li>
+                </div>
             </Nav>
         )
     }
