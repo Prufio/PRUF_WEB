@@ -61,7 +61,7 @@ class RetrieveRecordMobile extends Component {
         }
       }
 
-    }, 100)
+    }, 150)
     //State declaration.....................................................................................................
 
     this.getIPFSJSONObject = (lookup) => {

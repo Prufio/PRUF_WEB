@@ -23,7 +23,7 @@ class AssetDashboardMobile extends React.Component {
       if (this.state.hasNoAssets !== window.hasNoAssets && this.state.runWatchDog === true) {
         this.setState({ hasNoAssets: window.hasNoAssets })
       }
-    }, 100)
+    }, 150)
 
     this.moreInfo = (e) => {
       if (e === "back") { return this.setState({ assetObj: {}, moreInfo: false, printQR: undefined }) }

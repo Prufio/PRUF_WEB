@@ -19,7 +19,7 @@ class TransferAC extends Component {
       if (this.state.hasLoadedAssetClasses !== window.hasLoadedAssetClasses && this.state.runWatchDog === true) {
         this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
       }
-    }, 50)
+    }, 150)
 
     this.state = {
       addr: "",

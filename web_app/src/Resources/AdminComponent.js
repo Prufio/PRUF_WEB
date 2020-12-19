@@ -10,6 +10,11 @@ class AdminComponent extends Component {
             <Nav className="headerForm">
                 <div className="headerFormContent">
                     <li>
+                        <NavLink to="/ac-dashboard">ACN Dashboard</NavLink>
+                    </li>
+                </div>
+                <div className="headerFormContent">
+                    <li>
                         <NavLink to="/add-user">Authorize User</NavLink>
                     </li>
                 </div>

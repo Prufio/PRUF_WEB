@@ -28,7 +28,7 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (isMobile) {
+      if (!isMobile) {
         return (
           <div>
             <HashRouter>
@@ -40,7 +40,7 @@ class Main extends Component {
 
                         <>
                           <div className="hamburgerMenuMobile">
-                            <a href='' className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
+                            <a href={window.location.href} className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenuMobile() }} /></a>
                           </div>
 
                           <nav>
@@ -126,7 +126,7 @@ class Main extends Component {
                                 <h4 className="userStatFont">
                                   Please
                                   <a
-                                   href=''
+                                   href={window.location.href}
                                     onClick={() => {
                                       this.setState({ userMenu: undefined })
                                       if (window.ethereum) { window.ethereum.enable() }
@@ -454,7 +454,7 @@ class Main extends Component {
                             </Button>
                           )}
 
-                          {this.state.faucetBool === false && this.state.routeRequest !== "noAddr" && (
+                          {/* {this.state.faucetBool === false && this.state.routeRequest !== "noAddr" && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -463,7 +463,7 @@ class Main extends Component {
                               Faucet Menu
                             </Button>
                           )}
-
+ */}
                           {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
                             <Button
                               size="lg"
@@ -571,7 +571,7 @@ class Main extends Component {
                                 <Button
                                 variant="userButton"
                                 // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                onClick={() => { alert(this.state.assetClassReport) }}>
+                                onClick={() => { this.assetClassDashboard() }}>
                                 {this.state.assetClassBalance}
                               </Button>
                               <Button
@@ -756,19 +756,19 @@ class Main extends Component {
     this.updateWatchDog = setInterval(() => {
 
       //every tick ensure user auth level/user type is correct
-      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined) {
+      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined && this.state.runWatchDog === true) {
         this.setState({ isAuthUser: window.isAuthUser })
       }
-      if (this.state.isACAdmin !== window.isACAdmin) {
+      if (this.state.isACAdmin !== window.isACAdmin && this.state.runWatchDog === true) {
         this.setState({ isACAdmin: window.isACAdmin })
       }
 
-      if (this.state.custodyType !== window.custodyType) {
+      if (this.state.custodyType !== window.custodyType && this.state.runWatchDog === true) {
         this.setState({ custodyType: window.custodyType })
       }
 
       //Reset balance values to reflect in render
-      if (window.balances !== undefined) {
+      if (window.balances !== undefined && this.state.runWatchDog === true) {
         if (
           Object.values(window.balances) !==
           Object.values({ assetClass: this.state.assetClassBalance, asset: this.state.assetBalance, ID: this.state.IDTokenBalance })) {
@@ -786,20 +786,20 @@ class Main extends Component {
         }
       }
 
-      if (this.state.ETHBalance !== window.ETHBalance) {
+      if (this.state.ETHBalance !== window.ETHBalance && this.state.runWatchDog === true) {
         this.setState({ ETHBalance: window.ETHBalance })
       }
 
       // Remote menu switcher
-      if (window.menuChange !== undefined) {
+      if (window.menuChange !== undefined && this.state.runWatchDog === true) {
         console.log(window.menuChange)
         this.setState({ menuChange: window.menuChange })
       }
 
       //^^^
-      if (this.state.menuChange !== undefined) {
+      if (this.state.menuChange !== undefined && this.state.runWatchDog === true) {
         window.menuChange = undefined
-        if (isMobile && window.ethereum) {
+        if (!isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
           this.setState({ routeRequest: "basicMobile" })
           this.setState({
@@ -813,7 +813,7 @@ class Main extends Component {
           })
         }
 
-        else if(!isMobile && this.state.menuChange === "ACAdmin"){
+        else if(!!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true){
           window.routeRequest = "ACAdmin"
           this.setState({ routeRequest: "ACAdmin" })
           this.setState({
@@ -829,7 +829,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true) {
+        else if (!!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true && this.state.runWatchDog === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -845,7 +845,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false) {
+        else if (!!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false && this.state.runWatchDog === true) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
@@ -864,7 +864,7 @@ class Main extends Component {
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
-      if (isMobile && window.ethereum && window.routeRequest !== "basicMobile") {
+      if (!isMobile && window.ethereum && window.routeRequest !== "basicMobile" && this.state.runWatchDog === true) {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -884,7 +884,7 @@ class Main extends Component {
       }
 
       //Catch updated assets case and rebuild asset inventory 
-      if (window.assets !== undefined) {
+      if (window.assets !== undefined && this.state.runWatchDog === true) {
         if (window.assets.ids.length > 0 && Object.values(window.assets.descriptions).length === window.aTknIDs.length &&
           window.assets.names.length === 0 && this.state.buildReady === true && window.aTknIDs.length > 0) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
@@ -895,7 +895,7 @@ class Main extends Component {
       }
 
       //If reset was remotely requested, begin full asset recount  
-      if (window.resetInfo === true) {
+      if (window.resetInfo === true && this.state.runWatchDog === true) {
         window.hasLoadedAssetClasses = false;
         window.hasLoadedAssets = false;
         this.setState({ buildReady: false, runWatchDog: false })
@@ -905,7 +905,7 @@ class Main extends Component {
       }
 
       //In the case of a completed recount and rough asset build, make asset info usable for app
-      if (window.aTknIDs !== undefined && this.state.buildReady === false) {
+      if (window.aTknIDs !== undefined && this.state.buildReady === false && this.state.runWatchDog === true) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
           console.log("Assets are ready for rebuild")
           this.setState({ buildReady: true })
@@ -1067,6 +1067,12 @@ class Main extends Component {
       this.setState({ userMenu: undefined });
       this.toggleMenu("basic");
       window.location.href = '/#/asset-dashboard'
+    }
+
+    this.assetClassDashboard = () => {
+      this.setState({ userMenu: undefined });
+      this.toggleMenu("basic");
+      window.location.href = '/#/ac-dashboard'
     }
 
     //Set up held assets for rebuild. Recount when necessary
@@ -1340,7 +1346,7 @@ class Main extends Component {
 
             }
 
-            else if (!isMobile) {
+            else if (!!isMobile) {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1381,7 +1387,7 @@ class Main extends Component {
       window.isSettingUpContracts = true;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (!isMobile) {
+        if (!!isMobile) {
           console.log("Here!")
           await this.setState({
             mobileMenuBool: false,
@@ -1395,7 +1401,7 @@ class Main extends Component {
           })
         }
 
-        else if (isMobile && _web3.eth.net.getNetworkType() != undefined) {
+        else if (!isMobile && _web3.eth.net.getNetworkType() != undefined) {
           await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
@@ -1609,7 +1615,7 @@ class Main extends Component {
     window.menuChange = undefined;
 
     //Give me the desktop version
-    if (!isMobile && window.ethereum) {
+    if (!!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1650,7 +1656,7 @@ class Main extends Component {
     }
 
     //Give me the mobile ethereum-enabled version
-    else if (isMobile && window.ethereum) {
+    else if (!isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
 

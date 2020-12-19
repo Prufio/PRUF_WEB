@@ -138,6 +138,7 @@ function Router(routeRequest) {
     else if (routeRequest === "ACAdmin") {
         return (
             <>
+                <Route path="/ac-dashboard" component={ACDashboard} />
                 <Route path="/add-user" component={AddUser} />
                 <Route path="/transfer-ac" component={TransferAC} />
                 <Route path="/enable-contract" component={EnableContract} />

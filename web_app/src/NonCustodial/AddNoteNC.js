@@ -79,7 +79,7 @@ class AddNoteNC extends Component {
       if (this.state.hashPath !== "" && this.state.runWatchDog === true && window.isInTx !== true) {
         this.setInscription()
       }
-    }, 100)
+    }, 150)
 
     this.setAC = async (AC) => {
       let acDoesExist;

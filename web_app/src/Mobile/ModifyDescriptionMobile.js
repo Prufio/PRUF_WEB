@@ -26,7 +26,7 @@ class ModifyDescription extends Component {
         }
       }
 
-    }, 100)
+    }, 150)
 
     this.clearForm = async () => {
       if(document.getElementById("MainForm") === null){return}

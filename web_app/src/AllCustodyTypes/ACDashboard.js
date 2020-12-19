@@ -29,7 +29,7 @@ class ACDashboard extends React.Component {
           this.setState({ hasNoAssets: window.hasNoAssets })
         }
       
-    }, 100)
+    }, 150)
 
     this.moreInfo = (e) => {
       if (e === "back") { return this.setState({ assetClassObj: {}, moreInfo: false, printQR: undefined }) }

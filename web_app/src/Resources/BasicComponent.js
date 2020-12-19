@@ -14,6 +14,11 @@ class BasicComponent extends Component {
                 </div>
                 <div className="headerFormContent">
                     <li>
+                        <NavLink to="/ac-dashboard">ACN Dashboard</NavLink>
+                    </li>
+                </div>
+                <div className="headerFormContent">
+                    <li>
                         <NavLink to="/verify-lite">Verify Lite</NavLink>
                     </li>
                 </div>
@@ -25,11 +30,6 @@ class BasicComponent extends Component {
                 <div className="headerFormContent">
                     <li>
                         <NavLink to="/retrieve-record">Search</NavLink>
-                    </li>
-                </div>
-                <div className="headerFormContent">
-                    <li>
-                        <NavLink to="/ac-dashboard">AC Dashboard</NavLink>
                     </li>
                 </div>
             </Nav>

@@ -15,7 +15,7 @@ class ModifyRightsHolderMobile extends Component {
             if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
                 this.setState({ hasLoadedAssets: window.hasLoadedAssets })
             }
-        }, 50)
+        }, 150)
 
         //State declaration.....................................................................................................
 
