@@ -1282,6 +1282,9 @@ function buildWindowUtils() {
           });
       }
     }
+
+    else { console.log("No assets held by user"); window.assetClasses.ids = []; return window.hasNoAssetClasses = true }
+
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }
 

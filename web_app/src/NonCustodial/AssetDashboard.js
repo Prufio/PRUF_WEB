@@ -154,6 +154,7 @@ class AssetDashboard extends React.Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.updateAssets);
     this.setState({ runWatchDog: false });
   }
 

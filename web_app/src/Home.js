@@ -29,6 +29,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
+
     if (window.addr !== undefined) {
       this.setState({ addr: window.addr })
     }

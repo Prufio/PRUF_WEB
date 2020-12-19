@@ -813,12 +813,29 @@ class Main extends Component {
           })
         }
 
-        else if (!isMobile && this.state.IDHolderBool === true) {
+        else if(!isMobile && this.state.menuChange === "ACAdmin"){
+          window.routeRequest = "ACAdmin"
+          this.setState({ routeRequest: "ACAdmin" })
+          this.setState({
+            mobileMenuBool: false,
+            assetHolderMenuBool: false,
+            faucetBool: false,
+            assetHolderUserMenuBool: false,
+            basicMenuBool: false,
+            assetClassHolderMenuBool: true,
+            noAddrMenuBool: false,
+            authorizedUserMenuBool: false
+          })
+          this.setState({ menuChange: undefined });
+        }
+
+        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
             mobileMenuBool: false,
             assetHolderMenuBool: true,
+            faucetBool: false,
             assetHolderUserMenuBool: false,
             basicMenuBool: false,
             assetClassHolderMenuBool: false,
@@ -828,11 +845,12 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!isMobile && this.state.IDHolderBool === false) {
+        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
             mobileMenuBool: false,
+            faucetBool: false,
             assetHolderMenuBool: false,
             assetHolderUserMenuBool: true,
             basicMenuBool: false,
@@ -850,6 +868,7 @@ class Main extends Component {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
+          faucetBool: false,
           noAddrMenuBool: false,
           assetHolderMenuBool: false,
           assetClassHolderMenuBool: false,
@@ -1053,12 +1072,13 @@ class Main extends Component {
     //Set up held assets for rebuild. Recount when necessary
     this.setUpAssets = async () => {
       window.hasNoAssets = false; 
+      window.hasNoAssetClasses = false;
       let report = "AC Nodes Held:\n";
       window.ipfsCounter = 0;
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
 
-      window.assetClasses = { assetClassNames: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [] }
+      window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: []}
       window.hasLoadedAssetClasses = false;
       window.assetTokenInfo = {
         assetClass: undefined,
@@ -1153,7 +1173,6 @@ class Main extends Component {
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
-      window.hasLoadedAssetClasses = true;
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
@@ -1198,16 +1217,24 @@ class Main extends Component {
         }
 
       }
-      let identicons = [];
+      let identicons = [], AC_Identicons = [];
       //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {
         identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
       }
 
-      let identiconsLG = [];
+      for (let e = 0; e < window.assetClasses.ids.length; e++){
+        AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
+      }
+
+      let identiconsLG = [], AC_IdenticonsLG =[];
       //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {
         identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
+      }
+
+      for (let e = 0; e < window.assetClasses.ids.length; e++){
+        AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
       }
 
       let tempDisplayArray = [];
@@ -1226,13 +1253,17 @@ class Main extends Component {
         }
       }
 
+      window.assetClasses.identicons = AC_Identicons;
+      window.assetClasses.identiconsLG = AC_IdenticonsLG;
       window.assets.identiconsLG = identiconsLG;
       window.assets.identicons = identicons;
       window.assets.descriptions = tempDescArray;
       window.assets.names = tempNameArray;
       window.assets.displayImages = tempDisplayArray;
       window.hasLoadedAssets = true;
+      window.hasLoadedAssetClasses = true;
       console.log("BA: Assets after rebuild: ", window.assets)
+      console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
@@ -1544,7 +1575,6 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
-
     let _web3;
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
@@ -1741,6 +1771,7 @@ class Main extends Component {
 
   //stuff do do when component unmounts from the window (should never happen for main unless tab closed)
   componentWillUnmount() {
+    clearInterval(this.updateWatchDog);
     console.log("unmounting component");
   }
 

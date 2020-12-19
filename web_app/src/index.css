@@ -361,6 +361,8 @@ div {
   display: flex;
   opacity: 0.96;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
   word-break: break-all;
 }
 
@@ -382,6 +384,20 @@ div {
 .assetDashboardSelected {
   height: flex;
   max-height: 40rem;
+  width: 68rem;
+  background-color: #002a40;
+  margin-top: -1rem;
+  display: flex;
+  opacity: 0.96;
+  flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  word-break: break-all;
+}
+
+.assetClassDashboardSelected {
+  height: flex;
+  max-height: 30rem;
   width: 68rem;
   background-color: #002a40;
   margin-top: -1rem;

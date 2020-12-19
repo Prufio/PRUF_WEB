@@ -70,6 +70,7 @@ class ExportMobile extends Component {
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
+    clearInterval(this.updateAssets);
     this.setState({ runWatchDog: false });
   }
 

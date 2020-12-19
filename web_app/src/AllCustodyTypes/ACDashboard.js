@@ -15,22 +15,24 @@ class ACDashboard extends React.Component {
     super(props);
 
 
-    this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-        this.setState({ assets: window.assets })
-      }
-
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
-      }
-
-      if (this.state.hasNoAssets !== window.hasNoAssets && this.state.runWatchDog === true) {
-        this.setState({ hasNoAssets: window.hasNoAssets })
-      }
+    this.updateAssetClasses = setInterval(() => {
+        if (this.state.assetClasses !== window.assetClasses && this.state.runWatchDog === true) {
+          console.log("RESETTING ACS")
+          this.setState({ assetClasses: window.assetClasses })
+        }
+  
+        if (this.state.hasLoadedAssetClasses !== window.hasLoadedAssetClasses && this.state.runWatchDog === true) {
+          this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
+        }
+  
+        if (this.state.hasNoAssets !== window.hasNoAssets && this.state.runWatchDog === true) {
+          this.setState({ hasNoAssets: window.hasNoAssets })
+        }
+      
     }, 100)
 
     this.moreInfo = (e) => {
-      if (e === "back") { return this.setState({ assetObj: {}, moreInfo: false, printQR: undefined }) }
+      if (e === "back") { return this.setState({ assetClassObj: {}, moreInfo: false, printQR: undefined }) }
 
       if (e.DisplayImage !== undefined && e.DisplayImage !== "") {
         this.setState({ selectedImage: e.DisplayImage })
@@ -38,7 +40,7 @@ class ACDashboard extends React.Component {
       else {
         this.setState({ selectedImage: "" })
       }
-      this.setState({ assetObj: e, moreInfo: true, identicon: e.identicon })
+      this.setState({ assetClassObj: e, moreInfo: true, identicon: e.identicon })
       window.printObj = e;
       //this.setAC(e.assetClass)
     }
@@ -93,23 +95,10 @@ class ACDashboard extends React.Component {
       window.location.href = '/#/' + link
     }
 
-    this.newRecord = async () => {
-      await window.utils.determineTokenBalance()
-      console.log("IDholderBool", window.IDHolderBool)
-      if (window.IDHolderBool === false && window.confirm("You are not currently authorized to mint asset tokens. If you are interested in getting authorized, click ok to talk to one of our agents.")) {
-        window.open("https://t.me/prufteam", "_blank")
-        return
-      }
-      else if (window.IDHolderBool === true) {
-        window.menuChange = "NC"
-        window.location.href = '/#/new-record-NC'
-      }
-    }
-
     this.refresh = () => {
       window.resetInfo = true;
       window.recount = true;
-      this.setState({ hasLoadedAssets: false, moreInfo: false, assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] } })
+      this.setState({ hasLoadedAssetClasses: false, moreInfo: false, assetClasses: { ids: [], names: [], discounts: [], custodyTypes: [], roots: [], identicons: [], identiconsLG: [], exData: []} })
     }
 
     this.state = {
@@ -131,10 +120,11 @@ class ACDashboard extends React.Component {
       RCLR: "",
       showDescription: false,
       descriptionElements: undefined,
-      assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] },
+      assetClasses: { ids: [], names: [], exData: [], discounts: [], roots: [], identicons: [], identiconsLG: [], custodyTypes: []},
       contractArray: [],
       hasLoadedAssets: false,
       hasNoAssets: false,
+      runWatchDog: false
     };
   }
 
@@ -154,6 +144,7 @@ class ACDashboard extends React.Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.updateAssetClasses)
     this.setState({ runWatchDog: false });
   }
 
@@ -164,8 +155,8 @@ class ACDashboard extends React.Component {
 
   render() {
 
-    const generateAssetInfo = (obj) => {
-      let images = Object.values(obj.photo)
+     const generateAssetClassInfo = (obj) => {
+      /*let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
       let textNames = Object.keys(obj.text)
 
@@ -187,20 +178,6 @@ class ACDashboard extends React.Component {
       // const _printQRFile = async (obj) => {
 
       // }
-
-      const generateThumbs = () => {
-        let component = [];
-
-        for (let i = 0; i < images.length; i++) {
-          component.push(
-            <button key={"thumb" + String(i)} value={images[i]} className="assetImageSelectorButton" onClick={() => { showImage(images[i]) }}>
-              <img title="View Image" src={images[i]} className="imageSelectorImage" alt="" />
-            </button>
-          )
-        }
-
-        return component
-      }
 
       const generateTextList = () => {
         let component = [];
@@ -232,12 +209,12 @@ class ACDashboard extends React.Component {
         }
 
         return component
-      }
+      } */
 
         return (
           <div key="selectedAsset">
             <div>
-              <div className="assetDashboardSelected">
+              <div className="assetClassDashboardSelected">
                 <style type="text/css"> {`
   
               .card {
@@ -286,50 +263,15 @@ class ACDashboard extends React.Component {
                 <div className="card" value="100">
                   <div className="row no-gutters">
                     <div className="assetSelecedInfo">
-                      {/* <div>
-                        <button
-                          onClick={() => { _printQR() }}
-                          className="buttonQR"
-                        >
-                          <img
-                            className="imageFormQR"
-                            title="Asset QR Code"
-                            src={require("../Resources/Images/QRPIC.png")}
-                            alt="Pruf Print" />
-                        </button>
-                      </div>
-                      {this.state.printQR && (
-                        <div>
-                          <div className="displayQR">
-                            <div className="QR">
-                              <QRCode
-                                value={obj.idxHash}
-                                size="150"
-                                fgColor="#002a40"
-                                logoWidth="35"
-                                logoHeight="46"
-                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                              />
-                            </div>
-                          </div>
-                          <div className="displayFooterQR">
-                            <div className="mediaLinkQRDisplay">
-                              <Printer />
-                              <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
-                            </div>
-                          </div>
-                        </div>
-                      )} */}
 
                       <button className="assetImageButtonSelected">
                         <>{obj.identicon}</>
                       </button>
                       <p className="cardNameSelected">Name: {obj.assetClassName}</p>
-                      <p className="cardAcSelected">Node AC ID: {obj.assetClassName}</p>
-                      <p className="cardStatusSelected">Node AC Root: {obj.assetClassName}</p>
-                      <p className="cardStatusSelected">Share Percentage: {obj.assetClassName}</p>
+                      <p className="cardAcSelected">Node ID: {obj.id}</p>
+                      <p className="cardStatusSelected">Node Root: {obj.root}</p>
+                      <p className="cardStatusSelected">Share Percentage: {obj.discount.substring(0,2)}%</p>
                       <div className="cardDescriptionFormSelected">
-                        {generateTextList()}
                       </div>
                     </div>
                     {this.state.moreInfo && (
@@ -373,8 +315,9 @@ class ACDashboard extends React.Component {
         )
       }
 
-    const generateAssetDash = (obj) => {
-      if (obj.names.length > 0) {
+    const generateAssetClassDash = (obj) => {
+      if (obj.ids.length > 0) {
+        //console.log(obj)
         let component = [];
 
         for (let i = 0; i < obj.ids.length; i++) {
@@ -402,23 +345,12 @@ class ACDashboard extends React.Component {
                   <div className="col-auto">
                     <button
                       className="assetImageButton"
-                      // value={
-                      //   JSON.stringify()}
                       onClick={() => {
                         this.moreInfo({
-                          countPair: obj.countPairs[i],
-                          idxHash: obj.ids[i],
-                          descriptionObj: obj.descriptions[i],
-                          DisplayImage: obj.displayImages[i],
-                          name: obj.names[i],
-                          assetClass: obj.assetClasses[i],
-                          assetClassName: obj.assetClassNames[i],
-                          status: obj.statuses[i],
-                          statusNum: obj.statusNums[i],
-                          Description: obj.descriptions[i].text.Description,
-                          note: obj.notes[i],
-                          text: obj.descriptions[i].text,
-                          photo: obj.descriptions[i].photo,
+                          assetClassName: obj.names[i],
+                          id: obj.ids[i],
+                          discount: obj.discounts[i],
+                          root: obj.roots[i],
                           identicon: obj.identiconsLG[i]
                         })
                       }}
@@ -427,18 +359,13 @@ class ACDashboard extends React.Component {
                     </button>
                   </div>
                   <div>
-                    <p className="cardName">Name:</p>
-                    <p className="cardAc">Node AC ID:</p>
-                    <p className="cardStatus">Node AC Root:</p>
-                    <h4 className="cardIdx">Share Percentage: </h4>
+                    <p className="cardName">Name: {obj.names[i]}</p>
+                    <p className="cardAc">Node ID: {obj.ids[i]}</p>
+                    <p className="cardStatus">Node Root: {obj.roots[i]}</p>
+                    <h4 className="cardIdx">Share Percentage: {obj.discounts[i].substring(0,2)}%</h4>
                     <br></br>
-                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Description:
-                    {obj.descriptions[i].text.Description === undefined && (
-                        "None"
-                      )}
-                      {obj.descriptions[i].text.Description !== undefined && (
-                        obj.descriptions[i].text.Description.replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')
-                      )}
+                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Custody Type:
+                    {obj.custodyTypes[i]}
                     </h4></div>
                   </div>
                   <div className="cardButton">
@@ -446,19 +373,10 @@ class ACDashboard extends React.Component {
                       <ChevronRight
                         onClick={() => {
                           this.moreInfo({
-                            countPair: obj.countPairs[i],
-                            idxHash: obj.ids[i],
-                            descriptionObj: obj.descriptions[i],
-                            DisplayImage: obj.displayImages[i],
-                            name: obj.names[i],
-                            assetClass: obj.assetClasses[i],
-                            assetClassName: obj.assetClassNames[i],
-                            status: obj.statuses[i],
-                            statusNum: obj.statusNums[i],
-                            description: obj.descriptions[i].text.Description,
-                            note: obj.notes[i],
-                            text: obj.descriptions[i].text,
-                            photo: obj.descriptions[i].photo,
+                            assetClassName: obj.names[i],
+                            id: obj.ids[i],
+                            discount: obj.discounts[i],
+                            root: obj.roots[i],
                             identicon: obj.identiconsLG[i]
                           })
                         }}
@@ -491,19 +409,19 @@ class ACDashboard extends React.Component {
           <div className="mediaLinkADRefresh">
             <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
-          <div className="mediaLinkADAddAsset">
+{/*           <div className="mediaLinkADAddAsset">
             <a className="mediaLinkContentADAddAsset" ><Plus size={35}
-              onClick={() => { this.newRecord() }} 
+              onClick={() => { this.newACNode() }} 
               // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }} 
               />
             </a>
-          </div>
+          </div> */}
         </div>
         <div className="ACDashboard">
-          {!this.state.hasNoAssets && this.state.hasLoadedAssets && !this.state.moreInfo && (<>{generateAssetDash(this.state.assets)}</>)}
-          {!this.state.hasNoAssets && this.state.hasLoadedAssets && this.state.moreInfo && (<>{generateAssetInfo(this.state.assetObj)}</>)}
-          {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<h2 className="loadingAD">Loading ACs</h2>)}
-          {this.state.hasNoAssets && (<h2 className="textAD">No ACs Held by User</h2>)}
+          {!this.state.hasNoAssetClasses && this.state.hasLoadedAssetClasses && !this.state.moreInfo && (<>{generateAssetClassDash(this.state.assetClasses)}</>)}
+          {!this.state.hasNoAssetClasses && this.state.hasLoadedAssetClasses && this.state.moreInfo && (<>{generateAssetClassInfo(this.state.assetClassObj)}</>)}
+          {!this.state.hasNoAssetClasses && !this.state.hasLoadedAssetClasses && (<h2 className="loadingAD">Loading AC NodeKeys</h2>)}
+          {this.state.hasNoAssetClasses && (<h2 className="textAD">No NodeKeys Held by User</h2>)}
         </div>
         <div className="assetDashboardFooter">
         </div>
