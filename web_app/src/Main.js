@@ -28,7 +28,7 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (!isMobile) {
+      if (isMobile) {
         return (
           <div>
             <HashRouter>
@@ -759,6 +759,7 @@ class Main extends Component {
       if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined && this.state.runWatchDog === true) {
         this.setState({ isAuthUser: window.isAuthUser })
       }
+
       if (this.state.isACAdmin !== window.isACAdmin && this.state.runWatchDog === true) {
         this.setState({ isACAdmin: window.isACAdmin })
       }
@@ -799,7 +800,7 @@ class Main extends Component {
       //^^^
       if (this.state.menuChange !== undefined && this.state.runWatchDog === true) {
         window.menuChange = undefined
-        if (!isMobile && window.ethereum) {
+        if (isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
           this.setState({ routeRequest: "basicMobile" })
           this.setState({
@@ -813,7 +814,7 @@ class Main extends Component {
           })
         }
 
-        else if(!!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true){
+        else if(!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true){
           window.routeRequest = "ACAdmin"
           this.setState({ routeRequest: "ACAdmin" })
           this.setState({
@@ -829,7 +830,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true && this.state.runWatchDog === true) {
+        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true && this.state.runWatchDog === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -845,7 +846,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false && this.state.runWatchDog === true) {
+        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false && this.state.runWatchDog === true) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
@@ -864,7 +865,7 @@ class Main extends Component {
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
-      if (!isMobile && window.ethereum && window.routeRequest !== "basicMobile" && this.state.runWatchDog === true) {
+      if (isMobile && window.ethereum && window.routeRequest !== "basicMobile" && this.state.runWatchDog === true) {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -1195,8 +1196,38 @@ class Main extends Component {
                 });
     }
 
+    this.setBlueIcons = () => {
+      window.jdenticon_config = {
+        hues: [196],
+        lightness: {
+          color: [0.36, 0.70],
+          grayscale: [0.24, 0.82]
+        },
+        saturation: {
+          color: 0.75,
+          grayscale: 0.10
+        },
+        backColor: "#ffffffff"
+      };
+    }
+
+    this.setGreenIcons = () => {
+      window.jdenticon_config = {
+        hues: [126],
+        lightness: {
+            color: [0.42, 0.72],
+            grayscale: [0.37, 0.86]
+        },
+        saturation: {
+            color: 0.75,
+            grayscale: 0.74
+        },
+        backColor: "#ffffffff"
+    };
+    }
+
     //Rebuild fetched assets, preparing them for use by the app
-    this.buildAssets = () => {
+    this.buildAssets = async () => {
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
@@ -1224,19 +1255,21 @@ class Main extends Component {
 
       }
       let identicons = [], AC_Identicons = [];
+      let identiconsLG = [], AC_IdenticonsLG =[];
+      await this.setBlueIcons()
+
       //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {
         identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
       }
 
-      for (let e = 0; e < window.assetClasses.ids.length; e++){
-        AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
-      }
-
-      let identiconsLG = [], AC_IdenticonsLG =[];
       //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {
         identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
+      }
+      
+      for (let e = 0; e < window.assetClasses.ids.length; e++){
+        AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
       }
 
       for (let e = 0; e < window.assetClasses.ids.length; e++){
@@ -1346,7 +1379,7 @@ class Main extends Component {
 
             }
 
-            else if (!!isMobile) {
+            else if (!isMobile) {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1387,7 +1420,7 @@ class Main extends Component {
       window.isSettingUpContracts = true;
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (!!isMobile) {
+        if (!isMobile) {
           console.log("Here!")
           await this.setState({
             mobileMenuBool: false,
@@ -1401,7 +1434,7 @@ class Main extends Component {
           })
         }
 
-        else if (!isMobile && _web3.eth.net.getNetworkType() != undefined) {
+        else if (isMobile && _web3.eth.net.getNetworkType() != undefined) {
           await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
@@ -1576,6 +1609,7 @@ class Main extends Component {
       userMenuMobile: false,
       userMenu: false,
       settingsMenu: false,
+      blueIcons: true
     };
   }
 
@@ -1615,7 +1649,7 @@ class Main extends Component {
     window.menuChange = undefined;
 
     //Give me the desktop version
-    if (!!isMobile && window.ethereum) {
+    if (!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1656,7 +1690,7 @@ class Main extends Component {
     }
 
     //Give me the mobile ethereum-enabled version
-    else if (!isMobile && window.ethereum) {
+    else if (isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
 

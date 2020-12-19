@@ -129,6 +129,18 @@ class ACDashboard extends React.Component {
   }
 
   componentDidMount() {
+    window.jdenticon_config = {
+      hues: [250],
+      lightness: {
+          color: [0.51, 0.66],
+          grayscale: [0.36, 0.50]
+      },
+      saturation: {
+          color: 1.00,
+          grayscale: 1.00
+      },
+      backColor: "#fff"
+  };
     this.setState({
       addr: window.addr,
       runWatchDog: true,

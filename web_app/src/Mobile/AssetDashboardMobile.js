@@ -136,6 +136,18 @@ class AssetDashboardMobile extends React.Component {
   }
 
   componentDidMount() {
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+        color: [0.36, 0.70],
+        grayscale: [0.24, 0.82]
+      },
+      saturation: {
+        color: 0.75,
+        grayscale: 0.10
+      },
+      backColor: "#ffffffff"
+    };
     this.setState({
       addr: window.addr,
       runWatchDog: true,
