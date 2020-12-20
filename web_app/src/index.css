@@ -1359,6 +1359,16 @@ div {
   z-index: -999;
 }
 
+.ACProgressBar {
+  margin-left: 26.5rem;
+  margin-top: 3rem;
+  width: 40rem;
+  background-color: #002a40;
+  font-weight: bold;
+  font-size: medium !important;
+  height: 2.5rem !important;
+}
+
 .optgroup {
   max-height: 100px !important;
   font-size: 18px;

@@ -90,8 +90,8 @@ class RetrieveRecordMobile extends Component {
       else if (obj.status === "54") { status = "MARKED LOST" }
       else if (obj.status === "55") { status = "Transferred/Unclaimed" }
       else if (obj.status === "56") { status = "In Escrow" }
-      else if (obj.status === "57") { status = "Escrow Ended" }
-      else if (obj.status === "58") { status = "Locked Escrow Ended" }
+      else if (obj.status === "57") { status = "Out of Supervised Escrow" }
+      else if (obj.status === "58") { status = "Imported" }
       else if (obj.status === "59") { status = "Discardable" }
       else if (obj.status === "60") { status = "Recyclable" }
       else if (obj.status === "70") { status = "Exported" }
@@ -102,7 +102,7 @@ class RetrieveRecordMobile extends Component {
       else if (obj.status === "4") { status = "MARKED LOST" }
       else if (obj.status === "5") { status = "Transferred/Unclaimed" }
       else if (obj.status === "6") { status = "In Escrow" }
-      else if (obj.status === "7") { status = "Escrow Ended" }
+      else if (obj.status === "7") { status = "Out of Supervised Escrow" }
 
       else { status = "Invalid Status Retrieved" }
 

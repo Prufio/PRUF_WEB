@@ -307,9 +307,9 @@ class ImportMobile extends Component {
                     }
                     }
                     className="userDataLink">
-                    Log In
+                    click here
                 </a> 
-                  to web3 provider.
+                  to enable Ethereum.
                   </h3>
             </div>
           )}

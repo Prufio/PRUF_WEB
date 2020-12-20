@@ -1158,8 +1158,8 @@ class Main extends Component {
       console.log("Asset setUp Complete. Turning on watchDog.")
 
       //Build an AC report for provisional placeholder on AC node bal
-      if(window.assetClasses){
-        if(window.assetClasses.ids.length > 0){
+      if(window.assetClasses !== undefined){
+        if(window.assetClasses.ids !== undefined){
           for(let i=0; i<window.assetClasses.ids.length; i++){
             report += ((i+1) + ".) " + window.assetClasses.names[i] 
               + "\nCustody type: " + window.assetClasses.custodyTypes[i]
@@ -1256,7 +1256,6 @@ class Main extends Component {
       }
       let identicons = [], AC_Identicons = [];
       let identiconsLG = [], AC_IdenticonsLG =[];
-      await this.setBlueIcons()
 
       //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {

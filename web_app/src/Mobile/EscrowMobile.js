@@ -363,21 +363,21 @@ class EscrowMobile extends Component {
           </div>
         )}
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-          {window.addr === undefined && (
+        {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please
+              <h3>Please 
                 <a
-                  onClick={() => {
+                    onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
                     else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                  }
-                  }
-                  className="userDataLink">
-                  Log In
-                </a>
-                  to web3 provider.
+                    }
+                    }
+                    className="userDataLink">
+                    click here
+                </a> 
+                  to enable Ethereum.
                   </h3>
             </div>
           )}

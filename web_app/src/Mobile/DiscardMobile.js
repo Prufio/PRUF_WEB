@@ -191,7 +191,7 @@ class DiscardMobile extends Component {
                         <div className="resultsMobile">
                             <h2>User address unreachable</h2>
                             <h3>Please
-                <a
+                            <a
                                     onClick={() => {
                                         this.setState({ userMenu: undefined })
                                         if (window.ethereum) { window.ethereum.enable() }
@@ -199,9 +199,9 @@ class DiscardMobile extends Component {
                                     }
                                     }
                                     className="userDataLink">
-                                    Log In
-                </a>
-                  to web3 provider.
+                                    click here
+                            </a>
+                  to enable Ethereum.
                   </h3>
                         </div>
                     )}

@@ -246,10 +246,10 @@ class NewRecordMobile extends Component {
           </div>
         </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-          {window.addr === undefined && (
+        {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please
+              <h3>Please 
                 <a
                     onClick={() => {
                     this.setState({ userMenu: undefined })
@@ -258,9 +258,9 @@ class NewRecordMobile extends Component {
                     }
                     }
                     className="userDataLink">
-                    Log In
+                    click here
                 </a> 
-                  to web3 provider.
+                  to enable Ethereum.
                   </h3>
             </div>
           )}

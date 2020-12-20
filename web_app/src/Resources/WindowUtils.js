@@ -1152,7 +1152,7 @@ function buildWindowUtils() {
 
   const _determineTokenBalance = async () => {
 
-    if (window.contracts !== undefined) {
+    if (window.contracts !== undefined && window.addr !== undefined) {
       let _assetClassBal, _assetBal, _IDTokenBal, _prufTokenBal;
       console.log("getting balance info from token contracts...")
       await window.contracts.A_TKN.methods.balanceOf(window.addr).call((error, result) => {
@@ -1348,7 +1348,7 @@ function buildWindowUtils() {
               else if (_result[0] === "54") { statuses.push("MARKED LOST") }
               else if (_result[0] === "55") { statuses.push("Transferred/Unclaimed") }
               else if (_result[0] === "56") { statuses.push("In Escrow") }
-              else if (_result[0] === "57") { statuses.push("Escrow Ended") }
+              else if (_result[0] === "57") { statuses.push("Out of Supervised Escrow") }
               else if (_result[0] === "58") { statuses.push("Imported") }
               else if (_result[0] === "59") { statuses.push("Discardable") }
               else if (_result[0] === "60") { statuses.push("Recyclable") }

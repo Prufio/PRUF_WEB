@@ -5,6 +5,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { RefreshCw, X, ChevronRight, CornerUpLeft, Home, Plus, Copy } from "react-feather";
+import ProgressBar from 'react-bootstrap/ProgressBar'
 import { QRCode } from 'react-qrcode-logo';
 import { isMobile } from "react-device-detect";
 import Printer from '../Resources/Print'
@@ -282,9 +283,13 @@ class ACDashboard extends React.Component {
                       <p className="cardNameSelected">Name: {obj.assetClassName}</p>
                       <p className="cardAcSelected">Node ID: {obj.id}</p>
                       <p className="cardStatusSelected">Node Root: {obj.root}</p>
-                      <p className="cardStatusSelected">Share Percentage: {obj.discount.substring(0,2)}%</p>
-                      <div className="cardDescriptionFormSelected">
-                      </div>
+                      <p className="cardStatusSelected">Custody Type: {obj.custodyType}</p>
+                      <ProgressBar className ="ACProgressBar">
+                        <ProgressBar variant="success" label={"Price Share: " + String(Number(obj.discount)/100) + "%"} now={obj.discount/100} key={1} />
+                        {/* <ProgressBar variant="successs" label={obj.discount.substring(0,2)+"%"} now={Number(obj.discount)/100-51} key={2} /> */}
+                      </ProgressBar>
+                      {/* <div className="cardDescriptionFormSelected">
+                      </div> */}
                     </div>
                     {this.state.moreInfo && (
                       <div className="cardButton3">
@@ -363,7 +368,8 @@ class ACDashboard extends React.Component {
                           id: obj.ids[i],
                           discount: obj.discounts[i],
                           root: obj.roots[i],
-                          identicon: obj.identiconsLG[i]
+                          identicon: obj.identiconsLG[i],
+                          custodyType: obj.custodyTypes[i]
                         })
                       }}
                     >
@@ -374,11 +380,9 @@ class ACDashboard extends React.Component {
                     <p className="cardName">Name: {obj.names[i]}</p>
                     <p className="cardAc">Node ID: {obj.ids[i]}</p>
                     <p className="cardStatus">Node Root: {obj.roots[i]}</p>
+                    <p className="cardStatus">Custody Type: {obj.custodyTypes[i]}</p>
                     <h4 className="cardIdx">Share Percentage: {obj.discounts[i].substring(0,2)}%</h4>
-                    <br></br>
-                    <div className="cardDescriptionForm"><h4 className="cardDescriptionForm">Custody Type:
-                    {obj.custodyTypes[i]}
-                    </h4></div>
+                    <div className="cardDescriptionForm"></div>
                   </div>
                   <div className="cardButton">
                     <div className="cardButtonContent">
@@ -389,7 +393,8 @@ class ACDashboard extends React.Component {
                             id: obj.ids[i],
                             discount: obj.discounts[i],
                             root: obj.roots[i],
-                            identicon: obj.identiconsLG[i]
+                            identicon: obj.identiconsLG[i],
+                            custodyType: obj.custodyTypes[i]
                           })
                         }}
                         size={35}
