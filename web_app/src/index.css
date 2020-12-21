@@ -1368,11 +1368,11 @@ div {
 
 .ACProgressBar {
   margin-left: 26.5rem;
-  margin-top: 9rem;
+  /* margin-top: 9rem; */
   width: 40rem;
   background-color: #002a40;
   font-weight: bold;
-  border-radius: 0rem 0rem 0.5rem 0.5rem !important;
+  border-radius: 0.5rem 0.5rem 0rem 0rem !important;
   font-size: medium !important;
   height: 2.5rem !important;
 }
@@ -2168,7 +2168,7 @@ margin-bottom: -3rem;
   margin-left: 9rem;
   overflow-y: auto;
   flex-direction: column;
-  border-radius: 0.4rem 0.4rem 0rem 0rem;
+  border-radius: 0rem 0rem 0.4rem 0.4rem;
   padding-left: 0.5rem;
   position: absolute;
   margin-left: 26.5rem;
