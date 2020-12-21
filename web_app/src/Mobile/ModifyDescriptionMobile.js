@@ -857,7 +857,7 @@ class ModifyDescription extends Component {
               {this.state.elementType === "nameTag" && (
                 <div className="submitButtonRRMobile">
                   <div className="submitButtonContentMobile">
-                    <CheckCircle
+                    <FilePlus
                       onClick={() => { _addToMiscArray(this.state.elementType) }}
                     />
                   </div>
