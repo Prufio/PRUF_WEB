@@ -22,6 +22,7 @@ import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'rea
 import { isMobile } from "react-device-detect";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
+import Form from "react-bootstrap/Form";
 
 class Main extends Component {
   constructor(props) {
@@ -382,6 +383,15 @@ class Main extends Component {
                         ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.0.0 </a>
                         : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.0.0 </a>}
                     </h3>
+                    <Form.Check
+                      type="checkbox"
+                      className="checkBoxParticles"
+                      id="inlineFormCheck"
+                      onChange={() => { this.particles() }}
+                    />
+                    <h3 className="textParticles">
+                      Toggle Particles
+                    </h3>
                   </div>
                   <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
                     <button
@@ -638,7 +648,9 @@ class Main extends Component {
             </div>
           </div>
           <div className="pageForm">
+            {this.state.particles === true && (
             <ParticleBox />
+            )}
             <style type="text/css">
               {`
                       .btn-primary {
@@ -1557,6 +1569,18 @@ class Main extends Component {
             this.setState({ settingsMenu: false })
           }
         }
+    
+        //settingsMenu bool switch @DEV Move to this declarations?
+        this.particles = async () => {
+          if (this.state.particles === false) {
+            this.setState({
+              particles: true,
+            })
+          }
+          else {
+            this.setState({ particles: false })
+          }
+        }
 
     //Component state declaration
     this.state = {
@@ -1608,7 +1632,8 @@ class Main extends Component {
       userMenuMobile: false,
       userMenu: false,
       settingsMenu: false,
-      blueIcons: true
+      blueIcons: true,
+      particles: true,
     };
   }
 
