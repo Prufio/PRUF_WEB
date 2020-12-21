@@ -320,7 +320,7 @@ class RetrieveRecord extends Component {
       this.setState({ idxHash: idxHash })
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
-      if(idxHash.substring(0,2) !== "0x"){return}
+      if(idxHash.substring(0,2) !== "0x"){return this.setState({wasSentQuery: false, queryValue: undefined})}
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(
@@ -379,7 +379,8 @@ class RetrieveRecord extends Component {
       if(tempBool){
         this.setState({
           queryValue: data,
-          assetFound: "Asset Found!"
+          assetFound: "Asset Found!",
+          wasSentQuery: true
         })
       }
       else{
@@ -674,7 +675,7 @@ class RetrieveRecord extends Component {
     else {
       return (
         <div>
-          {!this.state.moreInfo && this.state.QRreader === false && (
+          {!this.state.moreInfo && this.state.QRreader === false && this.state.queryValue === undefined && (
             <div>
               <div>
                 <div className="mediaLinkADHome">
@@ -835,14 +836,14 @@ class RetrieveRecord extends Component {
             <div className="results">No Asset Found for Given Data</div>
           )}
 
-          {this.state.moreInfo && ( //conditional rendering
+          {(this.state.moreInfo || this.state.wasSentQuery) && ( //conditional rendering
             <div>
               <div>
                 <h2 className="assetDashboardHeader">Here's what we found: </h2>
               </div>
               <div className="assetDashboard">
                 {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
-                {this.state.assetObj === undefined && (<h4 className="loading">Loading Asset</h4>)}
+                {this.state.assetObj === undefined && (<h4 className="loadingRR">Loading Asset</h4>)}
               </div>
               <div className="assetDashboardFooter">
               </div>

@@ -1420,12 +1420,23 @@ div {
   animation: dots 1s steps(5, end) infinite;
 }
 
+.loadingRR {
+  margin-left: 26rem;
+  font-size: 2.5rem;
+  color: white;
+}
+
 .loadingAD {
   font-size: 2.5rem;
   color: white;
 }
 
 .loadingAD:after {
+  content: '  .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+.loadingRR:after {
   content: '  .';
   animation: dots 1s steps(5, end) infinite;
 }
