@@ -383,7 +383,7 @@ div {
 
 .assetDashboardSelected {
   height: flex;
-  max-height: 40rem;
+  max-height: 50rem;
   width: 68rem;
   background-color: #002a40;
   margin-top: -1rem;
@@ -1368,10 +1368,11 @@ div {
 
 .ACProgressBar {
   margin-left: 26.5rem;
-  margin-top: 3rem;
+  margin-top: 9rem;
   width: 40rem;
   background-color: #002a40;
   font-weight: bold;
+  border-radius: 0rem 0rem 0.5rem 0.5rem !important;
   font-size: medium !important;
   height: 2.5rem !important;
 }
@@ -2123,14 +2124,29 @@ margin-bottom: -3rem;
 
 .cardDescriptionFormSelected {
   display: flex;
-  width: 40rem;
-  height: 10rem;
+  width: 50rem;
+  height: 16rem;
   background-color: #002a40;
   word-wrap: normal;
   margin-left: 9rem;
   overflow-y: auto;
   flex-direction: column;
-  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
+  border-radius: 0rem 0rem 0.3rem 0.3rem;
+  padding-left: 0.5rem;
+  position: absolute;
+  margin-top: 17rem;
+}
+
+.cardDescriptionFormSelectedAC {
+  display: flex;
+  width: 40rem;
+  height: 8rem;
+  background-color: #002a40;
+  word-wrap: normal;
+  margin-left: 9rem;
+  overflow-y: auto;
+  flex-direction: column;
+  border-radius: 0.4rem 0.4rem 0rem 0rem;
   padding-left: 0.5rem;
   position: absolute;
   margin-left: 26.5rem;
