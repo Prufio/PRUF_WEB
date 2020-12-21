@@ -190,7 +190,7 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined, legacyMode: false }) }}
+                onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined, legacyMode: false }) }}
               />
             </div>
           </div>
@@ -476,7 +476,12 @@ class RetrieveRecordMobile extends Component {
   }
 
 
-  render() {//render continuously produces an up-to-date stateful document  
+  render() {//render continuously produces an up-to-date stateful document 
+    
+    const clearForm = async () => {
+      document.getElementById("MainForm").reset();
+      this.setState({ wasSentQuery: false, queryValue: undefined, Checkbox: false, help: false })
+    }
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {
@@ -590,7 +595,7 @@ class RetrieveRecordMobile extends Component {
               </div>
               <h2 className="formHeaderMobile">Search Assets</h2>
               <div className="mediaLinkClearForm">
-                <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { document.getElementById("MainForm").reset() }} /></a>
+                <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { clearForm() }} /></a>
               </div>
             </div>
             <Form className="formMobile" id="MainForm" onSubmit={submitHandler}>

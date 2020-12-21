@@ -252,7 +252,7 @@ class RetrieveRecord extends Component {
                       <div className="cardButton2Content">
                         <CornerUpLeft
                           size={35}
-                          onClick={() => { this.setState({ moreInfo: false, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false }) }}
+                          onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false }) }}
                         />
                       </div>
                     </div>
@@ -544,7 +544,7 @@ class RetrieveRecord extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ Checkbox: false, help: false })
+      this.setState({ wasSentQuery: false, queryValue: undefined, Checkbox: false, help: false })
     }
 
     const help = async () => {
