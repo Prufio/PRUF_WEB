@@ -55,8 +55,22 @@ class SetCosts extends Component {
 
   //component state-change events......................................................................................................
 
+
   componentDidMount() {//stuff to do when component mounts in window
+    if (window.sentPacket !== undefined) {
+      // this.setState({ name: window.sentPacket.assetClassName })
+      // this.setState({ idxHash: window.sentPacket.id })
+      this.setState({ assetClass: window.sentPacket.id, assetClassSelected: true })
+      this.setState({services: window.utils.getCosts(6, window.sentPacket.id)})
+      // this.setState({ status: window.sentPacket.custodyType })
+      console.log("Stat", window.sentPacket.status)
+
+      window.sentPacket = undefined
+      this.setState({ wasSentPacket: true })
+    }
+
     this.setState({ runWatchDog: true })
+
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
@@ -72,13 +86,13 @@ class SetCosts extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false })
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false })
     }
 
     const _setAC = async (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
+      this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root, txHash: "", txStatus: false });
       return await this.setState({services: window.utils.getCosts(6, e.id)})
     }
 
@@ -117,13 +131,13 @@ class SetCosts extends Component {
         .on("error", function (_error) {
           self.setState({ error: _error });
           self.setState({ result: _error.transactionHash });
-          self.setState({ transaction: false });
+          this.setState({ transaction: false, wasSentPacket: false })
           return clearForm();
         })
         .on("receipt", (receipt) => {
           window.resetInfo = true;
             window.recount = true;
-            self.setState({ transaction: false })
+            this.setState({ transaction: false, wasSentPacket: false })
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
             self.setState({ hasLoadedAssetClasses: false })
@@ -158,23 +172,25 @@ class SetCosts extends Component {
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
-                  <Form.Control
-                    as="select"
-                    size="lg"
-                    onChange={(e) => { _setAC(e.target.value) }}
+                {!this.state.wasSentPacket && (
+                    <Form.Control
+                      as="select"
+                      size="lg"
+                      onChange={(e) => { _setAC(e.target.value) }}
 
-                  >
-                    {this.state.hasLoadedAssetClasses && (
-                      <optgroup className="optgroup">
-                        {window.utils.generateAssetClasses()}
-                      </optgroup>)}
-                    {!this.state.hasLoadedAssetClasses && (
-                      <optgroup>
-                        <option value="null">
-                          Loading Held Asset Classes...
+                    >
+                      {this.state.hasLoadedAssetClasses && (
+                        <optgroup className="optgroup">
+                          {window.utils.generateAssetClasses()}
+                        </optgroup>)}
+                      {!this.state.hasLoadedAssetClasses && (
+                        <optgroup>
+                          <option value="null">
+                            Loading Held Asset Classes...
                            </option>
-                      </optgroup>)}
-                  </Form.Control>
+                        </optgroup>)}
+                    </Form.Control>
+                  )}
                 </Form.Group>
               </Form.Row>
             </>

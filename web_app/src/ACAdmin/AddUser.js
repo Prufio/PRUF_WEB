@@ -51,15 +51,9 @@ class AddUser extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      // if (Number(window.sentPacket.statusNum) !== 59) {
-      //   window.sentPacket = undefined;
-      //   alert("Asset is not discardable! Owner must set status to discardable.");
-      //   return window.location.href = "/#/asset-dashboard"
-      // }
-
       // this.setState({ name: window.sentPacket.assetClassName })
       // this.setState({ idxHash: window.sentPacket.id })
-      this.setState({ assetClass: window.sentPacket.root })
+      this.setState({ assetClass: window.sentPacket.id, assetClassSelected: true })
       // this.setState({ status: window.sentPacket.custodyType })
       console.log("Stat", window.sentPacket.status)
 
@@ -84,13 +78,13 @@ class AddUser extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false })
+      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false})
     }
 
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root });
+      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root, txHash: "", txStatus: false });
     }
 
     const help = async () => {
@@ -128,7 +122,7 @@ class AddUser extends Component {
             "user added succesfully under asset class",
             self.state.assetClass
           );
-          self.setState({ transaction: false })
+          this.setState({ transaction: false, wasSentPacket: false })
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
           self.setState({ hasLoadedAssetClasses: false })
@@ -179,20 +173,6 @@ class AddUser extends Component {
                             Loading Held Asset Classes...
                            </option>
                         </optgroup>)}
-                    </Form.Control>
-                  )}
-                  {this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _setAC(e.target.value) }}
-                      disabled
-                    >
-                      <optgroup>
-                        <option value="null">
-                          injecting "{this.state.assetClass}" Clear Form to Select Different AC
-                   </option>
-                      </optgroup>
                     </Form.Control>
                   )}
                 </Form.Group>
