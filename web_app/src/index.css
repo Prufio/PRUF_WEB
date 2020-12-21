@@ -2166,17 +2166,16 @@ margin-bottom: -3rem;
 .cardDescriptionFormSearch {
   display: flex;
   width: 50rem;
-  height: 10rem;
+  height: 16rem;
   background-color: #002a40;
   word-wrap: normal;
   margin-left: 9rem;
   overflow-y: auto;
   flex-direction: column;
-  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
+  border-radius: 0rem 0rem 0.3rem 0.3rem;
   padding-left: 0.5rem;
   position: absolute;
-  margin-left: 9rem;
-  margin-top: 18rem;
+  margin-top: 17rem;
 }
 
 .cardButton {
