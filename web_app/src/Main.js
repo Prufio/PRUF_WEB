@@ -390,7 +390,7 @@ class Main extends Component {
                       onChange={() => { this.particles() }}
                     />
                     <h3 className="textParticles">
-                      Toggle Particles
+                      Particles Off
                     </h3>
                   </div>
                   <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
