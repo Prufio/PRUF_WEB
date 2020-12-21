@@ -2136,6 +2136,22 @@ margin-bottom: -3rem;
   margin-left: 26.5rem;
 }
 
+.cardDescriptionFormSearch {
+  display: flex;
+  width: 50rem;
+  height: 10rem;
+  background-color: #002a40;
+  word-wrap: normal;
+  margin-left: 9rem;
+  overflow-y: auto;
+  flex-direction: column;
+  border-radius: 0.4rem 0.4rem 0.4rem 0.4rem;
+  padding-left: 0.5rem;
+  position: absolute;
+  margin-left: 9rem;
+  margin-top: 18rem;
+}
+
 .cardButton {
   display: flex;
   position: absolute;

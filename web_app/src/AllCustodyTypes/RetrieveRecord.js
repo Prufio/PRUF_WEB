@@ -36,6 +36,11 @@ class RetrieveRecord extends Component {
 
       }
 
+      if(this.state.runWatchDog === true && Number(this.state.queryValue) > 0 && window.contracts != undefined && this.state.runQuery === true){
+        this.setState({runQuery: false})
+        this._retrieveRecordQR(this.state.queryValue)
+      }
+
     }, 150)
     //State declaration.....................................................................................................
 
@@ -238,7 +243,7 @@ class RetrieveRecord extends Component {
                         <h4 className="cardIdxSelected">IDX : {obj.idxHash}</h4>
                       </div>
                     )}
-                    <div className="cardDescriptionFormSelected">
+                    <div className="cardDescriptionFormSearch">
                       {generateTextList()}
                     </div>
                   </div>
@@ -300,17 +305,22 @@ class RetrieveRecord extends Component {
 
     }
 
-    this._retrieveRecordQR = async () => {
+    this._retrieveRecordQR = async (query) => {
       this.setState({ help: false })
       this.setState({ QRRR: undefined, assetFound: "" })
       const self = this;
       var ipfsHash;
       var tempResult;
-      let idxHash = String(this.state.result)
+      let idxHash;
+      if(query){
+        idxHash = String(this.state.queryValue)
+      } else{
+        idxHash = String(this.state.result)
+      }
       this.setState({ idxHash: idxHash })
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
-
+      if(idxHash.substring(0,2) !== "0x"){return}
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(
@@ -354,9 +364,28 @@ class RetrieveRecord extends Component {
       await this.getIPFSJSONObject(ipfsHash);
 
       return this.setState({
+        moreInfo: true,
         authLevel: window.authLevel,
         QRreader: false
       })
+    }
+
+    this.handleQuery = async (data) => {
+      if(data.substring(0,2) !== "0x"){
+        return alert("'"+data+"'" + " is not a proper IDX!")
+      }
+
+      let tempBool = true//await window.utils.checkAssetExistsBare(data)
+      if(tempBool){
+        this.setState({
+          queryValue: data,
+          assetFound: "Asset Found!"
+        })
+      }
+      else{
+        return this.setState({assetFound: "Asset Not Found."})
+      }
+      
     }
 
     this.getACData = async (ref, ac) => {
@@ -443,6 +472,7 @@ class RetrieveRecord extends Component {
       Checkbox: false,
       idxHashRaw: "",
       help: false,
+      runQuery: true,
       legacyMode: false,
     };
   }
@@ -450,10 +480,10 @@ class RetrieveRecord extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
-
-    if (window.sentPacket !== undefined) {
-
-      this.handlePacket()
+    let hashString = window.location.hash;
+    if (hashString.includes("?")) {
+      let str = hashString.substring(hashString.indexOf("?")+1, hashString.length)
+      this.handleQuery(str)
     }
     this.setState({ QRReader: false });
     this.setState({ runWatchDog: true });
@@ -476,7 +506,6 @@ class RetrieveRecord extends Component {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
-
 
   handleScan = async (data) => {
     if (data) {

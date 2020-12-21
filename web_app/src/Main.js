@@ -1669,7 +1669,12 @@ class Main extends Component {
     window.sentPacket = undefined;
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
-    window.location.href = '/#/';
+    let refString = String(window.location.href);
+    if(!refString.includes("retrieve-record")){
+      window.location.href = '/#/';
+    } else{
+      console.log("Here is the search:", window.location.hash)
+    }
     window.menuChange = undefined;
 
     //Give me the desktop version
