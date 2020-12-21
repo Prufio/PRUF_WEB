@@ -1426,6 +1426,12 @@ div {
   color: white;
 }
 
+.loadingRRMobile {
+  margin-left: 9rem;
+  font-size: 2.5rem;
+  color: white;
+}
+
 .loadingAD {
   font-size: 2.5rem;
   color: white;
@@ -1437,6 +1443,11 @@ div {
 }
 
 .loadingRR:after {
+  content: '  .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+.loadingRRMobile:after {
   content: '  .';
   animation: dots 1s steps(5, end) infinite;
 }

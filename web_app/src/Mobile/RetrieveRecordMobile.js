@@ -61,6 +61,11 @@ class RetrieveRecordMobile extends Component {
         }
       }
 
+      if(this.state.runWatchDog === true && Number(this.state.queryValue) > 0 && window.contracts != undefined && this.state.runQuery === true){
+        this.setState({runQuery: false})
+        this._retrieveRecordQR(this.state.queryValue)
+      }
+
     }, 150)
     //State declaration.....................................................................................................
 
@@ -229,17 +234,26 @@ class RetrieveRecordMobile extends Component {
 
     }
 
-    this._retrieveRecordQR = async () => {
+    this._retrieveRecordQR = async (query) => {
 
       this.setState({ QRRR: undefined, assetFound: "" })
       const self = this;
       var ipfsHash;
       var tempResult;
-      let idxHash = String(this.state.resultQR)
+      let idxHash;
+      if(query){
+        let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
+        if(tempBool){
+          idxHash = String(this.state.queryValue)
+        } else{ this.setState({wasSentQuery: false, queryValue: undefined}); return alert("Asset does not exist!")}
+        
+      } else{
+        idxHash = String(this.state.result)
+      }
       this.setState({ idxHash: idxHash })
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
-
+      if(idxHash.substring(0,2) !== "0x"){return this.setState({wasSentQuery: false, queryValue: undefined})}
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(
@@ -287,6 +301,25 @@ class RetrieveRecordMobile extends Component {
         QRreader: undefined,
         moreInfo: true,
       })
+    }
+
+    this.handleQuery = async (data) => {
+      if(data.substring(0,2) !== "0x"){
+        return alert("'"+data+"'" + " is not a proper IDX!")
+      }
+
+      let tempBool = true//await window.utils.checkAssetExistsBare(data)
+      if(tempBool){
+        this.setState({
+          queryValue: data,
+          assetFound: "Asset Found!",
+          wasSentQuery: true
+        })
+      }
+      else{
+        return this.setState({assetFound: "Asset Not Found."})
+      }
+      
     }
 
     this.getACData = async (ref, ac) => {
@@ -374,6 +407,7 @@ class RetrieveRecordMobile extends Component {
       moreInfo: false,
       idxHash: undefined,
       idxHashRaw: undefined,
+      runQuery: true,
       legacyMode: false,
     };
 
@@ -385,9 +419,10 @@ class RetrieveRecordMobile extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
 
-    if (window.sentPacket !== undefined) {
-
-      this.handlePacket()
+    let hashString = window.location.hash;
+    if (hashString.includes("?")) {
+      let str = hashString.substring(hashString.indexOf("?")+1, hashString.length)
+      this.handleQuery(str)
     }
 
     this.setState({ runWatchDog: true })
@@ -547,7 +582,7 @@ class RetrieveRecordMobile extends Component {
 
     return (
       <div>
-        {this.state.moreInfo === false && this.state.QRreader === false && (
+        {this.state.moreInfo === false && this.state.QRreader === false && this.state.queryValue === undefined && (
           <div>
             <div>
               <div className="mediaLinkADHomeMobile">
@@ -695,14 +730,14 @@ class RetrieveRecordMobile extends Component {
           </div>
         )}
 
-        {this.state.moreInfo === true && ( //conditional rendering
+        {(this.state.moreInfo || this.state.wasSentQuery) && ( //conditional rendering
           <div>
             <div>
               <h2 className="assetDashboardHeaderMobile">Here's what we found: </h2>
             </div>
             <div className="assetDashboardMobile">
               {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
-              {this.state.assetObj === undefined && (<h4 className="loading">Loading Asset</h4>)}
+              {this.state.assetObj === undefined && (<h4 className="loadingRRMobile">Loading Asset</h4>)}
             </div>
             {/* <div className="resultsMobile">
             </div> */}

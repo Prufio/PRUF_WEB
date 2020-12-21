@@ -313,7 +313,11 @@ class RetrieveRecord extends Component {
       var tempResult;
       let idxHash;
       if(query){
-        idxHash = String(this.state.queryValue)
+        let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
+        if(tempBool){
+          idxHash = String(this.state.queryValue)
+        } else{ this.setState({wasSentQuery: false, queryValue: undefined}); return alert("Asset does not exist!")}
+        
       } else{
         idxHash = String(this.state.result)
       }

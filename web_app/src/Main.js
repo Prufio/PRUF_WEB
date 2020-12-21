@@ -1670,7 +1670,7 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if(!refString.includes("retrieve-record")){
+    if(!refString.includes("retrieve-record") && !refString.includes("retrieve-record-mobile")){
       window.location.href = '/#/';
     } else{
       console.log("Here is the search:", window.location.hash)
