@@ -1670,9 +1670,14 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if(!refString.includes("retrieve-record") && !refString.includes("retrieve-record-mobile")){
+    if(!refString.includes("0x")){
       window.location.href = '/#/';
     } else{
+      if(isMobile){
+        window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.length)
+      } else {
+        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.length)
+      }
       console.log("Here is the search:", window.location.hash)
     }
     window.menuChange = undefined;
