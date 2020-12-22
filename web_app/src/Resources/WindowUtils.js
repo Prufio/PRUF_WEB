@@ -143,7 +143,7 @@ function buildWindowUtils() {
           for (let i = 0; i < keys.length; i++) {
             component.push(<option size="lg" key={"option " + String(i)} value={i+1}>
               {i + 1}:
-              Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(String(values[i]))}
+              Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(values[i])}
               </option>);
           }
 
@@ -1087,7 +1087,9 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              window.costArray.push(Number((Object.values(_result)[1])) + Number((Object.values(_result)[3])))
+              let root = window.web3.utils.fromWei(Object.values(_result)[1]);
+              let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
+              window.costArray.push(window.web3.utils.toWei(String(Number(root) + Number(acth))));
             }
           })
       }
@@ -1283,7 +1285,7 @@ function buildWindowUtils() {
       }
     }
 
-    else { console.log("No assets held by user"); window.assetClasses.ids = []; return window.hasNoAssetClasses = true }
+    else { console.log("No asset classes held by user"); window.assetClasses.ids = []; return window.hasNoAssetClasses = true }
 
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }

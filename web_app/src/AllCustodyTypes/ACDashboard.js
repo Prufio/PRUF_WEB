@@ -26,8 +26,8 @@ class ACDashboard extends React.Component {
           this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
         }
   
-        if (this.state.hasNoAssets !== window.hasNoAssets && this.state.runWatchDog === true) {
-          this.setState({ hasNoAssets: window.hasNoAssets })
+        if (this.state.hasNoAssetClasses !== window.hasNoAssetClasses && this.state.runWatchDog === true) {
+          this.setState({ hasNoAssetClasses: window.hasNoAssetClasses })
         }
       
     }, 150)
