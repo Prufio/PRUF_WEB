@@ -1670,9 +1670,9 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if(!refString.includes("0x")){
+    if(!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length !== 66){
       window.location.href = '/#/';
-    } else{
+    } else {
       if(isMobile){
         window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.length)
       } else {
