@@ -1368,7 +1368,7 @@ div {
 
 .ACProgressBar {
   margin-left: 26.5rem;
-  /* margin-top: 9rem; */
+  color: black !important;
   width: 40rem;
   background-color: #002a40;
   font-weight: bold;

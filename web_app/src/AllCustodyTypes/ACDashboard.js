@@ -285,7 +285,7 @@ class ACDashboard extends React.Component {
                       <p className="cardStatusSelected">Node Root: {obj.root}</p>
                       <p className="cardStatusSelected">Custody Type: {obj.custodyType}</p>
                       <ProgressBar className ="ACProgressBar">
-                        <ProgressBar variant="success" label={"Price Share: " + String(Number(obj.discount)/100) + "%"} now={obj.discount/100} key={1} />
+                        <ProgressBar variant="success" label={"Price Share: " + String(Number(obj.discount)/100) + "%"} now={obj.discount/100} key={1} style="color: black" />
                         {/* <ProgressBar variant="successs" label={obj.discount.substring(0,2)+"%"} now={Number(obj.discount)/100-51} key={2} /> */}
                       </ProgressBar>
                       <div className="cardDescriptionFormSelectedAC">

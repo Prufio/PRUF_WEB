@@ -676,6 +676,7 @@ class RetrieveRecord extends Component {
       )
 
     }
+
     else {
       return (
         <div>
