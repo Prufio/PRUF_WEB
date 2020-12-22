@@ -420,8 +420,8 @@ class RetrieveRecordMobile extends Component {
   componentDidMount() {//stuff to do when component mounts in window
 
     let hashString = window.location.hash;
-    if (hashString.includes("?")) {
-      let str = hashString.substring(hashString.indexOf("?")+1, hashString.length)
+    if (hashString.includes("0x")) {
+      let str = hashString.substring(hashString.indexOf("0x"), hashString.length)
       this.handleQuery(str)
     }
 
