@@ -266,7 +266,7 @@ class AssetDashboardMobile extends React.Component {
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
-                      onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
+                      onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
                     />
                   </div>
                 </div>

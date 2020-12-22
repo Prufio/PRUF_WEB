@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, Copy } from "react-feather";
 
 
 class RetrieveRecordMobile extends Component {
@@ -179,9 +179,21 @@ class RetrieveRecordMobile extends Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Name : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.name}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
-              <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
+              <div className="cardCopyButtonMobile">
+                  <div className="cardCopyButtonMobileContent">
+                    <Copy
+                      size={15}
+                      onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
+                    />
+                  </div>
+                </div>
+                <h4 className="cardDescriptionSelectedContentMobile">
+                  {obj.idxHash}
+                </h4>
+              </Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
-              <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
               {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>

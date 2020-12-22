@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -236,11 +236,27 @@ class RetrieveRecord extends Component {
                     {this.state.idxHashRaw !== "" && (
                       <div className="cardSelectedIdxForm">
                         <h4 className="cardIdxSelected">IDX : {this.state.idxHashRaw}</h4>
+                        <div className="cardCopyButton">
+                          <div className="cardCopyButtonContent">
+                            <Copy
+                              size={15}
+                              onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     )}
                     {this.state.idxHashRaw === "" && (
                       <div className="cardSelectedIdxForm">
                         <h4 className="cardIdxSelected">IDX : {obj.idxHash}</h4>
+                        <div className="cardCopyButton">
+                          <div className="cardCopyButtonContent">
+                            <Copy
+                              size={15}
+                              onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     )}
                     <div className="cardDescriptionFormSearch">
