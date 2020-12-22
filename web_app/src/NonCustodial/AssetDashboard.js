@@ -317,7 +317,7 @@ class AssetDashboard extends React.Component {
                           <div className="displayQR">
                             <div className="QR">
                               <QRCode
-                                value={"https://https://pruf-web-app-9t16vez6j.vercel.app//#/retrieve-record?" + obj.idxHash}
+                                value={"https://192.168.0.20//#/retrieve-record?" + obj.idxHash}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
@@ -479,7 +479,7 @@ class AssetDashboard extends React.Component {
                           <div className="displayQR">
                             <div className="QR">
                               <QRCode
-                                value={"https://https://pruf-web-app-9t16vez6j.vercel.app//#/retrieve-record?" + obj.idxHash}
+                                value={"https://192.168.0.20//#/retrieve-record?" + obj.idxHash}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
