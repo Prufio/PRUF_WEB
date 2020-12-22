@@ -373,14 +373,14 @@ class Main extends Component {
                       dApp Last Updated:
                   </h3>
                     <h3>
-                      December 15, 2020
+                      December 23, 2020
                   </h3>
                   <h3>
                     <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
                   </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
-                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.0.0 </a>
+                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.0 </a>
                         : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.0.0 </a>}
                     </h3>
                     <Form.Check

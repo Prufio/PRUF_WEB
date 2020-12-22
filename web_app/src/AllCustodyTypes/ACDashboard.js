@@ -84,8 +84,7 @@ class ACDashboard extends React.Component {
 
           await this.setState({ ACname: window.assetClassName });
         }
-
-
+        
         return this.setState({ assetClassSelected: true, acData: window.tempACData })
       }
     }
