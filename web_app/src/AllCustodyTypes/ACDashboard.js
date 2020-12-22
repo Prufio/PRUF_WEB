@@ -15,7 +15,7 @@ class ACDashboard extends React.Component {
   constructor(props) {
     super(props);
 
-
+    //watchdog to keep ACNs up-to-date
     this.updateAssetClasses = setInterval(() => {
         if (this.state.assetClasses !== window.assetClasses && this.state.runWatchDog === true) {
           console.log("RESETTING ACS")
