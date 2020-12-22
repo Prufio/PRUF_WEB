@@ -317,7 +317,7 @@ class AssetDashboard extends React.Component {
                           <div className="displayQR">
                             <div className="QR">
                               <QRCode
-                                value={"https://192.168.0.20:3000/#/retrieve-record?" + obj.idxHash}
+                                value={"https://indevapp.pruf.io/#/retrieve-record?" + obj.idxHash}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
@@ -479,7 +479,7 @@ class AssetDashboard extends React.Component {
                           <div className="displayQR">
                             <div className="QR">
                               <QRCode
-                                value={"https://192.168.0.20:3000/#/retrieve-record?" + obj.idxHash}
+                                value={"https://indevapp.pruf.io/#/retrieve-record?" + obj.idxHash}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
