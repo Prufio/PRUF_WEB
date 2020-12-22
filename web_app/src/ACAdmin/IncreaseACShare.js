@@ -129,9 +129,11 @@ class IncreaseACShare extends Component {
         return alert("Insufficient balance!")
       }
 
-      if(this.state.currentShare === (this.state.currentShare*0.01 + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare)))){
+      if(this.state.currentShare*0.01 === (this.state.currentShare*0.01 + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare)))){
         return alert("Please increase the slider value before submission")
       }
+
+      console.log()
 
       const amount = window.web3.utils.toWei(String(this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))));
       if(this.state.assetClass === undefined || amount === undefined) {return}

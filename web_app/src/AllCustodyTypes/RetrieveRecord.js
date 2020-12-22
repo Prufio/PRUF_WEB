@@ -487,7 +487,7 @@ class RetrieveRecord extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     let hashString = window.location.hash;
     if (hashString.includes("0x")) {
-      let str = hashString.substring(hashString.indexOf("0x"), hashString.length)
+      let str = hashString.substring(hashString.indexOf("0x"), hashString.indexOf("0x") + 66)
       this.handleQuery(str)
     }
     this.setState({ QRReader: false });
