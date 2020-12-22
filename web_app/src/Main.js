@@ -1670,13 +1670,13 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if(!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length !== 66){
+    if(!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66){
       window.location.href = '/#/';
     } else {
       if(isMobile){
-        window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.length)
+        window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), 66)
       } else {
-        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.length)
+        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), 66)
       }
       console.log("Here is the search:", window.location.hash)
     }
