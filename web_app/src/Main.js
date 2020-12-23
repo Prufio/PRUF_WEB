@@ -970,7 +970,7 @@ class Main extends Component {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
             alert("WD: rebuilding assets (Last Step) ")
-            this.setState({buildReady: false})
+            this.setState({runWatchDog: false})
             this.buildAssets()
           }
         }
@@ -1398,7 +1398,8 @@ class Main extends Component {
       window.hasLoadedAssetClasses = true;
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
-      return alert("Assets Built: " + window.assets.ids.length)
+      alert("Assets Built: " + window.assets.ids.length + "Restarting WatchDog...")
+      await this.setState({ runWatchDog: true })
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
