@@ -990,7 +990,7 @@ class Main extends Component {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
           console.log("Assets are ready for rebuild")
           alert("WD: Assets Deemed ready for rebuild.")
-          this.setState({ buildReady: true })
+          this.setState({ buildReady: true})
         }
       }
 
@@ -1313,6 +1313,7 @@ class Main extends Component {
     this.buildAssets = async () => {
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
+      window.ipfsCounter = 0;
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
 
