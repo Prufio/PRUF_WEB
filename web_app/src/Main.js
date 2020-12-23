@@ -20,6 +20,8 @@ import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'react-feather';
 import { isMobile } from "react-device-detect";
+import { isFirefox } from "is-firefox";
+import { isSafari } from "is-safari";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
 import Form from "react-bootstrap/Form";
@@ -29,6 +31,134 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
+      // if (isFirefox && !isMobile) {
+      //   return (
+      //     <div>
+      //       <HashRouter>
+      //         <div>
+      //           <div className="bannerForm">
+      //             <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
+      //               <ul className="headerForm">
+      //                 {window.contracts !== undefined && (
+      //                   <>
+      //                     <nav>
+      //                       <NoAddressComponent />
+      //                     </nav>
+
+      //                   </>
+      //                 )}
+      //               </ul>
+      //             </ClickAwayListener>
+      //           </div>
+      //         </div>
+      //         <div className="pageForm">
+      //           <div>
+      //             <Route exact path="/" component={Home} />
+      //             {Router(this.state.routeRequest)}
+      //           </div>
+      //         </div>
+      //         <NavLink to="/">
+      //         </NavLink>
+      //       </HashRouter>
+      //     </div >
+      //   );
+      // }
+      if (isSafari && !isMobile) {
+        return (
+          <div>
+            <HashRouter>
+              <div>
+                <div className="bannerForm">
+                  <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
+                    <ul className="headerForm">
+                      {window.contracts !== undefined && (
+                        <>
+                          <nav>
+                            <NoAddressComponent />
+                          </nav>
+
+                        </>
+                      )}
+                    </ul>
+                  </ClickAwayListener>
+                </div>
+              </div>
+              <div className="pageForm">
+                <div>
+                  <Route exact path="/" component={Home} />
+                  {Router(this.state.routeRequest)}
+                </div>
+              </div>
+              <NavLink to="/">
+              </NavLink>
+            </HashRouter>
+          </div >
+        );
+      }
+      // if (isFirefox && isMobile) {
+      //   return (
+      //     <div>
+      //       <HashRouter>
+      //         <div>
+      //           <div className="bannerForm">
+      //             <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
+      //               <ul className="headerForm">
+      //                 {window.contracts !== undefined && (
+      //                   <>
+      //                     <nav>
+      //                       <NoAddressComponent />
+      //                     </nav>
+
+      //                   </>
+      //                 )}
+      //               </ul>
+      //             </ClickAwayListener>
+      //           </div>
+      //         </div>
+      //         <div className="pageForm">
+      //           <div>
+      //             <Route exact path="/" component={HomeMobile} />
+      //             {Router(this.state.routeRequest)}
+      //           </div>
+      //         </div>
+      //         <NavLink to="/">
+      //         </NavLink>
+      //       </HashRouter>
+      //     </div >
+      //   );
+      // }
+      if (isSafari && isMobile) {
+        return (
+          <div>
+            <HashRouter>
+              <div>
+                <div className="bannerForm">
+                  <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
+                    <ul className="headerForm">
+                      {window.contracts !== undefined && (
+                        <>
+                          <nav>
+                            <NoAddressComponent />
+                          </nav>
+
+                        </>
+                      )}
+                    </ul>
+                  </ClickAwayListener>
+                </div>
+              </div>
+              <div className="pageForm">
+                <div>
+                  <Route exact path="/" component={HomeMobile} />
+                  {Router(this.state.routeRequest)}
+                </div>
+              </div>
+              <NavLink to="/">
+              </NavLink>
+            </HashRouter>
+          </div >
+        );
+      }
       if (isMobile) {
         return (
           <div>
@@ -52,12 +182,12 @@ class Main extends Component {
                             )}
                             {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                           </nav>
-                          { this.state.mobileMenuBool && (
-                          <User
-                            className="imageFormUserMobile"
-                            size={20}
-                            onClick={() => { this.userMenuMobile() }}
-                          />)}
+                          {this.state.mobileMenuBool && (
+                            <User
+                              className="imageFormUserMobile"
+                              size={20}
+                              onClick={() => { this.userMenuMobile() }}
+                            />)}
 
                           <style type="text/css">
                             {`
@@ -81,6 +211,7 @@ class Main extends Component {
                         margin-top: -0.5rem;
                         // margin-right: 37rem;
                         font-size: 1.4rem;
+                        width: -moz-fit-content;
                         width: fit-content;
                       }
                       .btn-userButton:hover {
@@ -127,7 +258,7 @@ class Main extends Component {
                                 <h4 className="userStatFont">
                                   Please
                                   <a
-                                   href={window.location.href}
+                                    href={window.location.href}
                                     onClick={() => {
                                       this.setState({ userMenu: undefined })
                                       if (window.ethereum) { window.ethereum.enable() }
@@ -173,7 +304,7 @@ class Main extends Component {
                                     PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
                                     <Button
                                       variant="userButton"
-                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
+                                      onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/faucet' }}>
                                       Faucet
                               </Button>
                                   </h4>
@@ -206,7 +337,7 @@ class Main extends Component {
                               <Button
                                       variant="userButton"
                                       // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
-                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/asset-dashboard-mobile'}}>
+                                      onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/asset-dashboard-mobile' }}>
                                       {this.state.assetBalance}
                                     </Button>
                                   </h4>
@@ -375,9 +506,9 @@ class Main extends Component {
                     <h3>
                       December 23, 2020
                   </h3>
-                  <h3>
-                    <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
-                  </h3>
+                    <h3>
+                      <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
+                    </h3>
                     <h3>
                       {this.state.routeRequest === "noAddr"
                         ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.0 </a>
@@ -473,7 +604,7 @@ class Main extends Component {
                               Faucet Menu
                             </Button>
                           )}
- */}
+                             */}
                           {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
                             <Button
                               size="lg"
@@ -649,7 +780,7 @@ class Main extends Component {
           </div>
           <div className="pageForm">
             {this.state.particles === true && (
-            <ParticleBox />
+              <ParticleBox />
             )}
             <style type="text/css">
               {`
@@ -715,6 +846,7 @@ class Main extends Component {
                         // margin-right: 37rem;
                         font-size: 1.4rem;
                         width: fit-content;
+                        width: -moz-fit-content;
                       }
                       .btn-userButton:hover {
                         background-color: transparent;
@@ -826,7 +958,7 @@ class Main extends Component {
           })
         }
 
-        else if(!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true){
+        else if (!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true) {
           window.routeRequest = "ACAdmin"
           this.setState({ routeRequest: "ACAdmin" })
           this.setState({
@@ -1090,14 +1222,14 @@ class Main extends Component {
 
     //Set up held assets for rebuild. Recount when necessary
     this.setUpAssets = async () => {
-      window.hasNoAssets = false; 
+      window.hasNoAssets = false;
       window.hasNoAssetClasses = false;
       let report = "AC Nodes Held:\n";
       window.ipfsCounter = 0;
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
 
-      window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: []}
+      window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
       window.hasLoadedAssetClasses = false;
       window.assetTokenInfo = {
         assetClass: undefined,
@@ -1170,23 +1302,23 @@ class Main extends Component {
       console.log("Asset setUp Complete. Turning on watchDog.")
 
       //Build an AC report for provisional placeholder on AC node bal
-      if(window.assetClasses !== undefined){
-        if(window.assetClasses.ids !== undefined){
-          for(let i=0; i<window.assetClasses.ids.length; i++){
-            report += ((i+1) + ".) " + window.assetClasses.names[i] 
+      if (window.assetClasses !== undefined) {
+        if (window.assetClasses.ids !== undefined) {
+          for (let i = 0; i < window.assetClasses.ids.length; i++) {
+            report += ((i + 1) + ".) " + window.assetClasses.names[i]
               + "\nCustody type: " + window.assetClasses.custodyTypes[i]
-              + "\nroot ACN: " + window.assetClasses.roots[i] 
+              + "\nroot ACN: " + window.assetClasses.roots[i]
               + "\nnode ID: " + window.assetClasses.ids[i]
-              + "\nshare: " + window.assetClasses.discounts[i]/100 + "%\n----------\n") 
+              + "\nshare: " + window.assetClasses.discounts[i] / 100 + "%\n----------\n")
           }
         }
-        else{
+        else {
           report = "No AC nodekeys held by user";
         }
       }
-      
+
       //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
-      this.setState({assetClassReport: report})
+      this.setState({ assetClassReport: report })
 
       this.setState({ runWatchDog: true })
       console.log("IPFS operation count: ", window.ipfsCounter)
@@ -1197,15 +1329,15 @@ class Main extends Component {
 
     this.mintID = async () => {
       await window.contracts.PARTY.methods
-                .GET_ID()
-                .send({ from: window.addr })
-                .on("error", function (_error) {
-                    alert("Something went wrong when minting ID!")
-                })
-                .on("receipt", (receipt) => {
-                    window.resetInfo = true;
-                    window.recount = true;
-                });
+        .GET_ID()
+        .send({ from: window.addr })
+        .on("error", function (_error) {
+          alert("Something went wrong when minting ID!")
+        })
+        .on("receipt", (receipt) => {
+          window.resetInfo = true;
+          window.recount = true;
+        });
     }
 
     this.setBlueIcons = () => {
@@ -1227,15 +1359,15 @@ class Main extends Component {
       window.jdenticon_config = {
         hues: [126],
         lightness: {
-            color: [0.42, 0.72],
-            grayscale: [0.37, 0.86]
+          color: [0.42, 0.72],
+          grayscale: [0.37, 0.86]
         },
         saturation: {
-            color: 0.75,
-            grayscale: 0.74
+          color: 0.75,
+          grayscale: 0.74
         },
         backColor: "#ffffffff"
-    };
+      };
     }
 
     //Rebuild fetched assets, preparing them for use by the app
@@ -1267,7 +1399,7 @@ class Main extends Component {
 
       }
       let identicons = [], AC_Identicons = [];
-      let identiconsLG = [], AC_IdenticonsLG =[];
+      let identiconsLG = [], AC_IdenticonsLG = [];
 
       //In case of no images set in ipfs
       for (let e = 0; e < window.aTknIDs.length; e++) {
@@ -1278,12 +1410,12 @@ class Main extends Component {
       for (let e = 0; e < window.aTknIDs.length; e++) {
         identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
       }
-      
-      for (let e = 0; e < window.assetClasses.ids.length; e++){
+
+      for (let e = 0; e < window.assetClasses.ids.length; e++) {
         AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
       }
 
-      for (let e = 0; e < window.assetClasses.ids.length; e++){
+      for (let e = 0; e < window.assetClasses.ids.length; e++) {
         AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
       }
 
@@ -1329,7 +1461,7 @@ class Main extends Component {
     }
 
     //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
-    
+
     this.getIPFSJSONObject = (lookup, descElement) => {
       //console.log(lookup)
       window.ipfs.cat(lookup, async (error, result) => {
@@ -1503,84 +1635,84 @@ class Main extends Component {
 
     }
 
-        //hamburgerMenu bool switch @DEV Move to this declarations?
-        this.hamburgerMenu = async () => {
-          if (this.state.hamburgerMenu === undefined) {
-            this.setState({
-              hamburgerMenu: true,
-              userMenu: false,
-              settingsMenu: false
-    
-            })
-          }
-          else {
-            this.setState({ hamburgerMenu: undefined })
-          }
-        }
-    
-        //hamburgerMenuMobile bool switch @DEV Move to this declarations?
-        this.hamburgerMenuMobile = async () => {
-          if (this.state.hamburgerMenuMobile === false) {
-            this.setState({
-              hamburgerMenuMobile: true,
-              userMenuMobile: false
-            })
-          }
-          else {
-            this.setState({ hamburgerMenuMobile: false })
-          }
-        }
-    
-        //userMenu bool switch @DEV Move to this declarations?
-        this.userMenu = async () => {
-          if (this.state.userMenu === false) {
-            this.setState({
-              userMenu: true,
-              settingsMenu: false
-            })
-          }
-          else {
-            this.setState({ userMenu: false })
-          }
-        }
-    
-        //userMenuMobile bool switch @DEV Move to this declarations?
-        this.userMenuMobile = async () => {
-          if (this.state.userMenuMobile === false) {
-            this.setState({
-              userMenuMobile: true,
-              hamburgerMenuMobile: false,
-            })
-          }
-          else {
-            this.setState({ userMenuMobile: false })
-          }
-        }
-    
-        //settingsMenu bool switch @DEV Move to this declarations?
-        this.settingsMenu = async () => {
-          if (this.state.settingsMenu === false) {
-            this.setState({
-              settingsMenu: true,
-              userMenu: false
-            })
-          }
-          else {
-            this.setState({ settingsMenu: false })
-          }
-        }
-    
-        //settingsMenu bool switch @DEV Move to this declarations?
-        this.particles = async () => {
-          if (this.state.particles === false) {
-            this.setState({
-              particles: true,
-            })
-          }
-          else {
-            this.setState({ particles: false })
-          }
-        }
+    //hamburgerMenu bool switch @DEV Move to this declarations?
+    this.hamburgerMenu = async () => {
+      if (this.state.hamburgerMenu === undefined) {
+        this.setState({
+          hamburgerMenu: true,
+          userMenu: false,
+          settingsMenu: false
+
+        })
+      }
+      else {
+        this.setState({ hamburgerMenu: undefined })
+      }
+    }
+
+    //hamburgerMenuMobile bool switch @DEV Move to this declarations?
+    this.hamburgerMenuMobile = async () => {
+      if (this.state.hamburgerMenuMobile === false) {
+        this.setState({
+          hamburgerMenuMobile: true,
+          userMenuMobile: false
+        })
+      }
+      else {
+        this.setState({ hamburgerMenuMobile: false })
+      }
+    }
+
+    //userMenu bool switch @DEV Move to this declarations?
+    this.userMenu = async () => {
+      if (this.state.userMenu === false) {
+        this.setState({
+          userMenu: true,
+          settingsMenu: false
+        })
+      }
+      else {
+        this.setState({ userMenu: false })
+      }
+    }
+
+    //userMenuMobile bool switch @DEV Move to this declarations?
+    this.userMenuMobile = async () => {
+      if (this.state.userMenuMobile === false) {
+        this.setState({
+          userMenuMobile: true,
+          hamburgerMenuMobile: false,
+        })
+      }
+      else {
+        this.setState({ userMenuMobile: false })
+      }
+    }
+
+    //settingsMenu bool switch @DEV Move to this declarations?
+    this.settingsMenu = async () => {
+      if (this.state.settingsMenu === false) {
+        this.setState({
+          settingsMenu: true,
+          userMenu: false
+        })
+      }
+      else {
+        this.setState({ settingsMenu: false })
+      }
+    }
+
+    //settingsMenu bool switch @DEV Move to this declarations?
+    this.particles = async () => {
+      if (this.state.particles === false) {
+        this.setState({
+          particles: true,
+        })
+      }
+      else {
+        this.setState({ particles: false })
+      }
+    }
 
     //Component state declaration
     this.state = {
@@ -1670,10 +1802,10 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if(!refString.includes("0x")){
+    if (!refString.includes("0x")) {
       window.location.href = '/#/';
-    } else{
-      if(isMobile){
+    } else {
+      if (isMobile) {
         window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.length)
       } else {
         window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.length)
@@ -1855,15 +1987,15 @@ class Main extends Component {
 
     if (this.state.hasError) {
       return (
-      <div>
-        <h1> OOPS! </h1>
-        <h2> An error occoured. Please ensure you are connected to an ethereum provider and reload the page. </h2>
-        <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below </h3>
-        <br></br>
-        <div className="errorMediaLink">
-          <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
-        </div>
-      </div>)
+        <div>
+          <h1> OOPS! </h1>
+          <h2> An error occoured. Please ensure you are connected to an ethereum provider and reload the page. </h2>
+          <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below </h3>
+          <br></br>
+          <div className="errorMediaLink">
+            <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
+          </div>
+        </div>)
     }
 
     return this.renderContent();
