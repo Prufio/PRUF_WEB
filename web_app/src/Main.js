@@ -972,7 +972,7 @@ class Main extends Component {
             console.log("WD: rebuilding assets (Last Step)")
             alert("WD: rebuilding assets (Last Step) ")
             this.setState({runWatchDog: false})
-            this.buildAssets()
+            setTimeout(() => { this.buildAssets() }, 3000);
           }
         }
       }
@@ -1313,8 +1313,9 @@ class Main extends Component {
 
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = () => {
+      if(window.assets.ids === undefined){this.buildAssets()}
       this.setState({buildReady: false})
-      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses)
+      alert("Some Vars: atkns" + window.assets + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
       window.ipfsCounter = 0;
@@ -1322,7 +1323,7 @@ class Main extends Component {
       let emptyDesc = { photo: {}, text: {}, name: "" }
 
       //Get objects from unparsed asset data for reference in the app 
-      for (let i = 0; i < window.aTknIDs.length; i++) {
+      for (let i = 0; i < window.assets.ids.length; i++) {
         //console.log(window.assets.descriptions[i][0])
         if (window.assets.descriptions[i][0] !== undefined) {
           tempDescArray.push(JSON.parse(window.assets.descriptions[i][0]))
@@ -1334,7 +1335,7 @@ class Main extends Component {
 
       //Get specifically name from the ipfs object of each asset (if it exists)
       let tempNameArray = [];
-      for (let x = 0; x < window.aTknIDs.length; x++) {
+      for (let x = 0; x < window.assets.ids.length; x++) {
         if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
           tempNameArray.push("Not Available")
         }
@@ -1349,11 +1350,11 @@ class Main extends Component {
       //In case of no images set in ipfs
       if(window.hasNoAssets === false){
         alert("Found A Tokens")
-        for (let e = 0; e < window.aTknIDs.length; e++) {
+        for (let e = 0; e < window.assets.ids.length; e++) {
           identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
         }
   
-        for (let e = 0; e < window.aTknIDs.length; e++) {
+        for (let e = 0; e < window.assets.ids.length; e++) {
           identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
         }
       }
@@ -1372,7 +1373,7 @@ class Main extends Component {
 
       let tempDisplayArray = [];
       //Set up displayImages
-      for (let j = 0; j < window.aTknIDs.length; j++) {
+      for (let j = 0; j < window.assets.ids.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("")
         }

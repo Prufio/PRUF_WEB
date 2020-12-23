@@ -1379,7 +1379,7 @@ function buildWindowUtils() {
       window.assets.statuses = statuses;
       window.assets.statusNums = statusNums;
       window.assets.notes = noteArray;
-
+      return true
     }
 
     else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
