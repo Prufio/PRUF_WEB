@@ -1285,7 +1285,7 @@ function buildWindowUtils() {
       }
     }
 
-    else { console.log("No asset classes held by user"); window.assetClasses.ids = []; return window.hasNoAssetClasses = true }
+    else { console.log("No asset classes held by user"); window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] } ; return window.hasNoAssetClasses = true }
 
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }

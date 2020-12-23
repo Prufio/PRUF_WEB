@@ -965,13 +965,13 @@ class Main extends Component {
       }
 
       //Catch updated assets case and rebuild asset inventory 
-      if (window.assets !== undefined) {
+      if (window.assets !== undefined ) {
         if (window.assets.ids.length > 0 && window.assets.names.length === 0 && 
           this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
             //alert("WD: rebuilding assets (Last Step) ")
-            this.setState({runWatchDog: false})
+            //this.setState({runWatchDog: false})
             this.buildAssets()
           }
         }
@@ -981,7 +981,7 @@ class Main extends Component {
       if (window.resetInfo === true) {
         window.hasLoadedAssetClasses = false;
         window.hasLoadedAssets = false;
-        this.setState({ buildReady: false, runWatchDog: false })
+        this.setState({ buildReady: false })
         console.log("WD: setting up assets (Step one)")
         this.setUpAssets()
         window.resetInfo = false
@@ -1003,6 +1003,8 @@ class Main extends Component {
         //alert("WD: Shutting off buildReady")
         this.setState({ buildReady: false })
       }
+
+      //if(this.state.hasMounted)console.log(window.aTknIDs,this.state.buildReady,window.ipfsCounter, this.state.runWatchDog)
     }, 100)
 
     //Local menu toggler for navlinks
@@ -1261,6 +1263,11 @@ class Main extends Component {
       //this.setState({ assetClassReport: report })
 
       await this.setState({ runWatchDog: true })
+
+      if(window.assetClasses.ids !== undefined && window.aTknIDs !== undefined){
+        if(window.assetClasses.ids.length > 0 && window.aTknIDs.length < 1){return this.buildAssets()}
+      }
+
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
@@ -1323,7 +1330,30 @@ class Main extends Component {
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
 
-      //Get objects from unparsed asset data for reference in the app 
+      //Get specifically name from the ipfs object of each asset (if it exists)
+      let tempNameArray = [];
+      let identicons = [], AC_Identicons = [];
+      let identiconsLG = [], AC_IdenticonsLG = [];
+
+      let tempDisplayArray = [];
+
+      if(window.hasNoAssetClasses === false){
+
+        for (let e = 0; e < window.assetClasses.ids.length; e++){
+          AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
+        }
+  
+        for (let e = 0; e < window.assetClasses.ids.length; e++){
+          AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
+        }
+
+        window.assetClasses.identicons = AC_Identicons;
+        window.assetClasses.identiconsLG = AC_IdenticonsLG;
+        window.hasLoadedAssetClasses = true;
+      }
+
+      if(window.hasNoAssets === false){
+              //Get objects from unparsed asset data for reference in the app 
       for (let i = 0; i < window.assets.ids.length; i++) {
         //console.log(window.assets.descriptions[i][0])
         if (window.assets.descriptions[i][0] !== undefined) {
@@ -1334,23 +1364,16 @@ class Main extends Component {
         }
       }
 
-      //Get specifically name from the ipfs object of each asset (if it exists)
-      let tempNameArray = [];
-      for (let x = 0; x < window.assets.ids.length; x++) {
-        if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
-          tempNameArray.push("Not Available")
-        }
-        else {
-          tempNameArray.push(tempDescArray[x].name)
+        for (let x = 0; x < window.assets.ids.length; x++) {
+          if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
+            tempNameArray.push("Not Available")
+          }
+          else {
+            tempNameArray.push(tempDescArray[x].name)
+          }
+  
         }
 
-      }
-      let identicons = [], AC_Identicons = [];
-      let identiconsLG = [], AC_IdenticonsLG = [];
-
-      //In case of no images set in ipfs
-      if(window.hasNoAssets === false){
-        //alert("Found A Tokens")
         for (let e = 0; e < window.aTknIDs.length; e++) {
           identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
         }
@@ -1358,23 +1381,7 @@ class Main extends Component {
         for (let e = 0; e < window.aTknIDs.length; e++) {
           identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
         }
-      }
-      
-      if(window.hasNoAssetClasses === false){
-        //alert("Found AC Tokens")
-        for (let e = 0; e < window.assetClasses.ids.length; e++){
-          AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
-        }
-  
-        for (let e = 0; e < window.assetClasses.ids.length; e++){
-          AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
-        }
-      }
-
-
-      let tempDisplayArray = [];
-      //Set up displayImages
-      //alert("made it this far!")
+        
       for (let j = 0; j < window.aTknIDs.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("")
@@ -1389,17 +1396,14 @@ class Main extends Component {
         }
       }
 
-      if(window.hasNoAssetClasses === false){
-        window.assetClasses.identicons = AC_Identicons;
-        window.assetClasses.identiconsLG = AC_IdenticonsLG;
+        window.assets.identiconsLG = identiconsLG;
+        window.assets.identicons = identicons;
+        window.assets.descriptions = tempDescArray;
+        window.assets.names = tempNameArray;
+        window.assets.displayImages = tempDisplayArray;
+        window.hasLoadedAssets = true;
       }
-      window.assets.identiconsLG = identiconsLG;
-      window.assets.identicons = identicons;
-      window.assets.descriptions = tempDescArray;
-      window.assets.names = tempNameArray;
-      window.assets.displayImages = tempDisplayArray;
-      window.hasLoadedAssets = true;
-      window.hasLoadedAssetClasses = true;
+      
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
       //alert("Assets Built: " + window.assets.ids.length)
@@ -1424,7 +1428,7 @@ class Main extends Component {
       window.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-          alert("IPFS ERROR")
+          //alert("IPFS ERROR")
           descElement.push(undefined)
           window.ipfsCounter++
           //console.log(window.ipfsCounter)
@@ -1939,7 +1943,7 @@ class Main extends Component {
 
   //stuff do do when component unmounts from the window (should never happen for main unless tab closed)
   componentWillUnmount() {
-    clearInterval(this.updateWatchDog);
+    //clearInterval(this.updateWatchDog);
     console.log("unmounting component");
   }
 

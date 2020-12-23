@@ -144,7 +144,9 @@ class ACDashboard extends React.Component {
     this.setState({
       addr: window.addr,
       runWatchDog: true,
-      assetTokenInfo: {}
+      assetTokenInfo: {},
+      hasLoadedAssetClasses: false,
+      hasNoAssetClasses: true
     })
   }
 
