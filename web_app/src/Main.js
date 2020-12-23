@@ -970,6 +970,7 @@ class Main extends Component {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
             alert("WD: rebuilding assets (Last Step) ")
+            this.setState({buildReady: false})
             this.buildAssets()
           }
         }
