@@ -972,7 +972,7 @@ class Main extends Component {
             console.log("WD: rebuilding assets (Last Step)")
             alert("WD: rebuilding assets (Last Step) ")
             this.setState({runWatchDog: false})
-            setTimeout(() => { this.buildAssets() }, 3000);
+            this.buildAssets()
           }
         }
       }
@@ -1217,7 +1217,7 @@ class Main extends Component {
 
       //Get all asset token profiles for parsing
       alert("IN SETUP ASSETS")
-      await window.utils.getAssetTokenInfo()
+      let hasWorked = await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
 
       if (window.aTknIDs === undefined) { return }
@@ -1315,7 +1315,7 @@ class Main extends Component {
     this.buildAssets = () => {
       if(window.assets.ids === undefined){this.buildAssets()}
       this.setState({buildReady: false})
-      alert("Some Vars: atkns" + window.assets + " acs" + window.hasNoAssetClasses)
+      alert("Some Vars: atkns" + Object.values(window.assets) + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
       window.ipfsCounter = 0;

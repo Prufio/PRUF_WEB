@@ -1368,18 +1368,19 @@ function buildWindowUtils() {
       await window.utils.getACNames(assetClasses)
 
       //console.log(ipfsHashArray)
-
-      window.aTknIDs = tknIDArray;
-      //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
-      window.ipfsHashArray = ipfsHashArray;
-
-      window.assets.countPairs = countPairs;
-
-      window.assets.assetClasses = assetClasses;
-      window.assets.statuses = statuses;
-      window.assets.statusNums = statusNums;
-      window.assets.notes = noteArray;
-      return true
+      setTimeout(() => {
+        window.aTknIDs = tknIDArray;
+        //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
+        window.ipfsHashArray = ipfsHashArray;
+  
+        window.assets.countPairs = countPairs;
+  
+        window.assets.assetClasses = assetClasses;
+        window.assets.statuses = statuses;
+        window.assets.statusNums = statusNums;
+        window.assets.notes = noteArray;
+        return true
+      }, 2000);
     }
 
     else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
