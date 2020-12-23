@@ -1374,6 +1374,7 @@ class Main extends Component {
 
       let tempDisplayArray = [];
       //Set up displayImages
+      alert("made it this far!")
       for (let j = 0; j < window.aTknIDs.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("")
@@ -1388,6 +1389,7 @@ class Main extends Component {
         }
       }
 
+      alert("made it this far too!")
       window.assetClasses.identicons = AC_Identicons;
       window.assetClasses.identiconsLG = AC_IdenticonsLG;
       window.assets.identiconsLG = identiconsLG;
@@ -1399,8 +1401,8 @@ class Main extends Component {
       window.hasLoadedAssetClasses = true;
       if(window.hasNoAssets === false){console.log("BA: Assets after rebuild: ", window.assets)}
       if(window.hasNoAssetClasses === false){console.log("BA: AssetClasses after rebuild: ", window.assetClasses)}
-      alert("Assets Built: " + window.assets.ids.length + "Restarting WatchDog...")
-      return this.setState({ runWatchDog: true })
+      alert("Assets Built: " + window.assets.ids.length)
+      //return this.setState({ runWatchDog: true })
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
