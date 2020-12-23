@@ -129,6 +129,12 @@ class IncreaseACShare extends Component {
         return alert("Insufficient balance!")
       }
 
+      if(this.state.currentShare*0.01 === (this.state.currentShare*0.01 + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare)))){
+        return alert("Please increase the slider value before submission")
+      }
+
+      console.log()
+
       const amount = window.web3.utils.toWei(String(this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))));
       if(this.state.assetClass === undefined || amount === undefined) {return}
         self.setState({ transaction: true })
@@ -141,14 +147,14 @@ class IncreaseACShare extends Component {
           )
           .send({ from: window.addr })
           .on("error", function (_error) {
-            this.setState({ transaction: false, wasSentPacket: false })
+            self.setState({ transaction: false, wasSentPacket: false })
             self.setState({ error: _error });
             self.setState({ result: _error.transactionHash });
           })
           .on("receipt", (receipt) => {
               window.resetInfo = true;
               self.setState({ hasLoadedAssetClasses: false})
-              this.setState({ transaction: false, wasSentPacket: false })
+              self.setState({ transaction: false, wasSentPacket: false })
               self.setState({ txHash: receipt.transactionHash });
               self.setState({ txStatus: receipt.status });
             });

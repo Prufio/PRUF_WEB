@@ -1402,22 +1402,26 @@ class Main extends Component {
       let identiconsLG = [], AC_IdenticonsLG = [];
 
       //In case of no images set in ipfs
-      for (let e = 0; e < window.aTknIDs.length; e++) {
-        identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
+      if(window.aTknIDs !== undefined){
+        for (let e = 0; e < window.aTknIDs.length; e++) {
+          identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
+        }
+  
+        for (let e = 0; e < window.aTknIDs.length; e++) {
+          identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
+        }
+      }
+      
+      if(window.assetClasses.ids !== undefined){
+        for (let e = 0; e < window.assetClasses.ids.length; e++){
+          AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
+        }
+  
+        for (let e = 0; e < window.assetClasses.ids.length; e++){
+          AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
+        }
       }
 
-      //In case of no images set in ipfs
-      for (let e = 0; e < window.aTknIDs.length; e++) {
-        identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
-      }
-
-      for (let e = 0; e < window.assetClasses.ids.length; e++) {
-        AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
-      }
-
-      for (let e = 0; e < window.assetClasses.ids.length; e++) {
-        AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
-      }
 
       let tempDisplayArray = [];
       //Set up displayImages
@@ -1802,13 +1806,14 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if (!refString.includes("0x")) {
+    if(!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66){
       window.location.href = '/#/';
     } else {
-      if (isMobile) {
-        window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.length)
+      if(isMobile){
+        window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
       } else {
-        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.length)
+        console.log(refString)
+        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
       }
       console.log("Here is the search:", window.location.hash)
     }

@@ -118,7 +118,7 @@ class TransferAC extends Component {
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
-          this.setState({ transaction: false, wasSentPacket: false })
+          self.setState({ transaction: false, wasSentPacket: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, });
           alert("Something went wrong!")
@@ -131,7 +131,7 @@ class TransferAC extends Component {
           self.setState({ hasLoadedAssetClasses: false})
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
-          this.setState({ transaction: false, wasSentPacket: false })
+          self.setState({ transaction: false, wasSentPacket: false })
         });
       console.log(this.state.txHash);
       

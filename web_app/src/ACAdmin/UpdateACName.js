@@ -117,7 +117,7 @@ class UpdateACName extends Component {
           .send({ from: window.addr })
           .on("error", function (_error) {
             // self.setState({ NRerror: _error });
-            this.setState({ transaction: false, wasSentPacket: false })
+            self.setState({ transaction: false, wasSentPacket: false })
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
             self.setState({ txStatus: false, });
             alert("Something went wrong!")
@@ -130,9 +130,9 @@ class UpdateACName extends Component {
             self.setState({ hasLoadedAssetClasses: false})
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
-            this.setState({ transaction: false, wasSentPacket: false })
+            self.setState({ transaction: false, wasSentPacket: false })
           });
-        return this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
+        return self.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
       };
 
 

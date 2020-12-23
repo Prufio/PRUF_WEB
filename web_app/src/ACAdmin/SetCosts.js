@@ -131,18 +131,18 @@ class SetCosts extends Component {
         .on("error", function (_error) {
           self.setState({ error: _error });
           self.setState({ result: _error.transactionHash });
-          this.setState({ transaction: false, wasSentPacket: false })
+          self.setState({ transaction: false, wasSentPacket: false })
           return clearForm();
         })
         .on("receipt", (receipt) => {
           window.resetInfo = true;
             window.recount = true;
-            this.setState({ transaction: false, wasSentPacket: false })
+            self.setState({ transaction: false, wasSentPacket: false })
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
             self.setState({ hasLoadedAssetClasses: false })
             console.log("tx receipt: ", receipt);
-            return this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+            return self.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
         });
 
       console.log(this.state.txHash);

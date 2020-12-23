@@ -172,20 +172,20 @@ class enableContract extends Component {
         .send({ from: window.addr })
         .on("error", function (_error) {
           self.setState({ error: _error });
-          this.setState({ transaction: false, wasSentPacket: false })
+          self.setState({ transaction: false, wasSentPacket: false })
           self.setState({ result: _error.transactionHash });
           return clearForm();
         })
         .on("receipt", (receipt) => {
           console.log("contract added under authLevel:", self.state.authLevel);
           console.log("tx receipt: ", receipt);
-          this.setState({ transaction: false, wasSentPacket: false })
+          self.setState({ transaction: false, wasSentPacket: false })
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
           self.setState({ hasLoadedAssetClasses: false })
           window.resetInfo = true;
           console.log("tx receipt: ", receipt);
-          return this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
+          return self.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
         });
 
       console.log(this.state.txHash);
