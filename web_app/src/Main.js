@@ -1000,7 +1000,7 @@ class Main extends Component {
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
         console.log("Assets finished rebuilding, no longer ready for rebuild")
-        alert("Shutting off buildReady")
+        alert("WD: Shutting off buildReady")
         this.setState({ buildReady: false })
       }
     }, 100)
@@ -1351,11 +1351,11 @@ class Main extends Component {
       //In case of no images set in ipfs
       if(window.hasNoAssets === false){
         alert("Found A Tokens")
-        for (let e = 0; e < window.assets.ids.length; e++) {
+        for (let e = 0; e < window.aTknIDs.length; e++) {
           identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
         }
   
-        for (let e = 0; e < window.assets.ids.length; e++) {
+        for (let e = 0; e < window.aTknIDs.length; e++) {
           identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
         }
       }
@@ -1374,7 +1374,7 @@ class Main extends Component {
 
       let tempDisplayArray = [];
       //Set up displayImages
-      for (let j = 0; j < window.assets.ids.length; j++) {
+      for (let j = 0; j < window.aTknIDs.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("")
         }
