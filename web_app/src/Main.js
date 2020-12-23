@@ -1395,8 +1395,8 @@ class Main extends Component {
       window.assets.displayImages = tempDisplayArray;
       window.hasLoadedAssets = true;
       window.hasLoadedAssetClasses = true;
-      console.log("BA: Assets after rebuild: ", window.assets)
-      console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
+      if(window.hasNoAssets === false){console.log("BA: Assets after rebuild: ", window.assets)}
+      if(window.hasNoAssetClasses === false){console.log("BA: AssetClasses after rebuild: ", window.assetClasses)}
       alert("Assets Built: " + window.assets.ids.length + "Restarting WatchDog...")
       await this.setState({ runWatchDog: true })
     }
