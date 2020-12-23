@@ -966,10 +966,10 @@ class Main extends Component {
 
       //Catch updated assets case and rebuild asset inventory 
       if (window.assets !== undefined && this.state.runWatchDog === true) {
-        if (window.assets.ids.length > 0 && Object.values(window.assets.descriptions).length === window.aTknIDs.length &&
-          window.assets.names.length === 0 && this.state.buildReady === true && window.aTknIDs.length > 0) {
+        if (window.assets.ids.length > 0 && window.assets.names.length === 0 && this.state.buildReady === true) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
+            alert("WD: rebuilding assets (Last Step) ")
             this.buildAssets()
           }
         }
@@ -989,6 +989,7 @@ class Main extends Component {
       if (window.aTknIDs !== undefined && this.state.buildReady === false && this.state.runWatchDog === true) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
           console.log("Assets are ready for rebuild")
+          alert("WD: Assets Deemed ready for rebuild.")
           this.setState({ buildReady: true })
         }
       }
@@ -1311,6 +1312,7 @@ class Main extends Component {
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = async () => {
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
+      alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
 
