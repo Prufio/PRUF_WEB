@@ -1386,6 +1386,7 @@ class Main extends Component {
       window.hasLoadedAssetClasses = true;
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
+      alert("Assets Built: ", window.assets.ids.length)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
@@ -1711,6 +1712,7 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
+    let timeOutCounter = 0;
     let _web3, _ipfs;
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
@@ -1720,7 +1722,8 @@ class Main extends Component {
     buildWindowUtils() // get the utils object and make it globally accessible
 
     const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
-      setTimeout(() => { if (!window.ethereum) checkForEthereum() }, 1000);
+      timeOutCounter++;
+      setTimeout(() => { if (!window.ethereum && timeOutCounter < 5) checkForEthereum() }, 500);
     }
     checkForEthereum();
 
