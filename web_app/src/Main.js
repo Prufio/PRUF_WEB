@@ -1217,6 +1217,7 @@ class Main extends Component {
 
       //Get all asset token profiles for parsing
       alert("IN SETUP ASSETS")
+
       await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
 
@@ -1264,7 +1265,7 @@ class Main extends Component {
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
       alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
-      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+window.aTknIDs)
+      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+ window.aTknIDs + "\n")
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 

@@ -1295,6 +1295,7 @@ function buildWindowUtils() {
     if (window.balances === undefined) { return }
 
     console.log("GATI: In _getAssetTokenInfo")
+    alert("IN GATI")
 
     if (Number(window.balances.assetBalance) > 0) {
       let tknIDArray = [],
@@ -1323,6 +1324,8 @@ function buildWindowUtils() {
             }
           });
       }
+
+      alert(tknIDArray)
 
       for (let x = 0; x < tknIDArray.length; x++) {
         await window.contracts.STOR.methods.retrieveShortRecord(tknIDArray[x])
@@ -1368,7 +1371,6 @@ function buildWindowUtils() {
       await window.utils.getACNames(assetClasses)
 
       //console.log(ipfsHashArray)
-      setTimeout(() => {
         window.aTknIDs = tknIDArray;
         //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
         window.ipfsHashArray = ipfsHashArray;
@@ -1379,8 +1381,8 @@ function buildWindowUtils() {
         window.assets.statuses = statuses;
         window.assets.statusNums = statusNums;
         window.assets.notes = noteArray;
+        alert(Object.values(window.assets))
         return true
-      }, 2000);
     }
 
     else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
