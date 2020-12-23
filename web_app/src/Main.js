@@ -31,38 +31,6 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      // if (isFirefox && !isMobile) {
-      //   return (
-      //     <div>
-      //       <HashRouter>
-      //         <div>
-      //           <div className="bannerForm">
-      //             <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
-      //               <ul className="headerForm">
-      //                 {window.contracts !== undefined && (
-      //                   <>
-      //                     <nav>
-      //                       <NoAddressComponent />
-      //                     </nav>
-
-      //                   </>
-      //                 )}
-      //               </ul>
-      //             </ClickAwayListener>
-      //           </div>
-      //         </div>
-      //         <div className="pageForm">
-      //           <div>
-      //             <Route exact path="/" component={Home} />
-      //             {Router(this.state.routeRequest)}
-      //           </div>
-      //         </div>
-      //         <NavLink to="/">
-      //         </NavLink>
-      //       </HashRouter>
-      //     </div >
-      //   );
-      // }
       if (isSafari && !isMobile) {
         return (
           <div>
@@ -95,38 +63,6 @@ class Main extends Component {
           </div >
         );
       }
-      // if (isFirefox && isMobile) {
-      //   return (
-      //     <div>
-      //       <HashRouter>
-      //         <div>
-      //           <div className="bannerForm">
-      //             <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
-      //               <ul className="headerForm">
-      //                 {window.contracts !== undefined && (
-      //                   <>
-      //                     <nav>
-      //                       <NoAddressComponent />
-      //                     </nav>
-
-      //                   </>
-      //                 )}
-      //               </ul>
-      //             </ClickAwayListener>
-      //           </div>
-      //         </div>
-      //         <div className="pageForm">
-      //           <div>
-      //             <Route exact path="/" component={HomeMobile} />
-      //             {Router(this.state.routeRequest)}
-      //           </div>
-      //         </div>
-      //         <NavLink to="/">
-      //         </NavLink>
-      //       </HashRouter>
-      //     </div >
-      //   );
-      // }
       if (isSafari && isMobile) {
         return (
           <div>
@@ -159,7 +95,7 @@ class Main extends Component {
           </div >
         );
       }
-      if (isMobile) {
+      if (isMobile && !isSafari) {
         return (
           <div>
             <HashRouter>
