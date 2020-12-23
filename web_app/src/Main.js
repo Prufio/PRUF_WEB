@@ -1264,7 +1264,7 @@ class Main extends Component {
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
       alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
-      alert("Some Vars: atkns" + window.aTknIDs.length + " acs" + window.assetClasses.ids.length)
+      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses)
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
@@ -1314,7 +1314,7 @@ class Main extends Component {
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = async () => {
       this.setState({buildReady: false})
-      alert("Some Vars: atkns" + window.aTknIDs.length + " acs" + window.assetClasses.ids.length)
+      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
       window.ipfsCounter = 0;
@@ -1347,7 +1347,7 @@ class Main extends Component {
       let identiconsLG = [], AC_IdenticonsLG = [];
 
       //In case of no images set in ipfs
-      if(window.aTknIDs !== undefined){
+      if(window.hasNoAssets === false){
         alert("Found A Tokens")
         for (let e = 0; e < window.aTknIDs.length; e++) {
           identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
@@ -1358,7 +1358,7 @@ class Main extends Component {
         }
       }
       
-      if(window.assetClasses.ids !== undefined){
+      if(window.hasNoAssetClasses === false){
         alert("Found AC Tokens")
         for (let e = 0; e < window.assetClasses.ids.length; e++){
           AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
