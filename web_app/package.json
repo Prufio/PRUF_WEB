@@ -11,6 +11,8 @@
     "bootstrap": "^4.5.2",
     "bs58": "^4.0.1",
     "ipfs-mini": "^1.1.5",
+    "is-firefox": "^1.0.3",
+    "is-safari": "^1.0.0",
     "jquery": "^3.5.1",
     "npm-check": "^5.9.2",
     "popper.js": "^1.16.1",
