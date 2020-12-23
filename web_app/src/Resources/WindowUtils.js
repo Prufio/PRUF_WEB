@@ -1295,7 +1295,7 @@ function buildWindowUtils() {
     if (window.balances === undefined) { return }
 
     console.log("GATI: In _getAssetTokenInfo")
-    alert("IN GATI")
+    //alert("IN GATI")
 
     if (Number(window.balances.assetBalance) > 0) {
       let tknIDArray = [],
@@ -1325,7 +1325,7 @@ function buildWindowUtils() {
           });
       }
 
-      alert(tknIDArray)
+      //alert(tknIDArray)
 
       for (let x = 0; x < tknIDArray.length; x++) {
         await window.contracts.STOR.methods.retrieveShortRecord(tknIDArray[x])
@@ -1381,7 +1381,7 @@ function buildWindowUtils() {
         window.assets.statuses = statuses;
         window.assets.statusNums = statusNums;
         window.assets.notes = noteArray;
-        alert(Object.values(window.assets))
+        //alert(Object.values(window.assets))
         return true
     }
 
