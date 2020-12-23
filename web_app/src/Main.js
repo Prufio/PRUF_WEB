@@ -1313,6 +1313,8 @@ class Main extends Component {
     this.buildAssets = async () => {
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
+
+      alert("Some Vars: atkns" + window.aTknIDs.length + " acs" + window.assetClasses.ids.length)
       window.ipfsCounter = 0;
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
@@ -1344,6 +1346,7 @@ class Main extends Component {
 
       //In case of no images set in ipfs
       if(window.aTknIDs !== undefined){
+        alert("Found A Tokens")
         for (let e = 0; e < window.aTknIDs.length; e++) {
           identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
         }
@@ -1354,6 +1357,7 @@ class Main extends Component {
       }
       
       if(window.assetClasses.ids !== undefined){
+        alert("Found AC Tokens")
         for (let e = 0; e < window.assetClasses.ids.length; e++){
           AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
         }
@@ -1391,7 +1395,7 @@ class Main extends Component {
       window.hasLoadedAssetClasses = true;
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
-      alert("Assets Built: " + window.assets.ids.length)
+      return alert("Assets Built: " + window.assets.ids.length)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
