@@ -1643,7 +1643,7 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
-    let _web3;
+    let _web3, _ipfs;
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });
@@ -1714,7 +1714,7 @@ class Main extends Component {
 
       ethereum.enable()
 
-      var _ipfs = new this.state.IPFS({
+      _ipfs = new this.state.IPFS({
         host: "ipfs.infura.io",
         port: 5001,
         protocol: "https",
