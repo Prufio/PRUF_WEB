@@ -1167,7 +1167,6 @@ class Main extends Component {
       window.ipfsCounter = 0;
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-
       window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
       window.hasLoadedAssetClasses = false;
       window.assetTokenInfo = {
@@ -1205,7 +1204,7 @@ class Main extends Component {
       }
 
       //Do a full update if the balances are returning undefined at this stage (They should never do this)
-      if (window.balances === undefined) {
+      else if (window.balances === undefined) {
         console.log("balances undefined, trying to get them...");
         //if (window.addr === undefined) { return this.forceUpdate }
         return this.setUpTokenVals(true);
@@ -1242,7 +1241,7 @@ class Main extends Component {
       console.log("Asset setUp Complete. Turning on watchDog.")
 
       //Build an AC report for provisional placeholder on AC node bal
-      if (window.assetClasses !== undefined) {
+      /* if (window.assetClasses !== undefined) {
         if (window.assetClasses.ids !== undefined) {
           for (let i = 0; i < window.assetClasses.ids.length; i++) {
             report += ((i + 1) + ".) " + window.assetClasses.names[i]
@@ -1255,16 +1254,17 @@ class Main extends Component {
         else {
           report = "No AC nodekeys held by user";
         }
-      }
+      } */
 
       //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
-      this.setState({ assetClassReport: report })
+      //this.setState({ assetClassReport: report })
 
       await this.setState({ runWatchDog: true })
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
       alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
+      alert("Some Vars: atkns" + window.aTknIDs.length + " acs" + window.assetClasses.ids.length)
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
@@ -1317,8 +1317,6 @@ class Main extends Component {
       alert("Some Vars: atkns" + window.aTknIDs.length + " acs" + window.assetClasses.ids.length)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
-
-      alert("Some Vars: atkns" + window.aTknIDs.length + " acs" + window.assetClasses.ids.length)
       window.ipfsCounter = 0;
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
