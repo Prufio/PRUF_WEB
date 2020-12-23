@@ -132,6 +132,7 @@ class AssetDashboardMobile extends React.Component {
       contractArray: [],
       hasLoadedAssets: false,
       hasNoAssets: false,
+      runWatchDog: false
     };
   }
 

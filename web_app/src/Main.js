@@ -1214,6 +1214,7 @@ class Main extends Component {
       let tempNamesArray = [];
 
       //Get all asset token profiles for parsing
+      alert("IN SETUP ASSETS")
       await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
 
@@ -1256,10 +1257,11 @@ class Main extends Component {
       //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
       this.setState({ assetClassReport: report })
 
-      this.setState({ runWatchDog: true })
+      await this.setState({ runWatchDog: true })
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
+      alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
@@ -1386,7 +1388,7 @@ class Main extends Component {
       window.hasLoadedAssetClasses = true;
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
-      alert("Assets Built: ", window.assets.ids.length)
+      alert("Assets Built: " + window.assets.ids.length)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
