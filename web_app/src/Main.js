@@ -966,8 +966,9 @@ class Main extends Component {
 
       //Catch updated assets case and rebuild asset inventory 
       if (window.assets !== undefined && this.state.runWatchDog === true) {
-        if (window.assets.ids.length > 0 && window.assets.names.length === 0 && this.state.buildReady === true) {
-          if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
+        if (window.assets.ids.length > 0 && window.assets.names.length === 0 && 
+          this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length) {
+          if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false && window.aTknIDs.length > 0) {
             console.log("WD: rebuilding assets (Last Step)")
             alert("WD: rebuilding assets (Last Step) ")
             this.setState({runWatchDog: false})
@@ -1163,7 +1164,6 @@ class Main extends Component {
     this.setUpAssets = async () => {
       window.hasNoAssets = false;
       window.hasNoAssetClasses = false;
-      let report = "AC Nodes Held:\n";
       window.ipfsCounter = 0;
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
@@ -1312,7 +1312,7 @@ class Main extends Component {
     }
 
     //Rebuild fetched assets, preparing them for use by the app
-    this.buildAssets = async () => {
+    this.buildAssets = () => {
       this.setState({buildReady: false})
       alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
@@ -1398,7 +1398,7 @@ class Main extends Component {
       if(window.hasNoAssets === false){console.log("BA: Assets after rebuild: ", window.assets)}
       if(window.hasNoAssetClasses === false){console.log("BA: AssetClasses after rebuild: ", window.assetClasses)}
       alert("Assets Built: " + window.assets.ids.length + "Restarting WatchDog...")
-      await this.setState({ runWatchDog: true })
+      return this.setState({ runWatchDog: true })
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
