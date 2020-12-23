@@ -836,20 +836,20 @@ class Main extends Component {
     this.updateWatchDog = setInterval(() => {
 
       //every tick ensure user auth level/user type is correct
-      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined && this.state.runWatchDog === true) {
+      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined ) {
         this.setState({ isAuthUser: window.isAuthUser })
       }
 
-      if (this.state.isACAdmin !== window.isACAdmin && this.state.runWatchDog === true) {
+      if (this.state.isACAdmin !== window.isACAdmin ) {
         this.setState({ isACAdmin: window.isACAdmin })
       }
 
-      if (this.state.custodyType !== window.custodyType && this.state.runWatchDog === true) {
+      if (this.state.custodyType !== window.custodyType ) {
         this.setState({ custodyType: window.custodyType })
       }
 
       //Reset balance values to reflect in render
-      if (window.balances !== undefined && this.state.runWatchDog === true) {
+      if (window.balances !== undefined ) {
         if (
           Object.values(window.balances) !==
           Object.values({ assetClass: this.state.assetClassBalance, asset: this.state.assetBalance, ID: this.state.IDTokenBalance })) {
@@ -872,7 +872,7 @@ class Main extends Component {
       }
 
       // Remote menu switcher
-      if (window.menuChange !== undefined && this.state.runWatchDog === true) {
+      if (window.menuChange !== undefined ) {
         console.log(window.menuChange)
         this.setState({ menuChange: window.menuChange })
       }
@@ -965,10 +965,10 @@ class Main extends Component {
       }
 
       //Catch updated assets case and rebuild asset inventory 
-      if (window.assets !== undefined && this.state.runWatchDog === true) {
+      if (window.assets !== undefined) {
         if (window.assets.ids.length > 0 && window.assets.names.length === 0 && 
-          this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length) {
-          if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false && window.aTknIDs.length > 0) {
+          this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
+          if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
             alert("WD: rebuilding assets (Last Step) ")
             this.setState({runWatchDog: false})
@@ -978,7 +978,7 @@ class Main extends Component {
       }
 
       //If reset was remotely requested, begin full asset recount  
-      if (window.resetInfo === true && this.state.runWatchDog === true) {
+      if (window.resetInfo === true) {
         window.hasLoadedAssetClasses = false;
         window.hasLoadedAssets = false;
         this.setState({ buildReady: false, runWatchDog: false })
@@ -988,7 +988,7 @@ class Main extends Component {
       }
 
       //In the case of a completed recount and rough asset build, make asset info usable for app
-      if (window.aTknIDs !== undefined && this.state.buildReady === false && this.state.runWatchDog === true) {
+      if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
           console.log("Assets are ready for rebuild")
           alert("WD: Assets Deemed ready for rebuild.")
@@ -1003,7 +1003,7 @@ class Main extends Component {
         alert("Shutting off buildReady")
         this.setState({ buildReady: false })
       }
-    }, 200)
+    }, 100)
 
     //Local menu toggler for navlinks
     this.toggleMenu = async (menuChoice) => {
@@ -1217,7 +1217,7 @@ class Main extends Component {
 
       //Get all asset token profiles for parsing
       alert("IN SETUP ASSETS")
-      let hasWorked = await window.utils.getAssetTokenInfo()
+      await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
 
       if (window.aTknIDs === undefined) { return }
@@ -1313,8 +1313,8 @@ class Main extends Component {
 
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = () => {
-      if(window.assets.ids === undefined){this.buildAssets()}
-      this.setState({buildReady: false})
+      //if(window.assets.ids === undefined){this.buildAssets()}
+      //this.setState({buildReady: false})
       alert("Some Vars: atkns" + Object.values(window.assets) + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
