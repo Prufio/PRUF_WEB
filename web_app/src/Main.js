@@ -1264,7 +1264,7 @@ class Main extends Component {
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
       alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
-      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses)
+      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+window.aTknIDs)
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
@@ -1421,6 +1421,7 @@ class Main extends Component {
       window.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
+          alert("IPFS ERROR")
           descElement.push(undefined)
           window.ipfsCounter++
           //console.log(window.ipfsCounter)
@@ -1727,6 +1728,15 @@ class Main extends Component {
   componentDidMount() {
     let timeOutCounter = 0;
     let _web3, _ipfs;
+
+    _ipfs = new this.state.IPFS({
+      host: "ipfs.infura.io",
+      port: 5001,
+      protocol: "https",
+    });
+
+    window.ipfs = _ipfs;
+    
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });
@@ -1797,14 +1807,6 @@ class Main extends Component {
       const ethereum = window.ethereum;
 
       ethereum.enable()
-
-      _ipfs = new this.state.IPFS({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-      });
-
-      window.ipfs = _ipfs;
 
       _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
       window.addEventListener("accountListener", this.acctChanger());
