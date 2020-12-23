@@ -254,7 +254,7 @@ class Main extends Component {
                                 <Button
                                       variant="userButton"
                                       // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                      onClick={() => { alert(this.state.assetClassReport) }}>
+                                      onClick={() => { /* this.assetClassDashboard() */ }}>
                                       {this.state.assetClassBalance}
                                     </Button>
                                     {/* <Button
@@ -970,7 +970,7 @@ class Main extends Component {
           this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
-            alert("WD: rebuilding assets (Last Step) ")
+            //alert("WD: rebuilding assets (Last Step) ")
             this.setState({runWatchDog: false})
             this.buildAssets()
           }
@@ -991,7 +991,7 @@ class Main extends Component {
       if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
           console.log("Assets are ready for rebuild")
-          alert("WD: Assets Deemed ready for rebuild.")
+          //alert("WD: Assets Deemed ready for rebuild.")
           this.setState({ buildReady: true})
         }
       }
@@ -1000,7 +1000,7 @@ class Main extends Component {
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
         console.log("Assets finished rebuilding, no longer ready for rebuild")
-        alert("WD: Shutting off buildReady")
+        //alert("WD: Shutting off buildReady")
         this.setState({ buildReady: false })
       }
     }, 100)
@@ -1216,7 +1216,7 @@ class Main extends Component {
       let tempNamesArray = [];
 
       //Get all asset token profiles for parsing
-      alert("IN SETUP ASSETS")
+      //alert("IN SETUP ASSETS")
 
       await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
@@ -1264,8 +1264,8 @@ class Main extends Component {
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
-      alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
-      alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+ window.aTknIDs + "\n")
+      //alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
+      //alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+ window.aTknIDs + "\n")
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
@@ -1316,9 +1316,9 @@ class Main extends Component {
     this.buildAssets = () => {
       //if(window.assets.ids === undefined){this.buildAssets()}
       //this.setState({buildReady: false})
-      alert("Some Vars: atkns" + Object.values(window.assets) + " acs" + window.hasNoAssetClasses)
+      //alert("Some Vars: atkns" + Object.values(window.assets) + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
-      alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
+      //alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
       window.ipfsCounter = 0;
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
@@ -1350,7 +1350,7 @@ class Main extends Component {
 
       //In case of no images set in ipfs
       if(window.hasNoAssets === false){
-        alert("Found A Tokens")
+        //alert("Found A Tokens")
         for (let e = 0; e < window.aTknIDs.length; e++) {
           identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
         }
@@ -1361,7 +1361,7 @@ class Main extends Component {
       }
       
       if(window.hasNoAssetClasses === false){
-        alert("Found AC Tokens")
+        //alert("Found AC Tokens")
         for (let e = 0; e < window.assetClasses.ids.length; e++){
           AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
         }
@@ -1374,7 +1374,7 @@ class Main extends Component {
 
       let tempDisplayArray = [];
       //Set up displayImages
-      alert("made it this far!")
+      //alert("made it this far!")
       for (let j = 0; j < window.aTknIDs.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("")
@@ -1393,7 +1393,6 @@ class Main extends Component {
         window.assetClasses.identicons = AC_Identicons;
         window.assetClasses.identiconsLG = AC_IdenticonsLG;
       }
-
       window.assets.identiconsLG = identiconsLG;
       window.assets.identicons = identicons;
       window.assets.descriptions = tempDescArray;
@@ -1403,8 +1402,7 @@ class Main extends Component {
       window.hasLoadedAssetClasses = true;
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
-      alert("Assets Built: " + window.assets.ids.length)
-      //return this.setState({ runWatchDog: true })
+      //alert("Assets Built: " + window.assets.ids.length)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
