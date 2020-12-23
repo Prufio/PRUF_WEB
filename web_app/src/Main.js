@@ -997,10 +997,11 @@ class Main extends Component {
       //Assets finished rebuilding, flip rebuild switch
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
-        console.log("Assets finished rebuilding, no longer reaady for rebuild")
+        console.log("Assets finished rebuilding, no longer ready for rebuild")
+        alert("Shutting off buildReady")
         this.setState({ buildReady: false })
       }
-    }, 100)
+    }, 200)
 
     //Local menu toggler for navlinks
     this.toggleMenu = async (menuChoice) => {
@@ -1311,6 +1312,7 @@ class Main extends Component {
 
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = async () => {
+      this.setState({buildReady: false})
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
 
