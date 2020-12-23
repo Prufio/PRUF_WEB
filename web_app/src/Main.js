@@ -1389,7 +1389,7 @@ class Main extends Component {
         }
       }
 
-      if(window.assetClasses !== 0){
+      if(typeof window.assetClasses === 'object'){
         window.assetClasses.identicons = AC_Identicons;
         window.assetClasses.identiconsLG = AC_IdenticonsLG;
       }
