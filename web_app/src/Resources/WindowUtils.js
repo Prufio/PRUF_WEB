@@ -1210,7 +1210,7 @@ function buildWindowUtils() {
   }
 
   const _getAssetClassTokenInfo = async () => {
-    if (window.balances === undefined) { return }
+    if (window.balances === undefined) { return 0 }
     let tknIDArray = [], roots = [], discounts = [], custodyTypes = [], exData = [], names = [];
     console.log("GACTI: In _getAssetClassTokenInfo")
 

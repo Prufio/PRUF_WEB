@@ -1389,25 +1389,18 @@ class Main extends Component {
         }
       }
 
-      alert("made it this far too!")
-      window.assetClasses.identicons = AC_Identicons;
-      alert("1made it this far too!")
-      window.assetClasses.identiconsLG = AC_IdenticonsLG;
-      alert("2made it this far too!")
+      if(window.assetClasses !== 0){
+        window.assetClasses.identicons = AC_Identicons;
+        window.assetClasses.identiconsLG = AC_IdenticonsLG;
+      }
+
       window.assets.identiconsLG = identiconsLG;
-      alert("3made it this far too!")
       window.assets.identicons = identicons;
-      alert("4made it this far too!")
       window.assets.descriptions = tempDescArray;
-      alert("5made it this far too!")
       window.assets.names = tempNameArray;
-      alert("6made it this far too!")
       window.assets.displayImages = tempDisplayArray;
-      alert("7made it this far too!")
       window.hasLoadedAssets = true;
-      alert("8made it this far too!")
       window.hasLoadedAssetClasses = true;
-      alert("9made it this far too!")
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
       alert("Assets Built: " + window.assets.ids.length)
