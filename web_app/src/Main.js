@@ -1314,6 +1314,7 @@ class Main extends Component {
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = async () => {
       this.setState({buildReady: false})
+      alert("Some Vars: atkns" + window.aTknIDs.length + " acs" + window.assetClasses.ids.length)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
       alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
 
