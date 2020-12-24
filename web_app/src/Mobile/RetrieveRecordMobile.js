@@ -400,7 +400,7 @@ class RetrieveRecordMobile extends Component {
       lookupIPFS1: "",
       lookupIPFS2: "",
       hashPath: "",
-      baseURL: "https://indevapp.pruf.io/#/",
+      baseURL: "https://app.pruf.io/#/",
       error: undefined,
       URL: undefined,
       NRerror: undefined,

@@ -541,7 +541,7 @@ class AssetDashboard extends React.Component {
                         <div className="cardButton4Content">
                           <Share2
                             size={35}
-                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash); alert("Asset link copied to clipboard") }}
+                            onClick={() => { navigator.clipboard.writeText("https://app.pruf.io/#/"+obj.idxHash); alert("Asset link copied to clipboard") }}
                           />
                         </div>
                       </div>

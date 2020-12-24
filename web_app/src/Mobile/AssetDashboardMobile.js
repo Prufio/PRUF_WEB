@@ -139,7 +139,7 @@ class AssetDashboardMobile extends React.Component {
       APP: "",
       NP: "",
       STOR: "",
-      baseURL: "https://indevapp.pruf.io/#/",
+      baseURL: "https://app.pruf.io/#/",
       URL: undefined,
       AC_MGR: "",
       ECR_NC: "",
