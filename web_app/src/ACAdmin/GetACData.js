@@ -63,7 +63,13 @@ class GetACData extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, acData: undefined })
+      this.setState({
+        assetClass: undefined,
+        assetClassSelected: false,
+        help: false,
+        transaction: false,
+        acData: undefined
+      })
     }
 
     const help = async () => {
@@ -80,7 +86,11 @@ class GetACData extends Component {
     }
 
     const getAC_data = async () => {
-      if(this.state.assetClass === undefined || this.state.assetClass === null) {return}
+      this.setState({
+        txHash: "",
+        txStatus: false
+      })
+      if (this.state.assetClass === undefined || this.state.assetClass === null) { return }
       let ref;
 
       if (
@@ -122,15 +132,15 @@ class GetACData extends Component {
             </div>
           )}
           {window.addr > 0 && (
-                <Form.Group as={Col} controlId="formGridContractName">
-                  <Form.Label className="formFont">Asset Class:</Form.Label>
-                  <Form.Control
-                    placeholder="Asset Class"
-                    required
-                    onChange={(e) => this.setState({ assetClass: e.target.value.trim() })}
-                    size="lg"
-                  />
-                </Form.Group>
+            <Form.Group as={Col} controlId="formGridContractName">
+              <Form.Label className="formFont">Asset Class:</Form.Label>
+              <Form.Control
+                placeholder="Asset Class"
+                required
+                onChange={(e) => this.setState({ assetClass: e.target.value.trim() })}
+                size="lg"
+              />
+            </Form.Group>
           )}
           <>
             <Form.Row>

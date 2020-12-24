@@ -13,7 +13,11 @@ class VerifyLite extends Component {
 
 
     this.accessAsset = async () => {
-      this.setState({ help: false })
+      this.setState({
+        help: false,
+        txHash: "",
+        txStatus: false
+      })
       let idxHash;
       if (this.state.QRreader === false && !this.state.Checkbox) {
         if (this.state.manufacturer === ""
@@ -89,12 +93,14 @@ class VerifyLite extends Component {
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-    this.setState({ QRReader: false });
-    this.setState({ runWatchDog: false });
+    this.setState({
+      QRReader: false,
+      runWatchDog: false
+    });
   }
 
   componentDidUpdate() {//stuff to do when state updates
-    
+
   }
 
   static getDerivedStateFromError(error) {
@@ -133,7 +139,11 @@ class VerifyLite extends Component {
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {
-        this.setState({ QRreader: true, assetFound: "", Checkbox: false })
+        this.setState({
+          QRreader: true,
+          assetFound: "",
+          Checkbox: false
+        })
       }
       else {
         this.setState({ QRreader: false })
@@ -163,22 +173,29 @@ class VerifyLite extends Component {
       }
     }
 
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ VLresult: "", accessPermitted: false, Checkbox: false, help: false })
+      this.setState({
+        VLresult: "",
+        accessPermitted: false,
+        Checkbox: false,
+        help: false
+      })
     }
 
     const _verify = async () => {
-      this.setState({ help: false })
-      this.setState({ txStatus: false });
-      this.setState({ txHash: "" });
-      this.setState({ error: undefined })
-      this.setState({ VLresult: "" })
+      this.setState({
+        help: false,
+        txStatus: false,
+        txHash: "",
+        error: undefined,
+        VLresult: ""
+      })
       var idxHash = this.state.idxHash;
       console.log(idxHash)
       let rgtRaw = window.web3.utils.soliditySha3(
@@ -209,7 +226,10 @@ class VerifyLite extends Component {
 
       if (infoMatches) { await this.setState({ VLresult: "170" }); }
 
-      return this.setState({ accessPermitted: false, Checkbox: false });
+      return this.setState({
+        accessPermitted: false,
+        Checkbox: false
+      });
     };
 
     return (
@@ -316,12 +336,12 @@ class VerifyLite extends Component {
                     </div>
                   </div>
                   <div className="mediaLinkCamera">
-                      <div className="mediaLinkHelpContent">
-                        <Camera
-                          onClick={() => { QRReader() }}
-                        />
-                      </div>
+                    <div className="mediaLinkHelpContent">
+                      <Camera
+                        onClick={() => { QRReader() }}
+                      />
                     </div>
+                  </div>
                 </Form.Row>
                 {this.state.help === true && (
                   <div className="explainerTextBox">
@@ -351,22 +371,22 @@ class VerifyLite extends Component {
                   </div>
                 </div>
                 <div className="QRreader">
-                <QrReader
-                ref="qrReader1"
-                delay={300}
-                previewStyle={previewStyle}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                style={{ width: '50rem', height: '50rem' }}
-                legacyMode={this.state.legacyMode}
-              />
-              {this.state.legacyMode === true && (
-                <div className="uploadImageQR">
-                  <div className="uploadImageQRContent">
-                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
-                  </div>
-                </div>
-              )}
+                  <QrReader
+                    ref="qrReader1"
+                    delay={300}
+                    previewStyle={previewStyle}
+                    onError={this.handleError}
+                    onScan={this.handleScan}
+                    style={{ width: '50rem', height: '50rem' }}
+                    legacyMode={this.state.legacyMode}
+                  />
+                  {this.state.legacyMode === true && (
+                    <div className="uploadImageQR">
+                      <div className="uploadImageQRContent">
+                        <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                      </div>
+                    </div>
+                  )}
                   {this.state.result !== undefined && (
                     <div className="resultsQR">
                       {this.state.assetFound}

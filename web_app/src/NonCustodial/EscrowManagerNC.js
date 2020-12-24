@@ -24,7 +24,7 @@ class EscrowManagerNC extends Component {
     this.checkIn = async (e) => {
       let resArray;
       // this.setState({isSettingEscrow: e.target.value})
-      this.setState({ help: false })
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) {
         this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
       }
@@ -125,12 +125,12 @@ class EscrowManagerNC extends Component {
     if (window.sentPacket !== undefined) {
 
       if (Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 50) {
-        this.setState({ isSettingEscrowAble: false })
+        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false"  })
         console.log("isSettingEscrowAble: false")
       }
 
       else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 56) {
-        this.setState({ isSettingEscrowAble: true })
+        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true" })
         console.log("isSettingEscrowAble: true")
       }
 
@@ -352,7 +352,7 @@ class EscrowManagerNC extends Component {
         timeFormat: ""
       })
 
-      return clearForm();
+      return this.setState({ idxHash: "", idxHashRaw: "", result: "", name: "N/A", assetClass: "N/A", status: "N/A", transaction: false, isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
     };
 
     return (
@@ -563,10 +563,16 @@ class EscrowManagerNC extends Component {
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridFormatSetOrEnd">
                         <Form.Label className="formFont">Set or End?:</Form.Label>
-                        <Form.Control as="select" size="lg" >
-                            <option value="0">Please Select an option</option>
+                        <Form.Control as="select" size="lg" disabled>
+                          {this.state.isSettingEscrowAble === undefined && (
+                            <option value="0">Please Select an Asset</option>
+                          )}
+                          {this.state.isSettingEscrowAble === true && (
                             <option value="true">Set Escrow</option>
+                          )}
+                          {this.state.isSettingEscrowAble === false && (
                             <option value="false">End Escrow</option>
+                          )}
                         </Form.Control>
                       </Form.Group>
                     </Form.Row>

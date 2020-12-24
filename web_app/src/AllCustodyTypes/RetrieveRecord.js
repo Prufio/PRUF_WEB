@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy, Share2 } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -25,7 +25,8 @@ class RetrieveRecord extends Component {
             description: tempIPFS.text.description,
             text: tempIPFS.text,
             photo: tempIPFS.photo,
-          }, moreInfo: true
+          },
+          moreInfo: true
         })
         if (tempIPFS.photo.displayImage !== undefined && tempIPFS.photo.displayImage !== "") {
           this.setState({ selectedImage: tempIPFS.photo.displayImage })
@@ -36,8 +37,8 @@ class RetrieveRecord extends Component {
 
       }
 
-      if(this.state.runWatchDog === true && Number(this.state.queryValue) > 0 && window.contracts != undefined && this.state.runQuery === true){
-        this.setState({runQuery: false})
+      if (this.state.runWatchDog === true && Number(this.state.queryValue) > 0 && window.contracts != undefined && this.state.runQuery === true) {
+        this.setState({ runQuery: false })
         this._retrieveRecordQR(this.state.queryValue)
       }
 
@@ -236,11 +237,27 @@ class RetrieveRecord extends Component {
                     {this.state.idxHashRaw !== "" && (
                       <div className="cardSelectedIdxForm">
                         <h4 className="cardIdxSelected">IDX : {this.state.idxHashRaw}</h4>
+                        <div className="cardCopyButton">
+                          <div className="cardCopyButtonContent">
+                            <Copy
+                              size={15}
+                              onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     )}
                     {this.state.idxHashRaw === "" && (
                       <div className="cardSelectedIdxForm">
                         <h4 className="cardIdxSelected">IDX : {obj.idxHash}</h4>
+                        <div className="cardCopyButton">
+                          <div className="cardCopyButtonContent">
+                            <Copy
+                              size={15}
+                              onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     )}
                     <div className="cardDescriptionFormSearch">
@@ -248,14 +265,24 @@ class RetrieveRecord extends Component {
                     </div>
                   </div>
                   {this.state.moreInfo && (
-                    <div className="cardButton2">
-                      <div className="cardButton2Content">
-                        <CornerUpLeft
-                          size={35}
-                          onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false }) }}
-                        />
+                    <>
+                      <div className="cardButton2">
+                        <div className="cardButton2Content">
+                          <CornerUpLeft
+                            size={35}
+                            onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false }) }}
+                          />
+                        </div>
                       </div>
-                    </div>
+                      <div className="cardButton4">
+                        <div className="cardButton4Content">
+                          <Share2
+                            size={35}
+                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); alert("Asset link copied to clipboard") }}
+                          />
+                        </div>
+                      </div>
+                    </>
                   )}
 
                 </div>
@@ -269,7 +296,11 @@ class RetrieveRecord extends Component {
     }
 
     this.handlePacket = async () => {
-      this.setState({ help: false })
+      this.setState({
+        help: false,
+        txHash: "",
+        txStatus: false
+      })
       let idxHash = window.sentPacket;
 
       this.setState({
@@ -300,42 +331,54 @@ class RetrieveRecord extends Component {
             status = Object.values(_result)[0]
           }
         })
-      this.setState({ retrievedAssetClass: assetClass, retrievedStatus: status });
+      this.setState({
+        retrievedAssetClass: assetClass,
+        retrievedStatus: status
+      });
       return this.getIPFSJSONObject(window.utils.getIpfsHashFromBytes32(hash))
 
     }
 
     this._retrieveRecordQR = async (query) => {
-      this.setState({ help: false })
-      this.setState({ QRRR: undefined, assetFound: "" })
+      this.setState({
+        help: false,
+        txHash: "",
+        txStatus: false,
+        QRRR: undefined,
+        assetFound: ""
+      })
       const self = this;
       var ipfsHash;
       var tempResult;
       let idxHash;
-      if(query){
+      if (query) {
         let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
-        if(tempBool){
+        if (tempBool) {
           idxHash = String(this.state.queryValue)
-        } else{ this.setState({wasSentQuery: false, queryValue: undefined}); return alert("Asset does not exist!")}
-        
-      } else{
+        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return alert("Asset does not exist!") }
+
+      } else {
         idxHash = String(this.state.result)
       }
       this.setState({ idxHash: idxHash })
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
-      if(idxHash.substring(0,2) !== "0x"){return this.setState({wasSentQuery: false, queryValue: undefined})}
+      if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(
           function (_error, _result) {
             if (_error) {
               console.log(_error)
-              self.setState({ error: _error });
-              self.setState({ result: 0 });
+              self.setState({
+                error: _error,
+                result: 0
+              });
             } else {
-              self.setState({ result: Object.values(_result) })
-              self.setState({ error: undefined });
+              self.setState({
+                result: Object.values(_result),
+                error: undefined
+              })
               tempResult = Object.values(_result);
               if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
               console.log("ipfs data in promise", ipfsHash)
@@ -350,15 +393,15 @@ class RetrieveRecord extends Component {
             }
           });
 
-          window.assetClass = tempResult[2]
-          let assetClassName = await window.utils.getACName(tempResult[2])
-    
-          window.assetInfo = {
-            assetClassName: assetClassName,
-            assetClass: tempResult[2],
-            status: await window.utils.getStatusString(String(tempResult[0])),
-            idx: idxHash
-          }
+      window.assetClass = tempResult[2]
+      let assetClassName = await window.utils.getACName(tempResult[2])
+
+      window.assetInfo = {
+        assetClassName: assetClassName,
+        assetClass: tempResult[2],
+        status: await window.utils.getStatusString(String(tempResult[0])),
+        idx: idxHash
+      }
 
       await window.utils.resolveACFromID(tempResult[2])
       await this.getACData("id", window.assetClass)
@@ -375,22 +418,22 @@ class RetrieveRecord extends Component {
     }
 
     this.handleQuery = async (data) => {
-      if(data.substring(0,2) !== "0x"){
-        return alert("'"+data+"'" + " is not a proper IDX!")
+      if (data.substring(0, 2) !== "0x") {
+        return alert("'" + data + "'" + " is not a proper IDX!")
       }
 
       let tempBool = true//await window.utils.checkAssetExistsBare(data)
-      if(tempBool){
+      if (tempBool) {
         this.setState({
           queryValue: data,
           assetFound: "Asset Found!",
           wasSentQuery: true
         })
       }
-      else{
-        return this.setState({assetFound: "Asset Not Found."})
+      else {
+        return this.setState({ assetFound: "Asset Not Found." })
       }
-      
+
     }
 
     this.getACData = async (ref, ac) => {
@@ -485,13 +528,27 @@ class RetrieveRecord extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+        color: [0.36, 0.70],
+        grayscale: [0.24, 0.82]
+      },
+      saturation: {
+        color: 0.75,
+        grayscale: 0.10
+      },
+      backColor: "#ffffffff"
+    };
     let hashString = window.location.hash;
-    if (hashString.includes("?")) {
-      let str = hashString.substring(hashString.indexOf("?")+1, hashString.length)
+    if (hashString.includes("0x")) {
+      let str = hashString.substring(hashString.indexOf("0x"), hashString.indexOf("0x") + 66)
       this.handleQuery(str)
     }
-    this.setState({ QRReader: false });
-    this.setState({ runWatchDog: true });
+    this.setState({
+      QRReader: false,
+      runWatchDog: true
+    });
 
 
   }
@@ -503,8 +560,10 @@ class RetrieveRecord extends Component {
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
     clearInterval(this.updateAssets);
-    this.setState({ QRReader: false });
-    this.setState({ runWatchDog: false });
+    this.setState({
+      QRReader: false,
+      runWatchDog: false
+    });
   }
 
   static getDerivedStateFromError(error) {
@@ -544,7 +603,12 @@ class RetrieveRecord extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ wasSentQuery: false, queryValue: undefined, Checkbox: false, help: false })
+      this.setState({
+        wasSentQuery: false,
+        queryValue: undefined,
+        Checkbox: false,
+        help: false
+      })
     }
 
     const help = async () => {
@@ -558,7 +622,10 @@ class RetrieveRecord extends Component {
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {
-        this.setState({ QRreader: true, assetFound: "" })
+        this.setState({
+          QRreader: true,
+          assetFound: ""
+        })
       }
       else {
         this.setState({ QRreader: false })
@@ -572,7 +639,7 @@ class RetrieveRecord extends Component {
 
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
@@ -597,27 +664,31 @@ class RetrieveRecord extends Component {
           String(this.state.model).replace(/\s/g, ''),
           String(this.state.serial).replace(/\s/g, ''),
         );
-        this.setState({ idxHash: idxHash })
         console.log("idxHash", idxHash);
         console.log("addr: ", window.addr);
       }
 
-      if (this.state.Checkbox === true) {
+      else if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw;
         console.log("idxHash", idxHash);
         console.log("addr: ", window.addr);
       }
 
+      this.setState({idxHash: idxHash})
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(function (_error, _result) {
           if (_error) {
             console.log(_error)
-            self.setState({ error: _error });
-            self.setState({ result: 0 });
+            self.setState({
+              error: _error,
+              result: 0
+            });
           } else {
-            self.setState({ result: Object.values(_result) })
-            self.setState({ error: undefined });
+            self.setState({
+              result: Object.values(_result),
+              error: undefined
+            })
             tempResult = Object.values(_result);
             if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
             console.log("ipfs data in promise", ipfsHash)
@@ -632,7 +703,7 @@ class RetrieveRecord extends Component {
           }
         });
 
-       window.assetClass = tempResult[2]
+      window.assetClass = tempResult[2]
       let assetClassName = await window.utils.getACName(tempResult[2])
 
       window.assetInfo = {
@@ -811,22 +882,22 @@ class RetrieveRecord extends Component {
                 </div>
               </div>
               <div className="QRreader">
-              <QrReader
-                ref="qrReader1"
-                delay={300}
-                previewStyle={previewStyle}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                style={{ width: '50rem', height: '50rem' }}
-                legacyMode={this.state.legacyMode}
-              />
-              {this.state.legacyMode === true && (
-                <div className="uploadImageQR">
-                  <div className="uploadImageQRContent">
-                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                <QrReader
+                  ref="qrReader1"
+                  delay={300}
+                  previewStyle={previewStyle}
+                  onError={this.handleError}
+                  onScan={this.handleScan}
+                  style={{ width: '50rem', height: '50rem' }}
+                  legacyMode={this.state.legacyMode}
+                />
+                {this.state.legacyMode === true && (
+                  <div className="uploadImageQR">
+                    <div className="uploadImageQRContent">
+                      <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
                 {this.state.result !== undefined && (
                   <div className="resultsQR">
                     {this.state.assetFound}

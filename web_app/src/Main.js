@@ -20,6 +20,8 @@ import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'react-feather';
 import { isMobile } from "react-device-detect";
+import { isFirefox } from "is-firefox";
+import { isSafari } from "is-safari";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
 import Form from "react-bootstrap/Form";
@@ -29,7 +31,87 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
-      if (isMobile) {
+      var isSafari = require('is-safari');
+      if (isSafari && !isMobile) {
+        return (
+          <div>
+            <HashRouter>
+            <div className="imageForm">
+            <div>
+              {this.state.noAddrMenuBool === true && (
+                <button
+                  className="imageButton"
+                  title="Back to Home!"
+                  onClick={() => { window.location.href = '/#/' }}
+                >
+                  <img
+                    className="downSizeLogo"
+                    src={require("./Resources/Images/PrufReadOnly.png")}
+                    alt="Pruf Logo" />
+                </button>
+              )}
+            </div>
+          </div>
+              <div>
+                <div className="bannerForm">
+                  <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
+                    <ul className="headerForm">
+                      {window.contracts !== undefined && (
+                        <>
+                          <nav>
+                            <NoAddressComponent />
+                          </nav>
+
+                        </>
+                      )}
+                    </ul>
+                  </ClickAwayListener>
+                </div>
+              </div>
+              <div className="pageForm">
+                <div>
+                  <Route exact path="/" component={Home} />
+                  {Router(this.state.routeRequest)}
+                </div>
+              </div>
+              <NavLink to="/">
+              </NavLink>
+            </HashRouter>
+          </div >
+        );
+      }
+      if (isMobile && isSafari) {
+        return (
+          <div>
+            <HashRouter>
+              <div>
+                <div className="bannerForm">
+                  <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
+                    <ul className="headerForm">
+                      {window.contracts !== undefined && (
+                        <>
+                          <nav>
+                            <NoAddressComponent />
+                          </nav>
+                        </>
+                      )}
+                    </ul>
+                  </ClickAwayListener>
+                </div>
+              </div>
+              <div className="pageForm">
+                <div>
+                  <Route exact path="/" component={HomeMobile} />
+                  {Router(this.state.routeRequest)}
+                </div>
+              </div>
+              <NavLink to="/">
+              </NavLink>
+            </HashRouter>
+          </div >
+        );
+      }
+      if (isMobile && !isSafari) {
         return (
           <div>
             <HashRouter>
@@ -52,12 +134,12 @@ class Main extends Component {
                             )}
                             {this.state.mobileMenuBool === false && (<NoAddressComponent />)}
                           </nav>
-                          { this.state.mobileMenuBool && (
-                          <User
-                            className="imageFormUserMobile"
-                            size={20}
-                            onClick={() => { this.userMenuMobile() }}
-                          />)}
+                          {this.state.mobileMenuBool && (
+                            <User
+                              className="imageFormUserMobile"
+                              size={20}
+                              onClick={() => { this.userMenuMobile() }}
+                            />)}
 
                           <style type="text/css">
                             {`
@@ -81,6 +163,7 @@ class Main extends Component {
                         margin-top: -0.5rem;
                         // margin-right: 37rem;
                         font-size: 1.4rem;
+                        width: -moz-fit-content;
                         width: fit-content;
                       }
                       .btn-userButton:hover {
@@ -127,7 +210,7 @@ class Main extends Component {
                                 <h4 className="userStatFont">
                                   Please
                                   <a
-                                   href={window.location.href}
+                                    href={window.location.href}
                                     onClick={() => {
                                       this.setState({ userMenu: undefined })
                                       if (window.ethereum) { window.ethereum.enable() }
@@ -173,7 +256,7 @@ class Main extends Component {
                                     PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
                                     <Button
                                       variant="userButton"
-                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
+                                      onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/faucet' }}>
                                       Faucet
                               </Button>
                                   </h4>
@@ -187,7 +270,7 @@ class Main extends Component {
                                 <Button
                                       variant="userButton"
                                       // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                      onClick={() => { alert(this.state.assetClassReport) }}>
+                                      onClick={() => { /* this.assetClassDashboard() */ }}>
                                       {this.state.assetClassBalance}
                                     </Button>
                                     {/* <Button
@@ -206,7 +289,7 @@ class Main extends Component {
                               <Button
                                       variant="userButton"
                                       // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
-                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/asset-dashboard-mobile'}}>
+                                      onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/asset-dashboard-mobile' }}>
                                       {this.state.assetBalance}
                                     </Button>
                                   </h4>
@@ -253,6 +336,7 @@ class Main extends Component {
           </div >
         );
       }
+      if (!isSafari) {
       return (
         <HashRouter>
 
@@ -373,15 +457,15 @@ class Main extends Component {
                       dApp Last Updated:
                   </h3>
                     <h3>
-                      December 15, 2020
-                  </h3>
-                  <h3>
-                    <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
+                      December 24, 2020
                   </h3>
                     <h3>
+                      <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
+                    </h3>
+                    <h3>
                       {this.state.routeRequest === "noAddr"
-                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.0.0 </a>
-                        : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.0.0 </a>}
+                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.0 </a>
+                        : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.2.0 </a>}
                     </h3>
                     <Form.Check
                       type="checkbox"
@@ -473,7 +557,7 @@ class Main extends Component {
                               Faucet Menu
                             </Button>
                           )}
- */}
+                             */}
                           {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
                             <Button
                               size="lg"
@@ -649,7 +733,7 @@ class Main extends Component {
           </div>
           <div className="pageForm">
             {this.state.particles === true && (
-            <ParticleBox />
+              <ParticleBox />
             )}
             <style type="text/css">
               {`
@@ -715,6 +799,7 @@ class Main extends Component {
                         // margin-right: 37rem;
                         font-size: 1.4rem;
                         width: fit-content;
+                        width: -moz-fit-content;
                       }
                       .btn-userButton:hover {
                         background-color: transparent;
@@ -762,26 +847,27 @@ class Main extends Component {
           </NavLink>
         </HashRouter >
       );
+                    }
     }
 
     //Watchdog which keeps state consistent with other components
     this.updateWatchDog = setInterval(() => {
 
       //every tick ensure user auth level/user type is correct
-      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined && this.state.runWatchDog === true) {
+      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined ) {
         this.setState({ isAuthUser: window.isAuthUser })
       }
 
-      if (this.state.isACAdmin !== window.isACAdmin && this.state.runWatchDog === true) {
+      if (this.state.isACAdmin !== window.isACAdmin ) {
         this.setState({ isACAdmin: window.isACAdmin })
       }
 
-      if (this.state.custodyType !== window.custodyType && this.state.runWatchDog === true) {
+      if (this.state.custodyType !== window.custodyType ) {
         this.setState({ custodyType: window.custodyType })
       }
 
       //Reset balance values to reflect in render
-      if (window.balances !== undefined && this.state.runWatchDog === true) {
+      if (window.balances !== undefined ) {
         if (
           Object.values(window.balances) !==
           Object.values({ assetClass: this.state.assetClassBalance, asset: this.state.assetBalance, ID: this.state.IDTokenBalance })) {
@@ -804,7 +890,7 @@ class Main extends Component {
       }
 
       // Remote menu switcher
-      if (window.menuChange !== undefined && this.state.runWatchDog === true) {
+      if (window.menuChange !== undefined ) {
         console.log(window.menuChange)
         this.setState({ menuChange: window.menuChange })
       }
@@ -826,7 +912,7 @@ class Main extends Component {
           })
         }
 
-        else if(!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true){
+        else if (!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true) {
           window.routeRequest = "ACAdmin"
           this.setState({ routeRequest: "ACAdmin" })
           this.setState({
@@ -897,40 +983,46 @@ class Main extends Component {
       }
 
       //Catch updated assets case and rebuild asset inventory 
-      if (window.assets !== undefined && this.state.runWatchDog === true) {
-        if (window.assets.ids.length > 0 && Object.values(window.assets.descriptions).length === window.aTknIDs.length &&
-          window.assets.names.length === 0 && this.state.buildReady === true && window.aTknIDs.length > 0) {
+      if (window.assets !== undefined ) {
+        if (window.assets.ids.length > 0 && window.assets.names.length === 0 && 
+          this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
+            //alert("WD: rebuilding assets (Last Step) ")
+            //this.setState({runWatchDog: false})
             this.buildAssets()
           }
         }
       }
 
       //If reset was remotely requested, begin full asset recount  
-      if (window.resetInfo === true && this.state.runWatchDog === true) {
+      if (window.resetInfo === true) {
         window.hasLoadedAssetClasses = false;
         window.hasLoadedAssets = false;
-        this.setState({ buildReady: false, runWatchDog: false })
+        this.setState({ buildReady: false })
         console.log("WD: setting up assets (Step one)")
         this.setUpAssets()
         window.resetInfo = false
       }
 
       //In the case of a completed recount and rough asset build, make asset info usable for app
-      if (window.aTknIDs !== undefined && this.state.buildReady === false && this.state.runWatchDog === true) {
+      if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
           console.log("Assets are ready for rebuild")
-          this.setState({ buildReady: true })
+          //alert("WD: Assets Deemed ready for rebuild.")
+          this.setState({ buildReady: true})
         }
       }
 
       //Assets finished rebuilding, flip rebuild switch
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
-        console.log("Assets finished rebuilding, no longer reaady for rebuild")
+        console.log("Assets finished rebuilding, no longer ready for rebuild")
+        //alert("WD: Shutting off buildReady")
         this.setState({ buildReady: false })
       }
+
+      //if(this.state.hasMounted)console.log(window.aTknIDs,this.state.buildReady,window.ipfsCounter, this.state.runWatchDog)
     }, 100)
 
     //Local menu toggler for navlinks
@@ -1090,14 +1182,12 @@ class Main extends Component {
 
     //Set up held assets for rebuild. Recount when necessary
     this.setUpAssets = async () => {
-      window.hasNoAssets = false; 
+      window.hasNoAssets = false;
       window.hasNoAssetClasses = false;
-      let report = "AC Nodes Held:\n";
       window.ipfsCounter = 0;
       window.ipfsHashArray = [];
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-
-      window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: []}
+      window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
       window.hasLoadedAssetClasses = false;
       window.assetTokenInfo = {
         assetClass: undefined,
@@ -1134,7 +1224,7 @@ class Main extends Component {
       }
 
       //Do a full update if the balances are returning undefined at this stage (They should never do this)
-      if (window.balances === undefined) {
+      else if (window.balances === undefined) {
         console.log("balances undefined, trying to get them...");
         //if (window.addr === undefined) { return this.forceUpdate }
         return this.setUpTokenVals(true);
@@ -1146,6 +1236,8 @@ class Main extends Component {
       let tempNamesArray = [];
 
       //Get all asset token profiles for parsing
+      //alert("IN SETUP ASSETS")
+
       await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
 
@@ -1170,42 +1262,49 @@ class Main extends Component {
       console.log("Asset setUp Complete. Turning on watchDog.")
 
       //Build an AC report for provisional placeholder on AC node bal
-      if(window.assetClasses !== undefined){
-        if(window.assetClasses.ids !== undefined){
-          for(let i=0; i<window.assetClasses.ids.length; i++){
-            report += ((i+1) + ".) " + window.assetClasses.names[i] 
+      /* if (window.assetClasses !== undefined) {
+        if (window.assetClasses.ids !== undefined) {
+          for (let i = 0; i < window.assetClasses.ids.length; i++) {
+            report += ((i + 1) + ".) " + window.assetClasses.names[i]
               + "\nCustody type: " + window.assetClasses.custodyTypes[i]
-              + "\nroot ACN: " + window.assetClasses.roots[i] 
+              + "\nroot ACN: " + window.assetClasses.roots[i]
               + "\nnode ID: " + window.assetClasses.ids[i]
-              + "\nshare: " + window.assetClasses.discounts[i]/100 + "%\n----------\n") 
+              + "\nshare: " + window.assetClasses.discounts[i] / 100 + "%\n----------\n")
           }
         }
-        else{
+        else {
           report = "No AC nodekeys held by user";
         }
-      }
-      
-      //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
-      this.setState({assetClassReport: report})
+      } */
 
-      this.setState({ runWatchDog: true })
+      //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
+      //this.setState({ assetClassReport: report })
+
+      await this.setState({ runWatchDog: true })
+
+      if(window.assetClasses.ids !== undefined && window.aTknIDs !== undefined){
+        if(window.assetClasses.ids.length > 0 && window.aTknIDs.length < 1){return this.buildAssets()}
+      }
+
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
+      //alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
+      //alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+ window.aTknIDs + "\n")
       //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
     this.mintID = async () => {
       await window.contracts.PARTY.methods
-                .GET_ID()
-                .send({ from: window.addr })
-                .on("error", function (_error) {
-                    alert("Something went wrong when minting ID!")
-                })
-                .on("receipt", (receipt) => {
-                    window.resetInfo = true;
-                    window.recount = true;
-                });
+        .GET_ID()
+        .send({ from: window.addr })
+        .on("error", function (_error) {
+          alert("Something went wrong when minting ID!")
+        })
+        .on("receipt", (receipt) => {
+          window.resetInfo = true;
+          window.recount = true;
+        });
     }
 
     this.setBlueIcons = () => {
@@ -1227,25 +1326,53 @@ class Main extends Component {
       window.jdenticon_config = {
         hues: [126],
         lightness: {
-            color: [0.42, 0.72],
-            grayscale: [0.37, 0.86]
+          color: [0.42, 0.72],
+          grayscale: [0.37, 0.86]
         },
         saturation: {
-            color: 0.75,
-            grayscale: 0.74
+          color: 0.75,
+          grayscale: 0.74
         },
         backColor: "#ffffffff"
-    };
+      };
     }
 
     //Rebuild fetched assets, preparing them for use by the app
-    this.buildAssets = async () => {
+    this.buildAssets = () => {
+      //if(window.assets.ids === undefined){this.buildAssets()}
+      //this.setState({buildReady: false})
+      //alert("Some Vars: atkns" + Object.values(window.assets) + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
+      //alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
+      window.ipfsCounter = 0;
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
 
-      //Get objects from unparsed asset data for reference in the app 
-      for (let i = 0; i < window.aTknIDs.length; i++) {
+      //Get specifically name from the ipfs object of each asset (if it exists)
+      let tempNameArray = [];
+      let identicons = [], AC_Identicons = [];
+      let identiconsLG = [], AC_IdenticonsLG = [];
+
+      let tempDisplayArray = [];
+
+      if(window.hasNoAssetClasses === false){
+
+        for (let e = 0; e < window.assetClasses.ids.length; e++){
+          AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
+        }
+  
+        for (let e = 0; e < window.assetClasses.ids.length; e++){
+          AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
+        }
+
+        window.assetClasses.identicons = AC_Identicons;
+        window.assetClasses.identiconsLG = AC_IdenticonsLG;
+        window.hasLoadedAssetClasses = true;
+      }
+
+      if(window.hasNoAssets === false){
+              //Get objects from unparsed asset data for reference in the app 
+      for (let i = 0; i < window.assets.ids.length; i++) {
         //console.log(window.assets.descriptions[i][0])
         if (window.assets.descriptions[i][0] !== undefined) {
           tempDescArray.push(JSON.parse(window.assets.descriptions[i][0]))
@@ -1255,40 +1382,24 @@ class Main extends Component {
         }
       }
 
-      //Get specifically name from the ipfs object of each asset (if it exists)
-      let tempNameArray = [];
-      for (let x = 0; x < window.aTknIDs.length; x++) {
-        if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
-          tempNameArray.push("Not Available")
+        for (let x = 0; x < window.assets.ids.length; x++) {
+          if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
+            tempNameArray.push("Not Available")
+          }
+          else {
+            tempNameArray.push(tempDescArray[x].name)
+          }
+  
         }
-        else {
-          tempNameArray.push(tempDescArray[x].name)
+
+        for (let e = 0; e < window.aTknIDs.length; e++) {
+          identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
         }
-
-      }
-      let identicons = [], AC_Identicons = [];
-      let identiconsLG = [], AC_IdenticonsLG =[];
-
-      //In case of no images set in ipfs
-      for (let e = 0; e < window.aTknIDs.length; e++) {
-        identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
-      }
-
-      //In case of no images set in ipfs
-      for (let e = 0; e < window.aTknIDs.length; e++) {
-        identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
-      }
-      
-      for (let e = 0; e < window.assetClasses.ids.length; e++){
-        AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
-      }
-
-      for (let e = 0; e < window.assetClasses.ids.length; e++){
-        AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
-      }
-
-      let tempDisplayArray = [];
-      //Set up displayImages
+  
+        for (let e = 0; e < window.aTknIDs.length; e++) {
+          identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
+        }
+        
       for (let j = 0; j < window.aTknIDs.length; j++) {
         if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
           tempDisplayArray.push("")
@@ -1303,17 +1414,17 @@ class Main extends Component {
         }
       }
 
-      window.assetClasses.identicons = AC_Identicons;
-      window.assetClasses.identiconsLG = AC_IdenticonsLG;
-      window.assets.identiconsLG = identiconsLG;
-      window.assets.identicons = identicons;
-      window.assets.descriptions = tempDescArray;
-      window.assets.names = tempNameArray;
-      window.assets.displayImages = tempDisplayArray;
-      window.hasLoadedAssets = true;
-      window.hasLoadedAssetClasses = true;
+        window.assets.identiconsLG = identiconsLG;
+        window.assets.identicons = identicons;
+        window.assets.descriptions = tempDescArray;
+        window.assets.names = tempNameArray;
+        window.assets.displayImages = tempDisplayArray;
+        window.hasLoadedAssets = true;
+      }
+      
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
+      //alert("Assets Built: " + window.assets.ids.length)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
@@ -1329,12 +1440,13 @@ class Main extends Component {
     }
 
     //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
-    
+
     this.getIPFSJSONObject = (lookup, descElement) => {
       //console.log(lookup)
       window.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
+          //alert("IPFS ERROR")
           descElement.push(undefined)
           window.ipfsCounter++
           //console.log(window.ipfsCounter)
@@ -1503,84 +1615,84 @@ class Main extends Component {
 
     }
 
-        //hamburgerMenu bool switch @DEV Move to this declarations?
-        this.hamburgerMenu = async () => {
-          if (this.state.hamburgerMenu === undefined) {
-            this.setState({
-              hamburgerMenu: true,
-              userMenu: false,
-              settingsMenu: false
-    
-            })
-          }
-          else {
-            this.setState({ hamburgerMenu: undefined })
-          }
-        }
-    
-        //hamburgerMenuMobile bool switch @DEV Move to this declarations?
-        this.hamburgerMenuMobile = async () => {
-          if (this.state.hamburgerMenuMobile === false) {
-            this.setState({
-              hamburgerMenuMobile: true,
-              userMenuMobile: false
-            })
-          }
-          else {
-            this.setState({ hamburgerMenuMobile: false })
-          }
-        }
-    
-        //userMenu bool switch @DEV Move to this declarations?
-        this.userMenu = async () => {
-          if (this.state.userMenu === false) {
-            this.setState({
-              userMenu: true,
-              settingsMenu: false
-            })
-          }
-          else {
-            this.setState({ userMenu: false })
-          }
-        }
-    
-        //userMenuMobile bool switch @DEV Move to this declarations?
-        this.userMenuMobile = async () => {
-          if (this.state.userMenuMobile === false) {
-            this.setState({
-              userMenuMobile: true,
-              hamburgerMenuMobile: false,
-            })
-          }
-          else {
-            this.setState({ userMenuMobile: false })
-          }
-        }
-    
-        //settingsMenu bool switch @DEV Move to this declarations?
-        this.settingsMenu = async () => {
-          if (this.state.settingsMenu === false) {
-            this.setState({
-              settingsMenu: true,
-              userMenu: false
-            })
-          }
-          else {
-            this.setState({ settingsMenu: false })
-          }
-        }
-    
-        //settingsMenu bool switch @DEV Move to this declarations?
-        this.particles = async () => {
-          if (this.state.particles === false) {
-            this.setState({
-              particles: true,
-            })
-          }
-          else {
-            this.setState({ particles: false })
-          }
-        }
+    //hamburgerMenu bool switch @DEV Move to this declarations?
+    this.hamburgerMenu = async () => {
+      if (this.state.hamburgerMenu === undefined) {
+        this.setState({
+          hamburgerMenu: true,
+          userMenu: false,
+          settingsMenu: false
+
+        })
+      }
+      else {
+        this.setState({ hamburgerMenu: undefined })
+      }
+    }
+
+    //hamburgerMenuMobile bool switch @DEV Move to this declarations?
+    this.hamburgerMenuMobile = async () => {
+      if (this.state.hamburgerMenuMobile === false) {
+        this.setState({
+          hamburgerMenuMobile: true,
+          userMenuMobile: false
+        })
+      }
+      else {
+        this.setState({ hamburgerMenuMobile: false })
+      }
+    }
+
+    //userMenu bool switch @DEV Move to this declarations?
+    this.userMenu = async () => {
+      if (this.state.userMenu === false) {
+        this.setState({
+          userMenu: true,
+          settingsMenu: false
+        })
+      }
+      else {
+        this.setState({ userMenu: false })
+      }
+    }
+
+    //userMenuMobile bool switch @DEV Move to this declarations?
+    this.userMenuMobile = async () => {
+      if (this.state.userMenuMobile === false) {
+        this.setState({
+          userMenuMobile: true,
+          hamburgerMenuMobile: false,
+        })
+      }
+      else {
+        this.setState({ userMenuMobile: false })
+      }
+    }
+
+    //settingsMenu bool switch @DEV Move to this declarations?
+    this.settingsMenu = async () => {
+      if (this.state.settingsMenu === false) {
+        this.setState({
+          settingsMenu: true,
+          userMenu: false
+        })
+      }
+      else {
+        this.setState({ settingsMenu: false })
+      }
+    }
+
+    //settingsMenu bool switch @DEV Move to this declarations?
+    this.particles = async () => {
+      if (this.state.particles === false) {
+        this.setState({
+          particles: true,
+        })
+      }
+      else {
+        this.setState({ particles: false })
+      }
+    }
 
     //Component state declaration
     this.state = {
@@ -1639,7 +1751,17 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
-    let _web3;
+    let timeOutCounter = 0;
+    let _web3, _ipfs;
+
+    _ipfs = new this.state.IPFS({
+      host: "ipfs.infura.io",
+      port: 5001,
+      protocol: "https",
+    });
+
+    window.ipfs = _ipfs;
+    
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });
@@ -1648,7 +1770,8 @@ class Main extends Component {
     buildWindowUtils() // get the utils object and make it globally accessible
 
     const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
-      setTimeout(() => { if (!window.ethereum) checkForEthereum() }, 1000);
+      timeOutCounter++;
+      setTimeout(() => { if (!window.ethereum && timeOutCounter < 5) checkForEthereum() }, 500);
     }
     checkForEthereum();
 
@@ -1670,9 +1793,15 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if(!refString.includes("retrieve-record") && !refString.includes("retrieve-record-mobile")){
+    if(!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66){
       window.location.href = '/#/';
-    } else{
+    } else {
+      if(isMobile){
+        window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+      } else {
+        console.log(refString)
+        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+      }
       console.log("Here is the search:", window.location.hash)
     }
     window.menuChange = undefined;
@@ -1703,14 +1832,6 @@ class Main extends Component {
       const ethereum = window.ethereum;
 
       ethereum.enable()
-
-      var _ipfs = new this.state.IPFS({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-      });
-
-      window.ipfs = _ipfs;
 
       _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
       window.addEventListener("accountListener", this.acctChanger());
@@ -1840,7 +1961,7 @@ class Main extends Component {
 
   //stuff do do when component unmounts from the window (should never happen for main unless tab closed)
   componentWillUnmount() {
-    clearInterval(this.updateWatchDog);
+    //clearInterval(this.updateWatchDog);
     console.log("unmounting component");
   }
 
@@ -1850,15 +1971,15 @@ class Main extends Component {
 
     if (this.state.hasError) {
       return (
-      <div>
-        <h1> OOPS! </h1>
-        <h2> An error occoured. Please ensure you are connected to an ethereum provider and reload the page. </h2>
-        <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below </h3>
-        <br></br>
-        <div className="errorMediaLink">
-          <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
-        </div>
-      </div>)
+        <div>
+          <h1> OOPS! </h1>
+          <h2> An error occoured. Please ensure you are connected to an ethereum provider and reload the page. </h2>
+          <h3> NOTE: THIS APPLICATION IS IN ALPHA, IF YOU SEE THIS MESSAGE, PLEASE SEND A REPORT TO support@pruf.io using the icon below </h3>
+          <br></br>
+          <div className="errorMediaLink">
+            <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
+          </div>
+        </div>)
     }
 
     return this.renderContent();

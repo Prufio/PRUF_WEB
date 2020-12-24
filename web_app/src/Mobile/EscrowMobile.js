@@ -25,7 +25,7 @@ class EscrowMobile extends Component {
     this.checkIn = async (e) => {
       let resArray;
 
-      this.setState({ help: false })
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) {
         this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
       }
@@ -66,7 +66,7 @@ class EscrowMobile extends Component {
         console.log("isSettingEscrowAble: true")
       }
 
-      this.setState({ selectedAsset: e, input: false, QRreader: false })
+      this.setState({ selectedAsset: e, input: false, QRreader: false, txHash: "", txStatus: false })
       console.log("Changed component idx to: ", window.assets.ids[e])
       console.log(this.state.isSettingEscrow)
 
@@ -123,12 +123,12 @@ class EscrowMobile extends Component {
     if (window.sentPacket !== undefined) {
 
       if (Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 50) {
-        this.setState({ isSettingEscrowAble: false })
+        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false"  })
         console.log("isSettingEscrowAble: false")
       }
 
       else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 56) {
-        this.setState({ isSettingEscrowAble: true })
+        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true"  })
         console.log("isSettingEscrowAble: true")
       }
 
@@ -300,7 +300,7 @@ class EscrowMobile extends Component {
           //Stuff to do when tx confirms
         });
       console.log(this.state.txHash);
-      return clearForm();
+      return this.setState({ idxHash: "", idxHashRaw: "", result: "", transaction: false, isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false });
     };
 
     const _endEscrow = async () => {
@@ -346,7 +346,7 @@ class EscrowMobile extends Component {
         timeFormat: ""
       })
 
-      return clearForm();
+      return this.setState({ idxHash: "", idxHashRaw: "", result: "", transaction: false, isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false });
     };
 
     return (
