@@ -315,7 +315,7 @@ class AssetDashboardMobile extends React.Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); alert("Asset link copied to clipboard") }}
+                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash) }}
               />
             </div>
           </div>

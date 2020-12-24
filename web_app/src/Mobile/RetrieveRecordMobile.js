@@ -209,7 +209,7 @@ class RetrieveRecordMobile extends Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+this.state.idxHash); alert("Asset link copied to clipboard") }}
+                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash) }}
               />
             </div>
           </div>
@@ -437,6 +437,18 @@ class RetrieveRecordMobile extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+        color: [0.36, 0.70],
+        grayscale: [0.24, 0.82]
+      },
+      saturation: {
+        color: 0.75,
+        grayscale: 0.10
+      },
+      backColor: "#ffffffff"
+    };
 
     let hashString = window.location.hash;
     if (hashString.includes("0x")) {
@@ -543,16 +555,17 @@ class RetrieveRecordMobile extends Component {
           String(this.state.model).replace(/\s/g, ''),
           String(this.state.serial).replace(/\s/g, '')
         );
-        this.setState({ idxHash: idxHash })
         console.log("idxHash", idxHash);
         console.log("addr: ", window.addr);
       }
 
-      if (this.state.Checkbox === true) {
+      else if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw;
         console.log("idxHash", idxHash);
         console.log("addr: ", window.addr);
       }
+
+      this.setState({ idxHash: idxHash })
 
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
