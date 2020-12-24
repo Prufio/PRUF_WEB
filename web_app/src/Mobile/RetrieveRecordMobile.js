@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, Copy } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, Copy, Share2 } from "react-feather";
 
 
 class RetrieveRecordMobile extends Component {
