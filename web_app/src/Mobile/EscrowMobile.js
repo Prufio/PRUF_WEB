@@ -123,12 +123,12 @@ class EscrowMobile extends Component {
     if (window.sentPacket !== undefined) {
 
       if (Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 50) {
-        this.setState({ isSettingEscrowAble: false })
+        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false"  })
         console.log("isSettingEscrowAble: false")
       }
 
       else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 56) {
-        this.setState({ isSettingEscrowAble: true })
+        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true"  })
         console.log("isSettingEscrowAble: true")
       }
 

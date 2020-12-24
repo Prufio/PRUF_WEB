@@ -277,7 +277,7 @@ class ImportAssetNC extends Component {
         accessPermitted: false
       })
 
-      return clearForm();
+      return this.setState({ idxHash: undefined, wasSentPacket: false, assetClassSelected: false, help: false })
     };
 
     return (

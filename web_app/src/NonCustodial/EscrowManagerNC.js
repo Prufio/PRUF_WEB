@@ -125,12 +125,12 @@ class EscrowManagerNC extends Component {
     if (window.sentPacket !== undefined) {
 
       if (Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 50) {
-        this.setState({ isSettingEscrowAble: false })
+        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false"  })
         console.log("isSettingEscrowAble: false")
       }
 
       else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 56) {
-        this.setState({ isSettingEscrowAble: true })
+        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true" })
         console.log("isSettingEscrowAble: true")
       }
 
@@ -352,7 +352,7 @@ class EscrowManagerNC extends Component {
         timeFormat: ""
       })
 
-      return clearForm();
+      return this.setState({ idxHash: "", idxHashRaw: "", result: "", name: "N/A", assetClass: "N/A", status: "N/A", transaction: false, isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
     };
 
     return (
