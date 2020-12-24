@@ -31,10 +31,27 @@ class Main extends Component {
     super(props);
 
     this.renderContent = () => {
+      var isSafari = require('is-safari');
       if (isSafari && !isMobile) {
         return (
           <div>
             <HashRouter>
+            <div className="imageForm">
+            <div>
+              {this.state.noAddrMenuBool === true && (
+                <button
+                  className="imageButton"
+                  title="Back to Home!"
+                  onClick={() => { window.location.href = '/#/' }}
+                >
+                  <img
+                    className="downSizeLogo"
+                    src={require("./Resources/Images/PrufReadOnly.png")}
+                    alt="Pruf Logo" />
+                </button>
+              )}
+            </div>
+          </div>
               <div>
                 <div className="bannerForm">
                   <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
@@ -63,7 +80,7 @@ class Main extends Component {
           </div >
         );
       }
-      if (isSafari && isMobile) {
+      if (isMobile && isSafari) {
         return (
           <div>
             <HashRouter>
@@ -76,7 +93,6 @@ class Main extends Component {
                           <nav>
                             <NoAddressComponent />
                           </nav>
-
                         </>
                       )}
                     </ul>
@@ -320,6 +336,7 @@ class Main extends Component {
           </div >
         );
       }
+      if (!isSafari) {
       return (
         <HashRouter>
 
@@ -830,6 +847,7 @@ class Main extends Component {
           </NavLink>
         </HashRouter >
       );
+                    }
     }
 
     //Watchdog which keeps state consistent with other components

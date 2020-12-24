@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import "../index.css";
 import { Twitter, GitHub, Mail, Send, RefreshCw } from 'react-feather';
+import { isSafari } from "is-safari";
 
 
 class HomeMobile extends Component {
@@ -35,6 +36,10 @@ class HomeMobile extends Component {
     if(window.ethereum){
       window.ethereum.enable()
     }
+    var isSafari = require('is-safari');
+    if(isSafari) {
+      this.setState({isSafari: true})
+    }
 
   }
 
@@ -57,6 +62,7 @@ class HomeMobile extends Component {
           <br></br>
           {window._contracts === undefined && window.addr !== undefined && (<div className="textMobile"> <Form.Row><h1 className="loadingMobile">Connecting to the Blockchain</h1></Form.Row></div>)}
           {window._contracts === undefined && window.addr === undefined && (<div className="textMobile"> <Form.Row><h1 className="loadingMobile">Connecting to the Blockchain</h1></Form.Row></div>)}
+          {this.state.isSafari === true && window._contracts !== undefined && (<div className="homeDisclaimerSafariMobile">Safari is not currently supporting Web3 connections. Please install a Web3 supported browser to make blockchain transactions.</div>)}
           <div className="mediaLinkMobile">
             <a className="mediaLinkContent"><GitHub size={20} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
             <a className="mediaLinkContent"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>

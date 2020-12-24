@@ -563,10 +563,16 @@ class EscrowManagerNC extends Component {
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridFormatSetOrEnd">
                         <Form.Label className="formFont">Set or End?:</Form.Label>
-                        <Form.Control as="select" size="lg" >
-                            <option value="0">Please Select an option</option>
+                        <Form.Control as="select" size="lg" disabled>
+                          {this.state.isSettingEscrowAble === undefined && (
+                            <option value="0">Please Select an Asset</option>
+                          )}
+                          {this.state.isSettingEscrowAble === true && (
                             <option value="true">Set Escrow</option>
+                          )}
+                          {this.state.isSettingEscrowAble === false && (
                             <option value="false">End Escrow</option>
+                          )}
                         </Form.Control>
                       </Form.Group>
                     </Form.Row>
