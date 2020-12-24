@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, Camera, CameraOff, UploadCloud } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, Camera, CameraOff, UploadCloud, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class VerifyLiteMobile extends Component {
@@ -438,7 +438,7 @@ class VerifyLiteMobile extends Component {
                 <Form.Row>
                   <div className="submitButtonRRMobile">
                     <div className="submitButtonContentMobile">
-                      <ArrowRightCircle
+                      <CheckCircle
                         onClick={() => { _verify() }}
                       />
                     </div>

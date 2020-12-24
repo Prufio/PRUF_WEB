@@ -300,7 +300,7 @@ class EscrowMobile extends Component {
           //Stuff to do when tx confirms
         });
       console.log(this.state.txHash);
-      return clearForm();
+      return this.setState({ idxHash: "", idxHashRaw: "", result: "", transaction: false, isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false });
     };
 
     const _endEscrow = async () => {
@@ -346,7 +346,7 @@ class EscrowMobile extends Component {
         timeFormat: ""
       })
 
-      return clearForm();
+      return this.setState({ idxHash: "", idxHashRaw: "", result: "", transaction: false, isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false });
     };
 
     return (
