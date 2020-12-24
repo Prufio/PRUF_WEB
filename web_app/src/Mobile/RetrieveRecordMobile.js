@@ -184,7 +184,7 @@ class RetrieveRecordMobile extends Component {
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
-                      onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
+                      onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
                     />
                   </div>
                 </div>
@@ -193,8 +193,6 @@ class RetrieveRecordMobile extends Component {
                 </h4>
               </Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
-              <Card.Title><h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
-              {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>
           <div className="backButtonMobileAD">
@@ -202,7 +200,16 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined, legacyMode: false }) }}
+                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
+              />
+            </div>
+          </div>
+          <div className="shareButtonMobileAD">
+            <div className="submitButtonRRQR3MobileContent">
+              <Share2
+                color={"#028ed4"}
+                size={35}
+                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+this.state.idxHash); alert("Asset link copied to clipboard") }}
               />
             </div>
           </div>

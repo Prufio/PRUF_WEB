@@ -1,6 +1,6 @@
 import React from "react";
 import "./../index.css";
-import { RefreshCw, ChevronRight, CornerUpLeft, Home, Plus, Copy } from "react-feather";
+import { RefreshCw, ChevronRight, CornerUpLeft, Home, Plus, Copy, Share2 } from "react-feather";
 import Card from "react-bootstrap/Card";
 import Jdenticon from 'react-jdenticon';
 
@@ -267,7 +267,7 @@ class AssetDashboardMobile extends React.Component {
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
-                      onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
+                      onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
                     />
                   </div>
                 </div>
@@ -276,8 +276,6 @@ class AssetDashboardMobile extends React.Component {
               </h4>
               </Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
-              <Card.Title><h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
-              {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>
           <div className="backButtonMobileAD">
@@ -286,6 +284,15 @@ class AssetDashboardMobile extends React.Component {
                 color={"#028ed4"}
                 size={35}
                 onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
+              />
+            </div>
+          </div>
+          <div className="shareButtonMobileAD">
+            <div className="submitButtonRRQR3MobileContent">
+              <Share2
+                color={"#028ed4"}
+                size={35}
+                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash); alert("Asset link copied to clipboard") }}
               />
             </div>
           </div>

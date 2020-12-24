@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy, Share2 } from "react-feather";
 
 
 class RetrieveRecord extends Component {
@@ -240,7 +240,7 @@ class RetrieveRecord extends Component {
                           <div className="cardCopyButtonContent">
                             <Copy
                               size={15}
-                              onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
+                              onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
                             />
                           </div>
                         </div>
@@ -253,7 +253,7 @@ class RetrieveRecord extends Component {
                           <div className="cardCopyButtonContent">
                             <Copy
                               size={15}
-                              onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash) }}
+                              onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
                             />
                           </div>
                         </div>
@@ -264,6 +264,7 @@ class RetrieveRecord extends Component {
                     </div>
                   </div>
                   {this.state.moreInfo && (
+                    <>
                     <div className="cardButton2">
                       <div className="cardButton2Content">
                         <CornerUpLeft
@@ -272,6 +273,15 @@ class RetrieveRecord extends Component {
                         />
                       </div>
                     </div>
+                    <div className="cardButton4">
+                        <div className="cardButton4Content">
+                          <Share2
+                            size={35}
+                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+this.state.idxHash); alert("Asset link copied to clipboard") }}
+                          />
+                        </div>
+                      </div>
+                      </>
                   )}
 
                 </div>

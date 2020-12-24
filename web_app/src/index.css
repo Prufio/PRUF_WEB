@@ -1257,6 +1257,15 @@ div {
   position: absolute;
   background-color: transparent;
   z-index: 1000;
+  margin-left: 1rem;
+  margin-top: 2rem;
+}
+
+.shareButtonMobileAD {
+  display: flex;
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000;
   margin-left: 29rem;
   margin-top: 2rem;
 }
@@ -2334,6 +2343,25 @@ margin-bottom: -3rem;
   cursor: pointer;
   -webkit-transform: translateX(-3px);
   transform: translateX(-3px);
+}
+
+.cardButton4 {
+  display: flex;
+  position: absolute;
+  background-color: transparent;
+  z-index: 1000;
+  margin-left: 62rem;
+  margin-top: 5rem;
+}
+
+.cardButton4Content {
+  color: white;
+  border-radius: 50%;
+}
+
+.cardButton4Content:hover {
+  color: #028ed4;
+  cursor: pointer;
 }
 
 .cardIdxPrint {
