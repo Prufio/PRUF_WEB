@@ -28,7 +28,8 @@ class RetrieveRecordMobile extends Component {
               photo: tempIPFS.photo,
 
             },
-            moreInfo: true
+            moreInfo: true,
+            URL: this.state.URL + this.state.idxHash
           })
         }
         else {
@@ -44,7 +45,8 @@ class RetrieveRecordMobile extends Component {
               photo: tempIPFS.photo,
 
             },
-            moreInfo: true
+            moreInfo: true,
+            URL: this.state.URL + this.state.idxHashRaw
           })
         }
 
@@ -331,6 +333,7 @@ class RetrieveRecordMobile extends Component {
       if(tempBool){
         this.setState({
           queryValue: data,
+          URL: window.location.href,
           assetFound: "Asset Found!",
           wasSentQuery: true
         })
@@ -397,6 +400,7 @@ class RetrieveRecordMobile extends Component {
       lookupIPFS1: "",
       lookupIPFS2: "",
       hashPath: "",
+      URL: "https://indevapp.pruf.io/#/",
       error: undefined,
       NRerror: undefined,
       result: [],

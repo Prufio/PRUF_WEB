@@ -41,6 +41,7 @@ class AssetDashboardMobile extends React.Component {
         this.setState({ selectedImage: "" })
       }
       this.setState({
+        URL: this.state.URL + e.idxHash,
         assetObj: e,
         moreInfo: true,
         identicon: e.identicon
@@ -138,6 +139,7 @@ class AssetDashboardMobile extends React.Component {
       APP: "",
       NP: "",
       STOR: "",
+      URL: "https://indevapp.pruf.io/#/",
       AC_MGR: "",
       ECR_NC: "",
       ECR_MGR: "",
@@ -315,7 +317,7 @@ class AssetDashboardMobile extends React.Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash) }}
+                onClick={() => { navigator.clipboard.writeText(this.state.URL) }}
               />
             </div>
           </div>
