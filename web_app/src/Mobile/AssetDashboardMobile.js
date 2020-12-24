@@ -41,7 +41,7 @@ class AssetDashboardMobile extends React.Component {
         this.setState({ selectedImage: "" })
       }
       this.setState({
-        URL: this.state.URL + e.idxHash,
+        URL: this.state.baseURL + e.idxHash,
         assetObj: e,
         moreInfo: true,
         identicon: e.identicon
@@ -139,7 +139,8 @@ class AssetDashboardMobile extends React.Component {
       APP: "",
       NP: "",
       STOR: "",
-      URL: "https://indevapp.pruf.io/#/",
+      baseURL: "https://indevapp.pruf.io/#/",
+      URL: undefined,
       AC_MGR: "",
       ECR_NC: "",
       ECR_MGR: "",

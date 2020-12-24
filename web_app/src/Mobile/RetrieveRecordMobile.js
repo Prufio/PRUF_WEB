@@ -29,7 +29,7 @@ class RetrieveRecordMobile extends Component {
 
             },
             moreInfo: true,
-            URL: this.state.URL + this.state.idxHash
+            URL: this.state.baseURL + this.state.idxHash
           })
         }
         else {
@@ -46,7 +46,7 @@ class RetrieveRecordMobile extends Component {
 
             },
             moreInfo: true,
-            URL: this.state.URL + this.state.idxHashRaw
+            URL: this.state.baseURL + this.state.idxHashRaw
           })
         }
 
@@ -211,7 +211,7 @@ class RetrieveRecordMobile extends Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash) }}
+                onClick={() => { navigator.clipboard.writeText(this.state.URL) }}
               />
             </div>
           </div>
@@ -400,8 +400,9 @@ class RetrieveRecordMobile extends Component {
       lookupIPFS1: "",
       lookupIPFS2: "",
       hashPath: "",
-      URL: "https://indevapp.pruf.io/#/",
+      baseURL: "https://indevapp.pruf.io/#/",
       error: undefined,
+      URL: undefined,
       NRerror: undefined,
       result: [],
       assetClass: undefined,
