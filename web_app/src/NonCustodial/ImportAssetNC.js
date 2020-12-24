@@ -171,7 +171,7 @@ class ImportAssetNC extends Component {
   }
 
     const _checkIn = async (e) => {
-      this.setState({help: false})
+      this.setState({help: false, txHash: "", txStatus: false})
       console.log("Checking in with id: ", e)
       if (e === "null" || e === undefined) {
         alert("Please select an asset before submission.") 

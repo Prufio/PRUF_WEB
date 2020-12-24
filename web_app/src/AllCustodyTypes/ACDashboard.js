@@ -17,19 +17,19 @@ class ACDashboard extends React.Component {
 
     //watchdog to keep ACNs up-to-date
     this.updateAssetClasses = setInterval(() => {
-        if (this.state.assetClasses !== window.assetClasses && this.state.runWatchDog === true) {
-          console.log("RESETTING ACS")
-          this.setState({ assetClasses: window.assetClasses })
-        }
-  
-        if (this.state.hasLoadedAssetClasses !== window.hasLoadedAssetClasses && this.state.runWatchDog === true) {
-          this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
-        }
-  
-        if (this.state.hasNoAssetClasses !== window.hasNoAssetClasses && this.state.runWatchDog === true) {
-          this.setState({ hasNoAssetClasses: window.hasNoAssetClasses })
-        }
-      
+      if (this.state.assetClasses !== window.assetClasses && this.state.runWatchDog === true) {
+        console.log("RESETTING ACS")
+        this.setState({ assetClasses: window.assetClasses })
+      }
+
+      if (this.state.hasLoadedAssetClasses !== window.hasLoadedAssetClasses && this.state.runWatchDog === true) {
+        this.setState({ hasLoadedAssetClasses: window.hasLoadedAssetClasses })
+      }
+
+      if (this.state.hasNoAssetClasses !== window.hasNoAssetClasses && this.state.runWatchDog === true) {
+        this.setState({ hasNoAssetClasses: window.hasNoAssetClasses })
+      }
+
     }, 150)
 
     this.moreInfo = (e) => {
@@ -41,18 +41,21 @@ class ACDashboard extends React.Component {
       else {
         this.setState({ selectedImage: "" })
       }
-      this.setState({ assetClassObj: e, moreInfo: true, identicon: e.identicon })
+      this.setState({
+        assetClassObj: e,
+        moreInfo: true,
+        identicon: e.identicon
+      })
       window.printObj = e;
-      //this.setAC(e.assetClass)
     }
 
     this.setAC = async (AC) => {
       let acDoesExist;
 
       if (AC === "0" || AC === undefined) {
-        this.refresh() 
+        this.refresh()
         return alert("Selected AC Cannot be Zero")
-        }
+      }
       else {
         if (
           isNaN(AC)
@@ -84,8 +87,11 @@ class ACDashboard extends React.Component {
 
           await this.setState({ ACname: window.assetClassName });
         }
-        
-        return this.setState({ assetClassSelected: true, acData: window.tempACData })
+
+        return this.setState({
+          assetClassSelected: true,
+          acData: window.tempACData
+        })
       }
     }
 
@@ -98,7 +104,20 @@ class ACDashboard extends React.Component {
     this.refresh = () => {
       window.resetInfo = true;
       window.recount = true;
-      this.setState({ hasLoadedAssetClasses: false, moreInfo: false, assetClasses: { ids: [], names: [], discounts: [], custodyTypes: [], roots: [], identicons: [], identiconsLG: [], exData: []} })
+      this.setState({
+        hasLoadedAssetClasses: false,
+        moreInfo: false,
+        assetClasses: {
+          ids: [],
+          names: [],
+          discounts: [],
+          custodyTypes: [],
+          roots: [],
+          identicons: [],
+          identiconsLG: [],
+          exData: []
+        }
+      })
     }
 
     this.state = {
@@ -120,7 +139,16 @@ class ACDashboard extends React.Component {
       RCLR: "",
       showDescription: false,
       descriptionElements: undefined,
-      assetClasses: { ids: [], names: [], exData: [], discounts: [], roots: [], identicons: [], identiconsLG: [], custodyTypes: []},
+      assetClasses: {
+        ids: [],
+        names: [],
+        exData: [],
+        discounts: [],
+        roots: [],
+        identicons: [],
+        identiconsLG: [],
+        custodyTypes: []
+      },
       contractArray: [],
       hasLoadedAssets: false,
       hasNoAssets: false,
@@ -132,15 +160,15 @@ class ACDashboard extends React.Component {
     window.jdenticon_config = {
       hues: [250],
       lightness: {
-          color: [0.51, 0.66],
-          grayscale: [0.36, 0.50]
+        color: [0.51, 0.66],
+        grayscale: [0.36, 0.50]
       },
       saturation: {
-          color: 1.00,
-          grayscale: 1.00
+        color: 1.00,
+        grayscale: 1.00
       },
       backColor: "#fff"
-  };
+    };
     this.setState({
       addr: window.addr,
       runWatchDog: true,
@@ -169,13 +197,13 @@ class ACDashboard extends React.Component {
 
   render() {
 
-     const generateAssetClassInfo = (obj) => {
+    const generateAssetClassInfo = (obj) => {
 
-        return (
-          <div key="selectedAsset">
-            <div>
-              <div className="assetClassDashboardSelected">
-                <style type="text/css"> {`
+      return (
+        <div key="selectedAsset">
+          <div>
+            <div className="assetClassDashboardSelected">
+              <style type="text/css"> {`
   
               .card {
                 width: 100%;
@@ -211,7 +239,6 @@ class ACDashboard extends React.Component {
                 height: 2rem;
                 width: 17rem;
                 margin-top: auto;
-                // margin-left: -0.8rem;
                 font-weight: bold;
                 font-size: 1rem;
                 border-radius: 0rem 0rem 0.3rem 0.3rem;
@@ -219,74 +246,72 @@ class ACDashboard extends React.Component {
               }
   
             `}
-                </style>
-                <div className="card" value="100">
-                  <div className="row no-gutters">
-                    <div className="assetSelecedInfo">
+              </style>
+              <div className="card" value="100">
+                <div className="row no-gutters">
+                  <div className="assetSelecedInfo">
 
-                      <button className="assetImageButtonSelected">
-                        <>{obj.identicon}</>
-                      </button>
-                      <p className="cardNameSelected">Name: {obj.assetClassName}</p>
-                      <p className="cardAcSelected">Node ID: {obj.id}</p>
-                      <p className="cardStatusSelected">Node Root: {obj.root}</p>
-                      <p className="cardStatusSelected">Custody Type: {obj.custodyType}</p>
-                      <ProgressBar className ="ACProgressBar">
-                        <ProgressBar variant="success" label={"Price Share: " + String(Number(obj.discount)/100) + "%"} now={obj.discount/100} key={1} />
-                        {/* <ProgressBar variant="successs" label={obj.discount.substring(0,2)+"%"} now={Number(obj.discount)/100-51} key={2} /> */}
-                      </ProgressBar>
-                      <div className="cardDescriptionFormSelectedAC">
+                    <button className="assetImageButtonSelected">
+                      <>{obj.identicon}</>
+                    </button>
+                    <p className="cardNameSelected">Name: {obj.assetClassName}</p>
+                    <p className="cardAcSelected">Node ID: {obj.id}</p>
+                    <p className="cardStatusSelected">Node Root: {obj.root}</p>
+                    <p className="cardStatusSelected">Custody Type: {obj.custodyType}</p>
+                    <ProgressBar className="ACProgressBar">
+                      <ProgressBar variant="success" label={"Price Share: " + String(Number(obj.discount) / 100) + "%"} now={obj.discount / 100} key={1} />
+                      {/* <ProgressBar variant="successs" label={obj.discount.substring(0,2)+"%"} now={Number(obj.discount)/100-51} key={2} /> */}
+                    </ProgressBar>
+                    <div className="cardDescriptionFormSelectedAC">
+                    </div>
+                  </div>
+                  {this.state.moreInfo && (
+                    <div className="cardButton3">
+                      <div className="cardButton3Content">
+                        <CornerUpLeft
+                          size={35}
+                          onClick={() => { this.moreInfo("back") }}
+                        />
                       </div>
                     </div>
-                    {this.state.moreInfo && (
-                      <div className="cardButton3">
-                        <div className="cardButton3Content">
-                          <CornerUpLeft
-                            size={35}
-                            onClick={() => { this.moreInfo("back") }}
-                          />
-                        </div>
-                      </div>
-                    )}
+                  )}
 
-                  </div>
-                </div >
+                </div>
               </div >
-            </div>
-            <div
-              className="ACSelectedRouter"
-            >
-              <Nav className="headerSelected">
-                <li>
-                    <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "add-user ") }}>Authorize User</Button>
-                </li>
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "enable-contract") }}>Enable Contract</Button>
-                </li>
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "transfer-ac") }}>Transfer</Button>
-                </li>
-                <li>
-                  <DropdownButton title="Modify" drop="up" variant="selectedImage">
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "update-ac-name") }}>Update Name</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "set-costs") }}>Set Costs</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "increase-ac-share") }}>Increase Share</Dropdown.Item>
-                  </DropdownButton>
-                </li>
-              </Nav>
-            </div>
+            </div >
           </div>
-        )
-      }
+          <div
+            className="ACSelectedRouter"
+          >
+            <Nav className="headerSelected">
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "add-user ") }}>Authorize User</Button>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "enable-contract") }}>Enable Contract</Button>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "ACAdmin", "transfer-ac") }}>Transfer</Button>
+              </li>
+              <li>
+                <DropdownButton title="Modify" drop="up" variant="selectedImage">
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "update-ac-name") }}>Update Name</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "set-costs") }}>Set Costs</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "ACAdmin", "increase-ac-share") }}>Increase Share</Dropdown.Item>
+                </DropdownButton>
+              </li>
+            </Nav>
+          </div>
+        </div>
+      )
+    }
 
     const generateAssetClassDash = (obj) => {
       if (obj.ids.length > 0) {
-        //console.log(obj)
         let component = [];
 
         for (let i = 0; i < obj.ids.length; i++) {
           console.log()
-          //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
           component.push(
             <div key={"asset" + String(i)}>
               <style type="text/css"> {`
@@ -320,7 +345,7 @@ class ACDashboard extends React.Component {
                         })
                       }}
                     >
-                        <>{obj.identicons[i]}</>
+                      <>{obj.identicons[i]}</>
                     </button>
                   </div>
                   <div>
@@ -328,7 +353,7 @@ class ACDashboard extends React.Component {
                     <p className="cardAc">Node ID: {obj.ids[i]}</p>
                     <p className="cardStatus">Node Root: {obj.roots[i]}</p>
                     <p className="cardStatus">Custody Type: {obj.custodyTypes[i]}</p>
-                    <h4 className="cardIdx">Share Percentage: {obj.discounts[i].substring(0,2)}%</h4>
+                    <h4 className="cardIdx">Share Percentage: {obj.discounts[i].substring(0, 2)}%</h4>
                     <div className="cardDescriptionForm"></div>
                   </div>
                   <div className="cardButton">
@@ -373,13 +398,6 @@ class ACDashboard extends React.Component {
           <div className="mediaLinkADRefresh">
             <a className="mediaLinkContentADRefresh" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
-{/*           <div className="mediaLinkADAddAsset">
-            <a className="mediaLinkContentADAddAsset" ><Plus size={35}
-              onClick={() => { this.newACNode() }} 
-              // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }} 
-              />
-            </a>
-          </div> */}
         </div>
         <div className="ACDashboard">
           {!this.state.hasNoAssetClasses && this.state.hasLoadedAssetClasses && !this.state.moreInfo && (<>{generateAssetClassDash(this.state.assetClasses)}</>)}

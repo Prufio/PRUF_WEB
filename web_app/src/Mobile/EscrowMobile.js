@@ -25,7 +25,7 @@ class EscrowMobile extends Component {
     this.checkIn = async (e) => {
       let resArray;
 
-      this.setState({ help: false })
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) {
         this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
       }
@@ -66,7 +66,7 @@ class EscrowMobile extends Component {
         console.log("isSettingEscrowAble: true")
       }
 
-      this.setState({ selectedAsset: e, input: false, QRreader: false })
+      this.setState({ selectedAsset: e, input: false, QRreader: false, txHash: "", txStatus: false })
       console.log("Changed component idx to: ", window.assets.ids[e])
       console.log(this.state.isSettingEscrow)
 

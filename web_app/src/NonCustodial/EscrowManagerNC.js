@@ -24,7 +24,7 @@ class EscrowManagerNC extends Component {
     this.checkIn = async (e) => {
       let resArray;
       // this.setState({isSettingEscrow: e.target.value})
-      this.setState({ help: false })
+      this.setState({ help: false, txHash: "", txStatus: falses })
       if (e === "null" || e === undefined) {
         this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
       }

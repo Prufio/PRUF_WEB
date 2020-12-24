@@ -10,6 +10,7 @@ class VerifyLiteMobile extends Component {
 
 
     this.accessAsset = async () => {
+      this.setState({txHash: "", txStatus: false})
       let idxHash;
       if (this.state.QRreader === false && this.state.Checkbox === false) {
         if (this.state.manufacturer === ""

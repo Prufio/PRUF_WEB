@@ -135,7 +135,7 @@ class ModifyStatusMobile extends Component {
     render() {//render continuously produces an up-to-date stateful document  
 
         const _checkIn = async (e) => {
-            this.setState({ help: false })
+            this.setState({ help: false, txHash: "", txStatus: false })
             console.log("Checking in with id: ", e)
             if (e === "null" || e === undefined) {
                 return clearForm()

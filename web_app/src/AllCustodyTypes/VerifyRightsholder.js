@@ -11,7 +11,11 @@ class VerifyRightHolder extends Component {
     //State declaration.....................................................................................................
 
     this.accessAsset = async () => {
-      this.setState({ help: false })
+      this.setState({
+        help: false,
+        txHash: "",
+        txStatus: false
+      })
       let idxHash;
       if (this.state.QRreader === false && !this.state.Checkbox) {
         if (this.state.manufacturer === ""
@@ -88,8 +92,10 @@ class VerifyRightHolder extends Component {
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-    this.setState({ QRReader: false });
-    this.setState({ runWatchDog: false });
+    this.setState({
+      QRReader: false,
+      runWatchDog: false
+    });
   }
 
   componentDidUpdate() {//stuff to do when state updates
@@ -101,7 +107,7 @@ class VerifyRightHolder extends Component {
     return { hasError: true };
   }
 
-  
+
 
 
   handleScan = async (data) => {
@@ -137,7 +143,10 @@ class VerifyRightHolder extends Component {
 
     const QRReader = async () => {
       if (this.state.QRreader === false) {
-        this.setState({ QRreader: true, assetFound: "" })
+        this.setState({
+          QRreader: true,
+          assetFound: ""
+        })
       }
       else {
         this.setState({ QRreader: false })
@@ -171,16 +180,26 @@ class VerifyRightHolder extends Component {
 
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
-      this.setState({ DVresult: "", accessPermitted: false, transaction: false, txHash: "", Checkbox: false, wasSentPacket: false, help: false })
+      this.setState({
+        DVresult: "",
+        accessPermitted: false,
+        transaction: false,
+        txHash: "",
+        Checkbox: false,
+        wasSentPacket: false,
+        help: false
+      })
     }
 
     const _verify = async () => {
-      this.setState({ help: false })
-      this.setState({ txStatus: false });
-      this.setState({ txHash: "" });
-      this.setState({ error: undefined })
-      this.setState({ DVresult: "" })
-      this.setState({ transaction: true })
+      this.setState({
+        help: false,
+        txStatus: false,
+        txHash: "",
+        error: undefined,
+        DVresult: "",
+        transaction: true
+      })
       var idxHash = this.state.idxHash;
 
 
@@ -205,19 +224,23 @@ class VerifyRightHolder extends Component {
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
-          self.setState({ transaction: false })
-          self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false });
+          self.setState({
+            transaction: false,
+            txHash: Object.values(_error)[0].transactionHash,
+            txStatus: false
+          })
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
         })
         .on("receipt", (receipt) => {
-          this.setState({ txHash: receipt.transactionHash });
-          this.setState({ transaction: false })
+          this.setState({
+            txHash: receipt.transactionHash,
+            transaction: false,
+            DVresult: receipt.events.REPORT.returnValues._msg
+          });
           console.log(receipt.events.REPORT.returnValues._msg);
-          this.setState({ DVresult: receipt.events.REPORT.returnValues._msg })
         });
 
       console.log(this.state.DVresult);
@@ -379,22 +402,22 @@ class VerifyRightHolder extends Component {
                     </div>
                   </div>
                   <div className="QRreader">
-                  <QrReader
-                ref="qrReader1"
-                delay={300}
-                previewStyle={previewStyle}
-                onError={this.handleError}
-                onScan={this.handleScan}
-                style={{ width: '50rem', height: '50rem' }}
-                legacyMode={this.state.legacyMode}
-              />
-              {this.state.legacyMode === true && (
-                <div className="uploadImageQR">
-                  <div className="uploadImageQRContent">
-                    <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
-                  </div>
-                </div>
-              )}
+                    <QrReader
+                      ref="qrReader1"
+                      delay={300}
+                      previewStyle={previewStyle}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                      style={{ width: '50rem', height: '50rem' }}
+                      legacyMode={this.state.legacyMode}
+                    />
+                    {this.state.legacyMode === true && (
+                      <div className="uploadImageQR">
+                        <div className="uploadImageQRContent">
+                          <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                        </div>
+                      </div>
+                    )}
                     {this.state.result !== undefined && (
                       <div className="resultsQR">
                         {this.state.assetFound}

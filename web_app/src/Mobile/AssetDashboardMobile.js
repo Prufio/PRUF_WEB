@@ -26,7 +26,13 @@ class AssetDashboardMobile extends React.Component {
     }, 150)
 
     this.moreInfo = (e) => {
-      if (e === "back") { return this.setState({ assetObj: {}, moreInfo: false, printQR: undefined }) }
+      if (e === "back") {
+        return this.setState({
+          assetObj: {},
+          moreInfo: false,
+          printQR: undefined
+        })
+      }
 
       if (e.DisplayImage !== undefined && e.DisplayImage !== "" && e.DisplayImage !== null) {
         this.setState({ selectedImage: e.DisplayImage })
@@ -34,16 +40,20 @@ class AssetDashboardMobile extends React.Component {
       else {
         this.setState({ selectedImage: "" })
       }
-      this.setState({ assetObj: e, moreInfo: true, identicon: e.identicon })
+      this.setState({
+        assetObj: e,
+        moreInfo: true,
+        identicon: e.identicon
+      })
       window.printObj = e;
     }
 
     this.setAC = async (AC) => {
       let acDoesExist;
 
-      if (AC === "0" || AC === undefined) { 
-        this.refresh() 
-        return alert("Selected AC Cannot be Zero") 
+      if (AC === "0" || AC === undefined) {
+        this.refresh()
+        return alert("Selected AC Cannot be Zero")
       }
       else {
         if (
@@ -56,9 +66,11 @@ class AssetDashboardMobile extends React.Component {
             window.open('https://www.pruf.io')
           }
 
-          this.setState({ ACname: AC });
           await window.utils.resolveAC(AC);
-          await this.setState({ assetClass: window.assetClass });
+          await this.setState({
+            assetClass: window.assetClass,
+            ACname: AC
+          });
 
         }
 
@@ -78,7 +90,10 @@ class AssetDashboardMobile extends React.Component {
           await this.setState({ ACname: window.assetClassName });
         }
 
-        return this.setState({ assetClassSelected: true, acData: window.tempACData })
+        return this.setState({
+          assetClassSelected: true,
+          acData: window.tempACData
+        })
       }
     }
 
@@ -91,22 +106,30 @@ class AssetDashboardMobile extends React.Component {
     this.newRecord = async () => {
       await window.utils.determineTokenBalance()
       console.log("IDholderBool", window.IDHolderBool)
-      if (window.IDHolderBool === false && window.confirm("You are not currently authorized to mint asset tokens. If you are interested in getting authorized, click ok to talk to one of our agents."))
-      {
+      if (window.IDHolderBool === false && window.confirm("You are not currently authorized to mint asset tokens. If you are interested in getting authorized, click ok to talk to one of our agents.")) {
         window.open("https://t.me/prufteam", "_blank")
         return
       }
-      else if (window.IDHolderBool === true)
-      {
-      window.menuChange = "mobile"
-      window.location.href = '/#/new-record-mobile'
-    }
+      else if (window.IDHolderBool === true) {
+        window.menuChange = "mobile"
+        window.location.href = '/#/new-record-mobile'
+      }
     }
 
     this.refresh = () => {
       window.resetInfo = true;
       window.recount = true;
-      this.setState({ hasLoadedAssets: false, moreInfo: false, assets: { descriptions: [], ids: [], assetClasses: [], statuses: [], names: [] } })
+      this.setState({
+        hasLoadedAssets: false,
+        moreInfo: false,
+        assets: {
+          descriptions: [],
+          ids: [],
+          assetClasses: [],
+          statuses: [],
+          names: []
+        }
+      })
     }
 
     this.state = {
@@ -263,7 +286,7 @@ class AssetDashboardMobile extends React.Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
-              <div className="cardCopyButtonMobile">
+                <div className="cardCopyButtonMobile">
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
@@ -271,9 +294,9 @@ class AssetDashboardMobile extends React.Component {
                     />
                   </div>
                 </div>
-              <h4 className="cardDescriptionSelectedContentMobile">
-                {obj.idxHash}
-              </h4>
+                <h4 className="cardDescriptionSelectedContentMobile">
+                  {obj.idxHash}
+                </h4>
               </Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
             </Card.Body>
@@ -292,7 +315,7 @@ class AssetDashboardMobile extends React.Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash); alert("Asset link copied to clipboard") }}
+                onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); alert("Asset link copied to clipboard") }}
               />
             </div>
           </div>
@@ -416,8 +439,8 @@ class AssetDashboardMobile extends React.Component {
             <a className="mediaLinkContentADRefreshMobile" ><RefreshCw onClick={() => { this.refresh() }} /></a>
           </div>
           <div className="mediaLinkADAddAssetMobile">
-            <a className="mediaLinkContentADAddAsset" ><Plus size={35} 
-            onClick={() => { this.newRecord() }} 
+            <a className="mediaLinkContentADAddAsset" ><Plus size={35}
+              onClick={() => { this.newRecord() }}
             // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
             />
             </a>
@@ -425,17 +448,17 @@ class AssetDashboardMobile extends React.Component {
           {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
                     else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                  }
+                  }
+                  className="userDataLink">
+                  click here
+                </a>
                   to enable Ethereum.
                   </h3>
             </div>

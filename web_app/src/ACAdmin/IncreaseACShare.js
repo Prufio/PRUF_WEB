@@ -69,13 +69,16 @@ class IncreaseACShare extends Component {
 
 
   componentDidMount() {//stuff to do when component mounts in window
-    this.setState({ upperLimit: window.AC_UpperLimit})
-    this.setState({ costPerShare: 100*window.web3.utils.fromWei(String(window.AC_CostOfShares))})
+    this.setState({
+      upperLimit: window.AC_UpperLimit,
+      costPerShare: 100 * window.web3.utils.fromWei(String(window.AC_CostOfShares))
+    })
     if (window.sentPacket !== undefined) {
-      // this.setState({ name: window.sentPacket.assetClassName })
-      // this.setState({ idxHash: window.sentPacket.id })
-      this.setState({ assetClass: window.sentPacket.id, assetClassSelected: true, currentShare: window.sentPacket.discount })
-      // this.setState({ status: window.sentPacket.custodyType })
+      this.setState({
+        assetClass: window.sentPacket.id,
+        assetClassSelected: true,
+        currentShare: window.sentPacket.discount
+      })
       console.log("Stat", window.sentPacket.status)
 
       window.sentPacket = undefined
@@ -99,13 +102,31 @@ class IncreaseACShare extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false })
+      this.setState({
+        assetClass: undefined,
+        assetClassSelected: false,
+        help: false,
+        transaction: false,
+        txHash: "",
+        txStatus: false,
+        wasSentPacket: false
+      })
     }
 
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, currentShare: e.discount, custodyType: e.custodyType, ACName: e.name, root: e.root, txHash: "", txStatus: false });
+      return this.setState({
+        acArr: e,
+        assetClass: e.id,
+        assetClassSelected: true,
+        currentShare: e.discount,
+        custodyType: e.custodyType,
+        ACName: e.name,
+        root: e.root,
+        txHash: "",
+        txStatus: false
+      });
     }
 
     const help = async () => {
@@ -122,44 +143,55 @@ class IncreaseACShare extends Component {
     }
 
     const increaseACShare = async () => {
-      
+
       await console.log("Pruf Bal", this.state.prufBalance);
 
-      if(this.state.prufBalance < this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))) {
+      if (this.state.prufBalance < this.state.costPerShare * Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare))) {
         return alert("Insufficient balance!")
       }
 
-      if(this.state.currentShare*0.01 === (this.state.currentShare*0.01 + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare)))){
+      if (this.state.currentShare * 0.01 === (this.state.currentShare * 0.01 + Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare)))) {
         return alert("Please increase the slider value before submission")
       }
 
       console.log()
 
-      const amount = window.web3.utils.toWei(String(this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))));
-      if(this.state.assetClass === undefined || amount === undefined) {return}
-        self.setState({ transaction: true })
-        console.log(amount)
-        console.log(this.state.assetClass)
-        window.contracts.AC_MGR.methods
-          .increaseShare(
-            this.state.assetClass,
-            amount
-          )
-          .send({ from: window.addr })
-          .on("error", function (_error) {
-            self.setState({ transaction: false, wasSentPacket: false })
-            self.setState({ error: _error });
-            self.setState({ result: _error.transactionHash });
+      const amount = window.web3.utils.toWei(String(this.state.costPerShare * Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare))));
+      if (this.state.assetClass === undefined || amount === undefined) { return }
+      self.setState({ transaction: true })
+      console.log(amount)
+      console.log(this.state.assetClass)
+      window.contracts.AC_MGR.methods
+        .increaseShare(
+          this.state.assetClass,
+          amount
+        )
+        .send({ from: window.addr })
+        .on("error", function (_error) {
+          self.setState({
+            transaction: false,
+            wasSentPacket: false,
+            error: _error,
+            result: _error.transactionHash
           })
-          .on("receipt", (receipt) => {
-              window.resetInfo = true;
-              self.setState({ hasLoadedAssetClasses: false})
-              self.setState({ transaction: false, wasSentPacket: false })
-              self.setState({ txHash: receipt.transactionHash });
-              self.setState({ txStatus: receipt.status });
-            });
-            console.log(this.state.txHash);
-          return this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
+        })
+        .on("receipt", (receipt) => {
+          window.resetInfo = true;
+          self.setState({
+            hasLoadedAssetClasses: false,
+            txStatus: receipt.status,
+            transaction: false,
+            wasSentPacket: false,
+            txHash: receipt.transactionHash
+          })
+        });
+      console.log(this.state.txHash);
+      return this.setState({
+        assetClass: undefined,
+        assetClassSelected: false,
+        help: false,
+        transaction: false
+      })
     };
 
     return (
@@ -185,7 +217,7 @@ class IncreaseACShare extends Component {
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
-                {!this.state.wasSentPacket && (
+                  {!this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
@@ -225,14 +257,14 @@ class IncreaseACShare extends Component {
                     )}
                     {this.state.transaction === true && (
                       <Form.Control
-                        placeholder={"An increase of " + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare)) + "%"}
+                        placeholder={"An increase of " + Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare)) + "%"}
                         disabled
                         size="lg"
                       />
                     )}
-                    <Form.Label className="formFont">({this.state.currentShare*0.01 + Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))}%)</Form.Label>
+                    <Form.Label className="formFont">({this.state.currentShare * 0.01 + Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare))}%)</Form.Label>
                     <br></br>
-                    <Form.Label className="formFont">Cost: ü{this.state.costPerShare*Math.round(0.0001*this.state.amount*(this.state.upperLimit-this.state.currentShare))}</Form.Label>
+                    <Form.Label className="formFont">Cost: ü{this.state.costPerShare * Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare))}</Form.Label>
                   </Form.Group>
                 </div>
                 {this.state.transaction === false && (

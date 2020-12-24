@@ -50,14 +50,14 @@ class UpdateACName extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      // this.setState({ name: window.sentPacket.assetClassName })
-      // this.setState({ idxHash: window.sentPacket.id })
-      this.setState({ assetClass: window.sentPacket.id, assetClassSelected: true })
-      // this.setState({ status: window.sentPacket.custodyType })
+      this.setState({
+        assetClass: window.sentPacket.id,
+        assetClassSelected: true,
+        wasSentPacket: true
+      })
       console.log("Stat", window.sentPacket.status)
 
       window.sentPacket = undefined
-      this.setState({ wasSentPacket: true })
     }
 
     this.setState({ runWatchDog: true })
@@ -77,7 +77,15 @@ class UpdateACName extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false })
+      this.setState({
+        assetClass: "",
+        assetClassSelected: false,
+        help: false,
+        transaction: false,
+        txHash: "",
+        txStatus: false,
+        wasSentPacket: false
+      })
     }
 
     const help = async () => {
@@ -96,44 +104,64 @@ class UpdateACName extends Component {
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root, txHash: "", txStatus: false });
+      return this.setState({
+        acArr: e,
+        assetClass: e.id,
+        assetClassSelected: true,
+        custodyType:
+          e.custodyType,
+        ACName: e.name,
+        root: e.root,
+        txHash: "",
+        txStatus: false
+      });
     }
 
     const updateName = async () => {
+      this.setState({ transaction: true })
       var alreadyExists = await window.utils.checkACName(this.state.newACName);
       console.log(alreadyExists)
       if (alreadyExists) {
         return (alert("AC name already exists! Choose a different name and try again"))
       }
 
-      if(this.state.assetClass === undefined || this.state.newACName === undefined) {return}
+      if (this.state.assetClass === undefined || this.state.newACName === undefined) { return }
 
-        this.setState({transaction: true})
-        await window.contracts.AC_MGR.methods
-          .updateACname(
-            this.state.newACName,
-            this.state.assetClass
-          )
-          .send({ from: window.addr })
-          .on("error", function (_error) {
-            // self.setState({ NRerror: _error });
-            self.setState({ transaction: false, wasSentPacket: false })
-            self.setState({ txHash: Object.values(_error)[0].transactionHash });
-            self.setState({ txStatus: false, });
-            alert("Something went wrong!")
-            clearForm();
-            console.log(Object.values(_error)[0].transactionHash);
+      await window.contracts.AC_MGR.methods
+        .updateACname(
+          this.state.newACName,
+          this.state.assetClass
+        )
+        .send({ from: window.addr })
+        .on("error", function (_error) {
+          // self.setState({ NRerror: _error });
+          self.setState({
+            transaction: false,
+            wasSentPacket: false,
+            txHash: Object.values(_error)[0].transactionHash,
+            txStatus: false
           })
-          .on("receipt", (receipt) => {
-            window.resetInfo = true;
-            // window.recount = true;
-            self.setState({ hasLoadedAssetClasses: false})
-            self.setState({ txHash: receipt.transactionHash });
-            self.setState({ txStatus: receipt.status });
-            self.setState({ transaction: false, wasSentPacket: false })
-          });
-        return self.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
-      };
+          alert("Something went wrong!")
+          clearForm();
+          console.log(Object.values(_error)[0].transactionHash);
+        })
+        .on("receipt", (receipt) => {
+          window.resetInfo = true;
+          self.setState({
+            hasLoadedAssetClasses: false,
+            txHash: receipt.transactionHash,
+            txStatus: receipt.status,
+            transaction: false,
+            wasSentPacket: false
+          })
+        });
+      return self.setState({
+        assetClass: "",
+        assetClassSelected: false,
+        help: false,
+        transaction: false
+      })
+    };
 
 
 
@@ -160,7 +188,7 @@ class UpdateACName extends Component {
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
-                {!this.state.wasSentPacket && (
+                  {!this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"

@@ -214,7 +214,7 @@ class ModifyRecordStatusNC extends Component {
   }
 
     const _checkIn = async (e) => {
-      this.setState({help: false})
+      this.setState({help: false, txHash: "", txStatus: false})
       this.setState({
         txStatus: false,
         txHash: ""

@@ -51,10 +51,10 @@ class AddUser extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      // this.setState({ name: window.sentPacket.assetClassName })
-      // this.setState({ idxHash: window.sentPacket.id })
-      this.setState({ assetClass: window.sentPacket.id, assetClassSelected: true })
-      // this.setState({ status: window.sentPacket.custodyType })
+      this.setState({
+        assetClass: window.sentPacket.id,
+        assetClassSelected: true
+      })
       console.log("Stat", window.sentPacket.status)
 
       window.sentPacket = undefined
@@ -70,7 +70,6 @@ class AddUser extends Component {
   }
 
   componentWillUnmount() {//stuff do do when component unmounts from the window
-    //console.log("unmounting component")
   }
 
   render() {//render continuously produces an up-to-date stateful document  
@@ -78,13 +77,30 @@ class AddUser extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false})
+      this.setState({
+        assetClass: undefined,
+        assetClassSelected: false,
+        help: false,
+        transaction: false,
+        txHash: "",
+        txStatus: false,
+        wasSentPacket: false
+      })
     }
 
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root, txHash: "", txStatus: false });
+      return this.setState({
+        acArr: e,
+        assetClass: e.id,
+        assetClassSelected: true,
+        custodyType: e.custodyType,
+        ACName: e.name,
+        root: e.root,
+        txHash: "",
+        txStatus: false
+      });
     }
 
     const help = async () => {
@@ -112,9 +128,12 @@ class AddUser extends Component {
         )
         .send({ from: window.addr })
         .on("error", function (_error) {
-          self.setState({ error: _error });
-          self.setState({ result: _error.transactionHash });
-          self.setState({ transaction: false, wasSentPacket: false })
+          self.setState({
+            error: _error,
+            result: _error.transactionHash,
+            transaction: false,
+            wasSentPacket: false
+          });
           return clearForm();
         })
         .on("receipt", (receipt) => {
@@ -122,15 +141,23 @@ class AddUser extends Component {
             "user added succesfully under asset class",
             self.state.assetClass
           );
-          self.setState({ transaction: false, wasSentPacket: false })
-          self.setState({ txHash: receipt.transactionHash });
-          self.setState({ txStatus: receipt.status });
-          self.setState({ hasLoadedAssetClasses: false })
+          self.setState({
+            transaction: false,
+            wasSentPacket: false,
+            txHash: receipt.transactionHash,
+            txStatus: receipt.status,
+            hasLoadedAssetClasses: false
+          });
           window.resetInfo = true;
           console.log("tx receipt: ", receipt);
-          return self.setState({ assetClass: undefined, assetClassSelected: false, help: false, transaction: false })
         });
       console.log(this.state.txHash);
+      return self.setState({
+        assetClass: undefined,
+        assetClassSelected: false,
+        help: false,
+        transaction: false
+      })
     };
 
     return (

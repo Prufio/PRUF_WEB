@@ -90,7 +90,7 @@ class NewRecordNC extends Component {
     const _setAC = async () => {
       let acDoesExist;
       let destinationACData;
-      this.setState({txHash: ""})
+      this.setState({txHash: "", txStatus: false})
 
       if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
       else {
