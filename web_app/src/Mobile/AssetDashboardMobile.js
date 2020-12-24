@@ -293,7 +293,7 @@ class AssetDashboardMobile extends React.Component {
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
-                      onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
+                      onClick={() => { navigator.clipboard.writeText(String(obj.idxHash)) }}
                     />
                   </div>
                 </div>
@@ -318,7 +318,7 @@ class AssetDashboardMobile extends React.Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText(this.state.URL) }}
+                onClick={() => { navigator.clipboard.writeText(String(this.state.URL)) }}
               />
             </div>
           </div>
