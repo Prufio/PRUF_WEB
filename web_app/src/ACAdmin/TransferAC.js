@@ -49,14 +49,13 @@ class TransferAC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      // this.setState({ name: window.sentPacket.assetClassName })
-      // this.setState({ idxHash: window.sentPacket.id })
-      this.setState({ assetClass: window.sentPacket.id, assetClassSelected: true })
-      // this.setState({ status: window.sentPacket.custodyType })
+      this.setState({
+        assetClass: window.sentPacket.id,
+        assetClassSelected: true,
+        wasSentPacket: true
+      })
       console.log("Stat", window.sentPacket.status)
-
       window.sentPacket = undefined
-      this.setState({ wasSentPacket: true })
     }
 
     this.setState({ runWatchDog: true })
@@ -76,7 +75,15 @@ class TransferAC extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false })
+      this.setState({
+        assetClass: "",
+        assetClassSelected: false,
+        help: false,
+        transaction: false,
+        txHash: "",
+        txStatus: false,
+        wasSentPacket: false
+      })
     }
 
     const help = async () => {
@@ -95,47 +102,66 @@ class TransferAC extends Component {
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root, txHash: "", txStatus: false });
+      return this.setState({
+        acArr: e,
+        assetClass: e.id,
+        assetClassSelected: true,
+        custodyType: e.custodyType,
+        ACName: e.name,
+        root: e.root,
+        txHash: "",
+        txStatus: false
+      });
     }
 
     const _transferAssetClass = async () => {
-      this.setState({help: false})
-      this.setState({ txStatus: false });
-      this.setState({ txHash: "" });
-      this.setState({ error: undefined })
-      this.setState({ result: "" })
-      this.setState({ transaction: true });
-      // var idxHash = this.state.idxHash;
+      this.setState({
+        help: false,
+        txStatus: false,
+        txHash: "",
+        error: undefined,
+        result: "",
+        transaction: true
+      })
       let to = this.state.to;
 
       console.log("AC", this.state.assetClass);
       console.log("addr: ", window.addr);
 
-      if(this.state.assetClass < 1 || this.state.to < 1) {return}
+      if (this.state.assetClass < 1 || this.state.to < 1) { return }
 
       await window.contracts.AC_TKN.methods
         .safeTransferFrom(window.addr, to, this.state.assetClass)
         .send({ from: window.addr })
         .on("error", function (_error) {
-          // self.setState({ NRerror: _error });
-          this.setState({ transaction: false, wasSentPacket: false })
-          self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, });
+          self.setState({
+            transaction: false,
+            wasSentPacket: false,
+            txHash: Object.values(_error)[0].transactionHash,
+            txStatus: false
+          })
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
         .on("receipt", (receipt) => {
           window.resetInfo = true;
-            // window.recount = true;
-          self.setState({ hasLoadedAssetClasses: false})
-          self.setState({ txHash: receipt.transactionHash });
-          self.setState({ txStatus: receipt.status });
-          this.setState({ transaction: false, wasSentPacket: false })
+          self.setState({
+            hasLoadedAssetClasses: false,
+            txHash: receipt.transactionHash,
+            txStatus: receipt.status,
+            transaction: false,
+            wasSentPacket: false
+          })
         });
       console.log(this.state.txHash);
-      
-      return this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
+
+      return this.setState({
+        assetClass: "",
+        assetClassSelected: false,
+        help: false,
+        transaction: false
+      })
     };
 
     return (
@@ -156,12 +182,12 @@ class TransferAC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-                    {window.addr > 0 && !this.state.assetClassSelected && (
+          {window.addr > 0 && !this.state.assetClassSelected && (
             <>
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
-                {!this.state.wasSentPacket && (
+                  {!this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
@@ -187,9 +213,9 @@ class TransferAC extends Component {
           {window.addr > 0 && this.state.assetClassSelected && (
             <div>
               <Form.Row>
-                 <Form.Group as={Col} controlId="formGridTo">
-                   <Form.Label className="formFont">To:</Form.Label>
-                   {this.state.transaction === false && (
+                <Form.Group as={Col} controlId="formGridTo">
+                  <Form.Label className="formFont">To:</Form.Label>
+                  {this.state.transaction === false && (
                     <Form.Control
                       placeholder="Recipient Address"
                       required

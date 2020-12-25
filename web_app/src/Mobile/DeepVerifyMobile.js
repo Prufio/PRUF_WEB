@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff } from "react-feather";
+import { Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
 
 class DeepVerifyMobile extends Component {
@@ -10,6 +10,7 @@ class DeepVerifyMobile extends Component {
 
 
     this.accessAsset = async () => {
+      this.setState({txHash: "", txStatus: false})
       let idxHash;
       if (this.state.QRreader === false && this.state.Checkbox === false) {
         if (this.state.manufacturer === ""
@@ -479,7 +480,7 @@ class DeepVerifyMobile extends Component {
                   <Form.Row>
                     <div className="submitButtonRRMobile">
                       <div className="submitButtonContentMobile">
-                        <ArrowRightCircle
+                        <CheckCircle
                           onClick={() => { _verify() }}
                         />
                       </div>

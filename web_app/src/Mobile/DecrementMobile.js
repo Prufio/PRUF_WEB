@@ -96,7 +96,13 @@ class DecrementMobile extends Component {
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+      this.setState({ 
+        idxHash: undefined, 
+        txStatus: false, 
+        txHash: "", 
+        wasSentPacket: false, 
+        help: false 
+      })
     }
 
     const help = async () => {
@@ -113,10 +119,10 @@ class DecrementMobile extends Component {
   }
 
     const _checkIn = async (e) => {
-      this.setState({help: false})
       this.setState({
-        txStatus: false,
-        txHash: ""
+        help: false, 
+        txHash: "", 
+        txStatus: false
       })
       if (e === "null" || e === undefined) {
         return clearForm()
@@ -143,10 +149,10 @@ class DecrementMobile extends Component {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
       }
 
-      this.setState({ selectedAsset: e })
       console.log("Changed component idx to: ", window.assets.ids[e])
 
       this.setState({
+        selectedAsset: e,
         assetClass: window.assets.assetClasses[e],
         idxHash: window.assets.ids[e],
         name: window.assets.descriptions[e].name,
@@ -160,12 +166,14 @@ class DecrementMobile extends Component {
     }
 
     const _decrementCounter = async () => {
-      this.setState({help: false})
-      this.setState({ txStatus: false });
-      this.setState({ txHash: "" });
-      this.setState({ error: undefined })
-      this.setState({ result: "" })
-      this.setState({ transaction: true })
+      this.setState({
+        help: false,
+        txStatus: false,
+        txHash: "",
+        error: undefined,
+        result: "",
+        transaction: true
+      })
       var idxHash = this.state.idxHash;
 
       if(this.state.countDown === "" || this.state.countDown === undefined){return alert("Please fill all fields before submission")}
@@ -188,17 +196,22 @@ class DecrementMobile extends Component {
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
-          self.setState({ transaction: false })
-          self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false });
+          self.setState({ 
+            transaction: false,
+            txHash: Object.values(_error)[0].transactionHash,
+            txStatus: false, 
+            wasSentPacket: false 
+          })
           alert("Something went wrong!")
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
         .on("receipt", (receipt) => {
-          self.setState({ transaction: false })
-          self.setState({ txHash: receipt.transactionHash });
-          self.setState({ txStatus: receipt.status });
+          self.setState({ 
+            transaction: false,
+            txHash: receipt.transactionHash,
+            txStatus: receipt.status 
+          })
           console.log(receipt.status);
           window.resetInfo = true;
           if (self.state.wasSentPacket) {

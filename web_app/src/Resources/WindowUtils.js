@@ -143,7 +143,7 @@ function buildWindowUtils() {
           for (let i = 0; i < keys.length; i++) {
             component.push(<option size="lg" key={"option " + String(i)} value={i+1}>
               {i + 1}:
-              Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(String(values[i]))}
+              Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(values[i])}
               </option>);
           }
 
@@ -1087,7 +1087,9 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              window.costArray.push(Number((Object.values(_result)[1])) + Number((Object.values(_result)[3])))
+              let root = window.web3.utils.fromWei(Object.values(_result)[1]);
+              let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
+              window.costArray.push(window.web3.utils.toWei(String(Number(root) + Number(acth))));
             }
           })
       }
@@ -1208,7 +1210,7 @@ function buildWindowUtils() {
   }
 
   const _getAssetClassTokenInfo = async () => {
-    if (window.balances === undefined) { return }
+    if (window.balances === undefined) { return 0 }
     let tknIDArray = [], roots = [], discounts = [], custodyTypes = [], exData = [], names = [];
     console.log("GACTI: In _getAssetClassTokenInfo")
 
@@ -1283,7 +1285,7 @@ function buildWindowUtils() {
       }
     }
 
-    else { console.log("No assets held by user"); window.assetClasses.ids = []; return window.hasNoAssetClasses = true }
+    else { console.log("No asset classes held by user"); window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] } ; return window.hasNoAssetClasses = true }
 
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }
@@ -1293,6 +1295,7 @@ function buildWindowUtils() {
     if (window.balances === undefined) { return }
 
     console.log("GATI: In _getAssetTokenInfo")
+    //alert("IN GATI")
 
     if (Number(window.balances.assetBalance) > 0) {
       let tknIDArray = [],
@@ -1321,6 +1324,8 @@ function buildWindowUtils() {
             }
           });
       }
+
+      //alert(tknIDArray)
 
       for (let x = 0; x < tknIDArray.length; x++) {
         await window.contracts.STOR.methods.retrieveShortRecord(tknIDArray[x])
@@ -1366,18 +1371,18 @@ function buildWindowUtils() {
       await window.utils.getACNames(assetClasses)
 
       //console.log(ipfsHashArray)
-
-      window.aTknIDs = tknIDArray;
-      //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
-      window.ipfsHashArray = ipfsHashArray;
-
-      window.assets.countPairs = countPairs;
-
-      window.assets.assetClasses = assetClasses;
-      window.assets.statuses = statuses;
-      window.assets.statusNums = statusNums;
-      window.assets.notes = noteArray;
-
+        window.aTknIDs = tknIDArray;
+        //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
+        window.ipfsHashArray = ipfsHashArray;
+  
+        window.assets.countPairs = countPairs;
+  
+        window.assets.assetClasses = assetClasses;
+        window.assets.statuses = statuses;
+        window.assets.statusNums = statusNums;
+        window.assets.notes = noteArray;
+        //alert(Object.values(window.assets))
+        return true
     }
 
     else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
@@ -1445,7 +1450,7 @@ function buildWindowUtils() {
       <div className="printForm">
         <div className="printQR">
           <QRCode
-            value={window.printObj.idxHash}
+            value={"https://indevapp.pruf.io/#/retrieve-record?" + window.printObj.idxHash}
             size="256"
             fgColor="#002a40"
             logoWidth="48.8"

@@ -82,7 +82,7 @@ class ExportAssetNC extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
-      this.setState({help: false})
+      this.setState({help: false, txHash: "", txStatus: false})
       if (e === "null" || e === undefined) {
         return clearForm()
       }

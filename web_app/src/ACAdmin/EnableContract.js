@@ -50,10 +50,10 @@ class enableContract extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      // this.setState({ name: window.sentPacket.assetClassName })
-      // this.setState({ idxHash: window.sentPacket.id })
-      this.setState({ assetClass: window.sentPacket.id, assetClassSelected: true })
-      // this.setState({ status: window.sentPacket.custodyType })
+      this.setState({
+        assetClass: window.sentPacket.id,
+        assetClassSelected: true
+      })
       console.log("Stat", window.sentPacket.status)
 
       window.sentPacket = undefined
@@ -77,13 +77,30 @@ class enableContract extends Component {
 
     const clearForm = () => {
       document.getElementById("MainForm").reset();
-      this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false, txHash: "", txStatus: false, wasSentPacket: false })
+      this.setState({
+        assetClass: "",
+        assetClassSelected: false,
+        help: false,
+        transaction: false,
+        txHash: "",
+        txStatus: false,
+        wasSentPacket: false
+      })
     }
 
     const _setAC = (_e) => {
       const e = JSON.parse(_e);
       console.log("In setAC", e);
-      return this.setState({ acArr: e, assetClass: e.id, assetClassSelected: true, custodyType: e.custodyType, ACName: e.name, root: e.root, txHash: "", txStatus: false });
+      return this.setState({
+        acArr: e,
+        assetClass: e.id,
+        assetClassSelected: true,
+        custodyType: e.custodyType,
+        ACName: e.name,
+        root: e.root,
+        txHash: "",
+        txStatus: false
+      });
     }
 
     const help = async () => {
@@ -101,68 +118,68 @@ class enableContract extends Component {
 
     const _setContract = async (e) => {
       let authTemp, custodyId;
-      
-      if(this.state.custodyType === "Custodial"){
+
+      if (this.state.custodyType === "Custodial") {
         custodyId = 1;
-        switch(e) {
-          case "APP" : 
-            {authTemp = "1"; break;}
-          case "NP" : 
-            {authTemp = "1"; break;}
-          case "ECR" : 
-            {authTemp = "3"; break;}
-          case "ECR_MGR" : 
-            {authTemp = "3"; break;}
-          case "AC_TKN" : 
-            {authTemp = String(custodyId); break;}
-          case "A_TKN" : 
-            {if (this.state.root === this.state.assetClass) {authTemp = "1"; break;} else{authTemp = String(custodyId); break;} }
-          case "AC_MGR" : 
-            {authTemp = String(custodyId); break;}
-          case "RCLR" : 
-            {authTemp = "3"; break;}
-          default : 
-            {alert("Contract not allowed in asset class"); clearForm(); break;}
+        switch (e) {
+          case "APP":
+            { authTemp = "1"; break; }
+          case "NP":
+            { authTemp = "1"; break; }
+          case "ECR":
+            { authTemp = "3"; break; }
+          case "ECR_MGR":
+            { authTemp = "3"; break; }
+          case "AC_TKN":
+            { authTemp = String(custodyId); break; }
+          case "A_TKN":
+            { if (this.state.root === this.state.assetClass) { authTemp = "1"; break; } else { authTemp = String(custodyId); break; } }
+          case "AC_MGR":
+            { authTemp = String(custodyId); break; }
+          case "RCLR":
+            { authTemp = "3"; break; }
+          default:
+            { alert("Contract not allowed in asset class"); clearForm(); break; }
         }
       }
 
-      else{
+      else {
         custodyId = 2;
-        switch(e) {
-          case "APP_NC" : 
-            {authTemp = "2"; break;}
-          case "NP_NC" : 
-            {authTemp = "2"; break;}
-          case "ECR_NC" : 
-            {authTemp = "3"; break;}
-          case "ECR_MGR" : 
-            {authTemp = "3"; break;}
-          case "AC_TKN" : 
-            {authTemp = String(custodyId); break;}
-          case "A_TKN" : 
-            {if (this.state.root === this.state.assetClass) {authTemp = "1"; break;} else{authTemp = String(custodyId); break;} }
-          case "AC_MGR" : 
-            {authTemp = String(custodyId); break;}
-          case "RCLR" : 
-            {authTemp = "3"; break;}
-          default : 
-            {alert("Contract not allowed in asset class"); clearForm(); break;}
+        switch (e) {
+          case "APP_NC":
+            { authTemp = "2"; break; }
+          case "NP_NC":
+            { authTemp = "2"; break; }
+          case "ECR_NC":
+            { authTemp = "3"; break; }
+          case "ECR_MGR":
+            { authTemp = "3"; break; }
+          case "AC_TKN":
+            { authTemp = String(custodyId); break; }
+          case "A_TKN":
+            { if (this.state.root === this.state.assetClass) { authTemp = "1"; break; } else { authTemp = String(custodyId); break; } }
+          case "AC_MGR":
+            { authTemp = String(custodyId); break; }
+          case "RCLR":
+            { authTemp = "3"; break; }
+          default:
+            { alert("Contract not allowed in asset class"); clearForm(); break; }
         }
       }
 
-      
+
       console.log(e, authTemp);
-      return this.setState({name: e, authLevel: authTemp})
+      return this.setState({ name: e, authLevel: authTemp })
     }
 
     const enableContract = async () => {
-      this.setState({transaction: true})
-      if(this.state.name < 1) {return alert("Please select a contract to enable")}
-      if(this.state.assetClass === undefined) {return}
+      this.setState({ transaction: true })
+      if (this.state.name < 1) { return alert("Please select a contract to enable") }
+      if (this.state.assetClass === undefined) { return }
       console.log(this.state.name)
       console.log(this.state.assetClass)
       console.log(this.state.authLevel)
-      
+
       await window.contracts.STOR.methods
         .enableContractForAC(
           this.state.name,
@@ -171,24 +188,36 @@ class enableContract extends Component {
         )
         .send({ from: window.addr })
         .on("error", function (_error) {
-          self.setState({ error: _error });
-          this.setState({ transaction: false, wasSentPacket: false })
-          self.setState({ result: _error.transactionHash });
+          self.setState({
+            error: _error,
+            transaction: false,
+            wasSentPacket: false,
+            result: _error.transactionHash
+          });
           return clearForm();
         })
         .on("receipt", (receipt) => {
           console.log("contract added under authLevel:", self.state.authLevel);
           console.log("tx receipt: ", receipt);
-          this.setState({ transaction: false, wasSentPacket: false })
-          self.setState({ txHash: receipt.transactionHash });
-          self.setState({ txStatus: receipt.status });
-          self.setState({ hasLoadedAssetClasses: false })
+          self.setState({
+            transaction: false,
+            wasSentPacket: false,
+            txHash: receipt.transactionHash,
+            txStatus: receipt.status,
+            hasLoadedAssetClasses: false
+          })
           window.resetInfo = true;
           console.log("tx receipt: ", receipt);
-          return this.setState({ assetClass: "", assetClassSelected: false, help: false, transaction: false })
         });
 
       console.log(this.state.txHash);
+
+      return self.setState({
+        assetClass: "",
+        assetClassSelected: false,
+        help: false,
+        transaction: false
+      })
     };
 
     return (
@@ -214,7 +243,7 @@ class enableContract extends Component {
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
-                {!this.state.wasSentPacket && (
+                  {!this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
@@ -245,23 +274,23 @@ class enableContract extends Component {
                     <Form.Label className="formFont">Contract Name :</Form.Label>
                     {this.state.transaction === false && (
                       <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { _setContract(e.target.value) }}
-  
-                    >
+                        as="select"
+                        size="lg"
+                        onChange={(e) => { _setContract(e.target.value) }}
+
+                      >
                         <optgroup className="optgroup">
                           {window.utils.generateOptionsFromObject(window.contracts, "contracts")}
                         </optgroup>
-                    </Form.Control>
+                      </Form.Control>
                     )}
                     {this.state.transaction === true && (
                       <Form.Control
-                      size="lg"
-                      placeholder={this.state.name}
-                      disabled
-                    >
-                    </Form.Control>
+                        size="lg"
+                        placeholder={this.state.name}
+                        disabled
+                      >
+                      </Form.Control>
                     )}
                   </Form.Group>
                 </Form.Row>

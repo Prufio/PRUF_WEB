@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
-import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff } from "react-feather";
+import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, Copy, Share2 } from "react-feather";
 
 
 class RetrieveRecordMobile extends Component {
@@ -28,7 +28,8 @@ class RetrieveRecordMobile extends Component {
               photo: tempIPFS.photo,
 
             },
-            moreInfo: true
+            moreInfo: true,
+            URL: this.state.baseURL + this.state.idxHash
           })
         }
         else {
@@ -44,7 +45,8 @@ class RetrieveRecordMobile extends Component {
               photo: tempIPFS.photo,
 
             },
-            moreInfo: true
+            moreInfo: true,
+            URL: this.state.baseURL + this.state.idxHashRaw
           })
         }
 
@@ -179,10 +181,20 @@ class RetrieveRecordMobile extends Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Name : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.name}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
-              <Card.Title><h4 className="cardDescriptionSelectedMobile">ID : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.idxHash}</h4></Card.Title>
+              <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
+              <div className="cardCopyButtonMobile">
+                  <div className="cardCopyButtonMobileContent">
+                    <Copy
+                      size={15}
+                      onClick={() => { navigator.clipboard.writeText(String(obj.idxHash)) }}
+                    />
+                  </div>
+                </div>
+                <h4 className="cardDescriptionSelectedContentMobile">
+                  {obj.idxHash}
+                </h4>
+              </Card.Title>
               <Card.Title>{generateTextList()}</Card.Title>
-              <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">****End of Asset****</h4></Card.Title>
-              {/* <Card.Title><h4 h4 className="cardDescriptionSelectedMobile">*********************</h4></Card.Title> */}
             </Card.Body>
           </Card>
           <div className="backButtonMobileAD">
@@ -190,7 +202,16 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined, legacyMode: false }) }}
+                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
+              />
+            </div>
+          </div>
+          <div className="shareButtonMobileAD">
+            <div className="submitButtonRRQR3MobileContent">
+              <Share2
+                color={"#028ed4"}
+                size={35}
+                onClick={() => { navigator.clipboard.writeText(String(this.state.URL)) }}
               />
             </div>
           </div>
@@ -312,6 +333,7 @@ class RetrieveRecordMobile extends Component {
       if(tempBool){
         this.setState({
           queryValue: data,
+          URL: window.location.href,
           assetFound: "Asset Found!",
           wasSentQuery: true
         })
@@ -378,7 +400,9 @@ class RetrieveRecordMobile extends Component {
       lookupIPFS1: "",
       lookupIPFS2: "",
       hashPath: "",
+      baseURL: "https://app.pruf.io/#/",
       error: undefined,
+      URL: undefined,
       NRerror: undefined,
       result: [],
       assetClass: undefined,
@@ -418,10 +442,22 @@ class RetrieveRecordMobile extends Component {
   //component state-change events......................................................................................................
 
   componentDidMount() {//stuff to do when component mounts in window
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+        color: [0.36, 0.70],
+        grayscale: [0.24, 0.82]
+      },
+      saturation: {
+        color: 0.75,
+        grayscale: 0.10
+      },
+      backColor: "#ffffffff"
+    };
 
     let hashString = window.location.hash;
-    if (hashString.includes("?")) {
-      let str = hashString.substring(hashString.indexOf("?")+1, hashString.length)
+    if (hashString.includes("0x")) {
+      let str = hashString.substring(hashString.indexOf("0x"), hashString.indexOf("0x") + 66)
       this.handleQuery(str)
     }
 
@@ -524,16 +560,17 @@ class RetrieveRecordMobile extends Component {
           String(this.state.model).replace(/\s/g, ''),
           String(this.state.serial).replace(/\s/g, '')
         );
-        this.setState({ idxHash: idxHash })
         console.log("idxHash", idxHash);
         console.log("addr: ", window.addr);
       }
 
-      if (this.state.Checkbox === true) {
+      else if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw;
         console.log("idxHash", idxHash);
         console.log("addr: ", window.addr);
       }
+
+      this.setState({ idxHash: idxHash })
 
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
