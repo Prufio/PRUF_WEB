@@ -176,6 +176,7 @@ class IncreaseACShare extends Component {
           })
         })
         .on("receipt", (receipt) => {
+          window.recount = true;
           window.resetInfo = true;
           self.setState({
             hasLoadedAssetClasses: false,

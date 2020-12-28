@@ -121,7 +121,7 @@ function buildWindowUtils() {
             <option key="noselect" value="null"> Select an option </option>];
 
           for (let i = 0, count = 1; i < keys.length; i++) {
-            if (keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR" && keys[i] !== "APP" && keys[i] !== "NP" && keys[i] !== "ECR") {
+            if (keys[i] !== "ID_TKN" && heys[i] !== "PARTY" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR" && keys[i] !== "APP" && keys[i] !== "NP" && keys[i] !== "ECR") {
               component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
                 {count}:
               Name: {keys[i]}

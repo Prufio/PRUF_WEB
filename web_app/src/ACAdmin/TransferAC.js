@@ -145,6 +145,7 @@ class TransferAC extends Component {
           console.log(Object.values(_error)[0].transactionHash);
         })
         .on("receipt", (receipt) => {
+          window.recount = true;
           window.resetInfo = true;
           self.setState({
             hasLoadedAssetClasses: false,
