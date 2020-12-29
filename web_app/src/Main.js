@@ -1025,6 +1025,8 @@ class Main extends Component {
       //if(this.state.hasMounted)console.log(window.aTknIDs,this.state.buildReady,window.ipfsCounter, this.state.runWatchDog)
     }, 100)
 
+    this.netWorkWatchdog = setInterval(()=>{if(this.state.runWatchDog === true){window.web3.eth.net.getNetworkType().then((e)=>{if(e === "kovan"){this.setState({isKovan: true})} else{this.setState({isKovan: false})}})}}, 800)
+
     //Local menu toggler for navlinks
     this.toggleMenu = async (menuChoice) => {
 
@@ -1429,6 +1431,7 @@ class Main extends Component {
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
     this.setUpTokenVals = async (willSetup) => {
+
       window.balances = {}
       console.log("STV: Setting up balances")
 
@@ -1541,6 +1544,7 @@ class Main extends Component {
     this.setUpContractEnvironment = async (_web3) => {
       if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
       window.isSettingUpContracts = true;
+      _web3.eth.net.getNetworkType().then((e)=>{if(e === "kovan"){this.setState({isKovan: true})} else{this.setState({isKovan: false})}})
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
         if (!isMobile) {
@@ -1979,6 +1983,14 @@ class Main extends Component {
           <div className="errorMediaLink">
             <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
           </div>
+        </div>)
+    }
+
+    if(this.state.isKovan === false){
+      return (
+        <div>
+          <h1> Please connect to the Kovan testnet and reload the page. </h1>
+          <br></br>
         </div>)
     }
 
