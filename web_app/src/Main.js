@@ -957,7 +957,6 @@ class Main extends Component {
             noAddrMenuBool: false,
             authorizedUserMenuBool: false
           })
-
           this.setState({ menuChange: undefined });
         }
       }
@@ -976,9 +975,7 @@ class Main extends Component {
           hasFetchedBalances: false,
           routeRequest: "basicMobile"
         })
-
         window.web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
-
         window.addEventListener("accountListener", this.acctChanger());
       }
 
@@ -1263,25 +1260,6 @@ class Main extends Component {
 
       console.log("Asset setUp Complete. Turning on watchDog.")
 
-      //Build an AC report for provisional placeholder on AC node bal
-      /* if (window.assetClasses !== undefined) {
-        if (window.assetClasses.ids !== undefined) {
-          for (let i = 0; i < window.assetClasses.ids.length; i++) {
-            report += ((i + 1) + ".) " + window.assetClasses.names[i]
-              + "\nCustody type: " + window.assetClasses.custodyTypes[i]
-              + "\nroot ACN: " + window.assetClasses.roots[i]
-              + "\nnode ID: " + window.assetClasses.ids[i]
-              + "\nshare: " + window.assetClasses.discounts[i] / 100 + "%\n----------\n")
-          }
-        }
-        else {
-          report = "No AC nodekeys held by user";
-        }
-      } */
-
-      //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
-      //this.setState({ assetClassReport: report })
-
       await this.setState({ runWatchDog: true })
 
       if(window.assetClasses.ids !== undefined && window.aTknIDs !== undefined){
@@ -1291,9 +1269,6 @@ class Main extends Component {
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
-      //alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
-      //alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+ window.aTknIDs + "\n")
-      //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
     this.mintID = async () => {
@@ -1341,11 +1316,7 @@ class Main extends Component {
 
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = () => {
-      //if(window.assets.ids === undefined){this.buildAssets()}
-      //this.setState({buildReady: false})
-      //alert("Some Vars: atkns" + Object.values(window.assets) + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
-      //alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
       window.ipfsCounter = 0;
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
@@ -1373,9 +1344,8 @@ class Main extends Component {
       }
 
       if(window.hasNoAssets === false){
-              //Get objects from unparsed asset data for reference in the app 
+        //Get objects from unparsed asset data for reference in the app 
       for (let i = 0; i < window.assets.ids.length; i++) {
-        //console.log(window.assets.descriptions[i][0])
         if (window.assets.descriptions[i][0] !== undefined) {
           tempDescArray.push(JSON.parse(window.assets.descriptions[i][0]))
         }
@@ -1426,7 +1396,6 @@ class Main extends Component {
       
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
-      //alert("Assets Built: " + window.assets.ids.length)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
@@ -1445,19 +1414,14 @@ class Main extends Component {
     //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
 
     this.getIPFSJSONObject = (lookup, descElement) => {
-      //console.log(lookup)
       window.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-          //alert("IPFS ERROR")
           descElement.push(undefined)
           window.ipfsCounter++
-          //console.log(window.ipfsCounter)
         } else {
-          //console.log(lookup, "Here's what we found for asset description: ", result);
           descElement.push(result)
           window.ipfsCounter++
-          //console.log(window.ipfsCounter)
         }
       });
     };
@@ -1532,7 +1496,6 @@ class Main extends Component {
             window.recount = true;
             window.resetInfo = true;
 
-            //self.setUpContractEnvironment(window.web3);
             console.log("///////in acctChanger////////");
           }
           else { console.log("Something bit in the acct listener, but no changes made.") }
@@ -1603,7 +1566,6 @@ class Main extends Component {
 
 
         console.log("bools...", window.assetHolderBool, window.assetClassHolderBool, window.IDHolderBool)
-        //console.log("Wallet balance in ETH: ", window.ETHBalance)
         window.isSettingUpContracts = false;
         return this.setState({ runWatchDog: true })
       }
