@@ -198,7 +198,7 @@ class RetrieveRecord extends Component {
                           <div className="QR">
                             {this.state.idxHashRaw !== "" && (
                               <QRCode
-                                value={this.state.idxHashRaw}
+                                value={"https://indevapp.pruf.io/#/"+this.state.idxHashRaw}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
@@ -208,7 +208,7 @@ class RetrieveRecord extends Component {
                             )}
                             {this.state.idxHashRaw === "" && (
                               <QRCode
-                                value={obj.idxHash}
+                                value={"https://indevapp.pruf.io/#/"+obj.idxHash}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
