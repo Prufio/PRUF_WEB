@@ -457,7 +457,7 @@ class Main extends Component {
                       dApp Last Updated:
                   </h3>
                     <h3>
-                      December 24, 2020
+                      December 30, 2020
                   </h3>
                     <h3>
                       <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
@@ -467,14 +467,17 @@ class Main extends Component {
                         ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.0 </a>
                         : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.2.0 </a>}
                     </h3>
-                    <Form.Check
+                    
+                      <Form.Check
                       type="checkbox"
+                      checked={this.state.particles}
                       className="checkBoxParticles"
                       id="inlineFormCheck"
                       onChange={() => { this.particles() }}
-                    />
+                      />
+                    
                     <h3 className="textParticles">
-                      Particles Off
+                      Particles
                     </h3>
                   </div>
                   <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
