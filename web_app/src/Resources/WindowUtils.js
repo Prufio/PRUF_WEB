@@ -1458,7 +1458,7 @@ function buildWindowUtils() {
             logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
           />
         </div>
-        <div className="cardHref">https://app.pruf.io {window.printObj.idxHash}</div>
+        <div className="cardHref">https://app.pruf.io</div>
         <div className="cardDate">{date}</div>
         <div className="printFormContent">
           <img
@@ -1478,6 +1478,7 @@ function buildWindowUtils() {
           <p className="cardNamePrint">Name : {window.printObj.name}</p>
           <p className="cardAcPrint">Asset Class : {window.printObj.assetClassName}</p>
           <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
+          
         </div>
       </div >
     )

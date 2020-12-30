@@ -2371,6 +2371,14 @@ margin-bottom: -3rem;
   color: white;
   z-index: 999;
 }
+
+.cardAddrPrint {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 7rem;
+  color: white;
+  z-index: 999;
+}
       
 .cardNamePrint {
   font-weight: bold;
@@ -2391,7 +2399,7 @@ margin-bottom: -3rem;
   font-size: 2rem;
   font-weight: bold;
   margin-top: 30rem;
-  margin-left: 9.5rem;
+  margin-left: 8.5rem;
   color: white;
   z-index: 999;
   position: absolute;
