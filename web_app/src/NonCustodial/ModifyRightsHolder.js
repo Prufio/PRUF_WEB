@@ -60,13 +60,13 @@ class ModifyRightsHolder extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"});
+        alert("Cannot edit asset in lost or stolen status" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
+        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -108,10 +108,10 @@ class ModifyRightsHolder extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _checkIn = async (e) => {
       this.setState({ help: false, txHash: "", txStatus: false })
@@ -130,15 +130,15 @@ class ModifyRightsHolder extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        this.setState({alertBanner: "Asset does not exist at given IDX"});
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
       }
 
       if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"}); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -159,7 +159,7 @@ class ModifyRightsHolder extends Component {
     const _editRgtHash = async () => {
       var idxHash = this.state.idxHash;
       var newRgtRaw;
-      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return this.setState({alertBanner: "Please select an asset from the dropdown"})}
+      if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
       this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -191,7 +191,7 @@ class ModifyRightsHolder extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          this.setState({alertBanner: "Something went wrong!"})
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -230,14 +230,6 @@ class ModifyRightsHolder extends Component {
           )}
           {window.addr > 0 && (
             <div>
-                          {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
@@ -418,6 +410,13 @@ class ModifyRightsHolder extends Component {
         </Form>
         {this.state.transaction === false && this.state.txStatus === false && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === false && (
                 <Form.Group>

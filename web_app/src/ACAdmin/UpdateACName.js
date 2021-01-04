@@ -120,14 +120,13 @@ class UpdateACName extends Component {
     }
 
     const updateName = async () => {
+      if (this.state.assetClass === undefined || this.state.newACName === "") { return this.setState({ alertBanner: "Please fill out all forms before submission." }) }
       var alreadyExists = await window.utils.checkACName(this.state.newACName);
       console.log(alreadyExists)
       if (alreadyExists) {
-        return this.setState({alertBanner: "AC name already exists! Choose a different name and try again"})
+        return this.setState({ alertBanner: "AC name already exists! Choose a different name and try again" })
       }
       this.setState({ transaction: true })
-
-      if (this.state.assetClass === undefined || this.state.newACName === undefined) { return }
 
       await window.contracts.AC_MGR.methods
         .updateACname(
@@ -143,7 +142,7 @@ class UpdateACName extends Component {
             txHash: Object.values(_error)[0].transactionHash,
             txStatus: false
           })
-          this.setState({alertBanner: "Something went wrong!"})
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -188,14 +187,6 @@ class UpdateACName extends Component {
           )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
-                        {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
@@ -282,6 +273,13 @@ class UpdateACName extends Component {
         {
           this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
             <div className="assetSelectedResults">
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
               <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
             </div>
           )

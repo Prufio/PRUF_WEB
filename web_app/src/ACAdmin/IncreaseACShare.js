@@ -150,11 +150,11 @@ class IncreaseACShare extends Component {
       await console.log("Pruf Bal", this.state.prufBalance);
 
       if (this.state.prufBalance < this.state.costPerShare * Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare))) {
-        return this.setState({alertBanner: "Insufficient balance!"})
+        return this.setState({ alertBanner: "Insufficient balance!" })
       }
 
       if (this.state.currentShare * 0.01 === (this.state.currentShare * 0.01 + Math.round(0.0001 * this.state.amount * (this.state.upperLimit - this.state.currentShare)))) {
-        return this.setState({alertBanner: "Please increase the slider value before submission"})
+        return this.setState({ alertBanner: "Please increase the slider value before submission" })
       }
 
       console.log()
@@ -218,14 +218,6 @@ class IncreaseACShare extends Component {
           )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
-                        {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
@@ -320,6 +312,13 @@ class IncreaseACShare extends Component {
         {
           this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
             <div className="assetSelectedResults">
+              {this.state.alertBanner !== undefined && (
+                <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                  <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                    {this.state.alertBanner}
+                  </Alert>
+                </ClickAwayListener>
+              )}
               <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
             </div>
           )

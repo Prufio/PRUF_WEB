@@ -991,6 +991,7 @@ function buildWindowUtils() {
   }
 
   const _checkACName = async (name) => {
+    let tempBool;
     if (window.contracts !== undefined) {
       await window.contracts.AC_MGR.methods
         .resolveAssetClass(name)
@@ -998,11 +999,12 @@ function buildWindowUtils() {
           if (_error) { console.log(_error) }
           else {
             console.log("resolved successfully to AC: ", _result)
-            if (Number(_result) > 0) { return (true) }
-            else { return false }
+            if (Number(_result) > 0) { tempBool = true }
+            else { tempBool = false }
           }
         });
     }
+    return tempBool;
   }
 
   const _getEscrowData = async (idxHash) => {

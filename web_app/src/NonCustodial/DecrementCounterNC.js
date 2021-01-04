@@ -54,13 +54,13 @@ class DecrementCounterNC extends Component {
 
 
       if (Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"});
+        alert("Cannot edit asset in lost or stolen status");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
+        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -109,13 +109,13 @@ class DecrementCounterNC extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       this.setState({
         txStatus: false,
         txHash: ""
@@ -138,11 +138,11 @@ class DecrementCounterNC extends Component {
       console.log(count)
 
       if (Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"}); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -189,8 +189,8 @@ class DecrementCounterNC extends Component {
         this.setState({
           transaction: false
         })
-        return this.setState({alertBanner: "Countdown is greater than count reserve! Please ensure data fields are correct before submission."})
-          
+        return this.setState({ alertBanner: "Countdown is greater than count reserve! Please ensure data fields are correct before submission." })
+
       }
 
       await window.contracts.NP_NC.methods
@@ -201,7 +201,7 @@ class DecrementCounterNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
-          self.setState({alertBanner: "Something went wrong!"})
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -240,14 +240,6 @@ class DecrementCounterNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
-                          {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
@@ -353,19 +345,26 @@ class DecrementCounterNC extends Component {
           )}
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
-          <div className="assetSelectedResults">
-            <Form.Row>
-              {this.state.idxHash !== undefined && (
-                <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
-                  <div className="assetSelectedContentHead">Count: <span className="assetSelectedContent">{this.state.count} / {this.state.countDownStart}</span> </div>
-                </Form.Group>
-              )}
-            </Form.Row>
-          </div>
+            <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+              <Form.Row>
+                {this.state.idxHash !== undefined && (
+                  <Form.Group>
+                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
+                    <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
+                    <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                    <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
+                    <div className="assetSelectedContentHead">Count: <span className="assetSelectedContent">{this.state.count} / {this.state.countDownStart}</span> </div>
+                  </Form.Group>
+                )}
+              </Form.Row>
+            </div>
         )}
         {this.state.transaction === true && (
           <div className="results">

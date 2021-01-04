@@ -24,7 +24,7 @@ class VerifyRightHolder extends Component {
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
-          return this.setState({alertBanner: "Please fill out all fields before submission"})
+          return this.setState({ alertBanner: "Please fill out all fields before submission" })
         }
         idxHash = window.web3.utils.soliditySha3(
           String(this.state.type).replace(/\s/g, ''),
@@ -45,7 +45,7 @@ class VerifyRightHolder extends Component {
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
       if (!doesExist) {
-        return this.setState({alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission."})
+        return this.setState({ alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission." })
       }
 
       console.log("idxHash", idxHash);
@@ -231,7 +231,7 @@ class VerifyRightHolder extends Component {
             txHash: Object.values(_error)[0].transactionHash,
             txStatus: false
           })
-          this.setState({alertBanner: "Something went wrong!"})
+          this.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
@@ -279,14 +279,6 @@ class VerifyRightHolder extends Component {
           )}
           {window.addr > 0 && (
             <div>
-            {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               {this.state.QRreader === false && !this.state.accessPermitted && (
                 <div>
                   <Form.Check
@@ -635,6 +627,13 @@ class VerifyRightHolder extends Component {
         )}
         {this.state.QRreader === false && this.state.transaction === false && (
           <div className="results">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             {this.state.txHash > 0 && ( //conditional rendering
               <>
                   {this.state.DVresult === "Match confirmed"

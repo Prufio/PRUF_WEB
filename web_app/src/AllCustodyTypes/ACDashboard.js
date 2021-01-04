@@ -53,7 +53,7 @@ class ACDashboard extends React.Component {
 
       if (AC === "0" || AC === undefined) {
         this.refresh()
-        return this.setState({alertBanner: "Selected AC Cannot be Zero"})
+        return this.setState({ alertBanner: "Selected AC Cannot be Zero" })
       }
       else {
         if (
@@ -399,14 +399,13 @@ class ACDashboard extends React.Component {
           </div>
         </div>
         <div className="ACDashboard">
-        {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {!this.state.hasNoAssetClasses && this.state.hasLoadedAssetClasses && !this.state.moreInfo && (<>{generateAssetClassDash(this.state.assetClasses)}</>)}
           {!this.state.hasNoAssetClasses && this.state.hasLoadedAssetClasses && this.state.moreInfo && (<>{generateAssetClassInfo(this.state.assetClassObj)}</>)}
           {!this.state.hasNoAssetClasses && !this.state.hasLoadedAssetClasses && (<h2 className="loadingAD">Loading AC NodeKeys</h2>)}

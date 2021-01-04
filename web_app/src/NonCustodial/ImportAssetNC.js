@@ -62,7 +62,7 @@ class ImportAssetNC extends Component {
 
       if (Number(window.sentPacket.statusNum) !== 70) {
         console.log("SentPacketStatus :", window.sentPacket.status)
-        this.setState({alertBanner: "Asset is not exported! Owner must export the assset in order to import."});
+        alert("Asset is not exported! Owner must export the assset in order to import.");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -96,9 +96,9 @@ class ImportAssetNC extends Component {
     const _setAC = async () => {
       let acDoesExist;
       let destinationACData;
-      this.setState({txHash: ""})
+      this.setState({ txHash: "" })
 
-      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({alertBanner: "Selected AC Cannot be Zero"}) }
+      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({ alertBanner: "Selected AC Cannot be Zero" }) }
       else {
         if (
           isNaN(this.state.selectedAssetClass)
@@ -135,7 +135,7 @@ class ImportAssetNC extends Component {
           console.log(resArray)
 
           if (Number(resArray[0]) !== 70) {
-            this.setState({alertBanner: "Asset is not exported! Owner must export the assset in order to import."});
+            this.setState({ alertBanner: "Asset is not exported! Owner must export the assset in order to import." });
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
@@ -143,7 +143,7 @@ class ImportAssetNC extends Component {
           console.log(destinationACData.root)
 
           if (resArray[1] !== destinationACData.root) {
-            this.setState({alertBanner: "Import destination AC must have same root as origin!"});
+            this.setState({ alertBanner: "Import destination AC must have same root as origin!" });
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
@@ -167,16 +167,16 @@ class ImportAssetNC extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       console.log("Checking in with id: ", e)
       if (e === "null" || e === undefined) {
-        this.setState({alertBanner: "Please select an asset before submission."})
+        this.setState({ alertBanner: "Please select an asset before submission." })
         return clearForm()
       }
       else if (e === "reset") {
@@ -194,7 +194,7 @@ class ImportAssetNC extends Component {
         this.setState({
           QRreader: false,
         })
-        this.setState({alertBanner: "Asset does not exist! Ensure data fields are correct before submission."}); 
+        this.setState({ alertBanner: "Asset does not exist! Ensure data fields are correct before submission." });
         return clearForm()
       }
 
@@ -202,7 +202,7 @@ class ImportAssetNC extends Component {
         this.setState({
           QRreader: false,
         })
-        this.setState({alertBanner: "Asset is not exported! Owner must export the assset in order to import."});
+        this.setState({ alertBanner: "Asset is not exported! Owner must export the assset in order to import." });
         return clearForm()
       }
 
@@ -215,7 +215,7 @@ class ImportAssetNC extends Component {
         this.setState({
           QRreader: false,
         })
-        return this.setState({alertBanner: "Import destination AC must have same root as origin!"})
+        return this.setState({ alertBanner: "Import destination AC must have same root as origin!" })
       }
 
       this.setState({ selectedAsset: e })
@@ -234,9 +234,10 @@ class ImportAssetNC extends Component {
     }
 
     const _importAsset = async () => {
-      this.setState({help: false})
+      let idxHash = this.state.idxHash;
+      this.setState({ help: false })
       if (this.state.selectedAsset === undefined && !this.state.wasSentPacket) {
-        this.setState({alertBanner: "Please select an asset before submission."}); 
+        this.setState({ alertBanner: "Please select an asset before submission." });
         return clearForm()
       }
       this.setState({ txStatus: false });
@@ -244,8 +245,6 @@ class ImportAssetNC extends Component {
       this.setState({ error: undefined })
       this.setState({ resultIA: "" })
       this.setState({ transaction: true })
-
-      var idxHash = this.state.idxHash;
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -257,7 +256,7 @@ class ImportAssetNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
-          this.setState({alertBanner: "Something went wrong!"})
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -300,14 +299,6 @@ class ImportAssetNC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-                      {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
               <Form.Row>
@@ -392,7 +383,7 @@ class ImportAssetNC extends Component {
                       <div>
                         <Form.Label className="costText">
                           Cost to import into AC {this.state.selectedAssetClass}: ü{Number(window.costs.newAsset) / 1000000000000000000}
-                          </Form.Label>
+                        </Form.Label>
                         <div className="submitButton">
                           <div className="submitButtonContent">
                             <CheckCircle
@@ -423,6 +414,13 @@ class ImportAssetNC extends Component {
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && (
                 <Form.Group>

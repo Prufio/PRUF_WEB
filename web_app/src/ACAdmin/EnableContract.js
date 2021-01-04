@@ -86,7 +86,8 @@ class enableContract extends Component {
         transaction: false,
         txHash: "",
         txStatus: false,
-        wasSentPacket: false
+        wasSentPacket: false,
+        e: undefined
       })
     }
 
@@ -141,7 +142,7 @@ class enableContract extends Component {
           case "RCLR":
             { authTemp = "3"; break; }
           default:
-            { this.setState({alertBanner: "Contract not allowed in asset class"}); clearForm(); break; }
+            { this.setState({ alertBanner: "Contract not allowed in asset class" }); clearForm(); break; }
         }
       }
 
@@ -165,7 +166,7 @@ class enableContract extends Component {
           case "RCLR":
             { authTemp = "3"; break; }
           default:
-            { this.setState({alertBanner: "Contract not allowed in asset class"}); clearForm(); break; }
+            { this.setState({ alertBanner: "Contract not allowed in asset class" }); clearForm(); break; }
         }
       }
 
@@ -175,8 +176,8 @@ class enableContract extends Component {
     }
 
     const enableContract = async () => {
+      if (this.state.name < 1) { return this.setState({ alertBanner: "Please select a contract to enable" }) }
       this.setState({ transaction: true })
-      if (this.state.name < 1) { return this.setState({alertBanner: "Please select a contract to enable"}) }
       if (this.state.assetClass === undefined) { return }
       console.log(this.state.name)
       console.log(this.state.assetClass)
@@ -242,14 +243,6 @@ class enableContract extends Component {
           )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
-                        {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
@@ -345,6 +338,13 @@ class enableContract extends Component {
         {
           this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
             <div className="assetSelectedResults">
+              {this.state.alertBanner !== undefined && (
+                <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                  <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                    {this.state.alertBanner}
+                  </Alert>
+                </ClickAwayListener>
+              )}
               <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
             </div>
           )

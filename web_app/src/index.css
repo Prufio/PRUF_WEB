@@ -191,10 +191,22 @@ div {
   z-index: 3;
 }
 
-
 .alertBanner {
   font-size: 1.2rem;
   height: fit-content;
+  width: 55rem;
+}
+
+.alertBannerMobile {
+  font-size: 1.2rem;
+  height: fit-content;
+  width: 355px;
+}
+
+.msgBanner {
+  font-size: 1.2rem;
+  height: fit-content;
+  width: 68rem;
 }
 
 .alertFooter {
@@ -603,6 +615,7 @@ div {
   height: flex;
   max-height: 30rem;
   overflow-y: auto;
+  flex-direction: column;
   width: 59rem;
   color: white;
   background-color: #002a40;
@@ -1391,7 +1404,7 @@ div {
 .checkBox {
   color: white;
   font-size: 2rem;
-  margin-top: -2rem;
+  margin-top: -1.8rem;
 }
 
 .checkBox2 {
@@ -1751,7 +1764,7 @@ margin-bottom: -3rem;
   font-size: 1.5rem;
   color: rgb(255, 255, 255);
   font-family: Tahoma, Geneva, sans-serif;
-  margin-top: -2.6rem;
+  margin-top: -2.5rem;
   margin-left: 2.5rem;
 }
 
