@@ -272,7 +272,7 @@ class RetrieveRecord extends Component {
                         <div className="cardButton2Content">
                           <CornerUpLeft
                             size={35}
-                            onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false }) }}
+                            onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false, result: "" }) }}
                           />
                         </div>
                       </div>
