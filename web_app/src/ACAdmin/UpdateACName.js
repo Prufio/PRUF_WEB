@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class UpdateACName extends Component {
   constructor(props) {
@@ -118,12 +120,12 @@ class UpdateACName extends Component {
     }
 
     const updateName = async () => {
-      this.setState({ transaction: true })
       var alreadyExists = await window.utils.checkACName(this.state.newACName);
       console.log(alreadyExists)
       if (alreadyExists) {
-        return (alert("AC name already exists! Choose a different name and try again"))
+        return this.setState({alertBanner: "AC name already exists! Choose a different name and try again"})
       }
+      this.setState({ transaction: true })
 
       if (this.state.assetClass === undefined || this.state.newACName === undefined) { return }
 
@@ -141,7 +143,7 @@ class UpdateACName extends Component {
             txHash: Object.values(_error)[0].transactionHash,
             txStatus: false
           })
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -186,6 +188,14 @@ class UpdateACName extends Component {
           )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
+                        {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">

@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
+import Alert from "react-bootstrap/Alert";
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy, Share2 } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class RetrieveRecord extends Component {
@@ -278,7 +280,7 @@ class RetrieveRecord extends Component {
                         <div className="cardButton4Content">
                           <Share2
                             size={35}
-                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); alert("Asset link copied to clipboard") }}
+                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); this.setState({alertBanner: "Asset link copied to clipboard"}) }}
                           />
                         </div>
                       </div>
@@ -355,7 +357,7 @@ class RetrieveRecord extends Component {
         let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
         if (tempBool) {
           idxHash = String(this.state.queryValue)
-        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return alert("Asset does not exist!") }
+        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return this.setState({alertBanner: "Asset does not exist!"}) }
 
       } else {
         idxHash = String(this.state.result)
@@ -419,7 +421,7 @@ class RetrieveRecord extends Component {
 
     this.handleQuery = async (data) => {
       if (data.substring(0, 2) !== "0x") {
-        return alert("'" + data + "'" + " is not a proper IDX!")
+        return this.setState({alertBanner: ("'" + data + "'" + " is not a proper IDX!")})
       }
 
       let tempBool = true//await window.utils.checkAssetExistsBare(data)
@@ -917,6 +919,14 @@ class RetrieveRecord extends Component {
                 <h2 className="assetDashboardHeader">Here's what we found: </h2>
               </div>
               <div className="assetDashboard">
+              {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
                 {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
                 {this.state.assetObj === undefined && (<h4 className="loadingRR">Loading Asset</h4>)}
               </div>

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class ModifyDescriptionNC extends Component {
@@ -49,31 +51,31 @@ class ModifyDescriptionNC extends Component {
     if (window.sentPacket !== undefined) {
       console.log(window.sentPacket.status)
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot transfer asset in lost or stolen status! Please change to transferrable status");
+        this.setState({alertBanner: "Cannot transfer asset in lost or stolen status! Please change to transferrable status"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions");
+        this.setState({alertBanner: "Cannot transfer asset in escrow! Please wait until asset has met escrow conditions"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 58) {
-        alert("Cannot transfer asset in imported status! please change to transferrable status");
+        this.setState({alertBanner: "Cannot transfer asset in imported status! please change to transferrable status"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 70) {
-        alert("Cannot transfer asset in exported status! please import asset and change to transferrable status");
+        this.setState({alertBanner: "Cannot transfer asset in exported status! please import asset and change to transferrable status"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) !== 51) {
-        alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status");
+        this.setState({alertBanner: "Cannot transfer asset in a status other than transferrable! please change asset to transferrable status"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -124,11 +126,11 @@ class ModifyDescriptionNC extends Component {
 
 
       if (Number(resArray[1]) === 0) {
-        alert("Asset does not exist at given IDX"); return clearForm()
+        this.setState({alertBanner: "Asset does not exist at given IDX"}); return clearForm()
       }
 
       if (Number(resArray[0]) !== 51) {
-        alert("Asset not in transferrable status"); return clearForm()
+        this.setState({alertBanner: "Asset not in transferrable status"}); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -166,18 +168,18 @@ class ModifyDescriptionNC extends Component {
   }
 
     const _transferAsset = async () => {
+      var idxHash = this.state.idxHash;
+      let to = this.state.to;
+      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return this.setState({alertBanner: "Please select an asset from the dropdown"})}
+      else if(to === "" || to === undefined || !window.web3.utils.isAddress(to)){return this.setState({alertBanner: "Please input a valid 'to' address."})}
+      console.log("idxHash", idxHash);
+      console.log("addr: ", window.addr);
       this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ result: "" })
       this.setState({ transaction: true });
-      var idxHash = this.state.idxHash;
-      let to = this.state.to;
-      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
-      else if(to === "" || to === undefined || !window.web3.utils.isAddress(to)){return alert("Please input a valid 'to' address.")}
-      console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
 
       window.contracts.A_TKN.methods
         .safeTransferFrom(window.addr, to, idxHash)
@@ -187,7 +189,7 @@ class ModifyDescriptionNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -225,6 +227,14 @@ class ModifyDescriptionNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Transfer :</Form.Label>

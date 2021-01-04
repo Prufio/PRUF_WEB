@@ -220,7 +220,10 @@ class DecrementMobile extends Component {
           //Stuff to do when tx confirms
         });
 
-      return this.setState({ idxHash: undefined, wasSentPacket: false });
+      return this.setState({ 
+        idxHash: undefined, 
+        wasSentPacket: false 
+      });
     };
 
     return (

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class ModifyRecordStatusNC extends Component {
@@ -10,44 +12,16 @@ class ModifyRecordStatusNC extends Component {
 
     //State declaration.....................................................................................................
 
-
-
-    // this.toastTest = async () => {
-    //   const notify = () => toast("Wow so easy !");
-    //   return (
-    //     <div>
-    //     <button className="toastButton" onClick={notify}>Notify !</button>
-    //     <ToastContainer
-    //     position="bottom-right"
-    //     autoClose={5000}
-    //     hideProgressBar={false}
-    //     newestOnTop={false}
-    //     closeOnClick
-    //     rtl={false}
-    //     pauseOnFocusLoss
-    //     draggable
-    //     pauseOnHover
-    //     />
-    //     </div>
-    //   );
-    // }
-
     this.clearForm = async () => {
+      const self = this;
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined,  transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
 
     this.modifyStatus = async () => {
-      this.setState({help: false})
       const self = this;
-
-      this.setState({ txStatus: false });
-      this.setState({ txHash: "" });
-      this.setState({ error: undefined })
-      this.setState({ result: "" })
-      this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
-      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
+      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return this.setState({alertBanner: "Please select an asset from the dropdown"})}
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -59,14 +33,22 @@ class ModifyRecordStatusNC extends Component {
 
       if (!doesExist) {
         this.clearForm()
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
+        return this.setState({alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission."})
 
       }
 
       if (NewStatusString === this.state.status) {
         this.clearForm()
-        return alert("Asset already in selected Status! Ensure data fields are correct before submission.")
+        return this.setState({alertBanner: "Asset already in selected Status! Ensure data fields are correct before submission."})
       }
+
+      this.setState({help: false})
+      this.setState({ txStatus: false });
+      this.setState({ txHash: "" });
+      this.setState({ error: undefined })
+      this.setState({ result: "" })
+      this.setState({ transaction: true })
+
 
       if (
         this.state.newStatus !== "53" &&
@@ -81,10 +63,10 @@ class ModifyRecordStatusNC extends Component {
           .send({ from: window.addr })
           .on("error", function (_error) {
             // self.setState({ NRerror: _error });
+            this.setState({alertBanner: "Something went wrong!"})
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
             self.setState({ txStatus: false });
             self.setState({ transaction: false, wasSentPacket: false });
-            alert("Something went wrong!")
             self.clearForm();
             console.log(Object.values(_error)[0].transactionHash);
           })
@@ -107,10 +89,10 @@ class ModifyRecordStatusNC extends Component {
           .send({ from: window.addr })
           .on("error", function (_error) {
             // self.setState({ NRerror: _error });
+            this.setState({alertBanner: "Something went wrong!"})
             self.setState({ transaction: false })
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
             self.setState({ txStatus: false, wasSentPacket: false });
-            alert("Something went wrong!")
             self.clearForm();
             console.log(Object.values(_error)[0].transactionHash);
           })
@@ -127,7 +109,7 @@ class ModifyRecordStatusNC extends Component {
           });
       }
 
-      else { alert("Invalid status input") }
+      else { this.setState({alertBanner: "Invalid status input"}) }
 
       console.log(this.state.txHash);
       this.setState({
@@ -174,7 +156,7 @@ class ModifyRecordStatusNC extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -215,10 +197,6 @@ class ModifyRecordStatusNC extends Component {
 
     const _checkIn = async (e) => {
       this.setState({help: false, txHash: "", txStatus: false})
-      this.setState({
-        txStatus: false,
-        txHash: ""
-      })
       if (e === "null" || e === undefined) {
         return this.clearForm()
       }
@@ -234,11 +212,11 @@ class ModifyRecordStatusNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        alert("Asset does not exist at given IDX");
+        this.setState({alertBanner: "Asset does not exist at given IDX"});
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return this.clearForm()
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return this.clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -276,6 +254,14 @@ class ModifyRecordStatusNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>

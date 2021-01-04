@@ -25,6 +25,7 @@ import { isSafari } from "is-safari";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
 
 class Main extends Component {
   constructor(props) {
@@ -214,7 +215,7 @@ class Main extends Component {
                                     onClick={() => {
                                       this.setState({ userMenu: undefined })
                                       if (window.ethereum) { window.ethereum.enable() }
-                                      else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                                      else { this.setState({alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask"}); }
                                     }
                                     }
                                     className="userDataLink">
@@ -288,7 +289,6 @@ class Main extends Component {
                                     Assets :
                               <Button
                                       variant="userButton"
-                                      // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
                                       onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/asset-dashboard-mobile' }}>
                                       {this.state.assetBalance}
                                     </Button>
@@ -612,7 +612,7 @@ class Main extends Component {
                               onClick={() => {
                                 this.setState({ userMenu: undefined })
                                 if (window.ethereum) { window.ethereum.enable() }
-                                else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                                else { this.setState({alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask"}); }
                               }
                               }
                               className="userDataLink">
@@ -735,6 +735,14 @@ class Main extends Component {
             </div>
           </div>
           <div className="pageForm">
+          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
             {this.state.particles === true && (
               <ParticleBox />
             )}
@@ -988,7 +996,6 @@ class Main extends Component {
           this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
             console.log("WD: rebuilding assets (Last Step)")
-            //alert("WD: rebuilding assets (Last Step) ")
             //this.setState({runWatchDog: false})
             this.buildAssets()
           }
@@ -1009,7 +1016,6 @@ class Main extends Component {
       if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
           console.log("Assets are ready for rebuild")
-          //alert("WD: Assets Deemed ready for rebuild.")
           this.setState({ buildReady: true})
         }
       }
@@ -1018,7 +1024,6 @@ class Main extends Component {
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
         console.log("Assets finished rebuilding, no longer ready for rebuild")
-        //alert("WD: Shutting off buildReady")
         this.setState({ buildReady: false })
       }
 
@@ -1238,7 +1243,6 @@ class Main extends Component {
       let tempNamesArray = [];
 
       //Get all asset token profiles for parsing
-      //alert("IN SETUP ASSETS")
 
       await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
@@ -1279,7 +1283,7 @@ class Main extends Component {
         .GET_ID()
         .send({ from: window.addr })
         .on("error", function (_error) {
-          alert("Something went wrong when minting ID!")
+          this.setState({alertBanner: "Something went wrong when minting ID!"})
         })
         .on("receipt", (receipt) => {
           window.resetInfo = true;

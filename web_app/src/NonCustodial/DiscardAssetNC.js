@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Trash2, Home, XSquare, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class DiscardAssetNC extends Component {
   constructor(props) {
@@ -49,7 +51,7 @@ class DiscardAssetNC extends Component {
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) !== 59) {
         window.sentPacket = undefined;
-        alert("Asset is not discardable! Owner must set status to discardable.");
+        this.setState({alertBanner: "Asset is not discardable! Owner must set status to discardable."});
         return window.location.href = "/#/asset-dashboard"
       }
 
@@ -93,7 +95,7 @@ class DiscardAssetNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[0]) !== 59) {
-        alert("Asset not in discardable status"); return clearForm()
+        this.setState({alertBanner: "Asset not in discardable status"}); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -131,6 +133,9 @@ class DiscardAssetNC extends Component {
   }
 
     const _discardAsset = async () => {//create a new asset record
+      var idxHash = this.state.idxHash;
+      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return this.setState({alertBanner: "Please fill all fields before submission"})}
+
       this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -138,8 +143,6 @@ class DiscardAssetNC extends Component {
       this.setState({ result: "" })
       this.setState({ transaction: true })
       //reset state values before form resubmission
-      var idxHash = this.state.idxHash;
-      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return alert("Please fill all fields before submission")}
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -154,7 +157,7 @@ class DiscardAssetNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false  });
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -192,6 +195,14 @@ class DiscardAssetNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Discard :</Form.Label>

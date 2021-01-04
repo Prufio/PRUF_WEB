@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, FilePlus, FileMinus, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class ModifyDescription extends Component {
@@ -60,7 +62,7 @@ class ModifyDescription extends Component {
         return this.clearForm()
       } 
 
-      if(this.state.idxHash === "" || this.state.idxHash === "null"){return alert("Please select an asset from the dropdown")}
+      if(this.state.idxHash === "" || this.state.idxHash === "null"){return this.setState({alertBanner: "Please select an asset from the dropdown"})}
 
       
       const idxHash = this.state.idxHash;
@@ -88,7 +90,7 @@ class ModifyDescription extends Component {
           self.setState({ txStatus: false });
           self.setState({ transaction: false });
           
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false
@@ -182,13 +184,13 @@ class ModifyDescription extends Component {
       let tempTextArray = [];
 
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot edit asset in lost or stolen status");
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -290,7 +292,7 @@ class ModifyDescription extends Component {
 
 
       if (this.state.elementValue === "" && this.state.elementName === "" && this.state.nameTag === "") {
-        return alert("All fields are required for submission")
+        return this.setState({alertBanner: "All fields are required for submission"})
       }
       if (type === "photo" || type === "displayImage") {
         console.log("Pushing photo element: ", element)
@@ -311,7 +313,7 @@ class ModifyDescription extends Component {
         this.setState({ count: this.state.count + 1 })
       }
 
-      else { return alert("Please use the dropdown menu to select an element type") }
+      else { return this.setState({alertBanner: "Please use the dropdown menu to select an element type"}) }
 
       console.log("Added", element, "to element array")
       console.log("Which now looks like: ", window.additionalElementArrays)
@@ -328,7 +330,7 @@ class ModifyDescription extends Component {
       let oldDescription = this.state.oldDescription;
 
       if (this.state.element === "" && this.state.nameTag === "") {
-        return alert("All fields are required for submission")
+        return this.setState({alertBanner: "All fields are required for submission"})
       }
 
       if (type === "removePhoto") {
@@ -339,7 +341,6 @@ class ModifyDescription extends Component {
           images.push(element)
           //this.setState({ remCount: this.state.remCount + 1 })
         }
-        //else { alert("Element does not exist in existing photo object") }
       }
 
       else if (type === "removeText") {
@@ -350,10 +351,10 @@ class ModifyDescription extends Component {
           text.push(element)
           //this.setState({ remCount: this.state.remCount + 1 })
         }
-        else { alert("Element does not exist in existing text object") }
+        else { this.setState({alertBanner: "Element does not exist in existing text object"}) }
       }
 
-      else { return alert("Please use the dropdown menu to select an element type") }
+      else { return this.setState({alertBanner: "Please use the dropdown menu to select an element type"}) }
 
 
       this.setState({
@@ -437,7 +438,7 @@ class ModifyDescription extends Component {
       }
 
       else if (Number(newDescriptionPhoto + newDescriptionText) === 0) {
-        return alert("No new data added to payload! Add some data before submission.")
+        return this.setState({alertBanner: "No new data added to payload! Add some data before submission."})
       }
 
       else {
@@ -463,10 +464,6 @@ class ModifyDescription extends Component {
 
     const _checkIn = async (e) => {
       this.setState({help: false, txHash: "", txStatus: false})
-      this.setState({
-        txStatus: false,
-        txHash: ""
-      })
 
       if (e === "null" || e === undefined) {
         return clearForm()
@@ -485,15 +482,15 @@ class ModifyDescription extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        alert("Asset does not exist at given IDX");
+        this.setState({alertBanner: "Asset does not exist at given IDX"});
       }
 
       if (Number(resArray[0]) === 54 || Number(resArray[0]) === 53) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"}); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -543,6 +540,14 @@ class ModifyDescription extends Component {
           )}
           {window.addr > 0 && (
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               {this.state.accessPermitted && (
                 <div>
                   <Form.Row>

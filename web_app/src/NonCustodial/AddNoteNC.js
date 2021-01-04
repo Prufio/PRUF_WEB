@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import bs58 from "bs58";
+import Alert from "react-bootstrap/Alert";
 import { CheckCircle, Home, XSquare, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class AddNoteNC extends Component {
@@ -46,7 +48,7 @@ class AddNoteNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false});
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
@@ -84,7 +86,7 @@ class AddNoteNC extends Component {
     this.setAC = async (AC) => {
       let acDoesExist;
 
-      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (AC === "0" || AC === undefined) { return this.setState({alertBanner: "Selected AC Cannot be Zero"}) }
       else {
         if (
           isNaN(AC)
@@ -159,13 +161,13 @@ class AddNoteNC extends Component {
     if (window.sentPacket !== undefined) {
 
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot edit asset in lost or stolen status");
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -175,7 +177,7 @@ class AddNoteNC extends Component {
       console.log(resArray)
 
       if (window.sentPacket.note !== "0") {
-        alert("Note already enscribed on this asset! Cannot overwrite existing note.")
+        this.setState({alertBanner: "Note already enscribed on this asset! Cannot overwrite existing note."})
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -237,7 +239,14 @@ class AddNoteNC extends Component {
           });
         }
       }
-      else { if (document.getElementById("ipfs2File").files[0] === undefined) alert("No file chosen for upload!"); else { alert("Select an asset to modify!") } }
+      else {
+         if (document.getElementById("ipfs2File").files[0] === undefined) {
+         this.setState({alertBanner: "No file chosen for upload!"}); 
+         }
+         else { 
+           this.setState({alertBanner: "Select an asset to modify!" })
+          } 
+        }
     };
 
     const help = async () => {
@@ -268,15 +277,15 @@ class AddNoteNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 3 || Number(resArray[1]) === 4 || Number(resArray[1]) === 53 || Number(resArray[1]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"}); return clearForm()
       }
 
       if (resArray[0] !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
-        alert("Note already enscribed on this asset! Cannot overwrite existing note."); return clearForm()
+        this.setState({alertBanner: "Note already enscribed on this asset! Cannot overwrite existing note."}); return clearForm()
       }
 
       if (Number(resArray[1]) === 50 || Number(resArray[1]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions")
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"})
       }
 
       this.setState({ selectedAsset: e })
@@ -317,6 +326,14 @@ class AddNoteNC extends Component {
           )}
           {window.addr > 0 &&(
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>

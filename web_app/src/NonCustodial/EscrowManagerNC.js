@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle, Camera, CameraOff, UploadCloud } from 'react-feather'
 import QrReader from 'react-qr-reader'
+import { ClickAwayListener } from '@material-ui/core';
 
 class EscrowManagerNC extends Component {
   constructor(props) {
@@ -52,7 +54,8 @@ class EscrowManagerNC extends Component {
       console.log("resArray", resArray)
 
       if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"}); 
+        return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
       }
 
       if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
@@ -135,7 +138,7 @@ class EscrowManagerNC extends Component {
       }
 
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot edit asset in lost or stolen status");
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"});
         window.sentpacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -198,10 +201,10 @@ class EscrowManagerNC extends Component {
     const _accessAsset = async () => {
       await this.setState({ help: false })
       if (this.state.idxHash === "") {
-        return alert("Please Select an Asset From the Dropdown")
+        return this.setState({alertBanner: "Please Select an Asset From the Dropdown"})
       }
       if (this.state.isSettingEscrow === "0" || this.state.isSettingEscrowAble === undefined) {
-        return alert("Please Select an Action From the Dropdown")
+        return this.setState({alertBanner: "Please Select an Action From the Dropdown"})
       }
       else {
         let tempArray = []
@@ -262,6 +265,9 @@ class EscrowManagerNC extends Component {
     }
 
     const _setEscrow = async () => {
+      if(this.state.agent === undefined || this.state.agent === "" || this.state.escrowTime < 1 || this.state.timeFormat === null){return this.setState({alertBanner: "Please fill all forms before submission"})}
+      if (this.state.newStatus <= 49) { this.setState({ transaction: false }); this.setState({alertBanner: "Cannot set status under 50 in non-custodial AC"}); return clearForm() }
+      if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); this.setState({alertBanner: "Agent address invalid"}); return clearForm() }
       this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -274,9 +280,7 @@ class EscrowManagerNC extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       console.log("time: ", this.state.escrowTime, "format: ", this.state.timeFormat);
-      if(this.state.agent === undefined || this.state.agent === "" || this.state.escrowTime < 1 || this.state.timeFormat === null){return alert("Please fill all forms before submission")}
-      if (this.state.newStatus <= 49) { this.setState({ transaction: false }); alert("Cannot set status under 50 in non-custodial AC"); return clearForm() }
-      if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); alert("Agent address invalid"); return clearForm() }
+
 
 
       await window.contracts.ECR_NC.methods
@@ -286,7 +290,7 @@ class EscrowManagerNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -327,7 +331,7 @@ class EscrowManagerNC extends Component {
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
           console.log(Object.values(_error)[0].transactionHash);
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
         })
         .on("receipt", (receipt) => {
@@ -377,6 +381,14 @@ class EscrowManagerNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               { !this.state.accessPermitted && this.state.QRreader === false && (
                 <>
                   <div>

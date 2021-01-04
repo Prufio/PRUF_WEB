@@ -212,19 +212,6 @@ class AssetDashboardMobile extends React.Component {
         this.setState({ selectedImage: e })
       }
 
-      // const _printQR = async () => {
-      //   if (this.state.printQR === undefined) {
-      //     this.setState({ printQR: true })
-      //   }
-      //   else {
-      //     this.setState({ printQR: undefined })
-      //   }
-      // }
-
-      // const _printQRFile = async (obj) => {
-
-      // }
-
       const renderIcon = () => {
         return <Jdenticon size="340px" value={obj.idxHash} />
       }

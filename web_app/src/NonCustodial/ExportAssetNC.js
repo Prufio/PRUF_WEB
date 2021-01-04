@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class ExportAssetNC extends Component {
@@ -50,7 +52,7 @@ class ExportAssetNC extends Component {
     if (window.sentPacket !== undefined) {
       console.log("stat", window.sentPacket.status)
       if (Number(window.sentPacket.statusNum) !== 51) {
-        alert("Asset is not set to transferrable! Owner must set the status to transferrable before export.");
+        this.setState({alertBanner: "Asset is not set to transferrable! Owner must set the status to transferrable before export."});
         window.sentpacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -98,7 +100,7 @@ class ExportAssetNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[0]) !== 51) {
-        alert("Cannot export asset in non-transferrable status"); return clearForm()
+        this.setState({alertBanner: "Cannot export asset in non-transferrable status"}); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -136,6 +138,7 @@ class ExportAssetNC extends Component {
   }
 
     const _exportAsset = async () => {//create a new asset record
+      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return this.setState({alertBanner: "Please select an asset from the dropdown"}) }
       this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -144,7 +147,6 @@ class ExportAssetNC extends Component {
       this.setState({ transaction: true })
       //reset state values before form resubmission
       var idxHash = this.state.idxHash;
-      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return alert("Please select an asset from the dropdown")}
       console.log("idxHash", idxHash);
       console.log("addr: ", this.state.agentAddress);
 
@@ -158,7 +160,7 @@ class ExportAssetNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -195,6 +197,22 @@ class ExportAssetNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
+            {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>

@@ -49,7 +49,6 @@ class DeepVerifyMobile extends Component {
       }
 
       console.log("idxHash", idxHash);
-      // console.log("rgtHash", rgtHash);
 
       return this.setState({
         idxHash: idxHash,

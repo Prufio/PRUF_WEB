@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
 
 class SetCosts extends Component {
   constructor(props) {
@@ -132,9 +134,9 @@ class SetCosts extends Component {
 
     const setCosts = () => {
 
+      if (serviceCost === "" || this.state.assetClass === "" || this.state.beneficiary === "") { return this.setState({alertBanner: "Please fill out all forms"}) }
       const serviceCost = window.web3.utils.toWei(String(this.state.serviceCost))
       this.setState({ transaction: true })
-      if (serviceCost === "" || this.state.assetClass === "" || this.state.beneficiary === "") { return alert("Please fill out all forms") }
       window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           this.state.assetClass,
@@ -196,6 +198,14 @@ class SetCosts extends Component {
           )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
+                        {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">

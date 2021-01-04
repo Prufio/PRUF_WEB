@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, ArrowRightCircle, CheckCircle, HelpCircle, Camera, UploadCloud, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
+import { ClickAwayListener } from '@material-ui/core';
 
 class VerifyRightHolder extends Component {
   constructor(props) {
@@ -22,7 +24,7 @@ class VerifyRightHolder extends Component {
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
-          return alert("Please fill out all fields before submission")
+          return this.setState({alertBanner: "Please fill out all fields before submission"})
         }
         idxHash = window.web3.utils.soliditySha3(
           String(this.state.type).replace(/\s/g, ''),
@@ -43,7 +45,7 @@ class VerifyRightHolder extends Component {
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
       if (!doesExist) {
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
+        return this.setState({alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission."})
       }
 
       console.log("idxHash", idxHash);
@@ -229,7 +231,7 @@ class VerifyRightHolder extends Component {
             txHash: Object.values(_error)[0].transactionHash,
             txStatus: false
           })
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
@@ -277,7 +279,14 @@ class VerifyRightHolder extends Component {
           )}
           {window.addr > 0 && (
             <div>
-
+            {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               {this.state.QRreader === false && !this.state.accessPermitted && (
                 <div>
                   <Form.Check

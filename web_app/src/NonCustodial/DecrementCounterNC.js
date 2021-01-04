@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class DecrementCounterNC extends Component {
   constructor(props) {
@@ -52,13 +54,13 @@ class DecrementCounterNC extends Component {
 
 
       if (Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot edit asset in lost or stolen status");
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -136,11 +138,11 @@ class DecrementCounterNC extends Component {
       console.log(count)
 
       if (Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"}); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
+        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -160,6 +162,9 @@ class DecrementCounterNC extends Component {
     }
 
     const _decrementCounter = async () => {
+      if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){
+        return this.setState({alertBanner: "Please fill all fields before submission"})
+      }
       this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -168,7 +173,6 @@ class DecrementCounterNC extends Component {
       this.setState({ transaction: true })
       var idxHash = this.state.idxHash;
 
-      if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){return alert("Please fill all fields before submission")}
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -180,7 +184,7 @@ class DecrementCounterNC extends Component {
         this.setState({
           transaction: false
         })
-        return alert("Countdown is greater than count reserve! Please ensure data fields are correct before submission.")
+        return this.setState({alertBanner: "Countdown is greater than count reserve! Please ensure data fields are correct before submission."})
           
       }
 
@@ -192,7 +196,7 @@ class DecrementCounterNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -231,6 +235,14 @@ class DecrementCounterNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
+                          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>

@@ -191,6 +191,12 @@ div {
   z-index: 3;
 }
 
+
+.alertBanner {
+  font-size: 1.2rem;
+  height: fit-content;
+}
+
 .homeForm {
   height: 40rem;
   width: 75rem;

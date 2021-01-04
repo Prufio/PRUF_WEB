@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle, ArrowRightCircle, CornerUpLeft } from 'react-feather'
 import { isMobile } from "react-device-detect";
+import { ClickAwayListener } from '@material-ui/core';
 
 class Faucet extends Component {
     constructor(props) {
@@ -137,9 +139,9 @@ class Faucet extends Component {
         const mintPRUF = async () => {
             
             let amount;
-            if (isNaN(this.state.amount)){return alert("Please input a valid whole number")}
+            if (isNaN(this.state.amount)){return this.setState({alertBanner: "Please input a valid whole number"})}
             if (this.state.amount < 10000) {
-                alert("The minimum amount of PRUF the faucet can provide is 10000. Please submit an amount greater than or equal to 10000."); return clearForm()
+                this.setState({alertBanner: "The minimum amount of PRUF the faucet can provide is 10000. Please submit an amount greater than or equal to 10000."}); return clearForm()
             }
 
             else {
@@ -163,7 +165,7 @@ class Faucet extends Component {
                     self.setState({ transaction: false })
                     self.setState({ txHash: Object.values(_error)[0].transactionHash });
                     self.setState({ txStatus: false });
-                    alert("Something went wrong!")
+                    this.setState({alertBanner: "Something went wrong!"})
                     clearForm();
                     self.setState({ assetClassSelected: false, idxSubmitted: false })
                 })
@@ -180,12 +182,12 @@ class Faucet extends Component {
         }
 
         const mintAC = async () => {//create a new asset class record
-            if(this.state.ACname === undefined || this.state.ACname === "") {return alert("Please name the asset class node prior to submission")}
+            if(this.state.ACname === undefined || this.state.ACname === "") {return this.setState({alertBanner: "Please name the asset class node prior to submission"})}
 
             let root;
 
             if (this.state.catergory === "null") {
-                alert("Please select AC catergory before submitting"); return clearForm()
+                this.setState({alertBanner: "Please select AC catergory before submitting"}); return clearForm()
             }
 
             if (this.state.catergory === "Electronics") {
@@ -230,7 +232,7 @@ class Faucet extends Component {
                     self.setState({ transaction: false })
                     self.setState({ txHash: Object.values(_error)[0].transactionHash });
                     self.setState({ txStatus: false });
-                    alert("Something went wrong!")
+                    this.setState({alertBanner: "Something went wrong!"})
                     clearForm();
                     self.setState({ assetClassSelected: false, idxSubmitted: false })
 
@@ -299,6 +301,14 @@ class Faucet extends Component {
         
                             {window.addr > 0 && (
                                 <>
+                                            {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
                                     {this.state.ACmenu === false && this.state.PRUFmenu === false && (
                                         <div>
                                             {/* <div className="submitButtonRRMobile">
@@ -379,7 +389,6 @@ class Faucet extends Component {
                                                         <div className="submitButtonContentMobile">
                                                             <CheckCircle
                                                                 onClick={() => { mintAC() }}
-                                                                /* onClick={() => { alert("This function has been disabled until Alpha testing begins") }} */
                                                             />
                                                         </div>
                                                     </div>
@@ -452,7 +461,6 @@ class Faucet extends Component {
                                                     <div className="submitButtonContentMobile">
                                                         <CheckCircle
                                                             onClick={() => { mintPRUF() }}
-                                                            // onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
                                                         />
                                                     </div>
                                                 </div>
@@ -647,7 +655,6 @@ class Faucet extends Component {
                                                 <div className="submitButtonContent">
                                                     <CheckCircle
                                                         onClick={() => { mintAC() }}
-                                                        //onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
                                                     />
                                                 </div>
                                             </div>
@@ -720,7 +727,6 @@ class Faucet extends Component {
                                             <div className="submitButtonContent">
                                                 <CheckCircle
                                                     onClick={() => { mintPRUF() }}
-                                                    // onClick={() => { alert("This function has been disabled until Alpha testing begins") }}
                                                 />
                                             </div>
                                         </div>

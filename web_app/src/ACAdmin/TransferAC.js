@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class TransferAC extends Component {
@@ -140,7 +142,7 @@ class TransferAC extends Component {
             txHash: Object.values(_error)[0].transactionHash,
             txStatus: false
           })
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -185,6 +187,14 @@ class TransferAC extends Component {
           )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
+                        {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">

@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class NewRecordNC extends Component {
   constructor(props) {
@@ -92,7 +94,7 @@ class NewRecordNC extends Component {
       let destinationACData;
       this.setState({txHash: "", txStatus: false})
 
-      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({alertBanner: "Selected AC Cannot be Zero" })}
       else {
         if (
           isNaN(this.state.selectedAssetClass)
@@ -190,7 +192,7 @@ class NewRecordNC extends Component {
         await window.utils.addIPFSJSONObject(ipfsObj)
       }
 
-      else { return alert("Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)") }
+      else { return this.setState({alertBanner: "Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)" })}
     }
     
     const submitHandler = (e) => {
@@ -224,7 +226,7 @@ class NewRecordNC extends Component {
       console.log(idxHash.length)
 
       if (idxHash.length !== 66) {
-        return (alert("Something went wrong..."))
+        return this.setState({alertBanner: "Something went wrong..."})
       }
 
       var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
@@ -253,7 +255,7 @@ class NewRecordNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          this.setState({alertBanner: "Something went wrong!"})
           clearForm();
           self.setState({ assetClassSelected: false, idxSubmitted: false })
 
@@ -298,6 +300,14 @@ class NewRecordNC extends Component {
  
           {window.addr > 0 && !this.state.assetClassSelected && this.state.holdsID && (
             <>
+                        {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">

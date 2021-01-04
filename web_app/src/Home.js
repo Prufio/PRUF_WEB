@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import "./index.css";
+import Alert from "react-bootstrap/Alert";
 import { Twitter, GitHub, Mail, Send, } from 'react-feather'
 import { isSafari } from "is-safari";
+import { ClickAwayListener } from '@material-ui/core';
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -36,8 +39,8 @@ class Home extends Component {
     }
 
     var isSafari = require('is-safari');
-    if(isSafari) {
-      this.setState({isSafari: true})
+    if (isSafari) {
+      this.setState({ isSafari: true })
     }
 
   }
@@ -56,6 +59,14 @@ class Home extends Component {
     return (
       <div>
         <div className="homeFormTestNet">
+        {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
           <button
             className="imageButtonTestNet"
             title="Check out our website!"
@@ -73,8 +84,8 @@ class Home extends Component {
 
               <Form.Row>
                 {/* <div className="homeErrorTextTestNet"> */}
-                  <h1 className="loadingHome">
-                    Connecting to the Blockchain
+                <h1 className="loadingHome">
+                  Connecting to the Blockchain
                  </h1>
                 {/* </div> */}
               </Form.Row>
@@ -102,10 +113,10 @@ class Home extends Component {
                   <a
                     href='/#/'
                     onClick={() => {
-                    alert("That doesn't direct you anywhere. Safari is not currently supporting Web3 connections. Please install a Web3 supported browser to proceed. ");
-                    // this.setState({ settingsMenu: undefined })
-                    // window.ethereum.enable()
-                  }} className="home2ndRowLink">
+                      this.setState({alertBanner: "That doesn't direct you anywhere. Safari is not currently supporting Web3 connections. Please install a Web3 supported browser to proceed."});
+                      // this.setState({ settingsMenu: undefined })
+                      // window.ethereum.enable()
+                    }} className="home2ndRowLink">
                     Log In
                   </a>
                   to Web3 Provider.
@@ -114,23 +125,23 @@ class Home extends Component {
             </div>
           )}
           {this.state.isSafari === undefined && (
-          <div className="homeDisclaimer">
-            {/* Do not use a Web3 provider connected to a mainnet Ethereum address, or your private account information
+            <div className="homeDisclaimer">
+              {/* Do not use a Web3 provider connected to a mainnet Ethereum address, or your private account information
               could be compromised.  */}
-            {/* This application is not secure in its current form. */}
+              {/* This application is not secure in its current form. */}
               IMPORTANT : This version of the PRüF Web Application is in alpha, and is to be used for test and demonstration purposes only. All Ethereum
-              transactions are hosted on the Kovan EVM. Any information provided within this application may be visible to third-parties. Do not submit 
-              any sensitive information unless your primary intent is to make that information public. All information entered here will be lost when 
+              transactions are hosted on the Kovan EVM. Any information provided within this application may be visible to third-parties. Do not submit
+              any sensitive information unless your primary intent is to make that information public. All information entered here will be lost when
               the kovan network is reset.
-          </div>
+            </div>
           )}
           {this.state.isSafari === true && (
-          <div className="homeDisclaimerSafari">
+            <div className="homeDisclaimerSafari">
               IMPORTANT : This version of the PRüF Web Application is in alpha, and is to be used for test and demonstration purposes only. All Ethereum
-              transactions are hosted on the Kovan EVM. Any information provided within this application may be visible to third-parties. Do not submit 
-              any sensitive information unless your primary intent is to make that information public. All information entered here will be lost when 
+              transactions are hosted on the Kovan EVM. Any information provided within this application may be visible to third-parties. Do not submit
+              any sensitive information unless your primary intent is to make that information public. All information entered here will be lost when
               the kovan network is reset. Safari is not currently supporting Web3 connections. Please install a Web3 supported browser to make blockchain transactions.
-          </div>
+            </div>
           )}
           <div className="mediaLinkHomeTestNet">
             <a href='/#/' className="mediaLinkHomeContent"><GitHub size={25} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>

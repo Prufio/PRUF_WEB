@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class GetACData extends Component {
   constructor(props) {
@@ -110,7 +112,7 @@ class GetACData extends Component {
         });
         console.log(tempData);
       }
-      else { alert("Asset class does not exist!") }
+      else { this.setState({alertBanner: "Asset class does not exist!"}) }
     };
 
     return (
@@ -143,6 +145,14 @@ class GetACData extends Component {
             </Form.Group>
           )}
           <>
+          {this.state.alertBanner !== undefined && (
+              
+              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
+              {this.state.alertBanner}
+            </Alert>
+                  </ClickAwayListener>
+            )}
             <Form.Row>
               <div className="submitButton">
                 <div className="submitButtonContent">
