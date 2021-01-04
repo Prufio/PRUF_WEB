@@ -43,7 +43,7 @@ class AssetDashboardMobile extends React.Component {
         this.setState({ selectedImage: "" })
       }
       this.setState({
-        URL: this.state.baseURL + e.idxHash,
+        URL: String(this.state.baseURL) + String(e.idxHash),
         assetObj: e,
         moreInfo: true,
         identicon: e.identicon
@@ -203,6 +203,11 @@ class AssetDashboardMobile extends React.Component {
 
   render() {
 
+    const copyLink = async () => {
+      await this.setState({ alertBanner: "Asset link copied to clipboard." }); 
+      navigator.clipboard.writeText(String(this.state.URL))
+    }
+
     const generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
@@ -307,7 +312,7 @@ class AssetDashboardMobile extends React.Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ alertMsg: "Asset link copied to clipboard." }); navigator.clipboard.writeText(String(this.state.URL)) }}
+                onClick={() => { copyLink() }}
               />
             </div>
           </div>
