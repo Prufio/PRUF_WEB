@@ -197,10 +197,10 @@ div {
   width: 55rem;
 }
 
-.alertBannerMobile {
-  font-size: 1.2rem;
+.alertMsgMobile {
+  font-size: 1.5rem;
   height: fit-content;
-  width: 350px;
+  width: 340px;
 }
 
 .msgBanner {
@@ -430,7 +430,7 @@ div {
 
 .assetDashboardMobile {
   height: flex;
-  max-height: 40rem;
+  max-height: 45rem;
   width: 360px;
   background-color: #002a40;
   padding: 1rem;
