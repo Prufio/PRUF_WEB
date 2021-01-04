@@ -133,9 +133,8 @@ class SetCosts extends Component {
     }
 
     const setCosts = () => {
-
-      if (serviceCost === "" || this.state.assetClass === "" || this.state.beneficiary === "") { return this.setState({alertBanner: "Please fill out all forms"}) }
       const serviceCost = window.web3.utils.toWei(String(this.state.serviceCost))
+      if (serviceCost === undefined || this.state.assetClass === "" || this.state.beneficiary === "") { return this.setState({ alertBanner: "Please fill out all forms before submission." }) }
       this.setState({ transaction: true })
       window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -198,14 +197,6 @@ class SetCosts extends Component {
           )}
           {window.addr > 0 && !this.state.assetClassSelected && (
             <>
-                        {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Label className="formFontRow">Asset Class:</Form.Label>
                 <Form.Group as={Row} controlId="formGridAC">
@@ -343,12 +334,18 @@ class SetCosts extends Component {
             </div>
           )
         }
-        {
-          this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
-            <div className="assetSelectedResults">
-              <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
-            </div>
-          )
+        {this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
+          <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+            <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+          </div>
+        )
         }
         {
           this.state.transaction === true && (

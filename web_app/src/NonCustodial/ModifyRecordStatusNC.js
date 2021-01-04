@@ -15,13 +15,13 @@ class ModifyRecordStatusNC extends Component {
     this.clearForm = async () => {
       const self = this;
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined,  transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+      this.setState({ idxHash: undefined, transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
 
     this.modifyStatus = async () => {
       const self = this;
       var idxHash = this.state.idxHash;
-      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return this.setState({alertBanner: "Please select an asset from the dropdown"})}
+      if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -33,16 +33,16 @@ class ModifyRecordStatusNC extends Component {
 
       if (!doesExist) {
         this.clearForm()
-        return this.setState({alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission."})
+        return this.setState({ alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission." })
 
       }
 
       if (NewStatusString === this.state.status) {
         this.clearForm()
-        return this.setState({alertBanner: "Asset already in selected Status! Ensure data fields are correct before submission."})
+        return this.setState({ alertBanner: "Asset already in selected Status! Ensure data fields are correct before submission." })
       }
 
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -63,7 +63,7 @@ class ModifyRecordStatusNC extends Component {
           .send({ from: window.addr })
           .on("error", function (_error) {
             // self.setState({ NRerror: _error });
-            this.setState({alertBanner: "Something went wrong!"})
+            self.setState({ alertBanner: "Something went wrong!" })
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
             self.setState({ txStatus: false });
             self.setState({ transaction: false, wasSentPacket: false });
@@ -89,7 +89,7 @@ class ModifyRecordStatusNC extends Component {
           .send({ from: window.addr })
           .on("error", function (_error) {
             // self.setState({ NRerror: _error });
-            this.setState({alertBanner: "Something went wrong!"})
+            self.setState({ alertBanner: "Something went wrong!" })
             self.setState({ transaction: false })
             self.setState({ txHash: Object.values(_error)[0].transactionHash });
             self.setState({ txStatus: false, wasSentPacket: false });
@@ -109,7 +109,7 @@ class ModifyRecordStatusNC extends Component {
           });
       }
 
-      else { this.setState({alertBanner: "Invalid status input"}) }
+      else { this.setState({ alertBanner: "Invalid status input" }) }
 
       console.log(this.state.txHash);
       this.setState({
@@ -156,7 +156,7 @@ class ModifyRecordStatusNC extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
+        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -185,18 +185,18 @@ class ModifyRecordStatusNC extends Component {
 
 
     const help = async () => {
-        
-      if (this.state.help === false) {this.setState({ help: true })}
-        
-      else {this.setState({ help: false })}
+
+      if (this.state.help === false) { this.setState({ help: true }) }
+
+      else { this.setState({ help: false }) }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) {
         return this.clearForm()
       }
@@ -212,11 +212,11 @@ class ModifyRecordStatusNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        this.setState({alertBanner: "Asset does not exist at given IDX"});
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return this.clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return this.clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -254,14 +254,6 @@ class ModifyRecordStatusNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
-                          {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
@@ -410,6 +402,13 @@ class ModifyRecordStatusNC extends Component {
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && (
                 <Form.Group>
@@ -428,33 +427,33 @@ class ModifyRecordStatusNC extends Component {
           </div>)}
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
-              {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
+            {this.state.txStatus === false && (
+              <div className="transactionErrorText">
+                !ERROR! :
+                <a
                   className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
-              {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  TX Hash:{this.state.txHash}
+                </a>
+              </div>
+            )}
+            {this.state.txStatus === true && (
+              <div className="transactionErrorText">
+                {" "}
                 No Errors Reported :
-                  <a
+                <a
                   className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  TX Hash:{this.state.txHash}
+                </a>
+              </div>
+            )}
           </div>
         )}
       </div>

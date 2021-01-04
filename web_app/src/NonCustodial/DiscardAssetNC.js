@@ -51,7 +51,7 @@ class DiscardAssetNC extends Component {
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) !== 59) {
         window.sentPacket = undefined;
-        this.setState({alertBanner: "Asset is not discardable! Owner must set status to discardable."});
+        alert("Asset is not discardable! Owner must set status to discardable." );
         return window.location.href = "/#/asset-dashboard"
       }
 
@@ -60,7 +60,7 @@ class DiscardAssetNC extends Component {
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
       console.log("Stat", window.sentPacket.status)
-      
+
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
     }
@@ -81,7 +81,7 @@ class DiscardAssetNC extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) { return }
       else if (e === "reset") {
         return window.resetInfo = true;
@@ -95,7 +95,7 @@ class DiscardAssetNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[0]) !== 59) {
-        this.setState({alertBanner: "Asset not in discardable status"}); return clearForm()
+        this.setState({ alertBanner: "Asset not in discardable status." }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -114,7 +114,7 @@ class DiscardAssetNC extends Component {
     }
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, help: false })
     }
@@ -127,16 +127,16 @@ class DiscardAssetNC extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _discardAsset = async () => {//create a new asset record
       var idxHash = this.state.idxHash;
-      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return this.setState({alertBanner: "Please fill all fields before submission"})}
+      if (idxHash === "null" || idxHash === "" || idxHash === undefined) { return this.setState({ alertBanner: "Please fill all fields before submission." }) }
 
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -156,8 +156,8 @@ class DiscardAssetNC extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false  });
-          this.setState({alertBanner: "Something went wrong!"})
+          self.setState({ txStatus: false, wasSentPacket: false });
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -195,14 +195,6 @@ class DiscardAssetNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
-                          {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Discard :</Form.Label>
@@ -247,7 +239,7 @@ class DiscardAssetNC extends Component {
                     >
                       <optgroup>
                         <option value="null">
-                        Discarding "{this.state.name}" Clear Form to Select Different Asset
+                          Discarding "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                       </optgroup>
                     </Form.Control>
@@ -286,6 +278,13 @@ class DiscardAssetNC extends Component {
         </Form>
         {this.state.transaction === false && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
                 <Form.Group>
@@ -306,32 +305,32 @@ class DiscardAssetNC extends Component {
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
             {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
+              <div className="transactionErrorText">
+                !ERROR! :
+                <a
                   className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
-              {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  TX Hash:{this.state.txHash}
+                </a>
+              </div>
+            )}
+            {this.state.txStatus === true && (
+              <div className="transactionErrorText">
+                {" "}
                 No Errors Reported :
-                  <a
+                <a
                   className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  TX Hash:{this.state.txHash}
+                </a>
+              </div>
+            )}
           </div>
         )}
       </div>

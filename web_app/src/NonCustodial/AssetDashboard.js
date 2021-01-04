@@ -49,9 +49,9 @@ class AssetDashboard extends React.Component {
       let acDoesExist;
 
       if (AC === "0" || AC === undefined) {
-        this.refresh() 
-        return this.setState({alertBanner: "Selected AC Cannot be Zero"})
-        }
+        this.refresh()
+        return this.setState({ alertBanner: "Selected AC Cannot be Zero" })
+      }
       else {
         if (
           isNaN(AC)
@@ -248,11 +248,11 @@ class AssetDashboard extends React.Component {
 
         return component
       }
-        return (
-          <div key="selectedAsset">
-            <div>
-              <div className="assetDashboardSelected">
-                <style type="text/css"> {`
+      return (
+        <div key="selectedAsset">
+          <div>
+            <div className="assetDashboardSelected">
+              <style type="text/css"> {`
   
               .card {
                 width: 100%;
@@ -298,133 +298,133 @@ class AssetDashboard extends React.Component {
               }
   
             `}
-                </style>
-                <div className="card" value="100">
-                  <div className="row no-gutters">
-                    <div className="assetSelecedInfo">
-                      <div>
-                        <button
-                          onClick={() => { _printQR() }}
-                          className="buttonQR"
-                        >
-                          <img
-                            className="imageFormQR"
-                            title="Asset QR Code"
-                            src={require("../Resources/Images/QRPIC.png")}
-                            alt="Pruf Print" />
-                        </button>
-                      </div>
-                      {this.state.printQR && (
-                        <div>
-                          <div className="displayQR">
-                            <div className="QR">
-                              <QRCode
-                                value={"https://indevapp.pruf.io/#/retrieve-record?" + obj.idxHash}
-                                size="150"
-                                fgColor="#002a40"
-                                logoWidth="35"
-                                logoHeight="46"
-                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                              />
-                            </div>
-                          </div>
-                          <div className="displayFooterQR">
-                            <div className="mediaLinkQRDisplay">
-                              {/* <a className="mediaLinkQRDisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
-                              <Printer />
-                              <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      <button className="assetImageButtonSelected">
-                        {this.state.selectedImage !== "" ?
-                          (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
-                          : (<>{obj.identicon}</>)}
+              </style>
+              <div className="card" value="100">
+                <div className="row no-gutters">
+                  <div className="assetSelecedInfo">
+                    <div>
+                      <button
+                        onClick={() => { _printQR() }}
+                        className="buttonQR"
+                      >
+                        <img
+                          className="imageFormQR"
+                          title="Asset QR Code"
+                          src={require("../Resources/Images/QRPIC.png")}
+                          alt="Pruf Print" />
                       </button>
-                      <p className="cardNameSelected">Name: {obj.name}</p>
-                      <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
-                      <p className="cardStatusSelected">Status: {obj.status}</p>
-                      {images.length !== 0 && (
-                        <div className="imageSelector">
-                          {generateThumbs()}
-                        </div>
-                      )}
-                      <div className="cardSelectedIdxForm">
-                        <h4 className="cardIdxSelected">IDX: {obj.idxHash}</h4>
-                        <div className="cardCopyButton">
-                          <div className="cardCopyButtonContent">
-                            <Copy
-                              size={15}
-                              onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
+                    </div>
+                    {this.state.printQR && (
+                      <div>
+                        <div className="displayQR">
+                          <div className="QR">
+                            <QRCode
+                              value={"https://indevapp.pruf.io/#/retrieve-record?" + obj.idxHash}
+                              size="150"
+                              fgColor="#002a40"
+                              logoWidth="35"
+                              logoHeight="46"
+                              logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
                             />
                           </div>
                         </div>
+                        <div className="displayFooterQR">
+                          <div className="mediaLinkQRDisplay">
+                            {/* <a className="mediaLinkQRDisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
+                            <Printer />
+                            <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
+                          </div>
+                        </div>
                       </div>
-                      <div className="cardDescriptionFormSelected">
-                        {generateTextList()}
+                    )}
+
+                    <button className="assetImageButtonSelected">
+                      {this.state.selectedImage !== "" ?
+                        (<img title="View Image" src={this.state.selectedImage} className="assetImageSelected" alt="" />)
+                        : (<>{obj.identicon}</>)}
+                    </button>
+                    <p className="cardNameSelected">Name: {obj.name}</p>
+                    <p className="cardAcSelected">Asset Class: {obj.assetClassName}</p>
+                    <p className="cardStatusSelected">Status: {obj.status}</p>
+                    {images.length !== 0 && (
+                      <div className="imageSelector">
+                        {generateThumbs()}
+                      </div>
+                    )}
+                    <div className="cardSelectedIdxForm">
+                      <h4 className="cardIdxSelected">IDX: {obj.idxHash}</h4>
+                      <div className="cardCopyButton">
+                        <div className="cardCopyButtonContent">
+                          <Copy
+                            size={15}
+                            onClick={() => { navigator.clipboard.writeText(obj.idxHash) }}
+                          />
+                        </div>
                       </div>
                     </div>
-                    {this.state.moreInfo && (
-                      <div className="cardButton2">
-                        <div className="cardButton2Content">
-                          <CornerUpLeft
-                            size={35}
-                            onClick={() => { this.moreInfo("back") }}
-                          />
-                        </div>
-                      </div>
-                    )}
-                    {this.state.moreInfo && (
-                      <div className="cardButton4">
-                        <div className="cardButton4Content">
-                          <Share2
-                            size={35}
-                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/"+obj.idxHash); this.setState({alertBanner: "Asset link copied to clipboard"}) }}
-                          />
-                        </div>
-                      </div>
-                    )}
-
+                    <div className="cardDescriptionFormSelected">
+                      {generateTextList()}
+                    </div>
                   </div>
-                </div >
+                  {this.state.moreInfo && (
+                    <div className="cardButton2">
+                      <div className="cardButton2Content">
+                        <CornerUpLeft
+                          size={35}
+                          onClick={() => { this.moreInfo("back") }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {this.state.moreInfo && (
+                    <div className="cardButton4">
+                      <div className="cardButton4Content">
+                        <Share2
+                          size={35}
+                          onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); this.setState({ msgBanner: "Asset link copied to clipboard." }) }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                </div>
               </div >
-            </div>
-            <div
-              className="assetSelectedRouter"
-            >
-              <Nav className="headerSelected">
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "transfer-asset-NC") }}>Transfer</Button>
-                </li>
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "import-asset-NC") }}>Import</Button>
-                </li>
-                <li>
-                  <DropdownButton title="Export" drop="up" variant="selectedImage">
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "export-asset-NC") }}>Export</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "discard-asset-NC") }}>Discard</Dropdown.Item>
-                  </DropdownButton>
-                </li>
-                <li>
-                  <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "manage-escrow-NC") }}>Escrow</Button>
-                </li>
-                <li>
-                  <DropdownButton title="Modify" drop="up" variant="selectedImage">
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-record-status-NC") }}>Modify Status</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "decrement-counter-NC") }}>Decrement Counter</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information-NC") }}>Modify Asset Info</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "add-note-NC") }}>Add Note</Dropdown.Item>
-                    <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "force-modify-record-NC") }}>Modify Rightsholder</Dropdown.Item>
-                  </DropdownButton>
-                </li>
-              </Nav>
-            </div>
+            </div >
           </div>
+          <div
+            className="assetSelectedRouter"
+          >
+            <Nav className="headerSelected">
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "transfer-asset-NC") }}>Transfer</Button>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "import-asset-NC") }}>Import</Button>
+              </li>
+              <li>
+                <DropdownButton title="Export" drop="up" variant="selectedImage">
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "export-asset-NC") }}>Export</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "discard-asset-NC") }}>Discard</Dropdown.Item>
+                </DropdownButton>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "manage-escrow-NC") }}>Escrow</Button>
+              </li>
+              <li>
+                <DropdownButton title="Modify" drop="up" variant="selectedImage">
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-record-status-NC") }}>Modify Status</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "decrement-counter-NC") }}>Decrement Counter</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information-NC") }}>Modify Asset Info</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "add-note-NC") }}>Add Note</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "force-modify-record-NC") }}>Modify Rightsholder</Dropdown.Item>
+                </DropdownButton>
+              </li>
+            </Nav>
+          </div>
+        </div>
 
 
-        )
+      )
       // }
     }
 
@@ -554,19 +554,25 @@ class AssetDashboard extends React.Component {
           <div className="mediaLinkADAddAsset">
             <a className="mediaLinkContentADAddAsset" ><Plus size={35}
               onClick={() => { this.newRecord() }}
-              />
+            />
             </a>
           </div>
         </div>
         <div className="assetDashboard">
-        {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
+          {this.state.msgBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
+              <Alert className="msgBanner" key={1} variant="success" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+                {this.state.msgBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && !this.state.moreInfo && (<>{generateAssetDash(this.state.assets)}</>)}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && this.state.moreInfo && (<>{generateAssetInfo(this.state.assetObj)}</>)}
           {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<h2 className="loadingAD">Loading Assets</h2>)}

@@ -21,7 +21,7 @@ class RecycleAssetNC extends Component {
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
-          return this.setState({alertBanner: "Please fill out all fields before submission"})
+          return this.setState({ alertBanner: "Please fill out all fields before submission" })
         }
 
         else if (!this.state.Checkbox) {
@@ -37,7 +37,7 @@ class RecycleAssetNC extends Component {
       if (this.state.QRreader) {
         idxHash = this.state.result
       }
-      
+
       if (this.state.Checkbox) {
         idxHash = this.state.idxHashRaw
       }
@@ -48,15 +48,15 @@ class RecycleAssetNC extends Component {
 
 
       if (Number(resArray[1]) === 0) {
-        this.setState({alertBanner: "Asset does not exist at given IDX"});
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
         this.setState({
           idxHash: undefined, txStatus: undefined, txHash: "", accessPermitted: false, transaction: false
         })
-        return this.clearForm() 
+        return this.clearForm()
       }
 
       if (Number(resArray[0]) !== 60) {
-        this.setState({alertBanner: "Asset not in recyclable status"});
+        this.setState({ alertBanner: "Asset not in recyclable status" });
         this.setState({
           idxHash: undefined, txStatus: undefined, txHash: "", accessPermitted: false, transaction: false
         })
@@ -73,7 +73,7 @@ class RecycleAssetNC extends Component {
       })
 
     }
-    
+
     this.clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
@@ -166,7 +166,7 @@ class RecycleAssetNC extends Component {
       let destinationACData;
       this.setState({ txHash: "" })
 
-      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({alertBanner: "Selected AC Cannot be Zero"}) }
+      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({ alertBanner: "Selected AC Cannot be Zero" }) }
       else {
         if (
           isNaN(this.state.selectedAssetClass)
@@ -203,7 +203,7 @@ class RecycleAssetNC extends Component {
           console.log(resArray)
 
           if (Number(resArray[0]) !== 60) {
-            this.setState({alertBanner: "Asset is not recyclable!"});
+            this.setState({ alertBanner: "Asset is not recyclable!" });
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
@@ -211,7 +211,7 @@ class RecycleAssetNC extends Component {
           console.log(destinationACData.root)
 
           if (resArray[1] !== destinationACData.root) {
-            this.setState({alertBanner: "Import destination AC must have same root as origin!"});
+            this.setState({ alertBanner: "Import destination AC must have same root as origin!" });
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
@@ -254,8 +254,8 @@ class RecycleAssetNC extends Component {
       }
     }
 
-    const _recycleAsset = async () => {      
-      
+    const _recycleAsset = async () => {
+
       var idxHash = this.state.idxHash;
       let isSameRoot = await window.utils.checkAssetRootMatch(this.state.selectedAssetClass, this.state.idxHash);
       console.log(isSameRoot)
@@ -264,7 +264,7 @@ class RecycleAssetNC extends Component {
           QRreader: false
         })
         this.clearForm()
-        return this.setState({alertBanner: "Import destination AC must have same root as previous AC"})
+        return this.setState({ alertBanner: "Import destination AC must have same root as previous AC" })
       }
       if (
         this.state.first === "" ||
@@ -272,7 +272,7 @@ class RecycleAssetNC extends Component {
         this.state.surname === "" ||
         this.state.id === "" ||
         this.state.secret === ""
-      ) { return this.setState({alertBanner: "Please fill out all forms"}) }
+      ) { return this.setState({ alertBanner: "Please fill out all forms" }) }
 
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -320,7 +320,7 @@ class RecycleAssetNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          this.setState({alertBanner: "Something went wrong!"})
+          self.setState({ alertBanner: "Something went wrong!" })
           this.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -361,14 +361,6 @@ class RecycleAssetNC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-                      {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
           {window.addr > 0 && !this.state.assetClassSelected && this.state.QRreader === false && (
             <Form.Row>
               <Form.Label className="formFontRow">Asset Class:</Form.Label>
@@ -646,6 +638,13 @@ class RecycleAssetNC extends Component {
         </Form>
         { this.state.QRreader === false && this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
                 <Form.Group>

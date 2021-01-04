@@ -90,7 +90,8 @@ class GetACData extends Component {
     const getAC_data = async () => {
       this.setState({
         txHash: "",
-        txStatus: false
+        txStatus: false,
+        ACData: undefined
       })
       if (this.state.assetClass === undefined || this.state.assetClass === null) { return }
       let ref;
@@ -112,7 +113,7 @@ class GetACData extends Component {
         });
         console.log(tempData);
       }
-      else { this.setState({alertBanner: "Asset class does not exist!"}) }
+      else { this.setState({ alertBanner: "Asset class does not exist!" }) }
     };
 
     return (
@@ -145,14 +146,6 @@ class GetACData extends Component {
             </Form.Group>
           )}
           <>
-          {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
             <Form.Row>
               <div className="submitButton">
                 <div className="submitButtonContent">
@@ -180,6 +173,13 @@ class GetACData extends Component {
         </Form>
 
         <div className="resultsAC">
+        {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {this.state.ACData !== undefined && (
             <div>
               Asset Class Found!

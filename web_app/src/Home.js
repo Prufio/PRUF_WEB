@@ -59,14 +59,6 @@ class Home extends Component {
     return (
       <div>
         <div className="homeFormTestNet">
-        {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
           <button
             className="imageButtonTestNet"
             title="Check out our website!"
@@ -91,15 +83,13 @@ class Home extends Component {
               </Form.Row>
             </div>
           )}
-          {/* {window._contracts === undefined && window.addr === undefined && (
-            <div className="text">
-              <Form.Row>
-                <h1 className="loading">
-                  Connecting to the Blockchain
-                 </h1>
-              </Form.Row>
-            </div>
-          )} */}
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {window._contracts !== undefined && window.addr === undefined && (
             <div className="text">
               <Form.Row>
@@ -113,7 +103,7 @@ class Home extends Component {
                   <a
                     href='/#/'
                     onClick={() => {
-                      this.setState({alertBanner: "That doesn't direct you anywhere. Safari is not currently supporting Web3 connections. Please install a Web3 supported browser to proceed."});
+                      this.setState({ alertBanner: "That doesn't direct you anywhere. Safari is not currently supporting Web3 connections. Please install a Web3 supported browser to proceed." });
                       // this.setState({ settingsMenu: undefined })
                       // window.ethereum.enable()
                     }} className="home2ndRowLink">

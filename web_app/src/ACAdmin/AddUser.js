@@ -120,7 +120,7 @@ class AddUser extends Component {
 
     const addUser = () => {
 
-      if (Number(this.state.userType) < 1) { return this.setState({ alertBanner: "Please select a user type from the dropdown" }) }
+      if (Number(this.state.userType) < 1) { return this.setState({ alertBanner: "Please select a user type from the dropdown." }) }
       this.setState({ transaction: true })
       window.contracts.AC_MGR.methods
         .addUser(
@@ -211,15 +211,6 @@ class AddUser extends Component {
           {window.addr > 0 && this.state.assetClassSelected && (
             <div>
               <>
-
-                {this.state.alertBanner !== undefined && (
-
-                  <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
-                    <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
-                      {this.state.alertBanner}
-                    </Alert>
-                  </ClickAwayListener>
-                )}
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridAsset">
                     <Form.Label className="formFont">
@@ -341,6 +332,13 @@ class AddUser extends Component {
         {
           this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
             <div className="assetSelectedResults">
+              {this.state.alertBanner !== undefined && (
+                <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                  <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                    {this.state.alertBanner}
+                  </Alert>
+                </ClickAwayListener>
+              )}
               <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
             </div>
           )

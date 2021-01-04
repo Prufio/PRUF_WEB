@@ -51,31 +51,31 @@ class ModifyDescriptionNC extends Component {
     if (window.sentPacket !== undefined) {
       console.log(window.sentPacket.status)
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        this.setState({alertBanner: "Cannot transfer asset in lost or stolen status! Please change to transferrable status"});
+        alert("Cannot transfer asset in lost or stolen status! Please change to transferrable status" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        this.setState({alertBanner: "Cannot transfer asset in escrow! Please wait until asset has met escrow conditions"});
+        alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 58) {
-        this.setState({alertBanner: "Cannot transfer asset in imported status! please change to transferrable status"});
+        alert("Cannot transfer asset in imported status! please change to transferrable status" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 70) {
-        this.setState({alertBanner: "Cannot transfer asset in exported status! please import asset and change to transferrable status"});
+        alert("Cannot transfer asset in exported status! please import asset and change to transferrable status" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) !== 51) {
-        this.setState({alertBanner: "Cannot transfer asset in a status other than transferrable! please change asset to transferrable status"});
+        alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -107,7 +107,7 @@ class ModifyDescriptionNC extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       console.log("Checking in with id: ", e)
       if (e === "null" || e === undefined) {
         return clearForm()
@@ -126,11 +126,11 @@ class ModifyDescriptionNC extends Component {
 
 
       if (Number(resArray[1]) === 0) {
-        this.setState({alertBanner: "Asset does not exist at given IDX"}); return clearForm()
+        this.setState({ alertBanner: "Asset does not exist at given IDX" }); return clearForm()
       }
 
       if (Number(resArray[0]) !== 51) {
-        this.setState({alertBanner: "Asset not in transferrable status"}); return clearForm()
+        this.setState({ alertBanner: "Asset not in transferrable status" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -162,19 +162,19 @@ class ModifyDescriptionNC extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _transferAsset = async () => {
       var idxHash = this.state.idxHash;
       let to = this.state.to;
-      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return this.setState({alertBanner: "Please select an asset from the dropdown"})}
-      else if(to === "" || to === undefined || !window.web3.utils.isAddress(to)){return this.setState({alertBanner: "Please input a valid 'to' address."})}
+      if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
+      else if (to === "" || to === undefined || !window.web3.utils.isAddress(to)) { return this.setState({ alertBanner: "Please input a valid 'to' address." }) }
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
-      this.setState({help: false})
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -189,7 +189,7 @@ class ModifyDescriptionNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
-          this.setState({alertBanner: "Something went wrong!"})
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -227,14 +227,6 @@ class ModifyDescriptionNC extends Component {
           )}
           {window.addr > 0 && (
             <div>
-                          {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Transfer :</Form.Label>
@@ -279,7 +271,7 @@ class ModifyDescriptionNC extends Component {
                     >
                       <optgroup>
                         <option value="null">
-                        Transferring "{this.state.name}" Clear Form to Select Different Asset
+                          Transferring "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                       </optgroup>
                     </Form.Control>
@@ -339,6 +331,13 @@ class ModifyDescriptionNC extends Component {
         </Form>
         {this.state.transaction === false && this.state.txStatus === false && (
           <div className="assetSelectedResults" id="MainForm">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
                 <Form.Group>
@@ -360,32 +359,32 @@ class ModifyDescriptionNC extends Component {
             {this.state.txHash > 0 && ( //conditional rendering
               <div className="results">
                 {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
-              {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
+                  <div className="transactionErrorText">
+                    !ERROR! :
+                    <a
+                      className="transactionErrorText"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
+                {this.state.txStatus === true && (
+                  <div className="transactionErrorText">
+                    {" "}
                 No Errors Reported :
-                  <a
-                  className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
+                    <a
+                      className="transactionErrorText"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
               </div>
             )}
           </div>

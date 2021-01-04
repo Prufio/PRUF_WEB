@@ -200,7 +200,7 @@ class RetrieveRecord extends Component {
                           <div className="QR">
                             {this.state.idxHashRaw !== "" && (
                               <QRCode
-                                value={"https://indevapp.pruf.io/#/"+this.state.idxHashRaw}
+                                value={"https://indevapp.pruf.io/#/" + this.state.idxHashRaw}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
@@ -210,7 +210,7 @@ class RetrieveRecord extends Component {
                             )}
                             {this.state.idxHashRaw === "" && (
                               <QRCode
-                                value={"https://indevapp.pruf.io/#/"+obj.idxHash}
+                                value={"https://indevapp.pruf.io/#/" + obj.idxHash}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
@@ -280,7 +280,7 @@ class RetrieveRecord extends Component {
                         <div className="cardButton4Content">
                           <Share2
                             size={35}
-                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); this.setState({alertBanner: "Asset link copied to clipboard"}) }}
+                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); this.setState({ msgBanner: "Asset link copied to clipboard." }) }}
                           />
                         </div>
                       </div>
@@ -357,7 +357,7 @@ class RetrieveRecord extends Component {
         let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
         if (tempBool) {
           idxHash = String(this.state.queryValue)
-        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return this.setState({alertBanner: "Asset does not exist!"}) }
+        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return this.setState({ alertBanner: "Asset does not exist!" }) }
 
       } else {
         idxHash = String(this.state.result)
@@ -421,7 +421,7 @@ class RetrieveRecord extends Component {
 
     this.handleQuery = async (data) => {
       if (data.substring(0, 2) !== "0x") {
-        return this.setState({alertBanner: ("'" + data + "'" + " is not a proper IDX!")})
+        return this.setState({ alertBanner: ("'" + data + "'" + " is not a proper IDX!") })
       }
 
       let tempBool = true//await window.utils.checkAssetExistsBare(data)
@@ -609,7 +609,8 @@ class RetrieveRecord extends Component {
         wasSentQuery: false,
         queryValue: undefined,
         Checkbox: false,
-        help: false
+        help: false,
+        result: ""
       })
     }
 
@@ -676,7 +677,7 @@ class RetrieveRecord extends Component {
         console.log("addr: ", window.addr);
       }
 
-      this.setState({idxHash: idxHash})
+      this.setState({ idxHash: idxHash })
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(function (_error, _result) {
@@ -868,7 +869,17 @@ class RetrieveRecord extends Component {
                   )}
                 </div>
               </Form>
-              <div className="results"></div>
+              {this.state.result === "" && (
+                <div className="results">
+                  {this.state.alertBanner !== undefined && (
+                    <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                      <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                        {this.state.alertBanner}
+                      </Alert>
+                    </ClickAwayListener>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -919,14 +930,13 @@ class RetrieveRecord extends Component {
                 <h2 className="assetDashboardHeader">Here's what we found: </h2>
               </div>
               <div className="assetDashboard">
-              {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
+                {this.state.msgBanner !== undefined && (
+                  <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
+                    <Alert className="msgBanner" key={1} variant="success" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+                      {this.state.msgBanner}
+                    </Alert>
                   </ClickAwayListener>
-            )}
+                )}
                 {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
                 {this.state.assetObj === undefined && (<h4 className="loadingRR">Loading Asset</h4>)}
               </div>

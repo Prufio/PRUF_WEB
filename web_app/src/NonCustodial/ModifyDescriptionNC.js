@@ -23,7 +23,7 @@ class ModifyDescription extends Component {
       }
 
       if (this.state.hasUploaded && this.state.hashPath !== "" && this.state.runWatchDog === true && window.isInTx !== true) {
-        if(document.getElementById("MainForm") !== null){
+        if (document.getElementById("MainForm") !== null) {
           this.updateDescription()
         }
       }
@@ -31,7 +31,7 @@ class ModifyDescription extends Component {
     }, 150)
 
     this.clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
       this.setState({
         idxHash: undefined,
@@ -54,20 +54,20 @@ class ModifyDescription extends Component {
     }
 
     this.updateDescription = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       console.log(this.state.hashPath, this.state.runWatchDog, window.isInTx)
 
-      if(this.state.hashPath === "" || this.state.idxHash === undefined){
-        this.setState({hashPath: "", idxHash: undefined}); 
+      if (this.state.hashPath === "" || this.state.idxHash === undefined) {
+        this.setState({ hashPath: "", idxHash: undefined });
         return this.clearForm()
-      } 
+      }
 
-      if(this.state.idxHash === "" || this.state.idxHash === "null"){return this.setState({alertBanner: "Please select an asset from the dropdown"})}
+      if (this.state.idxHash === "" || this.state.idxHash === "null") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
 
-      
+
       const idxHash = this.state.idxHash;
       const self = this
-      
+
 
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -89,8 +89,8 @@ class ModifyDescription extends Component {
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
           self.setState({ transaction: false });
-          
-          this.setState({alertBanner: "Something went wrong!"})
+
+          self.setState({ alertBanner: "Something went wrong!" })
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false
@@ -114,16 +114,17 @@ class ModifyDescription extends Component {
       window.additionalElementArrays.name = "";
       //self.setState({ accessPermitted: false });
       //self.setState({ oldDescription: undefined });
-      self.setState({idxHash: undefined, elementType: "0", removedElements: {
-        images: [],
-        text: [],
-      },
-      addedElements: {
-        images: [],
-        text: [],
-        name: ""
-      }
-    });
+      self.setState({
+        idxHash: undefined, elementType: "0", removedElements: {
+          images: [],
+          text: [],
+        },
+        addedElements: {
+          images: [],
+          text: [],
+          name: ""
+        }
+      });
     };
 
     this.state = {
@@ -184,13 +185,13 @@ class ModifyDescription extends Component {
       let tempTextArray = [];
 
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"});
+        alert("Cannot edit asset in lost or stolen status");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"});
+        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -236,7 +237,7 @@ class ModifyDescription extends Component {
     const self = this;
 
     const clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", elementType: "0", wasSentPacket: false, help: false })
     }
@@ -249,13 +250,13 @@ class ModifyDescription extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _addToMiscArray = async (type) => {
-      this.setState({help: false})
+      this.setState({ help: false })
       let element, text = this.state.addedElements.text, images = this.state.addedElements.images;
       let elementName = this.state.elementName;
       let elementValue = this.state.elementValue;
@@ -292,7 +293,7 @@ class ModifyDescription extends Component {
 
 
       if (this.state.elementValue === "" && this.state.elementName === "" && this.state.nameTag === "") {
-        return this.setState({alertBanner: "All fields are required for submission"})
+        return this.setState({ alertBanner: "All fields are required for submission" })
       }
       if (type === "photo" || type === "displayImage") {
         console.log("Pushing photo element: ", element)
@@ -303,8 +304,9 @@ class ModifyDescription extends Component {
       else if (type === "text" || type === "description") {
         console.log("Pushing text element: ", element)
         window.additionalElementArrays.text.push(element)
-        if (type !== "description") {text.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
-        this.setState({ count: this.state.count + 1 })
+        if (type !== "description") {
+          text.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
+          this.setState({ count: this.state.count + 1 })
         }
       }
 
@@ -313,7 +315,7 @@ class ModifyDescription extends Component {
         this.setState({ count: this.state.count + 1 })
       }
 
-      else { return this.setState({alertBanner: "Please use the dropdown menu to select an element type"}) }
+      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type" }) }
 
       console.log("Added", element, "to element array")
       console.log("Which now looks like: ", window.additionalElementArrays)
@@ -322,7 +324,7 @@ class ModifyDescription extends Component {
     }
 
     const _removeElement = (type) => {
-      this.setState({help: false})
+      this.setState({ help: false })
       console.log("Existing description before edits: ", this.state.oldDescription)
       let text = this.state.removedElements.text;
       let images = this.state.removedElements.images;
@@ -330,7 +332,7 @@ class ModifyDescription extends Component {
       let oldDescription = this.state.oldDescription;
 
       if (this.state.element === "" && this.state.nameTag === "") {
-        return this.setState({alertBanner: "All fields are required for submission"})
+        return this.setState({ alertBanner: "All fields are required for submission" })
       }
 
       if (type === "removePhoto") {
@@ -351,10 +353,10 @@ class ModifyDescription extends Component {
           text.push(element)
           //this.setState({ remCount: this.state.remCount + 1 })
         }
-        else { this.setState({alertBanner: "Element does not exist in existing text object"}) }
+        else { this.setState({ alertBanner: "Element does not exist in existing text object" }) }
       }
 
-      else { return this.setState({alertBanner: "Please use the dropdown menu to select an element type"}) }
+      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type" }) }
 
 
       this.setState({
@@ -372,7 +374,7 @@ class ModifyDescription extends Component {
     }
 
     const publishIPFS1 = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       console.log(this.state.oldDescription)
       let newDescription;
 
@@ -438,7 +440,7 @@ class ModifyDescription extends Component {
       }
 
       else if (Number(newDescriptionPhoto + newDescriptionText) === 0) {
-        return this.setState({alertBanner: "No new data added to payload! Add some data before submission."})
+        return this.setState({ alertBanner: "No new data added to payload! Add some data before submission." })
       }
 
       else {
@@ -463,7 +465,7 @@ class ModifyDescription extends Component {
     }
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
 
       if (e === "null" || e === undefined) {
         return clearForm()
@@ -482,15 +484,15 @@ class ModifyDescription extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        this.setState({alertBanner: "Asset does not exist at given IDX"});
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
       }
 
       if (Number(resArray[0]) === 54 || Number(resArray[0]) === 53) {
-        this.setState({alertBanner: "Cannot edit asset in lost or stolen status"}); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -540,14 +542,6 @@ class ModifyDescription extends Component {
           )}
           {window.addr > 0 && (
             <div>
-                          {this.state.alertBanner !== undefined && (
-              
-              <ClickAwayListener onClickAway={() => { this.setState({alertBanner: undefined}) }}>
-              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({alertBanner: undefined})} dismissible>
-              {this.state.alertBanner}
-            </Alert>
-                  </ClickAwayListener>
-            )}
               {this.state.accessPermitted && (
                 <div>
                   <Form.Row>
@@ -864,39 +858,46 @@ class ModifyDescription extends Component {
 
               {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && ( //BS:EXAMINE elementType == "0"
                 <>
-                <Form.Row>
-                  <div className="submitButton">
-                    <div className="submitButtonContent">
-                      <CheckCircle
-                        onClick={() => { publishIPFS1() }}
-                      />
+                  <Form.Row>
+                    <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <CheckCircle
+                          onClick={() => { publishIPFS1() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="mediaLinkHelp">
-                    <div className="mediaLinkHelpContent2">
-                      <AlertTriangle
-                        color="white"
-                        onClick={() => { help() }}
-                      />
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContent2">
+                        <AlertTriangle
+                          color="white"
+                          onClick={() => { help() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Form.Row>
-                {this.state.help === true && (
-                  <div className="explainerTextBox2">
-                    Modifing Asset Information allows users to customize a selected assets profile. Information given within this version
-                    of the web application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
-                    identifying data unless it is the intention of the user to make this data public.
-                  </div>
-                )}
-              </>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBox2">
+                      Modifing Asset Information allows users to customize a selected assets profile. Information given within this version
+                      of the web application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
+                      identifying data unless it is the intention of the user to make this data public.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
-              {this.state.idxHash !== undefined &&(
+              {this.state.idxHash !== undefined && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
@@ -929,7 +930,7 @@ class ModifyDescription extends Component {
                 <div className="transactionErrorText">
                   !ERROR! :
                   <a
-                  className="transactionErrorText"
+                    className="transactionErrorText"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -943,7 +944,7 @@ class ModifyDescription extends Component {
                   {" "}
                 No Errors Reported :
                   <a
-                  className="transactionErrorText"
+                    className="transactionErrorText"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
