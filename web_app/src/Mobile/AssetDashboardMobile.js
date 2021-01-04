@@ -3,6 +3,8 @@ import "./../index.css";
 import { RefreshCw, ChevronRight, CornerUpLeft, Home, Plus, Copy, Share2 } from "react-feather";
 import Card from "react-bootstrap/Card";
 import Jdenticon from 'react-jdenticon';
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 
 class AssetDashboardMobile extends React.Component {
@@ -54,7 +56,7 @@ class AssetDashboardMobile extends React.Component {
 
       if (AC === "0" || AC === undefined) {
         this.refresh()
-        return alert("Selected AC Cannot be Zero")
+        return this.setState({ alertBanner: "Selected AC Cannot be Zero" })
       }
       else {
         if (
@@ -305,7 +307,7 @@ class AssetDashboardMobile extends React.Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText(String(this.state.URL)) }}
+                onClick={() => { this.setState({ alertBanner: "Asset link copied to clipboard." }); navigator.clipboard.writeText(String(this.state.URL)) }}
               />
             </div>
           </div>
@@ -431,7 +433,6 @@ class AssetDashboardMobile extends React.Component {
           <div className="mediaLinkADAddAssetMobile">
             <a className="mediaLinkContentADAddAsset" ><Plus size={35}
               onClick={() => { this.newRecord() }}
-            // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
             />
             </a>
           </div>
@@ -443,7 +444,7 @@ class AssetDashboardMobile extends React.Component {
                   onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
                   }
                   }
                   className="userDataLink">
@@ -455,6 +456,13 @@ class AssetDashboardMobile extends React.Component {
           )}
         </div>
         <div className="assetDashboardMobile">
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && !this.state.moreInfo && (<>{generateAssetDash(this.state.assets)}</>)}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && this.state.moreInfo && (<>{generateAssetInfo(this.state.assetObj)}</>)}
           {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<h2 className="loadingAD">Loading Assets</h2>)}
