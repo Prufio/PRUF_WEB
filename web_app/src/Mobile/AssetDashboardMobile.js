@@ -205,7 +205,7 @@ class AssetDashboardMobile extends React.Component {
 
     const copyLink = async () => { 
       let queryOpts = { name: 'clipboard-write', allowWithoutGesture: false }
-      let query = navigator.permissions.query(queryOpts).then(()=>{alert(query)})
+      navigator.permissions.query(queryOpts).then((query)=>{alert(query)})
       try {
         navigator.clipboard.writeText(String(this.state.URL));
         await this.setState({ alertMsg: "Asset link copied to clipboard." });
