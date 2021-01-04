@@ -203,9 +203,16 @@ class AssetDashboardMobile extends React.Component {
 
   render() {
 
-    const copyLink = async () => {
-      await this.setState({ alertMsg: "Asset link copied to clipboard." }); 
+    const copyLink = async () => { 
       navigator.clipboard.writeText(String(this.state.URL))
+      try {
+        navigator.clipboard.writeText(String(this.state.URL));
+        await this.setState({ alertMsg: "Asset link copied to clipboard." });
+        console.log('Page URL copied to clipboard');
+      } catch (err) {
+        await this.setState({ alertMsg: "Asset link failed to copy." });
+        console.error('Failed to copy: ', err);
+      }
     }
 
     const generateAssetInfo = (obj) => {
