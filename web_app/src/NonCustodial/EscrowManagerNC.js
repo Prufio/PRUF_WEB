@@ -795,37 +795,44 @@ class EscrowManagerNC extends Component {
           </div>)}
         {this.state.transaction === false && (
           <div>
-            {this.state.txHash > 0 && ( //conditional rendering
-              <div className="results">
-                {this.state.txStatus === false && (
-                  <div className="transactionErrorText">
-                    !ERROR! :
-                    <a
-                      className="transactionErrorText"
-                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
-                )}
-                {this.state.txStatus === true && (
-                  <div className="transactionErrorText">
-                    {" "}
-                No Errors Reported :
-                    <a
-                      className="transactionErrorText"
-                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
-                )}
-              </div>
-            )}
+           {this.state.txHash > 0 && ( //conditional rendering
+          <div className="results">
+
+            {this.state.txStatus === false && (
+              <Alert
+              className="alertFooter"
+              variant = "success">
+                Transaction failed!
+                  <Alert.Link
+                  className="alertLink"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view on etherscan.
+              </Alert>
+              )}
+
+              {this.state.txStatus === true && (
+                <Alert
+                className="alertFooter"
+                variant = "success">
+                  Transaction success!
+                    <Alert.Link
+                    className="alertLink"
+                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    CLICK HERE
+                  </Alert.Link>
+                  to view on etherscan.
+                </Alert>
+              )}
+          </div>
+        )}
           </div>
         )}
       </div>

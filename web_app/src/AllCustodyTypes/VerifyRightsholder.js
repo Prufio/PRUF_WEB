@@ -636,21 +636,34 @@ class VerifyRightHolder extends Component {
         {this.state.QRreader === false && this.state.transaction === false && (
           <div className="results">
             {this.state.txHash > 0 && ( //conditional rendering
-              <Form.Row>
-                <div className="transactionErrorText">
+              <>
                   {this.state.DVresult === "Match confirmed"
-                    ? "Match Confirmed :"
-                    : "No Match Found :"}
-                </div>
-                <a
-                  className="transactionErrorText"
-                  href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  TX Hash:{this.state.txHash}
-                </a>
-              </Form.Row>
+                    ? <Alert
+                        className="alertFooter"
+                        variant="success"> 
+                        Match confirmed!
+                          <Alert.Link 
+                            className="alertLink"
+                            href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
+                            target="_blank"
+                            rel="noopener noreferrer"> CLICK HERE
+                          </Alert.Link> 
+                        to view on etherscan.
+                      </Alert>
+                    : <Alert
+                      className="alertFooter"
+                      variant="danger"> 
+                      No match found! 
+                        <Alert.Link 
+                          className="alertLink"
+                          href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
+                          target="_blank"
+                          rel="noopener noreferrer"> CLICK HERE
+                        </Alert.Link>
+                      to view on etherscan.
+                    </Alert> 
+                    }
+              </>
             )}
           </div>
         )}

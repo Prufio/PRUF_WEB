@@ -197,6 +197,18 @@ div {
   height: fit-content;
 }
 
+.alertFooter {
+  font-size: 1.2rem;
+  width: 54rem;
+  flex-direction: row;
+}
+
+.alertLink {
+  font-size: 1.2rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
 .homeForm {
   height: 40rem;
   width: 75rem;
