@@ -56,7 +56,7 @@ class AssetDashboardMobile extends React.Component {
 
       if (AC === "0" || AC === undefined) {
         this.refresh()
-        return this.setState({ alertBanner: "Selected AC Cannot be Zero" })
+        return this.setState({ alertMsg: "Selected AC Cannot be Zero" })
       }
       else {
         if (
@@ -449,7 +449,7 @@ class AssetDashboardMobile extends React.Component {
                   onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                    else { this.setState({ alertMsg: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
                   }
                   }
                   className="userDataLink">
@@ -461,10 +461,10 @@ class AssetDashboardMobile extends React.Component {
           )}
         </div>
         <div className="assetDashboardMobile">
-          {this.state.alertBanner !== undefined && (
-            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
-              <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
-                {this.state.alertBanner}
+          {this.state.alertMsg !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertMsg: undefined }) }}>
+              <Alert className="alertMsgMobile" key={1} variant="success" onClose={() => this.setState({ alertMsg: undefined })} dismissible>
+                {this.state.alertMsg}
               </Alert>
             </ClickAwayListener>
           )}
