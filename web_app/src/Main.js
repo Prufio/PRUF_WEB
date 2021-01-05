@@ -19,7 +19,7 @@ import ParticleBox from "./Resources/ParticleBox";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'react-feather';
-import { isMobile } from "react-device-detect";
+import { isMobile, browserName } from "react-device-detect";
 import { isFirefox } from "is-firefox";
 import { isSafari } from "is-safari";
 import Jdenticon from 'react-jdenticon';
@@ -1722,6 +1722,9 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
+
+    alert(browserName)
+    
     window.balances = {}
     let timeOutCounter = 0;
     window.recount = false;
