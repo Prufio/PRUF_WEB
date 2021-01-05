@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Trash2, Home, XSquare, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class DiscardMobile extends Component {
     constructor(props) {
@@ -92,7 +94,7 @@ class DiscardMobile extends Component {
             console.log(resArray)
 
             if (Number(resArray[0]) !== 59) {
-                alert("Asset not in discardable status"); return clearForm()
+                this.setState({ alertBanner: "Asset not in discardable status" }); return clearForm()
             }
 
             this.setState({ selectedAsset: e })
@@ -130,6 +132,8 @@ class DiscardMobile extends Component {
         }
 
         const _discardAsset = async () => {//create a new asset record
+            var idxHash = this.state.idxHash;
+            if (idxHash === "null" || idxHash === "" || idxHash === undefined) { return this.setState({ alertBanner: "Please select an asset from the dropdown." }) }
             this.setState({ help: false })
             this.setState({ txStatus: false });
             this.setState({ txHash: "" });
@@ -137,7 +141,6 @@ class DiscardMobile extends Component {
             this.setState({ result: "" })
             this.setState({ transaction: true })
             //reset state values before form resubmission
-            var idxHash = this.state.idxHash;
 
             console.log("idxHash", idxHash);
             console.log("addr: ", this.state.agentAddress);
@@ -152,7 +155,7 @@ class DiscardMobile extends Component {
                     self.setState({ transaction: false })
                     self.setState({ txHash: Object.values(_error)[0].transactionHash });
                     self.setState({ txStatus: false, wasSentPacket: false });
-                    alert("Something went wrong!")
+                    self.setState({ alertBanner: "Something went wrong!" })
                     clearForm();
                     console.log(Object.values(_error)[0].transactionHash);
                 })
@@ -195,7 +198,7 @@ class DiscardMobile extends Component {
                                     onClick={() => {
                                         this.setState({ userMenu: undefined })
                                         if (window.ethereum) { window.ethereum.enable() }
-                                        else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                                        else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
                                     }
                                     }
                                     className="userDataLink">
@@ -290,6 +293,13 @@ class DiscardMobile extends Component {
                 </Form>
                 {this.state.transaction === false && this.state.txStatus === false && (
                     <div className="assetSelectedResultsMobile">
+                        {this.state.alertBanner !== undefined && (
+                            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                                    {this.state.alertBanner}
+                                </Alert>
+                            </ClickAwayListener>
+                        )}
                         <Form.Row>
                             {this.state.idxHash !== "" && this.state.txHash === "" && (
                                 <Form.Group>
@@ -311,31 +321,37 @@ class DiscardMobile extends Component {
                         {this.state.txHash > 0 && ( //conditional rendering
                             <div className="resultsMobile">
                                 {this.state.txStatus === false && (
-                                    <div className="transactionErrorTextMobile">
-                                        !ERROR! :
-                                        <a
-                                            className="transactionErrorTextMobile"
+                                    <Alert
+                                        className="alertFooterMobile"
+                                        variant="success">
+                                        Transaction failed!
+                                        <Alert.Link
+                                            className="alertLinkMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            TX Hash:{this.state.txHash}
-                                        </a>
-                                    </div>
+                                            CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+                                    </Alert>
                                 )}
+
                                 {this.state.txStatus === true && (
-                                    <div className="transactionErrorTextMobile">
-                                        {" "}
-        No Errors Reported :
-                                        <a
-                                            className="transactionErrorTextMobile"
+                                    <Alert
+                                        className="alertFooterMobile"
+                                        variant="success">
+                                        Transaction success!
+                                        <Alert.Link
+                                            className="alertLinkMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            TX Hash:{this.state.txHash}
-                                        </a>
-                                    </div>
+                                            CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                                    </Alert>
                                 )}
                             </div>
                         )}

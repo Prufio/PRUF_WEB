@@ -6,6 +6,8 @@ import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, Copy, Share2 } from "react-feather";
 import { isChrome, isOpera, isAndroid } from "react-device-detect";
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class RetrieveRecordMobile extends Component {
   constructor(props) {
@@ -53,7 +55,7 @@ class RetrieveRecordMobile extends Component {
         if (tempIPFS.photo.DisplayImage !== undefined) {
           this.setState({ selectedImage: tempIPFS.photo.DisplayImage })
         }
-        
+
         else if (Object.values(tempIPFS.photo).length > 0) {
           this.setState({ selectedImage: Object.values(tempIPFS.photo)[0] })
         }
@@ -63,8 +65,8 @@ class RetrieveRecordMobile extends Component {
         }
       }
 
-      if(this.state.runWatchDog === true && Number(this.state.queryValue) > 0 && window.contracts != undefined && this.state.runQuery === true){
-        this.setState({runQuery: false})
+      if (this.state.runWatchDog === true && Number(this.state.queryValue) > 0 && window.contracts != undefined && this.state.runQuery === true) {
+        this.setState({ runQuery: false })
         this._retrieveRecordQR(this.state.queryValue)
       }
 
@@ -141,7 +143,7 @@ class RetrieveRecordMobile extends Component {
         for (let i = 0; i < images.length; i++) {
           component.push(
             <button value={images[i]} class="assetImageSelectorButtonMobile" onClick={() => { showImage(images[i]) }}>
-              <img src={images[i]} className="imageSelectorImageMobile" alt="imageSelectorImageMobile"/>
+              <img src={images[i]} className="imageSelectorImageMobile" alt="imageSelectorImageMobile" />
             </button>
           )
         }
@@ -154,25 +156,26 @@ class RetrieveRecordMobile extends Component {
         let component = [];
 
         for (let i = 0; i < text.length; i++) {
-        if (textNames[i] !== "Description") {
-          component.push(
-            <>
-            <h4 key={"TextElement" + String(i)} className="cardDescriptionSelectedMobile">
-              {textNames[i]}:
+          if (textNames[i] !== "Description") {
+            component.push(
+              <>
+                <h4 key={"TextElement" + String(i)} className="cardDescriptionSelectedMobile">
+                  {textNames[i]}:
               <h4 key={"nestedText" + String(i)} className="cardDescriptionSelectedContentMobile">
-                {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
-            <br />
-          </>
-          )}
-        else{
-          component.unshift(<>
-            <h4 key="TextElementDesc" className="cardDescriptionSelected">
-              Description:
+                    {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+                <br />
+              </>
+            )
+          }
+          else {
+            component.unshift(<>
+              <h4 key="TextElementDesc" className="cardDescriptionSelected">
+                Description:
               <h4 key="nestedTextDesc" className="cardDescriptionSelectedContentMobile">
-                {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
-            <br />
-          </>)
-        }
+                  {text[i].replace(/111APOST111/gi, "'").replace(/111QUOTE111/gi, '"')}</h4></h4>
+              <br />
+            </>)
+          }
         }
 
         return component
@@ -213,7 +216,7 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { window.location.href="/#/retrieve-record"; this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, result: "" }) }}
+                onClick={() => { window.location.href = "/#/retrieve-record"; this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, result: "" }) }}
               />
             </div>
           </div>
@@ -273,19 +276,19 @@ class RetrieveRecordMobile extends Component {
       var ipfsHash;
       var tempResult;
       let idxHash;
-      if(query){
+      if (query) {
         let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
-        if(tempBool){
+        if (tempBool) {
           idxHash = String(this.state.queryValue)
-        } else{ this.setState({wasSentQuery: false, queryValue: undefined}); return alert("Asset does not exist!")}
-        
-      } else{
+        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return this.setState({ alertBanner: "Asset does not exist!" }) }
+
+      } else {
         idxHash = String(this.state.result)
       }
       this.setState({ idxHash: idxHash })
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
-      if(idxHash.substring(0,2) !== "0x"){return this.setState({wasSentQuery: false, queryValue: undefined})}
+      if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(
@@ -336,12 +339,12 @@ class RetrieveRecordMobile extends Component {
     }
 
     this.handleQuery = async (data) => {
-      if(data.substring(0,2) !== "0x"){
-        return alert("'"+data+"'" + " is not a proper IDX!")
+      if (data.substring(0, 2) !== "0x") {
+        return this.setState({ alertBanner: "'" + data + "'" + " is not a proper IDX!" })
       }
 
       let tempBool = true//await window.utils.checkAssetExistsBare(data)
-      if(tempBool){
+      if (tempBool) {
         this.setState({
           queryValue: data,
           URL: window.location.href,
@@ -349,10 +352,10 @@ class RetrieveRecordMobile extends Component {
           wasSentQuery: true
         })
       }
-      else{
-        return this.setState({assetFound: "Asset Not Found."})
+      else {
+        return this.setState({ assetFound: "Asset Not Found." })
       }
-      
+
     }
 
     this.getACData = async (ref, ac) => {
@@ -524,7 +527,7 @@ class RetrieveRecordMobile extends Component {
 
 
   render() {//render continuously produces an up-to-date stateful document 
-    
+
     const clearForm = async () => {
       document.getElementById("MainForm").reset();
       this.setState({ wasSentQuery: false, queryValue: undefined, Checkbox: false, help: false })
@@ -586,8 +589,8 @@ class RetrieveRecordMobile extends Component {
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
       if (!doesExist) {
+        this.setState({ alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission." })
         this.setState({ resultQR: "", accessPermitted: false, Checkbox: false, QRreader: false, VLresult: "" })
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
       }
 
       await window.contracts.STOR.methods
@@ -652,6 +655,7 @@ class RetrieveRecordMobile extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
+                      checked={this.state.Checkbox}
                       className="checkBoxMobile"
                       id="inlineFormCheck"
                       onChange={() => { Checkbox() }}
@@ -728,18 +732,25 @@ class RetrieveRecordMobile extends Component {
                     </div>
                   </div>
                   <div className="mediaLinkCameraMobile">
-                      <div className="submitButtonContentMobile">
-                        <Camera
-                          onClick={() => { QRReader() }}
-                        />
-                      </div>
+                    <div className="submitButtonContentMobile">
+                      <Camera
+                        onClick={() => { QRReader() }}
+                      />
                     </div>
+                  </div>
                 </Form.Row>
               </div>
             </Form>
             {this.state.QRreader === false && (
               <div className="resultsMobile">
 
+                {this.state.alertBanner !== undefined && (
+                  <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                    <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                      {this.state.alertBanner}
+                    </Alert>
+                  </ClickAwayListener>
+                )}
               </div>
             )}
           </div>
@@ -789,6 +800,13 @@ class RetrieveRecordMobile extends Component {
               <h2 className="assetDashboardHeaderMobile">Here's what we found: </h2>
             </div>
             <div className="assetDashboardMobile">
+              {this.state.msgBanner !== undefined && (
+                <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
+                  <Alert className="alertBannerADMobile" key={1} variant="success" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+                    {this.state.msgBanner}
+                  </Alert>
+                </ClickAwayListener>
+              )}
               {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
               {this.state.assetObj === undefined && (<h4 className="loadingRRMobile">Loading Asset</h4>)}
             </div>

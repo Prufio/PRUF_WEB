@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class NewRecordMobile extends Component {
   constructor(props) {
@@ -93,7 +95,7 @@ class NewRecordMobile extends Component {
       let destinationACData;
       this.setState({txHash: "", txStatus: false})
 
-      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({ alertBanner: "Selected AC Cannot be Zero"}) }
       else {
         if (
           isNaN(this.state.selectedAssetClass)
@@ -102,8 +104,8 @@ class NewRecordMobile extends Component {
           destinationACData = await window.utils.getACData("name", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ ACname: this.state.selectedAssetClass });
@@ -115,8 +117,8 @@ class NewRecordMobile extends Component {
           acDoesExist = await window.utils.checkForAC("id", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ assetClass: this.state.selectedAssetClass });
@@ -152,7 +154,7 @@ class NewRecordMobile extends Component {
         await window.utils.addIPFSJSONObject(ipfsObj)
       }
 
-      else { return alert("Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)") }
+      else { return this.setState({ alertBanner: "Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)"}) }
     }
     
     const submitHandler = (e) => {
@@ -186,7 +188,7 @@ class NewRecordMobile extends Component {
       console.log(idxHash.length)
 
       if (idxHash.length !== 66) {
-        return (alert("Something went wrong..."))
+        return (this.setState({ alertBanner: "Something went wrong..."}))
       }
 
       var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
@@ -215,7 +217,7 @@ class NewRecordMobile extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          this.setState({ alertBanner: "Something went wrong!"})
           clearForm();
           self.setState({ assetClassSelected: false, idxSubmitted: false })
 
@@ -254,7 +256,7 @@ class NewRecordMobile extends Component {
                     onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask"}); }
                     }
                     }
                     className="userDataLink">
@@ -621,6 +623,13 @@ class NewRecordMobile extends Component {
           </div>)}
         {this.state.transaction === false && (
           <div className="resultsMobile">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             {
               this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
                 <div className="assetSelectedContentHead">Selected Asset Class: "<span className="assetSelectedContentMobile">{this.state.ACname}</span>" </div>
@@ -628,33 +637,39 @@ class NewRecordMobile extends Component {
             }
             {this.state.txHash > 0 && ( //conditional rendering
               <div>
-                {this.state.txStatus === false && (
-                <div className="transactionErrorTextMobile">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
-              {this.state.txStatus === true && (
-                <div className="transactionErrorTextMobile">
-                  {" "}
-                No Errors Reported :
-                  <a
-                  className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
+                            {this.state.txStatus === false && (
+              <Alert
+                className="alertFooterMobile"
+                variant="success">
+                Transaction failed!
+                <Alert.Link
+                  className="alertLinkMobile"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
+            )}
+
+            {this.state.txStatus === true && (
+              <Alert
+                className="alertFooterMobile"
+                variant="success">
+                Transaction success!
+                <Alert.Link
+                  className="alertLinkMobile"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+              </Alert>
+            )}
               </div>
             )}
           </div>

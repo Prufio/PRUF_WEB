@@ -386,7 +386,7 @@ class DecrementCounterNC extends Component {
                 >
                   CLICK HERE
                 </Alert.Link>
-                to view on etherscan.
+                to view transaction on etherscan.
               </Alert>
               )}
 
@@ -403,7 +403,7 @@ class DecrementCounterNC extends Component {
                   >
                     CLICK HERE
                   </Alert.Link>
-                  to view on etherscan.
+                  to view transaction on etherscan.
                 </Alert>
               )}
           </div>

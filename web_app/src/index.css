@@ -201,7 +201,13 @@ div {
   width: 55rem;
 }
 
-.alertMsgMobile {
+.alertBannerMobile {
+  font-size: 1.2rem;
+  height: fit-content;
+  width: 322px;
+}
+
+.alertBannerADMobile {
   font-size: 1.5rem;
   height: fit-content;
   width: 340px;
@@ -220,6 +226,18 @@ div {
 }
 
 .alertLink {
+  font-size: 1.2rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+.alertFooterMobile {
+  font-size: 1.2rem;
+  width: 340px;
+  flex-direction: row;
+}
+
+.alertLinkMobile {
   font-size: 1.2rem;
   padding-left: 0.4rem;
   padding-right: 0.4rem;
@@ -434,7 +452,7 @@ div {
 
 .assetDashboardMobile {
   height: flex;
-  max-height: 45rem;
+  max-height: 40rem;
   width: 360px;
   background-color: #002a40;
   padding: 1rem;
@@ -644,6 +662,7 @@ div {
   margin-top: -0.2rem;
   justify-content: flex-start;
   align-items: flex-start;
+  flex-direction: column;
 }
 
 .assetSelectedContentHead {

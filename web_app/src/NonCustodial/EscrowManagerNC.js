@@ -386,6 +386,7 @@ class EscrowManagerNC extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
+                      checked={this.state.input}
                       className="checkBox"
                       id="inlineFormCheck"
                       onChange={() => { input() }}
@@ -810,7 +811,7 @@ class EscrowManagerNC extends Component {
                 >
                   CLICK HERE
                 </Alert.Link>
-                to view on etherscan.
+                to view transaction on etherscan.
               </Alert>
               )}
 
@@ -827,7 +828,7 @@ class EscrowManagerNC extends Component {
                   >
                     CLICK HERE
                   </Alert.Link>
-                  to view on etherscan.
+                  to view transaction on etherscan.
                 </Alert>
               )}
           </div>
