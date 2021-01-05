@@ -819,31 +819,37 @@ class EscrowMobile extends Component {
             {this.state.txHash > 0 && ( //conditional rendering
               <div className="resultsMobile">
                 {this.state.txStatus === false && (
-                  <div className="transactionErrorTextMobile">
-                    !ERROR! :
-                    <a
-                      className="transactionErrorTextMobile"
+                  <Alert
+                    className="alertFooterMobile"
+                    variant="success">
+                    Transaction failed!
+                    <Alert.Link
+                      className="alertLinkMobile"
                       href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
+                      CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+                  </Alert>
                 )}
+
                 {this.state.txStatus === true && (
-                  <div className="transactionErrorTextMobile">
-                    {" "}
-                No Errors Reported :
-                    <a
-                      className="transactionErrorTextMobile"
+                  <Alert
+                    className="alertFooterMobile"
+                    variant="success">
+                    Transaction success!
+                    <Alert.Link
+                      className="alertLinkMobile"
                       href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
+                      CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                  </Alert>
                 )}
               </div>
             )}

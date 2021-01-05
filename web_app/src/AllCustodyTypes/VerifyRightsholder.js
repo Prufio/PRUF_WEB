@@ -648,7 +648,7 @@ class VerifyRightHolder extends Component {
                             target="_blank"
                             rel="noopener noreferrer"> CLICK HERE
                           </Alert.Link> 
-                        to view on etherscan.
+                        to view transaction on etherscan.
                       </Alert>
                     : <Alert
                       className="alertFooter"
@@ -660,7 +660,7 @@ class VerifyRightHolder extends Component {
                           target="_blank"
                           rel="noopener noreferrer"> CLICK HERE
                         </Alert.Link>
-                      to view on etherscan.
+                      to view transaction on etherscan.
                     </Alert> 
                     }
               </>

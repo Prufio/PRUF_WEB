@@ -227,6 +227,18 @@ div {
   padding-right: 0.4rem;
 }
 
+.alertFooterMobile {
+  font-size: 1.2rem;
+  width: 340px;
+  flex-direction: row;
+}
+
+.alertLinkMobile {
+  font-size: 1.2rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
 .homeForm {
   height: 40rem;
   width: 75rem;

@@ -24,7 +24,7 @@ class ModifyDescription extends Component {
       }
 
       if (this.state.hasUploaded && this.state.hashPath !== "" && this.state.runWatchDog === true && window.isInTx !== true) {
-        if(document.getElementById("MainForm") !== null){
+        if (document.getElementById("MainForm") !== null) {
           this.updateDescription()
         }
       }
@@ -32,7 +32,7 @@ class ModifyDescription extends Component {
     }, 150)
 
     this.clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
       this.setState({
         idxHash: undefined,
@@ -55,17 +55,17 @@ class ModifyDescription extends Component {
     }
 
     this.updateDescription = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
       console.log(this.state.hashPath, this.state.runWatchDog, window.isInTx)
 
-      if(this.state.hashPath === "" || this.state.idxHash === undefined){
-        this.setState({hashPath: "", idxHash: undefined}); 
+      if (this.state.hashPath === "" || this.state.idxHash === undefined) {
+        this.setState({ hashPath: "", idxHash: undefined });
         return this.clearForm()
-      } 
-      
+      }
+
       const idxHash = this.state.idxHash;
       const self = this
-      
+
 
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -87,7 +87,7 @@ class ModifyDescription extends Component {
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
           self.setState({ transaction: false });
-          this.setState({ alertBanner:"Something went wrong!"})
+          this.setState({ alertBanner: "Something went wrong!" })
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false
@@ -111,16 +111,17 @@ class ModifyDescription extends Component {
       window.additionalElementArrays.name = "";
       //self.setState({ accessPermitted: false });
       //self.setState({ oldDescription: undefined });
-      self.setState({idxHash: undefined, elementType: "0", removedElements: {
-        images: [],
-        text: [],
-      },
-      addedElements: {
-        images: [],
-        text: [],
-        name: ""
-      }
-    });
+      self.setState({
+        idxHash: undefined, elementType: "0", removedElements: {
+          images: [],
+          text: [],
+        },
+        addedElements: {
+          images: [],
+          text: [],
+          name: ""
+        }
+      });
     };
 
     this.state = {
@@ -240,13 +241,13 @@ class ModifyDescription extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _addToMiscArray = async (type) => {
-      this.setState({help: false})
+      this.setState({ help: false })
       let element, text = this.state.addedElements.text, images = this.state.addedElements.images;
       let elementName = this.state.elementName;
       let elementValue = this.state.elementValue;
@@ -283,7 +284,7 @@ class ModifyDescription extends Component {
 
 
       if (this.state.elementValue === "" && this.state.elementName === "" && this.state.nameTag === "") {
-        return this.setState({ alertBanner: "All fields are required for submission"})
+        return this.setState({ alertBanner: "All fields are required for submission" })
       }
       if (type === "photo" || type === "displayImage") {
         console.log("Pushing photo element: ", element)
@@ -294,8 +295,9 @@ class ModifyDescription extends Component {
       else if (type === "text" || type === "description") {
         console.log("Pushing text element: ", element)
         window.additionalElementArrays.text.push(element)
-        if (type !== "description") {text.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
-        this.setState({ count: this.state.count + 1 })
+        if (type !== "description") {
+          text.push('"' + elementName + '": ' + '"' + this.state.elementValue + '",')
+          this.setState({ count: this.state.count + 1 })
         }
       }
 
@@ -304,7 +306,7 @@ class ModifyDescription extends Component {
         this.setState({ count: this.state.count + 1 })
       }
 
-      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type"}) }
+      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type" }) }
 
       console.log("Added", element, "to element array")
       console.log("Which now looks like: ", window.additionalElementArrays)
@@ -313,7 +315,7 @@ class ModifyDescription extends Component {
     }
 
     const _removeElement = (type) => {
-      this.setState({help: false})
+      this.setState({ help: false })
       console.log("Existing description before edits: ", this.state.oldDescription)
       let text = this.state.removedElements.text;
       let images = this.state.removedElements.images;
@@ -321,7 +323,7 @@ class ModifyDescription extends Component {
       let oldDescription = this.state.oldDescription;
 
       if (this.state.element === "" && this.state.nameTag === "") {
-        return this.setState({ alertBanner: "All fields are required for submission"})
+        return this.setState({ alertBanner: "All fields are required for submission" })
       }
 
       if (type === "removePhoto") {
@@ -343,10 +345,10 @@ class ModifyDescription extends Component {
           text.push(element)
           //this.setState({ remCount: this.state.remCount + 1 })
         }
-        else { this.setState({ alertBanner: "Element does not exist in existing text object"}) }
+        else { this.setState({ alertBanner: "Element does not exist in existing text object" }) }
       }
 
-      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type"}) }
+      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type" }) }
 
 
       this.setState({
@@ -365,9 +367,9 @@ class ModifyDescription extends Component {
 
     const publishIPFS1 = async () => {
 
-      if(this.state.idxHash === "" || this.state.idxHash === "null"){return this.setState({ alertBanner: "Please select an asset from the dropdown"})}
+      if (this.state.idxHash === "" || this.state.idxHash === "null") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
 
-      this.setState({help: false})
+      this.setState({ help: false })
       console.log(this.state.oldDescription)
       let newDescription;
 
@@ -433,7 +435,7 @@ class ModifyDescription extends Component {
       }
 
       else if (Number(newDescriptionPhoto + newDescriptionText) === 0) {
-        return this.setState({ alertBanner: "No new data added to payload! Add some data before submission."})
+        return this.setState({ alertBanner: "No new data added to payload! Add some data before submission." })
       }
 
       else {
@@ -458,7 +460,7 @@ class ModifyDescription extends Component {
     }
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       this.setState({
         txStatus: false,
         txHash: ""
@@ -481,15 +483,15 @@ class ModifyDescription extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        this.setState({ alertBanner: "Asset does not exist at given IDX"});
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
       }
 
       if (Number(resArray[0]) === 54 || Number(resArray[0]) === 53) {
-        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status"}); return this.clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return this.clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return this.clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return this.clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -521,36 +523,36 @@ class ModifyDescription extends Component {
     }
 
     return (
+      <div>
         <div>
-          <div>
-            <div className="mediaLinkADHome">
-              <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
-            </div>
-            <h2 className="formHeaderMobile">Modify Asset Info</h2>
-            <div className="mediaLinkClearForm">
-              <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { this.clearForm() }} /></a>
-            </div>
+          <div className="mediaLinkADHome">
+            <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
+          <h2 className="formHeaderMobile">Modify Asset Info</h2>
+          <div className="mediaLinkClearForm">
+            <a className="mediaLinkContentClearFormMobile" ><XSquare onClick={() => { this.clearForm() }} /></a>
+          </div>
+        </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-        {window.addr === undefined && (
+          {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask"}); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                  }
+                  }
+                  className="userDataLink">
+                  click here
+                </a>
                   to enable Ethereum.
                   </h3>
             </div>
           )}
-        {window.addr > 0 && (
+          {window.addr > 0 && (
             <div>
               {this.state.accessPermitted && (
                 <div>
@@ -866,53 +868,53 @@ class ModifyDescription extends Component {
                 </div>
               )}
 
-              {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && ( 
+              {this.state.hashPath === "" && this.state.elementType == "0" && this.state.accessPermitted && this.state.transaction === false && (
                 <>
-                <Form.Row>
-                  <div className="submitButtonRRMobile">
-                    <div className="submitButtonContentMobile">
-                      <CheckCircle
-                        onClick={() => { publishIPFS1() }}
-                      />
+                  <Form.Row>
+                    <div className="submitButtonRRMobile">
+                      <div className="submitButtonContentMobile">
+                        <CheckCircle
+                          onClick={() => { publishIPFS1() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="mediaLinkHelp">
-                    <div className="mediaLinkHelpContentMobile">
-                      <AlertTriangle
-                        color="white"
-                        onClick={() => { help() }}
-                      />
+                    <div className="mediaLinkHelp">
+                      <div className="mediaLinkHelpContentMobile">
+                        <AlertTriangle
+                          color="white"
+                          onClick={() => { help() }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Form.Row>
-                {this.state.help === true && (
-                  <div className="explainerTextBoxMobile">
-                    Modifing Asset Information allows users to customize a selected assets profile. Information given within this version
-                    of the web application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
-                    identifying data unless it is the intention of the user to make this data public.
-                  </div>
-                )}
-              </>
+                  </Form.Row>
+                  {this.state.help === true && (
+                    <div className="explainerTextBoxMobile">
+                      Modifing Asset Information allows users to customize a selected assets profile. Information given within this version
+                      of the web application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
+                      identifying data unless it is the intention of the user to make this data public.
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txStatus === false &&  (
+        {this.state.transaction === false && this.state.txStatus === false && (
           <div className="assetSelectedResultsMobile">
-          {this.state.alertBanner !== undefined && (
-            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
-              <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
-                {this.state.alertBanner}
-              </Alert>
-            </ClickAwayListener>
-          )}
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
-                <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
-                <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
-                <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
-                <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
                 </Form.Group>
               )}
             </Form.Row>
@@ -927,31 +929,37 @@ class ModifyDescription extends Component {
             {this.state.txHash > 0 && ( //conditional rendering
               <div className="resultsMobile">
                 {this.state.txStatus === false && (
-                  <div className="transactionErrorTextMobile">
-                    !ERROR! :
-                    <a
-                      className="transactionErrorTextMobile"
+                  <Alert
+                    className="alertFooterMobile"
+                    variant="success">
+                    Transaction failed!
+                    <Alert.Link
+                      className="alertLinkMobile"
                       href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
+                      CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+                  </Alert>
                 )}
+
                 {this.state.txStatus === true && (
-                  <div className="transactionErrorTextMobile">
-                    {" "}
-            No Errors Reported :
-                    <a
-                      className="transactionErrorTextMobile"
+                  <Alert
+                    className="alertFooterMobile"
+                    variant="success">
+                    Transaction success!
+                    <Alert.Link
+                      className="alertLinkMobile"
                       href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
+                      CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                  </Alert>
                 )}
               </div>
             )}

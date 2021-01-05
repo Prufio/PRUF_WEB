@@ -516,41 +516,32 @@ class DeepVerifyMobile extends Component {
             <div>
               {this.state.txHash > 0 && (
                 <div className="resultsMobile">
-                  {this.state.txStatus === false && (
-                    <div className="transactionErrorTextMobile">
-                      !ERROR! :
-                      <a
-                        className="transactionErrorTextMobile"
-                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        TX Hash:{this.state.txHash}
-                      </a>
-                    </div>
-                  )}
-                  {this.state.txStatus === true && (
-                    <> {" "}
-                      {this.state.DVresult !== "" && (
-                        <div className="transactionErrorTextMobile">
-                          {
-                            this.state.DVresult === "Match confirmed"
-                              ? "Match Confirmed :"
-                              : "No Match Found :"
-                          }
-                        </div>
-                      )}
-                      <br></br>
-                      <a
-                        className="transactionErrorTextMobile"
-                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        TX Hash:{this.state.txHash}
-                      </a>
-                    </>
-                  )}
+                  {this.state.DVresult === "Match confirmed"
+                    ? <Alert
+                        className="alertFooterMobile"
+                        variant="success"> 
+                        Match confirmed!
+                          <Alert.Link 
+                            className="alertLinkMobile"
+                            href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
+                            target="_blank"
+                            rel="noopener noreferrer"> CLICK HERE
+                          </Alert.Link> 
+                        to view transaction on etherscan.
+                      </Alert>
+                    : <Alert
+                      className="alertFooterMobile"
+                      variant="danger"> 
+                      No match found! 
+                        <Alert.Link 
+                          className="alertLinkMobile"
+                          href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
+                          target="_blank"
+                          rel="noopener noreferrer"> CLICK HERE
+                        </Alert.Link>
+                      to view transaction on etherscan.
+                    </Alert> 
+                    }
                 </div>
               )}
             </div>
