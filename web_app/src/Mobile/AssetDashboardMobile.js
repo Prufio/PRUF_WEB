@@ -6,6 +6,7 @@ import Jdenticon from 'react-jdenticon';
 import { ClickAwayListener } from '@material-ui/core';
 import Alert from "react-bootstrap/Alert";
 import { isChrome, isOpera, isAndroid } from "react-device-detect";
+import { RWebShare } from "react-web-share";
 
 
 class AssetDashboardMobile extends React.Component {
@@ -315,15 +316,23 @@ class AssetDashboardMobile extends React.Component {
               />
             </div>
           </div>
-          <div className="shareButtonMobileAD">
-            <div className="submitButtonRRQR3MobileContent">
-              <Share2
-                color={"#028ed4"}
-                size={35}
-                onClick={() => { copyLink() }}
-              />
+          <RWebShare
+            className="shareMenu"
+            data={{
+              text: "Check out my PRüF-verified asset!",
+              url: this.state.URL,
+              title: "Share Asset Link",
+            }}
+          >
+            <div className="shareButtonMobileAD">
+              <div className="submitButtonRRQR3MobileContent">
+                <Share2
+                  color={"#028ed4"}
+                  size={35}
+                />
+              </div>
             </div>
-          </div>
+          </RWebShare>
         </>
       )
     }
