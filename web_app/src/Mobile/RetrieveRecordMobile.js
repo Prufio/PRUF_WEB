@@ -214,17 +214,22 @@ class RetrieveRecordMobile extends Component {
               />
             </div>
           </div>
-          {isAndroid && window.ethereum.isMetaMask &&(
+          {window.ethereum !== undefined && (
+            <>
+            {isAndroid && window.ethereum.isMetaMask &&(
             <div className="shareButtonMobileAD">
               <div className="submitButtonRRQR3MobileContent">
-              <Share2
-                color={"#028ed4"}
-                size={35}
-                onClick={()=>{copyLink()}}
-              />
+                <Share2
+                  color={"#028ed4"}
+                  size={35}
+                  onClick={()=>{copyLink()}}
+                />
+              </div>
             </div>
-          </div>
+            )}
+            </>
           )}
+          
           {!isAndroid && (
             <RWebShare
             className="shareMenu"
