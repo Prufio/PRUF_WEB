@@ -202,17 +202,7 @@ class AssetDashboardMobile extends React.Component {
 
   render() {
 
-    const copyLink = async () => { 
-        navigator.clipboard.writeText(String(this.state.URL)).then((res, err)=>{
-          if(res){
-            this.setState({ msgBanner: "Asset link copied to clipboard." });
-          }
-          else{
-            this.setState({ msgBanner: "Failed to copy to clipboard." });
-            alert(err)
-          }
-        });
-    }
+    
 
     const generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
@@ -224,6 +214,10 @@ class AssetDashboardMobile extends React.Component {
         console.log(e)
         this.setState({ selectedImage: e })
       }
+      
+      const copyLink = async () => {
+          this.setState({ alertMsg: "Copy this text to share asset:\n" + this.state.URL });
+    }
 
       const renderIcon = () => {
         return <Jdenticon size="340px" value={obj.idxHash} />
@@ -316,6 +310,8 @@ class AssetDashboardMobile extends React.Component {
           <div className="shareButtonMobileAD">
             <div className="submitButtonRRQR3MobileContent">
               <Share2
+                id="shareVal"
+                value={this.state.URL}
                 color={"#028ed4"}
                 size={35}
                 onClick={() => { copyLink() }}
