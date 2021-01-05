@@ -342,7 +342,7 @@ class RetrieveRecordMobile extends Component {
 
       return this.setState({
         authLevel: window.authLevel,
-        QRreader: undefined,
+        QRreader: false,
         moreInfo: true,
       })
     }
