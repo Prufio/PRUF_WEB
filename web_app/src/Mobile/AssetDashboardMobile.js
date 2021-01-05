@@ -217,14 +217,7 @@ class AssetDashboardMobile extends React.Component {
       }
       
       const copyLink = async () => {
-        if(navigator.userAgent.toLowerCase() === "webview"){
           this.setState({ alertMsg: "Copy this text to share asset:\n" + this.state.URL });
-        }
-        else{
-          navigator.clipboard.writeText(String(this.state.URL))
-          this.setState({ alertMsg: "Asset link copied to clipboard." });
-        }
-        alert(navigator.userAgent.toLowerCase())
     }
 
       const renderIcon = () => {
