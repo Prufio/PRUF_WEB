@@ -230,7 +230,7 @@ class RetrieveRecordMobile extends Component {
             </>
           )}
           
-          {!isAndroid && (
+          {!isAndroid || window.ethereum === undefined (
             <RWebShare
             className="shareMenu"
             data={{
