@@ -218,9 +218,7 @@ class AssetDashboardMobile extends React.Component {
       }
       
       const copyLink = async () => {
-
-        this.setState({ alertMsg: "Copy this text to share asset:\n\n" + this.state.URL });
-        
+        this.setState({ msgBanner: "Copy this text to share asset:\n\n" + this.state.URL }); 
     }
 
       const renderIcon = () => {
