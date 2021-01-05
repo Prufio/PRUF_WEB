@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle, Camera, CameraOff, UploadCloud } from 'react-feather'
 import QrReader from 'react-qr-reader'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class EscrowMobile extends Component {
   constructor(props) {
@@ -20,69 +22,6 @@ class EscrowMobile extends Component {
       }
     }, 150)
 
-
-
-    this.checkIn = async (e) => {
-      let resArray;
-
-      this.setState({ help: false, txHash: "", txStatus: false })
-      if (e === "null" || e === undefined) {
-        this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard-mobile"
-      }
-
-      if (this.state.idxHashRaw === "" && this.state.result === "") {
-        resArray = await window.utils.checkStats(window.assets.ids[e], [0])
-      }
-
-      if (this.state.idxHashRaw !== "") {
-        this.setState({ idxHash: e })
-        resArray = await window.utils.checkStats(e, [0])
-      }
-
-      if (this.state.result !== "") {
-        this.setState({ idxHash: e })
-        resArray = await window.utils.checkStats(e, [0])
-      }
-
-      console.log("resArray", resArray)
-
-      if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
-      }
-
-      if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
-        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false"  })
-        console.log("isSettingEscrowAble: false")
-      }
-
-      if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
-        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true"  })
-        console.log("isSettingEscrowAble: true")
-      }
-
-      this.setState({ selectedAsset: e, input: false, QRreader: false, txHash: "", txStatus: false })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-      console.log(this.state.isSettingEscrow)
-
-      if (this.state.idxHashRaw === "" && this.state.result === "") {
-        this.setState({
-          assetClass: window.assets.assetClasses[e],
-          idxHash: window.assets.ids[e],
-          name: window.assets.descriptions[e].name,
-          photos: window.assets.descriptions[e].photo,
-          text: window.assets.descriptions[e].text,
-          description: window.assets.descriptions[e],
-          status: window.assets.statuses[e],
-          note: window.assets.notes[e]
-        })
-      }
-    }
 
     this.state = {
       addr: "",
@@ -115,6 +54,70 @@ class EscrowMobile extends Component {
       idxHashRaw: "",
       QRreader: false,
     };
+
+    this.checkIn = async (e) => {
+      let resArray;
+
+      this.setState({ help: false, txHash: "", txStatus: false })
+      if (e === "null" || e === undefined || e === "") {
+        this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
+        return this.setState({ alertBanner: "Please fill out all forms before submission." })
+      }
+      else if (e === "reset") {
+        return window.resetInfo = true;
+      }
+      else if (e === "assetDash") {
+        return window.location.href = "/#/asset-dashboard-mobile"
+      }
+
+      if (this.state.idxHashRaw === "" && this.state.result === "") {
+        resArray = await window.utils.checkStats(window.assets.ids[e], [0])
+      }
+
+      if (this.state.idxHashRaw !== "") {
+        this.setState({ idxHash: e })
+        resArray = await window.utils.checkStats(e, [0])
+      }
+
+      if (this.state.result !== "") {
+        this.setState({ idxHash: e })
+        resArray = await window.utils.checkStats(e, [0])
+      }
+
+      console.log("resArray", resArray)
+
+      if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
+        return this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
+      }
+
+      if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
+        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false" })
+        console.log("isSettingEscrowAble: false")
+      }
+
+      if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
+        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true" })
+        console.log("isSettingEscrowAble: true")
+      }
+
+      this.setState({ selectedAsset: e, input: false, QRreader: false, txHash: "", txStatus: false })
+      console.log("Changed component idx to: ", window.assets.ids[e])
+      console.log(this.state.isSettingEscrow)
+
+      if (this.state.idxHashRaw === "" && this.state.result === "") {
+        this.setState({
+          assetClass: window.assets.assetClasses[e],
+          idxHash: window.assets.ids[e],
+          name: window.assets.descriptions[e].name,
+          photos: window.assets.descriptions[e].photo,
+          text: window.assets.descriptions[e].text,
+          description: window.assets.descriptions[e],
+          status: window.assets.statuses[e],
+          note: window.assets.notes[e]
+        })
+      }
+    }
+
   }
 
   //component state-change events......................................................................................................
@@ -123,12 +126,12 @@ class EscrowMobile extends Component {
     if (window.sentPacket !== undefined) {
 
       if (Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 50) {
-        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false"  })
+        this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false" })
         console.log("isSettingEscrowAble: false")
       }
 
       else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 56) {
-        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true"  })
+        this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true" })
         console.log("isSettingEscrowAble: true")
       }
 
@@ -196,10 +199,10 @@ class EscrowMobile extends Component {
     const _accessAsset = async () => {
       this.setState({ help: false })
       if (this.state.idxHash === "") {
-        return alert("Please Select an Asset From the Dropdown")
+        return this.setState({ alertBanner: "Please Select an Asset From the Dropdown" })
       }
       if (this.state.isSettingEscrow === "0" || this.state.isSettingEscrowAble === undefined) {
-        return alert("Please Select an Action From the Dropdown")
+        return this.setState({ alertBanner: "Please Select an Action From the Dropdown" })
       }
       else {
         let tempArray = []
@@ -260,6 +263,28 @@ class EscrowMobile extends Component {
     }
 
     const _setEscrow = async () => {
+      var idxHash = this.state.idxHash;
+
+      console.log("idxHash", idxHash);
+      console.log("addr: ", window.addr);
+      console.log("time: ", this.state.escrowTime, "format: ", this.state.timeFormat);
+
+      if (this.state.agent === undefined || this.state.agent === "" || this.state.escrowTime < 1 || this.state.timeFormat === null) {
+        return this.setState({ alertBanner: "Please fill all forms before submission" })
+      }
+
+      if (this.state.newStatus <= 49) {
+        this.setState({ transaction: false });
+        this.setState({ alertBanner: "Cannot set status under 50 in non-custodial AC" });
+        return clearForm()
+      }
+
+      if (this.state.agent.substring(0, 2) !== "0x") {
+        this.setState({ transaction: false });
+        this.setState({ alertBanner: "Agent address invalid" });
+        return clearForm()
+      }
+
       this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -267,14 +292,6 @@ class EscrowMobile extends Component {
       this.setState({ result: "" })
       this.setState({ transaction: true })
 
-      var idxHash = this.state.idxHash;
-
-      console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
-      console.log("time: ", this.state.escrowTime, "format: ", this.state.timeFormat);
-      if(this.state.agent === undefined || this.state.agent === "" || this.state.escrowTime < 1 || this.state.timeFormat === null){return alert("Please fill all forms before submission")}
-      if (this.state.newStatus <= 49) { this.setState({ transaction: false }); alert("Cannot set status under 50 in non-custodial AC"); return clearForm() }
-      if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); alert("Agent address invalid"); return clearForm() }
 
 
       await window.contracts.ECR_NC.methods
@@ -323,7 +340,7 @@ class EscrowMobile extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false, txHash: Object.values(_error)[0].transactionHash, xStatus: false, wasSentPacket: false })
           console.log(Object.values(_error)[0].transactionHash);
-          alert("Something went wrong!")
+          this.setState({ alertBanner: "Something went wrong!" })
           clearForm();
         })
         .on("receipt", (receipt) => {
@@ -363,20 +380,20 @@ class EscrowMobile extends Component {
           </div>
         )}
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-        {window.addr === undefined && (
+          {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                  }
+                  }
+                  className="userDataLink">
+                  click here
+                </a>
                   to enable Ethereum.
                   </h3>
             </div>
@@ -389,6 +406,7 @@ class EscrowMobile extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
+                      checked={this.state.input}
                       className="checkBoxMobile"
                       id="inlineFormCheck"
                       onChange={() => { input() }}
@@ -772,6 +790,13 @@ class EscrowMobile extends Component {
         </Form>
         {this.state.transaction === false && this.state.txStatus === false && this.state.QRreader === false && (
           <div className="assetSelectedResultsMobile">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>

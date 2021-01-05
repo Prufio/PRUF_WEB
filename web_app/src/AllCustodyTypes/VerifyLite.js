@@ -247,6 +247,7 @@ class VerifyLite extends Component {
               <div>
                 <Form.Check
                   type="checkbox"
+                  checked={this.state.Checkbox}
                   className="checkBox"
                   id="inlineFormCheck"
                   onChange={() => { Checkbox() }}

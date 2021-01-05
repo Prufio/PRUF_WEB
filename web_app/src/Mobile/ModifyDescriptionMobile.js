@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, CheckCircle, FilePlus, FileMinus, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
+
 
 
 class ModifyDescription extends Component {
@@ -84,8 +87,7 @@ class ModifyDescription extends Component {
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
           self.setState({ transaction: false });
-          
-          alert("Something went wrong!")
+          this.setState({ alertBanner:"Something went wrong!"})
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false
@@ -281,7 +283,7 @@ class ModifyDescription extends Component {
 
 
       if (this.state.elementValue === "" && this.state.elementName === "" && this.state.nameTag === "") {
-        return alert("All fields are required for submission")
+        return this.setState({ alertBanner: "All fields are required for submission"})
       }
       if (type === "photo" || type === "displayImage") {
         console.log("Pushing photo element: ", element)
@@ -302,7 +304,7 @@ class ModifyDescription extends Component {
         this.setState({ count: this.state.count + 1 })
       }
 
-      else { return alert("Please use the dropdown menu to select an element type") }
+      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type"}) }
 
       console.log("Added", element, "to element array")
       console.log("Which now looks like: ", window.additionalElementArrays)
@@ -319,7 +321,7 @@ class ModifyDescription extends Component {
       let oldDescription = this.state.oldDescription;
 
       if (this.state.element === "" && this.state.nameTag === "") {
-        return alert("All fields are required for submission")
+        return this.setState({ alertBanner: "All fields are required for submission"})
       }
 
       if (type === "removePhoto") {
@@ -341,10 +343,10 @@ class ModifyDescription extends Component {
           text.push(element)
           //this.setState({ remCount: this.state.remCount + 1 })
         }
-        else { alert("Element does not exist in existing text object") }
+        else { this.setState({ alertBanner: "Element does not exist in existing text object"}) }
       }
 
-      else { return alert("Please use the dropdown menu to select an element type") }
+      else { return this.setState({ alertBanner: "Please use the dropdown menu to select an element type"}) }
 
 
       this.setState({
@@ -363,7 +365,7 @@ class ModifyDescription extends Component {
 
     const publishIPFS1 = async () => {
 
-      if(this.state.idxHash === "" || this.state.idxHash === "null"){return alert("Please select an asset from the dropdown")}
+      if(this.state.idxHash === "" || this.state.idxHash === "null"){return this.setState({ alertBanner: "Please select an asset from the dropdown"})}
 
       this.setState({help: false})
       console.log(this.state.oldDescription)
@@ -431,7 +433,7 @@ class ModifyDescription extends Component {
       }
 
       else if (Number(newDescriptionPhoto + newDescriptionText) === 0) {
-        return alert("No new data added to payload! Add some data before submission.")
+        return this.setState({ alertBanner: "No new data added to payload! Add some data before submission."})
       }
 
       else {
@@ -479,15 +481,15 @@ class ModifyDescription extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        alert("Asset does not exist at given IDX");
+        this.setState({ alertBanner: "Asset does not exist at given IDX"});
       }
 
       if (Number(resArray[0]) === 54 || Number(resArray[0]) === 53) {
-        alert("Cannot edit asset in lost or stolen status"); return this.clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status"}); return this.clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return this.clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions"}); return this.clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -538,7 +540,7 @@ class ModifyDescription extends Component {
                     onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask"}); }
                     }
                     }
                     className="userDataLink">
@@ -897,6 +899,13 @@ class ModifyDescription extends Component {
         </Form>
         {this.state.transaction === false && this.state.txStatus === false &&  (
           <div className="assetSelectedResultsMobile">
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>

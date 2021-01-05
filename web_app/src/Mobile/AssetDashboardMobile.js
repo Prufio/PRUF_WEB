@@ -56,7 +56,7 @@ class AssetDashboardMobile extends React.Component {
 
       if (AC === "0" || AC === undefined) {
         this.refresh()
-        return this.setState({ alertMsg: "Selected AC Cannot be Zero" })
+        return this.setState({ msgBanner: "Selected AC Cannot be Zero" })
       }
       else {
         if (
@@ -65,8 +65,8 @@ class AssetDashboardMobile extends React.Component {
           acDoesExist = await window.utils.checkForAC("name", AC);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           await window.utils.resolveAC(AC);
@@ -81,9 +81,8 @@ class AssetDashboardMobile extends React.Component {
 
           acDoesExist = await window.utils.checkForAC("id", AC);
           await console.log("Exists?", acDoesExist)
-
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ assetClass: AC });
@@ -206,10 +205,10 @@ class AssetDashboardMobile extends React.Component {
     const copyLink = async () => { 
         navigator.clipboard.writeText(String(this.state.URL)).then((res, err)=>{
           if(res){
-            this.setState({ alertMsg: "Asset link copied to clipboard." });
+            this.setState({ msgBanner: "Asset link copied to clipboard." });
           }
           else{
-            this.setState({ alertMsg: "Failed to copy to clipboard." });
+            this.setState({ msgBanner: "Failed to copy to clipboard." });
             alert(err)
           }
         });
@@ -456,7 +455,7 @@ class AssetDashboardMobile extends React.Component {
                   onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { this.setState({ alertMsg: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                    else { this.setState({ msgBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask." }); }
                   }
                   }
                   className="userDataLink">
@@ -468,10 +467,10 @@ class AssetDashboardMobile extends React.Component {
           )}
         </div>
         <div className="assetDashboardMobile">
-          {this.state.alertMsg !== undefined && (
-            <ClickAwayListener onClickAway={() => { this.setState({ alertMsg: undefined }) }}>
-              <Alert className="alertMsgMobile" key={1} variant="success" onClose={() => this.setState({ alertMsg: undefined })} dismissible>
-                {this.state.alertMsg}
+          {this.state.msgBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
+              <Alert className="alertBannerADMobile" key={1} variant="success" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+                {this.state.msgBanner}
               </Alert>
             </ClickAwayListener>
           )}

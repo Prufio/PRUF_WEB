@@ -390,6 +390,7 @@ class RecycleAssetNC extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
+                      checked={this.state.Checkbox}
                       className="checkBox2"
                       id="inlineFormCheck"
                       onChange={() => { Checkbox() }}

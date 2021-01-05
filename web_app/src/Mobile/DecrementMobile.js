@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class DecrementMobile extends Component {
   constructor(props) {
@@ -52,13 +54,13 @@ class DecrementMobile extends Component {
 
 
       if (Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot edit asset in lost or stolen status");
+        alert("Cannot edit asset in lost or stolen status.");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard-mobile"
       }
 
       if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
+        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions.");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard-mobile"
       }
@@ -96,12 +98,12 @@ class DecrementMobile extends Component {
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ 
-        idxHash: undefined, 
-        txStatus: false, 
-        txHash: "", 
-        wasSentPacket: false, 
-        help: false 
+      this.setState({
+        idxHash: undefined,
+        txStatus: false,
+        txHash: "",
+        wasSentPacket: false,
+        help: false
       })
     }
 
@@ -113,15 +115,15 @@ class DecrementMobile extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _checkIn = async (e) => {
       this.setState({
-        help: false, 
-        txHash: "", 
+        help: false,
+        txHash: "",
         txStatus: false
       })
       if (e === "null" || e === undefined) {
@@ -142,11 +144,11 @@ class DecrementMobile extends Component {
       console.log(count)
 
       if (Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status." }); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions." }); return clearForm()
       }
 
       console.log("Changed component idx to: ", window.assets.ids[e])
@@ -166,6 +168,15 @@ class DecrementMobile extends Component {
     }
 
     const _decrementCounter = async () => {
+      if (this.state.countDown === "" || this.state.countDown === undefined) { return this.setState({ alertBanner: "Please fill all fields before submission." }) }
+
+      if (Number(this.state.countDown) > Number(this.state.count)) {
+        clearForm()
+        this.setState({
+          transaction: false
+        })
+        return this.setState({ alertBanner: "Countdown is greater than count reserve! Please ensure data fields are correct before submission." })
+      }
       this.setState({
         help: false,
         txStatus: false,
@@ -176,41 +187,32 @@ class DecrementMobile extends Component {
       })
       var idxHash = this.state.idxHash;
 
-      if(this.state.countDown === "" || this.state.countDown === undefined){return alert("Please fill all fields before submission")}
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       console.log("Data: ", this.state.countDown);
       console.log("DataReserve: ", this.state.countDownStart);
 
-      if (Number(this.state.countDown) > Number(this.state.count)) {
-        clearForm()
-        this.setState({
-          transaction: false
-        })
-        return alert("Countdown is greater than count reserve! Please ensure data fields are correct before submission.")
-      }
-
       await window.contracts.NP_NC.methods
         ._decCounter(idxHash, this.state.countDown)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
-          self.setState({ 
+          self.setState({
             transaction: false,
             txHash: Object.values(_error)[0].transactionHash,
-            txStatus: false, 
-            wasSentPacket: false 
+            txStatus: false,
+            wasSentPacket: false
           })
-          alert("Something went wrong!")
+          this.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
         .on("receipt", (receipt) => {
-          self.setState({ 
+          self.setState({
             transaction: false,
             txHash: receipt.transactionHash,
-            txStatus: receipt.status 
+            txStatus: receipt.status
           })
           console.log(receipt.status);
           window.resetInfo = true;
@@ -220,9 +222,9 @@ class DecrementMobile extends Component {
           //Stuff to do when tx confirms
         });
 
-      return this.setState({ 
-        idxHash: undefined, 
-        wasSentPacket: false 
+      return this.setState({
+        idxHash: undefined,
+        wasSentPacket: false
       });
     };
 
@@ -238,20 +240,20 @@ class DecrementMobile extends Component {
           </div>
         </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-        {window.addr === undefined && (
+          {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask." }); }
+                  }
+                  }
+                  className="userDataLink">
+                  click here
+                </a>
                   to enable Ethereum.
                   </h3>
             </div>
@@ -363,10 +365,17 @@ class DecrementMobile extends Component {
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResultsMobile">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && (
                 <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
                   <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
@@ -383,32 +392,32 @@ class DecrementMobile extends Component {
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="resultsMobile">
             {this.state.txStatus === false && (
-                <div className="transactionErrorTextMobile">
-                  !ERROR! :
-                  <a
+              <div className="transactionErrorTextMobile">
+                !ERROR! :
+                <a
                   className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
-              {this.state.txStatus === true && (
-                <div className="transactionErrorTextMobile">
-                  {" "}
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  TX Hash:{this.state.txHash}
+                </a>
+              </div>
+            )}
+            {this.state.txStatus === true && (
+              <div className="transactionErrorTextMobile">
+                {" "}
                 No Errors Reported :
-                  <a
+                <a
                   className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  TX Hash:{this.state.txHash}
+                </a>
+              </div>
+            )}
           </div>
         )}
       </div>

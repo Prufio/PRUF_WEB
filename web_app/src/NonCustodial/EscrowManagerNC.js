@@ -386,6 +386,7 @@ class EscrowManagerNC extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
+                      checked={this.state.input}
                       className="checkBox"
                       id="inlineFormCheck"
                       onChange={() => { input() }}
