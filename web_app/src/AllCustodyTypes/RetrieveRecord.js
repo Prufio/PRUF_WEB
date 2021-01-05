@@ -195,32 +195,34 @@ class RetrieveRecord extends Component {
                       </button>
                     </div>
                     {this.state.printQR && (
-                      <div>
-                        <div className="displayQRRR">
-                          <div className="QR">
-                            {this.state.idxHashRaw !== "" && (
-                              <QRCode
-                                value={"https://indevapp.pruf.io/#/" + this.state.idxHashRaw}
-                                size="150"
-                                fgColor="#002a40"
-                                logoWidth="35"
-                                logoHeight="46"
-                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                              />
-                            )}
-                            {this.state.idxHashRaw === "" && (
-                              <QRCode
-                                value={"https://indevapp.pruf.io/#/" + obj.idxHash}
-                                size="150"
-                                fgColor="#002a40"
-                                logoWidth="35"
-                                logoHeight="46"
-                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                              />
-                            )}
+                      <ClickAwayListener onClickAway={() => { this.setState({ printQR: false }) }}>
+                        <div>
+                          <div className="displayQRRR">
+                            <div className="QR">
+                              {this.state.idxHashRaw !== "" && (
+                                <QRCode
+                                  value={"https://indevapp.pruf.io/#/" + this.state.idxHashRaw}
+                                  size="150"
+                                  fgColor="#002a40"
+                                  logoWidth="35"
+                                  logoHeight="46"
+                                  logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                                />
+                              )}
+                              {this.state.idxHashRaw === "" && (
+                                <QRCode
+                                  value={"https://indevapp.pruf.io/#/" + obj.idxHash}
+                                  size="150"
+                                  fgColor="#002a40"
+                                  logoWidth="35"
+                                  logoHeight="46"
+                                  logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                                />
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </ClickAwayListener>
                     )}
 
                     <button className="assetImageButtonSelected">
@@ -272,7 +274,7 @@ class RetrieveRecord extends Component {
                         <div className="cardButton2Content">
                           <CornerUpLeft
                             size={35}
-                            onClick={() => { window.location.href="/#/retrieve-record"; this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false, result: "" }) }}
+                            onClick={() => { window.location.href = "/#/retrieve-record"; this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false, result: "" }) }}
                           />
                         </div>
                       </div>

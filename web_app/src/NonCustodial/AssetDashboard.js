@@ -320,27 +320,29 @@ class AssetDashboard extends React.Component {
                       </button>
                     </div>
                     {this.state.printQR && (
-                      <div>
-                        <div className="displayQR">
-                          <div className="QR">
-                            <QRCode
-                              value={"https://indevapp.pruf.io/#/retrieve-record?" + obj.idxHash}
-                              size="150"
-                              fgColor="#002a40"
-                              logoWidth="35"
-                              logoHeight="46"
-                              logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                            />
+                      <ClickAwayListener onClickAway={() => { this.setState({ printQR: false }) }}>
+                        <div>
+                          <div className="displayQR">
+                            <div className="QR">
+                              <QRCode
+                                value={"https://indevapp.pruf.io/#/retrieve-record?" + obj.idxHash}
+                                size="150"
+                                fgColor="#002a40"
+                                logoWidth="35"
+                                logoHeight="46"
+                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                              />
+                            </div>
+                          </div>
+                          <div className="displayFooterQR">
+                            <div className="mediaLinkQRDisplay">
+                              {/* <a className="mediaLinkQRDisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
+                              <Printer />
+                              <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
+                            </div>
                           </div>
                         </div>
-                        <div className="displayFooterQR">
-                          <div className="mediaLinkQRDisplay">
-                            {/* <a className="mediaLinkQRDisplayContent" ><Save onClick={() => { _printQR()  }} /></a> */}
-                            <Printer />
-                            <a className="mediaLinkQRDisplayContent" ><X onClick={() => { _printQR() }} /></a>
-                          </div>
-                        </div>
-                      </div>
+                      </ClickAwayListener>
                     )}
 
                     <button className="assetImageButtonSelected">
@@ -388,7 +390,7 @@ class AssetDashboard extends React.Component {
                       url: this.state.URL,
                       title: "Share Asset Link",
                     }}
-                    >
+                  >
                     <div className="cardButton4">
                       <div className="cardButton4Content">
                         <Share2
@@ -433,7 +435,7 @@ class AssetDashboard extends React.Component {
               </li>
             </Nav>
           </div>
-        </div>
+        </div >
 
 
       )
