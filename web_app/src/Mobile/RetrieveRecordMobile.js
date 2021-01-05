@@ -217,7 +217,7 @@ class RetrieveRecordMobile extends Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { window.location.href = "/#/retrieve-record"; this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, result: "" }) }}
+                onClick={() => { window.location.href = "/#/retrieve-record-mobile"; this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, result: "" }) }}
               />
             </div>
           </div>
