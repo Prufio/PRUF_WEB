@@ -1722,8 +1722,6 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
-
-    alert(getUA)
     
     window.balances = {}
     let timeOutCounter = 0;

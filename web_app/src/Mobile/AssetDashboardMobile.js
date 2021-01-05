@@ -218,14 +218,9 @@ class AssetDashboardMobile extends React.Component {
       }
       
       const copyLink = async () => {
-        if(isAndroid && !isChrome){
-          this.setState({ alertMsg: "Copy this text to share asset:\n" + this.state.URL });
-        }
+
+        this.setState({ alertMsg: "Copy this text to share asset:\n\n" + this.state.URL });
         
-        else{
-          navigator.clipboard.writeText(String(this.state.URL));
-          this.setState({ alertMsg: "Text copied to clipboard."});
-        }
     }
 
       const renderIcon = () => {
@@ -316,7 +311,19 @@ class AssetDashboardMobile extends React.Component {
               />
             </div>
           </div>
-          <RWebShare
+          {isAndroid && window.ethereum.isMetaMask &&(
+            <div className="shareButtonMobileAD">
+              <div className="submitButtonRRQR3MobileContent">
+              <Share2
+                color={"#028ed4"}
+                size={35}
+                onClick={()=>{copyLink()}}
+              />
+            </div>
+          </div>
+          )}
+          {!isAndroid && (
+            <RWebShare
             className="shareMenu"
             data={{
               text: "Check out my PRüF-verified asset!",
@@ -333,6 +340,7 @@ class AssetDashboardMobile extends React.Component {
               </div>
             </div>
           </RWebShare>
+          )}
         </>
       )
     }
