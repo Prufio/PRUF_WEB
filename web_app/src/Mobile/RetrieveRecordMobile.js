@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader';
 import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, Copy, Share2 } from "react-feather";
-
+import { isChrome, isOpera, isAndroid } from "react-device-detect";
 
 class RetrieveRecordMobile extends Component {
   constructor(props) {
@@ -123,6 +123,17 @@ class RetrieveRecordMobile extends Component {
         return <Jdenticon size="340" value={obj.idxHash} />
       }
 
+      const copyLink = async () => {
+        if(isAndroid && !isChrome){
+          this.setState({ alertMsg: "Copy this text to share asset:\n" + this.state.URL });
+        }
+        
+        else{
+          navigator.clipboard.writeText(String(this.state.URL));
+          this.setState({ alertMsg: "Text copied to clipboard."});
+        }
+    }
+
 
       const generateThumbs = () => {
         let component = [];
@@ -182,14 +193,14 @@ class RetrieveRecordMobile extends Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
-              <div className="cardCopyButtonMobile">
+{/*               <div className="cardCopyButtonMobile">
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
                       onClick={() => { navigator.clipboard.writeText(String(obj.idxHash)) }}
                     />
                   </div>
-                </div>
+                </div> */}
                 <h4 className="cardDescriptionSelectedContentMobile">
                   {obj.idxHash}
                 </h4>
@@ -211,7 +222,7 @@ class RetrieveRecordMobile extends Component {
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText(String(this.state.URL)) }}
+                onClick={() => { copyLink() }}
               />
             </div>
           </div>

@@ -10,6 +10,7 @@ import { QRCode } from 'react-qrcode-logo';
 import { isMobile } from "react-device-detect";
 import Printer from '../Resources/Print'
 import { ClickAwayListener } from '@material-ui/core';
+import { RWebShare } from "react-web-share";
 
 
 class AssetDashboard extends React.Component {
@@ -41,6 +42,12 @@ class AssetDashboard extends React.Component {
         this.setState({ selectedImage: "" })
       }
       this.setState({ assetObj: e, moreInfo: true, identicon: e.identicon })
+      this.setState({
+        URL: String(this.state.baseURL) + String(e.idxHash),
+        assetObj: e,
+        moreInfo: true,
+        identicon: e.identicon
+      })
       window.printObj = e;
       //this.setAC(e.assetClass)
     }
@@ -120,6 +127,8 @@ class AssetDashboard extends React.Component {
       APP: "",
       NP: "",
       STOR: "",
+      baseURL: "https://indevapp.pruf.io/#/",
+      URL: undefined,
       AC_MGR: "",
       ECR_NC: "",
       ECR_MGR: "",
@@ -198,10 +207,6 @@ class AssetDashboard extends React.Component {
           this.setState({ printQR: undefined })
         }
       }
-
-      // const _printQRFile = async (obj) => {
-
-      // }
 
       const generateThumbs = () => {
         let component = [];
@@ -366,26 +371,33 @@ class AssetDashboard extends React.Component {
                       {generateTextList()}
                     </div>
                   </div>
-                  {this.state.moreInfo && (
-                    <div className="cardButton2">
-                      <div className="cardButton2Content">
-                        <CornerUpLeft
-                          size={35}
-                          onClick={() => { this.moreInfo("back") }}
-                        />
-                      </div>
+
+                  <div className="cardButton2">
+                    <div className="cardButton2Content">
+                      <CornerUpLeft
+                        size={35}
+                        onClick={() => { this.moreInfo("back") }}
+                      />
                     </div>
-                  )}
-                  {this.state.moreInfo && (
+                  </div>
+
+                  <RWebShare
+                    className="shareMenu"
+                    data={{
+                      text: "Check out my PRüF-verified asset!",
+                      url: this.state.URL,
+                      title: "Share Asset Link",
+                    }}
+                    >
                     <div className="cardButton4">
                       <div className="cardButton4Content">
                         <Share2
                           size={35}
-                          onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); this.setState({ msgBanner: "Asset link copied to clipboard." }) }}
                         />
                       </div>
                     </div>
-                  )}
+                  </RWebShare>
+
 
                 </div>
               </div >

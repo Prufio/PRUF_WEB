@@ -861,52 +861,40 @@ class Main extends Component {
     }
 
     //Watchdog which keeps state consistent with other components
-    this.updateWatchDog = setInterval(() => {
+    const updateWatchDog = setInterval(() => {
 
       //every tick ensure user auth level/user type is correct
       if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined) {
+        console.log("1")
         this.setState({ isAuthUser: window.isAuthUser })
       }
 
-      if (this.state.isACAdmin !== window.isACAdmin) {
+      /* if (this.state.isACAdmin !== window.isACAdmin) {
+        console.log("2")
+        console.log(window.isACAdmin, this.state.isACAdmin)
         this.setState({ isACAdmin: window.isACAdmin })
-      }
+      } */
 
       if (this.state.custodyType !== window.custodyType) {
+        console.log("3")
         this.setState({ custodyType: window.custodyType })
       }
 
-      //Reset balance values to reflect in render
-      if (window.balances !== undefined) {
-        if (
-          Object.values(window.balances) !==
-          Object.values({ assetClass: this.state.assetClassBalance, asset: this.state.assetBalance, ID: this.state.IDTokenBalance })) {
-          this.setState({
-            assetClassBalance: window.balances.assetClassBalance,
-            assetBalance: window.balances.assetBalance,
-            IDTokenBalance: window.balances.IDTokenBalance,
-            prufBalance: window.balances.prufTokenBalance,
-            assetHolderBool: window.assetHolderBool,
-            assetClassHolderBool: window.assetClassHolderBool,
-            IDHolderBool: window.IDHolderBool,
-            custodyType: window.custodyType,
-            hasFetchedBalances: window.hasFetchedBalances
-          })
-        }
-      }
-
       if (this.state.ETHBalance !== window.ETHBalance && this.state.runWatchDog === true) {
+        console.log("5")
         this.setState({ ETHBalance: window.ETHBalance })
       }
 
       // Remote menu switcher
       if (window.menuChange !== undefined) {
+        console.log("6")
         console.log(window.menuChange)
         this.setState({ menuChange: window.menuChange })
       }
 
       //^^^
       if (this.state.menuChange !== undefined && this.state.runWatchDog === true) {
+        console.log("7")
         window.menuChange = undefined
         if (isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
@@ -939,6 +927,7 @@ class Main extends Component {
         }
 
         else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true && this.state.runWatchDog === true) {
+          console.log("8")
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -973,6 +962,7 @@ class Main extends Component {
 
       //Catch late window.ethereum injection case (MetaMask mobile)
       if (isMobile && window.ethereum && window.routeRequest !== "basicMobile" && this.state.runWatchDog === true) {
+        console.log("9")
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -994,6 +984,7 @@ class Main extends Component {
         if (window.assets.ids.length > 0 && window.assets.names.length === 0 &&
           this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
+            console.log("10")
             console.log("WD: rebuilding assets (Last Step)")
             //this.setState({runWatchDog: false})
             this.buildAssets()
@@ -1003,6 +994,7 @@ class Main extends Component {
 
       //If reset was remotely requested, begin full asset recount  
       if (window.resetInfo === true) {
+        console.log("11")
         window.hasLoadedAssetClasses = false;
         window.hasLoadedAssets = false;
         this.setState({ buildReady: false })
@@ -1014,6 +1006,7 @@ class Main extends Component {
       //In the case of a completed recount and rough asset build, make asset info usable for app
       if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
+          console.log("12")
           console.log("Assets are ready for rebuild")
           this.setState({ buildReady: true })
         }
@@ -1022,14 +1015,15 @@ class Main extends Component {
       //Assets finished rebuilding, flip rebuild switch
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
-        console.log("Assets finished rebuilding, no longer ready for rebuild")
-        this.setState({ buildReady: false })
+          console.log("13")
+          console.log("Assets finished rebuilding, no longer ready for rebuild")
+          this.setState({ buildReady: false })
       }
 
       //if(this.state.hasMounted)console.log(window.aTknIDs,this.state.buildReady,window.ipfsCounter, this.state.runWatchDog)
-    }, 100)
+    }, 500)
 
-    this.netWorkWatchdog = setInterval(() => { if (this.state.runWatchDog === true) { window.web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { this.setState({ isKovan: true }) } else { this.setState({ isKovan: false }) } }) } }, 800)
+    this.netWorkWatchdog = setInterval(() => { if (this.state.runWatchDog === true) { window.web3.eth.net.getNetworkType().then((e) => { if (e === "kovan" && !this.state.isKovan) { this.setState({ isKovan: true }) } else if(e !== "kovan") { this.setState({ isKovan: false }) } }) } }, 800)
 
     //Local menu toggler for navlinks
     this.toggleMenu = async (menuChoice) => {
@@ -1208,33 +1202,18 @@ class Main extends Component {
       if (window.recount === true) {
         window.aTknIDs = [];
         window.acTknIDs = [];
-        if (window.balances !== undefined) window.balances.assetBalance = undefined;
+        if (window.balances !== undefined) window.balances.assetBalance = 0;
         window.recount = false
         await window.utils.getETHBalance();
         return this.setUpTokenVals(true)
       }
 
-      //If there are balances to get, lock them into state
-      if (window.balances !== undefined) {
-        this.setState({
-          assetClassBalance: window.balances.assetClassBalance,
-          assetBalance: window.balances.assetBalance,
-          IDTokenBalance: window.balances.IDTokenBalance,
-          prufBalance: window.balances.prufTokenBalance,
-          assetHolderBool: window.assetHolderBool,
-          assetClassHolderBool: window.assetClassHolderBool,
-          IDHolderBool: window.IDHolderBool,
-          custodyType: window.custodyType,
-          hasFetchedBalances: window.hasFetchedBalances
-        })
-      }
-
       //Do a full update if the balances are returning undefined at this stage (They should never do this)
-      else if (window.balances === undefined) {
+      /* else if (Object.values(window.balances) === [0,0,0,0]) {
         console.log("balances undefined, trying to get them...");
         //if (window.addr === undefined) { return this.forceUpdate }
         return this.setUpTokenVals(true);
-      }
+      } */
       console.log("SA: In setUpAssets")
 
       let tempDescObj = {}
@@ -1399,22 +1378,46 @@ class Main extends Component {
         window.assets.displayImages = tempDisplayArray;
         window.hasLoadedAssets = true;
       }
-
+      if(window.balances.prufTokenBalance !== this.state.prufBalance || window.balances.assetBalance !== this.state.assetBalance){
+        this.setState({
+          assetBalance: window.balances.assetBalance, 
+          assetClassBalance: window.balances.assetClassBalance,
+          prufBalance: window.balances.prufTokenBalance,
+          IDTokenBalance: window.balances.IDTokenBalance,
+          assetHolderBool: window.assetHolderBool,
+          assetClassHolderBool: window.assetClassHolderBool,
+          IDHolderBool: window.IDHolderBool,
+          custodyType: window.custodyType,
+          hasFetchedBalances: window.hasFetchedBalances
+          })
+      }
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
     this.setUpTokenVals = async (willSetup) => {
-
-      window.balances = {}
+      const self = this;
       console.log("STV: Setting up balances")
 
-      await window.utils.determineTokenBalance()
+      await window.utils.determineTokenBalance().then(async(e)=>{ console.log(e); 
+        await self.setState({
+        assetBalance: e.assetBalance, 
+        assetClassBalance: e.assetClassBalance,
+        prufBalance: e.prufTokenBalance,
+        IDTokenBalance: e.IDTokenBalance,
+        assetHolderBool: window.assetHolderBool,
+        assetClassHolderBool: window.assetClassHolderBool,
+        IDHolderBool: window.IDHolderBool,
+        custodyType: window.custodyType,
+        hasFetchedBalances: window.hasFetchedBalances
+        })
+      })
       await console.log(window.balances)
       if (willSetup) {
         return this.setUpAssets()
       }
+      
     }
 
     //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
@@ -1471,7 +1474,6 @@ class Main extends Component {
               })
 
               window.addr = "";
-              window.balances = {};
 
             }
 
@@ -1501,7 +1503,6 @@ class Main extends Component {
             self.setState({ addr: e[0] });
             window.recount = true;
             window.resetInfo = true;
-
             console.log("///////in acctChanger////////");
           }
           else { console.log("Something bit in the acct listener, but no changes made.") }
@@ -1566,8 +1567,8 @@ class Main extends Component {
 
         if (window.addr !== undefined) {
           await window.utils.getETHBalance();
-          await this.setUpTokenVals()
-          await this.setUpAssets()
+          await this.setUpTokenVals(true)
+          //await this.setUpAssets()
         }
 
 
@@ -1723,7 +1724,9 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
+    window.balances = {}
     let timeOutCounter = 0;
+    window.recount = false;
     let _web3, _ipfs;
 
     _ipfs = new this.state.IPFS({

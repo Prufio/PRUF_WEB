@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import Jdenticon from 'react-jdenticon';
 import { ClickAwayListener } from '@material-ui/core';
 import Alert from "react-bootstrap/Alert";
+import { isChrome, isOpera, isAndroid } from "react-device-detect";
 
 
 class AssetDashboardMobile extends React.Component {
@@ -217,7 +218,14 @@ class AssetDashboardMobile extends React.Component {
       }
       
       const copyLink = async () => {
+        if(isAndroid && !isChrome){
           this.setState({ alertMsg: "Copy this text to share asset:\n" + this.state.URL });
+        }
+        
+        else{
+          navigator.clipboard.writeText(String(this.state.URL));
+          this.setState({ alertMsg: "Text copied to clipboard."});
+        }
     }
 
       const renderIcon = () => {
@@ -284,14 +292,14 @@ class AssetDashboardMobile extends React.Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
-                <div className="cardCopyButtonMobile">
+                {/* <div className="cardCopyButtonMobile">
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
                       onClick={() => { navigator.clipboard.writeText(String(obj.idxHash)) }}
                     />
                   </div>
-                </div>
+                </div> */}
                 <h4 className="cardDescriptionSelectedContentMobile">
                   {obj.idxHash}
                 </h4>
@@ -311,8 +319,6 @@ class AssetDashboardMobile extends React.Component {
           <div className="shareButtonMobileAD">
             <div className="submitButtonRRQR3MobileContent">
               <Share2
-                id="shareVal"
-                value={this.state.URL}
                 color={"#028ed4"}
                 size={35}
                 onClick={() => { copyLink() }}

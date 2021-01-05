@@ -1208,6 +1208,8 @@ function buildWindowUtils() {
         assetBalance: _assetBal,
         IDTokenBalance: _IDTokenBal
       }
+
+      return window.balances
     }
   }
 
