@@ -7,6 +7,7 @@ import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy, Share2 } from "react-feather";
 import { ClickAwayListener } from '@material-ui/core';
+import { RWebShare } from "react-web-share";
 
 
 class RetrieveRecord extends Component {
@@ -276,14 +277,22 @@ class RetrieveRecord extends Component {
                           />
                         </div>
                       </div>
-                      <div className="cardButton4">
-                        <div className="cardButton4Content">
-                          <Share2
-                            size={35}
-                            onClick={() => { navigator.clipboard.writeText("https://indevapp.pruf.io/#/" + obj.idxHash); this.setState({ msgBanner: "Asset link copied to clipboard." }) }}
-                          />
-                        </div>
+                      <RWebShare
+                    className="shareMenu"
+                    data={{
+                      text: "Check out my PRüF-verified asset!",
+                      url: this.state.URL,
+                      title: "Share Asset Link",
+                    }}
+                    >
+                    <div className="cardButton4">
+                      <div className="cardButton4Content">
+                        <Share2
+                          size={35}
+                        />
                       </div>
+                    </div>
+                  </RWebShare>
                     </>
                   )}
 

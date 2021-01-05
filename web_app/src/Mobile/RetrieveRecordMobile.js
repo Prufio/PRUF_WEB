@@ -8,6 +8,7 @@ import { CornerUpLeft, Home, XSquare, ArrowRightCircle, UploadCloud, Camera, Cam
 import { isChrome, isOpera, isAndroid } from "react-device-detect";
 import { ClickAwayListener } from '@material-ui/core';
 import Alert from "react-bootstrap/Alert";
+import { RWebShare } from "react-web-share";
 
 class RetrieveRecordMobile extends Component {
   constructor(props) {
@@ -126,15 +127,15 @@ class RetrieveRecordMobile extends Component {
       }
 
       const copyLink = async () => {
-        if(isAndroid && !isChrome){
+        if (isAndroid && !isChrome) {
           this.setState({ alertMsg: "Copy this text to share asset:\n" + this.state.URL });
         }
-        
-        else{
+
+        else {
           navigator.clipboard.writeText(String(this.state.URL));
-          this.setState({ alertMsg: "Text copied to clipboard."});
+          this.setState({ alertMsg: "Text copied to clipboard." });
         }
-    }
+      }
 
 
       const generateThumbs = () => {
@@ -196,7 +197,7 @@ class RetrieveRecordMobile extends Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
-{/*               <div className="cardCopyButtonMobile">
+                {/*               <div className="cardCopyButtonMobile">
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
@@ -220,15 +221,23 @@ class RetrieveRecordMobile extends Component {
               />
             </div>
           </div>
-          <div className="shareButtonMobileAD">
-            <div className="submitButtonRRQR3MobileContent">
-              <Share2
-                color={"#028ed4"}
-                size={35}
-                onClick={() => { copyLink() }}
-              />
+          <RWebShare
+            className="shareMenu"
+            data={{
+              text: "Check out my PRüF-verified asset!",
+              url: this.state.URL,
+              title: "Share Asset Link",
+            }}
+          >
+            <div className="shareButtonMobileAD">
+              <div className="submitButtonRRQR3MobileContent">
+                <Share2
+                  color={"#028ed4"}
+                  size={35}
+                />
+              </div>
             </div>
-          </div>
+          </RWebShare>
         </>
       )
     }
