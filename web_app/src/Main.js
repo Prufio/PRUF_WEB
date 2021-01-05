@@ -33,7 +33,7 @@ class Main extends Component {
 
     this.renderContent = () => {
       var isSafari = require('is-safari');
-      if (isSafari && !!isMobile) {
+      if (isSafari && !isMobile) {
         return (
           <div>
             <HashRouter>
@@ -81,7 +81,7 @@ class Main extends Component {
           </div >
         );
       }
-      if (!isMobile && isSafari) {
+      if (isMobile && isSafari) {
         return (
           <div>
             <HashRouter>
@@ -112,7 +112,7 @@ class Main extends Component {
           </div >
         );
       }
-      if (!isMobile && !isSafari) {
+      if (isMobile && !isSafari) {
         return (
           <div>
             <HashRouter>
@@ -908,7 +908,7 @@ class Main extends Component {
       //^^^
       if (this.state.menuChange !== undefined && this.state.runWatchDog === true) {
         window.menuChange = undefined
-        if (!isMobile && window.ethereum) {
+        if (isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
           this.setState({ routeRequest: "basicMobile" })
           this.setState({
@@ -922,7 +922,7 @@ class Main extends Component {
           })
         }
 
-        else if (!!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true) {
+        else if (!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true) {
           window.routeRequest = "ACAdmin"
           this.setState({ routeRequest: "ACAdmin" })
           this.setState({
@@ -938,7 +938,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true && this.state.runWatchDog === true) {
+        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true && this.state.runWatchDog === true) {
           window.routeRequest = "NCAdmin"
           this.setState({ routeRequest: "NCAdmin" })
           this.setState({
@@ -954,7 +954,7 @@ class Main extends Component {
           this.setState({ menuChange: undefined });
         }
 
-        else if (!!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false && this.state.runWatchDog === true) {
+        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false && this.state.runWatchDog === true) {
           window.routeRequest = "NCUser"
           this.setState({ routeRequest: "NCUser" })
           this.setState({
@@ -972,7 +972,7 @@ class Main extends Component {
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
-      if (!isMobile && window.ethereum && window.routeRequest !== "basicMobile" && this.state.runWatchDog === true) {
+      if (isMobile && window.ethereum && window.routeRequest !== "basicMobile" && this.state.runWatchDog === true) {
         window.routeRequest = "basicMobile"
         this.setState({
           mobileMenuBool: true,
@@ -1475,7 +1475,7 @@ class Main extends Component {
 
             }
 
-            else if (!!isMobile) {
+            else if (!isMobile) {
               window.routeRequest = "basic"
               self.setState({ routeRequest: "basic" });
               self.setState({
@@ -1516,7 +1516,7 @@ class Main extends Component {
       _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { this.setState({ isKovan: true }) } else { this.setState({ isKovan: false }) } })
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
-        if (!!isMobile) {
+        if (!isMobile) {
           console.log("Here!")
           await this.setState({
             mobileMenuBool: false,
@@ -1530,7 +1530,7 @@ class Main extends Component {
           })
         }
 
-        else if (!isMobile && _web3.eth.net.getNetworkType() != undefined) {
+        else if (isMobile && _web3.eth.net.getNetworkType() != undefined) {
           await this.setState({
             mobileMenuBool: true,
             noAddrMenuBool: false,
@@ -1768,7 +1768,7 @@ class Main extends Component {
     if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
       window.location.href = '/#/';
     } else {
-      if (!isMobile) {
+      if (isMobile) {
         window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
       } else {
         console.log(refString)
@@ -1779,7 +1779,7 @@ class Main extends Component {
     window.menuChange = undefined;
 
     //Give me the desktop version
-    if (!!isMobile && window.ethereum) {
+    if (!isMobile && window.ethereum) {
       console.log(_web3.eth.net.getNetworkType())
       console.log("Here")
       window.costs = {}
@@ -1812,7 +1812,7 @@ class Main extends Component {
     }
 
     //Give me the mobile ethereum-enabled version
-    else if (!isMobile && window.ethereum) {
+    else if (isMobile && window.ethereum) {
 
       console.log(_web3.eth.net.getNetworkType())
 
