@@ -481,7 +481,7 @@ class Main extends Component {
                                 Basic Menu
                               </Button>)}
 
-                            {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
+{/*                             {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -496,7 +496,7 @@ class Main extends Component {
                               onClick={() => { this.toggleMenu("authUser") }}
                             >
                               Cusdodian Menu
-                            </Button>)}
+                            </Button>)} */}
 
                           </div>
                         </div>

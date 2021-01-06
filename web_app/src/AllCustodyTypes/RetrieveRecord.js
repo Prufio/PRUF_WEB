@@ -442,6 +442,8 @@ class RetrieveRecord extends Component {
           assetFound: "Asset Found!",
           wasSentQuery: true
         })
+
+
       }
       else {
         return this.setState({ assetFound: "Asset Not Found." })
