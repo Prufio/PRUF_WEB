@@ -299,6 +299,36 @@ class RetrieveRecord extends Component {
                   )}
 
                 </div>
+                <div
+            className="assetSelectedRouter"
+          >
+            <Nav className="headerSelected">
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "transfer-asset") }}>Transfer</Button>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "import-asset") }}>Import</Button>
+              </li>
+              <li>
+                <DropdownButton title="Export" drop="up" variant="selectedImage">
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "export-asset") }}>Export</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "discard-asset") }}>Discard</Dropdown.Item>
+                </DropdownButton>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "manage-escrow") }}>Escrow</Button>
+              </li>
+              <li>
+                <DropdownButton title="Modify" drop="up" variant="selectedImage">
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-record-status") }}>Modify Status</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "decrement-counter") }}>Decrement Counter</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information") }}>Modify Asset Info</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "add-note") }}>Add Note</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "force-modify-record") }}>Modify Rightsholder</Dropdown.Item>
+                </DropdownButton>
+              </li>
+            </Nav>
+          </div>
               </div >
             </div >
           </div>
