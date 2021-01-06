@@ -11,7 +11,7 @@ body {
   background-size: cover;
   box-sizing: border-box; 
   background-position: center center fixed;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* .mobile_body {
@@ -602,7 +602,8 @@ div {
 .formMobileBack {
   height: 90rem;
   width: 360px;
-  background-color: transparent;
+  /* background-color: transparent; */
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   overflow: visible;
