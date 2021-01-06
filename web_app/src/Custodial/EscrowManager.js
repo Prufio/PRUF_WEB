@@ -6,7 +6,7 @@ import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle, Camera, Camer
 import QrReader from 'react-qr-reader'
 import { ClickAwayListener } from '@material-ui/core';
 
-class EscrowManagerNC extends Component {
+class EscrowManager extends Component {
   constructor(props) {
     super(props);
 
@@ -840,4 +840,4 @@ class EscrowManagerNC extends Component {
   }
 }
 
-export default EscrowManagerNC;
+export default EscrowManager;

@@ -7,7 +7,7 @@ import { Home, XSquare, ArrowRightCircle, CheckCircle, HelpCircle } from "react-
 import { ClickAwayListener } from '@material-ui/core';
 
 
-class ImportAssetNC extends Component {
+class ImportAsset extends Component {
   constructor(props) {
     super(props);
 
@@ -484,4 +484,4 @@ class ImportAssetNC extends Component {
   }
 }
 
-export default ImportAssetNC;
+export default ImportAsset;

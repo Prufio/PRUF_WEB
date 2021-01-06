@@ -7,7 +7,7 @@ import { CheckCircle, Home, XSquare, AlertTriangle } from 'react-feather'
 import { ClickAwayListener } from '@material-ui/core';
 
 
-class AddNoteNC extends Component {
+class AddNote extends Component {
   constructor(props) {
     super(props);
 
@@ -490,4 +490,4 @@ class AddNoteNC extends Component {
   }
 }
 
-export default AddNoteNC;
+export default AddNote;

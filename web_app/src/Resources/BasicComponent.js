@@ -9,16 +9,6 @@ class BasicComponent extends Component {
             <Nav className="headerForm">
                 <div className="headerFormContent">
                     <li>
-                        <NavLink to="/asset-dashboard">Asset Dashboard</NavLink>
-                    </li>
-                </div>
-                <div className="headerFormContent">
-                    <li>
-                        <NavLink to="/ac-dashboard">ACN Dashboard</NavLink>
-                    </li>
-                </div>
-                <div className="headerFormContent">
-                    <li>
                         <NavLink to="/verify-lite">Verify Lite</NavLink>
                     </li>
                 </div>

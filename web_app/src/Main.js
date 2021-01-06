@@ -6,9 +6,6 @@ import Home from "./Home";
 import HomeMobile from "./Mobile/HomeMobile";
 import buildContracts from "./Resources/Contracts";
 import buildWindowUtils from "./Resources/WindowUtils";
-import NonCustodialComponent from "./Resources/NonCustodialComponent";
-import NonCustodialUserComponent from "./Resources/NonCustodialUserComponent";
-import AdminComponent from "./Resources/AdminComponent";
 import FaucetComponent from "./Resources/FaucetComponent";
 import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
 import AuthorizedUserLogin from "./Resources/AuthorizedUserLogin";
@@ -369,42 +366,6 @@ class Main extends Component {
                       alt="Pruf Logo" />
                   </button>
                 )}
-                {this.state.assetHolderMenuBool === true && (
-                  <button
-                    className="imageButton"
-                    title="Back to Home!"
-                    onClick={() => { window.location.href = '/#/' }}
-                  >
-                    <img
-                      className="downSizeLogo"
-                      src={require("./Resources/Images/PrufTokenMinter.png")}
-                      alt="Pruf Logo" />
-                  </button>
-                )}
-                {this.state.assetHolderUserMenuBool === true && (
-                  <button
-                    className="imageButton"
-                    title="Back to Home!"
-                    onClick={() => { window.location.href = '/#/' }}
-                  >
-                    <img
-                      className="downSizeLogo"
-                      src={require("./Resources/Images/PrufTokenHolder.png")}
-                      alt="Pruf Logo" />
-                  </button>
-                )}
-                {this.state.assetClassHolderMenuBool === true && (
-                  <button
-                    className="imageButton"
-                    title="Back to Home!"
-                    onClick={() => { window.location.href = '/#/' }}
-                  >
-                    <img
-                      className="downSizeLogo"
-                      src={require("./Resources/Images/PrufACAdmin.png")}
-                      alt="Pruf Logo" />
-                  </button>
-                )}
                 {this.state.authorizedUserMenuBool === true && (
                   <button
                     className="imageButton"
@@ -510,69 +471,6 @@ class Main extends Component {
                       {this.state.settingsMenu === true && (
                         <div>
                           <div className="hamburgerDropdownSettings">
-                            {/* {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => {
-                                this.setState({ settingsMenu: false })
-                                if (window.ethereum) {
-                                  if (window.confirm("Either you need to log into your ethereum provider, or you do not hold any PRuF assets. Click 'OK' to learn more on our website.")) {
-                                    window.open('https://pruf.io/')
-                                  }
-                                }
-                                else {
-                                  if (window.confirm("You do not currently have a Web3 provider installed. We recommend MetaMask; if you would like to be redirected to their officail site, press 'OK'")) {
-                                    window.open('https://metamask.io/')
-                                  }
-                                }
-
-                              }
-                              }
-                            >
-                              No Menu Options
-                            </Button>
-                          )} */}
-
-                            {this.state.assetClassHolderBool === true && this.state.assetClassHolderMenuBool === false && (
-                              <Button
-                                size="lg"
-                                variant="toggle"
-                                onClick={() => { this.toggleMenu("ACAdmin") }}
-                              >
-                                AC Admin Menu
-                              </Button>
-                            )}
-
-                            {this.state.IDHolderBool === false && this.state.assetHolderBool === true && this.state.assetHolderUserMenuBool === false && (
-                              <Button
-                                size="lg"
-                                variant="toggle"
-                                onClick={() => { this.toggleMenu("NCUser") }}
-                              >
-                                Token Holder Menu
-                              </Button>
-                            )}
-
-                            {/* {this.state.faucetBool === false && this.state.routeRequest !== "noAddr" && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("faucet") }}
-                            >
-                              Faucet Menu
-                            </Button>
-                          )}
-                             */}
-                            {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
-                              <Button
-                                size="lg"
-                                variant="toggle"
-                                onClick={() => { this.toggleMenu("NC") }}
-                              >
-                                Token Minter Menu
-                              </Button>
-                            )}
 
                             {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
                               <Button
@@ -725,9 +623,6 @@ class Main extends Component {
                   {window._contracts !== undefined && (
                     <nav>
                       {this.state.noAddrMenuBool === true && (<NoAddressComponent />)}
-                      {this.state.assetHolderMenuBool === true && (<NonCustodialComponent />)}
-                      {this.state.assetHolderUserMenuBool === true && (<NonCustodialUserComponent />)}
-                      {this.state.assetClassHolderMenuBool === true && (<AdminComponent />)}
                       {this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserComponent />)}
                       {!this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserLogin />)}
                       {this.state.basicMenuBool === true && (<BasicComponent />)}

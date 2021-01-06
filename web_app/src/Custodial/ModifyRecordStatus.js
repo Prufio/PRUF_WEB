@@ -6,7 +6,7 @@ import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 import { ClickAwayListener } from '@material-ui/core';
 
 
-class ModifyRecordStatusNC extends Component {
+class ModifyRecordStatus extends Component {
   constructor(props) {
     super(props);
 
@@ -468,4 +468,4 @@ class ModifyRecordStatusNC extends Component {
   }
 }
 
-export default ModifyRecordStatusNC;
+export default ModifyRecordStatus;

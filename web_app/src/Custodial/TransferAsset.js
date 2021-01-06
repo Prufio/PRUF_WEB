@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
-import { Trash2, Home, XSquare, AlertTriangle } from 'react-feather'
+import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 import { ClickAwayListener } from '@material-ui/core';
 
-class DiscardAssetNC extends Component {
+
+class ModifyDescription extends Component {
   constructor(props) {
     super(props);
 
@@ -23,21 +24,20 @@ class DiscardAssetNC extends Component {
 
     this.state = {
       addr: "",
-      lookupIPFS1: "",
-      lookupIPFS2: "",
+      costArray: [0],
       error: undefined,
       NRerror: undefined,
-      result: null,
+      result1: "",
+      result2: "",
       assetClass: undefined,
       ipfs1: "",
       txHash: "",
+      txStatus: false,
       type: "",
       manufacturer: "",
       model: "",
       serial: "",
-      importAgent: "",
-      isNFA: false,
-      txStatus: null,
+      to: "",
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
@@ -49,9 +49,34 @@ class DiscardAssetNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      if (Number(window.sentPacket.statusNum) !== 59) {
+      console.log(window.sentPacket.status)
+      if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
+        alert("Cannot transfer asset in lost or stolen status! Please change to transferrable status" );
         window.sentPacket = undefined;
-        alert("Asset is not discardable! Owner must set status to discardable." );
+        return window.location.href = "/#/asset-dashboard"
+      }
+
+      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
+        alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions" );
+        window.sentPacket = undefined;
+        return window.location.href = "/#/asset-dashboard"
+      }
+
+      if (Number(window.sentPacket.statusNum) === 58) {
+        alert("Cannot transfer asset in imported status! please change to transferrable status" );
+        window.sentPacket = undefined;
+        return window.location.href = "/#/asset-dashboard"
+      }
+
+      if (Number(window.sentPacket.statusNum) === 70) {
+        alert("Cannot transfer asset in exported status! please import asset and change to transferrable status" );
+        window.sentPacket = undefined;
+        return window.location.href = "/#/asset-dashboard"
+      }
+
+      if (Number(window.sentPacket.statusNum) !== 51) {
+        alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status" );
+        window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
@@ -59,7 +84,7 @@ class DiscardAssetNC extends Component {
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
-      console.log("Stat", window.sentPacket.status)
+
 
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
@@ -73,7 +98,8 @@ class DiscardAssetNC extends Component {
     clearInterval(this.updateAssets);
     this.setState({ runWatchDog: false });
   }
-  componentDidUpdate() {//stuff to do on a re-render
+
+  componentDidUpdate() {//stuff to do when state updates
 
   }
 
@@ -82,26 +108,35 @@ class DiscardAssetNC extends Component {
 
     const _checkIn = async (e) => {
       this.setState({ help: false, txHash: "", txStatus: false })
-      if (e === "null" || e === undefined) { return }
+      console.log("Checking in with id: ", e)
+      if (e === "null" || e === undefined) {
+        return clearForm()
+      }
       else if (e === "reset") {
         return window.resetInfo = true;
       }
       else if (e === "assetDash") {
+        console.log("heading over to dashboard")
         return window.location.href = "/#/asset-dashboard"
       }
 
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
+      let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
 
       console.log(resArray)
 
-      if (Number(resArray[0]) !== 59) {
-        this.setState({ alertBanner: "Asset not in discardable status." }); return clearForm()
+
+      if (Number(resArray[1]) === 0) {
+        this.setState({ alertBanner: "Asset does not exist at given IDX" }); return clearForm()
+      }
+
+      if (Number(resArray[0]) !== 51) {
+        this.setState({ alertBanner: "Asset not in transferrable status" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
       console.log("Changed component idx to: ", window.assets.ids[e])
 
-      this.setState({
+      return this.setState({
         assetClass: window.assets.assetClasses[e],
         idxHash: window.assets.ids[e],
         name: window.assets.descriptions[e].name,
@@ -116,7 +151,7 @@ class DiscardAssetNC extends Component {
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, help: false })
+      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
 
     const help = async () => {
@@ -132,25 +167,22 @@ class DiscardAssetNC extends Component {
       e.preventDefault();
     }
 
-    const _discardAsset = async () => {//create a new asset record
+    const _transferAsset = async () => {
       var idxHash = this.state.idxHash;
-      if (idxHash === "null" || idxHash === "" || idxHash === undefined) { return this.setState({ alertBanner: "Please fill all fields before submission." }) }
-
+      let to = this.state.to;
+      if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
+      else if (to === "" || to === undefined || !window.web3.utils.isAddress(to)) { return this.setState({ alertBanner: "Please input a valid 'to' address." }) }
+      console.log("idxHash", idxHash);
+      console.log("addr: ", window.addr);
       this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ result: "" })
-      this.setState({ transaction: true })
-      //reset state values before form resubmission
+      this.setState({ transaction: true });
 
-      console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
-
-      await window.contracts.A_TKN.methods
-        .discard(
-          idxHash
-        )
+      window.contracts.A_TKN.methods
+        .safeTransferFrom(window.addr, to, idxHash)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
@@ -163,25 +195,25 @@ class DiscardAssetNC extends Component {
         })
         .on("receipt", (receipt) => {
           self.setState({ transaction: false })
-          this.setState({ txHash: receipt.transactionHash });
-          this.setState({ txStatus: receipt.status });
+          self.setState({ txHash: receipt.transactionHash });
+          self.setState({ txStatus: receipt.status });
+          console.log(receipt.status);
           window.resetInfo = true;
           window.recount = true;
-          if (this.state.wasSentPacket) {
+          if (self.state.wasSentPacket) {
             return window.location.href = '/#/asset-dashboard'
           }
         });
-
-      return clearForm(); //clear form inputs
+      console.log(this.state.txHash);
     };
 
-    return (//default render
+    return (
       <div>
         <div>
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="formHeader">Discard Asset</h2>
+          <h2 className="formHeader">Transfer Asset</h2>
           <div className="mediaLinkClearForm">
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
@@ -197,7 +229,7 @@ class DiscardAssetNC extends Component {
             <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
-                  <Form.Label className="formFont"> Select an Asset to Discard :</Form.Label>
+                  <Form.Label className="formFont"> Select an Asset to Transfer :</Form.Label>
                   {!this.state.wasSentPacket && (
                     <>
                       {this.state.transaction === false && (
@@ -205,7 +237,6 @@ class DiscardAssetNC extends Component {
                           as="select"
                           size="lg"
                           onChange={(e) => { _checkIn(e.target.value) }}
-
                         >
                           {this.state.hasLoadedAssets && (
                             <optgroup className="optgroup">
@@ -217,7 +248,8 @@ class DiscardAssetNC extends Component {
                                 Loading Assets...
                            </option>
                             </optgroup>)}
-                        </Form.Control>)}
+                        </Form.Control>
+                      )}
                       {this.state.transaction === true && (
                         <Form.Control
                           as="select"
@@ -225,7 +257,7 @@ class DiscardAssetNC extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option>Discarding "{this.state.name}"</option>
+                            <option>Transferring "{this.state.name}"</option>
                           </optgroup>
                         </Form.Control>)}
                     </>
@@ -239,10 +271,32 @@ class DiscardAssetNC extends Component {
                     >
                       <optgroup>
                         <option value="null">
-                          Discarding "{this.state.name}" Clear Form to Select Different Asset
+                          Transferring "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                       </optgroup>
                     </Form.Control>
+                  )}
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridTo">
+                  <Form.Label className="formFont">To:</Form.Label>
+                  {this.state.transaction === false && (
+                    <Form.Control
+                      placeholder="Recipient Address"
+                      required
+                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
+                      size="lg"
+                    />
+                  )}
+                  {this.state.transaction === true && (
+                    <Form.Control
+                      placeholder={this.state.to}
+                      required
+                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
+                      size="lg"
+                      disabled
+                    />
                   )}
                 </Form.Group>
               </Form.Row>
@@ -251,14 +305,14 @@ class DiscardAssetNC extends Component {
                   <Form.Row>
                     <div className="submitButton">
                       <div className="submitButtonContent">
-                        <Trash2
-                          onClick={() => { _discardAsset() }}
+                        <CheckCircle
+                          onClick={() => { _transferAsset() }}
                         />
                       </div>
                     </div>
                     <div className="mediaLinkHelp">
-                      <div className="mediaLinkHelpContent2">
-                        <AlertTriangle
+                      <div className="mediaLinkHelpContent">
+                        <HelpCircle
                           onClick={() => { help() }}
                         />
                       </div>
@@ -266,9 +320,8 @@ class DiscardAssetNC extends Component {
                   </Form.Row>
                   {this.state.help === true && (
                     <div className="explainerTextBox2">
-                      Discarding an asset requires that the asset is in discardable status. Discarding an asset will burn the asset token
-                      linked to the asset. The individual discarding the asset will recieve a bonus in PRuF tokens once the following user
-                      recycles the asset into their ownership using Recycle Asset.
+                      Transfer is a function that transfers an asset token to a chosen address. This will remove the current rightsholder from the asset's
+                      record, which will need to be reset once it is recieved. To do this, use Modify Rightsholder
                     </div>
                   )}
                 </>
@@ -276,8 +329,8 @@ class DiscardAssetNC extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && (
-          <div className="assetSelectedResults">
+        {this.state.transaction === false && this.state.txStatus === false && (
+          <div className="assetSelectedResults" id="MainForm">
             {this.state.alertBanner !== undefined && (
               <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
                 <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
@@ -298,46 +351,42 @@ class DiscardAssetNC extends Component {
           </div>
         )}
         {this.state.transaction === true && (
-
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
-          {this.state.txHash > 0 && ( //conditional rendering
-          <div className="results">
-
-            {this.state.txStatus === false && (
-              <Alert
-              className="alertFooter"
-              variant = "success">
-                Transaction failed!
-                  <Alert.Link
-                  className="alertLink"
-                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  CLICK HERE
-                </Alert.Link>
-                to view transaction on etherscan.
-              </Alert>
-              )}
-
-              {this.state.txStatus === true && (
-                <Alert
-                className="alertFooter"
-                variant = "success">
-                  Transaction success!
-                    <Alert.Link
-                    className="alertLink"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    CLICK HERE
-                  </Alert.Link>
-                  to view transaction on etherscan.
-                </Alert>
-              )}
+        {this.state.transaction === false && (
+          <div>
+            {this.state.txHash > 0 && ( //conditional rendering
+              <div className="results">
+                {this.state.txStatus === false && (
+                  <div className="transactionErrorText">
+                    !ERROR! :
+                    <a
+                      className="transactionErrorText"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
+                {this.state.txStatus === true && (
+                  <div className="transactionErrorText">
+                    {" "}
+                No Errors Reported :
+                    <a
+                      className="transactionErrorText"
+                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TX Hash:{this.state.txHash}
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -345,4 +394,4 @@ class DiscardAssetNC extends Component {
   }
 }
 
-export default DiscardAssetNC;
+export default ModifyDescription;

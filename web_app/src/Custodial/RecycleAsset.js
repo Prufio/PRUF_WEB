@@ -7,7 +7,7 @@ import { Home, XSquare, ArrowRightCircle, Tag, HelpCircle, AlertOctagon, Camera,
 import QrReader from 'react-qr-reader'
 import { ClickAwayListener } from '@material-ui/core';
 
-class RecycleAssetNC extends Component {
+class RecycleAsset extends Component {
   constructor(props) {
     super(props);
 
@@ -703,4 +703,4 @@ class RecycleAssetNC extends Component {
   }
 }
 
-export default RecycleAssetNC;
+export default RecycleAsset;

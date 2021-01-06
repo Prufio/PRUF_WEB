@@ -6,7 +6,7 @@ import Alert from "react-bootstrap/Alert";
 import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 import { ClickAwayListener } from '@material-ui/core';
 
-class NewRecordNC extends Component {
+class NewRecord extends Component {
   constructor(props) {
     super(props);
 
@@ -684,4 +684,4 @@ class NewRecordNC extends Component {
   }
 }
 
-export default NewRecordNC;
+export default NewRecord;

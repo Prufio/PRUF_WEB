@@ -5,7 +5,8 @@ import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
 import { ClickAwayListener } from '@material-ui/core';
 
-class DecrementCounterNC extends Component {
+
+class ExportAsset extends Component {
   constructor(props) {
     super(props);
 
@@ -23,23 +24,21 @@ class DecrementCounterNC extends Component {
 
     this.state = {
       addr: "",
+      lookupIPFS1: "",
+      lookupIPFS2: "",
       error: undefined,
       NRerror: undefined,
-      result: "",
+      result: null,
       assetClass: undefined,
-      countDown: "",
+      ipfs1: "",
       txHash: "",
       type: "",
       manufacturer: "",
       model: "",
       serial: "",
-      first: "",
-      middle: "",
-      surname: "",
-      txStatus: false,
-      id: "",
-      secret: "",
+      importAgent: "",
       isNFA: false,
+      txStatus: null,
       hasLoadedAssets: false,
       assets: { descriptions: [0], ids: [0], assetClasses: [0], statuses: [0], names: [0] },
       transaction: false,
@@ -51,29 +50,18 @@ class DecrementCounterNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-
-
-      if (Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot edit asset in lost or stolen status");
-        window.sentPacket = undefined;
+      console.log("stat", window.sentPacket.status)
+      if (Number(window.sentPacket.statusNum) !== 51) {
+        alert("Asset is not set to transferrable! Owner must set the status to transferrable before export.");
+        window.sentpacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
-
-      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
-        window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
-      }
-
       this.setState({
         name: window.sentPacket.name,
         idxHash: window.sentPacket.idxHash,
-        countDownStart: window.sentPacket.countPair[1],
-        count: window.sentPacket.countPair[0],
         assetClass: window.sentPacket.assetClass,
-        status: window.sentPacket.status,
+        status: window.sentPacket.status
       })
-
 
       window.sentPacket = undefined
       this.setState({ wasSentPacket: true })
@@ -83,22 +71,57 @@ class DecrementCounterNC extends Component {
 
   }
 
-  componentDidUpdate() {//stuff to do when state updates
-
-  }
-
   componentWillUnmount() {//stuff do do when component unmounts from the window
     clearInterval(this.updateAssets);
     this.setState({ runWatchDog: false });
   }
 
+  componentDidUpdate() {//stuff to do on a re-render
+
+  }
+
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
+
+    const _checkIn = async (e) => {
+      this.setState({ help: false, txHash: "", txStatus: false })
+      if (e === "null" || e === undefined) {
+        return clearForm()
+      }
+      else if (e === "reset") {
+        return window.resetInfo = true;
+      }
+      else if (e === "assetDash") {
+        return window.location.href = "/#/asset-dashboard"
+      }
+
+      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
+
+      console.log(resArray)
+
+      if (Number(resArray[0]) !== 51) {
+        this.setState({ alertBanner: "Cannot export asset in non-transferrable status" }); return clearForm()
+      }
+
+      this.setState({ selectedAsset: e })
+      console.log("Changed component idx to: ", window.assets.ids[e])
+
+      this.setState({
+        assetClass: window.assets.assetClasses[e],
+        idxHash: window.assets.ids[e],
+        name: window.assets.descriptions[e].name,
+        photos: window.assets.descriptions[e].photo,
+        text: window.assets.descriptions[e].text,
+        description: window.assets.descriptions[e],
+        status: window.assets.statuses[e],
+        note: window.assets.notes[e]
+      })
+    }
 
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
-      this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+      this.setState({ idxHash: undefined, txStatus: undefined, txHash: "", wasSentPacket: false, help: false })
     }
 
     const help = async () => {
@@ -114,93 +137,29 @@ class DecrementCounterNC extends Component {
       e.preventDefault();
     }
 
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      this.setState({
-        txStatus: false,
-        txHash: ""
-      })
-      if (e === "null" || e === undefined) {
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
-      let countDownStart = await window.utils.checkAssetCounterStart(window.assets.ids[e], [0])
-      let count = await window.utils.checkAssetCount(window.assets.ids[e], [0])
-      console.log(resArray)
-      console.log(countDownStart)
-      console.log(count)
-
-      if (Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
-      }
-
-      if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        count: count,
-        countDownStart: countDownStart,
-      })
-    }
-
-    const _decrementCounter = async () => {
-      let idxHash = this.state.idxHash;
-      if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){
-        return this.setState({alertBanner: "Please fill all fields before submission"})
-      }
-
-      if(isNaN(this.state.countDown)){
-        return this.setState({alertBanner: "Please input a valid whole number to decrement"})
-      }
-
-      this.setState({help: false})
+    const _exportAsset = async () => {//create a new asset record
+      if (idxHash === "null" || idxHash === "" || idxHash === undefined) { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ result: "" })
       this.setState({ transaction: true })
-
-
+      //reset state values before form resubmission
+      var idxHash = this.state.idxHash;
       console.log("idxHash", idxHash);
-      console.log("addr: ", window.addr);
-      console.log("Data: ", this.state.countDown);
-      console.log("DataReserve: ", this.state.countDownStart);
-
-      if (Number(this.state.countDown) > Number(this.state.count)) {
-        clearForm()
-        this.setState({
-          transaction: false
-        })
-        return this.setState({ alertBanner: "Countdown is greater than count reserve! Please ensure data fields are correct before submission." })
-
-      }
+      console.log("addr: ", this.state.agentAddress);
 
       await window.contracts.NP_NC.methods
-        ._decCounter(idxHash, this.state.countDown)
+        ._exportNC(
+          idxHash
+        )
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false, wasSentPacket: false });
+          self.setState({ txStatus: false });
           self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
@@ -209,24 +168,22 @@ class DecrementCounterNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
-          console.log(receipt.status);
           window.resetInfo = true;
           if (self.state.wasSentPacket) {
             return window.location.href = '/#/asset-dashboard'
           }
-          //Stuff to do when tx confirms
         });
 
-      return this.setState({ idxHash: undefined, wasSentPacket: false });
+      return this.setState({ idxHash: undefined, wasSentPacket: false }); //clear form inputs
     };
 
-    return (
+    return (//default render
       <div>
         <div>
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHome" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
           </div>
-          <h2 className="formHeader">Decrement Counter</h2>
+          <h2 className="formHeader">Export Asset</h2>
           <div className="mediaLinkClearForm">
             <a className="mediaLinkContentClearForm" ><XSquare onClick={() => { clearForm() }} /></a>
           </div>
@@ -270,11 +227,12 @@ class DecrementCounterNC extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option>Modifying "{this.state.name}"</option>
+                            <option>Exporting "{this.state.idxHash}"</option>
                           </optgroup>
                         </Form.Control>)}
                     </>
                   )}
+
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
@@ -284,35 +242,11 @@ class DecrementCounterNC extends Component {
                     >
                       <optgroup>
                         <option value="null">
-                          Modifying "{this.state.name}" Clear Form to Select Different Asset
+                          Exporting "{this.state.name}" Clear Form to Select Different Asset
                            </option>
                       </optgroup>
                     </Form.Control>
                   )}
-                </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col} controlId="formGridCountdown">
-                  <Form.Label className="formFont">
-                    Countdown Amount:
-                  </Form.Label>
-                  {this.state.transaction === false && (
-                    <Form.Control
-                      placeholder="Countdown Amount"
-                      required
-                      type="number"
-                      onChange={(e) =>
-                        this.setState({ countDown: Math.round(e.target.value.trim()) })
-                      }
-                      size="lg"
-                    />)}
-                  {this.state.transaction === true && (
-                    <Form.Control
-                      placeholder={this.state.countDown}
-                      required
-                      disabled
-                      size="lg"
-                    />)}
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (
@@ -321,7 +255,7 @@ class DecrementCounterNC extends Component {
                     <div className="submitButton">
                       <div className="submitButtonContent">
                         <CheckCircle
-                          onClick={() => { _decrementCounter() }}
+                          onClick={() => { _exportAsset() }}
                         />
                       </div>
                     </div>
@@ -334,18 +268,19 @@ class DecrementCounterNC extends Component {
                     </div>
                   </Form.Row>
                   {this.state.help === true && (
-                    <div className="explainerTextBox2">
-                      Some things have limited lifespans or consumable supplies. PRuF tracks life-limited items using a blockchain countdown counter. This counter only counts down,
-                      and once it gets to zero it cannot be reset.
+                    <div className="explainerTextBox">
+                      Exporting an asset requires that the asset is in a transferrable status. Exporting an asset will remove it from its current
+                      asset class, allowing it to be imported into a new one within the same catergory using Import Asset.
                     </div>
                   )}
                 </>
               )}
+
             </div>
           )}
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
-            <div className="assetSelectedResults">
+          <div className="assetSelectedResults">
             {this.state.alertBanner !== undefined && (
               <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
                 <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
@@ -353,24 +288,23 @@ class DecrementCounterNC extends Component {
                 </Alert>
               </ClickAwayListener>
             )}
-              <Form.Row>
-                {this.state.idxHash !== undefined && (
-                  <Form.Group>
-                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
-                    <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                    <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
-                    <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
-                    <div className="assetSelectedContentHead">Count: <span className="assetSelectedContent">{this.state.count} / {this.state.countDownStart}</span> </div>
-                  </Form.Group>
-                )}
-              </Form.Row>
-            </div>
+            <Form.Row>
+              {this.state.idxHash !== undefined && (
+                <Form.Group>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
+                </Form.Group>
+              )}
+            </Form.Row>
+          </div>
         )}
         {this.state.transaction === true && (
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
-        {this.state.txHash > 0 && ( //conditional rendering
+          {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
 
             {this.state.txStatus === false && (
@@ -413,4 +347,4 @@ class DecrementCounterNC extends Component {
   }
 }
 
-export default DecrementCounterNC;
+export default ExportAsset;
