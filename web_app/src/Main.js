@@ -10,8 +10,6 @@ import NonCustodialComponent from "./Resources/NonCustodialComponent";
 import NonCustodialUserComponent from "./Resources/NonCustodialUserComponent";
 import AdminComponent from "./Resources/AdminComponent";
 import FaucetComponent from "./Resources/FaucetComponent";
-import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
-import AuthorizedUserLogin from "./Resources/AuthorizedUserLogin";
 import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
 import MobileComponent from "./Resources/MobileComponent";
@@ -510,29 +508,6 @@ class Main extends Component {
                       {this.state.settingsMenu === true && (
                         <div>
                           <div className="hamburgerDropdownSettings">
-                            {/* {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => {
-                                this.setState({ settingsMenu: false })
-                                if (window.ethereum) {
-                                  if (window.confirm("Either you need to log into your ethereum provider, or you do not hold any PRuF assets. Click 'OK' to learn more on our website.")) {
-                                    window.open('https://pruf.io/')
-                                  }
-                                }
-                                else {
-                                  if (window.confirm("You do not currently have a Web3 provider installed. We recommend MetaMask; if you would like to be redirected to their officail site, press 'OK'")) {
-                                    window.open('https://metamask.io/')
-                                  }
-                                }
-
-                              }
-                              }
-                            >
-                              No Menu Options
-                            </Button>
-                          )} */}
 
                             {this.state.assetClassHolderBool === true && this.state.assetClassHolderMenuBool === false && (
                               <Button
@@ -553,7 +528,6 @@ class Main extends Component {
                                 Token Holder Menu
                               </Button>
                             )}
-
                             {/* {this.state.faucetBool === false && this.state.routeRequest !== "noAddr" && (
                             <Button
                               size="lg"
@@ -582,24 +556,6 @@ class Main extends Component {
                               >
                                 Basic Menu
                               </Button>)}
-
-                            {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("authUser"); }}
-                            >
-                              Cusdodian Sign-In
-                            </Button>)}
-                            {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("authUser") }}
-                            >
-                              Cusdodian Menu
-                            </Button>)}
-
                           </div>
                         </div>
                       )}
@@ -728,8 +684,6 @@ class Main extends Component {
                       {this.state.assetHolderMenuBool === true && (<NonCustodialComponent />)}
                       {this.state.assetHolderUserMenuBool === true && (<NonCustodialUserComponent />)}
                       {this.state.assetClassHolderMenuBool === true && (<AdminComponent />)}
-                      {this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserComponent />)}
-                      {!this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserLogin />)}
                       {this.state.basicMenuBool === true && (<BasicComponent />)}
                       {this.state.faucetBool === true && (<FaucetComponent />)}
                     </nav>
