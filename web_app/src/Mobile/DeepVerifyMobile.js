@@ -159,10 +159,10 @@ class DeepVerifyMobile extends Component {
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
-        this.setState({ Checkbox: true })
+        this.setState({ Checkbox: true, idxHashRaw: "" })
       }
       else {
-        this.setState({ Checkbox: false })
+        this.setState({ Checkbox: false, idxHashRaw: "" })
       }
     }
 

@@ -580,22 +580,22 @@ class Main extends Component {
                                 Basic Menu
                               </Button>)}
 
-                            {/* {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
+                            {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
                             <Button
                               size="lg"
                               variant="toggle"
                               onClick={() => { this.toggleMenu("authUser"); }}
                             >
                               Cusdodian Sign-In
-                            </Button>)} */}
-                            {/* {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
+                            </Button>)}
+                            {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
                             <Button
                               size="lg"
                               variant="toggle"
                               onClick={() => { this.toggleMenu("authUser") }}
                             >
                               Cusdodian Menu
-                            </Button>)} */}
+                            </Button>)}
 
                           </div>
                         </div>

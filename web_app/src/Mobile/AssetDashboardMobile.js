@@ -305,7 +305,7 @@ class AssetDashboardMobile extends React.Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
+                onClick={() => { this.setState({ moreInfo: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
               />
             </div>
           </div>
