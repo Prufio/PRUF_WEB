@@ -252,15 +252,15 @@ class NewRecord extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          this.setState({ alertBanner: "Something went wrong!" })
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           self.setState({ assetClassSelected: false, idxSubmitted: false })
 
         })
         .on("receipt", (receipt) => {
           self.setState({ transaction: false })
-          this.setState({ txHash: receipt.transactionHash });
-          this.setState({ txStatus: receipt.status });
+          self.setState({ txHash: receipt.transactionHash });
+          self.setState({ txStatus: receipt.status });
           window.resetInfo = true;
           window.recount = true;
           if (self.state.wasSentPacket) {

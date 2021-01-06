@@ -44,6 +44,10 @@ class RetrieveRecord extends Component {
 
       }
 
+      if(this.state.runWatchDog === true && this.state.authLevel !== window.authLevel && window.authLevel !== undefined){
+        this.setState({authLevel: window.authLevel})
+      }
+
       if (this.state.runWatchDog === true && Number(this.state.queryValue) > 0 && window.contracts != undefined && this.state.runQuery === true) {
         this.setState({ runQuery: false })
         this._retrieveRecordQR(this.state.queryValue)
@@ -57,7 +61,7 @@ class RetrieveRecord extends Component {
       window.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-          return this.setState({ ipfsObject: undefined })
+          return this.setState({ ipfsObject: {name: "N/A", text: [], photo: []} })
         } else {
           console.log(lookup, "Here's what we found for asset description: ", result);
           return this.setState({ ipfsObject: JSON.parse(result) })
@@ -311,7 +315,39 @@ class RetrieveRecord extends Component {
                 </div>
               </div >
             </div >
-            {this.state.authLevel === "Authorized User" || this.state.authLevel === "Authorized User/AC Admin" && (
+            {this.state.authLevel === "Authorized User" && (
+            <div
+            className="assetSelectedRouter"
+          >
+            <Nav className="headerSelected">
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "basic", "transfer-asset") }}>Transfer</Button>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "basic", "import-asset") }}>Import</Button>
+              </li>
+              <li>
+                <DropdownButton title="Export" drop="up" variant="selectedImage">
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "export-asset") }}>Export</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "discard-asset") }}>Discard</Dropdown.Item>
+                </DropdownButton>
+              </li>
+              <li>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "basic", "manage-escrow") }}>Escrow</Button>
+              </li>
+              <li>
+                <DropdownButton title="Modify" drop="up" variant="selectedImage">
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "modify-record-status") }}>Modify Status</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "decrement-counter") }}>Decrement Counter</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "modify-asset-information") }}>Modify Asset Info</Dropdown.Item>
+                  {/* <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "add-note") }}>Add Note</Dropdown.Item> */}
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "force-modify-record") }}>Modify Rightsholder</Dropdown.Item>
+                </DropdownButton>
+              </li>
+            </Nav>
+          </div>
+            )}
+            {this.state.authLevel === "Authorized User/AC Admin" && (
             <div
             className="assetSelectedRouter"
           >
@@ -459,7 +495,7 @@ class RetrieveRecord extends Component {
       }
 
       await window.utils.resolveACFromID(tempResult[2])
-      await this.getACData("id", window.assetClass)
+      let tempData = await this.getACData("id", window.assetClass)
 
       console.log(window.authLevel);
 
@@ -468,6 +504,7 @@ class RetrieveRecord extends Component {
       return this.setState({
         moreInfo: true,
         authLevel: window.authLevel,
+        custodyType: tempData.custodyType,
         QRreader: false
       })
     }
@@ -772,13 +809,13 @@ class RetrieveRecord extends Component {
       }
 
       await window.utils.resolveACFromID(tempResult[2])
-      await this.getACData("id", window.assetClass)
+      let tempData = await this.getACData("id", window.assetClass)
 
       console.log(window.authLevel);
 
       await this.getIPFSJSONObject(ipfsHash);
 
-      return this.setState({ authLevel: window.authLevel })
+      return this.setState({ custodyType: tempData.custodyType, authLevel: window.authLevel })
     }
 
     if (this.state.wasSentPacket === true) {

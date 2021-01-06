@@ -989,6 +989,22 @@ class Main extends Component {
       }
     }
 
+    this.setUpTokenVals = async () => {
+      const self = this;
+      console.log("STV: Setting up balances")
+
+      await window.utils.determineTokenBalance().then(async(e)=>{ console.log(e); 
+        await self.setState({
+        prufBalance: e.prufTokenBalance,
+        IDTokenBalance: e.IDTokenBalance,
+        hasFetchedBalances: window.hasFetchedBalances
+        })
+      })
+
+      await console.log(window.balances)
+      
+    }
+
     //userMenuMobile bool switch @DEV Move to this declarations?
     this.userMenuMobile = async () => {
       if (this.state.userMenuMobile === false) {
