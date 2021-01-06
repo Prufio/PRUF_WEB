@@ -240,18 +240,15 @@ class NewRecord extends Component {
       console.log("IPFS bs58: ", window.rawIPFSHashTemp)
       console.log("IPFS bytes32: ", ipfsHash)
 
-      await window.contracts.APP_NC.methods
-        .$newRecordWithDescription(
+      await window.contracts.APP.methods
+        .$newRecord(
           idxHash,
           rgtHash,
           this.state.assetClass,
           "100000",
-          // this.state.countDownStart, Countdown Form
-          ipfsHash
         )
         .send({ from: window.addr })
         .on("error", function (_error) {
-          // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
@@ -329,16 +326,6 @@ class NewRecord extends Component {
               {!this.state.idxSubmitted && (
                 <>
                   <Form.Row>
-                    <Form.Group as={Col} controlId="formGridNewAssetName">
-                      <Form.Label className="formFont">Name Tag:</Form.Label>
-                      <Form.Control
-                        placeholder="Put a nametag on this asset (optional)"
-                        onChange={(e) => this.setState({ nameTag: e.target.value.trim() })}
-                        size="lg"
-                      />
-                    </Form.Group>
-                  </Form.Row>
-                  <Form.Row>
                     <Form.Group as={Col} controlId="formGridType">
                       <Form.Label className="formFont">Type:</Form.Label>
                       <Form.Control
@@ -414,16 +401,6 @@ class NewRecord extends Component {
                 <>
                   {this.state.transaction === true && (
                     <>
-                      <Form.Row>
-                        <Form.Group as={Col} controlId="formGridNewAssetName">
-                          <Form.Label className="formFont">Name Tag:</Form.Label>
-                          <Form.Control
-                            placeholder={this.state.nameTag}
-                            disabled
-                            size="lg"
-                          />
-                        </Form.Group>
-                      </Form.Row>
                       <Form.Row>
                         <Form.Group as={Col} controlId="formGridType">
                           <Form.Label className="formFont">Type:</Form.Label>

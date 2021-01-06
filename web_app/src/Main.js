@@ -481,23 +481,6 @@ class Main extends Component {
                                 Basic Menu
                               </Button>)}
 
-{/*                             {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("authUser"); }}
-                            >
-                              Cusdodian Sign-In
-                            </Button>)}
-                            {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("authUser") }}
-                            >
-                              Cusdodian Menu
-                            </Button>)} */}
-
                           </div>
                         </div>
                       )}
@@ -539,12 +522,7 @@ class Main extends Component {
                           {this.state.ETHBalance && (
                             <>
                               <h4 className="userStatFont">
-                                KETH Balance : Ξ{this.state.ETHBalance.substring(0, 6)}
-                                {/* <Button
-                                variant="userButton"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>
-                                Get KETH
-                              </Button> */}
+                                ETH Balance : Ξ{this.state.ETHBalance.substring(0, 6)}
                               </h4>
                               <br></br>
                             </>
@@ -553,43 +531,6 @@ class Main extends Component {
                             <>
                               <h4 className="userStatFont">
                                 PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
-                                <Button
-                                  variant="userButton"
-                                  onClick={() => { this.faucet() }}>
-                                  Faucet
-                              </Button>
-                              </h4>
-                              <br></br>
-                            </>
-                          )}
-                          {this.state.assetClassBalance && (
-                            <>
-                              <h4 className="userStatFont">
-                                AC Nodekeys :
-                                <Button
-                                  variant="userButton"
-                                  // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                  onClick={() => { this.assetClassDashboard() }}>
-                                  {this.state.assetClassBalance}
-                                </Button>
-                                <Button
-                                  variant="userButton"
-                                  onClick={() => { this.faucet() }}>
-                                  Get AC
-                              </Button>
-                              </h4>
-                              <br></br>
-                            </>
-                          )}
-                          {this.state.assetBalance && (
-                            <>
-                              <h4 className="userStatFont">
-                                Assets :
-                              <Button
-                                  variant="userButton"
-                                  onClick={() => { this.assetDashboard() }}>
-                                  {this.state.assetBalance}
-                                </Button>
                               </h4>
                               <br></br>
                             </>
@@ -640,9 +581,11 @@ class Main extends Component {
                   </Alert>
                 </ClickAwayListener>
               )}
+
               {this.state.particles === true && (
                 <ParticleBox />
               )}
+
               <style type="text/css">
                 {`
                       .btn-primary {
@@ -764,23 +707,6 @@ class Main extends Component {
     //Watchdog which keeps state consistent with other components
     const updateWatchDog = setInterval(() => {
 
-      //every tick ensure user auth level/user type is correct
-      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined) {
-        console.log("1")
-        this.setState({ isAuthUser: window.isAuthUser })
-      }
-
-      /* if (this.state.isACAdmin !== window.isACAdmin) {
-        console.log("2")
-        console.log(window.isACAdmin, this.state.isACAdmin)
-        this.setState({ isACAdmin: window.isACAdmin })
-      } */
-
-      if (this.state.custodyType !== window.custodyType) {
-        console.log("3")
-        this.setState({ custodyType: window.custodyType })
-      }
-
       if (this.state.ETHBalance !== window.ETHBalance && this.state.runWatchDog === true) {
         console.log("5")
         this.setState({ ETHBalance: window.ETHBalance })
@@ -810,54 +736,6 @@ class Main extends Component {
             authorizedUserMenuBool: false
           })
         }
-
-        else if (!isMobile && this.state.menuChange === "ACAdmin" && this.state.runWatchDog === true) {
-          window.routeRequest = "ACAdmin"
-          this.setState({ routeRequest: "ACAdmin" })
-          this.setState({
-            mobileMenuBool: false,
-            assetHolderMenuBool: false,
-            faucetBool: false,
-            assetHolderUserMenuBool: false,
-            basicMenuBool: false,
-            assetClassHolderMenuBool: true,
-            noAddrMenuBool: false,
-            authorizedUserMenuBool: false
-          })
-          this.setState({ menuChange: undefined });
-        }
-
-        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === true && this.state.runWatchDog === true) {
-          window.routeRequest = "NCAdmin"
-          this.setState({ routeRequest: "NCAdmin" })
-          this.setState({
-            mobileMenuBool: false,
-            assetHolderMenuBool: true,
-            faucetBool: false,
-            assetHolderUserMenuBool: false,
-            basicMenuBool: false,
-            assetClassHolderMenuBool: false,
-            noAddrMenuBool: false,
-            authorizedUserMenuBool: false
-          })
-          this.setState({ menuChange: undefined });
-        }
-
-        else if (!isMobile && this.state.menuChange === "NC" && this.state.IDHolderBool === false && this.state.runWatchDog === true) {
-          window.routeRequest = "NCUser"
-          this.setState({ routeRequest: "NCUser" })
-          this.setState({
-            mobileMenuBool: false,
-            faucetBool: false,
-            assetHolderMenuBool: false,
-            assetHolderUserMenuBool: true,
-            basicMenuBool: false,
-            assetClassHolderMenuBool: false,
-            noAddrMenuBool: false,
-            authorizedUserMenuBool: false
-          })
-          this.setState({ menuChange: undefined });
-        }
       }
 
       //Catch late window.ethereum injection case (MetaMask mobile)
@@ -878,47 +756,6 @@ class Main extends Component {
         window.addEventListener("accountListener", this.acctChanger());
       }
 
-      //Catch updated assets case and rebuild asset inventory 
-      if (window.assets !== undefined) {
-        if (window.assets.ids.length > 0 && window.assets.names.length === 0 &&
-          this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
-          if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
-            console.log("10")
-            console.log("WD: rebuilding assets (Last Step)")
-            //this.setState({runWatchDog: false})
-            this.buildAssets()
-          }
-        }
-      }
-
-      //If reset was remotely requested, begin full asset recount  
-      if (window.resetInfo === true) {
-        console.log("11")
-        window.hasLoadedAssetClasses = false;
-        window.hasLoadedAssets = false;
-        this.setState({ buildReady: false })
-        console.log("WD: setting up assets (Step one)")
-        this.setUpAssets()
-        window.resetInfo = false
-      }
-
-      //In the case of a completed recount and rough asset build, make asset info usable for app
-      if (window.aTknIDs !== undefined && this.state.buildReady === false) {
-        if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
-          console.log("12")
-          console.log("Assets are ready for rebuild")
-          this.setState({ buildReady: true })
-        }
-      }
-
-      //Assets finished rebuilding, flip rebuild switch
-      else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
-        (this.state.buildReady === true && this.state.runWatchDog === false)) {
-          console.log("13")
-          console.log("Assets finished rebuilding, no longer ready for rebuild")
-          this.setState({ buildReady: false })
-      }
-
       //if(this.state.hasMounted)console.log(window.aTknIDs,this.state.buildReady,window.ipfsCounter, this.state.runWatchDog)
     }, 500)
 
@@ -929,231 +766,9 @@ class Main extends Component {
 
       console.log("Here")
 
-
-      if (window.menuChange === undefined) {
-        window.location.href = '/#/';
-      }
-
-      console.log(menuChoice)
-
-      if (menuChoice === 'ACAdmin') {
-        window.routeRequest = "ACAdmin"
-        await this.setState({ routeRequest: "ACAdmin" });
-        await this.setState({
-          mobileMenuBool: false,
-          faucetBool: false,
-          assetClassHolderMenuBool: true,
-          assetHolderMenuBool: false,
-          assetHolderUserMenuBool: false,
-          basicMenuBool: false,
-          noAddrMenuBool: false,
-          authorizedUserMenuBool: false,
-          settingsMenu: false
-        })
-        window.menuChange = undefined;
-      }
-
-      else if (menuChoice === 'basic') {
-        window.routeRequest = "basic"
-        await this.setState({ routeRequest: "basic" });
-        await this.setState({
-          mobileMenuBool: false,
-          faucetBool: false,
-          basicMenuBool: true,
-          assetHolderMenuBool: false,
-          assetHolderUserMenuBool: false,
-          assetClassHolderMenuBool: false,
-          noAddrMenuBool: false,
-          authorizedUserMenuBool: false,
-          settingsMenu: false
-        })
-        window.menuChange = undefined;
-      }
-
-      else if (menuChoice === 'mobileBasic') {
-        window.routeRequest = "mobileBasic"
-        await this.setState({ routeRequest: "mobileBasic" });
-        await this.setState({
-          mobileMenuBool: true,
-          faucetBool: false,
-          basicMenuBool: false,
-          assetHolderMenuBool: false,
-          assetHolderUserMenuBool: false,
-          assetClassHolderMenuBool: false,
-          noAddrMenuBool: false,
-          authorizedUserMenuBool: false,
-          settingsMenu: false
-        })
-        window.menuChange = undefined;
-      }
-
-      else if (menuChoice === 'faucet') {
-        window.routeRequest = "faucet"
-        await this.setState({ routeRequest: "faucet" });
-        await this.setState({
-          mobileMenuBool: false,
-          faucetBool: true,
-          basicMenuBool: false,
-          assetHolderMenuBool: false,
-          assetHolderUserMenuBool: false,
-          assetClassHolderMenuBool: false,
-          noAddrMenuBool: false,
-          authorizedUserMenuBool: false,
-          settingsMenu: false
-        })
-        window.menuChange = undefined;
-      }
-
-      else if (menuChoice === 'NC') {
-        window.routeRequest = "NCAdmin"
-        await this.setState({ routeRequest: "NCAdmin" })
-        await this.setState({
-          mobileMenuBool: false,
-          faucetBool: false,
-          assetHolderMenuBool: true,
-          assetHolderUserMenuBool: false,
-          basicMenuBool: false,
-          assetClassHolderMenuBool: false,
-          noAddrMenuBool: false,
-          authorizedUserMenuBool: false,
-          settingsMenu: false
-        })
-        window.menuChange = undefined;
-      }
-
-      else if (menuChoice === 'NCUser') {
-        console.log(menuChoice)
-        window.routeRequest = "NCUser"
-        await this.setState({ routeRequest: "NCUser" })
-        await this.setState({
-          mobileMenuBool: false,
-          faucetBool: false,
-          assetHolderMenuBool: false,
-          assetHolderUserMenuBool: true,
-          basicMenuBool: false,
-          assetClassHolderMenuBool: false,
-          noAddrMenuBool: false,
-          authorizedUserMenuBool: false,
-          settingsMenu: false
-        })
-        window.menuChange = undefined;
-      }
-
-      else if (menuChoice === 'authUser') {
-        window.routeRequest = "authUser"
-        await this.setState({ routeRequest: "authUser" });
-        await this.setState({
-          mobileMenuBool: false,
-          faucetBool: false,
-          authorizedUserMenuBool: true,
-          assetHolderMenuBool: false,
-          assetHolderUserMenuBool: false,
-          assetClassHolderMenuBool: false,
-          noAddrMenuBool: false,
-          basicMenuBool: false,
-          settingsMenu: false
-        })
-        window.menuChange = undefined;
-        if (!this.state.isAuthUser) { window.location.href = '/#/login' }
-      }
-
-    }
-
-    //Faucet bool switch
-    this.faucet = () => {
-      this.setState({ userMenu: undefined });
-      this.toggleMenu("faucet");
-      window.location.href = '/#/faucet';
-    }
-
-    //dashBoard bool switch
-    this.assetDashboard = () => {
-      this.setState({ userMenu: undefined });
-      this.toggleMenu("basic");
-      window.location.href = '/#/asset-dashboard'
-    }
-
-    this.assetClassDashboard = () => {
-      this.setState({ userMenu: undefined });
-      this.toggleMenu("basic");
-      window.location.href = '/#/ac-dashboard'
     }
 
     //Set up held assets for rebuild. Recount when necessary
-    this.setUpAssets = async () => {
-      window.hasNoAssets = false;
-      window.hasNoAssetClasses = false;
-      window.ipfsCounter = 0;
-      window.ipfsHashArray = [];
-      window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-      window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
-      window.hasLoadedAssetClasses = false;
-      window.assetTokenInfo = {
-        assetClass: undefined,
-        idxHash: undefined,
-        name: undefined,
-        photos: undefined,
-        text: undefined,
-        status: undefined,
-      }
-
-      //Case of recount
-      if (window.recount === true) {
-        window.aTknIDs = [];
-        window.acTknIDs = [];
-        if (window.balances !== undefined) window.balances.assetBalance = 0;
-        window.recount = false
-        await window.utils.getETHBalance();
-        return this.setUpTokenVals(true)
-      }
-
-      //Do a full update if the balances are returning undefined at this stage (They should never do this)
-      /* else if (Object.values(window.balances) === [0,0,0,0]) {
-        console.log("balances undefined, trying to get them...");
-        //if (window.addr === undefined) { return this.forceUpdate }
-        return this.setUpTokenVals(true);
-      } */
-      console.log("SA: In setUpAssets")
-
-      let tempDescObj = {}
-      let tempDescriptionsArray = [];
-      let tempNamesArray = [];
-
-      //Get all asset token profiles for parsing
-
-      await window.utils.getAssetTokenInfo()
-      window.assetClasses = await window.utils.getAssetClassTokenInfo()
-
-      if (window.aTknIDs === undefined) { return }
-
-      for (let i = 0; i < window.aTknIDs.length; i++) {
-        tempDescObj["desc" + i] = []
-        await this.getIPFSJSONObject(window.ipfsHashArray[i], tempDescObj["desc" + i])
-      }
-
-      console.log("Temp description obj: ", tempDescObj)
-
-      for (let x = 0; x < window.aTknIDs.length; x++) {
-        let tempArray = tempDescObj["desc" + x]
-        await tempDescriptionsArray.push(tempArray)
-      }
-
-      window.assets.descriptions = tempDescriptionsArray;
-      window.assets.names = tempNamesArray;
-      window.assets.ids = window.aTknIDs;
-
-      console.log("Asset setUp Complete. Turning on watchDog.")
-
-      await this.setState({ runWatchDog: true })
-
-      if (window.assetClasses.ids !== undefined && window.aTknIDs !== undefined) {
-        if (window.assetClasses.ids.length > 0 && window.aTknIDs.length < 1) { return this.buildAssets() }
-      }
-
-      console.log("IPFS operation count: ", window.ipfsCounter)
-      console.log("Prebuild Assets: ", window.assets)
-      console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
-    }
 
     this.mintID = async () => {
       await window.contracts.PARTY.methods
@@ -1167,158 +782,7 @@ class Main extends Component {
           window.recount = true;
         });
     }
-
-    this.setBlueIcons = () => {
-      window.jdenticon_config = {
-        hues: [196],
-        lightness: {
-          color: [0.36, 0.70],
-          grayscale: [0.24, 0.82]
-        },
-        saturation: {
-          color: 0.75,
-          grayscale: 0.10
-        },
-        backColor: "#ffffffff"
-      };
-    }
-
-    this.setGreenIcons = () => {
-      window.jdenticon_config = {
-        hues: [126],
-        lightness: {
-          color: [0.42, 0.72],
-          grayscale: [0.37, 0.86]
-        },
-        saturation: {
-          color: 0.75,
-          grayscale: 0.74
-        },
-        backColor: "#ffffffff"
-      };
-    }
-
-    //Rebuild fetched assets, preparing them for use by the app
-    this.buildAssets = () => {
-      console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
-      window.ipfsCounter = 0;
-      let tempDescArray = [];
-      let emptyDesc = { photo: {}, text: {}, name: "" }
-
-      //Get specifically name from the ipfs object of each asset (if it exists)
-      let tempNameArray = [];
-      let identicons = [], AC_Identicons = [];
-      let identiconsLG = [], AC_IdenticonsLG = [];
-
-      let tempDisplayArray = [];
-
-      if (window.hasNoAssetClasses === false) {
-
-        for (let e = 0; e < window.assetClasses.ids.length; e++) {
-          AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
-        }
-
-        for (let e = 0; e < window.assetClasses.ids.length; e++) {
-          AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
-        }
-
-        window.assetClasses.identicons = AC_Identicons;
-        window.assetClasses.identiconsLG = AC_IdenticonsLG;
-        window.hasLoadedAssetClasses = true;
-      }
-
-      if (window.hasNoAssets === false) {
-        //Get objects from unparsed asset data for reference in the app 
-        for (let i = 0; i < window.assets.ids.length; i++) {
-          if (window.assets.descriptions[i][0] !== undefined) {
-            tempDescArray.push(JSON.parse(window.assets.descriptions[i][0]))
-          }
-          else {
-            tempDescArray.push(emptyDesc)
-          }
-        }
-
-        for (let x = 0; x < window.assets.ids.length; x++) {
-          if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
-            tempNameArray.push("Not Available")
-          }
-          else {
-            tempNameArray.push(tempDescArray[x].name)
-          }
-
-        }
-
-        for (let e = 0; e < window.aTknIDs.length; e++) {
-          identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
-        }
-
-        for (let e = 0; e < window.aTknIDs.length; e++) {
-          identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
-        }
-
-        for (let j = 0; j < window.aTknIDs.length; j++) {
-          if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
-            tempDisplayArray.push("")
-          }
-
-          else if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length > 0) {
-            tempDisplayArray.push(Object.values(tempDescArray[j].photo)[0])
-          }
-
-          else {
-            tempDisplayArray.push(tempDescArray[j].photo.DisplayImage)
-          }
-        }
-
-        window.assets.identiconsLG = identiconsLG;
-        window.assets.identicons = identicons;
-        window.assets.descriptions = tempDescArray;
-        window.assets.names = tempNameArray;
-        window.assets.displayImages = tempDisplayArray;
-        window.hasLoadedAssets = true;
-      }
-      if(window.balances.prufTokenBalance !== this.state.prufBalance || window.balances.assetBalance !== this.state.assetBalance){
-        this.setState({
-          assetBalance: window.balances.assetBalance, 
-          assetClassBalance: window.balances.assetClassBalance,
-          prufBalance: window.balances.prufTokenBalance,
-          IDTokenBalance: window.balances.IDTokenBalance,
-          assetHolderBool: window.assetHolderBool,
-          assetClassHolderBool: window.assetClassHolderBool,
-          IDHolderBool: window.IDHolderBool,
-          custodyType: window.custodyType,
-          hasFetchedBalances: window.hasFetchedBalances
-          })
-      }
-      console.log("BA: Assets after rebuild: ", window.assets)
-      console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
-    }
-
-    //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-    this.setUpTokenVals = async (willSetup) => {
-      const self = this;
-      console.log("STV: Setting up balances")
-
-      await window.utils.determineTokenBalance().then(async(e)=>{ console.log(e); 
-        await self.setState({
-        assetBalance: e.assetBalance, 
-        assetClassBalance: e.assetClassBalance,
-        prufBalance: e.prufTokenBalance,
-        IDTokenBalance: e.IDTokenBalance,
-        assetHolderBool: window.assetHolderBool,
-        assetClassHolderBool: window.assetClassHolderBool,
-        IDHolderBool: window.IDHolderBool,
-        custodyType: window.custodyType,
-        hasFetchedBalances: window.hasFetchedBalances
-        })
-      })
-      await console.log(window.balances)
-      if (willSetup) {
-        return this.setUpAssets()
-      }
-      
-    }
-
+    
     //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
 
     this.getIPFSJSONObject = (lookup, descElement) => {
@@ -1393,12 +857,9 @@ class Main extends Component {
             }
 
 
-            if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#" }
+            if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#/" }
 
             window.addr = e[0];
-            window.assetClass = undefined;
-            window.isAuthUser = false;
-            window.isACAdmin = false;
             self.setState({ addr: e[0] });
             window.recount = true;
             window.resetInfo = true;
@@ -1466,7 +927,7 @@ class Main extends Component {
 
         if (window.addr !== undefined) {
           await window.utils.getETHBalance();
-          await this.setUpTokenVals(true)
+          await this.setUpTokenVals()
           //await this.setUpAssets()
         }
 

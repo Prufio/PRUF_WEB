@@ -74,6 +74,12 @@ class RetrieveRecord extends Component {
       }
     }
 
+    this.sendPacket = (obj, menu, link) => {
+      window.sentPacket = obj
+      window.menuChange = menu
+      window.location.href = '/#/' + link
+    }
+
     this.generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
@@ -305,6 +311,7 @@ class RetrieveRecord extends Component {
                 </div>
               </div >
             </div >
+            {this.state.authLevel === "Authorized User" || this.state.authLevel === "Authorized User/AC Admin" && (
             <div
             className="assetSelectedRouter"
           >
@@ -329,12 +336,13 @@ class RetrieveRecord extends Component {
                   <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "modify-record-status") }}>Modify Status</Dropdown.Item>
                   <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "decrement-counter") }}>Decrement Counter</Dropdown.Item>
                   <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "modify-asset-information") }}>Modify Asset Info</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "add-note") }}>Add Note</Dropdown.Item>
+                  {/* <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "add-note") }}>Add Note</Dropdown.Item> */}
                   <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "force-modify-record") }}>Modify Rightsholder</Dropdown.Item>
                 </DropdownButton>
               </li>
             </Nav>
           </div>
+            )}
           </div>
         </div>
 
