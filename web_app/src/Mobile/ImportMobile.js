@@ -277,12 +277,7 @@ class ImportMobile extends Component {
         });
       console.log(this.state.txHash);
 
-      await this.setState({
-        idxHash: "",
-        accessPermitted: false
-      })
-
-      return clearForm();
+      return this.setState({ idxHash: "", accessPermitted: false, wasSentPacket: false, assetClassSelected: false, help: false })
     };
 
     return (

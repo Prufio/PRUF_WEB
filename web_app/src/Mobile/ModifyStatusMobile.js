@@ -51,32 +51,9 @@ class ModifyStatusMobile extends Component {
     componentDidMount() {//stuff to do when component mounts in window
         if (window.sentPacket !== undefined) {
             console.log(window.sentPacket.status)
-            if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-                alert("Cannot editRgtHash asset in lost or stolen status! Please change to editRgtHashrable status");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
 
             if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-                alert("Cannot editRgtHash asset in escrow! Please wait until asset has met escrow conditions");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
-
-            if (Number(window.sentPacket.statusNum) === 58) {
-                alert("Cannot editRgtHash asset in imported status! please change to editRgtHashrable status");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
-
-            if (Number(window.sentPacket.statusNum) === 70) {
-                alert("Cannot editRgtHash asset in exported status! please import asset and change to editRgtHashrable status");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
-
-            if (Number(window.sentPacket.statusNum) !== 51) {
-                alert("Cannot editRgtHash asset in a status other than editRgtHashrable! please change asset to editRgtHashrable status");
+                alert("Cannot modify asset in escrow! Please wait until asset has met escrow conditions");
                 window.sentPacket = undefined;
                 return window.location.href = "/#/asset-dashboard-mobile"
             }
@@ -157,6 +134,10 @@ class ModifyStatusMobile extends Component {
 
             if (Number(resArray[1]) === 0) {
                 this.setState({ alertBanner: "Asset does not exist at given IDX" }); return clearForm()
+            }
+
+            if (Number(resArray[0]) === 6 || Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
+                this.setState({ alertBanner: "Cannot modify asset in escrow status, please end escrow." }); return clearForm()
             }
 
             this.setState({ selectedAsset: e })

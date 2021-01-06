@@ -458,7 +458,7 @@ class VerifyLiteMobile extends Component {
           )}
           {this.state.msgBanner !== undefined && (
             <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
-              <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+              <Alert className="alertBannerMobile" key={1} variant="succcess" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
                 {this.state.msgBanner}
               </Alert>
             </ClickAwayListener>

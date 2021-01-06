@@ -318,6 +318,7 @@ class DecrementMobile extends Component {
                   </Form.Label>
                   {this.state.transaction === false && (
                     <Form.Control
+                      type="number"
                       placeholder="Countdown Amount"
                       required
                       onChange={(e) =>

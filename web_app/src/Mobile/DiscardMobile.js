@@ -170,7 +170,7 @@ class DiscardMobile extends Component {
                     }
                 });
 
-            return clearForm(); //clear form inputs
+            return this.setState({ idxHash: "", wasSentPacket: false, help: false }); //clear form inputs
         };
 
         return (//default render

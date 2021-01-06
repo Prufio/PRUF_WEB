@@ -251,6 +251,7 @@ class ModifyRightsHolderMobile extends Component {
 
         return (
             <div>
+                <div className="formMobileBack">
                 <div>
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -543,6 +544,7 @@ class ModifyRightsHolderMobile extends Component {
                         )}
                     </div>
                 )}
+                </div>
             </div>
         );
     }

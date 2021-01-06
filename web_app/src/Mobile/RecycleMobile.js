@@ -36,6 +36,13 @@ class RecycleMobile extends Component {
         }
       }
 
+      if (this.state.QRreader) {
+        idxHash = this.state.result
+      }
+      if (this.state.Checkbox) {
+        idxHash = this.state.idxHashRaw
+      }
+
       let resArray = await window.utils.checkStats(idxHash, [0, 2])
 
       console.log(resArray)
@@ -53,13 +60,6 @@ class RecycleMobile extends Component {
         this.setState({
           idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false
         })
-      }
-
-      if (this.state.QRreader) {
-        idxHash = this.state.result
-      }
-      if (this.state.Checkbox) {
-        idxHash = this.state.idxHashRaw
       }
 
       console.log("idxHash", idxHash);
