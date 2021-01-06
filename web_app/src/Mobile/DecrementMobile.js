@@ -230,6 +230,7 @@ class DecrementMobile extends Component {
 
     return (
       <div>
+      <div className="formMobileBack">
         <div>
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -318,6 +319,7 @@ class DecrementMobile extends Component {
                   </Form.Label>
                   {this.state.transaction === false && (
                     <Form.Control
+                      type="number"
                       placeholder="Countdown Amount"
                       required
                       onChange={(e) =>
@@ -426,6 +428,7 @@ class DecrementMobile extends Component {
             )}
           </div>
         )}
+        </div>
       </div>
     );
   }

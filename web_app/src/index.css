@@ -599,6 +599,15 @@ div {
   font-size: x-large;
 }
 
+.formMobileBack {
+  height: 60rem;
+  width: 360px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
 .formMobile {
   height: flex;
   width: 360px;

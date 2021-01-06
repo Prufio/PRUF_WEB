@@ -248,6 +248,7 @@ class DeepVerifyMobile extends Component {
 
     return (
       <div>
+      <div className="formMobileBack">
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
@@ -547,6 +548,7 @@ class DeepVerifyMobile extends Component {
             </div>
           )}</>
         )}
+        </div>
       </div>
     );
   }

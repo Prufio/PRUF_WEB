@@ -368,6 +368,7 @@ class EscrowMobile extends Component {
 
     return (
       <div>
+      <div className="formMobileBack">
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
@@ -855,6 +856,7 @@ class EscrowMobile extends Component {
             )}
           </div>
         )}
+        </div>
       </div>
     );
   }

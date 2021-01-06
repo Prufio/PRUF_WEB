@@ -239,6 +239,7 @@ class TransferAssetMobile extends Component {
 
     return (
       <div>
+      <div className="formMobileBack">
         <div>
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -437,6 +438,7 @@ class TransferAssetMobile extends Component {
             )}
           </div>
         )}
+        </div>
       </div>
     );
   }

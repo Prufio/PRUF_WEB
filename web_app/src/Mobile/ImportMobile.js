@@ -277,16 +277,12 @@ class ImportMobile extends Component {
         });
       console.log(this.state.txHash);
 
-      await this.setState({
-        idxHash: "",
-        accessPermitted: false
-      })
-
-      return clearForm();
+      return this.setState({ idxHash: "", accessPermitted: false, wasSentPacket: false, assetClassSelected: false, help: false })
     };
 
     return (
       <div>
+      <div className="formMobileBack">
         <div>
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -494,6 +490,7 @@ class ImportMobile extends Component {
             )}
           </div>
         )}
+        </div>
       </div>
     );
   }

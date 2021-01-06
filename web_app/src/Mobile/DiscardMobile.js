@@ -170,11 +170,12 @@ class DiscardMobile extends Component {
                     }
                 });
 
-            return clearForm(); //clear form inputs
+            return this.setState({ idxHash: "", wasSentPacket: false, help: false }); //clear form inputs
         };
 
         return (//default render
             <div>
+            <div className="formMobileBack">
                 <div>
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -357,6 +358,7 @@ class DiscardMobile extends Component {
                         )}
                     </div>
                 )}
+                </div>
             </div>
         );
     }

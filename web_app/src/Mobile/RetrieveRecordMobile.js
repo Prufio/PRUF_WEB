@@ -658,6 +658,7 @@ class RetrieveRecordMobile extends Component {
 
     return (
       <div>
+      <div className="formMobileBack">
         {this.state.moreInfo === false && this.state.QRreader === false && this.state.queryValue === undefined && (
           <div>
             <div>
@@ -834,6 +835,7 @@ class RetrieveRecordMobile extends Component {
             </div> */}
           </div >
         )}
+        </div>
       </div>
     );
   }

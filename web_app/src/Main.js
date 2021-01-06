@@ -202,6 +202,9 @@ class Main extends Component {
                         background-color: #23b6ff;
                         color: white !important;
                       }
+                      .body {
+                        overflow: visible !important;
+                      }
                    `}
                           </style>
 
@@ -845,6 +848,9 @@ class Main extends Component {
                       .btn-toggle:active {
                         background-color: #23b6ff;
                         color: white !important;
+                      }
+                      .body {
+                        overflow: hidden !important;
                       }
                    `}
               </style>
