@@ -11,7 +11,7 @@ body {
   background-size: cover;
   box-sizing: border-box; 
   background-position: center center fixed;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 /* .mobile_body {
