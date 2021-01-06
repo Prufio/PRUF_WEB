@@ -835,10 +835,10 @@ class Main extends Component {
         this.setState({ isACAdmin: window.isACAdmin })
       } */
 
-      if (this.state.custodyType !== window.custodyType) {
+      /* if (this.state.custodyType !== window.custodyType) {
         console.log("3")
         this.setState({ custodyType: window.custodyType })
-      }
+      } */
 
       if (this.state.ETHBalance !== window.ETHBalance && this.state.runWatchDog === true) {
         console.log("5")

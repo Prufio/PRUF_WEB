@@ -308,6 +308,12 @@ class RetrieveRecord extends Component {
       )
     }
 
+    this.sendPacket = (obj, menu, link) => {
+      window.sentPacket = obj
+      window.menuChange = menu
+      window.location.href = '/#/' + link
+    }
+
     this.handlePacket = async () => {
       this.setState({
         help: false,
