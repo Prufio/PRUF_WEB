@@ -17,18 +17,6 @@ import VerifyLite from "./AllCustodyTypes/VerifyLite"
 import VerifyRightsholder from "./AllCustodyTypes/VerifyRightsholder";
 import ACDashboard from "./AllCustodyTypes/ACDashboard";
 
-import AddNote from "./Custodial/AddNote";
-import DecrementCounter from "./Custodial/DecrementCounter";
-import ForceModifyRecord from "./Custodial/ForceModifyRecord";
-import ModifyDescription from "./Custodial/ModifyDescription";
-import ModifyRecordStatus from "./Custodial/ModifyRecordStatus";
-import NewRecord from "./Custodial/NewRecord";
-import TransferAsset from "./Custodial/TransferAsset";
-import EscrowManager from "./Custodial/EscrowManager";
-import ExportAsset from "./Custodial/ExportAsset";
-import ImportAsset from "./Custodial/ImportAsset";
-import LoginToAC from "./Custodial/LoginToAC";
-
 import RetrieveRecordMobile from "./Mobile/RetrieveRecordMobile";
 import VerifyLiteMobile from "./Mobile/VerifyLiteMobile";
 import DeepVerifyMobile from "./Mobile/DeepVerifyMobile";
@@ -63,30 +51,8 @@ import Faucet from "./Resources/Faucet";
 import DnvkxiOAFy_vDC from "./Resources/DnvkxiOAFy_vDC"
 
 function Router(routeRequest) {
-    if (routeRequest === "authUser") {
-        return (
-            <>
-                <Route path="/new-record" component={NewRecord} />
-                <Route path="/retrieve-record" component={RetrieveRecord} />
-                <Route path="/force-transfer-asset" component={ForceModifyRecord} />
-                <Route path="/import-asset" component={ImportAsset} />
-                <Route path="/transfer-asset" component={TransferAsset} />
-                <Route path="/modify-record-status" component={ModifyRecordStatus} />
-                <Route path="/decrement-counter" component={DecrementCounter} />
-                <Route path="/modify-asset-information" component={ModifyDescription} />
-                <Route path="/add-note" component={AddNote} />
-                <Route path="/export-asset" component={ExportAsset} />
-                <Route path="/verify-rights-holder" component={VerifyRightsholder} />
-                <Route path="/manage-escrow" component={EscrowManager} />
-                <Route path="/mint-pip-asset" component={MintPipAsset} />
-                <Route path="/claim-pip-asset" component={ClaimPipAsset} />
-                <Route path="/login" component={LoginToAC} />
-                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
-            </>
-        )
-    }
-
-    else if (routeRequest === "NCAdmin") {
+    
+    if (routeRequest === "NCAdmin") {
         return (
             <>
                 <Route path="/new-record-NC" component={NewRecordNC} />
