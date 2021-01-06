@@ -280,21 +280,21 @@ class RetrieveRecord extends Component {
                         </div>
                       </div>
                       <RWebShare
-                    className="shareMenu"
-                    data={{
-                      text: "Check out my PRüF-verified asset!",
-                      url: this.state.URL,
-                      title: "Share Asset Link",
-                    }}
-                    >
-                    <div className="cardButton4">
-                      <div className="cardButton4Content">
-                        <Share2
-                          size={35}
-                        />
-                      </div>
-                    </div>
-                  </RWebShare>
+                        className="shareMenu"
+                        data={{
+                          text: "Check out my PRüF-verified asset!",
+                          url: this.state.URL,
+                          title: "Share Asset Link",
+                        }}
+                      >
+                        <div className="cardButton4">
+                          <div className="cardButton4Content">
+                            <Share2
+                              size={35}
+                            />
+                          </div>
+                        </div>
+                      </RWebShare>
                     </>
                   )}
 
@@ -883,7 +883,6 @@ class RetrieveRecord extends Component {
                   )}
                 </div>
               </Form>
-              {this.state.result === "" && (
                 <div className="results">
                   {this.state.alertBanner !== undefined && (
                     <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
@@ -893,7 +892,6 @@ class RetrieveRecord extends Component {
                     </ClickAwayListener>
                   )}
                 </div>
-              )}
             </div>
           )}
 
