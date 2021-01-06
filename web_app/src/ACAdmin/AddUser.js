@@ -158,7 +158,6 @@ class AddUser extends Component {
         assetClass: undefined,
         assetClassSelected: false,
         help: false,
-        transaction: false
       })
     };
 
