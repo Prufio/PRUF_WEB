@@ -4,6 +4,10 @@ import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
 import Alert from "react-bootstrap/Alert";
 import { QRCode } from 'react-qrcode-logo';
+import Button from "react-bootstrap/Button";
+import Dropdown from 'react-bootstrap/Dropdown';
+import Nav from 'react-bootstrap/Nav'
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy, Share2 } from "react-feather";
 import { ClickAwayListener } from '@material-ui/core';
@@ -299,38 +303,38 @@ class RetrieveRecord extends Component {
                   )}
 
                 </div>
-                <div
+              </div >
+            </div >
+            <div
             className="assetSelectedRouter"
           >
             <Nav className="headerSelected">
               <li>
-                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "transfer-asset") }}>Transfer</Button>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "basic", "transfer-asset") }}>Transfer</Button>
               </li>
               <li>
-                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "import-asset") }}>Import</Button>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "basic", "import-asset") }}>Import</Button>
               </li>
               <li>
                 <DropdownButton title="Export" drop="up" variant="selectedImage">
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "export-asset") }}>Export</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "discard-asset") }}>Discard</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "export-asset") }}>Export</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "discard-asset") }}>Discard</Dropdown.Item>
                 </DropdownButton>
               </li>
               <li>
-                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "NC", "manage-escrow") }}>Escrow</Button>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "basic", "manage-escrow") }}>Escrow</Button>
               </li>
               <li>
                 <DropdownButton title="Modify" drop="up" variant="selectedImage">
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-record-status") }}>Modify Status</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "decrement-counter") }}>Decrement Counter</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "modify-asset-information") }}>Modify Asset Info</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "add-note") }}>Add Note</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "NC", "force-modify-record") }}>Modify Rightsholder</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "modify-record-status") }}>Modify Status</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "decrement-counter") }}>Decrement Counter</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "modify-asset-information") }}>Modify Asset Info</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "add-note") }}>Add Note</Dropdown.Item>
+                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "basic", "force-modify-record") }}>Modify Rightsholder</Dropdown.Item>
                 </DropdownButton>
               </li>
             </Nav>
           </div>
-              </div >
-            </div >
           </div>
         </div>
 

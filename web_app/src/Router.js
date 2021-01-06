@@ -37,11 +37,11 @@ import Faucet from "./Resources/Faucet";
 import DnvkxiOAFy_vDC from "./Resources/DnvkxiOAFy_vDC"
 
 function Router(routeRequest) {
-    if (routeRequest === "authUser") {
+
+    if (routeRequest === "basic") {
         return (
             <>
                 <Route path="/new-record" component={NewRecord} />
-                <Route path="/retrieve-record" component={RetrieveRecord} />
                 <Route path="/modify-rightsholder" component={ModifyRightsHolder} />
                 <Route path="/import-asset" component={ImportAsset} />
                 <Route path="/transfer-asset" component={TransferAsset} />
@@ -50,16 +50,7 @@ function Router(routeRequest) {
                 <Route path="/modify-asset-information" component={ModifyDescription} />
                 <Route path="/add-note" component={AddNote} />
                 <Route path="/export-asset" component={ExportAsset} />
-                <Route path="/verify-rights-holder" component={VerifyRightsholder} />
                 <Route path="/manage-escrow" component={EscrowManager} />
-                <Route path="/login" component={LoginToAC} />
-                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
-            </>
-        )
-    }
-    else if (routeRequest === "basic") {
-        return (
-            <>
                 <Route path="/verify-lite" component={VerifyLite} />
                 <Route path="/verify-rights-holder" component={VerifyRightsholder} />
                 <Route path="/retrieve-record" component={RetrieveRecord} />
@@ -99,23 +90,6 @@ function Router(routeRequest) {
                 <Route path="/retrieve-record" component={RetrieveRecord} />
                 <Route path="/verify-lite-mobile" component={VerifyLiteMobile} />
                 <Route path="/retrieve-record-mobile" component={RetrieveRecordMobile} />
-            </>
-        )
-    }
-
-    else if (routeRequest === "faucet") {
-        return (
-            <>
-                <Route path="/faucet" component={Faucet} />
-                <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
-            </>
-        )
-    }
-
-    else {
-        return (
-            <>
-            <Route path="/DnvkxiOAFy_vDC" component={DnvkxiOAFy_vDC} />
             </>
         )
     }
