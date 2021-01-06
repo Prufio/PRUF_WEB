@@ -600,10 +600,9 @@ div {
 }
 
 .formMobileBack {
-  height: 90rem;
+  height: 60rem;
   width: 360px;
-  /* background-color: transparent; */
-  background-color: #ffffff;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   overflow: visible;

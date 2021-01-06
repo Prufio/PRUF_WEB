@@ -238,6 +238,7 @@ class NewRecordMobile extends Component {
 
     return (//default render
       <div>
+      <div className="formMobileBack">
         <div>
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -674,6 +675,7 @@ class NewRecordMobile extends Component {
             )}
           </div>
         )}
+        </div>
       </div>
     )
   }

@@ -275,6 +275,7 @@ class ModifyStatusMobile extends Component {
 
         return (
             <div>
+            <div className="formMobileBack">
                 <div>
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -517,6 +518,7 @@ class ModifyStatusMobile extends Component {
                         )}
                     </div>
                 )}
+                </div>
             </div>
         );
     }
