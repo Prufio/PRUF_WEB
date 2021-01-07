@@ -250,18 +250,19 @@ class ACDashboard extends React.Component {
                 <div className="row no-gutters">
                   <div className="assetSelecedInfo">
 
-                    <button className="assetImageButtonSelected">
-                      <>{obj.identicon}</>
-                    </button>
-                    <p className="cardNameSelected">Name: {obj.assetClassName}</p>
-                    <p className="cardAcSelected">Node ID: {obj.id}</p>
-                    <p className="cardStatusSelected">Node Root: {obj.root}</p>
-                    <p className="cardStatusSelected">Custody Type: {obj.custodyType}</p>
-                    <ProgressBar className="ACProgressBar">
-                      <ProgressBar variant="success" label={"Price Share: " + String(Number(obj.discount) / 100) + "%"} now={obj.discount / 100} key={1} />
-                      {/* <ProgressBar variant="successs" label={obj.discount.substring(0,2)+"%"} now={Number(obj.discount)/100-51} key={2} /> */}
-                    </ProgressBar>
-                    <div className="cardDescriptionFormSelectedAC">
+                      <button className="assetImageButtonSelected">
+                        <>{obj.identicon}</>
+                      </button>
+                      <p className="cardNameSelected">Name: {obj.assetClassName}</p>
+                      <p className="cardAcSelected">Node ID: {obj.id}</p>
+                      <p className="cardStatusSelected">Node Root: {obj.root}</p>
+                      <p className="cardStatusSelected">Custody Type: {obj.custodyType}</p>
+                      <ProgressBar className ="ACProgressBar">
+                        <ProgressBar variant="success" label={"Price Share: " + String(Number(obj.discount)/100) + "%"} now={obj.discount/100} key={1} style="color: black" />
+                        {/* <ProgressBar variant="successs" label={obj.discount.substring(0,2)+"%"} now={Number(obj.discount)/100-51} key={2} /> */}
+                      </ProgressBar>
+                      <div className="cardDescriptionFormSelectedAC">
+                      </div>
                     </div>
                   </div>
                   {this.state.moreInfo && (
