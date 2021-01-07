@@ -56,25 +56,13 @@ class ModifyDescription extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
+      if (Number(window.sentPacket.statusNum) === 6) {
         alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.statusNum) === 58) {
-        alert("Cannot transfer asset in imported status! please change to transferrable status" );
-        window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      if (Number(window.sentPacket.statusNum) === 70) {
-        alert("Cannot transfer asset in exported status! please import asset and change to transferrable status" );
-        window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      if (Number(window.sentPacket.statusNum) !== 51) {
+      if (Number(window.sentPacket.statusNum) !== 1) {
         alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
@@ -198,11 +186,6 @@ class ModifyDescription extends Component {
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
           console.log(receipt.status);
-          window.resetInfo = true;
-          window.recount = true;
-          if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
         });
       console.log(this.state.txHash);
     };
@@ -230,7 +213,7 @@ class ModifyDescription extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Transfer :</Form.Label>
-                  {!this.state.wasSentPacket && (
+{/*                   {!this.state.wasSentPacket && (
                     <>
                       {this.state.transaction === false && (
                         <Form.Control
@@ -261,17 +244,17 @@ class ModifyDescription extends Component {
                           </optgroup>
                         </Form.Control>)}
                     </>
-                  )}
+                  )} */}
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
+                      onChange={(e) => {  }}
                       disabled
                     >
                       <optgroup>
                         <option value="null">
-                          Transferring "{this.state.name}" Clear Form to Select Different Asset
+                          Transferring "{this.state.name}" 
                            </option>
                       </optgroup>
                     </Form.Control>

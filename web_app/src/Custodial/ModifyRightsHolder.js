@@ -11,16 +11,6 @@ class ModifyRightsHolder extends Component {
 
     //State declaration.....................................................................................................
 
-    this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-        this.setState({ assets: window.assets })
-      }
-
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
-      }
-    }, 150)
-
     this.mounted = false;
     this.state = {
       addr: "",
@@ -65,7 +55,7 @@ class ModifyRightsHolder extends Component {
         return window.location.href = "/#/asset-dashboard"
       }
 
-      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
+      if (Number(window.sentPacket.statusNum) === 6) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
@@ -113,49 +103,6 @@ class ModifyRightsHolder extends Component {
       e.preventDefault();
     }
 
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      if (e === "null" || e === undefined) {
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
-
-      console.log(resArray)
-
-      if (Number(resArray[1]) === 0) {
-        this.setState({ alertBanner: "Asset does not exist at given IDX" });
-      }
-
-      if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
-      }
-
-      if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
-      })
-    }
-
     const _editRgtHash = async () => {
       var idxHash = this.state.idxHash;
       var newRgtRaw;
@@ -200,9 +147,6 @@ class ModifyRightsHolder extends Component {
           this.setState({ txHash: receipt.transactionHash });
           this.setState({ txStatus: receipt.status });
           console.log(receipt.status);
-          if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
           //Stuff to do when tx confirms
         });
 
@@ -233,7 +177,7 @@ class ModifyRightsHolder extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {!this.state.wasSentPacket && (
+{/*                   {!this.state.wasSentPacket && (
                     <>
                       {this.state.transaction === false && (
                         <Form.Control
@@ -264,17 +208,17 @@ class ModifyRightsHolder extends Component {
                           </optgroup>
                         </Form.Control>)}
                     </>
-                  )}
+                  )} */}
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
+                      onChange={(e) => {  }}
                       disabled
                     >
                       <optgroup>
                         <option value="null">
-                          Modifying "{this.state.name}" Clear Form to Select Different Asset
+                          Modifying "{this.state.name}" 
                            </option>
                       </optgroup>
                     </Form.Control>

@@ -34,7 +34,6 @@ class ModifyRecordStatus extends Component {
       if (!doesExist) {
         this.clearForm()
         return this.setState({ alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission." })
-
       }
 
       if (NewStatusString === this.state.status) {
@@ -49,16 +48,13 @@ class ModifyRecordStatus extends Component {
       this.setState({ result: "" })
       this.setState({ transaction: true })
 
-
       if (
-        this.state.newStatus !== "53" &&
-        this.state.newStatus !== "54" &&
-        this.state.newStatus !== "57" &&
-        this.state.newStatus !== "58" &&
+        this.state.newStatus !== "3" &&
+        this.state.newStatus !== "4" &&
+        this.state.newStatus !== "7" &&
         Number(this.state.newStatus) < 100 &&
-        Number(this.state.newStatus) > 49) {
-
-        await window.contracts.NP_NC.methods
+        Number(this.state.newStatus) < 50) {
+        await window.contracts.NP.methods
           ._modStatus(idxHash, this.state.newStatus)
           .send({ from: window.addr })
           .on("error", function (_error) {
@@ -75,16 +71,12 @@ class ModifyRecordStatus extends Component {
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
             console.log(receipt.status);
-            window.resetInfo = true;
-            if (self.state.wasSentPacket) {
-              return window.location.href = '/#/asset-dashboard'
-            }
             //Stuff to do when tx confirms
           });
       }
 
-      else if (this.state.newStatus === "53" || this.state.newStatus === "54") {
-        await window.contracts.NP_NC.methods
+      else if (this.state.newStatus === "3" || this.state.newStatus === "4") {
+        await window.contracts.NP.methods
           ._setLostOrStolen(idxHash, this.state.newStatus)
           .send({ from: window.addr })
           .on("error", function (_error) {
@@ -101,10 +93,6 @@ class ModifyRecordStatus extends Component {
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
             console.log(receipt.status);
-            window.resetInfo = true;
-            if (self.state.wasSentPacket === true) {
-              return window.location.href = '/#/asset-dashboard'
-            }
             //Stuff to do when tx confirms
           });
       }
@@ -116,16 +104,6 @@ class ModifyRecordStatus extends Component {
         idxHash: undefined
       });
     };
-
-    this.updateAssets = setInterval(() => {
-      if (this.state.assets !== window.assets && this.state.runWatchDog === true) {
-        this.setState({ assets: window.assets })
-      }
-
-      if (this.state.hasLoadedAssets !== window.hasLoadedAssets && this.state.runWatchDog === true) {
-        this.setState({ hasLoadedAssets: window.hasLoadedAssets })
-      }
-    }, 150)
 
     this.state = {
       addr: "",
@@ -155,7 +133,7 @@ class ModifyRecordStatus extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
-      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
+      if (Number(window.sentPacket.statusNum) === 6) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
@@ -195,45 +173,6 @@ class ModifyRecordStatus extends Component {
       e.preventDefault();
     }
 
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      if (e === "null" || e === undefined) {
-        return this.clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
-
-      console.log(resArray)
-
-      if (Number(resArray[1]) === 0) {
-        this.setState({ alertBanner: "Asset does not exist at given IDX" });
-      }
-
-      if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return this.clearForm()
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
-      })
-    }
-
     return (
       <div>
         <div>
@@ -257,7 +196,7 @@ class ModifyRecordStatus extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {!this.state.wasSentPacket && (
+{/*                   {!this.state.wasSentPacket && (
                     <>
                       {this.state.transaction === false && (
                         <Form.Control
@@ -288,17 +227,17 @@ class ModifyRecordStatus extends Component {
                           </optgroup>
                         </Form.Control>)}
                     </>
-                  )}
+                  )} */}
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
+                      onChange={(e) => { }}
                       disabled
                     >
                       <optgroup>
                         <option value="null">
-                          Modifying "{this.state.name}" Clear Form to Select Different Asset
+                          Modifying "{this.state.name}" 
                            </option>
                       </optgroup>
                     </Form.Control>
@@ -312,30 +251,29 @@ class ModifyRecordStatus extends Component {
                     <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
                       <optgroup className="optgroup">
                         <option value="0">Choose a status</option>
-                        <option value="51">Transferrable/Exportable</option>
-                        <option value="52">Non-Transferrable</option>
-                        <option value="53">Stolen</option>
-                        <option value="54">Lost</option>
-                        <option value="59">Discardable</option>
+                        <option value="1">Transferrable/Exportable</option>
+                        <option value="2">Non-Transferrable</option>
+                        <option value="3">Stolen</option>
+                        <option value="4">Lost</option>
                       </optgroup>
                     </Form.Control>
                   )}
                   {this.state.transaction === true && (
                     <Form.Control as="select" size="lg" disabled>
                       <optgroup className="optgroup">
-                        {this.state.newStatus === "51" && (
+                        {this.state.newStatus === "1" && (
                           <option> Changing Status to Transferable </option>
                         )}
-                        {this.state.newStatus === "52" && (
+                        {this.state.newStatus === "2" && (
                           <option> Changing Status to Non-transferrable </option>
                         )}
-                        {this.state.newStatus === "53" && (
+                        {this.state.newStatus === "3" && (
                           <option> Changing Status to Stolen </option>
                         )}
-                        {this.state.newStatus === "54" && (
+                        {this.state.newStatus === "4" && (
                           <option> Changing Status to Lost </option>
                         )}
-                        {this.state.newStatus === "59" && (
+                        {this.state.newStatus === "9" && (
                           <option> Changing Status to Discardable </option>
                         )}
                       </optgroup>

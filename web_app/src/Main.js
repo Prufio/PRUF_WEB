@@ -723,6 +723,7 @@ class Main extends Component {
       if (this.state.menuChange !== undefined && this.state.runWatchDog === true) {
         console.log("7")
         window.menuChange = undefined
+
         if (isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
           this.setState({ routeRequest: "basicMobile" })
@@ -735,6 +736,10 @@ class Main extends Component {
             noAddrMenuBool: false,
             authorizedUserMenuBool: false
           })
+        }
+        
+        else{
+          this.setState({})
         }
       }
 

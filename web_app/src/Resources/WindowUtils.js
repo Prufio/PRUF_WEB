@@ -539,7 +539,7 @@ function buildWindowUtils() {
     let tempStat;
     console.log(status)
     if (status === "0") {
-      tempStat = "No Status"
+      tempStat = "Status Not Set"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -554,22 +554,22 @@ function buildWindowUtils() {
     }
 
     else if (status === "3") {
-      tempStat = "Stolen"
+      tempStat = "MARKED STOLEN"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "4") {
-      tempStat = "Lost"
+      tempStat = "MARKED LOST"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "5") {
-      tempStat = "Transferred"
+      tempStat = "Transferred/Unclaimed"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "6") {
-      tempStat = "Supervised Escrow"
+      tempStat = "In Supervised Escrow"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -1350,19 +1350,14 @@ function buildWindowUtils() {
                 noteArray.push("0")
               }
 
-              if (_result[0] === "50") { statuses.push("In Locked Escrow") }
-              else if (_result[0] === "51") { statuses.push("Transferrable") }
-              else if (_result[0] === "52") { statuses.push("Non-Transferrable") }
-              else if (_result[0] === "53") { statuses.push("MARKED STOLEN") }
-              else if (_result[0] === "54") { statuses.push("MARKED LOST") }
-              else if (_result[0] === "55") { statuses.push("Transferred/Unclaimed") }
-              else if (_result[0] === "56") { statuses.push("In Escrow") }
-              else if (_result[0] === "57") { statuses.push("Out of Supervised Escrow") }
-              else if (_result[0] === "58") { statuses.push("Imported") }
-              else if (_result[0] === "59") { statuses.push("Discardable") }
-              else if (_result[0] === "60") { statuses.push("Recyclable") }
-              else if (_result[0] === "70") { statuses.push("Exported") }
-              else if (_result[0] === "0") { statuses.push("Status Not Set") }
+              if (_result[0] === "0") { statuses.push("Status Not set") }
+              else if (_result[0] === "1") { statuses.push("Transferrable") }
+              else if (_result[0] === "2") { statuses.push("Non-Transferrable") }
+              else if (_result[0] === "3") { statuses.push("MARKED STOLEN") }
+              else if (_result[0] === "4") { statuses.push("MARKED LOST") }
+              else if (_result[0] === "5") { statuses.push("Transferred/Unclaimed") }
+              else if (_result[0] === "6") { statuses.push("In Supervised Escrow") }
+              else if (_result[0] === "7") { statuses.push("Out of Supervised Escrow")}
               statusNums.push(_result[0])
               assetClasses.push(Object.values(_result)[2]);
               countPairs.push([Object.values(_result)[3], Object.values(_result)[4]]);
