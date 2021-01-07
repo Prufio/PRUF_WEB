@@ -391,7 +391,7 @@ class EscrowManagerNC extends Component {
                       id="inlineFormCheck"
                       onChange={() => { input() }}
                     />
-                    <Form.Label className="checkBoxFormFont">Manual Input</Form.Label>
+                    <Form.Label className="checkBoxFormFont">Agent Access</Form.Label>
                     {this.state.input === true && (
                       <>
                         <Form.Group>
