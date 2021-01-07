@@ -40,7 +40,7 @@ class AddNote extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
 
-      await window.contracts.APP_NC.methods
+      await window.contracts.APP.methods
         .$addIpfs2Note(idxHash, ipfs2)
         .send({ from: window.addr })
         .on("error", function (_error) {
@@ -60,9 +60,7 @@ class AddNote extends Component {
           console.log(receipt.status);
           window.resetInfo = true;
           window.isInTx = false;
-          if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
+          
           //Stuff to do when tx confirms
         });
 
@@ -94,8 +92,8 @@ class AddNote extends Component {
           acDoesExist = await window.utils.checkForAC("name", AC);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ ACname: AC });
@@ -108,8 +106,8 @@ class AddNote extends Component {
           acDoesExist = await window.utils.checkForAC("id", AC);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ assetClass: AC });
@@ -163,13 +161,13 @@ class AddNote extends Component {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
-      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
+      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 6) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
       let resArray = window.utils.checkStats(window.sentPacket.idxHash, [6])
@@ -179,7 +177,7 @@ class AddNote extends Component {
       if (window.sentPacket.note !== "0") {
         alert("Note already enscribed on this asset! Cannot overwrite existing note.")
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
       this.setState({ name: window.sentPacket.name })
@@ -258,53 +256,6 @@ class AddNote extends Component {
       }
     }
 
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      if (e === "null" || e === undefined) {
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      document.getElementById("ipfs2File").value = null;
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [6, 0])
-
-      console.log(resArray)
-
-      if (Number(resArray[1]) === 3 || Number(resArray[1]) === 4 || Number(resArray[1]) === 53 || Number(resArray[1]) === 54) {
-        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
-      }
-
-      if (resArray[0] !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
-        this.setState({ alertBanner: "Note already enscribed on this asset! Cannot overwrite existing note." }); return clearForm()
-      }
-
-      if (Number(resArray[1]) === 50 || Number(resArray[1]) === 56) {
-        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" })
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        statusNum: window.assets.statusNums[e],
-        note: window.assets.notes[e]
-      })
-
-      this.setAC(window.assets.assetClasses[e])
-    }
 
     return (
       <div>
@@ -329,38 +280,6 @@ class AddNote extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {!this.state.wasSentPacket && (
-                    <>
-                      {this.state.transaction === false && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
-
-                        >
-                          {this.state.hasLoadedAssets && (
-                            <optgroup className="optgroup">
-                              {window.utils.generateAssets()}
-                            </optgroup>)}
-                          {!this.state.hasLoadedAssets && (
-                            <optgroup>
-                              <option value="null">
-                                Loading Assets...
-                           </option>
-                            </optgroup>)}
-                        </Form.Control>)}
-                      {this.state.transaction === true && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          disabled
-                        >
-                          <optgroup className="optgroup">
-                            <option>Modifying "{this.state.name}"</option>
-                          </optgroup>
-                        </Form.Control>)}
-                    </>
-                  )}
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
