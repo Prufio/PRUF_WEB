@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class TransferAC extends Component {
@@ -115,6 +117,9 @@ class TransferAC extends Component {
     }
 
     const _transferAssetClass = async () => {
+      if (!window.web3.utils.isAddress(this.state.to)) {
+        return this.setState({ alertBanner: "Please submit a valid Ethereum address." })
+      }
       this.setState({
         help: false,
         txStatus: false,
@@ -140,11 +145,12 @@ class TransferAC extends Component {
             txHash: Object.values(_error)[0].transactionHash,
             txStatus: false
           })
-          alert("Something went wrong!")
+          this.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
         .on("receipt", (receipt) => {
+          window.recount = true;
           window.resetInfo = true;
           self.setState({
             hasLoadedAssetClasses: false,
@@ -263,18 +269,23 @@ class TransferAC extends Component {
             </div>
           )}
         </Form>
-        {
-          this.state.transaction === false && !this.state.assetClassSelected && this.state.txHash === "" && (
-            <div className="assetSelectedResults">
-            </div>
-          )
+        {this.state.transaction === false && !this.state.assetClassSelected && this.state.txHash === "" && (
+          <div className="assetSelectedResults">
+          </div>
+        )
         }
-        {
-          this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
-            <div className="assetSelectedResults">
-              <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
-            </div>
-          )
+        {this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
+          <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+            <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+          </div>
+        )
         }
         {this.state.transaction === true && (
           <div className="results">

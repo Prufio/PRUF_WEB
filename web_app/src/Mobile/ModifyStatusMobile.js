@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, HelpCircle, CheckCircle } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class ModifyStatusMobile extends Component {
     constructor(props) {
@@ -49,32 +51,9 @@ class ModifyStatusMobile extends Component {
     componentDidMount() {//stuff to do when component mounts in window
         if (window.sentPacket !== undefined) {
             console.log(window.sentPacket.status)
-            if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-                alert("Cannot editRgtHash asset in lost or stolen status! Please change to editRgtHashrable status");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
 
             if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
-                alert("Cannot editRgtHash asset in escrow! Please wait until asset has met escrow conditions");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
-
-            if (Number(window.sentPacket.statusNum) === 58) {
-                alert("Cannot editRgtHash asset in imported status! please change to editRgtHashrable status");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
-
-            if (Number(window.sentPacket.statusNum) === 70) {
-                alert("Cannot editRgtHash asset in exported status! please import asset and change to editRgtHashrable status");
-                window.sentPacket = undefined;
-                return window.location.href = "/#/asset-dashboard-mobile"
-            }
-
-            if (Number(window.sentPacket.statusNum) !== 51) {
-                alert("Cannot editRgtHash asset in a status other than editRgtHashrable! please change asset to editRgtHashrable status");
+                alert("Cannot modify asset in escrow! Please wait until asset has met escrow conditions");
                 window.sentPacket = undefined;
                 return window.location.href = "/#/asset-dashboard-mobile"
             }
@@ -154,7 +133,11 @@ class ModifyStatusMobile extends Component {
 
 
             if (Number(resArray[1]) === 0) {
-                alert("Asset does not exist at given IDX"); return clearForm()
+                this.setState({ alertBanner: "Asset does not exist at given IDX" }); return clearForm()
+            }
+
+            if (Number(resArray[0]) === 6 || Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
+                this.setState({ alertBanner: "Cannot modify asset in escrow status, please end escrow." }); return clearForm()
             }
 
             this.setState({ selectedAsset: e })
@@ -192,6 +175,28 @@ class ModifyStatusMobile extends Component {
         }
 
         this.modifyStatus = async () => {
+            var idxHash = this.state.idxHash;
+
+            if (idxHash === undefined || idxHash === "null" || idxHash === "") {
+                return this.setState({ alertBanner: "Please select an asset from the dropdown." })
+            }
+
+            if (this.state.newStatus === "0") {
+                return this.setState({ alertBanner: "Please fill out all forms before submission." })
+            }
+
+            console.log("idxHash", idxHash);
+            console.log("addr: ", window.addr);
+            var NewStatusString = await window.utils.getStatusString(this.state.newStatus)
+            console.log("new stat string", NewStatusString);
+            console.log("old stat: ", this.state.status);
+
+            if (NewStatusString === this.state.status) {
+                this.setState({ alertBanner: "Asset already in selected Status! Ensure data fields are correct before submission." });
+                if (document.getElementById("MainForm") === null) { return }
+                document.getElementById("MainForm").reset();
+                return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
+            }
             this.setState({ help: false })
             const self = this;
 
@@ -200,20 +205,6 @@ class ModifyStatusMobile extends Component {
             this.setState({ error: undefined })
             this.setState({ result: "" })
             this.setState({ transaction: true })
-            var idxHash = this.state.idxHash;
-            if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
-            console.log("idxHash", idxHash);
-            console.log("addr: ", window.addr);
-            var NewStatusString = await window.utils.getStatusString(this.state.newStatus)
-            console.log("new stat string", NewStatusString);
-            console.log("old stat: ", this.state.status);
-
-            if (NewStatusString === this.state.status) {
-                alert("Asset already in selected Status! Ensure data fields are correct before submission.");
-                if (document.getElementById("MainForm") === null) { return }
-                document.getElementById("MainForm").reset();
-                return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", wasSentPacket: false, help: false })
-            }
 
             if (
                 this.state.newStatus !== "53" &&
@@ -231,7 +222,7 @@ class ModifyStatusMobile extends Component {
                         self.setState({ txHash: Object.values(_error)[0].transactionHash });
                         self.setState({ txStatus: false });
                         self.setState({ transaction: false, wasSentPacket: false });
-                        alert("Something went wrong!")
+                        self.setState({ alertBanner: "Something went wrong!" })
                         self.clearForm();
                         console.log(Object.values(_error)[0].transactionHash);
                     })
@@ -257,7 +248,7 @@ class ModifyStatusMobile extends Component {
                         self.setState({ transaction: false })
                         self.setState({ txHash: Object.values(_error)[0].transactionHash });
                         self.setState({ txStatus: false, wasSentPacket: false });
-                        alert("Something went wrong!")
+                        this.setState({ alertBanner: "Something went wrong!" })
                         self.clearForm();
                         console.log(Object.values(_error)[0].transactionHash);
                     })
@@ -274,7 +265,7 @@ class ModifyStatusMobile extends Component {
                     });
             }
 
-            else { alert("Invalid status input") }
+            else { this.setState({ alertBanner: "Invalid status input" }) }
 
             console.log(this.state.txHash);
             this.setState({
@@ -284,6 +275,7 @@ class ModifyStatusMobile extends Component {
 
         return (
             <div>
+            <div className="formMobileBack">
                 <div>
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -294,24 +286,24 @@ class ModifyStatusMobile extends Component {
                     </div>
                 </div>
                 <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-                {window.addr === undefined && (
-            <div className="resultsMobile">
-              <h2>User address unreachable</h2>
-              <h3>Please 
+                    {window.addr === undefined && (
+                        <div className="resultsMobile">
+                            <h2>User address unreachable</h2>
+                            <h3>Please
                 <a
-                    onClick={() => {
-                    this.setState({ userMenu: undefined })
-                    if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                                    onClick={() => {
+                                        this.setState({ userMenu: undefined })
+                                        if (window.ethereum) { window.ethereum.enable() }
+                                        else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                                    }
+                                    }
+                                    className="userDataLink">
+                                    click here
+                </a>
                   to enable Ethereum.
                   </h3>
-            </div>
-          )}
+                        </div>
+                    )}
                     {window.addr > 0 && (
                         <div>
                             <Form.Row>
@@ -462,6 +454,13 @@ class ModifyStatusMobile extends Component {
                 </Form>
                 {this.state.transaction === false && this.state.txStatus === false && (
                     <div className="assetSelectedResultsMobile">
+                        {this.state.alertBanner !== undefined && (
+                            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                                    {this.state.alertBanner}
+                                </Alert>
+                            </ClickAwayListener>
+                        )}
                         <Form.Row>
                             {this.state.idxHash !== "" && this.state.txHash === "" && (
                                 <Form.Group>
@@ -483,36 +482,43 @@ class ModifyStatusMobile extends Component {
                         {this.state.txHash > 0 && ( //conditional rendering
                             <div className="resultsMobile">
                                 {this.state.txStatus === false && (
-                                    <div className="transactionErrorTextMobile">
-                                        !ERROR! :
-                                        <a
-                                            className="transactionErrorTextMobile"
+                                    <Alert
+                                        className="alertFooterMobile"
+                                        variant="success">
+                                        Transaction failed!
+                                        <Alert.Link
+                                            className="alertLinkMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            TX Hash:{this.state.txHash}
-                                        </a>
-                                    </div>
+                                            CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+                                    </Alert>
                                 )}
+
                                 {this.state.txStatus === true && (
-                                    <div className="transactionErrorTextMobile">
-                                        {" "}
-                No Errors Reported :
-                                        <a
-                                            className="transactionErrorTextMobile"
+                                    <Alert
+                                        className="alertFooterMobile"
+                                        variant="success">
+                                        Transaction success!
+                                        <Alert.Link
+                                            className="alertLinkMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            TX Hash:{this.state.txHash}
-                                        </a>
-                                    </div>
+                                            CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                                    </Alert>
                                 )}
                             </div>
                         )}
                     </div>
                 )}
+                </div>
             </div>
         );
     }

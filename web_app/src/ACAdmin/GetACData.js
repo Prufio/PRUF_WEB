@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class GetACData extends Component {
   constructor(props) {
@@ -88,7 +90,8 @@ class GetACData extends Component {
     const getAC_data = async () => {
       this.setState({
         txHash: "",
-        txStatus: false
+        txStatus: false,
+        ACData: undefined
       })
       if (this.state.assetClass === undefined || this.state.assetClass === null) { return }
       let ref;
@@ -110,7 +113,7 @@ class GetACData extends Component {
         });
         console.log(tempData);
       }
-      else { alert("Asset class does not exist!") }
+      else { this.setState({ alertBanner: "Asset class does not exist!" }) }
     };
 
     return (
@@ -170,6 +173,13 @@ class GetACData extends Component {
         </Form>
 
         <div className="resultsAC">
+        {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {this.state.ACData !== undefined && (
             <div>
               Asset Class Found!

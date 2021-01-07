@@ -4,6 +4,8 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Home, XSquare, ArrowRightCircle, Camera, Tag, HelpCircle, AlertOctagon, CameraOff, UploadCloud } from "react-feather";
 import QrReader from 'react-qr-reader'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class RecycleMobile extends Component {
   constructor(props) {
@@ -14,12 +16,13 @@ class RecycleMobile extends Component {
     this.accessAsset = async () => {
       this.setState({ help: false, txHash: "", txStatus: false })
       let idxHash;
+
       if (this.state.QRreader === false && this.state.Checkbox === false) {
         if (this.state.manufacturer === ""
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
-          return alert("Please fill out all fields before submission")
+          return this.setState({ alertBanner: "Please fill out all fields before submission" })
         }
 
         else if (!this.state.Checkbox) {
@@ -46,14 +49,14 @@ class RecycleMobile extends Component {
 
 
       if (Number(resArray[1]) === 0) {
-        alert("Asset does not exist at given IDX");
-        this.setState({
-          idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
+        return this.setState({
+          idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, Checkbox: false, wasSentPacket: false, help: false
         })
       }
 
       if (Number(resArray[0]) !== 60) {
-        alert("Asset not in recyclable status");
+        this.setState({ alertBanner: "Asset not in recyclable status" });
         this.setState({
           idxHash: "", transaction: false, txStatus: false, txHash: "", accessPermitted: false, assetClassSelected: false, Checkbox: false, wasSentPacket: false, help: false
         })
@@ -161,9 +164,9 @@ class RecycleMobile extends Component {
     const _setAC = async () => {
       let acDoesExist;
       let destinationACData;
-      this.setState({txHash: ""})
+      this.setState({ txHash: "" })
 
-      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === "") { return this.setState({ alertBanner: "Selected AC Cannot be Zero" }) }
       else {
         if (
           isNaN(this.state.selectedAssetClass)
@@ -172,8 +175,8 @@ class RecycleMobile extends Component {
           destinationACData = await window.utils.getACData("name", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({ alertBanner: "Asset class does not currently exist." })
           }
 
           this.setState({ ACname: this.state.selectedAssetClass });
@@ -185,8 +188,8 @@ class RecycleMobile extends Component {
           acDoesExist = await window.utils.checkForAC("id", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({ alertBanner: "Asset class does not currently exist." })
           }
 
           this.setState({ assetClass: this.state.selectedAssetClass });
@@ -250,10 +253,10 @@ class RecycleMobile extends Component {
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
-        this.setState({ Checkbox: true })
+        this.setState({ Checkbox: true, idxHashRaw: "" })
       }
       else {
-        this.setState({ Checkbox: false })
+        this.setState({ Checkbox: false, idxHashRaw: "" })
       }
     }
 
@@ -265,7 +268,7 @@ class RecycleMobile extends Component {
         this.state.surname === "" ||
         this.state.id === "" ||
         this.state.secret === ""
-      ) { return alert("Please fill out all forms") }
+      ) { return this.setState({ alertBanner: "Please fill out all forms" }) }
 
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
@@ -307,7 +310,7 @@ class RecycleMobile extends Component {
           QRreader: false
         })
         this.clearForm()
-        return alert("Import destination AC must have same root as previous AC")
+        return this.setState({ alertBanner: "Import destination AC must have same root as previous AC" })
       }
 
       let rgtHash;
@@ -336,7 +339,7 @@ class RecycleMobile extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          this.setState({ alertBanner: "Something went wrong!" })
           this.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -362,6 +365,7 @@ class RecycleMobile extends Component {
 
     return (
       <div>
+      <div className="formMobileBack">
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
@@ -374,20 +378,20 @@ class RecycleMobile extends Component {
           </div>
         )}
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-        {window.addr === undefined && (
+          {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                  }
+                  }
+                  className="userDataLink">
+                  click here
+                </a>
                   to enable Ethereum.
                   </h3>
             </div>
@@ -421,6 +425,7 @@ class RecycleMobile extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
+                      checked={this.state.Checkbox}
                       className="checkBoxMobile"
                       id="inlineFormCheck"
                       onChange={() => { Checkbox() }}
@@ -685,6 +690,13 @@ class RecycleMobile extends Component {
         </Form>
         {this.state.transaction === false && this.state.txStatus === false && this.state.QRreader === false && (
           <div className="assetSelectedResultsMobile">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
@@ -703,37 +715,44 @@ class RecycleMobile extends Component {
           <div>
             {this.state.txHash > 0 && ( //conditional rendering
               <div className="resultsMobile">
-                {this.state.txStatus === false && (
-                  <div className="transactionErrorTextMobile">
-                    !ERROR! :
-                    <a
-                      className="transactionErrorTextMobile"
-                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
-                )}
-                {this.state.txStatus === true && (
-                  <div className="transactionErrorTextMobile">
-                    {" "}
-            No Errors Reported :
-                    <a
-                      className="transactionErrorTextMobile"
-                      href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      TX Hash:{this.state.txHash}
-                    </a>
-                  </div>
-                )}
+                            {this.state.txStatus === false && (
+              <Alert
+                className="alertFooterMobile"
+                variant="success">
+                Transaction failed!
+                <Alert.Link
+                  className="alertLinkMobile"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
+            )}
+
+            {this.state.txStatus === true && (
+              <Alert
+                className="alertFooterMobile"
+                variant="success">
+                Transaction success!
+                <Alert.Link
+                  className="alertLinkMobile"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+              </Alert>
+            )}
               </div>
             )}
           </div>
         )}
+        </div>
       </div>
     );
   }

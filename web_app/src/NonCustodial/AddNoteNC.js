@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import bs58 from "bs58";
+import Alert from "react-bootstrap/Alert";
 import { CheckCircle, Home, XSquare, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class AddNoteNC extends Component {
@@ -12,17 +14,17 @@ class AddNoteNC extends Component {
     //State declaration.....................................................................................................
 
     this.clearForm = async () => {
-      if(document.getElementById("MainForm") === null){return}
+      if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
       this.setState({ idxHash: undefined, txStatus: false, txHash: "", wasSentPacket: false, help: false })
     }
 
     this.setInscription = async () => {
-      this.setState({help: false})
-      if(this.state.hashPath === "" || this.state.idxHash === undefined){
-        this.setState({hashPath: "", idxHash: undefined}); 
+      this.setState({ help: false })
+      if (this.state.hashPath === "" || this.state.idxHash === undefined) {
+        this.setState({ hashPath: "", idxHash: undefined });
         return this.clearForm()
-      } 
+      }
       const self = this;
       window.isInTx = true;
 
@@ -45,8 +47,8 @@ class AddNoteNC extends Component {
           // self.setState({ NRerror: _error });
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
-          self.setState({ txStatus: false});
-          alert("Something went wrong!")
+          self.setState({ txStatus: false });
+          this.setState({ alertBanner: "Something went wrong!" })
           self.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
@@ -84,7 +86,7 @@ class AddNoteNC extends Component {
     this.setAC = async (AC) => {
       let acDoesExist;
 
-      if (AC === "0" || AC === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (AC === "0" || AC === undefined) { return this.setState({ alertBanner: "Selected AC Cannot be Zero" }) }
       else {
         if (
           isNaN(AC)
@@ -214,7 +216,7 @@ class AddNoteNC extends Component {
     };
 
     const publishIPFS2Photo = async () => {
-      this.setState({help: false})
+      this.setState({ help: false })
 
       this.setState({ transaction: true })
       if (document.getElementById("ipfs2File").files[0] !== undefined && this.state.idxHash !== undefined) {
@@ -237,7 +239,14 @@ class AddNoteNC extends Component {
           });
         }
       }
-      else { if (document.getElementById("ipfs2File").files[0] === undefined) alert("No file chosen for upload!"); else { alert("Select an asset to modify!") } }
+      else {
+        if (document.getElementById("ipfs2File").files[0] === undefined) {
+          this.setState({ alertBanner: "No file chosen for upload!" });
+        }
+        else {
+          this.setState({ alertBanner: "Select an asset to modify!" })
+        }
+      }
     };
 
     const help = async () => {
@@ -250,7 +259,7 @@ class AddNoteNC extends Component {
     }
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -268,15 +277,15 @@ class AddNoteNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 3 || Number(resArray[1]) === 4 || Number(resArray[1]) === 53 || Number(resArray[1]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
       }
 
       if (resArray[0] !== "0x0000000000000000000000000000000000000000000000000000000000000000") {
-        alert("Note already enscribed on this asset! Cannot overwrite existing note."); return clearForm()
+        this.setState({ alertBanner: "Note already enscribed on this asset! Cannot overwrite existing note." }); return clearForm()
       }
 
       if (Number(resArray[1]) === 50 || Number(resArray[1]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions")
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" })
       }
 
       this.setState({ selectedAsset: e })
@@ -315,43 +324,43 @@ class AddNoteNC extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {window.addr > 0 &&(
+          {window.addr > 0 && (
             <div>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
                   {!this.state.wasSentPacket && (
-                        <>
-                          {this.state.transaction === false && (
-                            <Form.Control
-                              as="select"
-                              size="lg"
-                              onChange={(e) => { _checkIn(e.target.value) }}
+                    <>
+                      {this.state.transaction === false && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          onChange={(e) => { _checkIn(e.target.value) }}
 
-                            >
-                              {this.state.hasLoadedAssets && (
-                                <optgroup className="optgroup">
-                                  {window.utils.generateAssets()}
-                                </optgroup>)}
-                              {!this.state.hasLoadedAssets && (
-                                <optgroup>
-                                  <option value="null">
-                                    Loading Assets...
+                        >
+                          {this.state.hasLoadedAssets && (
+                            <optgroup className="optgroup">
+                              {window.utils.generateAssets()}
+                            </optgroup>)}
+                          {!this.state.hasLoadedAssets && (
+                            <optgroup>
+                              <option value="null">
+                                Loading Assets...
                            </option>
-                                </optgroup>)}
-                            </Form.Control>)}
-                          {this.state.transaction === true && (
-                            <Form.Control
-                              as="select"
-                              size="lg"
-                              disabled
-                            >
-                              <optgroup className="optgroup">
-                                <option>Modifying "{this.state.name}"</option>
-                              </optgroup>
-                            </Form.Control>)}
-                        </>
-                      )}
+                            </optgroup>)}
+                        </Form.Control>)}
+                      {this.state.transaction === true && (
+                        <Form.Control
+                          as="select"
+                          size="lg"
+                          disabled
+                        >
+                          <optgroup className="optgroup">
+                            <option>Modifying "{this.state.name}"</option>
+                          </optgroup>
+                        </Form.Control>)}
+                    </>
+                  )}
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
@@ -370,42 +379,42 @@ class AddNoteNC extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridIpfs2File">
                   {this.state.transaction === false && (
-                  <Form.File onChange={(e) => this.setState({ hashPath: "" })} size="lg" className="btn2" id="ipfs2File" />
+                    <Form.File onChange={(e) => this.setState({ hashPath: "" })} size="lg" className="btn2" id="ipfs2File" />
                   )}
                   {this.state.transaction === true && (
-                  <Form.File disabled size="lg" className="btn2" id="ipfs2File"/>
+                    <Form.File disabled size="lg" className="btn2" id="ipfs2File" />
                   )}
                 </Form.Group>
               </Form.Row>
 
               {this.state.hashPath === "" && this.state.transaction === false && (
                 <>
-                <Form.Row>
-                  <div>
-                    {this.state.assetClass !== undefined && (
-                      <Form.Label className="costText"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNote) / 1000000000000000000} PRüF</Form.Label >
-                    )}
-                    <div className="submitButton">
-                      <div className="submitButtonContent">
-                        <CheckCircle
-                          onClick={() => { publishIPFS2Photo() }}
-                        />
+                  <Form.Row>
+                    <div>
+                      {this.state.assetClass !== undefined && (
+                        <Form.Label className="costText"> Cost To Add Note in AC {this.state.assetClass}: {Number(window.costs.createNote) / 1000000000000000000} PRüF</Form.Label >
+                      )}
+                      <div className="submitButton">
+                        <div className="submitButtonContent">
+                          <CheckCircle
+                            onClick={() => { publishIPFS2Photo() }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="mediaLinkHelp">
+                    <div className="mediaLinkHelp">
                       <div className="mediaLinkHelpContent2">
                         <AlertTriangle
                           onClick={() => { help() }}
                         />
                       </div>
                     </div>
-                </Form.Row>
-                {this.state.help === true && (
+                  </Form.Row>
+                  {this.state.help === true && (
                     <div className="explainerTextBox2">
-                    Add Note allows users to permanently pair a file to an asset. Information given within this versionof the web 
-                    application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
-                    identifying data unless it is the intention of the user to make this data public.
+                      Add Note allows users to permanently pair a file to an asset. Information given within this versionof the web
+                      application may be visible to third parties if unencrypted. These data fields should not include sensitive or personally
+                      identifying data unless it is the intention of the user to make this data public.
                     </div>
                   )}
                 </>
@@ -415,6 +424,13 @@ class AddNoteNC extends Component {
         </Form>
         {this.state.transaction === false && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
                 <Form.Group>
@@ -431,34 +447,41 @@ class AddNoteNC extends Component {
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
-        {this.state.txHash > 0 && ( //conditional rendering
+          {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
+
             {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+              <Alert
+              className="alertFooter"
+              variant = "success">
+                Transaction failed!
+                  <Alert.Link
+                  className="alertLink"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
               )}
+
               {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
-                No Errors Reported :
-                  <a
-                  className="transactionErrorText"
+                <Alert
+                className="alertFooter"
+                variant = "success">
+                  Transaction success!
+                    <Alert.Link
+                    className="alertLink"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+                    CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                </Alert>
               )}
           </div>
         )}

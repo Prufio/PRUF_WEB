@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class ExportAssetNC extends Component {
@@ -82,7 +84,7 @@ class ExportAssetNC extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -98,7 +100,7 @@ class ExportAssetNC extends Component {
       console.log(resArray)
 
       if (Number(resArray[0]) !== 51) {
-        alert("Cannot export asset in non-transferrable status"); return clearForm()
+        this.setState({ alertBanner: "Cannot export asset in non-transferrable status" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -130,13 +132,14 @@ class ExportAssetNC extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _exportAsset = async () => {//create a new asset record
-      this.setState({help: false})
+      if (idxHash === "null" || idxHash === "" || idxHash === undefined) { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
+      this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
@@ -144,7 +147,6 @@ class ExportAssetNC extends Component {
       this.setState({ transaction: true })
       //reset state values before form resubmission
       var idxHash = this.state.idxHash;
-      if(idxHash === "null" || idxHash === "" || idxHash === undefined){return alert("Please select an asset from the dropdown")}
       console.log("idxHash", idxHash);
       console.log("addr: ", this.state.agentAddress);
 
@@ -158,7 +160,7 @@ class ExportAssetNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -279,6 +281,13 @@ class ExportAssetNC extends Component {
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && (
                 <Form.Group>
@@ -295,34 +304,41 @@ class ExportAssetNC extends Component {
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
-        {this.state.txHash > 0 && ( //conditional rendering
+          {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
+
             {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+              <Alert
+              className="alertFooter"
+              variant = "success">
+                Transaction failed!
+                  <Alert.Link
+                  className="alertLink"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
               )}
+
               {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
-                No Errors Reported :
-                  <a
-                  className="transactionErrorText"
+                <Alert
+                className="alertFooter"
+                variant = "success">
+                  Transaction success!
+                    <Alert.Link
+                    className="alertLink"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+                    CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                </Alert>
               )}
           </div>
         )}

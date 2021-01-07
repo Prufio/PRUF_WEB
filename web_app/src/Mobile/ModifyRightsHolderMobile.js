@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, HelpCircle, CheckCircle } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
+
 
 class ModifyRightsHolderMobile extends Component {
     constructor(props) {
@@ -154,11 +157,11 @@ class ModifyRightsHolderMobile extends Component {
 
 
             if (Number(resArray[1]) === 0) {
-                alert("Asset does not exist at given IDX"); return clearForm()
+                this.setState({ alertBanner: "Asset does not exist at given IDX" }); return clearForm()
             }
 
             if (Number(resArray[0]) !== 51) {
-                alert("Asset not in editRgtHashrable status"); return clearForm()
+                this.setState({ alertBanner: "Cannot edit rightsholder information while in non-transferable status." }); return clearForm()
             }
 
             this.setState({ selectedAsset: e })
@@ -204,7 +207,7 @@ class ModifyRightsHolderMobile extends Component {
             this.setState({ transaction: true })
             var idxHash = this.state.idxHash;
             var newRgtRaw;
-            if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
+            if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
             newRgtRaw = window.web3.utils.soliditySha3(
                 String(this.state.first).replace(/\s/g, ''),
                 String(this.state.middle).replace(/\s/g, ''),
@@ -227,7 +230,7 @@ class ModifyRightsHolderMobile extends Component {
                     self.setState({ transaction: false })
                     self.setState({ txHash: Object.values(_error)[0].transactionHash });
                     self.setState({ txStatus: false });
-                    alert("Something went wrong!")
+                    this.setState({ alertBanner: "Something went wrong!" })
                     clearForm();
                     console.log(Object.values(_error)[0].transactionHash);
                 })
@@ -248,6 +251,7 @@ class ModifyRightsHolderMobile extends Component {
 
         return (
             <div>
+                <div className="formMobileBack">
                 <div>
                     <div className="mediaLinkADHome">
                         <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -258,24 +262,24 @@ class ModifyRightsHolderMobile extends Component {
                     </div>
                 </div>
                 <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-                {window.addr === undefined && (
-            <div className="resultsMobile">
-              <h2>User address unreachable</h2>
-              <h3>Please 
+                    {window.addr === undefined && (
+                        <div className="resultsMobile">
+                            <h2>User address unreachable</h2>
+                            <h3>Please
                 <a
-                    onClick={() => {
-                    this.setState({ userMenu: undefined })
-                    if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                                    onClick={() => {
+                                        this.setState({ userMenu: undefined })
+                                        if (window.ethereum) { window.ethereum.enable() }
+                                        else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                                    }
+                                    }
+                                    className="userDataLink">
+                                    click here
+                </a>
                   to enable Ethereum.
                   </h3>
-            </div>
-          )}
+                        </div>
+                    )}
                     {window.addr > 0 && (
                         <div>
                             <Form.Row>
@@ -476,6 +480,13 @@ class ModifyRightsHolderMobile extends Component {
                 </Form>
                 {this.state.transaction === false && this.state.txStatus === false && (
                     <div className="assetSelectedResultsMobile">
+                        {this.state.alertBanner !== undefined && (
+                            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                                    {this.state.alertBanner}
+                                </Alert>
+                            </ClickAwayListener>
+                        )}
                         <Form.Row>
                             {this.state.idxHash !== "" && this.state.txHash === "" && (
                                 <Form.Group>
@@ -497,36 +508,43 @@ class ModifyRightsHolderMobile extends Component {
                         {this.state.txHash > 0 && ( //conditional rendering
                             <div className="resultsMobile">
                                 {this.state.txStatus === false && (
-                                    <div className="transactionErrorTextMobile">
-                                        !ERROR! :
-                                        <a
-                                            className="transactionErrorTextMobile"
+                                    <Alert
+                                        className="alertFooterMobile"
+                                        variant="success">
+                                        Transaction failed!
+                                        <Alert.Link
+                                            className="alertLinkMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            TX Hash:{this.state.txHash}
-                                        </a>
-                                    </div>
+                                            CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+                                    </Alert>
                                 )}
+
                                 {this.state.txStatus === true && (
-                                    <div className="transactionErrorTextMobile">
-                                        {" "}
-                No Errors Reported :
-                                        <a
-                                            className="transactionErrorTextMobile"
+                                    <Alert
+                                        className="alertFooterMobile"
+                                        variant="success">
+                                        Transaction success!
+                                        <Alert.Link
+                                            className="alertLinkMobile"
                                             href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            TX Hash:{this.state.txHash}
-                                        </a>
-                                    </div>
+                                            CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                                    </Alert>
                                 )}
                             </div>
                         )}
                     </div>
                 )}
+                </div>
             </div>
         );
     }

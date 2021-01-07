@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, CheckCircle, XSquare, AlertTriangle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class ModifyRightsHolder extends Component {
   constructor(props) {
@@ -58,7 +60,7 @@ class ModifyRightsHolder extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
-        alert("Cannot edit asset in lost or stolen status");
+        alert("Cannot edit asset in lost or stolen status" );
         window.sentPacket = undefined;
         return window.location.href = "/#/asset-dashboard"
       }
@@ -106,10 +108,10 @@ class ModifyRightsHolder extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _checkIn = async (e) => {
       this.setState({ help: false, txHash: "", txStatus: false })
@@ -128,15 +130,15 @@ class ModifyRightsHolder extends Component {
       console.log(resArray)
 
       if (Number(resArray[1]) === 0) {
-        alert("Asset does not exist at given IDX");
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
       }
 
       if (Number(resArray[0]) === 3 || Number(resArray[0]) === 4 || Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -155,16 +157,17 @@ class ModifyRightsHolder extends Component {
     }
 
     const _editRgtHash = async () => {
+      var idxHash = this.state.idxHash;
+      var newRgtRaw;
+      if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
       this.setState({ help: false })
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ result: "" })
       this.setState({ transaction: true })
-      var idxHash = this.state.idxHash;
-      var newRgtRaw;
 
-      if(idxHash === undefined || idxHash === "null" || idxHash === ""){return alert("Please select an asset from the dropdown")}
+
 
       newRgtRaw = window.web3.utils.soliditySha3(
         String(this.state.first).replace(/\s/g, ''),
@@ -188,7 +191,7 @@ class ModifyRightsHolder extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -405,10 +408,17 @@ class ModifyRightsHolder extends Component {
             </div>
           )}
         </Form>
-        {this.state.transaction === false && this.state.txHash === "" && (
+        {this.state.transaction === false && this.state.txStatus === false && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
-              {this.state.idxHash !== undefined && (
+              {this.state.idxHash !== undefined && this.state.txHash === false && (
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
@@ -423,34 +433,41 @@ class ModifyRightsHolder extends Component {
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
-        {this.state.txHash > 0 && ( //conditional rendering
+          {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
+
             {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+              <Alert
+              className="alertFooter"
+              variant = "success">
+                Transaction failed!
+                  <Alert.Link
+                  className="alertLink"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
               )}
+
               {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
-                No Errors Reported :
-                  <a
-                  className="transactionErrorText"
+                <Alert
+                className="alertFooter"
+                variant = "success">
+                  Transaction success!
+                    <Alert.Link
+                    className="alertLink"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+                    CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                </Alert>
               )}
           </div>
         )}

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 
 class ExportMobile extends Component {
@@ -50,7 +52,7 @@ class ExportMobile extends Component {
     if (window.sentPacket !== undefined) {
       console.log("stat", window.sentPacket.status)
       if (Number(window.sentPacket.statusNum) !== 51) {
-        alert("Asset is not set to transferrable! Owner must set the status to transferrable before export.");
+        alert("Asset is not set to transferrable! Please set the status to transferrable before export.");
         window.sentpacket = undefined;
         return window.location.href = "/#/asset-dashboard-mobile"
       }
@@ -82,7 +84,7 @@ class ExportMobile extends Component {
     const self = this;
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       if (e === "null" || e === undefined) {
         return clearForm()
       }
@@ -98,7 +100,7 @@ class ExportMobile extends Component {
       console.log(resArray)
 
       if (Number(resArray[0]) !== 51) {
-        alert("Cannot export asset in non-transferrable status"); return clearForm()
+        this.setState({ alertBanner: "Cannot export asset in non-transferrable status" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -130,10 +132,10 @@ class ExportMobile extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _exportAsset = async () => {//create a new asset record
       this.setState({ help: false })
@@ -157,7 +159,7 @@ class ExportMobile extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -176,6 +178,7 @@ class ExportMobile extends Component {
 
     return (//default render
       <div>
+      <div className="formMobileBack">
         <div>
           <div className="mediaLinkADHome">
             <a className="mediaLinkContentADHomeMobile" ><Home onClick={() => { window.location.href = '/#/' }} /></a>
@@ -186,20 +189,20 @@ class ExportMobile extends Component {
           </div>
         </div>
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-        {window.addr === undefined && (
+          {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                  }
+                  }
+                  className="userDataLink">
+                  click here
+                </a>
                   to enable Ethereum.
                   </h3>
             </div>
@@ -236,7 +239,7 @@ class ExportMobile extends Component {
                           disabled
                         >
                           <optgroup className="optgroup">
-                            <option>Exporting "{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}"</option>
+                            <option>Exporting "{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}"</option>
                           </optgroup>
                         </Form.Control>)}
                     </>
@@ -290,10 +293,17 @@ class ExportMobile extends Component {
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResultsMobile">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && (
                 <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0,18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
+                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContentMobile">{this.state.idxHash.substring(0, 18) + "..." + this.state.idxHash.substring(48, 66)}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContentMobile">{this.state.name}</span> </div>
                   <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContentMobile">{this.state.assetClass}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContentMobile">{this.state.status}</span> </div>
@@ -309,34 +319,41 @@ class ExportMobile extends Component {
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="resultsMobile">
             {this.state.txStatus === false && (
-                <div className="transactionErrorTextMobile">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
-              {this.state.txStatus === true && (
-                <div className="transactionErrorTextMobile">
-                  {" "}
-                No Errors Reported :
-                  <a
-                  className="transactionErrorTextMobile"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
-              )}
+              <Alert
+                className="alertFooterMobile"
+                variant="success">
+                Transaction failed!
+                <Alert.Link
+                  className="alertLinkMobile"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
+            )}
+
+            {this.state.txStatus === true && (
+              <Alert
+                className="alertFooterMobile"
+                variant="success">
+                Transaction success!
+                <Alert.Link
+                  className="alertLinkMobile"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+              </Alert>
+            )}
           </div>
         )}
+        </div>
       </div>
     );
   }

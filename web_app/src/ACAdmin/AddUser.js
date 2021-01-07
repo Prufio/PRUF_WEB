@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class AddUser extends Component {
@@ -118,8 +120,8 @@ class AddUser extends Component {
 
     const addUser = () => {
 
+      if (Number(this.state.userType) < 1) { return this.setState({ alertBanner: "Please select a user type from the dropdown." }) }
       this.setState({ transaction: true })
-      if (Number(this.state.userType) < 1) { return alert("Please select a user type from the dropdown") }
       window.contracts.AC_MGR.methods
         .addUser(
           window.web3.utils.soliditySha3(this.state.authAddr),
@@ -156,7 +158,6 @@ class AddUser extends Component {
         assetClass: undefined,
         assetClassSelected: false,
         help: false,
-        transaction: false
       })
     };
 
@@ -330,6 +331,13 @@ class AddUser extends Component {
         {
           this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
             <div className="assetSelectedResults">
+              {this.state.alertBanner !== undefined && (
+                <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                  <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                    {this.state.alertBanner}
+                  </Alert>
+                </ClickAwayListener>
+              )}
               <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
             </div>
           )

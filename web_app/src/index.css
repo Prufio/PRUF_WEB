@@ -117,6 +117,10 @@ div {
   color: rgb(255, 255, 255);
 }
 
+.shareMenu{
+  position: absolute !important;
+}
+
 .headerFormContent a::before {
   content: "";
   position: absolute;
@@ -191,6 +195,54 @@ div {
   z-index: 3;
 }
 
+.alertBanner {
+  font-size: 1.2rem;
+  height: fit-content;
+  width: 55rem;
+}
+
+.alertBannerMobile {
+  font-size: 1.2rem;
+  height: fit-content;
+  width: 322px;
+}
+
+.alertBannerADMobile {
+  font-size: 1.5rem;
+  height: fit-content;
+  width: 340px;
+}
+
+.msgBanner {
+  font-size: 1.2rem;
+  height: fit-content;
+  width: 68rem;
+}
+
+.alertFooter {
+  font-size: 1.2rem;
+  width: 54rem;
+  flex-direction: row;
+}
+
+.alertLink {
+  font-size: 1.2rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+.alertFooterMobile {
+  font-size: 1.2rem;
+  width: 340px;
+  flex-direction: row;
+}
+
+.alertLinkMobile {
+  font-size: 1.2rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
 .homeForm {
   height: 40rem;
   width: 75rem;
@@ -252,7 +304,7 @@ div {
 }
 
 .homeDisclaimer {
-  height: 12rem;
+  height: 11rem;
   width: 70rem;
   color: rgb(2, 0, 22);
   display: flex;
@@ -547,6 +599,15 @@ div {
   font-size: x-large;
 }
 
+.formMobileBack {
+  height: 60rem;
+  width: 360px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
 .formMobile {
   height: flex;
   width: 360px;
@@ -585,6 +646,7 @@ div {
   height: flex;
   max-height: 30rem;
   overflow-y: auto;
+  flex-direction: column;
   width: 59rem;
   color: white;
   background-color: #002a40;
@@ -609,6 +671,7 @@ div {
   margin-top: -0.2rem;
   justify-content: flex-start;
   align-items: flex-start;
+  flex-direction: column;
 }
 
 .assetSelectedContentHead {
@@ -1373,7 +1436,7 @@ div {
 .checkBox {
   color: white;
   font-size: 2rem;
-  margin-top: -2rem;
+  margin-top: -1.8rem;
 }
 
 .checkBox2 {
@@ -1386,8 +1449,8 @@ div {
 .checkBoxParticles {
   color: white;
   font-size: 2rem;
-  margin-top: -1rem;
-  margin-right: 6rem;
+  margin-top: -.74rem;
+  margin-right: 5.40rem;
 }
 
       /* -----------------------VVV----------------------Misc-------------------------VVV----------------------- */
@@ -1733,7 +1796,7 @@ margin-bottom: -3rem;
   font-size: 1.5rem;
   color: rgb(255, 255, 255);
   font-family: Tahoma, Geneva, sans-serif;
-  margin-top: -2.6rem;
+  margin-top: -2.5rem;
   margin-left: 2.5rem;
 }
 
@@ -2371,6 +2434,14 @@ margin-bottom: -3rem;
   color: white;
   z-index: 999;
 }
+
+.cardAddrPrint {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 7rem;
+  color: white;
+  z-index: 999;
+}
       
 .cardNamePrint {
   font-weight: bold;
@@ -2391,7 +2462,7 @@ margin-bottom: -3rem;
   font-size: 2rem;
   font-weight: bold;
   margin-top: 30rem;
-  margin-left: 9.5rem;
+  margin-left: 8.5rem;
   color: white;
   z-index: 999;
   position: absolute;

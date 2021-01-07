@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, ArrowRightCircle, UploadCloud, Camera, CameraOff, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class DeepVerifyMobile extends Component {
   constructor(props) {
@@ -10,14 +12,14 @@ class DeepVerifyMobile extends Component {
 
 
     this.accessAsset = async () => {
-      this.setState({txHash: "", txStatus: false})
+      this.setState({ txHash: "", txStatus: false })
       let idxHash;
       if (this.state.QRreader === false && this.state.Checkbox === false) {
         if (this.state.manufacturer === ""
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
-          return alert("Please fill out all forms before submission")
+          return this.setState({ alertBanner: "Please fill out all forms before submission" })
         }
         idxHash = window.web3.utils.soliditySha3(
           String(this.state.type).replace(/\s/g, ''),
@@ -37,19 +39,18 @@ class DeepVerifyMobile extends Component {
 
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
       let tempObj = await window.utils.checkAssetExists(idxHash)
-      
+      if (!doesExist) {
+        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
+        return this.setState({ alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission." })
+      }
+
       let infoArr, acName, tempStatus;
       infoArr = Object.values(tempObj.obj);
       acName = await window.utils.getACName(infoArr[2])
       tempStatus = await window.utils.getStatusString(String(infoArr[0]))
 
-      if (!doesExist) {
-        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
-      }
 
       console.log("idxHash", idxHash);
-      // console.log("rgtHash", rgtHash);
 
       return this.setState({
         idxHash: idxHash,
@@ -158,14 +159,14 @@ class DeepVerifyMobile extends Component {
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
-        this.setState({ Checkbox: true })
+        this.setState({ Checkbox: true, idxHashRaw: "" })
       }
       else {
-        this.setState({ Checkbox: false })
+        this.setState({ Checkbox: false, idxHashRaw: "" })
       }
     }
 
-    
+
     const previewStyle = {
       height: 240,
       width: 320,
@@ -205,14 +206,6 @@ class DeepVerifyMobile extends Component {
 
       var idxHash = this.state.idxHash;
 
-      // if(this.state.idxHashRaw !== undefined && this.state.idxHash === undefined){
-      //   idxHash = this.state.idxHashRaw;
-      // }
-      // else if (this.state.idxHashRaw === undefined && this.state.idxHash !== undefined){
-      //   idxHash = this.state.idxHash;
-      // }
-      // else{clearForm(); return alert("Multiple values for idxHash found. Clearing form.")}
-
       console.log(idxHash)
       let rgtRaw = window.web3.utils.soliditySha3(
         String(this.state.first).replace(/\s/g, ''),
@@ -237,7 +230,7 @@ class DeepVerifyMobile extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
           window.isInTx = false;
@@ -255,6 +248,7 @@ class DeepVerifyMobile extends Component {
 
     return (
       <div>
+      <div className="formMobileBack">
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
@@ -267,31 +261,32 @@ class DeepVerifyMobile extends Component {
           </div>
         )}
         <Form className="formMobile" id='MainForm' onSubmit={submitHandler}>
-        {window.addr === undefined && (
+          {window.addr === undefined && (
             <div className="resultsMobile">
               <h2>User address unreachable</h2>
-              <h3>Please 
+              <h3>Please
                 <a
-                    onClick={() => {
+                  onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                    }
-                    }
-                    className="userDataLink">
-                    click here
-                </a> 
+                    else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                  }
+                  }
+                  className="userDataLink">
+                  click here
+                </a>
                   to enable Ethereum.
                   </h3>
             </div>
           )}
-            {window.addr > 0 && (
-              <div>
+          {window.addr > 0 && (
+            <div>
 
               {this.state.QRreader === false && !this.state.accessPermitted && (
                 <div>
                   <Form.Check
                     type="checkbox"
+                    checked={this.state.Checkbox}
                     className="checkBoxMobile"
                     id="inlineFormCheck"
                     onChange={() => { Checkbox() }}
@@ -310,7 +305,7 @@ class DeepVerifyMobile extends Component {
                   )}
                 </div>
               )}
-  
+
               {!this.state.accessPermitted && this.state.QRreader === false && this.state.Checkbox === false && (
                 <>
                   <Form.Row>
@@ -333,9 +328,9 @@ class DeepVerifyMobile extends Component {
                         size="lg"
                       />
                     </Form.Group>
-  
+
                   </Form.Row>
-  
+
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridModel">
                       <Form.Label className="formFont">Model:</Form.Label>
@@ -371,16 +366,16 @@ class DeepVerifyMobile extends Component {
                       </div>
                     </div>
                     <div className="mediaLinkCameraMobile">
-                        <div className="submitButtonContentMobile">
-                          <Camera
-                            onClick={() => { QRReader() }}
-                          />
-                        </div>
+                      <div className="submitButtonContentMobile">
+                        <Camera
+                          onClick={() => { QRReader() }}
+                        />
                       </div>
+                    </div>
                   </Form.Row>
                 </>
               )}
-  
+
               {this.state.QRreader === true && (
                 <div>
                   <style type="text/css">
@@ -401,22 +396,22 @@ class DeepVerifyMobile extends Component {
                     </div>
                   </div>
                   <div className="QRreaderMobile">
-                  <QrReader
-                  ref="qrReader1"
-                  delay={300}
-                  previewStyle={previewStyle}
-                  onError={this.handleError}
-                  onScan={this.handleScan}
-                  style={{ width: '100%' }}
-                  legacyMode={this.state.legacyMode}
-                />
-                {this.state.legacyMode === true && (
-                  <div className="uploadImageQR">
-                    <div className="uploadImageQRContent">
-                      <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
-                    </div>
-                  </div>
-                )}
+                    <QrReader
+                      ref="qrReader1"
+                      delay={300}
+                      previewStyle={previewStyle}
+                      onError={this.handleError}
+                      onScan={this.handleScan}
+                      style={{ width: '100%' }}
+                      legacyMode={this.state.legacyMode}
+                    />
+                    {this.state.legacyMode === true && (
+                      <div className="uploadImageQR">
+                        <div className="uploadImageQRContent">
+                          <UploadCloud size={60} onClick={() => { this.openImageDialog() }} />
+                        </div>
+                      </div>
+                    )}
                     {this.state.result !== undefined && (
                       <div className="resultsMobile">
                         {this.state.assetFound}
@@ -425,7 +420,7 @@ class DeepVerifyMobile extends Component {
                   </div>
                 </div>
               )}
-  
+
               {this.state.accessPermitted && (
                 <>
                   <Form.Row>
@@ -455,7 +450,7 @@ class DeepVerifyMobile extends Component {
                       size="lg"
                     />
                   </Form.Row>
-  
+
                   <Form.Row>
                     <Form.Label className="formFont">ID Number:</Form.Label>
                     <Form.Control
@@ -489,11 +484,18 @@ class DeepVerifyMobile extends Component {
                 </>
               )}
             </div>
-            )}
-          
+          )}
+
         </Form>
         {this.state.transaction === false && this.state.txStatus === false && this.state.QRreader === false && (
           <div className="assetSelectedResultsMobile">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== "" && this.state.txHash === "" && (
                 <Form.Group>
@@ -515,46 +517,38 @@ class DeepVerifyMobile extends Component {
             <div>
               {this.state.txHash > 0 && (
                 <div className="resultsMobile">
-                  {this.state.txStatus === false && (
-                    <div className="transactionErrorTextMobile">
-                      !ERROR! :
-                      <a
-                        className="transactionErrorTextMobile"
-                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        TX Hash:{this.state.txHash}
-                      </a>
-                    </div>
-                  )}
-                  {this.state.txStatus === true && (
-                    <> {" "}
-                      {this.state.DVresult !== "" && (
-                        <div className="transactionErrorTextMobile">
-                          {
-                            this.state.DVresult === "Match confirmed"
-                              ? "Match Confirmed :"
-                              : "No Match Found :"
-                          }
-                        </div>
-                      )}
-                      <br></br>
-                      <a
-                        className="transactionErrorTextMobile"
-                        href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        TX Hash:{this.state.txHash}
-                      </a>
-                    </>
-                  )}
+                  {this.state.DVresult === "Match confirmed"
+                    ? <Alert
+                        className="alertFooterMobile"
+                        variant="success"> 
+                        Match confirmed!
+                          <Alert.Link 
+                            className="alertLinkMobile"
+                            href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
+                            target="_blank"
+                            rel="noopener noreferrer"> CLICK HERE
+                          </Alert.Link> 
+                        to view transaction on etherscan.
+                      </Alert>
+                    : <Alert
+                      className="alertFooterMobile"
+                      variant="danger"> 
+                      No match found! 
+                        <Alert.Link 
+                          className="alertLinkMobile"
+                          href={" https://kovan.etherscan.io/tx/" + this.state.txHash}
+                          target="_blank"
+                          rel="noopener noreferrer"> CLICK HERE
+                        </Alert.Link>
+                      to view transaction on etherscan.
+                    </Alert> 
+                    }
                 </div>
               )}
             </div>
           )}</>
         )}
+        </div>
       </div>
     );
   }

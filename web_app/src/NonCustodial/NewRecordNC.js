@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { ArrowRightCircle, Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class NewRecordNC extends Component {
   constructor(props) {
@@ -42,16 +44,16 @@ class NewRecordNC extends Component {
 
   componentDidMount() {//stuff to do when component mounts in window
 
-/*     if (window.assetClass > 0) {
-      this.setState({ assetClass: window.assetClass, assetClassSelected: true })
-    }
+    /*     if (window.assetClass > 0) {
+          this.setState({ assetClass: window.assetClass, assetClassSelected: true })
+        }
+    
+        else {
+          this.setState({ assetClassSelected: false })
+        } */
 
-    else {
-      this.setState({ assetClassSelected: false })
-    } */
-
-    if(window.balances !== undefined){
-      this.setState({holdsID: window.balances.IDTokenBalance === "1"})
+    if (window.balances !== undefined) {
+      this.setState({ holdsID: window.balances.IDTokenBalance === "1" })
     }
 
   }
@@ -90,9 +92,9 @@ class NewRecordNC extends Component {
     const _setAC = async () => {
       let acDoesExist;
       let destinationACData;
-      this.setState({txHash: "", txStatus: false})
+      this.setState({ txHash: "", txStatus: false })
 
-      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({ alertBanner: "Selected AC Cannot be Zero" }) }
       else {
         if (
           isNaN(this.state.selectedAssetClass)
@@ -190,12 +192,12 @@ class NewRecordNC extends Component {
         await window.utils.addIPFSJSONObject(ipfsObj)
       }
 
-      else { return alert("Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)") }
+      else { return this.setState({ alertBanner: "Record already exists! Try again. (Note: nameTag can contain whatever you want, and cannot cause hash collisions)" }) }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _newRecord = async () => { //create a new asset record
       this.setState({
@@ -224,7 +226,7 @@ class NewRecordNC extends Component {
       console.log(idxHash.length)
 
       if (idxHash.length !== 66) {
-        return (alert("Something went wrong..."))
+        return this.setState({ alertBanner: "Something went wrong..." })
       }
 
       var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
@@ -253,7 +255,7 @@ class NewRecordNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          this.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           self.setState({ assetClassSelected: false, idxSubmitted: false })
 
@@ -291,11 +293,11 @@ class NewRecordNC extends Component {
             </div>
           )}
           {!this.state.holdsID && (
-                <div className="results">
-                <h2>User does not hold ID</h2>
-                </div>
-              )}
- 
+            <div className="results">
+              <h2>User does not hold ID</h2>
+            </div>
+          )}
+
           {window.addr > 0 && !this.state.assetClassSelected && this.state.holdsID && (
             <>
               <Form.Row>
@@ -625,42 +627,56 @@ class NewRecordNC extends Component {
           </div>)}
         {this.state.transaction === false && (
           <div className="results">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             {
               this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
                 <div className="assetSelectedContentHead">New Asset Being Made in Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
               )
             }
             {this.state.txHash > 0 && ( //conditional rendering
-              <div>
-                {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+          <div className="results">
+
+            {this.state.txStatus === false && (
+              <Alert
+              className="alertFooter"
+              variant = "success">
+                Transaction failed!
+                  <Alert.Link
+                  className="alertLink"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
               )}
+
               {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
-                No Errors Reported :
-                  <a
-                  className="transactionErrorText"
+                <Alert
+                className="alertFooter"
+                variant = "success">
+                  Transaction success!
+                    <Alert.Link
+                    className="alertLink"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+                    CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                </Alert>
               )}
-              </div>
-            )}
+          </div>
+        )}
           </div>
         )}
       </div>

@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import QrReader from 'react-qr-reader'
+import Alert from "react-bootstrap/Alert";
 import { QRCode } from 'react-qrcode-logo';
 import Jdenticon from 'react-jdenticon';
 import { CornerUpLeft, Home, XSquare, ArrowRightCircle, Camera, HelpCircle, CameraOff, UploadCloud, Copy, Share2 } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
+import { RWebShare } from "react-web-share";
 
 
 class RetrieveRecord extends Component {
@@ -193,32 +196,34 @@ class RetrieveRecord extends Component {
                       </button>
                     </div>
                     {this.state.printQR && (
-                      <div>
-                        <div className="displayQRRR">
-                          <div className="QR">
-                            {this.state.idxHashRaw !== "" && (
-                              <QRCode
-                                value={this.state.idxHashRaw}
-                                size="150"
-                                fgColor="#002a40"
-                                logoWidth="35"
-                                logoHeight="46"
-                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                              />
-                            )}
-                            {this.state.idxHashRaw === "" && (
-                              <QRCode
-                                value={obj.idxHash}
-                                size="150"
-                                fgColor="#002a40"
-                                logoWidth="35"
-                                logoHeight="46"
-                                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-                              />
-                            )}
+                      <ClickAwayListener onClickAway={() => { this.setState({ printQR: false }) }}>
+                        <div>
+                          <div className="displayQRRR">
+                            <div className="QR">
+                              {this.state.idxHashRaw !== "" && (
+                                <QRCode
+                                  value={"https://indevapp.pruf.io/#/" + this.state.idxHashRaw}
+                                  size="150"
+                                  fgColor="#002a40"
+                                  logoWidth="35"
+                                  logoHeight="46"
+                                  logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                                />
+                              )}
+                              {this.state.idxHashRaw === "" && (
+                                <QRCode
+                                  value={"https://indevapp.pruf.io/#/" + obj.idxHash}
+                                  size="150"
+                                  fgColor="#002a40"
+                                  logoWidth="35"
+                                  logoHeight="46"
+                                  logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                                />
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </ClickAwayListener>
                     )}
 
                     <button className="assetImageButtonSelected">
@@ -270,18 +275,26 @@ class RetrieveRecord extends Component {
                         <div className="cardButton2Content">
                           <CornerUpLeft
                             size={35}
-                            onClick={() => { this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false }) }}
+                            onClick={() => { window.location.href = "/#/retrieve-record"; this.setState({ moreInfo: false, wasSentQuery: false, queryValue: undefined, ipfsObject: undefined, assetObj: undefined, Checkbox: false, idxHashRaw: "", legacyMode: false, result: "" }) }}
                           />
                         </div>
                       </div>
-                      <div className="cardButton4">
-                        <div className="cardButton4Content">
-                          <Share2
-                            size={35}
-                            onClick={() => { navigator.clipboard.writeText("https://app.pruf.io/#/" + obj.idxHash); alert("Asset link copied to clipboard") }}
-                          />
+                      <RWebShare
+                        className="shareMenu"
+                        data={{
+                          text: "Check out my PRüF-verified asset!",
+                          url: this.state.URL,
+                          title: "Share Asset Link",
+                        }}
+                      >
+                        <div className="cardButton4">
+                          <div className="cardButton4Content">
+                            <Share2
+                              size={35}
+                            />
+                          </div>
                         </div>
-                      </div>
+                      </RWebShare>
                     </>
                   )}
 
@@ -293,6 +306,12 @@ class RetrieveRecord extends Component {
 
 
       )
+    }
+
+    this.sendPacket = (obj, menu, link) => {
+      window.sentPacket = obj
+      window.menuChange = menu
+      window.location.href = '/#/' + link
     }
 
     this.handlePacket = async () => {
@@ -355,7 +374,7 @@ class RetrieveRecord extends Component {
         let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
         if (tempBool) {
           idxHash = String(this.state.queryValue)
-        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return alert("Asset does not exist!") }
+        } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return this.setState({ alertBanner: "Asset does not exist!" }) }
 
       } else {
         idxHash = String(this.state.result)
@@ -419,7 +438,7 @@ class RetrieveRecord extends Component {
 
     this.handleQuery = async (data) => {
       if (data.substring(0, 2) !== "0x") {
-        return alert("'" + data + "'" + " is not a proper IDX!")
+        return this.setState({ alertBanner: ("'" + data + "'" + " is not a proper IDX!") })
       }
 
       let tempBool = true//await window.utils.checkAssetExistsBare(data)
@@ -607,7 +626,8 @@ class RetrieveRecord extends Component {
         wasSentQuery: false,
         queryValue: undefined,
         Checkbox: false,
-        help: false
+        help: false,
+        result: ""
       })
     }
 
@@ -643,10 +663,10 @@ class RetrieveRecord extends Component {
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
-        this.setState({ Checkbox: true })
+        this.setState({ Checkbox: true, idxHashRaw: "" })
       }
       else {
-        this.setState({ Checkbox: false })
+        this.setState({ Checkbox: false, idxHashRaw: "" })
       }
     }
 
@@ -674,7 +694,7 @@ class RetrieveRecord extends Component {
         console.log("addr: ", window.addr);
       }
 
-      this.setState({idxHash: idxHash})
+      this.setState({ idxHash: idxHash })
       await window.contracts.STOR.methods
         .retrieveShortRecord(idxHash)
         .call(function (_error, _result) {
@@ -767,6 +787,7 @@ class RetrieveRecord extends Component {
                     <div>
                       <Form.Check
                         type="checkbox"
+                        checked={this.state.Checkbox}
                         className="checkBox"
                         id="inlineFormCheck"
                         onChange={() => { Checkbox() }}
@@ -866,7 +887,15 @@ class RetrieveRecord extends Component {
                   )}
                 </div>
               </Form>
-              <div className="results"></div>
+              <div className="results">
+                {this.state.alertBanner !== undefined && (
+                  <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                    <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                      {this.state.alertBanner}
+                    </Alert>
+                  </ClickAwayListener>
+                )}
+              </div>
             </div>
           )}
 
@@ -917,6 +946,13 @@ class RetrieveRecord extends Component {
                 <h2 className="assetDashboardHeader">Here's what we found: </h2>
               </div>
               <div className="assetDashboard">
+                {this.state.msgBanner !== undefined && (
+                  <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
+                    <Alert className="msgBanner" key={1} variant="success" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+                      {this.state.msgBanner}
+                    </Alert>
+                  </ClickAwayListener>
+                )}
                 {this.state.assetObj !== undefined && (<>{this.generateAssetInfo(this.state.assetObj)}</>)}
                 {this.state.assetObj === undefined && (<h4 className="loadingRR">Loading Asset</h4>)}
               </div>

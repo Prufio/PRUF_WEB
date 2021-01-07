@@ -4,11 +4,10 @@ import "./../index.css";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Nav from 'react-bootstrap/Nav'
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { RefreshCw, X, ChevronRight, CornerUpLeft, Home, Plus, Copy } from "react-feather";
+import Alert from "react-bootstrap/Alert";
+import { RefreshCw, ChevronRight, CornerUpLeft, Home } from "react-feather";
 import ProgressBar from 'react-bootstrap/ProgressBar'
-import { QRCode } from 'react-qrcode-logo';
-import { isMobile } from "react-device-detect";
-import Printer from '../Resources/Print'
+import { ClickAwayListener } from '@material-ui/core';
 
 
 class ACDashboard extends React.Component {
@@ -54,7 +53,7 @@ class ACDashboard extends React.Component {
 
       if (AC === "0" || AC === undefined) {
         this.refresh()
-        return alert("Selected AC Cannot be Zero")
+        return this.setState({ alertBanner: "Selected AC Cannot be Zero" })
       }
       else {
         if (
@@ -63,8 +62,8 @@ class ACDashboard extends React.Component {
           acDoesExist = await window.utils.checkForAC("name", AC);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ ACname: AC });
@@ -77,8 +76,8 @@ class ACDashboard extends React.Component {
           acDoesExist = await window.utils.checkForAC("id", AC);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ assetClass: AC });
@@ -400,6 +399,13 @@ class ACDashboard extends React.Component {
           </div>
         </div>
         <div className="ACDashboard">
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {!this.state.hasNoAssetClasses && this.state.hasLoadedAssetClasses && !this.state.moreInfo && (<>{generateAssetClassDash(this.state.assetClasses)}</>)}
           {!this.state.hasNoAssetClasses && this.state.hasLoadedAssetClasses && this.state.moreInfo && (<>{generateAssetClassInfo(this.state.assetClassObj)}</>)}
           {!this.state.hasNoAssetClasses && !this.state.hasLoadedAssetClasses && (<h2 className="loadingAD">Loading AC NodeKeys</h2>)}

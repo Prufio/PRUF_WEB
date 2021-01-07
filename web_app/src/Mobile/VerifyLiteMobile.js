@@ -3,6 +3,8 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { Home, XSquare, ArrowRightCircle, Camera, CameraOff, UploadCloud, CheckCircle } from "react-feather";
 import QrReader from 'react-qr-reader'
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
 
 class VerifyLiteMobile extends Component {
   constructor(props) {
@@ -10,14 +12,14 @@ class VerifyLiteMobile extends Component {
 
 
     this.accessAsset = async () => {
-      this.setState({txHash: "", txStatus: false})
+      this.setState({ txHash: "", txStatus: false })
       let idxHash;
       if (this.state.QRreader === false && this.state.Checkbox === false) {
         if (this.state.manufacturer === ""
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
-          return alert("Please fill out all forms before submission")
+          return this.setState({ alertBanner: "Please fill out all forms before submission" })
         }
         idxHash = window.web3.utils.soliditySha3(
           String(this.state.type).replace(/\s/g, ''),
@@ -25,35 +27,30 @@ class VerifyLiteMobile extends Component {
           String(this.state.model).replace(/\s/g, ''),
           String(this.state.serial).replace(/\s/g, '')
         );
-        console.log("IDXTEST1", idxHash)
       }
 
       if (this.state.QRreader === true && this.state.Checkbox === false) {
         idxHash = this.state.result
-        console.log("IDXTEST2", idxHash)
       }
 
       if (this.state.Checkbox === true) {
         idxHash = this.state.idxHashRaw
-        console.log("IDXTEST3", idxHash)
       }
-      console.log("IDXTEST4", idxHash)
 
       let doesExist = await window.utils.checkAssetExistsBare(idxHash);
       let tempObj = await window.utils.checkAssetExists(idxHash)
-      
+      if (!doesExist) {
+        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
+        return this.setState({ alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission." })
+      }
+
       let infoArr, acName, tempStatus;
       infoArr = Object.values(tempObj.obj);
       acName = await window.utils.getACName(infoArr[2])
       tempStatus = await window.utils.getStatusString(String(infoArr[0]))
 
-      if (!doesExist) {
-        this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, DVresult: "" })
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
-      }
 
       console.log("idxHash", idxHash);
-      // console.log("rgtHash", rgtHash);
 
       return this.setState({
         idxHash: idxHash,
@@ -161,10 +158,10 @@ class VerifyLiteMobile extends Component {
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
-        this.setState({ Checkbox: true })
+        this.setState({ Checkbox: true, idxHashRaw: "" })
       }
       else {
-        this.setState({ Checkbox: false })
+        this.setState({ Checkbox: false, idxHashRaw: "" })
       }
     }
     
@@ -219,20 +216,21 @@ class VerifyLiteMobile extends Component {
 
       if (!doesExist) {
         this.setState({ result: "", accessPermitted: false, Checkbox: false, QRreader: false, assetFound: "" })
-        return alert("Asset doesnt exist! Ensure data fields are correct before submission.")
+        return this.setState({ alertBanner: "Asset doesnt exist! Ensure data fields are correct before submission."})
       }
 
       if (!infoMatches) {
         await this.setState({ VLresult: "0" })
       }
 
-      if (infoMatches) {alert ("Match Confirmed"); await this.setState({ VLresult: "170" }); }
+      if (infoMatches) {this.setState({ msgBanner: "Match Confirmed"}); await this.setState({ VLresult: "170" }); }
 
       return this.setState({ accessPermitted: false, Checkbox: false });
     };
 
     return (
       <div>
+      <div className="formMobileBack">
         {this.state.QRreader === false && (
           <div>
             <div className="mediaLinkADHome">
@@ -251,6 +249,7 @@ class VerifyLiteMobile extends Component {
               <div>
                 <Form.Check
                   type="checkbox"
+                  checked={this.state.Checkbox}
                   className="checkBoxMobile"
                   id="inlineFormCheck"
                   onChange={() => { Checkbox() }}
@@ -451,6 +450,20 @@ class VerifyLiteMobile extends Component {
         </Form>
         {this.state.QRreader === false && (
           <div className="resultsMobile">
+          {this.state.alertBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+              <Alert className="alertBannerMobile" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                {this.state.alertBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
+          {this.state.msgBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
+              <Alert className="alertBannerMobile" key={1} variant="succcess" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+                {this.state.msgBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
 
             {this.state.VLresult !== "" && ( //conditional rendering
             <>
@@ -475,6 +488,7 @@ class VerifyLiteMobile extends Component {
 
           </div>
         )}
+        </div>
       </div>
     );
   }

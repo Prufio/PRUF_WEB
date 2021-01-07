@@ -3,6 +3,10 @@ import "./../index.css";
 import { RefreshCw, ChevronRight, CornerUpLeft, Home, Plus, Copy, Share2 } from "react-feather";
 import Card from "react-bootstrap/Card";
 import Jdenticon from 'react-jdenticon';
+import { ClickAwayListener } from '@material-ui/core';
+import Alert from "react-bootstrap/Alert";
+import { isChrome, isOpera, isAndroid } from "react-device-detect";
+import { RWebShare } from "react-web-share";
 
 
 class AssetDashboardMobile extends React.Component {
@@ -41,7 +45,7 @@ class AssetDashboardMobile extends React.Component {
         this.setState({ selectedImage: "" })
       }
       this.setState({
-        URL: this.state.baseURL + e.idxHash,
+        URL: String(this.state.baseURL) + String(e.idxHash),
         assetObj: e,
         moreInfo: true,
         identicon: e.identicon
@@ -54,7 +58,7 @@ class AssetDashboardMobile extends React.Component {
 
       if (AC === "0" || AC === undefined) {
         this.refresh()
-        return alert("Selected AC Cannot be Zero")
+        return this.setState({ msgBanner: "Selected AC Cannot be Zero" })
       }
       else {
         if (
@@ -63,8 +67,8 @@ class AssetDashboardMobile extends React.Component {
           acDoesExist = await window.utils.checkForAC("name", AC);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           await window.utils.resolveAC(AC);
@@ -79,9 +83,8 @@ class AssetDashboardMobile extends React.Component {
 
           acDoesExist = await window.utils.checkForAC("id", AC);
           await console.log("Exists?", acDoesExist)
-
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ assetClass: AC });
@@ -201,6 +204,8 @@ class AssetDashboardMobile extends React.Component {
 
   render() {
 
+    
+
     const generateAssetInfo = (obj) => {
       let images = Object.values(obj.photo)
       let text = Object.values(obj.text)
@@ -211,19 +216,10 @@ class AssetDashboardMobile extends React.Component {
         console.log(e)
         this.setState({ selectedImage: e })
       }
-
-      // const _printQR = async () => {
-      //   if (this.state.printQR === undefined) {
-      //     this.setState({ printQR: true })
-      //   }
-      //   else {
-      //     this.setState({ printQR: undefined })
-      //   }
-      // }
-
-      // const _printQRFile = async (obj) => {
-
-      // }
+      
+      const copyLink = async () => {
+        this.setState({ msgBanner: "Copy this text to share asset:\n\n" + this.state.URL }); 
+    }
 
       const renderIcon = () => {
         return <Jdenticon size="340px" value={obj.idxHash} />
@@ -289,14 +285,14 @@ class AssetDashboardMobile extends React.Component {
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Class : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.assetClassName}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">Asset Status : </h4><h4 className="cardDescriptionSelectedContentMobile">{obj.status}</h4></Card.Title>
               <Card.Title><h4 className="cardDescriptionSelectedMobile">IDX : </h4>
-                <div className="cardCopyButtonMobile">
+                {/* <div className="cardCopyButtonMobile">
                   <div className="cardCopyButtonMobileContent">
                     <Copy
                       size={15}
                       onClick={() => { navigator.clipboard.writeText(String(obj.idxHash)) }}
                     />
                   </div>
-                </div>
+                </div> */}
                 <h4 className="cardDescriptionSelectedContentMobile">
                   {obj.idxHash}
                 </h4>
@@ -309,19 +305,40 @@ class AssetDashboardMobile extends React.Component {
               <CornerUpLeft
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { this.setState({ moreInfo: false, Checkbox: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
+                onClick={() => { this.setState({ moreInfo: false, QRreader: false, ipfsObject: undefined, idxHash: undefined }) }}
               />
             </div>
           </div>
-          <div className="shareButtonMobileAD">
-            <div className="submitButtonRRQR3MobileContent">
+          {isAndroid && window.ethereum.isMetaMask &&(
+            <div className="shareButtonMobileAD">
+              <div className="submitButtonRRQR3MobileContent">
               <Share2
                 color={"#028ed4"}
                 size={35}
-                onClick={() => { navigator.clipboard.writeText(String(this.state.URL)) }}
+                onClick={()=>{copyLink()}}
               />
             </div>
           </div>
+          )}
+          {!isAndroid && (
+            <RWebShare
+            className="shareMenu"
+            data={{
+              text: "Check out my PRüF-verified asset!",
+              url: this.state.URL,
+              title: "Share Asset Link",
+            }}
+          >
+            <div className="shareButtonMobileAD">
+              <div className="submitButtonRRQR3MobileContent">
+                <Share2
+                  color={"#028ed4"}
+                  size={35}
+                />
+              </div>
+            </div>
+          </RWebShare>
+          )}
         </>
       )
     }
@@ -444,7 +461,6 @@ class AssetDashboardMobile extends React.Component {
           <div className="mediaLinkADAddAssetMobile">
             <a className="mediaLinkContentADAddAsset" ><Plus size={35}
               onClick={() => { this.newRecord() }}
-            // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
             />
             </a>
           </div>
@@ -456,7 +472,7 @@ class AssetDashboardMobile extends React.Component {
                   onClick={() => {
                     this.setState({ userMenu: undefined })
                     if (window.ethereum) { window.ethereum.enable() }
-                    else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                    else { this.setState({ msgBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask." }); }
                   }
                   }
                   className="userDataLink">
@@ -468,6 +484,13 @@ class AssetDashboardMobile extends React.Component {
           )}
         </div>
         <div className="assetDashboardMobile">
+          {this.state.msgBanner !== undefined && (
+            <ClickAwayListener onClickAway={() => { this.setState({ msgBanner: undefined }) }}>
+              <Alert className="alertBannerADMobile" key={1} variant="success" onClose={() => this.setState({ msgBanner: undefined })} dismissible>
+                {this.state.msgBanner}
+              </Alert>
+            </ClickAwayListener>
+          )}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && !this.state.moreInfo && (<>{generateAssetDash(this.state.assets)}</>)}
           {!this.state.hasNoAssets && this.state.hasLoadedAssets && this.state.moreInfo && (<>{generateAssetInfo(this.state.assetObj)}</>)}
           {!this.state.hasNoAssets && !this.state.hasLoadedAssets && (<h2 className="loadingAD">Loading Assets</h2>)}

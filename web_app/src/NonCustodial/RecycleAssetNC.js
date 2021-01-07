@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, ArrowRightCircle, Tag, HelpCircle, AlertOctagon, Camera, UploadCloud, CameraOff } from "react-feather";
 import QrReader from 'react-qr-reader'
+import { ClickAwayListener } from '@material-ui/core';
 
 class RecycleAssetNC extends Component {
   constructor(props) {
@@ -19,7 +21,7 @@ class RecycleAssetNC extends Component {
           || this.state.type === ""
           || this.state.model === ""
           || this.state.serial === "") {
-          return alert("Please fill out all fields before submission")
+          return this.setState({ alertBanner: "Please fill out all fields before submission" })
         }
 
         else if (!this.state.Checkbox) {
@@ -35,7 +37,7 @@ class RecycleAssetNC extends Component {
       if (this.state.QRreader) {
         idxHash = this.state.result
       }
-      
+
       if (this.state.Checkbox) {
         idxHash = this.state.idxHashRaw
       }
@@ -46,15 +48,15 @@ class RecycleAssetNC extends Component {
 
 
       if (Number(resArray[1]) === 0) {
-        alert("Asset does not exist at given IDX");
+        this.setState({ alertBanner: "Asset does not exist at given IDX" });
         this.setState({
           idxHash: undefined, txStatus: undefined, txHash: "", accessPermitted: false, transaction: false
         })
-        return this.clearForm() 
+        return this.clearForm()
       }
 
       if (Number(resArray[0]) !== 60) {
-        alert("Asset not in recyclable status");
+        this.setState({ alertBanner: "Asset not in recyclable status" });
         this.setState({
           idxHash: undefined, txStatus: undefined, txHash: "", accessPermitted: false, transaction: false
         })
@@ -71,7 +73,7 @@ class RecycleAssetNC extends Component {
       })
 
     }
-    
+
     this.clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
       document.getElementById("MainForm").reset();
@@ -164,7 +166,7 @@ class RecycleAssetNC extends Component {
       let destinationACData;
       this.setState({ txHash: "" })
 
-      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return alert("Selected AC Cannot be Zero") }
+      if (this.state.selectedAssetClass === "0" || this.state.selectedAssetClass === undefined) { return this.setState({ alertBanner: "Selected AC Cannot be Zero" }) }
       else {
         if (
           isNaN(this.state.selectedAssetClass)
@@ -201,7 +203,7 @@ class RecycleAssetNC extends Component {
           console.log(resArray)
 
           if (Number(resArray[0]) !== 60) {
-            alert("Asset is not recyclable!");
+            this.setState({ alertBanner: "Asset is not recyclable!" });
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
@@ -209,7 +211,7 @@ class RecycleAssetNC extends Component {
           console.log(destinationACData.root)
 
           if (resArray[1] !== destinationACData.root) {
-            alert("Import destination AC must have same root as origin!");
+            this.setState({ alertBanner: "Import destination AC must have same root as origin!" });
             window.sentPacket = undefined;
             return window.location.href = "/#/asset-dashboard"
           }
@@ -245,42 +247,39 @@ class RecycleAssetNC extends Component {
 
     const Checkbox = async () => {
       if (this.state.Checkbox === false) {
-        this.setState({ Checkbox: true })
+        this.setState({ Checkbox: true, idxHashRaw: "" })
       }
       else {
-        this.setState({ Checkbox: false })
+        this.setState({ Checkbox: false, idxHashRaw: "" })
       }
     }
 
     const _recycleAsset = async () => {
-      this.setState({ help: false })
+
+      var idxHash = this.state.idxHash;
+      let isSameRoot = await window.utils.checkAssetRootMatch(this.state.selectedAssetClass, this.state.idxHash);
+      console.log(isSameRoot)
+      if (!isSameRoot) {
+        this.setState({
+          QRreader: false
+        })
+        this.clearForm()
+        return this.setState({ alertBanner: "Import destination AC must have same root as previous AC" })
+      }
       if (
         this.state.first === "" ||
         this.state.middle === "" ||
         this.state.surname === "" ||
         this.state.id === "" ||
         this.state.secret === ""
-      ) { return alert("Please fill out all forms") }
+      ) { return this.setState({ alertBanner: "Please fill out all forms" }) }
 
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ resultRA: "" })
       this.setState({ transaction: true })
-      var idxHash = this.state.idxHash;
-      /* 
-            if (this.state.result !== "") {
-              idxHash = this.state.result;
-            }
-      
-            else {
-              idxHash = window.web3.utils.soliditySha3(
-                String(this.state.type).replace(/\s/g, ''),
-                String(this.state.manufacturer).replace(/\s/g, ''),
-                String(this.state.model).replace(/\s/g, ''),
-                String(this.state.serial).replace(/\s/g, ''),
-              );
-            } */
+      this.setState({ help: false })
 
       var rgtRaw;
 
@@ -293,16 +292,7 @@ class RecycleAssetNC extends Component {
       );
 
       console.log(idxHash)
-      console.log(this.state.selectedAssetClassW)
-      let isSameRoot = await window.utils.checkAssetRootMatch(this.state.selectedAssetClass, this.state.idxHash);
-      console.log(isSameRoot)
-      if (!isSameRoot) {
-        this.setState({
-          QRreader: false
-        })
-        this.clearForm()
-        return alert("Import destination AC must have same root as previous AC")
-      }
+
 
       let rgtHash;
 
@@ -330,7 +320,7 @@ class RecycleAssetNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false });
-          alert("Something went wrong!")
+          self.setState({ alertBanner: "Something went wrong!" })
           this.clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -400,6 +390,7 @@ class RecycleAssetNC extends Component {
                   <div>
                     <Form.Check
                       type="checkbox"
+                      checked={this.state.Checkbox}
                       className="checkBox2"
                       id="inlineFormCheck"
                       onChange={() => { Checkbox() }}
@@ -648,6 +639,13 @@ class RecycleAssetNC extends Component {
         </Form>
         { this.state.QRreader === false && this.state.transaction === false && this.state.txHash === "" && (
           <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
             <Form.Row>
               {this.state.idxHash !== undefined && this.state.txHash === "" && (
                 <Form.Group>
@@ -662,35 +660,42 @@ class RecycleAssetNC extends Component {
           <div className="results">
             <h1 className="loadingh1">Transaction In Progress</h1>
           </div>)}
-        {this.state.txHash > 0 && this.state.QRreader === false && ( //conditional rendering
+          {this.state.txHash > 0 && this.state.QRreader === false && ( //conditional rendering
           <div className="results">
+
             {this.state.txStatus === false && (
-              <div className="transactionErrorText">
-                !ERROR! :
-                <a
-                  className="transactionErrorText"
+              <Alert
+              className="alertFooter"
+              variant = "success">
+                Transaction failed!
+                  <Alert.Link
+                  className="alertLink"
                   href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  TX Hash:{this.state.txHash}
-                </a>
-              </div>
-            )}
-            {this.state.txStatus === true && (
-              <div className="transactionErrorText">
-                {" "}
-                No Errors Reported :
-                <a
-                  className="transactionErrorText"
-                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  TX Hash:{this.state.txHash}
-                </a>
-              </div>
-            )}
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
+              )}
+
+              {this.state.txStatus === true && (
+                <Alert
+                className="alertFooter"
+                variant = "success">
+                  Transaction success!
+                    <Alert.Link
+                    className="alertLink"
+                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                </Alert>
+              )}
           </div>
         )}
       </div>

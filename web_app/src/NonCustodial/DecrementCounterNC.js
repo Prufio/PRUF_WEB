@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from 'react-feather'
+import { ClickAwayListener } from '@material-ui/core';
 
 class DecrementCounterNC extends Component {
   constructor(props) {
@@ -107,13 +109,13 @@ class DecrementCounterNC extends Component {
         this.setState({ help: false })
       }
     }
-    
+
     const submitHandler = (e) => {
       e.preventDefault();
-  }
+    }
 
     const _checkIn = async (e) => {
-      this.setState({help: false, txHash: "", txStatus: false})
+      this.setState({ help: false, txHash: "", txStatus: false })
       this.setState({
         txStatus: false,
         txHash: ""
@@ -136,11 +138,11 @@ class DecrementCounterNC extends Component {
       console.log(count)
 
       if (Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        alert("Cannot edit asset in lost or stolen status"); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
       }
 
       if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions"); return clearForm()
+        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
       }
 
       this.setState({ selectedAsset: e })
@@ -160,15 +162,22 @@ class DecrementCounterNC extends Component {
     }
 
     const _decrementCounter = async () => {
+      let idxHash = this.state.idxHash;
+      if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){
+        return this.setState({alertBanner: "Please fill all fields before submission"})
+      }
+
+      if(isNaN(this.state.countDown)){
+        return this.setState({alertBanner: "Please input a valid whole number to decrement"})
+      }
+
       this.setState({help: false})
       this.setState({ txStatus: false });
       this.setState({ txHash: "" });
       this.setState({ error: undefined })
       this.setState({ result: "" })
       this.setState({ transaction: true })
-      var idxHash = this.state.idxHash;
 
-      if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){return alert("Please fill all fields before submission")}
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -180,8 +189,8 @@ class DecrementCounterNC extends Component {
         this.setState({
           transaction: false
         })
-        return alert("Countdown is greater than count reserve! Please ensure data fields are correct before submission.")
-          
+        return this.setState({ alertBanner: "Countdown is greater than count reserve! Please ensure data fields are correct before submission." })
+
       }
 
       await window.contracts.NP_NC.methods
@@ -192,7 +201,7 @@ class DecrementCounterNC extends Component {
           self.setState({ transaction: false })
           self.setState({ txHash: Object.values(_error)[0].transactionHash });
           self.setState({ txStatus: false, wasSentPacket: false });
-          alert("Something went wrong!")
+          self.setState({ alertBanner: "Something went wrong!" })
           clearForm();
           console.log(Object.values(_error)[0].transactionHash);
         })
@@ -291,8 +300,9 @@ class DecrementCounterNC extends Component {
                     <Form.Control
                       placeholder="Countdown Amount"
                       required
+                      type="number"
                       onChange={(e) =>
-                        this.setState({ countDown: e.target.value.trim() })
+                        this.setState({ countDown: Math.round(e.target.value.trim()) })
                       }
                       size="lg"
                     />)}
@@ -335,19 +345,26 @@ class DecrementCounterNC extends Component {
           )}
         </Form>
         {this.state.transaction === false && this.state.txHash === "" && (
-          <div className="assetSelectedResults">
-            <Form.Row>
-              {this.state.idxHash !== undefined && (
-                <Form.Group>
-                  <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
-                  <div className="assetSelectedContentHead">Count: <span className="assetSelectedContent">{this.state.count} / {this.state.countDownStart}</span> </div>
-                </Form.Group>
-              )}
-            </Form.Row>
-          </div>
+            <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+              <Form.Row>
+                {this.state.idxHash !== undefined && (
+                  <Form.Group>
+                    <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
+                    <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
+                    <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                    <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
+                    <div className="assetSelectedContentHead">Count: <span className="assetSelectedContent">{this.state.count} / {this.state.countDownStart}</span> </div>
+                  </Form.Group>
+                )}
+              </Form.Row>
+            </div>
         )}
         {this.state.transaction === true && (
           <div className="results">
@@ -355,32 +372,39 @@ class DecrementCounterNC extends Component {
           </div>)}
         {this.state.txHash > 0 && ( //conditional rendering
           <div className="results">
+
             {this.state.txStatus === false && (
-                <div className="transactionErrorText">
-                  !ERROR! :
-                  <a
-                  className="transactionErrorText"
-                    href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+              <Alert
+              className="alertFooter"
+              variant = "success">
+                Transaction failed!
+                  <Alert.Link
+                  className="alertLink"
+                  href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CLICK HERE
+                </Alert.Link>
+                to view transaction on etherscan.
+              </Alert>
               )}
+
               {this.state.txStatus === true && (
-                <div className="transactionErrorText">
-                  {" "}
-                No Errors Reported :
-                  <a
-                  className="transactionErrorText"
+                <Alert
+                className="alertFooter"
+                variant = "success">
+                  Transaction success!
+                    <Alert.Link
+                    className="alertLink"
                     href={"https://kovan.etherscan.io/tx/" + this.state.txHash}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    TX Hash:{this.state.txHash}
-                  </a>
-                </div>
+                    CLICK HERE
+                  </Alert.Link>
+                  to view transaction on etherscan.
+                </Alert>
               )}
           </div>
         )}

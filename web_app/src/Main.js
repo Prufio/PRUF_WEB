@@ -10,8 +10,6 @@ import NonCustodialComponent from "./Resources/NonCustodialComponent";
 import NonCustodialUserComponent from "./Resources/NonCustodialUserComponent";
 import AdminComponent from "./Resources/AdminComponent";
 import FaucetComponent from "./Resources/FaucetComponent";
-import AuthorizedUserComponent from "./Resources/AuthorizedUserComponent";
-import AuthorizedUserLogin from "./Resources/AuthorizedUserLogin";
 import NoAddressComponent from "./Resources/NoAddressComponent";
 import BasicComponent from "./Resources/BasicComponent";
 import MobileComponent from "./Resources/MobileComponent";
@@ -19,12 +17,13 @@ import ParticleBox from "./Resources/ParticleBox";
 import Router from "./Router";
 import Button from 'react-bootstrap/Button';
 import { Twitter, GitHub, Mail, Send, Menu, Check, Settings, X, User } from 'react-feather';
-import { isMobile } from "react-device-detect";
+import { isMobile, browserName, engineVersion, getUA } from "react-device-detect";
 import { isFirefox } from "is-firefox";
 import { isSafari } from "is-safari";
 import Jdenticon from 'react-jdenticon';
 import Robohash from 'react-robohash';
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
 
 class Main extends Component {
   constructor(props) {
@@ -36,22 +35,22 @@ class Main extends Component {
         return (
           <div>
             <HashRouter>
-            <div className="imageForm">
-            <div>
-              {this.state.noAddrMenuBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufReadOnly.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-            </div>
-          </div>
+              <div className="imageForm">
+                <div>
+                  {this.state.noAddrMenuBool === true && (
+                    <button
+                      className="imageButton"
+                      title="Back to Home!"
+                      onClick={() => { window.location.href = '/#/' }}
+                    >
+                      <img
+                        className="downSizeLogo"
+                        src={require("./Resources/Images/PrufReadOnly.png")}
+                        alt="Pruf Logo" />
+                    </button>
+                  )}
+                </div>
+              </div>
               <div>
                 <div className="bannerForm">
                   <ClickAwayListener onClickAway={() => { this.setState({ hamburgerMenuMobile: false, userMenuMobile: false }) }}>
@@ -201,6 +200,9 @@ class Main extends Component {
                         background-color: #23b6ff;
                         color: white !important;
                       }
+                      .body {
+                        overflow: visible !important;
+                      }
                    `}
                           </style>
 
@@ -214,7 +216,7 @@ class Main extends Component {
                                     onClick={() => {
                                       this.setState({ userMenu: undefined })
                                       if (window.ethereum) { window.ethereum.enable() }
-                                      else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
+                                      else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask" ); }
                                     }
                                     }
                                     className="userDataLink">
@@ -288,7 +290,6 @@ class Main extends Component {
                                     Assets :
                               <Button
                                       variant="userButton"
-                                      // onClick={() => { alert("This functionality has been disabled until Alpha-Testing begins") }}
                                       onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/asset-dashboard-mobile' }}>
                                       {this.state.assetBalance}
                                     </Button>
@@ -337,218 +338,197 @@ class Main extends Component {
         );
       }
       if (!isSafari) {
-      return (
-        <HashRouter>
+        return (
+          <HashRouter>
 
-          <div className="imageForm">
-            <div>
-              {this.state.noAddrMenuBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufReadOnly.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-              {this.state.faucetBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufFaucet.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-              {this.state.assetHolderMenuBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufTokenMinter.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-              {this.state.assetHolderUserMenuBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufTokenHolder.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-              {this.state.assetClassHolderMenuBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufACAdmin.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-              {this.state.authorizedUserMenuBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufAssetMinter.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-              {this.state.basicMenuBool === true && (
-                <button
-                  className="imageButton"
-                  title="Back to Home!"
-                  onClick={() => { window.location.href = '/#/' }}
-                >
-                  <img
-                    className="downSizeLogo"
-                    src={require("./Resources/Images/PrufBasic.png")}
-                    alt="Pruf Logo" />
-                </button>
-              )}
-            </div>
-          </div>
-          <div>
-            <div className="bannerForm">
-              <div className="hamburgerMenu">
-                <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenu() }} /></a>
-              </div>
-
-              {this.state.hamburgerMenu !== undefined && (
-                <div className="hamburgerDropdown">
-                  <div className="mediaLink">
-                    <a className="mediaLinkContent"><GitHub size={20} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
-                    <a className="mediaLinkContent"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
-                    <a className="mediaLinkContent"><Twitter size={20} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
-                    <a className="mediaLinkContent" ><Send size={20} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
-                  </div>
+            <div className="imageForm">
+              <div>
+                {this.state.noAddrMenuBool === true && (
                   <button
-                    className="imageButtonU"
-                    onClick={() => { window.open("https://pruf.io", "_blank") }}
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
                   >
                     <img
-                      className="imageFormU"
-                      title="Find out More!"
-                      src={require("./Resources/Images/favicon pruf no bg.png")}
-                      alt="Pruf U" />
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufReadOnly.png")}
+                      alt="Pruf Logo" />
                   </button>
-                  <div className="siteInfoBox">
-                    <h3>
-                      dApp Last Updated:
-                  </h3>
-                    <h3>
-                      December 24, 2020
-                  </h3>
-                    <h3>
-                      <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
-                    </h3>
-                    <h3>
-                      {this.state.routeRequest === "noAddr"
-                        ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.0 </a>
-                        : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.2.0 </a>}
-                    </h3>
-                    <Form.Check
-                      type="checkbox"
-                      className="checkBoxParticles"
-                      id="inlineFormCheck"
-                      onChange={() => { this.particles() }}
-                    />
-                    <h3 className="textParticles">
-                      Particles Off
-                    </h3>
-                  </div>
-                  <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
-                    <button
-                      className="imageButtonUser"
-                      onClick={() => { this.userMenu() }}>
-                      {window.addr !== undefined && (
-                        <Robohash
-                          className="imageFormUser"
-                          name={window.addr}
-                        />
-                      )}
-                      {window.addr === undefined && (
-                        <User
-                          className="imageFormUser"
-                          size={30}
-                        />
-                      )}
-                    </button>
-                  </ClickAwayListener>
-                  <ClickAwayListener onClickAway={() => { this.setState({ settingsMenu: false }) }}>
-                    <div className="hamburgerMenuLink">
-                      <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
+                )}
+                {this.state.faucetBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufFaucet.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.assetHolderMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufTokenMinter.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.assetHolderUserMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufTokenHolder.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.assetClassHolderMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufACAdmin.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.authorizedUserMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufAssetMinter.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+                {this.state.basicMenuBool === true && (
+                  <button
+                    className="imageButton"
+                    title="Back to Home!"
+                    onClick={() => { window.location.href = '/#/' }}
+                  >
+                    <img
+                      className="downSizeLogo"
+                      src={require("./Resources/Images/PrufBasic.png")}
+                      alt="Pruf Logo" />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className="bannerForm">
+                <div className="hamburgerMenu">
+                  <a className="hamburgerMenuContent"><Menu size={35} onClick={() => { this.hamburgerMenu() }} /></a>
+                </div>
+
+                {this.state.hamburgerMenu !== undefined && (
+                  <div className="hamburgerDropdown">
+                    <div className="mediaLink">
+                      <a className="mediaLinkContent"><GitHub size={20} onClick={() => { window.open("https://github.com/Prufio", "_blank") }} /></a>
+                      <a className="mediaLinkContent"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
+                      <a className="mediaLinkContent"><Twitter size={20} onClick={() => { window.open("https://www.twitter.com/prufteam", "_blank") }} /></a>
+                      <a className="mediaLinkContent" ><Send size={20} onClick={() => { window.open("https://t.me/pruftalk", "_blank") }} /></a>
                     </div>
-                  </ ClickAwayListener>
-                  <div>
-                    {this.state.settingsMenu === true && (
-                      <div>
-                        <div className="hamburgerDropdownSettings">
-                          {/* {this.state.assetClassHolderBool === false && this.state.assetHolderBool === false && this.state.IDHolderBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => {
-                                this.setState({ settingsMenu: false })
-                                if (window.ethereum) {
-                                  if (window.confirm("Either you need to log into your ethereum provider, or you do not hold any PRuF assets. Click 'OK' to learn more on our website.")) {
-                                    window.open('https://pruf.io/')
-                                  }
-                                }
-                                else {
-                                  if (window.confirm("You do not currently have a Web3 provider installed. We recommend MetaMask; if you would like to be redirected to their officail site, press 'OK'")) {
-                                    window.open('https://metamask.io/')
-                                  }
-                                }
+                    <button
+                      className="imageButtonU"
+                      onClick={() => { window.open("https://pruf.io", "_blank") }}
+                    >
+                      <img
+                        className="imageFormU"
+                        title="Find out More!"
+                        src={require("./Resources/Images/favicon pruf no bg.png")}
+                        alt="Pruf U" />
+                    </button>
+                    <div className="siteInfoBox">
+                      <h3>
+                        dApp Last Updated:
+                  </h3>
+                      <h3>
+                        December 30, 2020
+                  </h3>
+                      <h3>
+                        <a onClick={() => { window.open("https://pruf.io", "_blank") }}> © pruf.io </a>
+                      </h3>
+                      <h3>
+                        {this.state.routeRequest === "noAddr"
+                          ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.6 </a>
+                          : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.2.6 </a>}
+                      </h3>
 
-                              }
-                              }
-                            >
-                              No Menu Options
-                            </Button>
-                          )} */}
+                      <Form.Check
+                        type="checkbox"
+                        checked={this.state.particles}
+                        className="checkBoxParticles"
+                        id="inlineFormCheck"
+                        onChange={() => { this.particles() }}
+                      />
 
-                          {this.state.assetClassHolderBool === true && this.state.assetClassHolderMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("ACAdmin") }}
-                            >
-                              AC Admin Menu
-                            </Button>
-                          )}
+                      <h3 className="textParticles">
+                        Particles
+                    </h3>
+                    </div>
+                    <ClickAwayListener onClickAway={() => { this.setState({ userMenu: undefined }) }}>
+                      <button
+                        className="imageButtonUser"
+                        onClick={() => { this.userMenu() }}>
+                        {window.addr !== undefined && (
+                          <Robohash
+                            className="imageFormUser"
+                            name={window.addr}
+                          />
+                        )}
+                        {window.addr === undefined && (
+                          <User
+                            className="imageFormUser"
+                            size={30}
+                          />
+                        )}
+                      </button>
+                    </ClickAwayListener>
+                    <ClickAwayListener onClickAway={() => { this.setState({ settingsMenu: false }) }}>
+                      <div className="hamburgerMenuLink">
+                        <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
+                      </div>
+                    </ ClickAwayListener>
+                    <div>
+                      {this.state.settingsMenu === true && (
+                        <div>
+                          <div className="hamburgerDropdownSettings">
 
-                          {this.state.IDHolderBool === false && this.state.assetHolderBool === true && this.state.assetHolderUserMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("NCUser") }}
-                            >
-                              Token Holder Menu
-                            </Button>
-                          )}
+                            {this.state.assetClassHolderBool === true && this.state.assetClassHolderMenuBool === false && (
+                              <Button
+                                size="lg"
+                                variant="toggle"
+                                onClick={() => { this.toggleMenu("ACAdmin") }}
+                              >
+                                AC Admin Menu
+                              </Button>
+                            )}
 
-                          {/* {this.state.faucetBool === false && this.state.routeRequest !== "noAddr" && (
+                            {this.state.IDHolderBool === false && this.state.assetHolderBool === true && this.state.assetHolderUserMenuBool === false && (
+                              <Button
+                                size="lg"
+                                variant="toggle"
+                                onClick={() => { this.toggleMenu("NCUser") }}
+                              >
+                                Token Holder Menu
+                              </Button>
+                            )}
+                            {/* {this.state.faucetBool === false && this.state.routeRequest !== "noAddr" && (
                             <Button
                               size="lg"
                               variant="toggle"
@@ -558,185 +538,172 @@ class Main extends Component {
                             </Button>
                           )}
                              */}
-                          {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("NC") }}
-                            >
-                              Token Minter Menu
-                            </Button>
-                          )}
+                            {this.state.IDHolderBool === true && this.state.assetHolderMenuBool === false && (
+                              <Button
+                                size="lg"
+                                variant="toggle"
+                                onClick={() => { this.toggleMenu("NC") }}
+                              >
+                                Token Minter Menu
+                              </Button>
+                            )}
 
-                          {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("basic") }}
-                            >
-                              Basic Menu
-                            </Button>)}
-
-                          {/* {this.state.isAuthUser === false && this.state.authorizedUserMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("authUser"); }}
-                            >
-                              Cusdodian Sign-In
-                            </Button>)} */}
-                          {/* {this.state.isAuthUser === true && this.state.authorizedUserMenuBool === false && (
-                            <Button
-                              size="lg"
-                              variant="toggle"
-                              onClick={() => { this.toggleMenu("authUser") }}
-                            >
-                              Cusdodian Menu
-                            </Button>)} */}
-
+                            {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
+                              <Button
+                                size="lg"
+                                variant="toggle"
+                                onClick={() => { this.toggleMenu("basic") }}
+                              >
+                                Basic Menu
+                              </Button>)}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  <div>
+                      )}
+                    </div>
+                    <div>
 
-                    {this.state.userMenu === true && (
-                      <div className="hamburgerDropdownUserInfo">
-                        {this.state.addr === undefined && (
-                          <h4 className="userStatFont">
-                            Please
-                            <a
-                              onClick={() => {
-                                this.setState({ userMenu: undefined })
-                                if (window.ethereum) { window.ethereum.enable() }
-                                else { alert("You do not currently have a Web3 provider installed, we recommend MetaMask"); }
-                              }
-                              }
-                              className="userDataLink">
-                              Log In
+                      {this.state.userMenu === true && (
+                        <div className="hamburgerDropdownUserInfo">
+                          {this.state.addr === undefined && (
+                            <h4 className="userStatFont">
+                              Please
+                              <a
+                                onClick={() => {
+                                  this.setState({ userMenu: undefined })
+                                  if (window.ethereum) { window.ethereum.enable() }
+                                  else { this.setState({ alertBanner: "You do not currently have a Web3 provider installed, we recommend MetaMask" }); }
+                                }
+                                }
+                                className="userDataLink">
+                                Log In
                               </a>
                               to View Balances
-                          </h4>
-                        )}
-                        {this.state.addr > 0 && (
-                          <>
-                            <h4 className="userStatFont">
-                              Currently serving :
-                              <Button
-                                variant="etherscan"
-                                title="Check it out on Etherscan!"
-                                onClick={() => { this.setState({ userMenu: undefined }); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
-                                {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
-                              </Button>
                             </h4>
-                            <br></br>
-                          </>
-                        )}
-                        {this.state.ETHBalance && (
-                          <>
-                            <h4 className="userStatFont">
-                              KETH Balance : Ξ{this.state.ETHBalance.substring(0, 6)}
-                              {/* <Button
+                          )}
+                          {this.state.addr > 0 && (
+                            <>
+                              <h4 className="userStatFont">
+                                Currently serving :
+                              <Button
+                                  variant="etherscan"
+                                  title="Check it out on Etherscan!"
+                                  onClick={() => { this.setState({ userMenu: undefined }); window.open("https://kovan.etherscan.io/address/" + this.state.addr) }}>
+                                  {this.state.addr.substring(0, 6) + "..." + this.state.addr.substring(37, 42)}
+                                </Button>
+                              </h4>
+                              <br></br>
+                            </>
+                          )}
+                          {this.state.ETHBalance && (
+                            <>
+                              <h4 className="userStatFont">
+                                KETH Balance : Ξ{this.state.ETHBalance.substring(0, 6)}
+                                {/* <Button
                                 variant="userButton"
                                 onClick={() => { this.setState({ userMenu: undefined }); window.open("https://faucet.kovan.network/", "_blank") }}>
                                 Get KETH
                               </Button> */}
-                            </h4>
-                            <br></br>
-                          </>
-                        )}
-                        {this.state.prufBalance && (
-                          <>
-                            <h4 className="userStatFont">
-                              PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
-                              <Button
-                                variant="userButton"
-                                onClick={() => { this.faucet() }}>
-                                Faucet
-                              </Button>
-                            </h4>
-                            <br></br>
-                          </>
-                        )}
-                        {this.state.assetClassBalance && (
-                          <>
-                            <h4 className="userStatFont">
-                              AC Nodekeys :
+                              </h4>
+                              <br></br>
+                            </>
+                          )}
+                          {this.state.prufBalance && (
+                            <>
+                              <h4 className="userStatFont">
+                                PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
                                 <Button
-                                variant="userButton"
-                                // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                onClick={() => { this.assetClassDashboard() }}>
-                                {this.state.assetClassBalance}
+                                  variant="userButton"
+                                  onClick={() => { this.faucet() }}>
+                                  Faucet
                               </Button>
+                              </h4>
+                              <br></br>
+                            </>
+                          )}
+                          {this.state.assetClassBalance && (
+                            <>
+                              <h4 className="userStatFont">
+                                AC Nodekeys :
+                                <Button
+                                  variant="userButton"
+                                  // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
+                                  onClick={() => { this.assetClassDashboard() }}>
+                                  {this.state.assetClassBalance}
+                                </Button>
+                                <Button
+                                  variant="userButton"
+                                  onClick={() => { this.faucet() }}>
+                                  Get AC
+                              </Button>
+                              </h4>
+                              <br></br>
+                            </>
+                          )}
+                          {this.state.assetBalance && (
+                            <>
+                              <h4 className="userStatFont">
+                                Assets :
                               <Button
-                                variant="userButton"
-                                onClick={() => { this.faucet() }}>
-                                Get AC
+                                  variant="userButton"
+                                  onClick={() => { this.assetDashboard() }}>
+                                  {this.state.assetBalance}
+                                </Button>
+                              </h4>
+                              <br></br>
+                            </>
+                          )}
+                          {this.state.IDTokenBalance && (
+                            <>
+                              <h4 className="userStatFont">
+                                Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)}
+                                {this.state.IDTokenBalance === "0" && (
+                                  <>
+                                    <X className="userIDBalance0" />
+                                    <Button
+                                      variant="userButton"
+                                      // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
+                                      onClick={() => { this.mintID() }}>
+                                      Get ID
                               </Button>
-                            </h4>
-                            <br></br>
-                          </>
-                        )}
-                        {this.state.assetBalance && (
-                          <>
-                            <h4 className="userStatFont">
-                              Assets :
-                              <Button
-                                variant="userButton"
-                                onClick={() => { this.assetDashboard() }}>
-                                {this.state.assetBalance}
-                              </Button>
-                            </h4>
-                            <br></br>
-                          </>
-                        )}
-                        {this.state.IDTokenBalance && (
-                          <>
-                            <h4 className="userStatFont">
-                              Token Minter : {this.state.IDTokenBalance > 0 && (<Check className="userIDBalance1" />)}
-                              {this.state.IDTokenBalance === "0" && (
-                                <>
-                                  <X className="userIDBalance0" />
-                                  <Button
-                                    variant="userButton"
-                                    // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
-                                    onClick={() => { this.mintID() }}>
-                                    Get ID
-                              </Button>
-                                </>
-                              )}
-                              {/* {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)} */}
-                            </h4>
-                            <br></br>
-                          </>
-                        )}
-                      </div>
-                    )}
+                                  </>
+                                )}
+                                {/* {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)} */}
+                              </h4>
+                              <br></br>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-              <ul className="headerForm">
-                {window._contracts !== undefined && (
-                  <nav>
-                    {this.state.noAddrMenuBool === true && (<NoAddressComponent />)}
-                    {this.state.assetHolderMenuBool === true && (<NonCustodialComponent />)}
-                    {this.state.assetHolderUserMenuBool === true && (<NonCustodialUserComponent />)}
-                    {this.state.assetClassHolderMenuBool === true && (<AdminComponent />)}
-                    {this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserComponent />)}
-                    {!this.state.isAuthUser && this.state.authorizedUserMenuBool === true && (<AuthorizedUserLogin />)}
-                    {this.state.basicMenuBool === true && (<BasicComponent />)}
-                    {this.state.faucetBool === true && (<FaucetComponent />)}
-                  </nav>
                 )}
-              </ul>
+                <ul className="headerForm">
+                  {window._contracts !== undefined && (
+                    <nav>
+                      {this.state.noAddrMenuBool === true && (<NoAddressComponent />)}
+                      {this.state.assetHolderMenuBool === true && (<NonCustodialComponent />)}
+                      {this.state.assetHolderUserMenuBool === true && (<NonCustodialUserComponent />)}
+                      {this.state.assetClassHolderMenuBool === true && (<AdminComponent />)}
+                      {this.state.basicMenuBool === true && (<BasicComponent />)}
+                      {this.state.faucetBool === true && (<FaucetComponent />)}
+                    </nav>
+                  )}
+                </ul>
+              </div>
             </div>
-          </div>
-          <div className="pageForm">
-            {this.state.particles === true && (
-              <ParticleBox />
-            )}
-            <style type="text/css">
-              {`
+            <div className="pageForm">
+              {this.state.alertBanner !== undefined && (
+                <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                  <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                    {this.state.alertBanner}
+                  </Alert>
+                </ClickAwayListener>
+              )}
+              {this.state.particles === true && (
+                <ParticleBox />
+              )}
+              <style type="text/css">
+                {`
                       .btn-primary {
                         background-color: #00a8ff;
                         color: white;
@@ -836,67 +803,58 @@ class Main extends Component {
                         background-color: #23b6ff;
                         color: white !important;
                       }
+                      .body {
+                        overflow: hidden !important;
+                      }
                    `}
-            </style>
-            <div>
-              <Route exact path="/" component={Home} />
-              {Router(this.state.routeRequest)}
+              </style>
+              <div>
+                <Route exact path="/" component={Home} />
+                {Router(this.state.routeRequest)}
+              </div>
             </div>
-          </div>
-          <NavLink to="/">
-          </NavLink>
-        </HashRouter >
-      );
-                    }
+            <NavLink to="/">
+            </NavLink>
+          </HashRouter >
+        );
+      }
     }
 
     //Watchdog which keeps state consistent with other components
-    this.updateWatchDog = setInterval(() => {
+    const updateWatchDog = setInterval(() => {
 
       //every tick ensure user auth level/user type is correct
-      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined ) {
+      if (this.state.isAuthUser !== window.isAuthUser && window.isAuthUser !== undefined) {
+        console.log("1")
         this.setState({ isAuthUser: window.isAuthUser })
       }
 
-      if (this.state.isACAdmin !== window.isACAdmin ) {
+      /* if (this.state.isACAdmin !== window.isACAdmin) {
+        console.log("2")
+        console.log(window.isACAdmin, this.state.isACAdmin)
         this.setState({ isACAdmin: window.isACAdmin })
-      }
+      } */
 
-      if (this.state.custodyType !== window.custodyType ) {
+      /* if (this.state.custodyType !== window.custodyType) {
+        console.log("3")
         this.setState({ custodyType: window.custodyType })
-      }
-
-      //Reset balance values to reflect in render
-      if (window.balances !== undefined ) {
-        if (
-          Object.values(window.balances) !==
-          Object.values({ assetClass: this.state.assetClassBalance, asset: this.state.assetBalance, ID: this.state.IDTokenBalance })) {
-          this.setState({
-            assetClassBalance: window.balances.assetClassBalance,
-            assetBalance: window.balances.assetBalance,
-            IDTokenBalance: window.balances.IDTokenBalance,
-            prufBalance: window.balances.prufTokenBalance,
-            assetHolderBool: window.assetHolderBool,
-            assetClassHolderBool: window.assetClassHolderBool,
-            IDHolderBool: window.IDHolderBool,
-            custodyType: window.custodyType,
-            hasFetchedBalances: window.hasFetchedBalances
-          })
-        }
-      }
+      } */
 
       if (this.state.ETHBalance !== window.ETHBalance && this.state.runWatchDog === true) {
+        console.log("5")
         this.setState({ ETHBalance: window.ETHBalance })
       }
 
       // Remote menu switcher
-      if (window.menuChange !== undefined ) {
+      if (window.menuChange !== undefined) {
+        console.log("6")
         console.log(window.menuChange)
         this.setState({ menuChange: window.menuChange })
       }
 
       //^^^
       if (this.state.menuChange !== undefined && this.state.runWatchDog === true) {
+        console.log("7")
         window.menuChange = undefined
         if (isMobile && window.ethereum) {
           window.routeRequest = "basicMobile"
@@ -957,7 +915,6 @@ class Main extends Component {
             noAddrMenuBool: false,
             authorizedUserMenuBool: false
           })
-
           this.setState({ menuChange: undefined });
         }
       }
@@ -976,19 +933,17 @@ class Main extends Component {
           hasFetchedBalances: false,
           routeRequest: "basicMobile"
         })
-
         window.web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
-
         window.addEventListener("accountListener", this.acctChanger());
       }
 
       //Catch updated assets case and rebuild asset inventory 
-      if (window.assets !== undefined ) {
-        if (window.assets.ids.length > 0 && window.assets.names.length === 0 && 
+      if (window.assets !== undefined) {
+        if (window.assets.ids.length > 0 && window.assets.names.length === 0 &&
           this.state.buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
           if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
+            console.log("10")
             console.log("WD: rebuilding assets (Last Step)")
-            //alert("WD: rebuilding assets (Last Step) ")
             //this.setState({runWatchDog: false})
             this.buildAssets()
           }
@@ -997,6 +952,7 @@ class Main extends Component {
 
       //If reset was remotely requested, begin full asset recount  
       if (window.resetInfo === true) {
+        console.log("11")
         window.hasLoadedAssetClasses = false;
         window.hasLoadedAssets = false;
         this.setState({ buildReady: false })
@@ -1008,22 +964,24 @@ class Main extends Component {
       //In the case of a completed recount and rough asset build, make asset info usable for app
       if (window.aTknIDs !== undefined && this.state.buildReady === false) {
         if (window.ipfsCounter >= window.aTknIDs.length && this.state.runWatchDog === true && window.aTknIDs.length > 0) {
+          console.log("12")
           console.log("Assets are ready for rebuild")
-          //alert("WD: Assets Deemed ready for rebuild.")
-          this.setState({ buildReady: true})
+          this.setState({ buildReady: true })
         }
       }
 
       //Assets finished rebuilding, flip rebuild switch
       else if ((this.state.buildReady === true && window.ipfsCounter < window.aTknIDs.length) ||
         (this.state.buildReady === true && this.state.runWatchDog === false)) {
-        console.log("Assets finished rebuilding, no longer ready for rebuild")
-        //alert("WD: Shutting off buildReady")
-        this.setState({ buildReady: false })
+          console.log("13")
+          console.log("Assets finished rebuilding, no longer ready for rebuild")
+          this.setState({ buildReady: false })
       }
 
       //if(this.state.hasMounted)console.log(window.aTknIDs,this.state.buildReady,window.ipfsCounter, this.state.runWatchDog)
-    }, 100)
+    }, 500)
+
+    this.netWorkWatchdog = setInterval(() => { if (this.state.runWatchDog === true) { window.web3.eth.net.getNetworkType().then((e) => { if (e === "kovan" && !this.state.isKovan) { this.setState({ isKovan: true }) } else if(e !== "kovan") { this.setState({ isKovan: false }) } }) } }, 800)
 
     //Local menu toggler for navlinks
     this.toggleMenu = async (menuChoice) => {
@@ -1202,33 +1160,18 @@ class Main extends Component {
       if (window.recount === true) {
         window.aTknIDs = [];
         window.acTknIDs = [];
-        if (window.balances !== undefined) window.balances.assetBalance = undefined;
+        if (window.balances !== undefined) window.balances.assetBalance = 0;
         window.recount = false
         await window.utils.getETHBalance();
         return this.setUpTokenVals(true)
       }
 
-      //If there are balances to get, lock them into state
-      if (window.balances !== undefined) {
-        this.setState({
-          assetClassBalance: window.balances.assetClassBalance,
-          assetBalance: window.balances.assetBalance,
-          IDTokenBalance: window.balances.IDTokenBalance,
-          prufBalance: window.balances.prufTokenBalance,
-          assetHolderBool: window.assetHolderBool,
-          assetClassHolderBool: window.assetClassHolderBool,
-          IDHolderBool: window.IDHolderBool,
-          custodyType: window.custodyType,
-          hasFetchedBalances: window.hasFetchedBalances
-        })
-      }
-
       //Do a full update if the balances are returning undefined at this stage (They should never do this)
-      else if (window.balances === undefined) {
+      /* else if (Object.values(window.balances) === [0,0,0,0]) {
         console.log("balances undefined, trying to get them...");
         //if (window.addr === undefined) { return this.forceUpdate }
         return this.setUpTokenVals(true);
-      }
+      } */
       console.log("SA: In setUpAssets")
 
       let tempDescObj = {}
@@ -1236,7 +1179,6 @@ class Main extends Component {
       let tempNamesArray = [];
 
       //Get all asset token profiles for parsing
-      //alert("IN SETUP ASSETS")
 
       await window.utils.getAssetTokenInfo()
       window.assetClasses = await window.utils.getAssetClassTokenInfo()
@@ -1261,37 +1203,15 @@ class Main extends Component {
 
       console.log("Asset setUp Complete. Turning on watchDog.")
 
-      //Build an AC report for provisional placeholder on AC node bal
-      /* if (window.assetClasses !== undefined) {
-        if (window.assetClasses.ids !== undefined) {
-          for (let i = 0; i < window.assetClasses.ids.length; i++) {
-            report += ((i + 1) + ".) " + window.assetClasses.names[i]
-              + "\nCustody type: " + window.assetClasses.custodyTypes[i]
-              + "\nroot ACN: " + window.assetClasses.roots[i]
-              + "\nnode ID: " + window.assetClasses.ids[i]
-              + "\nshare: " + window.assetClasses.discounts[i] / 100 + "%\n----------\n")
-          }
-        }
-        else {
-          report = "No AC nodekeys held by user";
-        }
-      } */
-
-      //{ names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
-      //this.setState({ assetClassReport: report })
-
       await this.setState({ runWatchDog: true })
 
-      if(window.assetClasses.ids !== undefined && window.aTknIDs !== undefined){
-        if(window.assetClasses.ids.length > 0 && window.aTknIDs.length < 1){return this.buildAssets()}
+      if (window.assetClasses.ids !== undefined && window.aTknIDs !== undefined) {
+        if (window.assetClasses.ids.length > 0 && window.aTknIDs.length < 1) { return this.buildAssets() }
       }
 
       console.log("IPFS operation count: ", window.ipfsCounter)
       console.log("Prebuild Assets: ", window.assets)
       console.log("Bools...", this.state.assetHolderBool, this.state.assetClassHolderBool, this.state.IDHolderBool)
-      //alert("PREBUILD FINISHED" + this.state.runWatchDog + window.balances.assetBalance)
-      //alert("Some Vars: atkns" + window.hasNoAssets + " acs" + window.hasNoAssetClasses + "ids"+ window.aTknIDs + "\n")
-      //console.log(window.assets.ids, " aTkn-> ", window.aTknIDs)
     }
 
     this.mintID = async () => {
@@ -1299,7 +1219,7 @@ class Main extends Component {
         .GET_ID()
         .send({ from: window.addr })
         .on("error", function (_error) {
-          alert("Something went wrong when minting ID!")
+          this.setState({ alertBanner: "Something went wrong when minting ID!" })
         })
         .on("receipt", (receipt) => {
           window.resetInfo = true;
@@ -1339,11 +1259,7 @@ class Main extends Component {
 
     //Rebuild fetched assets, preparing them for use by the app
     this.buildAssets = () => {
-      //if(window.assets.ids === undefined){this.buildAssets()}
-      //this.setState({buildReady: false})
-      //alert("Some Vars: atkns" + Object.values(window.assets) + " acs" + window.hasNoAssetClasses)
       console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
-      //alert("BA: In buildAssets. IPFS operation count: " + window.ipfsCounter)
       window.ipfsCounter = 0;
       let tempDescArray = [];
       let emptyDesc = { photo: {}, text: {}, name: "" }
@@ -1355,13 +1271,13 @@ class Main extends Component {
 
       let tempDisplayArray = [];
 
-      if(window.hasNoAssetClasses === false){
+      if (window.hasNoAssetClasses === false) {
 
-        for (let e = 0; e < window.assetClasses.ids.length; e++){
+        for (let e = 0; e < window.assetClasses.ids.length; e++) {
           AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
         }
-  
-        for (let e = 0; e < window.assetClasses.ids.length; e++){
+
+        for (let e = 0; e < window.assetClasses.ids.length; e++) {
           AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
         }
 
@@ -1370,17 +1286,16 @@ class Main extends Component {
         window.hasLoadedAssetClasses = true;
       }
 
-      if(window.hasNoAssets === false){
-              //Get objects from unparsed asset data for reference in the app 
-      for (let i = 0; i < window.assets.ids.length; i++) {
-        //console.log(window.assets.descriptions[i][0])
-        if (window.assets.descriptions[i][0] !== undefined) {
-          tempDescArray.push(JSON.parse(window.assets.descriptions[i][0]))
+      if (window.hasNoAssets === false) {
+        //Get objects from unparsed asset data for reference in the app 
+        for (let i = 0; i < window.assets.ids.length; i++) {
+          if (window.assets.descriptions[i][0] !== undefined) {
+            tempDescArray.push(JSON.parse(window.assets.descriptions[i][0]))
+          }
+          else {
+            tempDescArray.push(emptyDesc)
+          }
         }
-        else {
-          tempDescArray.push(emptyDesc)
-        }
-      }
 
         for (let x = 0; x < window.assets.ids.length; x++) {
           if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
@@ -1389,30 +1304,30 @@ class Main extends Component {
           else {
             tempNameArray.push(tempDescArray[x].name)
           }
-  
+
         }
 
         for (let e = 0; e < window.aTknIDs.length; e++) {
           identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
         }
-  
+
         for (let e = 0; e < window.aTknIDs.length; e++) {
           identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
         }
-        
-      for (let j = 0; j < window.aTknIDs.length; j++) {
-        if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
-          tempDisplayArray.push("")
-        }
 
-        else if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length > 0) {
-          tempDisplayArray.push(Object.values(tempDescArray[j].photo)[0])
-        }
+        for (let j = 0; j < window.aTknIDs.length; j++) {
+          if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length === 0) {
+            tempDisplayArray.push("")
+          }
 
-        else {
-          tempDisplayArray.push(tempDescArray[j].photo.DisplayImage)
+          else if (tempDescArray[j].photo.DisplayImage === undefined && Object.values(tempDescArray[j].photo).length > 0) {
+            tempDisplayArray.push(Object.values(tempDescArray[j].photo)[0])
+          }
+
+          else {
+            tempDisplayArray.push(tempDescArray[j].photo.DisplayImage)
+          }
         }
-      }
 
         window.assets.identiconsLG = identiconsLG;
         window.assets.identicons = identicons;
@@ -1421,40 +1336,59 @@ class Main extends Component {
         window.assets.displayImages = tempDisplayArray;
         window.hasLoadedAssets = true;
       }
-      
+      if(window.balances.prufTokenBalance !== this.state.prufBalance || window.balances.assetBalance !== this.state.assetBalance){
+        this.setState({
+          assetBalance: window.balances.assetBalance, 
+          assetClassBalance: window.balances.assetClassBalance,
+          prufBalance: window.balances.prufTokenBalance,
+          IDTokenBalance: window.balances.IDTokenBalance,
+          assetHolderBool: window.assetHolderBool,
+          assetClassHolderBool: window.assetClassHolderBool,
+          IDHolderBool: window.IDHolderBool,
+          custodyType: window.custodyType,
+          hasFetchedBalances: window.hasFetchedBalances
+          })
+      }
       console.log("BA: Assets after rebuild: ", window.assets)
       console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
-      //alert("Assets Built: " + window.assets.ids.length)
     }
 
     //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
     this.setUpTokenVals = async (willSetup) => {
-      window.balances = {}
+      const self = this;
       console.log("STV: Setting up balances")
 
-      await window.utils.determineTokenBalance()
+      await window.utils.determineTokenBalance().then(async(e)=>{ console.log(e); 
+        await self.setState({
+        assetBalance: e.assetBalance, 
+        assetClassBalance: e.assetClassBalance,
+        prufBalance: e.prufTokenBalance,
+        IDTokenBalance: e.IDTokenBalance,
+        assetHolderBool: window.assetHolderBool,
+        assetClassHolderBool: window.assetClassHolderBool,
+        IDHolderBool: window.IDHolderBool,
+        custodyType: window.custodyType,
+        hasFetchedBalances: window.hasFetchedBalances
+        })
+      })
       await console.log(window.balances)
       if (willSetup) {
         return this.setUpAssets()
       }
+      
     }
 
     //Get a single asset's ipfs description file contents using "lookup" (the destination hash) and "descElement" for the array to append 
 
     this.getIPFSJSONObject = (lookup, descElement) => {
-      //console.log(lookup)
       window.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-          //alert("IPFS ERROR")
           descElement.push(undefined)
           window.ipfsCounter++
-          //console.log(window.ipfsCounter)
         } else {
-          //console.log(lookup, "Here's what we found for asset description: ", result);
           descElement.push(result)
           window.ipfsCounter++
-          //console.log(window.ipfsCounter)
         }
       });
     };
@@ -1498,7 +1432,6 @@ class Main extends Component {
               })
 
               window.addr = "";
-              window.balances = {};
 
             }
 
@@ -1528,8 +1461,6 @@ class Main extends Component {
             self.setState({ addr: e[0] });
             window.recount = true;
             window.resetInfo = true;
-
-            //self.setUpContractEnvironment(window.web3);
             console.log("///////in acctChanger////////");
           }
           else { console.log("Something bit in the acct listener, but no changes made.") }
@@ -1541,6 +1472,7 @@ class Main extends Component {
     this.setUpContractEnvironment = async (_web3) => {
       if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
       window.isSettingUpContracts = true;
+      _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { this.setState({ isKovan: true }) } else { this.setState({ isKovan: false }) } })
       console.log("Setting up contracts")
       if (window.ethereum !== undefined) {
         if (!isMobile) {
@@ -1593,13 +1525,12 @@ class Main extends Component {
 
         if (window.addr !== undefined) {
           await window.utils.getETHBalance();
-          await this.setUpTokenVals()
-          await this.setUpAssets()
+          await this.setUpTokenVals(true)
+          //await this.setUpAssets()
         }
 
 
         console.log("bools...", window.assetHolderBool, window.assetClassHolderBool, window.IDHolderBool)
-        //console.log("Wallet balance in ETH: ", window.ETHBalance)
         window.isSettingUpContracts = false;
         return this.setState({ runWatchDog: true })
       }
@@ -1751,7 +1682,10 @@ class Main extends Component {
 
   //stuff to do when component mounts in window
   componentDidMount() {
+    
+    window.balances = {}
     let timeOutCounter = 0;
+    window.recount = false;
     let _web3, _ipfs;
 
     _ipfs = new this.state.IPFS({
@@ -1761,7 +1695,7 @@ class Main extends Component {
     });
 
     window.ipfs = _ipfs;
-    
+
     _web3 = require("web3");
     _web3 = new Web3(_web3.givenProvider);
     this.setState({ web3: _web3 });
@@ -1793,10 +1727,10 @@ class Main extends Component {
     window.isSettingUpContracts = false;
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
-    if(!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66){
+    if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
       window.location.href = '/#/';
     } else {
-      if(isMobile){
+      if (isMobile) {
         window.location.href = '/#/retrieve-record-mobile/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
       } else {
         console.log(refString)
@@ -1979,6 +1913,14 @@ class Main extends Component {
           <div className="errorMediaLink">
             <a className="centeredErrorButtons"><Mail size={20} onClick={() => { window.open("mailto:support@pruf.io", "_blank") }} /></a>
           </div>
+        </div>)
+    }
+
+    if (this.state.isKovan === false) {
+      return (
+        <div>
+          <h1> Please connect to the Kovan testnet and reload the page. </h1>
+          <br></br>
         </div>)
     }
 

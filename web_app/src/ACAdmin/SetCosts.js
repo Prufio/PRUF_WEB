@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
 
 class SetCosts extends Component {
   constructor(props) {
@@ -131,10 +133,9 @@ class SetCosts extends Component {
     }
 
     const setCosts = () => {
-
       const serviceCost = window.web3.utils.toWei(String(this.state.serviceCost))
+      if (serviceCost === undefined || this.state.assetClass === "" || this.state.beneficiary === "") { return this.setState({ alertBanner: "Please fill out all forms before submission." }) }
       this.setState({ transaction: true })
-      if (serviceCost === "" || this.state.assetClass === "" || this.state.beneficiary === "") { return alert("Please fill out all forms") }
       window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           this.state.assetClass,
@@ -333,12 +334,18 @@ class SetCosts extends Component {
             </div>
           )
         }
-        {
-          this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
-            <div className="assetSelectedResults">
-              <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
-            </div>
-          )
+        {this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
+          <div className="assetSelectedResults">
+            {this.state.alertBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                  {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+            <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+          </div>
+        )
         }
         {
           this.state.transaction === true && (

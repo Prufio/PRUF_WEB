@@ -31,6 +31,7 @@
     "react-scripts": "^3.4.3",
     "react-simple-snake": "^0.2.2",
     "react-to-print": "^2.10.3",
+    "react-web-share": "^1.0.16",
     "web3": "^1.2.7"
   },
   "scripts": {

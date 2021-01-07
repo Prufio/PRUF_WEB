@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "react-bootstrap/Alert";
 import { Home, XSquare, CheckCircle, HelpCircle } from "react-feather";
+import { ClickAwayListener } from '@material-ui/core';
 
 class enableContract extends Component {
   constructor(props) {
@@ -84,7 +86,8 @@ class enableContract extends Component {
         transaction: false,
         txHash: "",
         txStatus: false,
-        wasSentPacket: false
+        wasSentPacket: false,
+        e: undefined
       })
     }
 
@@ -139,7 +142,7 @@ class enableContract extends Component {
           case "RCLR":
             { authTemp = "3"; break; }
           default:
-            { alert("Contract not allowed in asset class"); clearForm(); break; }
+            { this.setState({ alertBanner: "Contract not allowed in asset class" }); clearForm(); break; }
         }
       }
 
@@ -163,7 +166,7 @@ class enableContract extends Component {
           case "RCLR":
             { authTemp = "3"; break; }
           default:
-            { alert("Contract not allowed in asset class"); clearForm(); break; }
+            { this.setState({ alertBanner: "Contract not allowed in asset class" }); clearForm(); break; }
         }
       }
 
@@ -173,8 +176,8 @@ class enableContract extends Component {
     }
 
     const enableContract = async () => {
+      if (this.state.name < 1) { return this.setState({ alertBanner: "Please select a contract to enable" }) }
       this.setState({ transaction: true })
-      if (this.state.name < 1) { return alert("Please select a contract to enable") }
       if (this.state.assetClass === undefined) { return }
       console.log(this.state.name)
       console.log(this.state.assetClass)
@@ -335,6 +338,13 @@ class enableContract extends Component {
         {
           this.state.transaction === false && this.state.txHash === "" && this.state.assetClassSelected && (
             <div className="assetSelectedResults">
+              {this.state.alertBanner !== undefined && (
+                <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
+                  <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
+                    {this.state.alertBanner}
+                  </Alert>
+                </ClickAwayListener>
+              )}
               <div className="assetSelectedContentHead">Configuring Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
             </div>
           )

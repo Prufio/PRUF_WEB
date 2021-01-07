@@ -121,7 +121,7 @@ function buildWindowUtils() {
             <option key="noselect" value="null"> Select an option </option>];
 
           for (let i = 0, count = 1; i < keys.length; i++) {
-            if (keys[i] !== "ID_TKN" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR" && keys[i] !== "APP" && keys[i] !== "NP" && keys[i] !== "ECR") {
+            if (keys[i] !== "ID_TKN" && keys[i] !== "PARTY" && keys[i] !== "PIP" && keys[i] !== "VERIFY" && keys[i] !== "UTIL_TKN" && keys[i] !== "STOR" && keys[i] !== "APP" && keys[i] !== "NP" && keys[i] !== "ECR") {
               component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
                 {count}:
               Name: {keys[i]}
@@ -991,6 +991,7 @@ function buildWindowUtils() {
   }
 
   const _checkACName = async (name) => {
+    let tempBool;
     if (window.contracts !== undefined) {
       await window.contracts.AC_MGR.methods
         .resolveAssetClass(name)
@@ -998,11 +999,12 @@ function buildWindowUtils() {
           if (_error) { console.log(_error) }
           else {
             console.log("resolved successfully to AC: ", _result)
-            if (Number(_result) > 0) { return (true) }
-            else { return false }
+            if (Number(_result) > 0) { tempBool = true }
+            else { tempBool = false }
           }
         });
     }
+    return tempBool;
   }
 
   const _getEscrowData = async (idxHash) => {
@@ -1206,6 +1208,8 @@ function buildWindowUtils() {
         assetBalance: _assetBal,
         IDTokenBalance: _IDTokenBal
       }
+
+      return window.balances
     }
   }
 
@@ -1458,7 +1462,7 @@ function buildWindowUtils() {
             logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
           />
         </div>
-        <div className="cardHref">https://pruf.io</div>
+        <div className="cardHref">https://app.pruf.io</div>
         <div className="cardDate">{date}</div>
         <div className="printFormContent">
           <img
@@ -1467,7 +1471,7 @@ function buildWindowUtils() {
             alt="Pruf Print Background" />
           <div className="printQR2">
             <QRCode
-              value={window.printObj.idxHash}
+              value={"https://indevapp.pruf.io/#/"+window.printObj.idxHash}
               size="160"
               fgColor="#002a40"
               logoWidth="32"
@@ -1476,8 +1480,9 @@ function buildWindowUtils() {
             />
           </div>
           <p className="cardNamePrint">Name : {window.printObj.name}</p>
-          <p className="cardAcPrint">Asset Class : {window.printObj.assetClass}</p>
+          <p className="cardAcPrint">Asset Class : {window.printObj.assetClassName}</p>
           <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
+          
         </div>
       </div >
     )
