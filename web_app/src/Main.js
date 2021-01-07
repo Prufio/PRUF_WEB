@@ -863,6 +863,8 @@ class Main extends Component {
             self.setState({ addr: e[0] });
             window.recount = true;
             window.resetInfo = true;
+            self.setUpTokenVals();
+            window.utils.getETHBalance();
             console.log("///////in acctChanger////////");
           }
           else { console.log("Something bit in the acct listener, but no changes made.") }
@@ -994,11 +996,20 @@ class Main extends Component {
       console.log("STV: Setting up balances")
 
       await window.utils.determineTokenBalance().then(async(e)=>{ console.log(e); 
-        await self.setState({
-        prufBalance: e.prufTokenBalance,
-        IDTokenBalance: e.IDTokenBalance,
-        hasFetchedBalances: window.hasFetchedBalances
-        })
+        if(e !== undefined){
+          await self.setState({
+            prufBalance: e.prufTokenBalance,
+            IDTokenBalance: e.IDTokenBalance,
+            hasFetchedBalances: window.hasFetchedBalances
+            })
+        }
+        else{
+          this.setState({
+            prufBalance: "N/A",
+            IDTokenBalance: "N/A",
+            hasFetchedBalances: window.hasFetchedBalances
+          })
+        }
       })
 
       await console.log(window.balances)
