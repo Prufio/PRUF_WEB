@@ -127,7 +127,7 @@ class AssetDashboard extends React.Component {
       APP: "",
       NP: "",
       STOR: "",
-      baseURL: "https://indevapp.pruf.io/#/",
+      baseURL: "https://app.pruf.io/#/",
       URL: undefined,
       AC_MGR: "",
       ECR_NC: "",
@@ -325,7 +325,7 @@ class AssetDashboard extends React.Component {
                           <div className="displayQR">
                             <div className="QR">
                               <QRCode
-                                value={"https://indevapp.pruf.io/#/retrieve-record?" + obj.idxHash}
+                                value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
                                 size="150"
                                 fgColor="#002a40"
                                 logoWidth="35"
