@@ -51,10 +51,10 @@ class ExportAsset extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
       console.log("stat", window.sentPacket.status)
-      if (Number(window.sentPacket.statusNum) !== 51) {
+      if (Number(window.sentPacket.statusNum) !== 1) {
         alert("Asset is not set to transferrable! Owner must set the status to transferrable before export.");
         window.sentpacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
       this.setState({
         name: window.sentPacket.name,
@@ -82,41 +82,6 @@ class ExportAsset extends Component {
 
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
-
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      if (e === "null" || e === undefined) {
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
-
-      console.log(resArray)
-
-      if (Number(resArray[0]) !== 51) {
-        this.setState({ alertBanner: "Cannot export asset in non-transferrable status" }); return clearForm()
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
-      })
-    }
 
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
@@ -150,7 +115,7 @@ class ExportAsset extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", this.state.agentAddress);
 
-      await window.contracts.NP_NC.methods
+      await window.contracts.NP.methods
         ._exportNC(
           idxHash
         )
@@ -169,9 +134,7 @@ class ExportAsset extends Component {
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
           window.resetInfo = true;
-          if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
+          
         });
 
       return this.setState({ idxHash: undefined, wasSentPacket: false }); //clear form inputs
@@ -200,44 +163,11 @@ class ExportAsset extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {!this.state.wasSentPacket && (
-                    <>
-                      {this.state.transaction === false && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
-
-                        >
-                          {this.state.hasLoadedAssets && (
-                            <optgroup className="optgroup">
-                              {window.utils.generateAssets()}
-                            </optgroup>)}
-                          {!this.state.hasLoadedAssets && (
-                            <optgroup>
-                              <option value="null">
-                                Loading Assets...
-                           </option>
-                            </optgroup>)}
-                        </Form.Control>)}
-                      {this.state.transaction === true && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          disabled
-                        >
-                          <optgroup className="optgroup">
-                            <option>Exporting "{this.state.idxHash}"</option>
-                          </optgroup>
-                        </Form.Control>)}
-                    </>
-                  )}
 
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
                       disabled
                     >
                       <optgroup>

@@ -34,7 +34,7 @@ class EscrowManager extends Component {
         return window.resetInfo = true;
       }
       if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
       if (this.state.idxHashRaw === "" && this.state.result === "") {
@@ -58,12 +58,12 @@ class EscrowManager extends Component {
         return this.setState({ idxHash: "", transaction: false, txStatus: false, txHash: "", isSettingEscrowAble: undefined, accessPermitted: false, wasSentPacket: false, isSettingEscrow: "0", help: false, input: false })
       }
 
-      if (Number(resArray[0]) === 56 || Number(resArray[0]) === 50) {
+      if (Number(resArray[0]) === 6 || Number(resArray[0]) === 50) {
         this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false" })
         console.log("isSettingEscrowAble: false")
       }
 
-      if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 56) {
+      if (Number(resArray[0]) !== 50 && Number(resArray[0]) !== 6) {
         this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true" })
         console.log("isSettingEscrowAble: true")
       }
@@ -127,12 +127,12 @@ class EscrowManager extends Component {
   componentDidMount() {//stuff to do when component mounts in window
     if (window.sentPacket !== undefined) {
 
-      if (Number(window.sentPacket.statusNum) === 56 || Number(window.sentPacket.statusNum) === 50) {
+      if (Number(window.sentPacket.statusNum) === 6 || Number(window.sentPacket.statusNum) === 50) {
         this.setState({ isSettingEscrowAble: false, isSettingEscrow: "false" })
         console.log("isSettingEscrowAble: false")
       }
 
-      else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 56) {
+      else if (Number(window.sentPacket.statusNum) !== 50 && Number(window.sentPacket.statusNum) !== 6) {
         this.setState({ isSettingEscrowAble: true, isSettingEscrow: "true" })
         console.log("isSettingEscrowAble: true")
       }
@@ -140,7 +140,7 @@ class EscrowManager extends Component {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentpacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
       this.setState({
         name: window.sentPacket.name,
@@ -266,7 +266,6 @@ class EscrowManager extends Component {
 
     const _setEscrow = async () => {
       if (this.state.agent === undefined || this.state.agent === "" || this.state.escrowTime < 1 || this.state.timeFormat === null) { return this.setState({ alertBanner: "Please fill all forms before submission" }) }
-      if (this.state.newStatus <= 49) { this.setState({ transaction: false }); this.setState({ alertBanner: "Cannot set status under 50 in non-custodial AC" }); return clearForm() }
       if (this.state.agent.substring(0, 2) !== "0x") { this.setState({ transaction: false }); this.setState({ alertBanner: "Agent address invalid" }); return clearForm() }
       this.setState({ help: false })
       this.setState({ txStatus: false });
@@ -283,7 +282,7 @@ class EscrowManager extends Component {
 
 
 
-      await window.contracts.ECR_NC.methods
+      await window.contracts.ECR.methods
         .setEscrow(idxHash, window.web3.utils.soliditySha3(this.state.agent), window.utils.convertTimeTo(this.state.escrowTime, this.state.timeFormat), this.state.newStatus)
         .send({ from: window.addr })
         .on("error", function (_error) {
@@ -300,9 +299,7 @@ class EscrowManager extends Component {
           self.setState({ txStatus: receipt.status });
           console.log(receipt.status);
           window.resetInfo = true;
-          if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
+          
           //Stuff to do when tx confirms
         });
       console.log(this.state.txHash);
@@ -322,7 +319,7 @@ class EscrowManager extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
 
-      await window.contracts.ECR_NC.methods
+      await window.contracts.ECR.methods
         .endEscrow(idxHash)
         .send({ from: window.addr })
         .on("error", function (_error) {
@@ -489,38 +486,6 @@ class EscrowManager extends Component {
                     <Form.Row>
                       <Form.Group as={Col} controlId="formGridAsset">
                         <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                        {!this.state.wasSentPacket && (
-                          <>
-                            {this.state.transaction === false && (
-                              <Form.Control
-                                as="select"
-                                size="lg"
-                                onChange={(e) => { this.checkIn(e.target.value) }}
-
-                              >
-                                {this.state.hasLoadedAssets && (
-                                  <optgroup className="optgroup">
-                                    {window.utils.generateAssets()}
-                                  </optgroup>)}
-                                {!this.state.hasLoadedAssets && (
-                                  <optgroup>
-                                    <option value="null">
-                                      Loading Assets...
-                           </option>
-                                  </optgroup>)}
-                              </Form.Control>)}
-                            {this.state.transaction === true && (
-                              <Form.Control
-                                as="select"
-                                size="lg"
-                                disabled
-                              >
-                                <optgroup className="optgroup">
-                                  <option>Modifying Escrow of "{this.state.name}"</option>
-                                </optgroup>
-                              </Form.Control>)}
-                          </>
-                        )}
                         {this.state.wasSentPacket && (
                           <Form.Control
                             as="select"

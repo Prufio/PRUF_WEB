@@ -53,16 +53,16 @@ class DecrementCounter extends Component {
     if (window.sentPacket !== undefined) {
 
 
-      if (Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
+      if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4) {
         alert("Cannot edit asset in lost or stolen status");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
-      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 56) {
+      if (Number(window.sentPacket.statusNum) === 50 || Number(window.sentPacket.statusNum) === 6) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
       this.setState({
@@ -114,53 +114,6 @@ class DecrementCounter extends Component {
       e.preventDefault();
     }
 
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      this.setState({
-        txStatus: false,
-        txHash: ""
-      })
-      if (e === "null" || e === undefined) {
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
-      let countDownStart = await window.utils.checkAssetCounterStart(window.assets.ids[e], [0])
-      let count = await window.utils.checkAssetCount(window.assets.ids[e], [0])
-      console.log(resArray)
-      console.log(countDownStart)
-      console.log(count)
-
-      if (Number(resArray[0]) === 53 || Number(resArray[0]) === 54) {
-        this.setState({ alertBanner: "Cannot edit asset in lost or stolen status" }); return clearForm()
-      }
-
-      if (Number(resArray[0]) === 50 || Number(resArray[0]) === 56) {
-        this.setState({ alertBanner: "Cannot edit asset in escrow! Please wait until asset has met escrow conditions" }); return clearForm()
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        count: count,
-        countDownStart: countDownStart,
-      })
-    }
-
     const _decrementCounter = async () => {
       let idxHash = this.state.idxHash;
       if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){
@@ -193,7 +146,7 @@ class DecrementCounter extends Component {
 
       }
 
-      await window.contracts.NP_NC.methods
+      await window.contracts.NP.methods
         ._decCounter(idxHash, this.state.countDown)
         .send({ from: window.addr })
         .on("error", function (_error) {
@@ -211,9 +164,7 @@ class DecrementCounter extends Component {
           self.setState({ txStatus: receipt.status });
           console.log(receipt.status);
           window.resetInfo = true;
-          if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
+          
           //Stuff to do when tx confirms
         });
 
@@ -243,43 +194,10 @@ class DecrementCounter extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {!this.state.wasSentPacket && (
-                    <>
-                      {this.state.transaction === false && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
-
-                        >
-                          {this.state.hasLoadedAssets && (
-                            <optgroup className="optgroup">
-                              {window.utils.generateAssets()}
-                            </optgroup>)}
-                          {!this.state.hasLoadedAssets && (
-                            <optgroup>
-                              <option value="null">
-                                Loading Assets...
-                           </option>
-                            </optgroup>)}
-                        </Form.Control>)}
-                      {this.state.transaction === true && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          disabled
-                        >
-                          <optgroup className="optgroup">
-                            <option>Modifying "{this.state.name}"</option>
-                          </optgroup>
-                        </Form.Control>)}
-                    </>
-                  )}
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
                       size="lg"
-                      onChange={(e) => { _checkIn(e.target.value) }}
                       disabled
                     >
                       <optgroup>

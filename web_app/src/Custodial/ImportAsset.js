@@ -64,7 +64,7 @@ class ImportAsset extends Component {
         console.log("SentPacketStatus :", window.sentPacket.status)
         alert("Asset is not exported! Owner must export the assset in order to import.");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
       this.setState({ name: window.sentPacket.name })
@@ -107,8 +107,8 @@ class ImportAsset extends Component {
           destinationACData = await window.utils.getACData("name", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
 
           this.setState({ ACname: this.state.selectedAssetClass });
@@ -120,10 +120,9 @@ class ImportAsset extends Component {
           acDoesExist = await window.utils.checkForAC("id", this.state.selectedAssetClass);
           await console.log("Exists?", acDoesExist)
 
-          if (!acDoesExist && window.confirm("Asset class does not currently exist. Consider minting it yourself! Click ok to route to our website for more information.")) {
-            window.open('https://www.pruf.io')
+          if (!acDoesExist) {
+            return this.setState({alertBanner: "Asset class does not currently exist."})
           }
-
           this.setState({ assetClass: this.state.selectedAssetClass });
           await window.utils.resolveACFromID(this.state.selectedAssetClass)
           destinationACData = await window.utils.getACData("id", this.state.selectedAssetClass);
@@ -137,7 +136,6 @@ class ImportAsset extends Component {
           if (Number(resArray[0]) !== 70) {
             this.setState({ alertBanner: "Asset is not exported! Owner must export the assset in order to import." });
             window.sentPacket = undefined;
-            return window.location.href = "/#/asset-dashboard"
           }
 
           console.log(destinationACData.root)
@@ -145,7 +143,6 @@ class ImportAsset extends Component {
           if (resArray[1] !== destinationACData.root) {
             this.setState({ alertBanner: "Import destination AC must have same root as origin!" });
             window.sentPacket = undefined;
-            return window.location.href = "/#/asset-dashboard"
           }
         }
         this.setState({ assetClassSelected: true, acData: window.tempACData, txHash: "" });
@@ -172,67 +169,6 @@ class ImportAsset extends Component {
       e.preventDefault();
     }
 
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      console.log("Checking in with id: ", e)
-      if (e === "null" || e === undefined) {
-        this.setState({ alertBanner: "Please select an asset before submission." })
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        console.log("heading over to dashboard")
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
-      console.log(resArray)
-
-      if (Number(resArray[1]) === 0) {
-        this.setState({
-          QRreader: false,
-        })
-        this.setState({ alertBanner: "Asset does not exist! Ensure data fields are correct before submission." });
-        return clearForm()
-      }
-
-      if (Number(resArray[0]) !== 70) {
-        this.setState({
-          QRreader: false,
-        })
-        this.setState({ alertBanner: "Asset is not exported! Owner must export the assset in order to import." });
-        return clearForm()
-      }
-
-      let destinationACData = await window.utils.getACData("id", this.state.assetClass);
-      let originACRoot = window.assets.assetClasses[e]
-      console.log(originACRoot, destinationACData.root)
-
-      console.log(destinationACData.root)
-      if (originACRoot !== destinationACData.root) {
-        this.setState({
-          QRreader: false,
-        })
-        return this.setState({ alertBanner: "Import destination AC must have same root as origin!" })
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      return this.setState({
-        currentAssetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
-      })
-    }
-
     const _importAsset = async () => {
       let idxHash = this.state.idxHash;
       this.setState({ help: false })
@@ -249,7 +185,7 @@ class ImportAsset extends Component {
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
 
-      await window.contracts.APP_NC.methods
+      await window.contracts.APP.methods
         .$importAsset(idxHash, this.state.assetClass)
         .send({ from: window.addr })
         .on("error", function (_error) {
@@ -266,9 +202,7 @@ class ImportAsset extends Component {
           self.setState({ txStatus: receipt.status });
           console.log(receipt.status);
           window.resetInfo = true;
-          if (self.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
+          
           //Stuff to do when tx confirms
         });
       console.log(this.state.txHash);
@@ -329,43 +263,10 @@ class ImportAsset extends Component {
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridAsset">
                     <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                    {!this.state.wasSentPacket && (
-                      <>
-                        {this.state.transaction === false && (
-                          <Form.Control
-                            as="select"
-                            size="lg"
-                            onChange={(e) => { _checkIn(e.target.value) }}
-
-                          >
-                            {this.state.hasLoadedAssets && (
-                              <optgroup className="optgroup">
-                                {window.utils.generateAssets()}
-                              </optgroup>)}
-                            {!this.state.hasLoadedAssets && (
-                              <optgroup>
-                                <option value="null">
-                                  Loading Assets...
-                           </option>
-                              </optgroup>)}
-                          </Form.Control>)}
-                        {this.state.transaction === true && (
-                          <Form.Control
-                            as="select"
-                            size="lg"
-                            disabled
-                          >
-                            <optgroup className="optgroup">
-                              <option>Importing "{this.state.idxHash}"</option>
-                            </optgroup>
-                          </Form.Control>)}
-                      </>
-                    )}
                     {this.state.wasSentPacket && (
                       <Form.Control
                         as="select"
                         size="lg"
-                        onChange={(e) => { _checkIn(e.target.value) }}
                         disabled
                       >
                         <optgroup>

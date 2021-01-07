@@ -52,7 +52,7 @@ class DiscardAsset extends Component {
       if (Number(window.sentPacket.statusNum) !== 59) {
         window.sentPacket = undefined;
         alert("Asset is not discardable! Owner must set status to discardable." );
-        return window.location.href = "/#/asset-dashboard"
+        
       }
 
       this.setState({ name: window.sentPacket.name })
@@ -79,39 +79,6 @@ class DiscardAsset extends Component {
 
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
-
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      if (e === "null" || e === undefined) { return }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0])
-
-      console.log(resArray)
-
-      if (Number(resArray[0]) !== 59) {
-        this.setState({ alertBanner: "Asset not in discardable status." }); return clearForm()
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
-      })
-    }
 
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }
@@ -198,38 +165,6 @@ class DiscardAsset extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridAsset">
                   <Form.Label className="formFont"> Select an Asset to Discard :</Form.Label>
-                  {!this.state.wasSentPacket && (
-                    <>
-                      {this.state.transaction === false && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
-
-                        >
-                          {this.state.hasLoadedAssets && (
-                            <optgroup className="optgroup">
-                              {window.utils.generateAssets()}
-                            </optgroup>)}
-                          {!this.state.hasLoadedAssets && (
-                            <optgroup>
-                              <option value="null">
-                                Loading Assets...
-                           </option>
-                            </optgroup>)}
-                        </Form.Control>)}
-                      {this.state.transaction === true && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          disabled
-                        >
-                          <optgroup className="optgroup">
-                            <option>Discarding "{this.state.name}"</option>
-                          </optgroup>
-                        </Form.Control>)}
-                    </>
-                  )}
                   {this.state.wasSentPacket && (
                     <Form.Control
                       as="select"
