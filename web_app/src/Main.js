@@ -462,28 +462,7 @@ class Main extends Component {
                         )}
                       </button>
                     </ClickAwayListener>
-                    <ClickAwayListener onClickAway={() => { this.setState({ settingsMenu: false }) }}>
-                      <div className="hamburgerMenuLink">
-                        <a className="hamburgerMenuLinkContentSettings"><Settings size={35} onClick={() => { this.settingsMenu() }} /></a>
-                      </div>
-                    </ ClickAwayListener>
                     <div>
-                      {this.state.settingsMenu === true && (
-                        <div>
-                          <div className="hamburgerDropdownSettings">
-
-                            {this.state.basicMenuBool === false && this.state.routeRequest !== "noAddr" && (
-                              <Button
-                                size="lg"
-                                variant="toggle"
-                                onClick={() => { this.toggleMenu("basic") }}
-                              >
-                                Basic Menu
-                              </Button>)}
-
-                          </div>
-                        </div>
-                      )}
                     </div>
                     <div>
 
@@ -1031,19 +1010,6 @@ class Main extends Component {
       }
       else {
         this.setState({ userMenuMobile: false })
-      }
-    }
-
-    //settingsMenu bool switch @DEV Move to this declarations?
-    this.settingsMenu = async () => {
-      if (this.state.settingsMenu === false) {
-        this.setState({
-          settingsMenu: true,
-          userMenu: false
-        })
-      }
-      else {
-        this.setState({ settingsMenu: false })
       }
     }
 
