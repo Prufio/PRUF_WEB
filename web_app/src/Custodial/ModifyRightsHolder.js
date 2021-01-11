@@ -162,8 +162,8 @@ class ModifyRightsHolder extends Component {
       console.log("New rgtHash", newRgtHash);
       console.log("addr: ", window.addr);
 
-      await window.contracts.NP_NC.methods
-        ._changeRgt(idxHash, newRgtHash)
+      await window.contracts.APP.methods
+        ._forceModifyRecord(idxHash, newRgtHash)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });

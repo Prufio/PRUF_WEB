@@ -58,6 +58,7 @@ class ModifyDescription extends Component {
 
 
       const idxHash = this.state.idxHash;
+      const rgtHash = this.state.rgtHash;
       const self = this
 
 
@@ -74,7 +75,7 @@ class ModifyDescription extends Component {
       console.log("addr: ", window.addr);
 
       await window.contracts.NP.methods
-        ._modIpfs1(idxHash, _ipfs1)
+        ._modIpfs1(idxHash, rgtHash, _ipfs1)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
