@@ -53,19 +53,19 @@ class ModifyDescription extends Component {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot transfer asset in lost or stolen status! Please change to transferrable status" );
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/retrieve-record"
       }
 
       if (Number(window.sentPacket.statusNum) === 6) {
         alert("Cannot transfer asset in escrow! Please wait until asset has met escrow conditions" );
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/retrieve-record"
       }
 
       if (Number(window.sentPacket.statusNum) !== 1) {
         alert("Cannot transfer asset in a status other than transferrable! please change asset to transferrable status" );
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/retrieve-record"
       }
 
       this.setState({ name: window.sentPacket.name })
@@ -93,48 +93,6 @@ class ModifyDescription extends Component {
 
   render() {//render continuously produces an up-to-date stateful document  
     const self = this;
-
-    const _checkIn = async (e) => {
-      this.setState({ help: false, txHash: "", txStatus: false })
-      console.log("Checking in with id: ", e)
-      if (e === "null" || e === undefined) {
-        return clearForm()
-      }
-      else if (e === "reset") {
-        return window.resetInfo = true;
-      }
-      else if (e === "assetDash") {
-        console.log("heading over to dashboard")
-        return window.location.href = "/#/asset-dashboard"
-      }
-
-      let resArray = await window.utils.checkStats(window.assets.ids[e], [0, 2])
-
-      console.log(resArray)
-
-
-      if (Number(resArray[1]) === 0) {
-        this.setState({ alertBanner: "Asset does not exist at given IDX" }); return clearForm()
-      }
-
-      if (Number(resArray[0]) !== 51) {
-        this.setState({ alertBanner: "Asset not in transferrable status" }); return clearForm()
-      }
-
-      this.setState({ selectedAsset: e })
-      console.log("Changed component idx to: ", window.assets.ids[e])
-
-      return this.setState({
-        assetClass: window.assets.assetClasses[e],
-        idxHash: window.assets.ids[e],
-        name: window.assets.descriptions[e].name,
-        photos: window.assets.descriptions[e].photo,
-        text: window.assets.descriptions[e].text,
-        description: window.assets.descriptions[e],
-        status: window.assets.statuses[e],
-        note: window.assets.notes[e]
-      })
-    }
 
     const clearForm = async () => {
       if (document.getElementById("MainForm") === null) { return }

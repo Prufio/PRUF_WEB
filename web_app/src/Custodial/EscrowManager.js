@@ -327,7 +327,6 @@ class EscrowManager extends Component {
           self.setState({ txHash: receipt.transactionHash });
           self.setState({ txStatus: receipt.status });
           console.log(receipt.status);
-          window.resetInfo = true;
           
           //Stuff to do when tx confirms
         });
@@ -365,10 +364,6 @@ class EscrowManager extends Component {
           this.setState({ txHash: receipt.transactionHash });
           this.setState({ txStatus: receipt.status });
           console.log(receipt.status);
-          window.resetInfo = true;
-          if (this.state.wasSentPacket) {
-            return window.location.href = '/#/asset-dashboard'
-          }
           //Stuff to do when tx confirms
         });
       console.log(this.state.txHash);

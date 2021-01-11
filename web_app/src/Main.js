@@ -255,43 +255,6 @@ class Main extends Component {
                                 <>
                                   <h4 className="userStatFont">
                                     PRUF Balance : ü{Math.round(Number(this.state.prufBalance))}
-                                    <Button
-                                      variant="userButton"
-                                      onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/faucet' }}>
-                                      Faucet
-                              </Button>
-                                  </h4>
-                                  <br></br>
-                                </>
-                              )}
-                              {this.state.assetClassBalance && (
-                                <>
-                                  <h4 className="userStatFont">
-                                    AC Nodekeys :
-                                <Button
-                                      variant="userButton"
-                                      // onClick={() => { this.setState({ userMenu: undefined, }); window.location.href = '/#/' }}>
-                                      onClick={() => { /* this.assetClassDashboard() */ }}>
-                                      {this.state.assetClassBalance}
-                                    </Button>
-                                    {/* <Button
-                                      variant="userButton"
-                                      onClick={() => { this.setState({userMenuMobile: false}); window.location.href = '/#/faucet' }}>
-                                      Get AC
-                              </Button> */}
-                                  </h4>
-                                  <br></br>
-                                </>
-                              )}
-                              {this.state.assetBalance && (
-                                <>
-                                  <h4 className="userStatFont">
-                                    Assets :
-                              <Button
-                                      variant="userButton"
-                                      onClick={() => { this.setState({ userMenuMobile: false }); window.location.href = '/#/asset-dashboard-mobile' }}>
-                                      {this.state.assetBalance}
-                                    </Button>
                                   </h4>
                                   <br></br>
                                 </>
@@ -303,12 +266,6 @@ class Main extends Component {
                                     {this.state.IDTokenBalance === "0" && (
                                       <>
                                         <X className="userIDBalance0" />
-                                        <Button
-                                          variant="userButton"
-                                          // onClick={() => { this.setState({ userMenu: undefined }); window.open("https://t.me/prufteam", "_blank") }}>
-                                          onClick={() => { this.mintID() }}>
-                                          Get ID
-                              </Button>
                                       </>
                                     )}
                                     {/* {this.state.IDTokenBalance === "0" && (<X className="userIDBalance0" />)} */}
@@ -429,7 +386,7 @@ class Main extends Component {
                       <h3>
                         {this.state.routeRequest === "noAddr"
                           ? <a onClick={() => { window.open("https://github.com/Prufio", "_blank") }}> Version A1.2.6 </a>
-                          : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" /* onClick={() => { window.location.href = '/#/DnvkxiOAFy_vDC' } }*/> Version A1.2.6 </a>}
+                          : <a href='/#/DnvkxiOAFy_vDC' className="siteInfoBoxExtra" > Version A1.2.6 </a>}
                       </h3>
 
                       <Form.Check

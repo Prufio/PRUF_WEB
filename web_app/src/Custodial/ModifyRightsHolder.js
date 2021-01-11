@@ -52,13 +52,13 @@ class ModifyRightsHolder extends Component {
       if (Number(window.sentPacket.statusNum) === 3 || Number(window.sentPacket.statusNum) === 4 || Number(window.sentPacket.statusNum) === 53 || Number(window.sentPacket.statusNum) === 54) {
         alert("Cannot edit asset in lost or stolen status" );
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/retrieve-record"
       }
 
       if (Number(window.sentPacket.statusNum) === 6) {
         alert("Cannot edit asset in escrow! Please wait until asset has met escrow conditions");
         window.sentPacket = undefined;
-        return window.location.href = "/#/asset-dashboard"
+        return window.location.href = "/#/retrieve-record"
       }
       this.setState({ name: window.sentPacket.name })
       this.setState({ idxHash: window.sentPacket.idxHash })
