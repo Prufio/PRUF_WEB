@@ -140,7 +140,10 @@ class ModifyRecordStatus extends Component {
         window.sentPacket = undefined;
         return window.location.href = "/#/retrieve-record"
       }
-      this.setState({ name: window.sentPacket.name })
+      this.setState({ 
+        name: window.sentPacket.name,
+        assetClassName: window.sentPacket.assetClassName
+      })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
@@ -323,9 +326,6 @@ class ModifyRecordStatus extends Component {
                         {this.state.newStatus === "4" && (
                           <option> Changing Status to Lost </option>
                         )}
-                        {this.state.newStatus === "9" && (
-                          <option> Changing Status to Discardable </option>
-                        )}
                       </optgroup>
                     </Form.Control>
                   )}
@@ -418,7 +418,7 @@ class ModifyRecordStatus extends Component {
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClassName}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                 </Form.Group>
               )}

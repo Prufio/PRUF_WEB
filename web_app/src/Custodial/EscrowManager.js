@@ -115,6 +115,7 @@ class EscrowManager extends Component {
       idxHash: "",
       idxHashRaw: "",
       QRreader: false,
+      accessPermitted: false,
       name: "N/A",
       assetClass: "N/A",
       status: "N/A",
@@ -147,6 +148,7 @@ class EscrowManager extends Component {
         idxHash: window.sentPacket.idxHash,
         assetClass: window.sentPacket.assetClass,
         status: window.sentPacket.status,
+        assetClassName: window.sentPacket.assetClassName,
         wasSentPacket: true
       })
       window.sentPacket = undefined
@@ -211,7 +213,6 @@ class EscrowManager extends Component {
         tempArray = await window.utils.getEscrowData(this.state.idxHash)
         console.log("tempArray", tempArray)
         this.setState({
-          accessPermitted: true,
           escrowData: tempArray,
         })
         console.log("escrowData", this.state.escrowData[1])
@@ -510,8 +511,8 @@ class EscrowManager extends Component {
                         </Form.Row>
                         {this.state.help === true && (
                           <div className="explainerTextBox2">
-                            Setting Escrow gives you two options. Supervised Escrow, which allows the owner of the asset to change the status to lost or stolen during the escrow period,
-                            and Locked Escrow, which disables all modifications of the asset during the escrow period. Both types of escrow can be ended by the assigned agent at any time.
+                            Setting Escrow gives locks asset operations until a specific set of conditions is met. In this case, we are using a timelock escrow 
+                            which can only be unset by a specified agent address.
                           </div>
                         )}
                         <Form.Row>
@@ -672,16 +673,12 @@ class EscrowManager extends Component {
                       {this.state.transaction === false && (
                         <Form.Control as="select" size="lg" onChange={(e) => this.setState({ newStatus: e.target.value })}>
                           <option value="0">Select an Escrow Status</option>
-                          <option value="56">Supervised Escrow</option>
-                          <option value="50">Locked Escrow</option>
+                          <option value="6">Supervised Escrow</option>
                         </Form.Control>)}
                       {this.state.transaction === true && (
                         <Form.Control as="select" size="lg" disabled >
-                          {this.state.newStatus === "56" && (
+                          {this.state.newStatus === "6" && (
                             <option>Supervised Escrow</option>
-                          )}
-                          {this.state.newStatus === "50" && (
-                            <option>Locked Escrow</option>
                           )}
                         </Form.Control>)}
                     </Form.Group>
@@ -824,7 +821,7 @@ class EscrowManager extends Component {
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClassName}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                 </Form.Group>
               )}

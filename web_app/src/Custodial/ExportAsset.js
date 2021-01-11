@@ -60,7 +60,8 @@ class ExportAsset extends Component {
         name: window.sentPacket.name,
         idxHash: window.sentPacket.idxHash,
         assetClass: window.sentPacket.assetClass,
-        status: window.sentPacket.status
+        status: window.sentPacket.status,
+        assetClassName: window.sentPacket.assetClassName
       })
 
       window.sentPacket = undefined
@@ -308,7 +309,7 @@ class ExportAsset extends Component {
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClassName}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                 </Form.Group>
               )}

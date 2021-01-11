@@ -67,7 +67,10 @@ class ImportAsset extends Component {
         
       }
 
-      this.setState({ name: window.sentPacket.name })
+      this.setState({ 
+        name: window.sentPacket.name,
+        assetClassName: window.sentPacket.assetClassName 
+      })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ packetAssetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
@@ -413,7 +416,7 @@ class ImportAsset extends Component {
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.currentAssetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClassName}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                   {this.state.assetClassSelected === true && (
                     <div className="assetSelectedContentHead">Importing Asset Class: <span className="assetSelectedContent">{this.state.selectedAssetClass}</span> </div>

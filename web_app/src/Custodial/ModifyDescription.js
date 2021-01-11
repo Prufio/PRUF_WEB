@@ -129,7 +129,7 @@ class ModifyDescription extends Component {
       ipfs1: "",
       txHash: "",
       txStatus: false,
-      accessPermitted: true,
+      accessPermitted: false,
       idxHash: undefined,
       elementType: "0",
       elementName: "",
@@ -196,6 +196,7 @@ class ModifyDescription extends Component {
         name: window.sentPacket.name,
         idxHash: window.sentPacket.idxHash,
         assetClass: window.sentPacket.assetClass,
+        assetClassName: window.sentPacket.assetClassName,
         status: window.sentPacket.status,
         oldDescription: window.sentPacket.descriptionObj,
         wasSentPacket: true,
@@ -884,7 +885,7 @@ class ModifyDescription extends Component {
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClassName}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                   {this.state.count > 1 && (
                     <div>

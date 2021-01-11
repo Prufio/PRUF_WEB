@@ -33,6 +33,7 @@ class RetrieveRecord extends Component {
             description: tempIPFS.text.description,
             text: tempIPFS.text,
             photo: tempIPFS.photo,
+            descriptionObj: tempIPFS
           },
           moreInfo: true
         })
@@ -62,7 +63,7 @@ class RetrieveRecord extends Component {
       window.ipfs.cat(lookup, async (error, result) => {
         if (error) {
           console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-          return this.setState({ ipfsObject: {name: "N/A", text: [], photo: []} })
+          return this.setState({ ipfsObject: {name: "N/A", text: {}, photo: {}} })
         } else {
           console.log(lookup, "Here's what we found for asset description: ", result);
           return this.setState({ ipfsObject: JSON.parse(result) })
@@ -327,10 +328,7 @@ class RetrieveRecord extends Component {
                 <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "import-asset") }}>Import</Button>
               </li>
               <li>
-                <DropdownButton title="Export" drop="up" variant="selectedImage">
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "export-asset") }}>Export</Dropdown.Item>
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "discard-asset") }}>Discard</Dropdown.Item>
-                </DropdownButton>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "export-asset") }}>Export</Button>
               </li>
               <li>
                 <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "manage-escrow") }}>Escrow</Button>
@@ -358,9 +356,7 @@ class RetrieveRecord extends Component {
                 <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "import-asset") }}>Import</Button>
               </li>
               <li>
-                <DropdownButton title="Export" drop="up" variant="selectedImage">
-                  <Dropdown.Item id="header-dropdown" as={Button} variant="selectedAsset" onClick={() => { this.sendPacket(obj, "export-asset") }}>Export</Dropdown.Item>
-                </DropdownButton>
+                <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "export-asset") }}>Export</Button>
               </li>
               <li>
                 <Button variant="selectedImage" onClick={() => { this.sendPacket(obj, "manage-escrow") }}>Escrow</Button>

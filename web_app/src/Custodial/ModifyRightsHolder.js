@@ -60,7 +60,10 @@ class ModifyRightsHolder extends Component {
         window.sentPacket = undefined;
         return window.location.href = "/#/retrieve-record"
       }
-      this.setState({ name: window.sentPacket.name })
+      this.setState({ 
+        name: window.sentPacket.name,
+        assetClassName: window.sentPacket.assetClassName 
+      })
       this.setState({ idxHash: window.sentPacket.idxHash })
       this.setState({ assetClass: window.sentPacket.assetClass })
       this.setState({ status: window.sentPacket.status })
@@ -419,7 +422,7 @@ class ModifyRightsHolder extends Component {
                 <Form.Group>
                   <div className="assetSelectedContentHead">Asset IDX: <span className="assetSelectedContent">{this.state.idxHash}</span> </div>
                   <div className="assetSelectedContentHead">Asset Name: <span className="assetSelectedContent">{this.state.name}</span> </div>
-                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClass}</span> </div>
+                  <div className="assetSelectedContentHead">Asset Class: <span className="assetSelectedContent">{this.state.assetClassName}</span> </div>
                   <div className="assetSelectedContentHead">Asset Status: <span className="assetSelectedContent">{this.state.status}</span> </div>
                 </Form.Group>
               )}
