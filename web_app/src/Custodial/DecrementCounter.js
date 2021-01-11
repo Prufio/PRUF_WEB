@@ -114,6 +114,35 @@ class DecrementCounter extends Component {
       e.preventDefault();
     }
 
+    const accessAsset = async () => {
+      const self = this;
+
+      let idxHash = this.state.idxHash;
+
+      let rgtRaw = window.web3.utils.soliditySha3(
+        this.state.first,
+        this.state.middle,
+        this.state.surname,
+        this.state.id,
+        this.state.secret
+      );
+
+      var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
+
+      var infoMatches = await window.utils.checkMatch(idxHash, rgtHash);
+
+      if (!infoMatches) {
+        return this.setState({alertBanner: "Supplied info does not match record credentials. Please Check forms and try again."})
+      }
+
+      return this.setState({ 
+        rgtHash: rgtHash,
+        accessPermitted: true,
+        successBanner: "Credentials successfully matched to record"
+       })
+
+    }
+
     const _decrementCounter = async () => {
       let idxHash = this.state.idxHash;
       if(idxHash === "null" || idxHash === "" || idxHash === undefined || this.state.countDown === "" || this.state.countDown === undefined){
@@ -191,25 +220,77 @@ class DecrementCounter extends Component {
           )}
           {window.addr > 0 && (
             <div>
+              {!this.state.accessPermitted &&(
+                <>
+
               <Form.Row>
-                <Form.Group as={Col} controlId="formGridAsset">
-                  <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-                  {this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      disabled
-                    >
-                      <optgroup>
-                        <option value="null">
-                          Modifying "{this.state.name}" Clear Form to Select Different Asset
-                           </option>
-                      </optgroup>
-                    </Form.Control>
-                  )}
+                <Form.Group as={Col} controlId="formGridFirstName">
+                  <Form.Label className="formFont">First Name:</Form.Label>
+                  <Form.Control
+                    placeholder="First Name"
+                    required
+                    onChange={(e) => this.setState({ first: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridMiddleName">
+                  <Form.Label className="formFont">Middle Name:</Form.Label>
+                  <Form.Control
+                    placeholder="Middle Name"
+                    required
+                    onChange={(e) => this.setState({ middle: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridLastName">
+                  <Form.Label className="formFont">Last Name:</Form.Label>
+                  <Form.Control
+                    placeholder="Last Name"
+                    required
+                    onChange={(e) => this.setState({ surname: e.target.value })}
+                    size="lg"
+                  />
                 </Form.Group>
               </Form.Row>
+
               <Form.Row>
+                <Form.Group as={Col} controlId="formGridIdNumber">
+                  <Form.Label className="formFont">ID Number:</Form.Label>
+                  <Form.Control
+                    placeholder="ID Number"
+                    required
+                    onChange={(e) => this.setState({ id: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridPassword">
+                  <Form.Label className="formFont">Password:</Form.Label>
+                  <Form.Control
+                    placeholder="Password"
+                    type="password"
+                    required
+                    onChange={(e) => this.setState({ secret: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+              </Form.Row>
+                <Form.Row>
+                <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <CheckCircle
+                          onClick={() => { accessAsset() }}
+                        />
+                      </div>
+                    </div>
+                </Form.Row>
+                </>
+              )}
+              {this.state.accessPermitted && (
+                <>
+                              <Form.Row>
                 <Form.Group as={Col} controlId="formGridCountdown">
                   <Form.Label className="formFont">
                     Countdown Amount:
@@ -259,6 +340,9 @@ class DecrementCounter extends Component {
                   )}
                 </>
               )}
+                </>
+              )}
+
             </div>
           )}
         </Form>
@@ -268,6 +352,13 @@ class DecrementCounter extends Component {
               <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
                 <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
                   {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+            {this.state.successBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ successBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="success" onClose={() => this.setState({ successBanner: undefined })} dismissible>
+                  {this.state.successBanner}
                 </Alert>
               </ClickAwayListener>
             )}

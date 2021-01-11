@@ -11,7 +11,7 @@ class ModifyRecordStatus extends Component {
     super(props);
 
     //State declaration.....................................................................................................
-
+    
     this.clearForm = async () => {
       const self = this;
       document.getElementById("MainForm").reset();
@@ -20,8 +20,9 @@ class ModifyRecordStatus extends Component {
 
     this.modifyStatus = async () => {
       const self = this;
-      var idxHash = this.state.idxHash;
-      if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
+      let idxHash = this.state.idxHash;
+      let rgtHash = this.state.rgtHash;
+      if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "No asset IDX value detected" }) }
 
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
@@ -55,7 +56,7 @@ class ModifyRecordStatus extends Component {
         Number(this.state.newStatus) < 100 &&
         Number(this.state.newStatus) < 50) {
         await window.contracts.NP.methods
-          ._modStatus(idxHash, this.state.newStatus)
+          ._modStatus(idxHash, rgtHash, this.state.newStatus)
           .send({ from: window.addr })
           .on("error", function (_error) {
             // self.setState({ NRerror: _error });
@@ -71,6 +72,7 @@ class ModifyRecordStatus extends Component {
             self.setState({ txHash: receipt.transactionHash });
             self.setState({ txStatus: receipt.status });
             console.log(receipt.status);
+            window.location.href = "/#/retrieve-record"
             //Stuff to do when tx confirms
           });
       }
@@ -173,6 +175,35 @@ class ModifyRecordStatus extends Component {
       e.preventDefault();
     }
 
+    const accessAsset = async () => {
+      const self = this;
+
+      let idxHash = this.state.idxHash;
+
+      let rgtRaw = window.web3.utils.soliditySha3(
+        this.state.first,
+        this.state.middle,
+        this.state.surname,
+        this.state.id,
+        this.state.secret
+      );
+
+      var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
+
+      var infoMatches = await window.utils.checkMatch(idxHash, rgtHash);
+
+      if (!infoMatches) {
+        return this.setState({alertBanner: "Supplied info does not match record credentials. Please Check forms and try again."})
+      }
+
+      return this.setState({ 
+        rgtHash: rgtHash,
+        accessPermitted: true,
+        successBanner: "Credentials successfully matched to record"
+       })
+
+    }
+
     return (
       <div>
         <div>
@@ -193,57 +224,76 @@ class ModifyRecordStatus extends Component {
           )}
           {window.addr > 0 && (
             <div>
-              <Form.Row>
-                <Form.Group as={Col} controlId="formGridAsset">
-                  <Form.Label className="formFont"> Select an Asset to Modify :</Form.Label>
-{/*                   {!this.state.wasSentPacket && (
-                    <>
-                      {this.state.transaction === false && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          onChange={(e) => { _checkIn(e.target.value) }}
+              {!this.state.accessPermitted &&(
+                <>
 
-                        >
-                          {this.state.hasLoadedAssets && (
-                            <optgroup className="optgroup">
-                              {window.utils.generateAssets()}
-                            </optgroup>)}
-                          {!this.state.hasLoadedAssets && (
-                            <optgroup>
-                              <option value="null">
-                                Loading Assets...
-                           </option>
-                            </optgroup>)}
-                        </Form.Control>)}
-                      {this.state.transaction === true && (
-                        <Form.Control
-                          as="select"
-                          size="lg"
-                          disabled
-                        >
-                          <optgroup className="optgroup">
-                            <option>Modifying "{this.state.name}"</option>
-                          </optgroup>
-                        </Form.Control>)}
-                    </>
-                  )} */}
-                  {this.state.wasSentPacket && (
-                    <Form.Control
-                      as="select"
-                      size="lg"
-                      onChange={(e) => { }}
-                      disabled
-                    >
-                      <optgroup>
-                        <option value="null">
-                          Modifying "{this.state.name}" 
-                           </option>
-                      </optgroup>
-                    </Form.Control>
-                  )}
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridFirstName">
+                  <Form.Label className="formFont">First Name:</Form.Label>
+                  <Form.Control
+                    placeholder="First Name"
+                    required
+                    onChange={(e) => this.setState({ first: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridMiddleName">
+                  <Form.Label className="formFont">Middle Name:</Form.Label>
+                  <Form.Control
+                    placeholder="Middle Name"
+                    required
+                    onChange={(e) => this.setState({ middle: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridLastName">
+                  <Form.Label className="formFont">Last Name:</Form.Label>
+                  <Form.Control
+                    placeholder="Last Name"
+                    required
+                    onChange={(e) => this.setState({ surname: e.target.value })}
+                    size="lg"
+                  />
                 </Form.Group>
               </Form.Row>
+
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridIdNumber">
+                  <Form.Label className="formFont">ID Number:</Form.Label>
+                  <Form.Control
+                    placeholder="ID Number"
+                    required
+                    onChange={(e) => this.setState({ id: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridPassword">
+                  <Form.Label className="formFont">Password:</Form.Label>
+                  <Form.Control
+                    placeholder="Password"
+                    type="password"
+                    required
+                    onChange={(e) => this.setState({ secret: e.target.value })}
+                    size="lg"
+                  />
+                </Form.Group>
+              </Form.Row>
+                <Form.Row>
+                <div className="submitButton">
+                      <div className="submitButtonContent">
+                        <CheckCircle
+                          onClick={() => { accessAsset() }}
+                        />
+                      </div>
+                    </div>
+                </Form.Row>
+                </>
+              )}
+              
+             {this.state.accessPermitted && (<> 
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridFormat">
                   <Form.Label className="formFont">New Status:</Form.Label>
@@ -335,6 +385,8 @@ class ModifyRecordStatus extends Component {
                   )}
                 </>
               )}
+              </>
+              )}
             </div>
           )}
         </Form>
@@ -344,6 +396,20 @@ class ModifyRecordStatus extends Component {
               <ClickAwayListener onClickAway={() => { this.setState({ alertBanner: undefined }) }}>
                 <Alert className="alertBanner" key={1} variant="danger" onClose={() => this.setState({ alertBanner: undefined })} dismissible>
                   {this.state.alertBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+            {this.state.successBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ successBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="success" onClose={() => this.setState({ successBanner: undefined })} dismissible>
+                  {this.state.successBanner}
+                </Alert>
+              </ClickAwayListener>
+            )}
+            {this.state.successBanner !== undefined && (
+              <ClickAwayListener onClickAway={() => { this.setState({ successBanner: undefined }) }}>
+                <Alert className="alertBanner" key={1} variant="success" onClose={() => this.setState({ successBanner: undefined })} dismissible>
+                  {this.state.successBanner}
                 </Alert>
               </ClickAwayListener>
             )}
