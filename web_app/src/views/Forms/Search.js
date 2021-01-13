@@ -28,20 +28,33 @@ import CardText from "components/Card/CardText.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
+import QrReader from 'react-qr-reader'
+
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 
 const useStyles = makeStyles(styles);
 
 export default function Search() {
+
   const [checked, setChecked] = React.useState([24, 22]);
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
+  const [scanQR, setScanQR] = React.useState(false)
+  const [data, setData] = React.useState('No result');
+
   const handleChange = event => {
     setSelectedValue(event.target.value);
   };
+
   const handleChangeEnabled = event => {
     setSelectedEnabled(event.target.value);
   };
+
+  const handleScanQR = event => {
+    setScanQR(!scanQR);
+    console.log("new value", !scanQR)
+  };
+
   const handleToggle = value => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -55,6 +68,8 @@ export default function Search() {
   };
   const classes = useStyles();
   return (
+    <>
+      {scanQR === false && (
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info">
@@ -70,9 +85,9 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-                // inputProps={{
-                  // type: "email"
-                // }}
+              // inputProps={{
+              // type: "email"
+              // }}
               />
               <CustomInput
                 labelText="Type"
@@ -80,10 +95,10 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
+              // inputProps={{
+              //   type: "password",
+              //   autoComplete: "off"
+              // }}
               />
               <CustomInput
                 labelText="Model"
@@ -91,9 +106,9 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-                // inputProps={{
-                  // type: "email"
-                // }}
+              // inputProps={{
+              // type: "email"
+              // }}
               />
               <CustomInput
                 labelText="Serial"
@@ -101,10 +116,10 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
+              // inputProps={{
+              //   type: "password",
+              //   autoComplete: "off"
+              // }}
               />
               <div className={classes.checkboxAndRadio}>
                 <FormControlLabel
@@ -127,10 +142,38 @@ export default function Search() {
                   label="Input IDX Hash"
                 />
               </div>
-              <Button color="info">Scan QR</Button>
+              <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Scan QR</Button>
               <Button color="success">Search Asset</Button>
             </form>
           </CardBody>
         </Card>
+      )}
+      {scanQR === true && (
+        <Card>
+          <CardHeader color="info" icon>
+            <CardIcon color="info">
+              <Category />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>QR Scanner</h4>
+          </CardHeader>
+          <CardBody>
+          <QrReader
+        onResult={(result, error) => {
+          if (!!result) {
+            setData(result?.text);
+          }
+
+          if (!!error) {
+            console.info(error);
+          }
+        }}
+        style={{ width: '40%' }}
+      />
+      <p>{data}</p>
+      <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
+          </CardBody>
+        </Card>
+      )}
+    </>
   );
 }

@@ -26,6 +26,7 @@ import Print from "@material-ui/icons/Print";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
+import Button from "components/CustomButtons/Button.js";
 import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -42,12 +43,36 @@ export default function ViewAsset() {
   const [checkedA, setCheckedA] = React.useState(true);
   const [checkedB, setCheckedB] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [multipleSelect, setMultipleSelect] = React.useState([]);
-  const [tags, setTags] = React.useState(["pizza", "pasta", "parmesan"]);
+  // const [multipleSelect, setMultipleSelect] = React.useState([]);
+  // const [tags, setTags] = React.useState(["pizza", "pasta", "parmesan"]);
   const handleSimple = event => {
     setSimpleSelect(event.target.value);
-    if(event.target.value === "transfer") {
+    if (event.target.value === "transfer") {
       return window.location.href = "/#/admin/transfer-asset"
+    }
+    if (event.target.value === "escrow") {
+      return window.location.href = "/#/admin/escrow-manager"
+    }
+    if (event.target.value === "import") {
+      return window.location.href = "/#/admin/import-asset"
+    }
+    if (event.target.value === "export") {
+      return window.location.href = "/#/admin/export-asset"
+    }
+    if (event.target.value === "discard") {
+      return window.location.href = "/#/admin/discard-asset"
+    }
+    if (event.target.value === "change-status") {
+      return window.location.href = "/#/admin/modify-status"
+    }
+    if (event.target.value === "decrement-counter") {
+      return window.location.href = "/#/admin/counter"
+    }
+    if (event.target.value === "edit-information") {
+      return window.location.href = "/#/admin/modify-description"
+    }
+    if (event.target.value === "edit-rightsholder") {
+      return window.location.href = "/#/admin/modify-rightsholder"
     }
   };
   const classes = useStyles();
@@ -59,17 +84,17 @@ export default function ViewAsset() {
         </CardHeader>
         <CardBody>
           <h4 className={classes.cardTitle}>Name: Bennny's Mongoose</h4>
-          <h4 className={classes.cardTitle}>Class: Bicicles(UK)</h4>
+          <h4 className={classes.cardTitle}>Class: Bicycles(UK)</h4>
           <h4 className={classes.cardTitle}>Status: Transferable</h4>
           <p className={classes.cardCategory}>
             Description: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
               </p>
           <br />
           <div className={classes.stats}>
-                <Danger>
-                  <Create 
-                    className="functionSelectorIcon"/>
-                </Danger>
+            <Danger>
+              <Create
+                className="functionSelectorIcon" />
+            </Danger>
                 <FormControl
                   fullWidth
                   className={classes.selectFormControl}
