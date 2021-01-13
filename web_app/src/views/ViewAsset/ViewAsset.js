@@ -46,6 +46,9 @@ export default function ViewAsset() {
   const [tags, setTags] = React.useState(["pizza", "pasta", "parmesan"]);
   const handleSimple = event => {
     setSimpleSelect(event.target.value);
+    if(event.target.value === "transfer") {
+      return window.location.href = "/#/admin/transfer-asset"
+    }
   };
   const classes = useStyles();
   return (
