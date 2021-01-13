@@ -146,10 +146,19 @@ class ModifyDescription extends Component {
     }
 
     const _transferAsset = async () => {
-      var idxHash = this.state.idxHash;
-      let to = this.state.to;
+      let idxHash = this.state.idxHash;
+      let rgtHash = this.state.rgtHash;
+       if (this.state.newFirst === undefined || this.state.newMiddle === undefined || this.state.newSurname === undefined || this.state.newId === undefined || this.state.newSecret === undefined){
+         return this.setState({alertBanner: "Please fill out all fields before submission"})
+       }
+      let newRgtHash = window.web3.utils.soliditySha3(
+        String(this.state.newFirst).replace(/\s/g, ''),
+        String(this.state.newMiddle).replace(/\s/g, ''),
+        String(this.state.newSurname).replace(/\s/g, ''),
+        String(this.state.newId).replace(/\s/g, ''),
+        String(this.state.newSecret).replace(/\s/g, '')
+      );
       if (idxHash === undefined || idxHash === "null" || idxHash === "") { return this.setState({ alertBanner: "Please select an asset from the dropdown" }) }
-      else if (to === "" || to === undefined || !window.web3.utils.isAddress(to)) { return this.setState({ alertBanner: "Please input a valid 'to' address." }) }
       console.log("idxHash", idxHash);
       console.log("addr: ", window.addr);
       this.setState({ help: false })
@@ -160,7 +169,7 @@ class ModifyDescription extends Component {
       this.setState({ transaction: true });
 
       window.contracts.A_TKN.methods
-        .safeTransferFrom(window.addr, to, idxHash)
+        .safeTransferFrom(idxHash, rgtHash, newRgtHash)
         .send({ from: window.addr })
         .on("error", function (_error) {
           // self.setState({ NRerror: _error });
@@ -209,7 +218,7 @@ class ModifyDescription extends Component {
                   <Form.Control
                     placeholder="First Name"
                     required
-                    onChange={(e) => this.setState({ first: e.target.value })}
+                    onChange={(e) => this.setState({ first: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Group>
@@ -219,7 +228,7 @@ class ModifyDescription extends Component {
                   <Form.Control
                     placeholder="Middle Name"
                     required
-                    onChange={(e) => this.setState({ middle: e.target.value })}
+                    onChange={(e) => this.setState({ middle: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Group>
@@ -229,7 +238,7 @@ class ModifyDescription extends Component {
                   <Form.Control
                     placeholder="Last Name"
                     required
-                    onChange={(e) => this.setState({ surname: e.target.value })}
+                    onChange={(e) => this.setState({ surname: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Group>
@@ -241,7 +250,7 @@ class ModifyDescription extends Component {
                   <Form.Control
                     placeholder="ID Number"
                     required
-                    onChange={(e) => this.setState({ id: e.target.value })}
+                    onChange={(e) => this.setState({ id: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Group>
@@ -252,7 +261,7 @@ class ModifyDescription extends Component {
                     placeholder="Password"
                     type="password"
                     required
-                    onChange={(e) => this.setState({ secret: e.target.value })}
+                    onChange={(e) => this.setState({ secret: e.target.value.trim() })}
                     size="lg"
                   />
                 </Form.Group>
@@ -270,26 +279,58 @@ class ModifyDescription extends Component {
               )}
               {this.state.accessPermitted && (
                 <>
-                <Form.Row>
-                <Form.Group as={Col} controlId="formGridTo">
-                  <Form.Label className="formFont">To:</Form.Label>
-                  {this.state.transaction === false && (
-                    <Form.Control
-                      placeholder="Recipient Address"
-                      required
-                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
-                      size="lg"
-                    />
-                  )}
-                  {this.state.transaction === true && (
-                    <Form.Control
-                      placeholder={this.state.to}
-                      required
-                      onChange={(e) => this.setState({ to: e.target.value.trim() })}
-                      size="lg"
-                      disabled
-                    />
-                  )}
+                              <Form.Row>
+                <Form.Group as={Col} controlId="formGridFirstName">
+                  <Form.Label className="formFont">New First Name:</Form.Label>
+                  <Form.Control
+                    placeholder="First Name"
+                    required
+                    onChange={(e) => this.setState({ newFirst: e.target.value.trim() })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridMiddleName">
+                  <Form.Label className="formFont">New Middle Name:</Form.Label>
+                  <Form.Control
+                    placeholder="Middle Name"
+                    required
+                    onChange={(e) => this.setState({ newMiddle: e.target.value.trim() })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridLastName">
+                  <Form.Label className="formFont">New Last Name:</Form.Label>
+                  <Form.Control
+                    placeholder="Last Name"
+                    required
+                    onChange={(e) => this.setState({ newSurname: e.target.value.trim() })}
+                    size="lg"
+                  />
+                </Form.Group>
+              </Form.Row>
+
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridIdNumber">
+                  <Form.Label className="formFont">New ID Number:</Form.Label>
+                  <Form.Control
+                    placeholder="ID Number"
+                    required
+                    onChange={(e) => this.setState({ newId: e.target.value.trim() })}
+                    size="lg"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridPassword">
+                  <Form.Label className="formFont">New Password:</Form.Label>
+                  <Form.Control
+                    placeholder="Password"
+                    type="password"
+                    required
+                    onChange={(e) => this.setState({ newSecret: e.target.value.trim() })}
+                    size="lg"
+                  />
                 </Form.Group>
               </Form.Row>
               {this.state.transaction === false && (

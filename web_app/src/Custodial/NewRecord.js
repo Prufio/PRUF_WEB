@@ -289,7 +289,7 @@ class NewRecord extends Component {
               <h3>Please connect web3 provider.</h3>
             </div>
           )}
-          {!this.state.holdsID && (
+          {!this.state.holdsID && window.addr !== undefined &&(
             <div className="results">
               <h2>User does not hold ID</h2>
             </div>
