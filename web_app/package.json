@@ -24,6 +24,7 @@
     "react-google-maps": "9.4.5",
     "react-jdenticon": "0.0.8",
     "react-jvectormap": "0.0.16",
+    "react-qr-reader": "^2.2.1",
     "react-qrcode-logo": "^2.2.1",
     "react-robohash": "^1.0.9",
     "react-router-dom": "5.2.0",
