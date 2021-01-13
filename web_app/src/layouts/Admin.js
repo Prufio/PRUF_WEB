@@ -22,6 +22,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/adminStyle.js";
+import { SettingsPowerRounded } from "@material-ui/icons";
 
 var ps;
 
@@ -50,6 +51,8 @@ export default function Dashboard(props) {
   const [IDBalance, setIDBalance] = React.useState("0");
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
+  const [WD, setWD] = React.useState(false);
+  const [hasSetUp, setHasSetUp] = React.useState(false);
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
@@ -75,152 +78,155 @@ export default function Dashboard(props) {
       });
       document.body.style.overflow = "hidden";
     }
-
-    window.balances = {}
-    let timeOutCounter = 0;
-    window.recount = false;
-    let _web3, _ipfs;
-
-    _ipfs = new IPFS({
-      host: "ipfs.infura.io",
-      port: 5001,
-      protocol: "https",
-    });
-
-    window.ipfs = _ipfs;
-
-    _web3 = require("web3");
-    _web3 = new Web3(_web3.givenProvider);
-    window.web3 = _web3;
-
-    buildWindowUtils() // get the utils object and make it globally accessible
-
-    const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
-      timeOutCounter++;
-      setTimeout(() => { if (!window.ethereum && timeOutCounter < 5) checkForEthereum() }, 500);
-    }
-
-    checkForEthereum();
-
-    window.jdenticon_config = {
-      hues: [196],
-      lightness: {
-        color: [0.36, 0.70],
-        grayscale: [0.24, 0.82]
-      },
-      saturation: {
-        color: 0.75,
-        grayscale: 0.10
-      },
-      backColor: "#ffffffff"
-    };
-
-    //Declare a few globals
-    window.sentPacket = undefined;
-    window.isSettingUpContracts = false;
-    window.hasLoadedAssets = false;
-    let refString = String(window.location.href);
-    if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
-      // window.location.href = '/#/admin/home';
-    } else {
-      window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
-      console.log("Here is the search:", window.location.hash)
-    }
-    window.menuChange = undefined;
-
-    //Give me the desktop version
-    if (!isMobile && window.ethereum) {
-      console.log(_web3.eth.net.getNetworkType())
-      console.log("Here")
-      window.costs = {}
-      window.additionalElementArrays = {
-        photo: [],
-        text: [],
-        name: ""
-      }
-
-      //More globals (eth-is-connected specific)
-      window.assetTokenInfo = {
-        assetClass: undefined,
-        idxHash: undefined,
-        name: undefined,
-        photos: undefined,
-        text: undefined,
-        status: undefined,
-      }
-
-      window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-      window.resetInfo = false;
-      const ethereum = window.ethereum;
-
-      ethereum.enable()
-
-      _web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0] });
-      window.addEventListener("accountListener", acctListener);
-      setUpContractEnvironment(_web3)
-      setIsMounted(true)
-    }
-
-    //Give me the mobile ethereum-enabled version
-    else if (isMobile && window.ethereum) {
-
-      console.log(_web3.eth.net.getNetworkType())
-
-      console.log("Here")
-
-      window.costs = {}
-      window.additionalElementArrays = {
-        photo: [],
-        text: [],
-        name: ""
-      }
-      window.assetTokenInfo = {
-        assetClass: undefined,
-        idxHash: undefined,
-        name: undefined,
-        photos: undefined,
-        text: undefined,
-        status: undefined,
-      }
-      window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-      window.resetInfo = false;
-
-      _ipfs = IPFS({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-      });
-
-      window.ipfs = _ipfs;
-
-      _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
-
-      window.addEventListener("accountListener", acctListener);
-      this.setUpContractEnvironment(_web3)
-
-
-      setIsMounted(true)
-    }
-
-    //Give me the read-only version
-    else {
-      console.log("Here")
-      window.ipfsCounter = 0;
-      _web3 = require("web3");
-      _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
-      setUpContractEnvironment(_web3)
-      window.web3 = _web3;
-
+    if(!isMounted){
+      window.balances = {}
+      let timeOutCounter = 0;
+      window.recount = false;
+      let _web3, _ipfs;
+  
       _ipfs = new IPFS({
         host: "ipfs.infura.io",
         port: 5001,
         protocol: "https",
       });
-
+  
       window.ipfs = _ipfs;
-
-      setIsMounted(true)
+  
+      _web3 = require("web3");
+      _web3 = new Web3(_web3.givenProvider);
+      window.web3 = _web3;
+  
+      buildWindowUtils() // get the utils object and make it globally accessible
+  
+      const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
+        timeOutCounter++;
+        setTimeout(() => { if (!window.ethereum && timeOutCounter < 5) checkForEthereum() }, 500);
+      }
+  
+      checkForEthereum();
+  
+      window.jdenticon_config = {
+        hues: [196],
+        lightness: {
+          color: [0.36, 0.70],
+          grayscale: [0.24, 0.82]
+        },
+        saturation: {
+          color: 0.75,
+          grayscale: 0.10
+        },
+        backColor: "#ffffffff"
+      };
+  
+      //Declare a few globals
+      window.sentPacket = undefined;
+      window.isSettingUpContracts = false;
+      window.hasLoadedAssets = false;
+      let refString = String(window.location.href);
+      if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
+        //window.location.href = '/#/admin/home';
+      } else {
+        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+        console.log("Here is the search:", window.location.hash)
+      }
+      window.menuChange = undefined;
+  
+      //Give me the desktop version
+      if (!isMobile && window.ethereum) {
+        console.log(_web3.eth.net.getNetworkType())
+        console.log("Here")
+        window.costs = {}
+        window.additionalElementArrays = {
+          photo: [],
+          text: [],
+          name: ""
+        }
+  
+        //More globals (eth-is-connected specific)
+        window.assetTokenInfo = {
+          assetClass: undefined,
+          idxHash: undefined,
+          name: undefined,
+          photos: undefined,
+          text: undefined,
+          status: undefined,
+        }
+  
+        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+        window.resetInfo = false;
+        const ethereum = window.ethereum;
+  
+        ethereum.enable()
+  
+        _web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0] });
+        window.addEventListener("accountListener", acctListener);
+        console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
+        setUpContractEnvironment(_web3)
+        setIsMounted(true)
+      }
+  
+      //Give me the mobile ethereum-enabled version
+      else if (isMobile && window.ethereum) {
+  
+        console.log(_web3.eth.net.getNetworkType())
+  
+        console.log("Here")
+  
+        window.costs = {}
+        window.additionalElementArrays = {
+          photo: [],
+          text: [],
+          name: ""
+        }
+        window.assetTokenInfo = {
+          assetClass: undefined,
+          idxHash: undefined,
+          name: undefined,
+          photos: undefined,
+          text: undefined,
+          status: undefined,
+        }
+        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+        window.resetInfo = false;
+  
+        _ipfs = IPFS({
+          host: "ipfs.infura.io",
+          port: 5001,
+          protocol: "https",
+        });
+  
+        window.ipfs = _ipfs;
+  
+        _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+  
+        window.addEventListener("accountListener", acctListener);
+        setUpContractEnvironment(_web3)
+  
+  
+        setIsMounted(true)
+      }
+  
+      //Give me the read-only version
+      else {
+        console.log("Here")
+        window.ipfsCounter = 0;
+        _web3 = require("web3");
+        _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+        setUpContractEnvironment(_web3)
+        window.web3 = _web3;
+  
+        _ipfs = new IPFS({
+          host: "ipfs.infura.io",
+          port: 5001,
+          protocol: "https",
+        });
+  
+        window.ipfs = _ipfs;
+  
+        setIsMounted(true)
+      }
     }
+
     
     window.addEventListener("resize", resizeFunction);
 
@@ -230,6 +236,11 @@ export default function Dashboard(props) {
         ps.destroy();
       }
       window.removeEventListener("resize", resizeFunction);
+      window.removeEventListener("balances", balanceListener);
+      window.removeEventListener("assets", assetListener);
+      window.removeEventListener("network", networkListener);
+      window.removeEventListener("accountListener", acctListener);
+      window.removeEventListener("navigator", navTypeListener);
     };
   });
   // functions for changeing the states from components
@@ -323,12 +334,13 @@ export default function Dashboard(props) {
 
       if (window.addr !== undefined) {
         await window.utils.getETHBalance();
-        await setUpTokenVals(true)
+        await setUpTokenVals(true, "SetupContractEnvironment")
       }
 
 
       console.log("bools...", window.assetHolderBool, window.assetClassHolderBool, window.IDHolderBool)
       window.isSettingUpContracts = false;
+      setWD(true)
     }
 
     else {
@@ -336,13 +348,16 @@ export default function Dashboard(props) {
       window._contracts = await buildContracts(_web3)
       await window.utils.getContracts()
       window.isSettingUpContracts = false;
+      setWD(true)
     }
 
     window.addEventListener("navigator", navTypeListener);
 
   }
 
-  const setUpAssets = async () => {
+  const setUpAssets = async (who) => {
+    console.log("SUA, called from ", who)
+
     window.hasNoAssets = false;
     window.hasNoAssetClasses = false;
     window.ipfsCounter = 0;
@@ -366,7 +381,7 @@ export default function Dashboard(props) {
       if (window.balances !== undefined) window.balances.assetBalance = 0;
       window.recount = false
       await window.utils.getETHBalance();
-      return setUpTokenVals(true)
+      return setUpTokenVals(true, "SUA recount")
     }
 
     //Do a full update if the balances are returning undefined at this stage (They should never do this)
@@ -407,7 +422,7 @@ export default function Dashboard(props) {
 
     console.log("Asset setUp Complete. Turning on watchDog.")
 
-    //await this.setState({ runWatchDog: true })
+    setWD(true)
 
     console.log("IPFS operation count: ", window.ipfsCounter)
     console.log("Prebuild Assets: ", window.assets)
@@ -508,9 +523,8 @@ export default function Dashboard(props) {
   }
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-  const setUpTokenVals = async (willSetup) => {
-    const self = this;
-    console.log("STV: Setting up balances")
+  const setUpTokenVals = async (willSetup, who) => {
+    console.log("STV: Setting up balances, called from ", who)
 
     await window.utils.determineTokenBalance().then((e)=>{ console.log(e); 
       setAssetBalance(e.assetBalance); 
@@ -522,9 +536,10 @@ export default function Dashboard(props) {
       setIsIDHolder(window.IDHolderBool);
       setHasFetchedBalances(window.hasFetchedBalances);
     })
+
     await console.log(window.balances)
     if (willSetup) {
-      return setUpAssets()
+      return setUpAssets("setUpTokenVals")
     }
     
   }
@@ -595,7 +610,7 @@ export default function Dashboard(props) {
       window.hasLoadedAssets = false;
       setBuildReady(false)
       console.log("WD: setting up assets (Step one)")
-      setUpAssets()
+      setUpAssets("AssetListener")
       window.resetInfo = false
     }
 
@@ -613,7 +628,7 @@ export default function Dashboard(props) {
 
     //In the case of a completed recount and rough asset build, make asset info usable for app
     if (window.aTknIDs !== undefined && buildReady === false) {
-      if (window.ipfsCounter >= window.aTknIDs.length && window.aTknIDs.length > 0) {
+      if (window.ipfsCounter >= window.aTknIDs.length && window.aTknIDs.length > 0 && WD === true) {
         console.log("12")
         console.log("Assets are ready for rebuild")
         setBuildReady(true)
@@ -621,7 +636,7 @@ export default function Dashboard(props) {
     }
 
     //Assets finished rebuilding, flip rebuild switch
-    else if (buildReady === true && window.ipfsCounter < window.aTknIDs.length) {
+    else if (buildReady === true && window.ipfsCounter < window.aTknIDs.length && WD === false) {
       console.log("13")
       console.log("Assets finished rebuilding, no longer ready for rebuild")
       setBuildReady(false)
@@ -629,7 +644,7 @@ export default function Dashboard(props) {
   }
 
   const balanceListener = () => {
-    if (ETHBalance !== window.ETHBalance) {
+    if (ETHBalance !== window.ETHBalance && WD === true) {
       console.log("5")
       setETHBalance(window.ETHBalance);
     }
@@ -637,17 +652,19 @@ export default function Dashboard(props) {
 
   const navTypeListener = () => {
     //Catch late window.ethereum injection case (MetaMask mobile)
-    if (isMobile && window.ethereum) {
+    if (isMobile && window.ethereum && WD === true) {
       window.web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0]; });
       window.addEventListener("accountListener", this.acctChanger());
     }
   }
 
   const networkListener = () => { 
-    window.web3.eth.net.getNetworkType().then((e) => { 
-      if (e === "kovan" && !isKovan) { setIsKovan(true) } 
-      else if (e !== "kovan") { setIsKovan(false) }  
-    })
+    if(WD === true){
+      window.web3.eth.net.getNetworkType().then((e) => { 
+        if (e === "kovan" && !isKovan) { setIsKovan(true) } 
+        else if (e !== "kovan") { setIsKovan(false) }  
+      })
+    }
   }
 
   return (
