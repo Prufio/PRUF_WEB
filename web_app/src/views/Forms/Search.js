@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from 'react';
 import "../../assets/css/custom.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -40,7 +41,7 @@ export default function Search() {
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
-  const [data, setData] = React.useState('No result');
+  const [data, setData] = useState("???");
 
   const handleChange = event => {
     setSelectedValue(event.target.value);
@@ -157,20 +158,25 @@ export default function Search() {
             <h4 className={classes.cardIconTitle}>QR Scanner</h4>
           </CardHeader>
           <CardBody>
-          <QrReader
-        onResult={(result, error) => {
-          if (!!result) {
-            setData(result?.text);
-          }
+            <QrReader
+            facingMode={"rear"}
+              scanDelay={300}
+              onScan={(result) => {
+                if (!!result) {
+                  return setData(result);
+                }
 
-          if (!!error) {
-            console.info(error);
-          }
-        }}
-        style={{ width: '40%' }}
-      />
-      <p>{data}</p>
-      <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
+              }}
+              onError={(err) => {
+                if (!!err) {
+                  console.info(err);
+                }
+              }}
+
+              style={{ width: '100%' }}
+            />
+            <p>{data}</p>
+            <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
           </CardBody>
         </Card>
       )}
