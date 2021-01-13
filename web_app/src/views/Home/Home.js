@@ -3,6 +3,7 @@ import React from "react";
 import ChartistGraph from "react-chartist";
 // react plugin for creating vector maps
 import { VectorMap } from "react-jvectormap";
+import "../../assets/css/custom.css";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -86,8 +87,8 @@ export default function Dashboard() {
       <GridContainer>
         <GridItem xs={12} sm={6} md={6} lg={3}>
           <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon color="success">
+            <CardHeader color="info" stats icon>
+              <CardIcon className="headerIconBack">
                 <Category/>
               </CardIcon>
               <p className={classes.cardCategory}>Assets Held</p>
@@ -100,7 +101,7 @@ export default function Dashboard() {
                 <Success>
                   <Add />
                 </Success>
-                <a href="/admin/new-record">
+                <a href="/#/admin/new-record">
                   Create New Record
                 </a>
               </div>
@@ -109,8 +110,8 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={6} md={6} lg={3}>
           <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon color="success">
+            <CardHeader  stats icon>
+              <CardIcon className="headerIconBack">
                 <img className="Icon" src={Eth}></img>
               </CardIcon>
               <p className={classes.cardCategory}>ETH Balance</p>
@@ -132,7 +133,7 @@ export default function Dashboard() {
         <GridItem xs={12} sm={6} md={6} lg={3}>
           <Card>
             <CardHeader color="danger" stats icon>
-              <CardIcon color="success">
+              <CardIcon className="headerIconBack">
               <img className="Icon" src={Pruf}></img>
               </CardIcon>
               <p className={classes.cardCategory}>PRüF Balance</p>

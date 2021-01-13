@@ -356,10 +356,11 @@ class Sidebar extends React.Component {
     var user = (
       <div className={userWrapperClass}>
         <div className={photo}>
-          <Robohash
+        <img src={pruftoken} alt="logo" className={classes.img} />
+          {/* <Robohash
             className={classes.avatarImg}
             name={"0x9397ec...0184bD9"}
-          />
+          /> */}
         </div>
         <List className={classes.list}>
           <ListItem className={classes.item + " " + classes.userItem}>

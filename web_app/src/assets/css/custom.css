@@ -33,3 +33,18 @@
         background: linear-gradient(60deg, #002a40, #01476d);
         box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
 }
+
+.makeStyles-appBar-79 {
+    background: linear-gradient(60deg, #002a40, #01476d) !important;
+    border-radius: 0px !important;
+}
+
+.makeStyles-title-82 {
+    color: white !important;
+}
+
+.makeStyles-input-170, .makeStyles-input-170::placeholder {
+
+   color: white !important;
+
+ }

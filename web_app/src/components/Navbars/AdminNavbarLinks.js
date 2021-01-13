@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import "../../assets/css/custom.css";
 // import { Manager, Target, Popper } from "react-popper";
 
 // @material-ui/core components

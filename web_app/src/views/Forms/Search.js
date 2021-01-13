@@ -41,7 +41,7 @@ export default function Search() {
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
-  const [data, setData] = useState("???");
+  const [data, setData] = useState("Asset not found");
 
   const handleChange = event => {
     setSelectedValue(event.target.value);
@@ -53,6 +53,7 @@ export default function Search() {
 
   const handleScanQR = event => {
     setScanQR(!scanQR);
+    setData()
     console.log("new value", !scanQR)
   };
 
@@ -159,7 +160,7 @@ export default function Search() {
           </CardHeader>
           <CardBody>
             <QrReader
-            facingMode={"rear"}
+            // facingMode={"rear"}
               scanDelay={300}
               onScan={(result) => {
                 if (!!result) {

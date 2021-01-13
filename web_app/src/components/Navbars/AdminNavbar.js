@@ -72,10 +72,11 @@ export default function AdminNavbar(props) {
         <Hidden mdUp implementation="css">
           <Button
             className={classes.appResponsive}
-            color="transparent"
+            // color="transparent"
             justIcon
             aria-label="open drawer"
             onClick={props.handleDrawerToggle}
+            color="white"
           >
             <Menu />
           </Button>
