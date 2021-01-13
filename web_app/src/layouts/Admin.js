@@ -121,7 +121,7 @@ export default function Dashboard(props) {
     window.hasLoadedAssets = false;
     let refString = String(window.location.href);
     if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
-      window.location.href = '/#/admin/home';
+      // window.location.href = '/#/admin/home';
     } else {
       window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
       console.log("Here is the search:", window.location.hash)

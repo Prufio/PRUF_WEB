@@ -42,6 +42,8 @@ export default function Search() {
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
   const [data, setData] = useState("Asset not found");
+  const [idxHash, setIdxHash] = useState("");
+  const [result, setResult] = useState("");
 
   const handleChange = event => {
     setSelectedValue(event.target.value);
@@ -56,6 +58,81 @@ export default function Search() {
     setData()
     console.log("new value", !scanQR)
   };
+
+  const retrieveRecordQR = async (data) => {
+    console.log("in rrqr")
+    // const self = this;
+    // let ipfsHash;
+    // let tempResult;
+    let idxHash = data;
+    // if (query) {
+    //   let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
+    //   if (tempBool) {
+    //     idxHash = String(this.state.queryValue)
+    //   } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return this.setState({ alertBanner: "Asset does not exist!" }) }
+
+    // } else {
+    //   idxHash = String(this.state.result)
+    // }
+    // setData(idxHash)
+    console.log("idxHash", idxHash);
+    console.log("addr: ", window.addr);
+    // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
+    await window.contracts.STOR.methods
+      .retrieveShortRecord(idxHash)
+      .call(
+        function (_error, _result) {
+          if (_error) {
+            console.log(_error)
+            // self.setState({
+            //   error: _error,
+            //   result: 0
+            // });
+          } 
+          else {
+            console.log("rrqr conf");
+            // self.setState({
+            //   result: Object.values(_result),
+            //   error: undefined
+            // })
+            // setResult(Object.values(_result))
+            // tempResult = Object.values(_result);
+            // if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+            // console.log("ipfs data in promise", ipfsHash)
+            // if (Object.values(_result)[6] > 0) {
+            //   console.log("Getting ipfs2 set up...")
+            //   let knownUrl = "https://ipfs.io/ipfs/";
+            //   let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
+            //   let fullUrl = knownUrl + hash;
+            //   console.log(fullUrl);
+              // self.setState({ ipfs2: fullUrl });
+            // }
+          }
+        });
+
+    // window.assetClass = result[2]
+    // let assetClassName = await window.utils.getACName(result[2])
+
+    // window.assetInfo = {
+    //   assetClassName: assetClassName,
+    //   assetClass: result[2],
+    //   status: await window.utils.getStatusString(String(result[0])),
+    //   idx: idxHash
+    // }
+
+    // await window.utils.resolveACFromID(result[2])
+    // await this.getACData("id", window.assetClass)
+
+    console.log(window.authLevel);
+
+    // await this.getIPFSJSONObject(ipfsHash);
+
+    // return this.setState({
+    //   moreInfo: true,
+    //   authLevel: window.authLevel,
+    //   QRreader: false
+    // })
+  }
 
   const handleToggle = value => {
     const currentIndex = checked.indexOf(value);
@@ -164,7 +241,8 @@ export default function Search() {
               scanDelay={300}
               onScan={(result) => {
                 if (!!result) {
-                  return setData(result);
+                  return retrieveRecordQR(result);
+                  // setData(result), 
                 }
 
               }}
