@@ -358,10 +358,6 @@ class Sidebar extends React.Component {
         <div className={photo}>
         {window.addr !== undefined && (
         <img src={pruftoken} alt="logo" className={classes.img} />
-          {/* <Robohash
-            className={classes.avatarImg}
-            name={"0x9397ec...0184bD9"}
-          /> */}
           )}
         </div>
         <List className={classes.list}>
