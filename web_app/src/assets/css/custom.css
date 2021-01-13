@@ -1,0 +1,35 @@
+.assetImage {
+    width: 300px !important;
+    height: 300px !important;
+    object-fit: cover !important;
+}
+
+.assetHeader {
+    /* width: 300px !important; */
+    /* height: 300px !important; */
+    object-fit: cover !important;
+}
+
+.functionSelector {
+    /* top: -20px !important; */
+    width: 100px;
+}
+
+.functionSelectorIcon {
+    bottom: -20px !important;
+}
+
+.Icon {
+    width: 55px;
+    height: 55px;
+}
+
+.headerIconBack {
+    float: left;
+    padding: 15px;
+    margin-top: -20px;
+    margin-right: 15px;
+    border-radius: 3px;
+        background: linear-gradient(60deg, #002a40, #01476d);
+        box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
+}
