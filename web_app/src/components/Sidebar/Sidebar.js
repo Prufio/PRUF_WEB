@@ -356,10 +356,12 @@ class Sidebar extends React.Component {
     var user = (
       <div className={userWrapperClass}>
         <div className={photo}>
-          <Robohash
+          {window.addr !== undefined && (
+            <Robohash
             className={classes.avatarImg}
-            name={"0x9397ec...0184bD9"}
-          />
+            name={window.addr}
+            />
+          )}
         </div>
         <List className={classes.list}>
           <ListItem className={classes.item + " " + classes.userItem}>
@@ -367,9 +369,9 @@ class Sidebar extends React.Component {
               to={"#"}
               className={classes.itemLink + " " + classes.userCollapseButton}
               onClick={() => this.openCollapse("openAvatar")}
-            >
+            > {window.addr !== undefined && (
               <ListItemText
-                primary={"0x9397ec...0184bD9"}
+                primary={window.addr.substring(0,8) + "..." + window.addr.substring(34,42)}
                 secondary={
                   <b
                     className={
@@ -384,6 +386,26 @@ class Sidebar extends React.Component {
                 disableTypography={true}
                 className={itemText + " " + classes.userItemText}
               />
+              )}
+              {window.addr === undefined && (
+                <ListItemText
+                primary={"User address unavailable"}
+                secondary={
+                  <b
+                    className={
+                      caret +
+                      " " +
+                      classes.userCaret +
+                      " " +
+                      (this.state.openAvatar ? classes.caretActive : "")
+                    }
+                  />
+                }
+                disableTypography={true}
+                className={itemText + " " + classes.userItemText}
+              />
+              )}
+              
             </NavLink>
             <Collapse in={this.state.openAvatar} unmountOnExit>
               <List className={classes.list + " " + classes.collapseList}>
