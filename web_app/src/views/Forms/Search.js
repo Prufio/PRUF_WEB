@@ -133,6 +133,22 @@ export default function Search() {
     }
   }
 
+  const purchaseAsset = async () => {
+    if(window.balances.prufTokenBalance < price){return}
+
+    await window.contracts.PURCHASE.methods
+      .purchaseWithPRUF(asset.idxHash)
+      .send({from: window.addr})
+      .on("error", function (_error) {
+        console.log(Object.values(_error)[0].transactionHash);
+        window.isInTx = false;
+      })
+      .on("receipt", (receipt) => {
+        alert("Success! Drake is a beanhead!")
+        console.log(receipt.events.REPORT.returnValues._msg);
+      });
+  } 
+
   const retrieveRecordQR = async (query) => {
     console.log("in rrqr")
     let ipfsHash;
@@ -386,7 +402,7 @@ export default function Search() {
             )}
             <br />
             {currency !== "" && (
-              <Button color="success">Purchase Item</Button>
+              <Button onClick={()=>{purchaseAsset()}} color="success">Purchase Item</Button>
             )}
           </CardBody>
           <CardFooter chart>
