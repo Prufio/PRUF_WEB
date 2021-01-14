@@ -126,7 +126,7 @@ export default function Dashboard(props) {
       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
         //window.location.href = '/#/admin/home';
       } else {
-        window.location.href = '/#/retrieve-record/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
         console.log("Here is the search:", window.location.hash)
       }
       window.menuChange = undefined;
@@ -236,11 +236,11 @@ export default function Dashboard(props) {
         ps.destroy();
       }
       window.removeEventListener("resize", resizeFunction);
-      window.removeEventListener("balances", balanceListener);
-      window.removeEventListener("assets", assetListener);
-      window.removeEventListener("network", networkListener);
-      window.removeEventListener("accountListener", acctListener);
-      window.removeEventListener("navigator", navTypeListener);
+      //window.removeEventListener("balances", balanceListener);
+      //window.removeEventListener("assets", assetListener);
+      //window.removeEventListener("network", networkListener);
+      //window.removeEventListener("accountListener", acctListener);
+      //window.removeEventListener("navigator", navTypeListener);
     };
   });
   // functions for changeing the states from components
@@ -325,9 +325,9 @@ export default function Dashboard(props) {
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
     console.log("Setting up contracts")
     if (window.ethereum !== undefined) {
-      window.addEventListener("balances", balanceListener);
-      window.addEventListener("assets", assetListener);
-      window.addEventListener("network", networkListener);
+      //window.addEventListener("balances", balanceListener);
+      //window.addEventListener("assets", assetListener);
+      //window.addEventListener("network", networkListener);
       window._contracts = await buildContracts(_web3)
 
       await window.utils.getContracts()
@@ -351,7 +351,7 @@ export default function Dashboard(props) {
       setWD(true)
     }
 
-    window.addEventListener("navigator", navTypeListener);
+    //window.addEventListener("navigator", navTypeListener);
 
   }
 
@@ -427,6 +427,7 @@ export default function Dashboard(props) {
     console.log("IPFS operation count: ", window.ipfsCounter)
     console.log("Prebuild Assets: ", window.assets)
     console.log("Bools...", isAssetHolder, isAssetClassHolder, isIDHolder)
+    console.log(window.ipfsCounter >= window.aTknIDs.length, window.aTknIDs.length > 0, WD)
   }
 
   const buildAssets = () => {
@@ -550,9 +551,11 @@ export default function Dashboard(props) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         descElement.push(undefined)
         window.ipfsCounter++
+        console.log(window.ipfsCounter)
       } else {
         descElement.push(result)
         window.ipfsCounter++
+        console.log(window.ipfsCounter)
       }
     });
   };
@@ -601,7 +604,7 @@ export default function Dashboard(props) {
     });
   };
 
-  const assetListener = () => {
+  const assetListener = setInterval(() => {
 
     //If reset was remotely requested, begin full asset recount
     if (window.resetInfo === true) {
@@ -641,31 +644,31 @@ export default function Dashboard(props) {
       console.log("Assets finished rebuilding, no longer ready for rebuild")
       setBuildReady(false)
     }
-  }
+  }, 500)
 
-  const balanceListener = () => {
+  /* const balanceListener = setInterval(() => {
     if (ETHBalance !== window.ETHBalance && WD === true) {
       console.log("5")
-      setETHBalance(window.ETHBalance);
+      return setETHBalance(window.ETHBalance);
     }
-  }
+  }, 500) */
 
-  const navTypeListener = () => {
+  const navTypeListener = setInterval(() => {
     //Catch late window.ethereum injection case (MetaMask mobile)
     if (isMobile && window.ethereum && WD === true) {
       window.web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0]; });
       window.addEventListener("accountListener", this.acctChanger());
     }
-  }
+  }, 500)
 
-  const networkListener = () => { 
+  const networkListener = setInterval(() => { 
     if(WD === true){
       window.web3.eth.net.getNetworkType().then((e) => { 
         if (e === "kovan" && !isKovan) { setIsKovan(true) } 
         else if (e !== "kovan") { setIsKovan(false) }  
       })
     }
-  }
+  }, 500)
 
   return (
     <div className={classes.wrapper}>
