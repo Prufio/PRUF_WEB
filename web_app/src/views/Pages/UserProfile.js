@@ -18,7 +18,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 
-import styles from "assets/jss/material-dashboard-pro-react/views/userProfileStyles.js";
+import styles from "assets/jss/material-dashboard-pro-react/views/adminProfileStyles.js";
 
 import avatar from "assets/img/faces/marc.jpg";
 

@@ -126,7 +126,7 @@ export default function Dashboard(props) {
       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
         //window.location.href = '/#/admin/home';
       } else {
-        window.location.href = '/#/user/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
         console.log("Here is the search:", window.location.hash)
       }
       window.menuChange = undefined;
@@ -272,7 +272,7 @@ export default function Dashboard(props) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return window.location.pathname !== "/user/full-screen-maps";
+    return window.location.pathname !== "/admin/full-screen-maps";
   };
   const getActiveRoute = routes => {
     let activeRoute = "Default Brand Text";
@@ -297,7 +297,7 @@ export default function Dashboard(props) {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/user") {
+      if (prop.layout === "/admin") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -588,7 +588,7 @@ export default function Dashboard(props) {
 
           }
 
-          if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#/user/home" }
+          if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#/admin/home" }
 
           window.addr = e[0];
           window.assetClass = undefined;
@@ -698,7 +698,7 @@ export default function Dashboard(props) {
             <div className={classes.container}>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
+                <Redirect from="/admin" to="/admin/home" />
               </Switch>
             </div>
           </div>
@@ -706,7 +706,7 @@ export default function Dashboard(props) {
             <div className={classes.map}>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
+                <Redirect from="/admin" to="/admin/home" />
               </Switch>
             </div>
           )}

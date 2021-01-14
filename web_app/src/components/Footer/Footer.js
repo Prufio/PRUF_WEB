@@ -39,7 +39,7 @@ export default function Footer(props) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="/#/user/home" className={block}>
+              <a href="/#/admin/home" className={block}>
                 {rtlActive ? "الصفحة الرئيسية" : "Home"}
               </a>
             </ListItem>

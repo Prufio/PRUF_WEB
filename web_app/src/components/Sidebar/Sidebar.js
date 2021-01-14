@@ -458,13 +458,13 @@ class Sidebar extends React.Component {
     var brand = (
       <div className={logoClasses}>
         <a
-          href="/user/home"
+          href="/admin/home"
           className={logoMini}
         >
           <img src={pruftoken} alt="logo" className={classes.img} />
         </a>
         <a
-          href="/user/home"
+          href="/admin/home"
           className={logoNormal}
         >
           PRüF Dashboard

@@ -149,7 +149,7 @@ export default function Search() {
       })
       .on("receipt", (receipt) => {
         setTransaction(false);
-        window.location.href="/#/user/dashboard"
+        window.location.href="/#/admin/dashboard"
         console.log(receipt.events.REPORT.returnValues._msg);
       });
   } 

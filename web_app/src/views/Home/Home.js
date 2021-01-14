@@ -101,7 +101,7 @@ export default function Dashboard() {
                 <Success>
                   <Add />
                 </Success>
-                <a href="/#/user/new-record">
+                <a href="/#/admin/new-record">
                   Create New Record
                 </a>
               </div>
