@@ -3,35 +3,31 @@ import { useState } from 'react';
 import "../../assets/css/custom.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import FormLabel from "@material-ui/core/FormLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Radio from "@material-ui/core/Radio";
 import Checkbox from "@material-ui/core/Checkbox";
 
 // @material-ui/icons
-import MailOutline from "@material-ui/icons/MailOutline";
 import Check from "@material-ui/icons/Check";
-import Clear from "@material-ui/icons/Clear";
-import Contacts from "@material-ui/icons/Contacts";
-import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
 import Category from "@material-ui/icons/Category";
-import AccountBox from "@material-ui/icons/AccountBox";
+import Share from "@material-ui/icons/Share";
+import Print from "@material-ui/icons/Print";
+
 
 // core components
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardText from "components/Card/CardText.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
+import CardFooter from "components/Card/CardFooter.js";
 
 import QrReader from 'react-qr-reader'
+import Jdenticon from 'react-jdenticon';
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
+import pruftoken from "../../assets/img/pruftoken.png";
+
 
 const useStyles = makeStyles(styles);
 
@@ -41,9 +37,22 @@ export default function Search() {
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
-  const [data, setData] = useState("Asset not found");
+  const [data, setData] = useState("");
   const [idxHash, setIdxHash] = useState("");
   const [result, setResult] = useState("");
+  const [queryValue, setQueryValue] = useState("");
+  const [wasSentQuery, setWasSentQuery] = useState(false);
+  const [error, setError] = useState("");
+  const [inscription, setInscription] = useState("");
+  const [moreInfo, setMoreInfo] = useState(false);
+  const [authLevel, setAuthLevel] = useState("");
+  const [ipfsObject, setIpfsObject] = useState({});
+  const [asset, setAsset] = useState({});
+
+
+
+
+
 
   const handleChange = event => {
     setSelectedValue(event.target.value);
@@ -59,22 +68,75 @@ export default function Search() {
     console.log("new value", !scanQR)
   };
 
-  const retrieveRecordQR = async (data) => {
-    console.log("in rrqr")
-    // const self = this;
-    // let ipfsHash;
-    // let tempResult;
-    let idxHash = data;
-    // if (query) {
-    //   let tempBool = await window.utils.checkAssetExistsBare(this.state.queryValue)
-    //   if (tempBool) {
-    //     idxHash = String(this.state.queryValue)
-    //   } else { this.setState({ wasSentQuery: false, queryValue: undefined }); return this.setState({ alertBanner: "Asset does not exist!" }) }
+  const getIPFSJSONObject = (lookup) => {
+    //console.log(lookup)
+    window.ipfs.cat(lookup, async (error, result) => {
+      if (error) {
+        console.log(lookup, "Something went wrong. Unable to find file on IPFS");
+        return setIpfsObject({})
+      } else {
+        console.log(lookup, "Here's what we found for asset description: ", result);
+        return setIpfsObject(JSON.parse(result))
+      }
+    });
+  };
 
-    // } else {
-    //   idxHash = String(this.state.result)
-    // }
-    // setData(idxHash)
+  const getACData = async (ref, ac) => {
+    let tempData;
+    let tempAC;
+
+    if (window.contracts !== undefined) {
+
+      if (ref === "name") {
+        console.log("Using name ref")
+        await window.contracts.AC_MGR.methods
+          .resolveAssetClass(ac)
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
+            else {
+              if (Number(_result) > 0) { tempAC = Number(_result) }
+              else { return 0 }
+            }
+          });
+
+      }
+
+      else if (ref === "id") { tempAC = ac; }
+
+      await window.contracts.AC_MGR.methods
+        .getAC_data(tempAC)
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let _custodyType;
+
+            if (Object.values(_result)[1] === "1") {
+              _custodyType = "Custodial"
+            }
+
+            else {
+              _custodyType = "Non-Custodial"
+            }
+
+            tempData = {
+              root: Object.values(_result)[0],
+              custodyType: _custodyType,
+              discount: Object.values(_result)[2],
+              exData: Object.values(_result)[3],
+              AC: tempAC
+            }
+          }
+        });
+      return tempData;
+    }
+  }
+
+  const retrieveRecordQR = async (query) => {
+    console.log("in rrqr")
+    let ipfsHash;
+    let tempResult;
+    let idxHash = query;
+
     console.log("idxHash", idxHash);
     console.log("addr: ", window.addr);
     // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
@@ -84,54 +146,52 @@ export default function Search() {
         function (_error, _result) {
           if (_error) {
             console.log(_error)
-            // self.setState({
-            //   error: _error,
-            //   result: 0
-            // });
-          } 
+            setError(_error);
+            setResult("");
+          }
           else {
             console.log("rrqr conf");
-            // self.setState({
-            //   result: Object.values(_result),
-            //   error: undefined
-            // })
-            // setResult(Object.values(_result))
-            // tempResult = Object.values(_result);
-            // if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-            // console.log("ipfs data in promise", ipfsHash)
-            // if (Object.values(_result)[6] > 0) {
-            //   console.log("Getting ipfs2 set up...")
-            //   let knownUrl = "https://ipfs.io/ipfs/";
-            //   let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
-            //   let fullUrl = knownUrl + hash;
-            //   console.log(fullUrl);
-              // self.setState({ ipfs2: fullUrl });
-            // }
+            setResult(Object.values(_result));
+            setError("");
+            tempResult = Object.values(_result);
+            if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+            console.log("ipfs data in promise", ipfsHash)
+            if (Object.values(_result)[6] > 0) {
+              console.log("Getting ipfs2 set up...")
+              let knownUrl = "https://ipfs.io/ipfs/";
+              let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
+              let fullUrl = knownUrl + hash;
+              console.log(fullUrl);
+              setInscription(fullUrl)
+            }
           }
         });
 
-    // window.assetClass = result[2]
-    // let assetClassName = await window.utils.getACName(result[2])
+    window.assetClass = tempResult[2]
+    let assetClassName = await window.utils.getACName(tempResult[2])
 
-    // window.assetInfo = {
-    //   assetClassName: assetClassName,
-    //   assetClass: result[2],
-    //   status: await window.utils.getStatusString(String(result[0])),
-    //   idx: idxHash
-    // }
+    window.assetInfo = {
+      assetClassName: assetClassName,
+      assetClass: tempResult[2],
+      status: await window.utils.getStatusString(String(tempResult[0])),
+      idx: idxHash
+    }
 
-    // await window.utils.resolveACFromID(result[2])
-    // await this.getACData("id", window.assetClass)
+    await window.utils.resolveACFromID(tempResult[2])
+    await getACData("id", window.assetClass)
 
     console.log(window.authLevel);
 
-    // await this.getIPFSJSONObject(ipfsHash);
-
-    // return this.setState({
-    //   moreInfo: true,
-    //   authLevel: window.authLevel,
-    //   QRreader: false
-    // })
+    await getIPFSJSONObject(ipfsHash);
+    setAuthLevel(window.authLevel);
+    setScanQR(false);
+    setAsset({
+      assetClassName: window.assetClassName,
+      assetClass: tempResult[2],
+      status: window.assetInfo.status,
+      idxHash: idxHash,
+    })
+    return setMoreInfo(true);
   }
 
   const handleToggle = value => {
@@ -148,7 +208,7 @@ export default function Search() {
   const classes = useStyles();
   return (
     <>
-      {scanQR === false && (
+      {scanQR === false && !moreInfo && (
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info">
@@ -164,9 +224,6 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-              // inputProps={{
-              // type: "email"
-              // }}
               />
               <CustomInput
                 labelText="Type"
@@ -174,10 +231,6 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-              // inputProps={{
-              //   type: "password",
-              //   autoComplete: "off"
-              // }}
               />
               <CustomInput
                 labelText="Model"
@@ -185,9 +238,6 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-              // inputProps={{
-              // type: "email"
-              // }}
               />
               <CustomInput
                 labelText="Serial"
@@ -195,10 +245,6 @@ export default function Search() {
                 formControlProps={{
                   fullWidth: true
                 }}
-              // inputProps={{
-              //   type: "password",
-              //   autoComplete: "off"
-              // }}
               />
               <div className={classes.checkboxAndRadio}>
                 <FormControlLabel
@@ -227,7 +273,7 @@ export default function Search() {
           </CardBody>
         </Card>
       )}
-      {scanQR === true && (
+      {scanQR === true && !moreInfo && (
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info">
@@ -237,17 +283,15 @@ export default function Search() {
           </CardHeader>
           <CardBody>
             <QrReader
-            // facingMode={"rear"}
               scanDelay={300}
               onScan={(result) => {
-                if (!!result) {
-                  return retrieveRecordQR(result);
-                  // setData(result), 
+                if (result) {
+                  retrieveRecordQR(result);
                 }
 
               }}
               onError={(err) => {
-                if (!!err) {
+                if (err) {
                   console.info(err);
                 }
               }}
@@ -257,6 +301,71 @@ export default function Search() {
             <p>{data}</p>
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
           </CardBody>
+        </Card>
+      )}
+      {moreInfo && (
+        <Card>
+          <CardHeader color="info" className="assetHeader">
+            {ipfsObject.photo !== undefined && (
+              <>
+                {Object.values(ipfsObject.photo).length > 0 && (
+                  <>
+                    {ipfsObject.photo.displayImage !== undefined && (
+                      <img src={ipfsObject.photo.displayImage} alt="logo" className="assetImage" />
+                    )}
+                    {ipfsObject.photo.displayImage === undefined && (
+                      <img src={Object.values(ipfsObject.photo)[0]} alt="logo" className="assetImage" />
+                    )}
+                  </>
+                )}
+                {Object.values(ipfsObject.photo).length === 0 && (
+                  <Jdenticon size="300" value={asset.idxHash} />
+                )}
+              </>
+            )}
+
+          </CardHeader>
+          <CardBody>
+            <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
+            <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
+            <h4 className={classes.cardTitle}>Status: {asset.status}</h4>
+            {ipfsObject.text !== undefined && (
+              <>
+                {
+                  ipfsObject.text.Description !== undefined && (
+                    <p className={classes.cardCategory}>
+                      Description: {ipfsObject.text.Description}
+                    </p>
+                  )
+                }
+                {ipfsObject.text.Description === undefined && (
+                  <p className={classes.cardCategory}>
+                    Description: None
+                  </p>
+                )}
+                {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
+                  <p className={classes.cardCategory}>
+                    Text Element: {Object.values(ipfsObject.text)[0]}
+                  </p>
+                )}
+              </>
+            )}
+
+
+            <br />
+            {/* {this.state.status = undefined && ( */}
+            <Button color="success">Purchase Item</Button>
+            {/* )} */}
+          </CardBody>
+          <CardFooter chart>
+            <div className={classes.stats}>
+              IDX Hash: {asset.idxHash}
+            </div>
+            <div className={classes.stats}>
+              <Share />
+              <Print />
+            </div>
+          </CardFooter>
         </Card>
       )}
     </>

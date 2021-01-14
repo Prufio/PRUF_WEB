@@ -183,13 +183,13 @@ var dashRoutes = [
     component: ViewAsset,
     layout: "/admin"
   },
-  {
-    path: "/retrieved-record",
-    name: "Retrieved Record",
-    rtlName: "لوحة القيادة",
-    icon: DashboardIcon,
-    component: RetrievedRecord,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/retrieved-record",
+  //   name: "Retrieved Record",
+  //   rtlName: "لوحة القيادة",
+  //   icon: DashboardIcon,
+  //   component: RetrievedRecord,
+  //   layout: "/admin"
+  // },
 ];
 export default dashRoutes;
