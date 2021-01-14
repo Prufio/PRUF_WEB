@@ -22,11 +22,13 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import SweetAlert from "react-bootstrap-sweetalert";
 import QrReader from 'react-qr-reader'
 import Jdenticon from 'react-jdenticon';
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import pruftoken from "../../assets/img/pruftoken.png";
+import macbook from "../../assets/img/MacBook.png";
 
 
 const useStyles = makeStyles(styles);
@@ -37,6 +39,7 @@ export default function Search() {
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
+  const [alert, setAlert] = React.useState(null);
   const [data, setData] = useState("");
   const [idxHash, setIdxHash] = useState("");
   const [result, setResult] = useState("");
@@ -51,10 +54,6 @@ export default function Search() {
   const [asset, setAsset] = useState({});
   const [price, setPrice] = useState("");
   const [currency, setCurrency] = useState("");
-
-
-
-
 
 
   const handleChange = event => {
@@ -147,24 +146,24 @@ export default function Search() {
       .getPriceData(idxHash)
       .call(
         (_error, _result) => {
-          if(_error){
+          if (_error) {
             console.log(_error)
           }
-          else{
-            if(Object.values(_result)[1] > 0){
+          else {
+            if (Object.values(_result)[1] > 0) {
               setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
               let currencyNum = Object.values(_result)[1]
-              switch(currencyNum){
-                case "1" : setCurrency("Ξ"); break;
-                case "2" : setCurrency("ü"); break;
-                case "3" : setCurrency("◈"); break;
-                case "4" : setCurrency("Ƀ"); break;
+              switch (currencyNum) {
+                case "1": setCurrency("Ξ"); break;
+                case "2": setCurrency("ü"); break;
+                case "3": setCurrency("◈"); break;
+                case "4": setCurrency("Ƀ"); break;
                 default: setCurrency("?"); break;
               }
-              
+
               setForSale(true);
             }
-            else{
+            else {
               setForSale(false);
             }
           }
@@ -353,13 +352,18 @@ export default function Search() {
                 )}
               </>
             )}
-
           </CardHeader>
           <CardBody>
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
-            <h4 className={classes.cardTitle}>Status: {asset.status}</h4>
-            {/* {ipfsObject.text !== undefined && (
+            {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
+            {currency !== "" && (
+              <>
+                <h4 className={classes.cardTitle}>Status: For Sale </h4>
+                <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
+              </>
+            )}
+            {ipfsObject.text !== undefined && (
               <>
                 {
                   ipfsObject.text.Description !== undefined && (
@@ -379,13 +383,11 @@ export default function Search() {
                   </p>
                 )}
               </>
-            )} */}
-
-
+            )}
             <br />
-            {/* {this.state.status = undefined && ( */}
-            <Button color="success">Purchase Item</Button>
-            {/* )} */}
+            {currency !== "" && (
+              <Button color="success">Purchase Item</Button>
+            )}
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
