@@ -54,6 +54,7 @@ export default function Search() {
   const [asset, setAsset] = useState({});
   const [price, setPrice] = useState("");
   const [currency, setCurrency] = useState("");
+  const [transaction, setTransaction] = useState(false);
 
 
   const handleChange = event => {
@@ -135,16 +136,18 @@ export default function Search() {
 
   const purchaseAsset = async () => {
     if(window.balances.prufTokenBalance < price){return}
-
+    setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
       .send({from: window.addr})
       .on("error", function (_error) {
+        setMoreInfo(false);
+        setTransaction(false);
         console.log(Object.values(_error)[0].transactionHash);
-        window.isInTx = false;
       })
       .on("receipt", (receipt) => {
-        alert("Success! Drake is a beanhead!")
+        setTransaction(false);
+        window.location.href="/#/user/dashboard"
         console.log(receipt.events.REPORT.returnValues._msg);
       });
   } 
@@ -401,13 +404,17 @@ export default function Search() {
               </>
             )}
             <br />
-            {currency !== "" && (
+            {currency !== "" && !transaction && (
               <Button onClick={()=>{purchaseAsset()}} color="success">Purchase Item</Button>
+            )}
+            
+            {currency !== "" && transaction && (
+              <Button disabled color="success" className="loading">Transaction Pending</Button>
             )}
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash}
+              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 42)}
             </div>
             <div className={classes.stats}>
               <Share />

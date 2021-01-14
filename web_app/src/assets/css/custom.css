@@ -56,3 +56,11 @@
     rotate: 180deg !important;
     top: -130px !important;
 }
+
+.loading{
+  }
+
+  .loading:after{
+      content: '  .' !important;
+      animation: dots 0.5s steps(5, end) infinite !important;
+    }
