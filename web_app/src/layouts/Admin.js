@@ -189,11 +189,11 @@ export default function Dashboard(props) {
         window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
         window.resetInfo = false;
   
-        // _ipfs = IPFS({
-        //   host: "ipfs.infura.io",
-        //   port: 5001,
-        //   protocol: "https",
-        // });
+        _ipfs = new IPFS({
+          host: "ipfs.infura.io",
+          port: 5001,
+          protocol: "https",
+        });
   
         window.ipfs = _ipfs;
   
