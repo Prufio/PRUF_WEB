@@ -21,7 +21,8 @@ async function buildContracts(_web3) {
   const PIP_ABI = abis.PIP;
   const RCLR_ABI = abis.RCLR;
   const UTIL_TKN_ABI = abis.UTIL_TKN;
-  const PARTY_ABI = abis.PARTY
+  const PARTY_ABI = abis.PARTY;
+  const PURCHASE_ABI = abis.PURCHASE;
 
   const STOR_Address = "0xc84A4e8Ac901aE23E6103C25ede2bb7578a55eeB";
   const PARTY_Address = "0xA837a86dB071c8531AFf1D301C8Fd0f30c2c1E9A";
@@ -44,6 +45,7 @@ async function buildContracts(_web3) {
   let PIP = null;
   let ID_TKN = null;
   let UTIL_TKN = null;
+  let PURCHASE = null;
 
 /*   await STOR.methods
     .resolveContractAddress("NP")
@@ -64,6 +66,18 @@ async function buildContracts(_web3) {
           } else {
             //console.log(_result);
             NP_NC = new _web3.eth.Contract(NP_NC_ABI, _result);
+          }
+        }
+        );
+
+        await STOR.methods
+        .resolveContractAddress("PURCHASE")
+        .call(function (_error, _result) {
+          if (_error) {
+            console.log(_error);
+          } else {
+            //console.log(_result);
+            PURCHASE = new _web3.eth.Contract(PURCHASE_ABI, _result);
           }
         }
         );
@@ -242,7 +256,8 @@ async function buildContracts(_web3) {
     //PIP: PIP,
     ID_TKN: ID_TKN,
     UTIL_TKN: UTIL_TKN,
-    PARTY: PARTY
+    PARTY: PARTY,
+    PURCHASE: PURCHASE
   }
 }
 
