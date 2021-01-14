@@ -48,31 +48,31 @@ export default function ViewAsset() {
   const handleSimple = event => {
     setSimpleSelect(event.target.value);
     if (event.target.value === "transfer") {
-      return window.location.href = "/#/admin/transfer-asset"
+      return window.location.href = "/#/user/transfer-asset"
     }
     if (event.target.value === "escrow") {
-      return window.location.href = "/#/admin/escrow-manager"
+      return window.location.href = "/#/user/escrow-manager"
     }
     if (event.target.value === "import") {
-      return window.location.href = "/#/admin/import-asset"
+      return window.location.href = "/#/user/import-asset"
     }
     if (event.target.value === "export") {
-      return window.location.href = "/#/admin/export-asset"
+      return window.location.href = "/#/user/export-asset"
     }
     if (event.target.value === "discard") {
-      return window.location.href = "/#/admin/discard-asset"
+      return window.location.href = "/#/user/discard-asset"
     }
     if (event.target.value === "change-status") {
-      return window.location.href = "/#/admin/modify-status"
+      return window.location.href = "/#/user/modify-status"
     }
     if (event.target.value === "decrement-counter") {
-      return window.location.href = "/#/admin/counter"
+      return window.location.href = "/#/user/counter"
     }
     if (event.target.value === "edit-information") {
-      return window.location.href = "/#/admin/modify-description"
+      return window.location.href = "/#/user/modify-description"
     }
     if (event.target.value === "edit-rightsholder") {
-      return window.location.href = "/#/admin/modify-rightsholder"
+      return window.location.href = "/#/user/modify-rightsholder"
     }
   };
   const classes = useStyles();

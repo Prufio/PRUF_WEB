@@ -329,7 +329,7 @@ export default function Search() {
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
             <h4 className={classes.cardTitle}>Status: {asset.status}</h4>
-            {ipfsObject.text !== undefined && (
+            {/* {ipfsObject.text !== undefined && (
               <>
                 {
                   ipfsObject.text.Description !== undefined && (
@@ -349,7 +349,7 @@ export default function Search() {
                   </p>
                 )}
               </>
-            )}
+            )} */}
 
 
             <br />

@@ -30,7 +30,7 @@ var dashRoutes = [
     rtlName: "لوحة القيادة",
     icon: HomeIcon,
     component: Home,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/dashboard",
@@ -38,7 +38,7 @@ var dashRoutes = [
     rtlName: "لوحة القيادة",
     icon: DashboardIcon,
     component: Dashboard,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/verify-asset",
@@ -46,7 +46,7 @@ var dashRoutes = [
     rtlName: "لوحة القيادة",
     icon: HowToReg,
     component: Verify,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/search",
@@ -54,7 +54,7 @@ var dashRoutes = [
     rtlName: "لوحة القيادة",
     icon: SearchIcon,
     component: Search,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     collapse: true,
@@ -71,7 +71,7 @@ var dashRoutes = [
         // icon: "cachced",
         rtlMini: "صو",
         component: NewRecord,
-        layout: "/admin"
+        layout: "/user"
       },
       {
         path: "/recycle-asset",
@@ -81,7 +81,7 @@ var dashRoutes = [
         // icon: "cachced",
         rtlMini: "صو",
         component: Recycle,
-        layout: "/admin"
+        layout: "/user"
       },
     ]
   },
@@ -175,14 +175,14 @@ var dashRoutes = [
   //     },
   //   ]
   // },
-  {
-    path: "/view-asset",
-    name: "View Asset",
-    rtlName: "لوحة القيادة",
-    icon: DashboardIcon,
-    component: ViewAsset,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/view-asset",
+  //   name: "View Asset",
+  //   rtlName: "لوحة القيادة",
+  //   icon: DashboardIcon,
+  //   component: ViewAsset,
+  //   layout: "/user"
+  // },
   // {
   //   path: "/retrieved-record",
   //   name: "Retrieved Record",
