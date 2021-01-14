@@ -178,15 +178,15 @@ export default function Dashboard(props) {
           text: [],
           name: ""
         }
-        // window.assetTokenInfo = {
-        //   assetClass: undefined,
-        //   idxHash: undefined,
-        //   name: undefined,
-        //   photos: undefined,
-        //   text: undefined,
-        //   status: undefined,
-        // }
-        // window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+        window.assetTokenInfo = {
+          assetClass: undefined,
+          idxHash: undefined,
+          name: undefined,
+          photos: undefined,
+          text: undefined,
+          status: undefined,
+        }
+        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
         // // window.resetInfo = false;
   
         // _ipfs = IPFS({
