@@ -1,5 +1,10 @@
 import React from "react";
 import cx from "classnames";
+import Jdenticon from 'react-jdenticon';
+import Web3 from "web3";
+import buildContracts from "./../Resources/Contracts";
+import buildWindowUtils from "./../Resources/WindowUtils";
+import { isMobile, browserName, engineVersion, getUA } from "react-device-detect";
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -17,6 +22,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/adminStyle.js";
+import { SettingsPowerRounded } from "@material-ui/icons";
 
 var ps;
 
@@ -25,11 +31,29 @@ const useStyles = makeStyles(styles);
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
+  const IPFS = require("ipfs-mini")
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [miniActive, setMiniActive] = React.useState(false);
   const [image, setImage] = React.useState(require("assets/img/sidebar-2.jpg"));
   const [color, setColor] = React.useState("blue");
   const [bgColor, setBgColor] = React.useState("black");
+  const [isKovan, setIsKovan] = React.useState(true);
+  const [buildReady, setBuildReady] = React.useState(false);
+  const [ETHBalance, setETHBalance] = React.useState("0");
+  const [addr, setAddr] = React.useState("");
+  const [isAssetHolder, setIsAssetHolder] = React.useState(false);
+  const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
+  const [isIDHolder, setIsIDHolder] = React.useState(false);
+  
+  const [prufBalance, setPrufBalance] = React.useState("0");
+  const [assetBalance, setAssetBalance] = React.useState("0");
+  const [assetClassBalance, setAssetClassBalance] = React.useState("0");
+  const [IDBalance, setIDBalance] = React.useState("0");
+  const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
+  const [isMounted, setIsMounted] = React.useState(false);
+  const [WD, setWD] = React.useState(false);
+  const [hasSetUp, setHasSetUp] = React.useState(false);
+
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
@@ -45,6 +69,180 @@ export default function Dashboard(props) {
     });
   // ref for main panel div
   const mainPanel = React.createRef();
+  // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
+  React.useEffect(() => {
+    if (navigator.platform.indexOf("Win") > -1) {
+      ps = new PerfectScrollbar(mainPanel.current, {
+        suppressScrollX: true,
+        suppressScrollY: false
+      });
+      document.body.style.overflow = "hidden";
+    }
+    if(!isMounted){
+      window.balances = {}
+      let timeOutCounter = 0;
+      window.recount = false;
+      let _web3, _ipfs;
+  
+      _ipfs = new IPFS({
+        host: "ipfs.infura.io",
+        port: 5001,
+        protocol: "https",
+      });
+  
+      window.ipfs = _ipfs;
+  
+      _web3 = require("web3");
+      _web3 = new Web3(_web3.givenProvider);
+      window.web3 = _web3;
+  
+      buildWindowUtils() // get the utils object and make it globally accessible
+  
+      const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
+        timeOutCounter++;
+        setTimeout(() => { if (!window.ethereum && timeOutCounter < 5) checkForEthereum() }, 500);
+      }
+  
+      checkForEthereum();
+  
+      window.jdenticon_config = {
+        hues: [196],
+        lightness: {
+          color: [0.36, 0.70],
+          grayscale: [0.24, 0.82]
+        },
+        saturation: {
+          color: 0.75,
+          grayscale: 0.10
+        },
+        backColor: "#ffffffff"
+      };
+  
+      //Declare a few globals
+      window.sentPacket = undefined;
+      window.isSettingUpContracts = false;
+      window.hasLoadedAssets = false;
+      let refString = String(window.location.href);
+      if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
+        //window.location.href = '/#/admin/home';
+      } else {
+        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+        console.log("Here is the search:", window.location.hash)
+      }
+      window.menuChange = undefined;
+  
+      //Give me the desktop version
+      if (!isMobile && window.ethereum) {
+        console.log(_web3.eth.net.getNetworkType())
+        console.log("Here")
+        window.costs = {}
+        window.additionalElementArrays = {
+          photo: [],
+          text: [],
+          name: ""
+        }
+  
+        //More globals (eth-is-connected specific)
+        window.assetTokenInfo = {
+          assetClass: undefined,
+          idxHash: undefined,
+          name: undefined,
+          photos: undefined,
+          text: undefined,
+          status: undefined,
+        }
+  
+        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+        window.resetInfo = false;
+        const ethereum = window.ethereum;
+  
+        ethereum.enable()
+  
+        _web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0] });
+        // window.addEventListener("accountListener", acctListener);
+        console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
+        // setUpContractEnvironment(_web3)
+        setIsMounted(true)
+      }
+  
+      //Give me the mobile ethereum-enabled version
+      else if (isMobile && window.ethereum) {
+  
+        console.log(_web3.eth.net.getNetworkType())
+  
+        console.log("Here")
+  
+        window.costs = {}
+        window.additionalElementArrays = {
+          photo: [],
+          text: [],
+          name: ""
+        }
+        window.assetTokenInfo = {
+          assetClass: undefined,
+          idxHash: undefined,
+          name: undefined,
+          photos: undefined,
+          text: undefined,
+          status: undefined,
+        }
+        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+        window.resetInfo = false;
+  
+        _ipfs = IPFS({
+          host: "ipfs.infura.io",
+          port: 5001,
+          protocol: "https",
+        });
+  
+        window.ipfs = _ipfs;
+  
+        _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+  
+        // window.addEventListener("accountListener", acctListener);
+        // setUpContractEnvironment(_web3)
+  
+  
+        setIsMounted(true)
+      }
+  
+      //Give me the read-only version
+      else {
+        console.log("Here")
+        window.ipfsCounter = 0;
+        _web3 = require("web3");
+        _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+        // setUpContractEnvironment(_web3)
+        window.web3 = _web3;
+  
+        _ipfs = new IPFS({
+          host: "ipfs.infura.io",
+          port: 5001,
+          protocol: "https",
+        });
+  
+        window.ipfs = _ipfs;
+  
+        setIsMounted(true)
+      }
+    }
+
+    
+    window.addEventListener("resize", resizeFunction);
+
+    // Specify how to clean up after this effect:
+    return function cleanup() {
+      if (navigator.platform.indexOf("Win") > -1) {
+        ps.destroy();
+      }
+      window.removeEventListener("resize", resizeFunction);
+      //window.removeEventListener("balances", balanceListener);
+      //window.removeEventListener("assets", assetListener);
+      //window.removeEventListener("network", networkListener);
+      //window.removeEventListener("accountListener", acctListener);
+      //window.removeEventListener("navigator", navTypeListener);
+    };
+  });
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
