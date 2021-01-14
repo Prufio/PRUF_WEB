@@ -55,6 +55,7 @@ export default function Search() {
   const [price, setPrice] = useState("");
   const [currency, setCurrency] = useState("");
   const [transaction, setTransaction] = useState(false);
+  const [QRValue, setQRValue] = useState("");
 
 
   const handleChange = event => {
@@ -335,6 +336,7 @@ export default function Search() {
               onScan={(result) => {
                 if (result) {
                   retrieveRecordQR(result);
+                  setQRValue(result);
                 }
 
               }}
@@ -346,7 +348,7 @@ export default function Search() {
 
               style={{ width: '100%' }}
             />
-            <p>{data}</p>
+            <p>{QRValue}</p>
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
           </CardBody>
         </Card>

@@ -345,7 +345,6 @@ export default function Dashboard() {
                     </Select>
                   </FormControl>
             </div>
-                  
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
