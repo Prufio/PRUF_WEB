@@ -304,6 +304,19 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "clearPrice",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "string",
 					"name": "_name",
 					"type": "string"
@@ -335,6 +348,30 @@ function returnABIs() {
 			"name": "endEscrow",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "getPriceData",
+			"outputs": [
+				{
+					"internalType": "uint120",
+					"name": "",
+					"type": "uint120"
+				},
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -735,6 +772,29 @@ function returnABIs() {
 				}
 			],
 			"name": "setEscrow",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint120",
+					"name": "_price",
+					"type": "uint120"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_currency",
+					"type": "uint8"
+				}
+			],
+			"name": "setPrice",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
