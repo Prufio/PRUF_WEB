@@ -40,6 +40,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import pruftoken from "assets/img/pruftoken.png";
+import macbook from "../../assets/img/MacBook.png";
 
 import {
   dailySalesChart,
@@ -143,8 +144,8 @@ export default function Dashboard() {
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className={classes.cardHeaderHover}>
-              <img src={pruftoken} alt="logo" className={classes.img} />
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <img src={macbook} alt="logo" className="assetImage" />
             </CardHeader>
             <CardBody>
               <div className={classes.cardHoverUnder}>
@@ -169,19 +170,15 @@ export default function Dashboard() {
                   </Button>
                 </Tooltip>
               </div>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today sales.
-              </p>
+              <h4 className={classes.cardTitle}>Macbook Air 2020</h4>
+              <h5 className={classes.cardTitle}>Status: Transferable</h5>
+              
             </CardBody>
-            <CardFooter chart>
+            {/* <CardFooter chart>
               <div className={classes.stats}>
                 <AccessTime /> updated 4 minutes ago
               </div>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </GridItem>
       </GridContainer>
@@ -205,14 +202,14 @@ export default function Dashboard() {
                   <ExitToApp/>
                   </Button>
                 </Tooltip>
-            <img src={pruftoken} alt="logo" className="assetImage" />
+            <img src={macbook} alt="logo" className="assetImage" />
           </CardHeader>
           <CardBody>
-            <h4 className={classes.cardTitle}>Name: Bennny's Mongoose</h4>
-            <h4 className={classes.cardTitle}>Class: Bicycles(UK)</h4>
+            <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
+            <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
             <h4 className={classes.cardTitle}>Status: Transferable</h4>
             <p className={classes.cardCategory}>
-              Description: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+              Description: Slightly used, like new. Comes with box and original charger.
                 </p>
             <br />
             <div className={classes.stats}>

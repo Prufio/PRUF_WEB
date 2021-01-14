@@ -22,11 +22,13 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import SweetAlert from "react-bootstrap-sweetalert";
 import QrReader from 'react-qr-reader'
 import Jdenticon from 'react-jdenticon';
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import pruftoken from "../../assets/img/pruftoken.png";
+import macbook from "../../assets/img/MacBook.png";
 
 
 const useStyles = makeStyles(styles);
@@ -37,6 +39,7 @@ export default function Search() {
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
+  const [alert, setAlert] = React.useState(null);
   const [data, setData] = useState("");
   const [idxHash, setIdxHash] = useState("");
   const [result, setResult] = useState("");
@@ -48,10 +51,6 @@ export default function Search() {
   const [authLevel, setAuthLevel] = useState("");
   const [ipfsObject, setIpfsObject] = useState({});
   const [asset, setAsset] = useState({});
-
-
-
-
 
 
   const handleChange = event => {
@@ -306,7 +305,7 @@ export default function Search() {
       {moreInfo && (
         <Card>
           <CardHeader color="info" className="assetHeader">
-            {ipfsObject.photo !== undefined && (
+            {/* {ipfsObject.photo !== undefined && (
               <>
                 {Object.values(ipfsObject.photo).length > 0 && (
                   <>
@@ -322,13 +321,17 @@ export default function Search() {
                   <Jdenticon size="300" value={asset.idxHash} />
                 )}
               </>
-            )}
+            )} */}
+            <img src={macbook} alt="logo" className="assetImage" />
+
 
           </CardHeader>
           <CardBody>
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
-            <h4 className={classes.cardTitle}>Status: {asset.status}</h4>
+            <h4 className={classes.cardTitle}>Status: For Sale </h4>
+            <h4 className={classes.cardTitle}>Price: Ü 20,000 </h4>
+            {/* {asset.status} */}
             {/* {ipfsObject.text !== undefined && (
               <>
                 {
@@ -350,7 +353,9 @@ export default function Search() {
                 )}
               </>
             )} */}
-
+            <p className={classes.cardCategory}>
+              Description: Slightly used, like new. Comes with box and original charger.
+            </p>
 
             <br />
             {/* {this.state.status = undefined && ( */}

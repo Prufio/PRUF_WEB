@@ -5,8 +5,7 @@
 }
 
 .assetHeader {
-    /* width: 300px !important; */
-    /* height: 300px !important; */
+    background: linear-gradient(60deg, #002a40, #01476d) !important;
     object-fit: cover !important;
 }
 
