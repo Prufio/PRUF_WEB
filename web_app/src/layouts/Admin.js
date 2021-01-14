@@ -172,12 +172,12 @@ export default function Dashboard(props) {
   
         console.log("Here")
   
-        // window.costs = {}
-        // window.additionalElementArrays = {
-        //   photo: [],
-        //   text: [],
-        //   name: ""
-        // }
+        window.costs = {}
+        window.additionalElementArrays = {
+          photo: [],
+          text: [],
+          name: ""
+        }
         // window.assetTokenInfo = {
         //   assetClass: undefined,
         //   idxHash: undefined,
