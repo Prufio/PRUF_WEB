@@ -146,24 +146,24 @@ export default function Search() {
       .getPriceData(idxHash)
       .call(
         (_error, _result) => {
-          if(_error){
+          if (_error) {
             console.log(_error)
           }
-          else{
-            if(Object.values(_result)[1] > 0){
+          else {
+            if (Object.values(_result)[1] > 0) {
               setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
               let currencyNum = Object.values(_result)[1]
-              switch(currencyNum){
-                case "1" : setCurrency("Ξ"); break;
-                case "2" : setCurrency("ü"); break;
-                case "3" : setCurrency("◈"); break;
-                case "4" : setCurrency("Ƀ"); break;
+              switch (currencyNum) {
+                case "1": setCurrency("Ξ"); break;
+                case "2": setCurrency("ü"); break;
+                case "3": setCurrency("◈"); break;
+                case "4": setCurrency("Ƀ"); break;
                 default: setCurrency("?"); break;
               }
-              
+
               setForSale(true);
             }
-            else{
+            else {
               setForSale(false);
             }
           }
@@ -335,7 +335,7 @@ export default function Search() {
       {moreInfo && (
         <Card>
           <CardHeader color="info" className="assetHeader">
-            {/* {ipfsObject.photo !== undefined && (
+            {ipfsObject.photo !== undefined && (
               <>
                 {Object.values(ipfsObject.photo).length > 0 && (
                   <>
@@ -351,18 +351,19 @@ export default function Search() {
                   <Jdenticon size="300" value={asset.idxHash} />
                 )}
               </>
-            )} */}
-            <img src={macbook} alt="logo" className="assetImage" />
-
-
+            )}
           </CardHeader>
           <CardBody>
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
-            <h4 className={classes.cardTitle}>Status: For Sale </h4>
-            <h4 className={classes.cardTitle}>Price: Ü 20,000 </h4>
-            {/* {asset.status} */}
-            {/* {ipfsObject.text !== undefined && (
+            {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
+            {currency !== "" && (
+              <>
+                <h4 className={classes.cardTitle}>Status: For Sale </h4>
+                <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
+              </>
+            )}
+            {ipfsObject.text !== undefined && (
               <>
                 {
                   ipfsObject.text.Description !== undefined && (
@@ -382,15 +383,11 @@ export default function Search() {
                   </p>
                 )}
               </>
-            )} */}
-            <p className={classes.cardCategory}>
-              Description: Slightly used, like new. Comes with box and original charger.
-            </p>
-
+            )}
             <br />
-            {/* {this.state.status = undefined && ( */}
-            <Button color="success">Purchase Item</Button>
-            {/* )} */}
+            {currency !== "" && (
+              <Button color="success">Purchase Item</Button>
+            )}
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
