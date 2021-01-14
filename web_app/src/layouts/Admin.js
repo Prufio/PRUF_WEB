@@ -172,28 +172,28 @@ export default function Dashboard(props) {
   
         console.log("Here")
   
-        window.costs = {}
-        window.additionalElementArrays = {
-          photo: [],
-          text: [],
-          name: ""
-        }
-        window.assetTokenInfo = {
-          assetClass: undefined,
-          idxHash: undefined,
-          name: undefined,
-          photos: undefined,
-          text: undefined,
-          status: undefined,
-        }
-        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-        // window.resetInfo = false;
+        // window.costs = {}
+        // window.additionalElementArrays = {
+        //   photo: [],
+        //   text: [],
+        //   name: ""
+        // }
+        // window.assetTokenInfo = {
+        //   assetClass: undefined,
+        //   idxHash: undefined,
+        //   name: undefined,
+        //   photos: undefined,
+        //   text: undefined,
+        //   status: undefined,
+        // }
+        // window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+        // // window.resetInfo = false;
   
-        _ipfs = IPFS({
-          host: "ipfs.infura.io",
-          port: 5001,
-          protocol: "https",
-        });
+        // _ipfs = IPFS({
+        //   host: "ipfs.infura.io",
+        //   port: 5001,
+        //   protocol: "https",
+        // });
   
         // window.ipfs = _ipfs;
   
