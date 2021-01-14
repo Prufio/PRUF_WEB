@@ -43,8 +43,6 @@
     color: white !important;
 }
 
-.makeStyles-input-170, .makeStyles-input-170::placeholder {
-
-   color: white !important;
-
- }
+.makeStyles-underline-162:after {
+    border-color: #26c6da !important;
+}
