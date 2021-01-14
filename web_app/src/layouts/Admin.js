@@ -207,24 +207,24 @@ export default function Dashboard(props) {
       // }
   
       //Give me the read-only version
-      // else {
-      //   console.log("Here")
-      //   window.ipfsCounter = 0;
-      //   _web3 = require("web3");
-      //   _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
-      //   // setUpContractEnvironment(_web3)
-      //   window.web3 = _web3;
+      else {
+        console.log("Here")
+        window.ipfsCounter = 0;
+        _web3 = require("web3");
+        _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+        // setUpContractEnvironment(_web3)
+        window.web3 = _web3;
   
-      //   _ipfs = new IPFS({
-      //     host: "ipfs.infura.io",
-      //     port: 5001,
-      //     protocol: "https",
-      //   });
+        _ipfs = new IPFS({
+          host: "ipfs.infura.io",
+          port: 5001,
+          protocol: "https",
+        });
   
-      //   window.ipfs = _ipfs;
+        window.ipfs = _ipfs;
   
-      //   setIsMounted(true)
-      // }
+        setIsMounted(true)
+      }
     }
 
     
