@@ -126,7 +126,7 @@ export default function Dashboard(props) {
       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
         //window.location.href = '/#/admin/home';
       } else {
-        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+        window.location.href = '/#/user/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
         console.log("Here is the search:", window.location.hash)
       }
       window.menuChange = undefined;
