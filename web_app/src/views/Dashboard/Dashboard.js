@@ -40,7 +40,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import pruftoken from "assets/img/pruftoken.png";
-import macbook from "../../assets/img/MacBook.png";
+import macbook from "../../assets/img/MacBook.jpg";
 
 import {
   dailySalesChart,
@@ -187,24 +187,34 @@ export default function Dashboard() {
         <div>
         <Card>
           <CardHeader color="info" className="assetHeader">
-            <Tooltip
+            <img src={macbook} alt="logo" className="assetImage" />
+          </CardHeader>
+          <CardBody>
+          <Tooltip
                   id="tooltip-top"
                   title="Back"
-                  placement="top"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button onClick={(e) => setViewAsset(!viewAsset)} simple color="info" justIcon>
+                  <ExitToApp />
+                  </Button>
+                </Tooltip>
+            {/* <Tooltip
+                  id="tooltip-top"
+                  title="Back"
+                  placement="top" color="info"
                   // classes={{ tooltip: classes.tooltip }}
                 >
                   <Button 
                   onClick={(e) => setViewAsset(!viewAsset)}
                   className="exitAsset" 
                   simple
-                  justIcon
+                  justIcon color="success"
                   >
-                  <ExitToApp/>
+                  <ExitToApp />
                   </Button>
-                </Tooltip>
-            <img src={macbook} alt="logo" className="assetImage" />
-          </CardHeader>
-          <CardBody>
+                </Tooltip> */}
             <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
             <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
             <h4 className={classes.cardTitle}>Status: Transferable</h4>
