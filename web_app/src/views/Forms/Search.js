@@ -136,7 +136,8 @@ export default function Search() {
   }
 
   const purchaseAsset = async () => {
-    if(window.balances.prufTokenBalance < price){return}
+    console.log("Purchasing Asset")
+    if(window.balances.prufTokenBalance < window.web3.utils.fromWei(price)){console.log("insufficient balance"); return console.log(window.web3.utils.fromWei(price))}
     setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
@@ -336,7 +337,7 @@ export default function Search() {
               onScan={(result) => {
                 if (result) {
                   retrieveRecordQR(result);
-                  setQRValue(result);
+                  // setQRValue(result);
                 }
 
               }}
