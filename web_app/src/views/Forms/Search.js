@@ -48,9 +48,12 @@ export default function Search() {
   const [error, setError] = useState("");
   const [inscription, setInscription] = useState("");
   const [moreInfo, setMoreInfo] = useState(false);
+  const [forSale, setForSale] = useState(false);
   const [authLevel, setAuthLevel] = useState("");
   const [ipfsObject, setIpfsObject] = useState({});
   const [asset, setAsset] = useState({});
+  const [price, setPrice] = useState("");
+  const [currency, setCurrency] = useState("");
 
 
   const handleChange = event => {
@@ -139,6 +142,33 @@ export default function Search() {
     console.log("idxHash", idxHash);
     console.log("addr: ", window.addr);
     // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
+    await window.contracts.STOR.methods
+      .getPriceData(idxHash)
+      .call(
+        (_error, _result) => {
+          if(_error){
+            console.log(_error)
+          }
+          else{
+            if(Object.values(_result)[1] > 0){
+              setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
+              let currencyNum = Object.values(_result)[1]
+              switch(currencyNum){
+                case "1" : setCurrency("Ξ"); break;
+                case "2" : setCurrency("ü"); break;
+                case "3" : setCurrency("◈"); break;
+                case "4" : setCurrency("Ƀ"); break;
+                default: setCurrency("?"); break;
+              }
+              
+              setForSale(true);
+            }
+            else{
+              setForSale(false);
+            }
+          }
+        });
+
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)
       .call(
