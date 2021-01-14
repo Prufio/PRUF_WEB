@@ -26,8 +26,8 @@ import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 ReactDOM.render(
   <HashRouter>
     <Switch>
-      <Route path="/admin" component={AdminLayout} />
-      <Redirect from="/" to="/admin/home" />
+      <Route path="/user" component={AdminLayout} />
+      <Redirect from="/" to="/user/home" />
     </Switch>
  </HashRouter>,
   document.getElementById("root")
