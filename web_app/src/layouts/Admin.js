@@ -187,7 +187,7 @@ export default function Dashboard(props) {
           status: undefined,
         }
         window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-        // // window.resetInfo = false;
+        window.resetInfo = false;
   
         // _ipfs = IPFS({
         //   host: "ipfs.infura.io",
