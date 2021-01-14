@@ -189,15 +189,15 @@ export default function Dashboard(props) {
         window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
         window.resetInfo = false;
   
-        _ipfs = IPFS({
-          host: "ipfs.infura.io",
-          port: 5001,
-          protocol: "https",
-        });
+        // _ipfs = IPFS({
+        //   host: "ipfs.infura.io",
+        //   port: 5001,
+        //   protocol: "https",
+        // });
   
-        // window.ipfs = _ipfs;
+        window.ipfs = _ipfs;
   
-        // _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+        _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
   
         // window.addEventListener("accountListener", acctListener);
         // setUpContractEnvironment(_web3)
