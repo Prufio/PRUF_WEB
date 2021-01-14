@@ -166,45 +166,45 @@ export default function Dashboard(props) {
       }
   
       //Give me the mobile ethereum-enabled version
-      else if (isMobile && window.ethereum) {
+      // else if (isMobile && window.ethereum) {
   
-        console.log(_web3.eth.net.getNetworkType())
+      //   console.log(_web3.eth.net.getNetworkType())
   
-        console.log("Here")
+      //   console.log("Here")
   
-        window.costs = {}
-        window.additionalElementArrays = {
-          photo: [],
-          text: [],
-          name: ""
-        }
-        window.assetTokenInfo = {
-          assetClass: undefined,
-          idxHash: undefined,
-          name: undefined,
-          photos: undefined,
-          text: undefined,
-          status: undefined,
-        }
-        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-        window.resetInfo = false;
+      //   window.costs = {}
+      //   window.additionalElementArrays = {
+      //     photo: [],
+      //     text: [],
+      //     name: ""
+      //   }
+      //   window.assetTokenInfo = {
+      //     assetClass: undefined,
+      //     idxHash: undefined,
+      //     name: undefined,
+      //     photos: undefined,
+      //     text: undefined,
+      //     status: undefined,
+      //   }
+      //   window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+      //   window.resetInfo = false;
   
-        _ipfs = IPFS({
-          host: "ipfs.infura.io",
-          port: 5001,
-          protocol: "https",
-        });
+      //   _ipfs = IPFS({
+      //     host: "ipfs.infura.io",
+      //     port: 5001,
+      //     protocol: "https",
+      //   });
   
-        window.ipfs = _ipfs;
+      //   window.ipfs = _ipfs;
   
-        _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+      //   _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
   
-        // window.addEventListener("accountListener", acctListener);
-        // setUpContractEnvironment(_web3)
+      //   // window.addEventListener("accountListener", acctListener);
+      //   // setUpContractEnvironment(_web3)
   
   
-        setIsMounted(true)
-      }
+      //   setIsMounted(true)
+      // }
   
       //Give me the read-only version
       // else {
