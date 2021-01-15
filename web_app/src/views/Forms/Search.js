@@ -355,7 +355,7 @@ export default function Search() {
               style={{ width: '100%' }}
             />
             {retrieving && (
-              <h4 className="loading">Retrieving Asset...</h4>
+              <h4 >Retrieving Asset. . .</h4>
             )}
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
           </CardBody>
