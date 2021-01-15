@@ -208,6 +208,7 @@ export default function Dashboard(props) {
   
       //Give me the read-only version
       else {
+        alert("we ended up in here")
         console.log("Here")
         window.ipfsCounter = 0;
         _web3 = require("web3");
