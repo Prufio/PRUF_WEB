@@ -95,7 +95,8 @@ export default function Home(props) {
               </CardIcon>
               <p className={classes.cardCategory}>Assets Held</p>
               <h3 className={classes.cardTitle}>
-                {props.assets} <small>Assets</small>
+                {/* {props.assets} <small>Assets</small> */}
+                2 <small>Assets</small>
               </h3>
             </CardHeader>
             <CardFooter stats>

@@ -428,7 +428,7 @@ export default function Dashboard() {
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              IDX Hash: 0x3531cc3dc5...cc583d8fe8fb
+              IDX Hash: 0xa2d8028a8a335c3d...e26ed6358443aeb2fd0
                 </div>
             <div className={classes.stats}>
               <Share />
