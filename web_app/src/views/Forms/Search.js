@@ -57,6 +57,7 @@ export default function Search() {
   const [currency, setCurrency] = useState("");
   const [transaction, setTransaction] = useState(false);
   const [QRValue, setQRValue] = useState("");
+  const [retrieving, setRetrieving] = useState(false);
 
 
   const handleChange = event => {
@@ -156,6 +157,7 @@ export default function Search() {
   } 
 
   const retrieveRecordQR = async (query) => {
+    setRetrieving(true)
     console.log("in rrqr")
     let ipfsHash;
     let tempResult;
@@ -199,6 +201,7 @@ export default function Search() {
             console.log(_error)
             setError(_error);
             setResult("");
+            setRetrieving(false);
           }
           else {
             console.log("rrqr conf");
@@ -351,7 +354,9 @@ export default function Search() {
 
               style={{ width: '100%' }}
             />
-            <p>{QRValue}</p>
+            {retrieving && (
+              <h4 className="loading">Retrieving Asset...</h4>
+            )}
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
           </CardBody>
         </Card>
