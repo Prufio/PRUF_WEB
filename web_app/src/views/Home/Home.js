@@ -80,7 +80,7 @@ var mapData = {
 
 const useStyles = makeStyles(styles);
 
-export default function Dashboard() {
+export default function Home(props) {
   const classes = useStyles();
   return (
     <div>
@@ -93,7 +93,7 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Assets Held</p>
               <h3 className={classes.cardTitle}>
-                7 <small>Assets</small>
+                {props.assets-2} <small>Assets</small>
               </h3>
             </CardHeader>
             <CardFooter stats>
@@ -117,7 +117,7 @@ export default function Dashboard() {
               <p className={classes.cardCategory}>ETH Balance</p>
               <h3 className={classes.cardTitle}>
                 
-                1.01 <small>Ether</small>
+                {props.ether} <small>Ether</small>
                 </h3>
             </CardHeader>
             <CardFooter stats>
@@ -138,7 +138,7 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>PRüF Balance</p>
               <h3 className={classes.cardTitle}>
-                125,345 <small>PRüF</small>
+                {props.pruf} <small>PRüF</small>
                 </h3>
             </CardHeader>
             <CardFooter stats>

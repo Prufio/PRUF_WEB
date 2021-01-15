@@ -159,9 +159,9 @@ export default function Dashboard(props) {
         ethereum.enable()
   
         _web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0] });
-        // window.addEventListener("accountListener", acctListener);
+        window.addEventListener("accountListener", acctListener);
         console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
-        // setUpContractEnvironment(_web3)
+        setUpContractEnvironment(_web3)
         setIsMounted(true)
       }
   
@@ -301,7 +301,7 @@ export default function Dashboard(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            component={prop.component}
+            render={()=>(<prop.component pruf={prufBalance} ether={ETHBalance} assets={assetBalance}/>)}
             key={key}
           />
         );
@@ -428,6 +428,7 @@ export default function Dashboard(props) {
     console.log("Prebuild Assets: ", window.assets)
     console.log("Bools...", isAssetHolder, isAssetClassHolder, isIDHolder)
     console.log(window.ipfsCounter >= window.aTknIDs.length, window.aTknIDs.length > 0, WD)
+    
   }
 
   const buildAssets = () => {
@@ -536,6 +537,7 @@ export default function Dashboard(props) {
       setIsAssetClassHolder(window.assetClassHolderBool);
       setIsIDHolder(window.IDHolderBool);
       setHasFetchedBalances(window.hasFetchedBalances);
+      setETHBalance(window.ETHBalance)
     })
 
     await console.log(window.balances)
