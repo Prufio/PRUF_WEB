@@ -29,6 +29,7 @@ import Jdenticon from 'react-jdenticon';
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import pruftoken from "../../assets/img/pruftoken.png";
 import macbook from "../../assets/img/MacBook.png";
+import { boxShadow } from "assets/jss/material-dashboard-pro-react";
 
 
 const useStyles = makeStyles(styles);
@@ -333,6 +334,7 @@ export default function Search() {
           </CardHeader>
           <CardBody>
             <QrReader
+            className="qrReader"
               scanDelay={300}
               onScan={(result) => {
                 if (result) {

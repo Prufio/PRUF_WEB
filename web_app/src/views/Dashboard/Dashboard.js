@@ -41,6 +41,8 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import pruftoken from "assets/img/pruftoken.png";
 import macbook from "../../assets/img/MacBook.jpg";
+import Nike from "assets/img/Nike.png";
+import Mustang from "assets/img/Mustang.png";
 
 import {
   dailySalesChart,
@@ -171,7 +173,85 @@ export default function Dashboard() {
                 </Tooltip>
               </div>
               <h4 className={classes.cardTitle}>Macbook Air 2020</h4>
-              <h5 className={classes.cardTitle}>Status: Transferable</h5>
+              <h5 className={classes.cardTitle}>Status: Transferrable</h5>
+              
+            </CardBody>
+            {/* <CardFooter chart>
+              <div className={classes.stats}>
+                <AccessTime /> updated 4 minutes ago
+              </div>
+            </CardFooter> */}
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card chart className={classes.cardHover}>
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <img src={Nike} alt="logo" className="assetImage" />
+            </CardHeader>
+            <CardBody>
+              <div className={classes.cardHoverUnder}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Refresh"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button simple color="info" justIcon>
+                    <Refresh className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Edit"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="success" simple justIcon>
+                    <Edit className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+              </div>
+              <h4 className={classes.cardTitle}>Off-White AF1's</h4>
+              <h5 className={classes.cardTitle}>Status: Stolen</h5>
+              
+            </CardBody>
+            {/* <CardFooter chart>
+              <div className={classes.stats}>
+                <AccessTime /> updated 4 minutes ago
+              </div>
+            </CardFooter> */}
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card chart className={classes.cardHover}>
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <img src={Mustang} alt="logo" className="assetImage" />
+            </CardHeader>
+            <CardBody>
+              <div className={classes.cardHoverUnder}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Refresh"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button simple color="info" justIcon>
+                    <Refresh className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Edit"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="success" simple justIcon>
+                    <Edit className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+              </div>
+              <h4 className={classes.cardTitle}>2020 Ford Mustang</h4>
+              <h5 className={classes.cardTitle}>Status: Non-Transferrable</h5>
               
             </CardBody>
             {/* <CardFooter chart>
@@ -217,7 +297,7 @@ export default function Dashboard() {
                 </Tooltip> */}
             <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
             <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
-            <h4 className={classes.cardTitle}>Status: Transferable</h4>
+            <h4 className={classes.cardTitle}>Status: Transferrable</h4>
             <p className={classes.cardCategory}>
               Description: Slightly used, like new. Comes with box and original charger.
                 </p>

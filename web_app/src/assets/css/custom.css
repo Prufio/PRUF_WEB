@@ -1,7 +1,7 @@
 .assetImage {
     width: 300px !important;
     height: 300px !important;
-    object-fit: cover !important;
+    object-fit:contain !important;
 }
 
 .assetHeader {
@@ -57,10 +57,11 @@
     top: -130px !important;
 }
 
-.loading{
-  }
-
   .loading:after{
       content: '  .' !important;
       animation: dots 0.5s steps(5, end) infinite !important;
+    }
+
+    .qrReader {
+        max-width: 500px;
     }
