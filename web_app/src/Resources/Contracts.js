@@ -21,10 +21,9 @@ async function buildContracts(_web3) {
   const PIP_ABI = abis.PIP;
   const RCLR_ABI = abis.RCLR;
   const UTIL_TKN_ABI = abis.UTIL_TKN;
-  const PARTY_ABI = abis.PARTY;
-  const PURCHASE_ABI = abis.PURCHASE;
+  const PARTY_ABI = abis.PARTY
 
-  const STOR_Address = "0xc84A4e8Ac901aE23E6103C25ede2bb7578a55eeB";
+  const STOR_Address = "0xaEfc4a04E1B40Ef85bDCDeA715Ec5a7d2745226A";
   const PARTY_Address = "0xA837a86dB071c8531AFf1D301C8Fd0f30c2c1E9A";
 
   const STOR = new _web3.eth.Contract(STOR_ABI, STOR_Address);
@@ -45,9 +44,8 @@ async function buildContracts(_web3) {
   let PIP = null;
   let ID_TKN = null;
   let UTIL_TKN = null;
-  let PURCHASE = null;
 
-/*   await STOR.methods
+  await STOR.methods
     .resolveContractAddress("NP")
     .call(function (_error, _result) {
       if (_error) {
@@ -57,7 +55,7 @@ async function buildContracts(_web3) {
         NP = new _web3.eth.Contract(NP_ABI, _result);
       }
     }
-    ) */
+    ).then(async () => {
       await STOR.methods
         .resolveContractAddress("NP_NC")
         .call(function (_error, _result) {
@@ -69,21 +67,9 @@ async function buildContracts(_web3) {
           }
         }
         );
+    });
 
-        await STOR.methods
-        .resolveContractAddress("PURCHASE")
-        .call(function (_error, _result) {
-          if (_error) {
-            console.log(_error);
-          } else {
-            //console.log(_result);
-            PURCHASE = new _web3.eth.Contract(PURCHASE_ABI, _result);
-          }
-        }
-        );
-
-
-/*   await STOR.methods
+  await STOR.methods
     .resolveContractAddress("APP")
     .call(function (_error, _result) {
       if (_error) {
@@ -93,7 +79,7 @@ async function buildContracts(_web3) {
         APP = new _web3.eth.Contract(APP_ABI, _result);
       }
     }
-    ); */
+    );
 
   await STOR.methods
     .resolveContractAddress("APP_NC")
@@ -131,7 +117,7 @@ async function buildContracts(_web3) {
     }
     );
 
- /*  await STOR.methods
+  await STOR.methods
     .resolveContractAddress("ECR")
     .call(function (_error, _result) {
       if (_error) {
@@ -141,9 +127,9 @@ async function buildContracts(_web3) {
         ECR = new _web3.eth.Contract(ECR_ABI, _result);
       }
     }
-    ); */
+    );
 
- /*  await STOR.methods
+  await STOR.methods
     .resolveContractAddress("ECR_NC")
     .call(function (_error, _result) {
       if (_error) {
@@ -153,9 +139,9 @@ async function buildContracts(_web3) {
         ECR_NC = new _web3.eth.Contract(ECR_NC_ABI, _result);
       }
     }
-    ); */
+    );
 
- /*  await STOR.methods
+  await STOR.methods
     .resolveContractAddress("ECR_MGR")
     .call(function (_error, _result) {
       if (_error) {
@@ -165,7 +151,7 @@ async function buildContracts(_web3) {
         ECR_MGR = new _web3.eth.Contract(ECR_MGR_ABI, _result);
       }
     }
-    ); */
+    );
 
   await STOR.methods
     .resolveContractAddress("A_TKN")
@@ -179,7 +165,7 @@ async function buildContracts(_web3) {
     }
     );
 
-  /* await STOR.methods
+  await STOR.methods
     .resolveContractAddress("RCLR")
     .call(function (_error, _result) {
       if (_error) {
@@ -189,7 +175,7 @@ async function buildContracts(_web3) {
         RCLR = new _web3.eth.Contract(RCLR_ABI, _result);
       }
     }
-    ); */
+    );
 
   await STOR.methods
     .resolveContractAddress("ID_TKN")
@@ -215,7 +201,7 @@ async function buildContracts(_web3) {
     }
     );
 
-/*   await STOR.methods
+  await STOR.methods
     .resolveContractAddress("PIP")
     .call(function (_error, _result) {
       if (_error) {
@@ -225,9 +211,9 @@ async function buildContracts(_web3) {
         PIP = new _web3.eth.Contract(PIP_ABI, _result);
       }
     }
-    ); */
+    );
 
- /*  await STOR.methods
+  await STOR.methods
     .resolveContractAddress("VERIFY")
     .call(function (_error, _result) {
       if (_error) {
@@ -237,27 +223,26 @@ async function buildContracts(_web3) {
         VERIFY = new _web3.eth.Contract(VERIFY_ABI, _result);
       }
     }
-    ); */
+    );
 
   return window.contracts = {
     STOR: STOR,
-    //APP: APP,
-    //NP: NP,
+    APP: APP,
+    NP: NP,
     AC_MGR: AC_MGR,
     AC_TKN: AC_TKN,
     A_TKN: A_TKN,
-    //ECR_MGR: ECR_MGR,
-    //ECR: ECR,
-    //VERIFY: VERIFY,
-    //ECR_NC: ECR_NC,
+    ECR_MGR: ECR_MGR,
+    ECR: ECR,
+    VERIFY: VERIFY,
+    ECR_NC: ECR_NC,
     APP_NC: APP_NC,
     NP_NC: NP_NC,
-    //RCLR: RCLR,
-    //PIP: PIP,
+    RCLR: RCLR,
+    PIP: PIP,
     ID_TKN: ID_TKN,
     UTIL_TKN: UTIL_TKN,
-    PARTY: PARTY,
-    PURCHASE: PURCHASE
+    PARTY: PARTY
   }
 }
 
