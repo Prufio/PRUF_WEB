@@ -58,7 +58,7 @@ export default function Recycle() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <Category />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Asset Information</h4>
@@ -128,7 +128,7 @@ export default function Recycle() {
                   label="Input IDX Hash"
                 />
               </div>
-              <Button color="info">Scan QR</Button>
+              <Button color="info" className="MLBGradient">Scan QR</Button>
             </form>
           </CardBody>
         </Card>
@@ -136,7 +136,7 @@ export default function Recycle() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <AccountBox />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>New Owner Information</h4>
@@ -196,7 +196,7 @@ export default function Recycle() {
                   autoComplete: "off"
                 }}
               />
-              <Button color="success">Recycle Discarded Asset</Button>
+              <Button color="info" className="MLBGradient">Recycle Discarded Asset</Button>
             </form>
           </CardBody>
         </Card>

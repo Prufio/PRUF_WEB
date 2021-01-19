@@ -265,7 +265,7 @@ export default function Search() {
       {scanQR === false && !moreInfo && (
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <Category />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Asset Information</h4>
@@ -321,8 +321,8 @@ export default function Search() {
                   label="Input IDX Hash"
                 />
               </div>
-              <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Scan QR</Button>
-              <Button color="success">Search Asset</Button>
+              <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR</Button>
+              <Button color="info" className="MLBGradient">Search Asset</Button>
             </form>
           </CardBody>
         </Card>
@@ -363,7 +363,7 @@ export default function Search() {
       )}
       {moreInfo && (
         <Card>
-          <CardHeader color="info" className="assetHeader">
+          <CardHeader color="info" className="DBGradient">
             {ipfsObject.photo !== undefined && (
               <>
                 {Object.values(ipfsObject.photo).length > 0 && (
@@ -415,11 +415,11 @@ export default function Search() {
             )}
             <br />
             {currency !== "" && !transaction && (
-              <Button onClick={()=>{purchaseAsset()}} color="success">Purchase Item</Button>
+              <Button onClick={()=>{purchaseAsset()}} color="info" className="MLBGradient">Purchase Item</Button>
             )}
             
             {currency !== "" && transaction && (
-              <Button disabled color="success" className="loading">Transaction Pending</Button>
+              <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
             )}
           </CardBody>
           <CardFooter chart>

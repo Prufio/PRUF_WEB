@@ -57,7 +57,7 @@ export default function EscrowManager() {
   return (
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <TransferWithinAStation />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Escrow Manager</h4>
@@ -128,7 +128,7 @@ export default function EscrowManager() {
                   label="Input IDX Hash"
                 />
               </div>
-              <Button color="info">Scan QR</Button>
+              <Button color="info" className="MLBGradient">Scan QR</Button>
             </form>
           </CardBody>
         </Card>

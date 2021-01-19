@@ -4,8 +4,23 @@
     object-fit:contain !important;
 }
 
-.assetHeader {
-    background: linear-gradient(60deg, #002a40, #01476d) !important;
+.DBGradient {
+    background: linear-gradient(0deg, #002a40, #01476d) !important;
+    object-fit: cover !important;
+}
+
+.MDBGradient {
+    background: linear-gradient(0deg, #005480, #015f92) !important;
+    object-fit: cover !important;
+}
+
+.MLBGradient {
+    background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+    object-fit: cover !important;
+}
+
+.LBGradient {
+    background: linear-gradient(0deg, #00a8ff, #00c3ff) !important;
     object-fit: cover !important;
 }
 
@@ -49,7 +64,7 @@
 }
 
 .makeStyles-underline-162:after {
-    border-color: #26c6da !important;
+    border-color: #00a8ff !important;
 }
 
 .exitAsset {
@@ -64,4 +79,8 @@
 
     .qrReader {
         max-width: 500px;
+    }
+    
+    .Sidebar-blue-50, .Sidebar-blue-50:hover, .Sidebar-blue-50:focus{
+        background: #00a8ff !important;
     }

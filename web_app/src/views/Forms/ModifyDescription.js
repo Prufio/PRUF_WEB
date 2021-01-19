@@ -60,7 +60,7 @@ export default function ModifyDescription() {
   return (
     <Card>
       <CardHeader color="info" icon>
-        <CardIcon color="info">
+        <CardIcon color="info" className="DBGradient">
         <span class="material-icons">
 history_edu
 </span>

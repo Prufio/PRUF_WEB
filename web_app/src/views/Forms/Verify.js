@@ -59,7 +59,7 @@ export default function Verify() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <Category />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Asset Information</h4>
@@ -129,7 +129,7 @@ export default function Verify() {
                   label="Input IDX Hash"
                 />
               </div>
-              <Button color="info">Scan QR</Button>
+              <Button color="info" className="MLBGradient">Scan QR</Button>
             </form>
           </CardBody>
         </Card>
@@ -137,7 +137,7 @@ export default function Verify() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <AccountBox />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>New Owner Information</h4>
@@ -197,8 +197,8 @@ export default function Verify() {
                   autoComplete: "off"
                 }}
               />
-              <Button color="success">Verify</Button>
-              <Button color="success">Blockchain Verify</Button>
+              <Button color="info" className="MLBGradient">Verify</Button>
+              <Button color="info" className="MLBGradient">Blockchain Verify</Button>
             </form>
           </CardBody>
         </Card>
