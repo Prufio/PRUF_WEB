@@ -58,7 +58,7 @@ export default function ModifyRGT() {
   return (
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <GroupAdd />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>New Owner Information</h4>
@@ -120,7 +120,7 @@ export default function ModifyRGT() {
                   autoComplete: "off"
                 }}
               />
-              <Button color="success">Update Rightsholder</Button>
+              <Button color="info" className="MLBGradient">Update Rightsholder</Button>
             </form>
           </CardBody>
         </Card>

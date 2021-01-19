@@ -58,7 +58,7 @@ export default function Transfer() {
   return (
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <SwapHoriz />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Transfer Asset</h4>
@@ -72,7 +72,7 @@ export default function Transfer() {
                   fullWidth: true
                 }}
               />
-              <Button color="info">Transfer Asset</Button>
+              <Button color="info" className="MLBGradient">Transfer Asset</Button>
             </form>
           </CardBody>
         </Card>

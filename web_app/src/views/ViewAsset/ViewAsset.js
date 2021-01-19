@@ -79,7 +79,7 @@ export default function ViewAsset() {
   return (
     <div>
       <Card>
-        <CardHeader color="info" className="assetHeader">
+        <CardHeader color="info" className="DBGradient">
           <img src={pruftoken} alt="logo" className="assetImage" />
         </CardHeader>
         <CardBody>

@@ -61,7 +61,7 @@ export default function ModifyStatus() {
   return (
     <Card>
       <CardHeader color="info" icon>
-        <CardIcon color="info">
+        <CardIcon color="info" className="DBGradient">
           <ScatterPlot/>
         </CardIcon>
         <h4 className={classes.cardIconTitle}>Modify Status</h4>

@@ -57,7 +57,7 @@ export default function Counter() {
   return (
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <Iso />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Decrement Counter</h4>
@@ -78,7 +78,7 @@ export default function Counter() {
                   // type: "email"
                 // }}
               />
-              <Button color="info">Update Counter</Button>
+              <Button color="info" className="MLBGradient">Update Counter</Button>
             </form>
           </CardBody>
         </Card>

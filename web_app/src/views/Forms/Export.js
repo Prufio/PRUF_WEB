@@ -44,7 +44,7 @@ export default function Export() {
   return (
     <Card>
       <CardHeader color="info" icon>
-        <CardIcon color="info">
+        <CardIcon color="info" className="DBGradient">
           <FlightTakeoff />
         </CardIcon>
         <h3 className={classes.cardIconTitle}>Export Asset</h3>
@@ -54,7 +54,7 @@ export default function Export() {
           <h4>Asset Selected: </h4>
           <Danger><h4>Disclaimer:</h4></Danger>
           <h5> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</h5>
-          <Button color="info">Export Asset</Button>
+          <Button color="info" className="MLBGradient">Export Asset</Button>
         </form>
       </CardBody>
     </Card>

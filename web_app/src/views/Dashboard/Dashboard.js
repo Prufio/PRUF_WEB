@@ -147,7 +147,7 @@ export default function Dashboard() {
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
             </CardHeader>
             <CardBody>
@@ -186,7 +186,7 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={Nike} alt="logo" className="assetImage" />
             </CardHeader>
             <CardBody>
@@ -225,7 +225,7 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={Mustang} alt="logo" className="assetImage" />
             </CardHeader>
             <CardBody>
@@ -267,7 +267,7 @@ export default function Dashboard() {
       {viewAsset && (
         <div>
         <Card>
-          <CardHeader color="info" className="assetHeader">
+          <CardHeader color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
           </CardHeader>
           <CardBody>

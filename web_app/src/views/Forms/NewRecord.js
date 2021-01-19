@@ -61,13 +61,23 @@ export default function NewRecord() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <Category />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Asset Information</h4>
           </CardHeader>
           <CardBody>
             <form>
+              <CustomInput
+                labelText="Name"
+                id="name"
+                formControlProps={{
+                  fullWidth: true
+                }}
+              // inputProps={{
+              // type: "email"
+              // }}
+              />
               <CustomInput
                 labelText="Manufacturer"
                 id="manufacturer"
@@ -118,7 +128,7 @@ export default function NewRecord() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <AccountBox />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Owner Information</h4>
@@ -178,7 +188,7 @@ export default function NewRecord() {
                   autoComplete: "off"
                 }}
               />
-              <Button color="success">Create New Record</Button>
+              <Button color="info" className="MLBGradient">Create New Record</Button>
             </form>
           </CardBody>
         </Card>
@@ -186,7 +196,7 @@ export default function NewRecord() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <Description />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Asset Description</h4>
@@ -223,7 +233,7 @@ export default function NewRecord() {
       <GridItem xs={12} sm={12} md={6}>
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <AddPhotoAlternate />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Upload Asset Image(s)</h4>
