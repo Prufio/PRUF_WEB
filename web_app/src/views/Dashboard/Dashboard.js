@@ -122,6 +122,7 @@ export default function Dashboard() {
       return window.location.href = "/#/user/modify-rightsholder"
     }
   };
+  
   const classes = useStyles();
   return (
     <div>
