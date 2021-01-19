@@ -19,7 +19,7 @@ const customInputStyle = {
       borderWidth: "1px !important"
     },
     "&:after": {
-      borderColor: primaryColor[0]
+      borderColor: "#00a8ff"
     },
     "& + p": {
       fontWeight: "300"

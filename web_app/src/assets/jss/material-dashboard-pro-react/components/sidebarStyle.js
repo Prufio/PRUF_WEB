@@ -390,7 +390,7 @@ const sidebarStyle = theme => ({
   blue: {
     "&,&:hover,&:focus": {
       color: whiteColor,
-      backgroundColor: infoColor[0],
+      backgroundColor: infoColor[7],
       boxShadow:
         "0 12px 20px -10px rgba(" +
         hexToRgb(infoColor[0]) +

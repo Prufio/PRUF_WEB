@@ -10,10 +10,11 @@ import {
   whiteColor,
   grayColor
 } from "assets/jss/material-dashboard-pro-react.js";
+import "../../../../assets/css/custom.css";
 
 const headerStyle = () => ({
   appBar: {
-    backgroundColor: "transparent",
+    backgroundColor: "#002a40",
     boxShadow: "none",
     borderBottom: "0",
     marginBottom: "0",
@@ -21,9 +22,8 @@ const headerStyle = () => ({
     width: "100%",
     paddingTop: "10px",
     zIndex: "1029",
-    color: grayColor[6],
+    color: "#fff",
     border: "0",
-    borderRadius: "3px",
     padding: "10px 0",
     transition: "all 150ms ease 0s",
     minHeight: "50px",

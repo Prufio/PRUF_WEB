@@ -56,6 +56,7 @@ import priceImage1 from "assets/img/card-2.jpeg";
 import priceImage2 from "assets/img/card-3.jpeg";
 import priceImage3 from "assets/img/card-1.jpeg";
 import { ExitToApp } from "@material-ui/icons";
+import { supportsGoWithoutReloadUsingHash } from "history/DOMUtils";
 
 const us_flag = require("assets/img/flags/US.png");
 const de_flag = require("assets/img/flags/DE.png");
@@ -147,9 +148,15 @@ export default function Dashboard() {
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
-            <img src={macbook} alt="logo" className="assetImage" />
+          <CardHeader image  onClick={(e) => setViewAsset(!viewAsset)} className={classes.cardHeaderHover}
+          >
+              <a onClick={(e) => setViewAsset(!viewAsset)}>
+                <img src={macbook} alt="..." />
+              </a>
             </CardHeader>
+            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
+            <img src={macbook} alt="logo" className="assetImage" />
+            </CardHeader> */}
             <CardBody>
               <div className={classes.cardHoverUnder}>
                 <Tooltip
@@ -158,17 +165,17 @@ export default function Dashboard() {
                   placement="bottom"
                   classes={{ tooltip: classes.tooltip }}
                 >
-                  <Button simple color="info" justIcon>
+                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
                     <Refresh className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
                 <Tooltip
                   id="tooltip-top"
-                  title="Edit"
+                  title="View/Edit"
                   placement="bottom"
                   classes={{ tooltip: classes.tooltip }}
                 >
-                  <Button color="success" simple justIcon>
+                  <Button color="success" simple justIcon onClick={(e) => setViewAsset(!viewAsset)}>
                     <Edit className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
@@ -186,8 +193,14 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
+            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={Nike} alt="logo" className="assetImage" />
+            </CardHeader> */}
+          <CardHeader image className={classes.cardHeaderHover}
+          >
+              <a onClick={e => e.preventDefault()}>
+                <img src={Nike} alt="..." />
+              </a>
             </CardHeader>
             <CardBody>
               <div className={classes.cardHoverUnder}>
@@ -197,17 +210,17 @@ export default function Dashboard() {
                   placement="bottom"
                   classes={{ tooltip: classes.tooltip }}
                 >
-                  <Button simple color="info" justIcon>
+                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
                     <Refresh className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
                 <Tooltip
                   id="tooltip-top"
-                  title="Edit"
+                  title="View/Edit"
                   placement="bottom"
                   classes={{ tooltip: classes.tooltip }}
                 >
-                  <Button color="success" simple justIcon>
+                  <Button color="success" simple justIcon onClick={(e) => setViewAsset(!viewAsset)}>
                     <Edit className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
@@ -225,8 +238,14 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={classes.cardHover}>
-            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
+            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={Mustang} alt="logo" className="assetImage" />
+            </CardHeader> */}
+          <CardHeader image className={classes.cardHeaderHover}
+          >
+              <a onClick={e => e.preventDefault()}>
+                <img src={Mustang} alt="..." />
+              </a>
             </CardHeader>
             <CardBody>
               <div className={classes.cardHoverUnder}>
@@ -236,17 +255,17 @@ export default function Dashboard() {
                   placement="bottom"
                   classes={{ tooltip: classes.tooltip }}
                 >
-                  <Button simple color="info" justIcon>
+                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
                     <Refresh className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
                 <Tooltip
                   id="tooltip-top"
-                  title="Edit"
+                  title="View/Edit"
                   placement="bottom"
                   classes={{ tooltip: classes.tooltip }}
                 >
-                  <Button color="success" simple justIcon>
+                  <Button color="success" simple justIcon onClick={(e) => setViewAsset(!viewAsset)}>
                     <Edit className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
@@ -267,9 +286,12 @@ export default function Dashboard() {
       {viewAsset && (
         <div>
         <Card>
-          <CardHeader color="info" className="DBGradient">
+        <CardHeader image  onClick={(e) => setViewAsset(!viewAsset)} className={classes.cardHeaderHover}>
+                <img src={macbook} alt="..." />
+            </CardHeader>
+          {/* <CardHeader color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
-          </CardHeader>
+          </CardHeader> */}
           <CardBody>
           <Tooltip
                   id="tooltip-top"
