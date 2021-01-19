@@ -29,6 +29,7 @@ import Jdenticon from 'react-jdenticon';
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import pruftoken from "../../assets/img/pruftoken.png";
 import macbook from "../../assets/img/MacBook.png";
+import { boxShadow } from "assets/jss/material-dashboard-pro-react";
 
 
 const useStyles = makeStyles(styles);
@@ -54,6 +55,9 @@ export default function Search() {
   const [asset, setAsset] = useState({});
   const [price, setPrice] = useState("");
   const [currency, setCurrency] = useState("");
+  const [transaction, setTransaction] = useState(false);
+  const [QRValue, setQRValue] = useState("");
+  const [retrieving, setRetrieving] = useState(false);
 
 
   const handleChange = event => {
@@ -134,22 +138,26 @@ export default function Search() {
   }
 
   const purchaseAsset = async () => {
-    if(window.balances.prufTokenBalance < price){return}
-
+    console.log("Purchasing Asset")
+    if(window.balances.prufTokenBalance < window.web3.utils.fromWei(price)){console.log("insufficient balance"); return console.log(window.web3.utils.fromWei(price))}
+    setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
       .send({from: window.addr})
       .on("error", function (_error) {
+        setMoreInfo(false);
+        setTransaction(false);
         console.log(Object.values(_error)[0].transactionHash);
-        window.isInTx = false;
       })
       .on("receipt", (receipt) => {
-        alert("Success! Drake is a beanhead!")
+        setTransaction(false);
+        window.location.href="/#/admin/dashboard"
         console.log(receipt.events.REPORT.returnValues._msg);
       });
   } 
 
   const retrieveRecordQR = async (query) => {
+    setRetrieving(true)
     console.log("in rrqr")
     let ipfsHash;
     let tempResult;
@@ -193,6 +201,7 @@ export default function Search() {
             console.log(_error)
             setError(_error);
             setResult("");
+            setRetrieving(false);
           }
           else {
             console.log("rrqr conf");
@@ -328,10 +337,12 @@ export default function Search() {
           </CardHeader>
           <CardBody>
             <QrReader
+            className="qrReader"
               scanDelay={300}
               onScan={(result) => {
                 if (result) {
                   retrieveRecordQR(result);
+                  // setQRValue(result);
                 }
 
               }}
@@ -343,7 +354,9 @@ export default function Search() {
 
               style={{ width: '100%' }}
             />
-            <p>{data}</p>
+            {retrieving && (
+              <h4 >Retrieving Asset. . .</h4>
+            )}
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
           </CardBody>
         </Card>
@@ -401,13 +414,17 @@ export default function Search() {
               </>
             )}
             <br />
-            {currency !== "" && (
+            {currency !== "" && !transaction && (
               <Button onClick={()=>{purchaseAsset()}} color="success">Purchase Item</Button>
+            )}
+            
+            {currency !== "" && transaction && (
+              <Button disabled color="success" className="loading">Transaction Pending</Button>
             )}
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash}
+              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 42)}
             </div>
             <div className={classes.stats}>
               <Share />

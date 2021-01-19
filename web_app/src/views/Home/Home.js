@@ -12,6 +12,8 @@ import Icon from "@material-ui/core/Icon";
 
 import Eth from "../../assets/img/eth-logo.png";
 import Pruf from "../../assets/img/pruftoken.png";
+import Patek from "../../assets/img/Patek.png";
+import Apartment from "../../assets/img/Apartment.png";
 // @material-ui/icons
 // import ContentCopy from "@material-ui/icons/ContentCopy";
 import Store from "@material-ui/icons/Store";
@@ -80,7 +82,7 @@ var mapData = {
 
 const useStyles = makeStyles(styles);
 
-export default function Dashboard() {
+export default function Home(props) {
   const classes = useStyles();
   return (
     <div>
@@ -93,7 +95,8 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Assets Held</p>
               <h3 className={classes.cardTitle}>
-                7 <small>Assets</small>
+                {/* {props.assets} <small>Assets</small> */}
+                2 <small>Assets</small>
               </h3>
             </CardHeader>
             <CardFooter stats>
@@ -117,7 +120,8 @@ export default function Dashboard() {
               <p className={classes.cardCategory}>ETH Balance</p>
               <h3 className={classes.cardTitle}>
                 
-                1.01 <small>Ether</small>
+              3.02 <small>Ether</small>
+                {/* {props.ether} <small>Ether</small> */}
                 </h3>
             </CardHeader>
             <CardFooter stats>
@@ -138,7 +142,8 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>PRüF Balance</p>
               <h3 className={classes.cardTitle}>
-                125,345 <small>PRüF</small>
+                245,642 <small>PRüF</small>
+                {/* {props.pruf} <small>PRüF</small> */}
                 </h3>
             </CardHeader>
             <CardFooter stats>
@@ -159,7 +164,7 @@ export default function Dashboard() {
           <Card product className={classes.cardHover}>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={priceImage1} alt="..." />
+                <img src={Apartment} alt="..." />
               </a>
             </CardHeader>
             <CardBody>
@@ -201,78 +206,16 @@ export default function Dashboard() {
                 </a>
               </h4>
               <p className={classes.cardProductDesciprion}>
-                The place is close to Barceloneta Beach and bus stop just 2 min
-                by walk and near to {'"'}Naviglio{'"'} where you can enjoy the
-                main night life in Barcelona.
+                Close to Barceloneta Beach, this brand new 5 star Apartment is located in the center of Barcelona, Spain. Just a 3 min
+                walk to the bus station, this apartment is perfect for a family eager to travel the bustling city of Barcel...
               </p>
             </CardBody>
             <CardFooter product>
               <div className={classes.price}>
-                <h4>$899/night</h4>
+                <h4>ü80,000/night</h4>
               </div>
               <div className={`${classes.stats} ${classes.productStats}`}>
                 <Place /> Barcelona, Spain
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card product className={classes.cardHover}>
-            <CardHeader image className={classes.cardHeaderHover}>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={priceImage2} alt="..." />
-              </a>
-            </CardHeader>
-            <CardBody>
-              <div className={classes.cardHoverUnder}>
-                <Tooltip
-                  id="tooltip-top"
-                  title="View"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button color="transparent" simple justIcon>
-                    <ArtTrack className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  id="tooltip-top"
-                  title="Edit"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button color="success" simple justIcon>
-                    <Refresh className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  id="tooltip-top"
-                  title="Remove"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button color="danger" simple justIcon>
-                    <Edit className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-              </div>
-              <h4 className={classes.cardProductTitle}>
-                <a href="#pablo" onClick={e => e.preventDefault()}>
-                  Office Studio
-                </a>
-              </h4>
-              <p className={classes.cardProductDesciprion}>
-                The place is close to Metro Station and bus stop just 2 min by
-                walk and near to {'"'}Naviglio{'"'} where you can enjoy the
-                night life in London, UK.
-              </p>
-            </CardBody>
-            <CardFooter product>
-              <div className={classes.price}>
-                <h4>$1.119/night</h4>
-              </div>
-              <div className={`${classes.stats} ${classes.productStats}`}>
-                <Place /> London, UK
               </div>
             </CardFooter>
           </Card>
@@ -319,21 +262,84 @@ export default function Dashboard() {
               </div>
               <h4 className={classes.cardProductTitle}>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
-                  Beautiful Castle
+                  16th Century Castle
                 </a>
               </h4>
               <p className={classes.cardProductDesciprion}>
-                The place is close to Metro Station and bus stop just 2 min by
-                walk and near to {'"'}Naviglio{'"'} where you can enjoy the main
-                night life in Milan.
+                Loactated in Milan, Italy, this 16th century castle is the greatest solution to your fairytale fantasies. Originally built for a royal family more than 400 years ago, the...
               </p>
             </CardBody>
             <CardFooter product>
               <div className={classes.price}>
-                <h4>$459/night</h4>
+                <h4>Ξ1,250</h4>
               </div>
               <div className={`${classes.stats} ${classes.productStats}`}>
                 <Place /> Milan, Italy
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card product className={classes.cardHover}>
+            <CardHeader image className={classes.cardHeaderHover}>
+              <a href="#pablo" onClick={e => e.preventDefault()}>
+                <img src={Patek} alt="..." />
+              </a>
+            </CardHeader>
+            <CardBody>
+              <div className={classes.cardHoverUnder}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="View"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="transparent" simple justIcon>
+                    <ArtTrack className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Edit"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="success" simple justIcon>
+                    <Refresh className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Remove"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="danger" simple justIcon>
+                    <Edit className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+              </div>
+              <h4 className={classes.cardProductTitle}>
+                <a href="#pablo" onClick={e => e.preventDefault()}>
+                  Patek Philippe
+                </a>
+              </h4>
+              <p className={classes.cardProductDesciprion}>
+              Referance 5740/1 Nautilus perpetual calendar
+              </p>
+              <p className={classes.cardProductDesciprion}>
+              Ultra-thin self-winding caliber 240 Q movement
+              </p>
+              <p className={classes.cardProductDesciprion}>
+              Water resistant to 60M
+              </p>
+            </CardBody>
+            <CardFooter product>
+              <div className={classes.price}>
+                <h4>◈129,999</h4>
+              </div>
+              <div className={`${classes.stats} ${classes.productStats}`}>
+                <Place /> London, UK
               </div>
             </CardFooter>
           </Card>

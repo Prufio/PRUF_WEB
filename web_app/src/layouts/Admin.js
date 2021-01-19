@@ -189,7 +189,7 @@ export default function Dashboard(props) {
         window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
         window.resetInfo = false;
   
-        _ipfs = IPFS({
+        _ipfs = new IPFS({
           host: "ipfs.infura.io",
           port: 5001,
           protocol: "https",
@@ -208,6 +208,7 @@ export default function Dashboard(props) {
   
       //Give me the read-only version
       else {
+        alert("we ended up in here")
         console.log("Here")
         window.ipfsCounter = 0;
         _web3 = require("web3");
@@ -235,12 +236,12 @@ export default function Dashboard(props) {
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
-      window.removeEventListener("resize", resizeFunction);
-      //window.removeEventListener("balances", balanceListener);
-      //window.removeEventListener("assets", assetListener);
-      //window.removeEventListener("network", networkListener);
-      //window.removeEventListener("accountListener", acctListener);
-      //window.removeEventListener("navigator", navTypeListener);
+      // window.removeEventListener("resize", resizeFunction);
+      // window.removeEventListener("balances", balanceListener);
+      // window.removeEventListener("assets", assetListener);
+      // window.removeEventListener("network", networkListener);
+      // window.removeEventListener("accountListener", acctListener);
+      // window.removeEventListener("navigator", navTypeListener);
     };
   });
   // functions for changeing the states from components
@@ -272,7 +273,7 @@ export default function Dashboard(props) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return window.location.pathname !== "/user/full-screen-maps";
+    return window.location.pathname !== "/admin/full-screen-maps";
   };
   const getActiveRoute = routes => {
     let activeRoute = "Default Brand Text";
@@ -297,11 +298,11 @@ export default function Dashboard(props) {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/user") {
+      if (prop.layout === "/admin") {
         return (
           <Route
             path={prop.layout + prop.path}
-            component={prop.component}
+            render={()=>(<prop.component pruf={prufBalance} ether={ETHBalance} assets={assetBalance}/>)}
             key={key}
           />
         );
@@ -428,6 +429,7 @@ export default function Dashboard(props) {
     console.log("Prebuild Assets: ", window.assets)
     console.log("Bools...", isAssetHolder, isAssetClassHolder, isIDHolder)
     console.log(window.ipfsCounter >= window.aTknIDs.length, window.aTknIDs.length > 0, WD)
+    
   }
 
   const buildAssets = () => {
@@ -536,6 +538,7 @@ export default function Dashboard(props) {
       setIsAssetClassHolder(window.assetClassHolderBool);
       setIsIDHolder(window.IDHolderBool);
       setHasFetchedBalances(window.hasFetchedBalances);
+      setETHBalance(window.ETHBalance)
     })
 
     await console.log(window.balances)
@@ -588,7 +591,7 @@ export default function Dashboard(props) {
 
           }
 
-          if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#/user/home" }
+          if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#/admin/home" }
 
           window.addr = e[0];
           window.assetClass = undefined;
@@ -698,7 +701,7 @@ export default function Dashboard(props) {
             <div className={classes.container}>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
+                <Redirect from="/admin" to="/admin/home" />
               </Switch>
             </div>
           </div>
@@ -706,7 +709,7 @@ export default function Dashboard(props) {
             <div className={classes.map}>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
+                <Redirect from="/admin" to="/admin/home" />
               </Switch>
             </div>
           )}

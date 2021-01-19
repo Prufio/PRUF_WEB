@@ -41,6 +41,8 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import pruftoken from "assets/img/pruftoken.png";
 import macbook from "../../assets/img/MacBook.jpg";
+import Nike from "assets/img/Nike.png";
+import Mustang from "assets/img/Mustang.png";
 
 import {
   dailySalesChart,
@@ -95,31 +97,31 @@ export default function Dashboard() {
   const handleSimple = event => {
     setSimpleSelect(event.target.value);
     if (event.target.value === "transfer") {
-      return window.location.href = "/#/user/transfer-asset"
+      return window.location.href = "/#/admin/transfer-asset"
     }
     if (event.target.value === "escrow") {
-      return window.location.href = "/#/user/escrow-manager"
+      return window.location.href = "/#/admin/escrow-manager"
     }
     if (event.target.value === "import") {
-      return window.location.href = "/#/user/import-asset"
+      return window.location.href = "/#/admin/import-asset"
     }
     if (event.target.value === "export") {
-      return window.location.href = "/#/user/export-asset"
+      return window.location.href = "/#/admin/export-asset"
     }
     if (event.target.value === "discard") {
-      return window.location.href = "/#/user/discard-asset"
+      return window.location.href = "/#/admin/discard-asset"
     }
     if (event.target.value === "change-status") {
-      return window.location.href = "/#/user/modify-status"
+      return window.location.href = "/#/admin/modify-status"
     }
     if (event.target.value === "decrement-counter") {
-      return window.location.href = "/#/user/counter"
+      return window.location.href = "/#/admin/counter"
     }
     if (event.target.value === "edit-information") {
-      return window.location.href = "/#/user/modify-description"
+      return window.location.href = "/#/admin/modify-description"
     }
     if (event.target.value === "edit-rightsholder") {
-      return window.location.href = "/#/user/modify-rightsholder"
+      return window.location.href = "/#/admin/modify-rightsholder"
     }
   };
   
@@ -172,7 +174,85 @@ export default function Dashboard() {
                 </Tooltip>
               </div>
               <h4 className={classes.cardTitle}>Macbook Air 2020</h4>
-              <h5 className={classes.cardTitle}>Status: Transferable</h5>
+              <h5 className={classes.cardTitle}>Status: Transferrable</h5>
+              
+            </CardBody>
+            {/* <CardFooter chart>
+              <div className={classes.stats}>
+                <AccessTime /> updated 4 minutes ago
+              </div>
+            </CardFooter> */}
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card chart className={classes.cardHover}>
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <img src={Nike} alt="logo" className="assetImage" />
+            </CardHeader>
+            <CardBody>
+              <div className={classes.cardHoverUnder}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Refresh"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button simple color="info" justIcon>
+                    <Refresh className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Edit"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="success" simple justIcon>
+                    <Edit className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+              </div>
+              <h4 className={classes.cardTitle}>Off-White AF1's</h4>
+              <h5 className={classes.cardTitle}>Status: Stolen</h5>
+              
+            </CardBody>
+            {/* <CardFooter chart>
+              <div className={classes.stats}>
+                <AccessTime /> updated 4 minutes ago
+              </div>
+            </CardFooter> */}
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card chart className={classes.cardHover}>
+            <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="assetHeader">
+            <img src={Mustang} alt="logo" className="assetImage" />
+            </CardHeader>
+            <CardBody>
+              <div className={classes.cardHoverUnder}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Refresh"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button simple color="info" justIcon>
+                    <Refresh className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Edit"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="success" simple justIcon>
+                    <Edit className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+              </div>
+              <h4 className={classes.cardTitle}>2020 Ford Mustang</h4>
+              <h5 className={classes.cardTitle}>Status: Non-Transferrable</h5>
               
             </CardBody>
             {/* <CardFooter chart>
@@ -218,7 +298,7 @@ export default function Dashboard() {
                 </Tooltip> */}
             <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
             <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
-            <h4 className={classes.cardTitle}>Status: Transferable</h4>
+            <h4 className={classes.cardTitle}>Status: Transferrable</h4>
             <p className={classes.cardCategory}>
               Description: Slightly used, like new. Comes with box and original charger.
                 </p>
@@ -346,11 +426,10 @@ export default function Dashboard() {
                     </Select>
                   </FormControl>
             </div>
-                  
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              IDX Hash: 0x6d5ffa25c1f9...1b8be12927
+              IDX Hash: 0x8adbd0ab0401fa6...e6f3dcde1b953fcc4e
                 </div>
             <div className={classes.stats}>
               <Share />
