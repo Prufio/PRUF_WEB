@@ -1,3 +1,25 @@
+
+body {
+    background: linear-gradient(0deg, rgba(0, 83, 128, 0.212), #015f9218) !important;
+}
+
+/* body {
+    background: linear-gradient(0deg, rgba(0, 83, 128, 0.514), #015f923b) !important;
+} */
+
+/* body {
+    background: linear-gradient(180deg, rgba(0, 83, 128, 0.514), #015f923b) !important;
+} */
+
+/* body {
+    background: linear-gradient(0deg, rgba(0, 83, 128, 0.616), #015f923b) !important;
+} */
+
+/* body {
+    background: linear-gradient(180deg, rgba(0, 83, 128, 0.596), #015f923b) !important;
+} */
+
+
 .assetImage {
     width: 300px !important;
     height: 300px !important;
