@@ -137,7 +137,6 @@ export default function Dashboard(props) {
         _web3 = new Web3(_web3.givenProvider);
         window.web3 = _web3;
         //alert("Is desktop and ethereum exists")
-        console.log(_web3.eth.net.getNetworkType())
         console.log("Here")
         window.costs = {}
         window.additionalElementArrays = {
@@ -173,8 +172,6 @@ export default function Dashboard(props) {
       else if (isMobile && window.ethereum) {
         _web3 = new Web3(_web3.givenProvider);
         window.web3 = _web3;
-        console.log(_web3.eth.net.getNetworkType())
-        //alert("Is mobile and ethereum exists")
         console.log("Here")
   
         window.costs = {}
@@ -654,7 +651,7 @@ export default function Dashboard(props) {
   }, 500)
 
    const balanceListener = setInterval(() => {
-    if (ETHBalance !== window.ETHBalance && WD === true) {
+    if (window.ETHBalance !== undefined && ETHBalance !== window.ETHBalance && WD === true) {
       console.log("5")
       return setETHBalance(window.ETHBalance);
     }
