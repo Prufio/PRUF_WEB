@@ -81,19 +81,159 @@ var mapData = {
 
 const useStyles = makeStyles(styles);
 
-export default function Dashboard() {
+
+export default function Dashboard(props) {
+
+  React.useEffect(() => {
+    //if(assetObj !== props.assetObj) {setAssetObj(props.assetObj)}
+    // returned function will be called on component unmount 
+    return () => {
+      
+    }
+  
+  })
+  
 
   const [viewAsset, setViewAsset] = React.useState(false)
   const [checkedA, setCheckedA] = React.useState(true);
   const [checkedB, setCheckedB] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
+  const [assetObj, setAssetObj] = React.useState({});
+  const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
+  const [identicon, setIdenticon] = React.useState(<></>);
+  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
+  const [URL ,setURL] = React.useState("");
+  const [selectedImage, setSelectedImage] = React.useState("")
+  const [reset, setReset] = React.useState("")
 
-  
+  const moreInfo = (e) => {
+    const url =String(baseURL)+String(e.idxHash)
 
-  // const handleSetViewAsset = event => {
-  //   setViewAsset(!viewAsset);
-  //   console.log("new value", !viewAsset)
-  // };
+    if (e === "back") { setSelectedAssetObj({}); return setViewAsset(false); }
+
+    if (e.DisplayImage !== undefined && e.DisplayImage !== "") {
+      setSelectedImage(e.DisplayImage);
+    }
+
+    else {
+      setSelectedImage("")
+    }
+
+    setViewAsset(true);
+    setSelectedAssetObj(e);
+    setIdenticon(e.identicon);
+    setURL(url)
+
+    window.printObj = e;
+    
+  }
+
+  const sendPacket = (obj, menu, link) => {
+    window.sentPacket = obj
+    window.menuChange = menu
+    window.location.href = '/#/' + link
+  }
+
+  const generateAssetDash = (obj) => {
+    if (Object.values(obj).length > 0 && obj.names.length > 0) {
+      let component = [];
+      console.log(obj)
+
+      for (let i = 0; i < obj.ids.length; i++) {
+        //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
+        component.push(
+          <GridItem key={"asset"+i} xs={12} sm={12} md={4}>
+          <Card chart className={classes.cardHover}>
+          <CardHeader image className={classes.cardHeaderHover}>
+              <a onClick={() => moreInfo({
+                        countPair: obj.countPairs[i],
+                        idxHash: obj.ids[i],
+                        descriptionObj: obj.descriptions[i],
+                        DisplayImage: obj.displayImages[i],
+                        name: obj.names[i],
+                        assetClass: obj.assetClasses[i],
+                        assetClassName: obj.assetClassNames[i],
+                        status: obj.statuses[i],
+                        statusNum: obj.statusNums[i],
+                        Description: obj.descriptions[i].text.Description,
+                        note: obj.notes[i],
+                        text: obj.descriptions[i].text,
+                        photo: obj.descriptions[i].photo,
+                        identicon: obj.identiconsLG[i]
+                      })}>
+
+                    {obj.displayImages[i] !== "" && (
+                      <img title="View Asset" src={obj.displayImages[i]} className="assetImage" alt="" />
+                    )}
+
+                    {obj.displayImages[i] === "" && (
+                      <>{obj.identicons[i]}</>
+                    )}
+              </a>
+            </CardHeader>
+            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
+            <img src={macbook} alt="logo" className="assetImage" />
+            </CardHeader> */}
+            <CardBody>
+              <div className={classes.cardHoverUnder}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Refresh"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
+                    <Refresh className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  id="tooltip-top"
+                  title="View/Edit"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button color="success" simple justIcon onClick={() => moreInfo({
+                        countPair: obj.countPairs[i],
+                        idxHash: obj.ids[i],
+                        descriptionObj: obj.descriptions[i],
+                        DisplayImage: obj.displayImages[i],
+                        name: obj.names[i],
+                        assetClass: obj.assetClasses[i],
+                        assetClassName: obj.assetClassNames[i],
+                        status: obj.statuses[i],
+                        statusNum: obj.statusNums[i],
+                        Description: obj.descriptions[i].text.Description,
+                        note: obj.notes[i],
+                        text: obj.descriptions[i].text,
+                        photo: obj.descriptions[i].photo,
+                        identicon: obj.identiconsLG[i]
+                      })}>
+                    <Edit className={classes.underChartIcons} />
+                  </Button>
+                </Tooltip>
+              </div>
+              <h4 className={classes.cardTitle}>{obj.names[i]}</h4>
+              <h5 className={classes.cardTitle}>Status: {obj.statuses[i]}</h5>
+              
+            </CardBody>
+            {/* <CardFooter chart>
+              <div className={classes.stats}>
+                <AccessTime /> updated 4 minutes ago
+              </div>
+            </CardFooter> */}
+          </Card>
+          </GridItem>
+        );
+      }
+
+      return component
+    }
+
+    else if (Object.values(obj).length > 0 && obj.names.length === 0) { console.log(obj); return <h1>No assets held by user</h1>}
+
+    else { console.log(obj); return <h1>Loading held assets...</h1> }
+
+  }
 
   const handleSimple = event => {
     setSimpleSelect(event.target.value);
@@ -146,147 +286,13 @@ export default function Dashboard() {
       </GridContainer>
 {!viewAsset && (
       <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart className={classes.cardHover}>
-          <CardHeader image  onClick={(e) => setViewAsset(!viewAsset)} className={classes.cardHeaderHover}
-          >
-              <a onClick={(e) => setViewAsset(!viewAsset)}>
-                <img src={macbook} alt="..." />
-              </a>
-            </CardHeader>
-            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
-            <img src={macbook} alt="logo" className="assetImage" />
-            </CardHeader> */}
-            <CardBody>
-              <div className={classes.cardHoverUnder}>
-                <Tooltip
-                  id="tooltip-top"
-                  title="Refresh"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
-                    <Refresh className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  id="tooltip-top"
-                  title="View/Edit"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button color="success" simple justIcon onClick={(e) => setViewAsset(!viewAsset)}>
-                    <Edit className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-              </div>
-              <h4 className={classes.cardTitle}>Macbook Air 2020</h4>
-              <h5 className={classes.cardTitle}>Status: Transferrable</h5>
-              
-            </CardBody>
-            {/* <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter> */}
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart className={classes.cardHover}>
-            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
-            <img src={Nike} alt="logo" className="assetImage" />
-            </CardHeader> */}
-          <CardHeader image className={classes.cardHeaderHover}
-          >
-              <a onClick={e => e.preventDefault()}>
-                <img src={Nike} alt="..." />
-              </a>
-            </CardHeader>
-            <CardBody>
-              <div className={classes.cardHoverUnder}>
-                <Tooltip
-                  id="tooltip-top"
-                  title="Refresh"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
-                    <Refresh className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  id="tooltip-top"
-                  title="View/Edit"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button color="success" simple justIcon onClick={(e) => setViewAsset(!viewAsset)}>
-                    <Edit className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-              </div>
-              <h4 className={classes.cardTitle}>Off-White AF1's</h4>
-              <h5 className={classes.cardTitle}>Status: Stolen</h5>
-              
-            </CardBody>
-            {/* <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter> */}
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart className={classes.cardHover}>
-            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
-            <img src={Mustang} alt="logo" className="assetImage" />
-            </CardHeader> */}
-          <CardHeader image className={classes.cardHeaderHover}
-          >
-              <a onClick={e => e.preventDefault()}>
-                <img src={Mustang} alt="..." />
-              </a>
-            </CardHeader>
-            <CardBody>
-              <div className={classes.cardHoverUnder}>
-                <Tooltip
-                  id="tooltip-top"
-                  title="Refresh"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
-                    <Refresh className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  id="tooltip-top"
-                  title="View/Edit"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button color="success" simple justIcon onClick={(e) => setViewAsset(!viewAsset)}>
-                    <Edit className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-              </div>
-              <h4 className={classes.cardTitle}>2020 Ford Mustang</h4>
-              <h5 className={classes.cardTitle}>Status: Non-Transferrable</h5>
-              
-            </CardBody>
-            {/* <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter> */}
-          </Card>
-        </GridItem>
+        {generateAssetDash(props.assetObj)}
       </GridContainer>
       )}
       {viewAsset && (
         <div>
         <Card>
-        <CardHeader image  onClick={(e) => setViewAsset(!viewAsset)} className={classes.cardHeaderHover}>
+        <CardHeader image  onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
                 <img src={macbook} alt="..." />
             </CardHeader>
           {/* <CardHeader color="info" className="DBGradient">
@@ -299,7 +305,7 @@ export default function Dashboard() {
                   placement="bottom"
                   classes={{ tooltip: classes.tooltip }}
                 >
-                  <Button onClick={(e) => setViewAsset(!viewAsset)} simple color="info" justIcon>
+                  <Button onClick={(e) => moreInfo("back")} simple color="info" justIcon>
                   <ExitToApp />
                   </Button>
                 </Tooltip>
