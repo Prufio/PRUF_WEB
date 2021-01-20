@@ -293,7 +293,8 @@ export default function Dashboard(props) {
         <div>
         <Card>
         <CardHeader image  onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
-                <img src={macbook} alt="..." />
+                {selectedAssetObj.DisplayImage.length > 1 && (<img src={selectedAssetObj.DisplayImage} alt="..." />)}
+                {selectedAssetObj.DisplayImage.length === 0 && (<>{selectedAssetObj.identicon}</>)}
             </CardHeader>
           {/* <CardHeader color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
@@ -309,12 +310,12 @@ export default function Dashboard(props) {
                   <ExitToApp />
                   </Button>
                 </Tooltip>
-            {/* <Tooltip
+                  {/* <Tooltip
                   id="tooltip-top"
                   title="Back"
                   placement="top" color="info"
                   // classes={{ tooltip: classes.tooltip }}
-                >
+                  >
                   <Button 
                   onClick={(e) => setViewAsset(!viewAsset)}
                   className="exitAsset" 
@@ -323,13 +324,14 @@ export default function Dashboard(props) {
                   >
                   <ExitToApp />
                   </Button>
-                </Tooltip> */}
-            <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
-            <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
-            <h4 className={classes.cardTitle}>Status: Transferrable</h4>
+                  </Tooltip> */}
+            <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
+            <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (ACID: {selectedAssetObj.assetClass})</h4>
+            <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
             <p className={classes.cardCategory}>
-              Description: Slightly used, like new. Comes with box and original charger.
-                </p>
+              Description: {selectedAssetObj.Description}
+            </p>
+            
             <br />
             <div className={classes.stats}>
               <Danger>
@@ -457,7 +459,7 @@ export default function Dashboard(props) {
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              IDX Hash: 0x8adbd0ab0401fa6...e6f3dcde1b953fcc4e
+              IDX Hash: {selectedAssetObj.idxHash}
                 </div>
             <div className={classes.stats}>
               <Share />
