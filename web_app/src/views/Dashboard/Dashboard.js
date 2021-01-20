@@ -167,7 +167,9 @@ export default function Dashboard(props) {
                   )}
 
                   {obj.displayImages[i] === "" && (
-                    <img title="View Asset" src={obj.identicons[i]} alt="" />
+                    <>
+                    {obj.identicons[i]}
+                    </>
                   )}
                 </a>
               </CardHeader>
