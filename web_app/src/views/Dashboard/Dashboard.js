@@ -5,6 +5,7 @@ import ChartistGraph from "react-chartist";
 // react plugin for creating vector maps
 import { VectorMap } from "react-jvectormap";
 
+import { isMobile } from "react-device-detect";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -145,33 +146,51 @@ export default function Dashboard(props) {
           <GridItem key={"asset" + i} xs={12} sm={12} md={4}>
             <Card chart className={classes.cardHover}>
               <CardHeader image className={classes.cardHeaderHover}>
-                <a onClick={() => moreInfo({
-                  countPair: obj.countPairs[i],
-                  idxHash: obj.ids[i],
-                  descriptionObj: obj.descriptions[i],
-                  DisplayImage: obj.displayImages[i],
-                  name: obj.names[i],
-                  assetClass: obj.assetClasses[i],
-                  assetClassName: obj.assetClassNames[i],
-                  status: obj.statuses[i],
-                  statusNum: obj.statusNums[i],
-                  Description: obj.descriptions[i].text.Description,
-                  note: obj.notes[i],
-                  text: obj.descriptions[i].text,
-                  photo: obj.descriptions[i].photo,
-                  identicon: obj.identiconsLG[i]
-                })}>
+                <>
+                  {!isMobile && (
+                    <a onClick={() => moreInfo({
+                      countPair: obj.countPairs[i],
+                      idxHash: obj.ids[i],
+                      descriptionObj: obj.descriptions[i],
+                      DisplayImage: obj.displayImages[i],
+                      name: obj.names[i],
+                      assetClass: obj.assetClasses[i],
+                      assetClassName: obj.assetClassNames[i],
+                      status: obj.statuses[i],
+                      statusNum: obj.statusNums[i],
+                      Description: obj.descriptions[i].text.Description,
+                      note: obj.notes[i],
+                      text: obj.descriptions[i].text,
+                      photo: obj.descriptions[i].photo,
+                      identicon: obj.identiconsLG[i]
+                    })}>
 
-                  {obj.displayImages[i] !== "" && (
-                    <img title="View Asset" src={obj.displayImages[i]} alt="" />
-                  )}
+                      {obj.displayImages[i] !== "" && (
+                        <img title="View Asset" src={obj.displayImages[i]} alt="" />
+                      )}
 
-                  {obj.displayImages[i] === "" && (
-                    <>
-                    {obj.identicons[i]}
-                    </>
+                      {obj.displayImages[i] === "" && (
+                        <>
+                          {obj.identicons[i]}
+                        </>
+                      )}
+                    </a>
                   )}
-                </a>
+                  {isMobile && (
+                    <a>
+
+                      {obj.displayImages[i] !== "" && (
+                        <img title="View Asset" src={obj.displayImages[i]} alt="" />
+                      )}
+
+                      {obj.displayImages[i] === "" && (
+                        <>
+                          {obj.identicons[i]}
+                        </>
+                      )}
+                    </a>
+                  )}
+                </>
               </CardHeader>
               {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
@@ -469,10 +488,17 @@ export default function Dashboard(props) {
                 </FormControl>
               </div>
             </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                IDX Hash: {selectedAssetObj.idxHash}
-              </div>
+            <CardFooter>
+              {!isMobile && (
+                <div className={classes.stats}>
+                  IDX Hash: {selectedAssetObj.idxHash}
+                </div>
+              )}
+              {isMobile && (
+                <div className={classes.stats}>
+                  IDX Hash: {selectedAssetObj.idxHash.substring(0, 8) + selectedAssetObj.idxHash.substring(58, 66)}
+                </div>
+              )}
               <div className={classes.stats}>
                 <Share />
                 <Print />
