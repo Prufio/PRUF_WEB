@@ -170,7 +170,6 @@ export default function Dashboard(props) {
   
       //Give me the mobile ethereum-enabled version
       else if (isMobile && window.ethereum) {
-        alert("we ended up in here IM W.E")
         _web3 = new Web3(_web3.givenProvider);
         window.web3 = _web3;
         console.log("Here")
@@ -199,6 +198,9 @@ export default function Dashboard(props) {
         });
   
         window.ipfs = _ipfs;
+
+        const ethereum = window.ethereum;
+        ethereum.enable()
   
         _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
   
