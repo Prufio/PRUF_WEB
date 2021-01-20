@@ -488,7 +488,7 @@ export default function Dashboard(props) {
                 </FormControl>
               </div>
             </CardBody>
-            <CardFooter>
+            <CardFooter chart>
               {!isMobile && (
                 <div className={classes.stats}>
                   IDX Hash: {selectedAssetObj.idxHash}
