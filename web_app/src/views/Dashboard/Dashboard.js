@@ -465,24 +465,6 @@ export default function Dashboard(props) {
                     >
                       Edit Rightsholder
                             </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-information"
-                    >
-                      Edit Information
-                            </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-rightsholder"
-                    >
-                      Edit Rightsholder
-                            </MenuItem>
                   </Select>
                 </FormControl>
               </div>
