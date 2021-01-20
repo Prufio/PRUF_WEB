@@ -331,7 +331,6 @@ export default function Dashboard(props) {
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
     console.log("Setting up contracts")
     if (window.ethereum !== undefined) {
-
       window._contracts = await buildContracts(_web3)
 
       await window.utils.getContracts()
@@ -664,7 +663,12 @@ export default function Dashboard(props) {
     //Catch late window.ethereum injection case (MetaMask mobile)
     if (isMobile && window.ethereum && WD === true) {
       window.web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0]; });
-      window.addEventListener("accountListener", this.acctChanger());
+      window.addEventListener("accountListener", acctListener());
+
+      if(window.balances === {} && window.addr !== undefined){
+        window.utils.getETHBalance();
+        setUpTokenVals(true, "SetupContractEnvironment")
+      }
     }
   }, 500)
 
