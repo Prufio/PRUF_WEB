@@ -10,7 +10,7 @@ import Check from "@material-ui/icons/Check";
 import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
-import { ExitToApp } from "@material-ui/icons";
+import { ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
 
 
 // core components
@@ -722,33 +722,69 @@ export default function Search() {
                 {Object.values(ipfsObject.photo).length > 0 && (
                   <>
                     {ipfsObject.photo.displayImage !== undefined && (
-                      <img src={ipfsObject.photo.displayImage} alt="logo" />
+                      <>
+                        <Tooltip
+                          id="tooltip-top"
+                          title="Back"
+                          placement="bottom"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
+                          <Button onClick={() => window.location.reload()} x-large color="info" justIcon className="back">
+                            <KeyboardArrowLeft />
+                          </Button>
+                        </Tooltip>
+                        <img src={ipfsObject.photo.displayImage} alt="logo" />
+                      </>
                     )}
                     {ipfsObject.photo.displayImage === undefined && (
-                      <img src={Object.values(ipfsObject.photo)[0]} alt="logo" />
+                      <>
+                        <Tooltip
+                          id="tooltip-top"
+                          title="Back"
+                          placement="bottom"
+                          classes={{ tooltip: classes.tooltip }}
+                        >
+                          <Button onClick={() => window.location.reload()} x-large color="info" justIcon className="back">
+                            <KeyboardArrowLeft />
+                          </Button>
+                        </Tooltip>
+                        <img src={Object.values(ipfsObject.photo)[0]} alt="logo" />
+                      </>
                     )}
                   </>
                 )}
                 {Object.values(ipfsObject.photo).length === 0 && (
-                  <Jdenticon size="300" value={asset.idxHash} />
+                  <>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Back"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button onClick={() => window.location.reload()} x-large color="info" justIcon className="back">
+                        <KeyboardArrowLeft />
+                      </Button>
+                    </Tooltip>
+                    <Jdenticon value={asset.idxHash}/>
+                  </>
                 )}
               </>
             )}
           </CardHeader>
           <CardBody>
-            <Tooltip
+            {/* <Tooltip
               id="tooltip-top"
               title="Back"
               placement="bottom"
               classes={{ tooltip: classes.tooltip }}
             >
-              <Button 
-              // onClick={(e) => setMoreInfo(!moreInfo)}
-              onClick={() => window.location.reload()}
-               simple color="info" justIcon>
+              <Button
+                // onClick={(e) => setMoreInfo(!moreInfo)}
+                onClick={() => window.location.reload()}
+                simple color="info" justIcon>
                 <ExitToApp />
               </Button>
-            </Tooltip>
+            </Tooltip> */}
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
             {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
