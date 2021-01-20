@@ -10,7 +10,7 @@ const regularFormsStyle = {
   cardIconTitle: {
     ...cardTitle,
     marginTop: "15px",
-    marginBottom: "0px"
+    marginBottom: "0px",
   },
   staticFormGroup: {
     marginLeft: "0",
@@ -30,7 +30,7 @@ const regularFormsStyle = {
     marginBottom: "0",
     paddingTop: "8px",
     paddingBottom: "8px",
-    minHeight: "34px"
+    minHeight: "34px",
   },
   inputAdornment: {
     marginRight: "8px",
