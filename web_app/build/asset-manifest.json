@@ -1,20 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.1ce23084.chunk.css",
-    "main.js": "/static/js/main.27a00c44.chunk.js",
-    "main.js.map": "/static/js/main.27a00c44.chunk.js.map",
+<<<<<<< Updated upstream
+    "main.css": "/static/css/main.beef8ab2.chunk.css",
+    "main.js": "/static/js/main.94014adb.chunk.js",
+    "main.js.map": "/static/js/main.94014adb.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.e6710eac.js",
     "runtime-main.js.map": "/static/js/runtime-main.e6710eac.js.map",
     "static/css/2.d0176e96.chunk.css": "/static/css/2.d0176e96.chunk.css",
-    "static/js/2.a2d7de83.chunk.js": "/static/js/2.a2d7de83.chunk.js",
-    "static/js/2.a2d7de83.chunk.js.map": "/static/js/2.a2d7de83.chunk.js.map",
+    "static/js/2.9aa4b976.chunk.js": "/static/js/2.9aa4b976.chunk.js",
+    "static/js/2.9aa4b976.chunk.js.map": "/static/js/2.9aa4b976.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.d875009046bac14045d8474748be2f33.js": "/precache-manifest.d875009046bac14045d8474748be2f33.js",
+    "precache-manifest.d65fe2ad7d78b2b960c9086edf006d0d.js": "/precache-manifest.d65fe2ad7d78b2b960c9086edf006d0d.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.d0176e96.chunk.css.map": "/static/css/2.d0176e96.chunk.css.map",
-    "static/css/main.1ce23084.chunk.css.map": "/static/css/main.1ce23084.chunk.css.map",
-    "static/js/2.a2d7de83.chunk.js.LICENSE.txt": "/static/js/2.a2d7de83.chunk.js.LICENSE.txt",
-    "static/js/main.27a00c44.chunk.js.LICENSE.txt": "/static/js/main.27a00c44.chunk.js.LICENSE.txt",
+    "static/css/main.beef8ab2.chunk.css.map": "/static/css/main.beef8ab2.chunk.css.map",
+    "static/js/2.9aa4b976.chunk.js.LICENSE.txt": "/static/js/2.9aa4b976.chunk.js.LICENSE.txt",
+    "static/js/main.94014adb.chunk.js.LICENSE.txt": "/static/js/main.94014adb.chunk.js.LICENSE.txt",
     "static/media/Apartment.png": "/static/media/Apartment.27b3438d.png",
     "static/media/MacBook.png": "/static/media/MacBook.01310f2f.png",
     "static/media/MacBook.jpg": "/static/media/MacBook.f3b4a660.jpg",
@@ -37,8 +38,42 @@
   "entrypoints": [
     "static/js/runtime-main.e6710eac.js",
     "static/css/2.d0176e96.chunk.css",
-    "static/js/2.a2d7de83.chunk.js",
-    "static/css/main.1ce23084.chunk.css",
-    "static/js/main.27a00c44.chunk.js"
+    "static/js/2.9aa4b976.chunk.js",
+    "static/css/main.beef8ab2.chunk.css",
+    "static/js/main.94014adb.chunk.js"
+=======
+    "main.css": "./static/css/main.686c5748.chunk.css",
+    "main.js": "./static/js/main.70de7208.chunk.js",
+    "main.js.map": "./static/js/main.70de7208.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.17ab6e71.js",
+    "runtime-main.js.map": "./static/js/runtime-main.17ab6e71.js.map",
+    "static/css/2.40563451.chunk.css": "./static/css/2.40563451.chunk.css",
+    "static/js/2.e66dd92e.chunk.js": "./static/js/2.e66dd92e.chunk.js",
+    "static/js/2.e66dd92e.chunk.js.map": "./static/js/2.e66dd92e.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.68ec10ca838df95bdb03a6af34e5a2b6.js": "./precache-manifest.68ec10ca838df95bdb03a6af34e5a2b6.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.40563451.chunk.css.map": "./static/css/2.40563451.chunk.css.map",
+    "static/css/main.686c5748.chunk.css.map": "./static/css/main.686c5748.chunk.css.map",
+    "static/js/2.e66dd92e.chunk.js.LICENSE.txt": "./static/js/2.e66dd92e.chunk.js.LICENSE.txt",
+    "static/media/index.css": "./static/media/BlueBackMobile.3f7c1b45.png",
+    "static/media/Pruf AR (2).png": "./static/media/Pruf AR (2).a09bb578.png",
+    "static/media/PrufACAdmin.png": "./static/media/PrufACAdmin.f9c9a41c.png",
+    "static/media/PrufAssetMinter.png": "./static/media/PrufAssetMinter.09afcee7.png",
+    "static/media/PrufBasic.png": "./static/media/PrufBasic.9f7e2be0.png",
+    "static/media/PrufFaucet.png": "./static/media/PrufFaucet.f6fd0a1c.png",
+    "static/media/PrufPrintBackground.png": "./static/media/PrufPrintBackground.b2768b44.png",
+    "static/media/PrufReadOnly.png": "./static/media/PrufReadOnly.374d6078.png",
+    "static/media/PrufTokenHolder.png": "./static/media/PrufTokenHolder.fd070be4.png",
+    "static/media/PrufTokenMinter.png": "./static/media/PrufTokenMinter.f186845b.png",
+    "static/media/print.png": "./static/media/print.57cc7292.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.17ab6e71.js",
+    "static/css/2.40563451.chunk.css",
+    "static/js/2.e66dd92e.chunk.js",
+    "static/css/main.686c5748.chunk.css",
+    "static/js/main.70de7208.chunk.js"
+>>>>>>> Stashed changes
   ]
 }
