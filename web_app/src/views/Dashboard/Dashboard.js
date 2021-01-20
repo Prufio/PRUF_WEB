@@ -344,11 +344,9 @@ export default function Dashboard(props) {
                   </Button>
                   </Tooltip> */}
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
-              <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (ACID: {selectedAssetObj.assetClass})</h4>
+              <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
               <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
-              <p className={classes.cardCategory}>
-                Description: {selectedAssetObj.Description}
-              </p>
+              <p className={classes.cardCategory}>Description: {selectedAssetObj.Description}</p>
 
               <br />
               <div className={classes.stats}>
