@@ -291,9 +291,10 @@ export default function Dashboard(props) {
       )}
       {viewAsset && (
         <div>
-          <Card>
-            <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
-              <img src={macbook} alt="..." />
+        <Card>
+        <CardHeader image  onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
+                {selectedAssetObj.DisplayImage.length > 1 && (<img src={selectedAssetObj.DisplayImage} alt="..." />)}
+                {selectedAssetObj.DisplayImage.length === 0 && (<>{selectedAssetObj.identicon}</>)}
             </CardHeader>
             {/* <CardHeader color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
@@ -307,14 +308,14 @@ export default function Dashboard(props) {
               >
                 <Button onClick={(e) => moreInfo("back")} simple color="info" justIcon>
                   <ExitToApp />
-                </Button>
-              </Tooltip>
-              {/* <Tooltip
+                  </Button>
+                </Tooltip>
+                  {/* <Tooltip
                   id="tooltip-top"
                   title="Back"
                   placement="top" color="info"
                   // classes={{ tooltip: classes.tooltip }}
-                >
+                  >
                   <Button 
                   onClick={(e) => setViewAsset(!viewAsset)}
                   className="exitAsset" 
@@ -323,27 +324,23 @@ export default function Dashboard(props) {
                   >
                   <ExitToApp />
                   </Button>
-                </Tooltip> */}
-              <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
-              <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
-              <h4 className={classes.cardTitle}>Status: Transferrable</h4>
-              <p className={classes.cardCategory}>
-                Description: Slightly used, like new. Comes with box and original charger.
-                </p>
-              <br />
-              <div className={classes.stats}>
-                <Danger>
-                  <Create
-                    className="functionSelectorIcon" />
-                </Danger>
-                <FormControl
-                  fullWidth
-                  className={classes.selectFormControl}
-                >
-                  <InputLabel
-                    // htmlFor="simple-select"
-                    // className={classes.selectLabel}
-                    className="functionSelector"
+                  </Tooltip> */}
+            <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
+            <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (ACID: {selectedAssetObj.assetClass})</h4>
+            <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
+            <p className={classes.cardCategory}>
+              Description: {selectedAssetObj.Description}
+            </p>
+            
+            <br />
+            <div className={classes.stats}>
+              <Danger>
+                <Create
+                  className="functionSelectorIcon" />
+              </Danger>
+                  <FormControl
+                    fullWidth
+                    className={classes.selectFormControl}
                   >
                     Edit Asset
                           </InputLabel>
@@ -451,13 +448,31 @@ export default function Dashboard(props) {
                     >
                       Edit Rightsholder
                             </MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                IDX Hash: 0x8adbd0ab0401fa6...e6f3dcde1b953fcc4e
+                      <MenuItem
+                        classes={{
+                          root: classes.selectMenuItem,
+                          selected: classes.selectMenuItemSelected
+                        }}
+                        value="edit-information"
+                      >
+                        Edit Information
+                            </MenuItem>
+                      <MenuItem
+                        classes={{
+                          root: classes.selectMenuItem,
+                          selected: classes.selectMenuItemSelected
+                        }}
+                        value="edit-rightsholder"
+                      >
+                        Edit Rightsholder
+                            </MenuItem>
+                    </Select>
+                  </FormControl>
+            </div>
+          </CardBody>
+          <CardFooter chart>
+            <div className={classes.stats}>
+              IDX Hash: {selectedAssetObj.idxHash}
                 </div>
               <div className={classes.stats}>
                 <Share />

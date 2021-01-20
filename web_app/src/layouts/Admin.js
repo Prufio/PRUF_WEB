@@ -449,11 +449,11 @@ export default function Dashboard(props) {
     if (window.hasNoAssetClasses === false) {
 
       for (let e = 0; e < window.assetClasses.ids.length; e++) {
-        AC_Identicons.push(<Jdenticon size="115" value={window.assetClasses.ids[e]} />)
+        AC_Identicons.push(<Jdenticon size="300" value={window.assetClasses.ids[e]} />)
       }
 
       for (let e = 0; e < window.assetClasses.ids.length; e++) {
-        AC_IdenticonsLG.push(<Jdenticon size="230" value={window.assetClasses.ids[e]} />)
+        AC_IdenticonsLG.push(<Jdenticon size="450" value={window.assetClasses.ids[e]} />)
       }
 
       window.assetClasses.identicons = AC_Identicons;
@@ -483,11 +483,11 @@ export default function Dashboard(props) {
       }
 
       for (let e = 0; e < window.aTknIDs.length; e++) {
-        identicons.push(<Jdenticon size="115" value={window.aTknIDs[e]} />)
+        identicons.push(<Jdenticon size="300" value={window.aTknIDs[e]} />)
       }
 
       for (let e = 0; e < window.aTknIDs.length; e++) {
-        identiconsLG.push(<Jdenticon size="230" value={window.aTknIDs[e]} />)
+        identiconsLG.push(<Jdenticon size="450" value={window.aTknIDs[e]} />)
       }
 
       for (let j = 0; j < window.aTknIDs.length; j++) {
