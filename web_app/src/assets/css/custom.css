@@ -159,7 +159,8 @@ body {
 
 
       .back {
-          /* position: absolute; */
-          bottom: -80px;
-          right: -30px;
+        background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+        object-fit: cover !important;
+        bottom: -80px;
+        right: -30px;
       }
