@@ -665,12 +665,15 @@ export default function Dashboard(props) {
       window.web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0]; });
       window.addEventListener("accountListener", acctListener());
 
-      if(window.balances === {} && window.addr !== undefined){
-        window.utils.getETHBalance();
-        setUpTokenVals(true, "SetupContractEnvironment")
-      }
     }
   }, 500)
+  
+const lateWeb3Listener = setInterval(() => {
+  if (window.addr !== undefined && isMobile && WD === true && Object.values(window.balances).length === 0){
+      window.utils.getETHBalance();
+      setUpTokenVals(true, "SetupContractEnvironment")
+  }
+}, 500)
 
   const networkListener = setInterval(() => { 
     if(WD === true){
