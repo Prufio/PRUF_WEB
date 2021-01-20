@@ -134,6 +134,8 @@ export default function Dashboard(props) {
   
       //Give me the desktop version
       if (!isMobile && window.ethereum) {
+        _web3 = new Web3(_web3.givenProvider);
+        window.web3 = _web3;
         //alert("Is desktop and ethereum exists")
         console.log(_web3.eth.net.getNetworkType())
         console.log("Here")
@@ -169,7 +171,8 @@ export default function Dashboard(props) {
   
       //Give me the mobile ethereum-enabled version
       else if (isMobile && window.ethereum) {
-  
+        _web3 = new Web3(_web3.givenProvider);
+        window.web3 = _web3;
         console.log(_web3.eth.net.getNetworkType())
         //alert("Is mobile and ethereum exists")
         console.log("Here")
@@ -210,11 +213,10 @@ export default function Dashboard(props) {
   
       //Give me the read-only version
       else {
-        alert("Else clause")
-        alert("we ended up in here")
+        //alert("Else clause")
+        //alert("we ended up in here")
         console.log("Here")
         window.ipfsCounter = 0;
-        _web3 = require("web3");
         _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
         setUpContractEnvironment(_web3)
         window.web3 = _web3;
