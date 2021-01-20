@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from 'react';
 import "../../assets/css/custom.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,23 +40,43 @@ export default function Search() {
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
   const [alert, setAlert] = React.useState(null);
-  const [data, setData] = useState("");
-  const [idxHash, setIdxHash] = useState("");
-  const [result, setResult] = useState("");
-  const [queryValue, setQueryValue] = useState("");
-  const [wasSentQuery, setWasSentQuery] = useState(false);
-  const [error, setError] = useState("");
-  const [inscription, setInscription] = useState("");
-  const [moreInfo, setMoreInfo] = useState(false);
-  const [forSale, setForSale] = useState(false);
-  const [authLevel, setAuthLevel] = useState("");
-  const [ipfsObject, setIpfsObject] = useState({});
-  const [asset, setAsset] = useState({});
-  const [price, setPrice] = useState("");
-  const [currency, setCurrency] = useState("");
-  const [transaction, setTransaction] = useState(false);
-  const [QRValue, setQRValue] = useState("");
-  const [retrieving, setRetrieving] = useState(false);
+  const [data, setData] = React.useState("");
+  const [idxHash, setIdxHash] = React.useState("");
+  const [result, setResult] = React.useState("");
+  const [queryValue, setQueryValue] = React.useState("");
+  const [wasSentQuery, setWasSentQuery] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [inscription, setInscription] = React.useState("");
+  const [moreInfo, setMoreInfo] = React.useState(false);
+  const [forSale, setForSale] = React.useState(false);
+  const [authLevel, setAuthLevel] = React.useState("");
+  const [ipfsObject, setIpfsObject] = React.useState({});
+  const [asset, setAsset] = React.useState({});
+  const [price, setPrice] = React.useState("");
+  const [currency, setCurrency] = React.useState("");
+  const [transaction, setTransaction] = React.useState(false);
+  const [QRValue, setQRValue] = React.useState("");
+  const [retrieving, setRetrieving] = React.useState(false);
+
+  const [IDXRawInput, setIDXRawInputInput] = React.useState(false);
+
+  const [manufacturer, setManufacturer] = React.useState("");
+  const [type, setType] = React.useState("");
+  const [model, setModel] = React.useState("");
+  const [serial, setSerial] = React.useState("");
+  const [IDXRaw, setIDXRaw] = React.useState("");
+
+  const [loginManufacturer, setloginManufacturer] = React.useState("");
+  const [loginType, setloginType] = React.useState("");
+  const [loginModel, setloginModel] = React.useState("");
+  const [loginSerial, setloginSerial] = React.useState("");
+  const [loginIDX, setloginIDX] = React.useState("");
+
+  const [loginManufacturerState, setloginManufacturerState] = React.useState("");
+  const [loginTypeState, setloginTypeState] = React.useState("");
+  const [loginModelState, setloginModelState] = React.useState("");
+  const [loginSerialState, setloginSerialState] = React.useState("");
+  const [loginIDXState, setloginIDXState] = React.useState("");
 
 
   const handleChange = event => {
@@ -139,11 +158,11 @@ export default function Search() {
 
   const purchaseAsset = async () => {
     console.log("Purchasing Asset")
-    if(window.balances.prufTokenBalance < window.web3.utils.fromWei(price)){console.log("insufficient balance"); return console.log(window.web3.utils.fromWei(price))}
+    if (window.balances.prufTokenBalance < window.web3.utils.fromWei(price)) { console.log("insufficient balance"); return console.log(window.web3.utils.fromWei(price)) }
     setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
-      .send({from: window.addr})
+      .send({ from: window.addr })
       .on("error", function (_error) {
         setMoreInfo(false);
         setTransaction(false);
@@ -151,10 +170,142 @@ export default function Search() {
       })
       .on("receipt", (receipt) => {
         setTransaction(false);
-        window.location.href="/#/admin/dashboard"
+        window.location.href = "/#/admin/dashboard"
         console.log(receipt.events.REPORT.returnValues._msg);
       });
-  } 
+  }
+
+  const retrieveRecord = async () => {
+    if (!IDXRawInput) {
+      if (loginTypeState === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
+
+        if (loginTypeState === "") {
+          setloginTypeState("error");
+        }
+        if (loginManufacturer === "") {
+          setloginManufacturerState("error");
+        }
+        if (loginModel === "") {
+          setloginModelState("error");
+        }
+        if (loginSerial === "") {
+          setloginSerialState("error");
+        }
+        return;
+      }
+    }
+
+    if (IDXRawInput) {
+      if (loginIDXState === "") {
+        setloginIDXState("error");
+        return;
+      }
+    }
+
+    setRetrieving(true)
+    console.log("in rr")
+    let ipfsHash;
+    let tempResult;
+    let idxHash;
+    {
+      IDXRawInput === true && (
+        idxHash = IDXRaw
+      )
+    }
+    {
+      IDXRawInput === false && (
+        idxHash = window.web3.utils.soliditySha3(
+          String(type).replace(/\s/g, ''),
+          String(manufacturer).replace(/\s/g, ''),
+          String(model).replace(/\s/g, ''),
+          String(serial).replace(/\s/g, ''),
+        )
+      )
+    }
+    console.log("idxHash", idxHash);
+    console.log("addr: ", window.addr);
+    // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
+    // await window.contracts.STOR.methods
+    //   .getPriceData(idxHash)
+    //   .call(
+    //     (_error, _result) => {
+    //       if (_error) {
+    //         console.log(_error)
+    //       }
+    //       else {
+    //         if (Object.values(_result)[1] > 0) {
+    //           setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
+    //           let currencyNum = Object.values(_result)[1]
+    //           switch (currencyNum) {
+    //             case "1": setCurrency("Ξ"); break;
+    //             case "2": setCurrency("ü"); break;
+    //             case "3": setCurrency("◈"); break;
+    //             case "4": setCurrency("Ƀ"); break;
+    //             default: setCurrency("?"); break;
+    //           }
+
+    //           setForSale(true);
+    //         }
+    //         else {
+    //           setForSale(false);
+    //         }
+    //       }
+    //     });
+
+    await window.contracts.STOR.methods
+      .retrieveShortRecord(idxHash)
+      .call(
+        function (_error, _result) {
+          if (_error) {
+            console.log(_error)
+            setError(_error);
+            setResult("");
+            setRetrieving(false);
+          }
+          else {
+            console.log("rrqr conf");
+            setResult(Object.values(_result));
+            setError("");
+            tempResult = Object.values(_result);
+            if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+            console.log("ipfs data in promise", ipfsHash)
+            if (Object.values(_result)[6] > 0) {
+              console.log("Getting ipfs2 set up...")
+              let knownUrl = "https://ipfs.io/ipfs/";
+              let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
+              let fullUrl = knownUrl + hash;
+              console.log(fullUrl);
+              setInscription(fullUrl)
+            }
+          }
+        });
+
+    window.assetClass = tempResult[2]
+    let assetClassName = await window.utils.getACName(tempResult[2])
+
+    window.assetInfo = {
+      assetClassName: assetClassName,
+      assetClass: tempResult[2],
+      status: await window.utils.getStatusString(String(tempResult[0])),
+      idx: idxHash
+    }
+
+    await window.utils.resolveACFromID(tempResult[2])
+    await getACData("id", window.assetClass)
+
+    console.log(window.authLevel);
+
+    await getIPFSJSONObject(ipfsHash);
+    setAuthLevel(window.authLevel);
+    setScanQR(false);
+    setAsset({
+      assetClassName: window.assetClassName,
+      assetClass: tempResult[2],
+      status: window.assetInfo.status,
+      idxHash: idxHash,
+    })
+    return setMoreInfo(true);
+  }
 
   const retrieveRecordQR = async (query) => {
     setRetrieving(true)
@@ -166,32 +317,32 @@ export default function Search() {
     console.log("idxHash", idxHash);
     console.log("addr: ", window.addr);
     // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
-    await window.contracts.STOR.methods
-      .getPriceData(idxHash)
-      .call(
-        (_error, _result) => {
-          if (_error) {
-            console.log(_error)
-          }
-          else {
-            if (Object.values(_result)[1] > 0) {
-              setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
-              let currencyNum = Object.values(_result)[1]
-              switch (currencyNum) {
-                case "1": setCurrency("Ξ"); break;
-                case "2": setCurrency("ü"); break;
-                case "3": setCurrency("◈"); break;
-                case "4": setCurrency("Ƀ"); break;
-                default: setCurrency("?"); break;
-              }
+    // await window.contracts.STOR.methods
+    //   .getPriceData(idxHash)
+    //   .call(
+    //     (_error, _result) => {
+    //       if (_error) {
+    //         console.log(_error)
+    //       }
+    //       else {
+    //         if (Object.values(_result)[1] > 0) {
+    //           setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
+    //           let currencyNum = Object.values(_result)[1]
+    //           switch (currencyNum) {
+    //             case "1": setCurrency("Ξ"); break;
+    //             case "2": setCurrency("ü"); break;
+    //             case "3": setCurrency("◈"); break;
+    //             case "4": setCurrency("Ƀ"); break;
+    //             default: setCurrency("?"); break;
+    //           }
 
-              setForSale(true);
-            }
-            else {
-              setForSale(false);
-            }
-          }
-        });
+    //           setForSale(true);
+    //         }
+    //         else {
+    //           setForSale(false);
+    //         }
+    //       }
+    //     });
 
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)
@@ -272,57 +423,254 @@ export default function Search() {
           </CardHeader>
           <CardBody>
             <form>
-              <CustomInput
-                labelText="Manufacturer"
-                id="manufacturer"
-                formControlProps={{
-                  fullWidth: true
-                }}
-              />
-              <CustomInput
-                labelText="Type"
-                id="type"
-                formControlProps={{
-                  fullWidth: true
-                }}
-              />
-              <CustomInput
-                labelText="Model"
-                id="model"
-                formControlProps={{
-                  fullWidth: true
-                }}
-              />
-              <CustomInput
-                labelText="Serial"
-                id="serial"
-                formControlProps={{
-                  fullWidth: true
-                }}
-              />
-              <div className={classes.checkboxAndRadio}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      tabIndex={-1}
-                      onClick={() => handleToggle(2)}
-                      checkedIcon={<Check className={classes.checkedIcon} />}
-                      icon={<Check className={classes.uncheckedIcon} />}
-                      classes={{
-                        checked: classes.checked,
-                        root: classes.checkRoot
-                      }}
-                    />
-                  }
-                  classes={{
-                    label: classes.label,
-                    root: classes.labelRoot
-                  }}
-                  label="Input IDX Hash"
-                />
+              {IDXRawInput === false && !retrieving && (
+                <>
+                  <CustomInput
+                    success={loginManufacturerState === "success"}
+                    error={loginManufacturerState === "error"}
+                    labelText="Manufacturer *"
+                    id="manufacturer"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setManufacturer(event.target.value.trim())
+                        if (event.target.value !== "") {
+                          setloginManufacturerState("success");
+                        } else {
+                          setloginManufacturerState("error");
+                        }
+                        setloginManufacturer(event.target.value);
+                      },
+                    }}
+                  />
+                  <CustomInput
+                    success={loginTypeState === "success"}
+                    error={loginTypeState === "error"}
+                    labelText="Type *"
+                    id="type"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setType(event.target.value.trim())
+                        if (event.target.value !== "") {
+                          setloginTypeState("success");
+                        } else {
+                          setloginTypeState("error");
+                        }
+                        setloginType(event.target.value);
+                      },
+                    }}
+                  />
+                  <CustomInput
+                    success={loginModelState === "success"}
+                    error={loginModelState === "error"}
+                    labelText="Model *"
+                    id="model"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setModel(event.target.value.trim())
+                        if (event.target.value !== "") {
+                          setloginModelState("success");
+                        } else {
+                          setloginModelState("error");
+                        }
+                        setloginModel(event.target.value);
+                      },
+                    }}
+                  />
+                  <CustomInput
+                    success={loginSerialState === "success"}
+                    error={loginSerialState === "error"}
+                    labelText="Serial *"
+                    id="serial"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setSerial(event.target.value.trim())
+                        if (event.target.value !== "") {
+                          setloginSerialState("success");
+                        } else {
+                          setloginSerialState("error");
+                        }
+                        setloginSerial(event.target.value);
+                      },
+                    }}
+                  />
+                  <div className={classes.formCategory}>
+                    <small>*</small> Required fields
               </div>
-              <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR</Button>
-              <Button color="info" className="MLBGradient">Search Asset</Button>
+                </>
+              )}
+              {IDXRawInput === false && retrieving && (
+                <>
+                  <CustomInput
+                    labelText={manufacturer}
+                    id="manufacturer"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true
+                    }}
+                  />
+                  <CustomInput
+                    labelText={type}
+                    id="type"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true
+                    }}
+                  />
+                  <CustomInput
+                    labelText={model}
+                    id="model"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true
+                    }}
+                  />
+                  <CustomInput
+                    labelText={serial}
+                    id="serial"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true
+                    }}
+                  />
+                </>
+              )}
+              {IDXRawInput === true && (
+                <>
+                  <CustomInput
+                    id="manufacturer"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      placeholder: "Disabled",
+                      disabled: true
+                    }}
+                  />
+                  <CustomInput
+                    id="type"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      placeholder: "Disabled",
+                      disabled: true
+                    }}
+                  />
+                  <CustomInput
+                    id="model"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      placeholder: "Disabled",
+                      disabled: true
+                    }}
+                  />
+                  <CustomInput
+                    id="serial"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      placeholder: "Disabled",
+                      disabled: true
+                    }}
+                  />
+                </>
+              )}
+              {!retrieving && (
+                <div className={classes.checkboxAndRadio}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        tabIndex={-1}
+                        onClick={() => setIDXRawInputInput(!IDXRawInput)}
+                        checkedIcon={<Check className={classes.checkedIcon} />}
+                        icon={<Check className={classes.uncheckedIcon} />}
+                        classes={{
+                          checked: classes.checked,
+                          root: classes.checkRoot
+                        }}
+                      />
+                    }
+                    classes={{
+                      label: classes.label,
+                      root: classes.labelRoot
+                    }}
+                    label="Input IDX Hash"
+                  />
+                </div>
+              )}
+              {IDXRawInput === true && !retrieving && (
+                <>
+                  <CustomInput
+                    success={loginIDXState === "success"}
+                    error={loginIDXState === "error"}
+                    labelText="IDX Hash *"
+                    id="IDX"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setIDXRaw(event.target.value.trim())
+                        if (event.target.value !== "") {
+                          setloginIDXState("success");
+                        } else {
+                          setloginIDXState("error");
+                        }
+                        setloginIDX(event.target.value);
+                      },
+                    }}
+                  />
+                  <div className={classes.formCategory}>
+                    <small>*</small> Required fields
+              </div>
+                </>
+              )}
+              {IDXRawInput === true && retrieving && (
+                <>
+                  <CustomInput
+                    labelText={IDXRaw}
+                    id="IDX"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true
+                    }}
+                  />
+                </>
+              )}
+              {!retrieving && (
+                <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR</Button>
+              )}
+              {!retrieving && (
+                <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
+              )}
+              {retrieving && (
+                <Button color="info" className="MLBGradient" disabled >Retrieving Asset. . .</Button>
+              )}
             </form>
           </CardBody>
         </Card>
@@ -330,14 +678,14 @@ export default function Search() {
       {scanQR === true && !moreInfo && (
         <Card>
           <CardHeader color="info" icon>
-            <CardIcon color="info">
+            <CardIcon color="info" className="DBGradient">
               <Category />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>QR Scanner</h4>
           </CardHeader>
           <CardBody>
             <QrReader
-            className="qrReader"
+              className="qrReader"
               scanDelay={300}
               onScan={(result) => {
                 if (result) {
@@ -357,22 +705,25 @@ export default function Search() {
             {retrieving && (
               <h4 >Retrieving Asset. . .</h4>
             )}
-            <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info">Back</Button>
+            <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
           </CardBody>
         </Card>
       )}
       {moreInfo && (
         <Card>
-          <CardHeader color="info" className="DBGradient">
+          {/* <CardHeader   onClick={(e) => setViewAsset(!viewAsset)} className={classes.cardHeaderHover}>
+                <img src={macbook} alt="..." />
+            </CardHeader> */}
+          <CardHeader image className={classes.cardHeaderHover}>
             {ipfsObject.photo !== undefined && (
               <>
                 {Object.values(ipfsObject.photo).length > 0 && (
                   <>
                     {ipfsObject.photo.displayImage !== undefined && (
-                      <img src={ipfsObject.photo.displayImage} alt="logo" className="assetImage" />
+                      <img src={ipfsObject.photo.displayImage} alt="logo" />
                     )}
                     {ipfsObject.photo.displayImage === undefined && (
-                      <img src={Object.values(ipfsObject.photo)[0]} alt="logo" className="assetImage" />
+                      <img src={Object.values(ipfsObject.photo)[0]} alt="logo" />
                     )}
                   </>
                 )}
@@ -415,16 +766,17 @@ export default function Search() {
             )}
             <br />
             {currency !== "" && !transaction && (
-              <Button onClick={()=>{purchaseAsset()}} color="info" className="MLBGradient">Purchase Item</Button>
+              <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
             )}
-            
+
             {currency !== "" && transaction && (
               <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
             )}
           </CardBody>
           <CardFooter chart>
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 42)}
+              IDX Hash: {asset.idxHash}
+              {/* {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 42)} */}
             </div>
             <div className={classes.stats}>
               <Share />
