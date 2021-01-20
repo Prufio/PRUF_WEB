@@ -833,7 +833,7 @@ export default function Search() {
             )}
             {isMobile && (
               <div className={classes.stats}>
-                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 66)}
+                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
               </div>
             )}
             <div className={classes.stats}>

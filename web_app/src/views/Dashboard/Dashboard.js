@@ -496,7 +496,7 @@ export default function Dashboard(props) {
               )}
               {isMobile && (
                 <div className={classes.stats}>
-                  IDX Hash: {selectedAssetObj.idxHash.substring(0, 8) + selectedAssetObj.idxHash.substring(58, 66)}
+                  IDX Hash: {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}
                 </div>
               )}
               <div className={classes.stats}>
