@@ -134,7 +134,7 @@ export default function Dashboard(props) {
   
       //Give me the desktop version
       if (!isMobile && window.ethereum) {
-        alert("Is desktop and ethereum exists")
+        //alert("Is desktop and ethereum exists")
         console.log(_web3.eth.net.getNetworkType())
         console.log("Here")
         window.costs = {}
@@ -171,7 +171,7 @@ export default function Dashboard(props) {
       else if (isMobile && window.ethereum) {
   
         console.log(_web3.eth.net.getNetworkType())
-        alert("Is mobile and ethereum exists")
+        //alert("Is mobile and ethereum exists")
         console.log("Here")
   
         window.costs = {}
