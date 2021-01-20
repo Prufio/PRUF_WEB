@@ -94,8 +94,8 @@ export default function Dashboard(props) {
       window.ipfs = _ipfs;
   
       _web3 = require("web3");
-      _web3 = new Web3(_web3.givenProvider);
-      window.web3 = _web3;
+/*       _web3 = new Web3(_web3.givenProvider);
+      window.web3 = _web3; */
   
       buildWindowUtils() // get the utils object and make it globally accessible
   
@@ -134,6 +134,7 @@ export default function Dashboard(props) {
   
       //Give me the desktop version
       if (!isMobile && window.ethereum) {
+        alert("Is desktop and ethereum exists")
         console.log(_web3.eth.net.getNetworkType())
         console.log("Here")
         window.costs = {}
@@ -170,7 +171,7 @@ export default function Dashboard(props) {
       else if (isMobile && window.ethereum) {
   
         console.log(_web3.eth.net.getNetworkType())
-  
+        alert("Is mobile and ethereum exists")
         console.log("Here")
   
         window.costs = {}
@@ -209,6 +210,7 @@ export default function Dashboard(props) {
   
       //Give me the read-only version
       else {
+        alert("Else clause")
         alert("we ended up in here")
         console.log("Here")
         window.ipfsCounter = 0;
@@ -651,12 +653,12 @@ export default function Dashboard(props) {
     }
   }, 500)
 
-  /* const balanceListener = setInterval(() => {
+   const balanceListener = setInterval(() => {
     if (ETHBalance !== window.ETHBalance && WD === true) {
       console.log("5")
       return setETHBalance(window.ETHBalance);
     }
-  }, 500) */
+  }, 500) 
 
   const navTypeListener = setInterval(() => {
     //Catch late window.ethereum injection case (MetaMask mobile)
