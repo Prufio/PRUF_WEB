@@ -721,7 +721,7 @@ export default function Search() {
           {/* <CardHeader   onClick={(e) => setViewAsset(!viewAsset)} className={classes.cardHeaderHover}>
                 <img src={macbook} alt="..." />
             </CardHeader> */}
-          <CardHeader image className={classes.cardHeaderHover}>
+          <CardHeader image className={classes.cardHeaderHoverCustom}>
             {ipfsObject.photo !== undefined && (
               <>
                 {Object.values(ipfsObject.photo).length > 0 && (
