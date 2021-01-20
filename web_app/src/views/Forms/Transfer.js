@@ -65,6 +65,7 @@ export default function Transfer() {
           </CardHeader>
           <CardBody>
             <form>
+              <h4>Asset Selected: </h4>
               <CustomInput
                 labelText="Recieveing Address"
                 id="manufacturer"

@@ -88,11 +88,11 @@ export default function Dashboard(props) {
     //if(assetObj !== props.assetObj) {setAssetObj(props.assetObj)}
     // returned function will be called on component unmount 
     return () => {
-      
+
     }
-  
+
   })
-  
+
 
   const [viewAsset, setViewAsset] = React.useState(false)
   const [checkedA, setCheckedA] = React.useState(true);
@@ -102,12 +102,12 @@ export default function Dashboard(props) {
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
   const [identicon, setIdenticon] = React.useState(<></>);
   const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
-  const [URL ,setURL] = React.useState("");
+  const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
   const [reset, setReset] = React.useState("")
 
   const moreInfo = (e) => {
-    const url =String(baseURL)+String(e.idxHash)
+    const url = String(baseURL) + String(e.idxHash)
 
     if (e === "back") { setSelectedAssetObj({}); return setViewAsset(false); }
 
@@ -125,7 +125,7 @@ export default function Dashboard(props) {
     setURL(url)
 
     window.printObj = e;
-    
+
   }
 
   const sendPacket = (obj, menu, link) => {
@@ -142,86 +142,86 @@ export default function Dashboard(props) {
       for (let i = 0; i < obj.ids.length; i++) {
         //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
         component.push(
-          <GridItem key={"asset"+i} xs={12} sm={12} md={4}>
-          <Card chart className={classes.cardHover}>
-          <CardHeader image className={classes.cardHeaderHover}>
-              <a onClick={() => moreInfo({
-                        countPair: obj.countPairs[i],
-                        idxHash: obj.ids[i],
-                        descriptionObj: obj.descriptions[i],
-                        DisplayImage: obj.displayImages[i],
-                        name: obj.names[i],
-                        assetClass: obj.assetClasses[i],
-                        assetClassName: obj.assetClassNames[i],
-                        status: obj.statuses[i],
-                        statusNum: obj.statusNums[i],
-                        Description: obj.descriptions[i].text.Description,
-                        note: obj.notes[i],
-                        text: obj.descriptions[i].text,
-                        photo: obj.descriptions[i].photo,
-                        identicon: obj.identiconsLG[i]
-                      })}>
+          <GridItem key={"asset" + i} xs={12} sm={12} md={4}>
+            <Card chart className={classes.cardHover}>
+              <CardHeader image className={classes.cardHeaderHover}>
+                <a onClick={() => moreInfo({
+                  countPair: obj.countPairs[i],
+                  idxHash: obj.ids[i],
+                  descriptionObj: obj.descriptions[i],
+                  DisplayImage: obj.displayImages[i],
+                  name: obj.names[i],
+                  assetClass: obj.assetClasses[i],
+                  assetClassName: obj.assetClassNames[i],
+                  status: obj.statuses[i],
+                  statusNum: obj.statusNums[i],
+                  Description: obj.descriptions[i].text.Description,
+                  note: obj.notes[i],
+                  text: obj.descriptions[i].text,
+                  photo: obj.descriptions[i].photo,
+                  identicon: obj.identiconsLG[i]
+                })}>
 
-                    {obj.displayImages[i] !== "" && (
-                      <img title="View Asset" src={obj.displayImages[i]} className="assetImage" alt="" />
-                    )}
+                  {obj.displayImages[i] !== "" && (
+                    <img title="View Asset" src={obj.displayImages[i]} alt="" />
+                  )}
 
-                    {obj.displayImages[i] === "" && (
-                      <>{obj.identicons[i]}</>
-                    )}
-              </a>
-            </CardHeader>
-            {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
+                  {obj.displayImages[i] === "" && (
+                    <img title="View Asset" src={obj.identicons[i]} alt="" />
+                  )}
+                </a>
+              </CardHeader>
+              {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
             </CardHeader> */}
-            <CardBody>
-              <div className={classes.cardHoverUnder}>
-                <Tooltip
-                  id="tooltip-top"
-                  title="Refresh"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button simple color="info" justIcon onClick={() => window.location.reload()}>
-                    <Refresh className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  id="tooltip-top"
-                  title="View/Edit"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button color="success" simple justIcon onClick={() => moreInfo({
-                        countPair: obj.countPairs[i],
-                        idxHash: obj.ids[i],
-                        descriptionObj: obj.descriptions[i],
-                        DisplayImage: obj.displayImages[i],
-                        name: obj.names[i],
-                        assetClass: obj.assetClasses[i],
-                        assetClassName: obj.assetClassNames[i],
-                        status: obj.statuses[i],
-                        statusNum: obj.statusNums[i],
-                        Description: obj.descriptions[i].text.Description,
-                        note: obj.notes[i],
-                        text: obj.descriptions[i].text,
-                        photo: obj.descriptions[i].photo,
-                        identicon: obj.identiconsLG[i]
-                      })}>
-                    <Edit className={classes.underChartIcons} />
-                  </Button>
-                </Tooltip>
-              </div>
-              <h4 className={classes.cardTitle}>{obj.names[i]}</h4>
-              <h5 className={classes.cardTitle}>Status: {obj.statuses[i]}</h5>
-              
-            </CardBody>
-            {/* <CardFooter chart>
+              <CardBody>
+                <div className={classes.cardHoverUnder}>
+                  <Tooltip
+                    id="tooltip-top"
+                    title="Refresh"
+                    placement="bottom"
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <Button simple color="info" justIcon onClick={() => window.location.reload()}>
+                      <Refresh className={classes.underChartIcons} />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    id="tooltip-top"
+                    title="View/Edit"
+                    placement="bottom"
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <Button color="success" simple justIcon onClick={() => moreInfo({
+                      countPair: obj.countPairs[i],
+                      idxHash: obj.ids[i],
+                      descriptionObj: obj.descriptions[i],
+                      DisplayImage: obj.displayImages[i],
+                      name: obj.names[i],
+                      assetClass: obj.assetClasses[i],
+                      assetClassName: obj.assetClassNames[i],
+                      status: obj.statuses[i],
+                      statusNum: obj.statusNums[i],
+                      Description: obj.descriptions[i].text.Description,
+                      note: obj.notes[i],
+                      text: obj.descriptions[i].text,
+                      photo: obj.descriptions[i].photo,
+                      identicon: obj.identiconsLG[i]
+                    })}>
+                      <Edit className={classes.underChartIcons} />
+                    </Button>
+                  </Tooltip>
+                </div>
+                <h4 className={classes.cardTitle}>{obj.names[i]}</h4>
+                <h5 className={classes.cardTitle}>Status: {obj.statuses[i]}</h5>
+
+              </CardBody>
+              {/* <CardFooter chart>
               <div className={classes.stats}>
                 <AccessTime /> updated 4 minutes ago
               </div>
             </CardFooter> */}
-          </Card>
+            </Card>
           </GridItem>
         );
       }
@@ -229,9 +229,9 @@ export default function Dashboard(props) {
       return component
     }
 
-    else if (Object.values(obj).length > 0 && obj.names.length === 0) { console.log(obj); return <h1>No assets held by user</h1>}
+    else if (Object.values(obj).length > 0 && obj.names.length === 0) { console.log(obj); return <h1>No assets held by user</h1> }
 
-    else { console.log(obj); return <h1>Loading held assets...</h1> }
+    else { console.log(obj); return <h3 className="loading">Loading held assets</h3> }
 
   }
 
@@ -265,7 +265,7 @@ export default function Dashboard(props) {
       return window.location.href = "/#/admin/modify-rightsholder"
     }
   };
-  
+
   const classes = useStyles();
   return (
     <div>
@@ -284,32 +284,32 @@ export default function Dashboard(props) {
           </Card>
         </GridItem>
       </GridContainer>
-{!viewAsset && (
-      <GridContainer>
-        {generateAssetDash(props.assetObj)}
-      </GridContainer>
+      {!viewAsset && (
+        <GridContainer>
+          {generateAssetDash(props.assetObj)}
+        </GridContainer>
       )}
       {viewAsset && (
         <div>
-        <Card>
-        <CardHeader image  onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
-                <img src={macbook} alt="..." />
+          <Card>
+            <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
+              <img src={macbook} alt="..." />
             </CardHeader>
-          {/* <CardHeader color="info" className="DBGradient">
+            {/* <CardHeader color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
           </CardHeader> */}
-          <CardBody>
-          <Tooltip
-                  id="tooltip-top"
-                  title="Back"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button onClick={(e) => moreInfo("back")} simple color="info" justIcon>
+            <CardBody>
+              <Tooltip
+                id="tooltip-top"
+                title="Back"
+                placement="bottom"
+                classes={{ tooltip: classes.tooltip }}
+              >
+                <Button onClick={(e) => moreInfo("back")} simple color="info" justIcon>
                   <ExitToApp />
-                  </Button>
-                </Tooltip>
-            {/* <Tooltip
+                </Button>
+              </Tooltip>
+              {/* <Tooltip
                   id="tooltip-top"
                   title="Back"
                   placement="top" color="info"
@@ -324,148 +324,148 @@ export default function Dashboard(props) {
                   <ExitToApp />
                   </Button>
                 </Tooltip> */}
-            <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
-            <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
-            <h4 className={classes.cardTitle}>Status: Transferrable</h4>
-            <p className={classes.cardCategory}>
-              Description: Slightly used, like new. Comes with box and original charger.
+              <h4 className={classes.cardTitle}>Name: Macbook Air 2020</h4>
+              <h4 className={classes.cardTitle}>Class: Personal Computers (ID: 11)</h4>
+              <h4 className={classes.cardTitle}>Status: Transferrable</h4>
+              <p className={classes.cardCategory}>
+                Description: Slightly used, like new. Comes with box and original charger.
                 </p>
-            <br />
-            <div className={classes.stats}>
-              <Danger>
-                <Create
-                  className="functionSelectorIcon" />
-              </Danger>
-                  <FormControl
-                    fullWidth
-                    className={classes.selectFormControl}
+              <br />
+              <div className={classes.stats}>
+                <Danger>
+                  <Create
+                    className="functionSelectorIcon" />
+                </Danger>
+                <FormControl
+                  fullWidth
+                  className={classes.selectFormControl}
+                >
+                  <InputLabel
+                    // htmlFor="simple-select"
+                    // className={classes.selectLabel}
+                    className="functionSelector"
                   >
-                    <InputLabel
-                      // htmlFor="simple-select"
-                      // className={classes.selectLabel}
-                      className="functionSelector"
-                    >
-                      Edit Asset
+                    Edit Asset
                           </InputLabel>
-                    <Select
-                      className="functionSelector"
-                      MenuProps={{
-                        className: classes.selectMenu
-                      }}
+                  <Select
+                    className="functionSelector"
+                    MenuProps={{
+                      className: classes.selectMenu
+                    }}
+                    classes={{
+                      select: classes.select
+                    }}
+                    value={simpleSelect}
+                    onChange={handleSimple}
+                    inputProps={{
+                      name: "simpleSelect",
+                      id: "simple-select"
+                    }}
+                  >
+                    <MenuItem
+                      disabled
                       classes={{
-                        select: classes.select
-                      }}
-                      value={simpleSelect}
-                      onChange={handleSimple}
-                      inputProps={{
-                        name: "simpleSelect",
-                        id: "simple-select"
+                        root: classes.selectMenuItem
                       }}
                     >
-                      <MenuItem
-                        disabled
-                        classes={{
-                          root: classes.selectMenuItem
-                        }}
-                      >
-                        Select Function
+                      Select Function
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="transfer"
-                      >
-                        Transfer
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="transfer"
+                    >
+                      Transfer
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="escrow"
-                      >
-                        Escrow
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="escrow"
+                    >
+                      Escrow
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="import"
-                      >
-                        Import
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="import"
+                    >
+                      Import
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="export"
-                      >
-                        Export
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="export"
+                    >
+                      Export
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="discard"
-                      >
-                        Discard
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="discard"
+                    >
+                      Discard
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="change-status"
-                      >
-                        Change Status
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="change-status"
+                    >
+                      Change Status
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="decrement-counter"
-                      >
-                        Decrement Counter
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="decrement-counter"
+                    >
+                      Decrement Counter
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="edit-information"
-                      >
-                        Edit Information
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="edit-information"
+                    >
+                      Edit Information
                             </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="edit-rightsholder"
-                      >
-                        Edit Rightsholder
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="edit-rightsholder"
+                    >
+                      Edit Rightsholder
                             </MenuItem>
-                    </Select>
-                  </FormControl>
-            </div>
-          </CardBody>
-          <CardFooter chart>
-            <div className={classes.stats}>
-              IDX Hash: 0x8adbd0ab0401fa6...e6f3dcde1b953fcc4e
+                  </Select>
+                </FormControl>
+              </div>
+            </CardBody>
+            <CardFooter chart>
+              <div className={classes.stats}>
+                IDX Hash: 0x8adbd0ab0401fa6...e6f3dcde1b953fcc4e
                 </div>
-            <div className={classes.stats}>
-              <Share />
-              <Print />
-            </div>
-          </CardFooter>
-        </Card>
-      </div>
+              <div className={classes.stats}>
+                <Share />
+                <Print />
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
       )}
     </div>
   );
