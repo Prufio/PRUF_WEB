@@ -111,3 +111,48 @@ body {
     .Sidebar-blue-50, .Sidebar-blue-50:hover, .Sidebar-blue-50:focus{
         background: #00a8ff !important;
     }
+
+
+    .lds-facebook {
+        display: inline-block;
+        position: relative;
+        width: 20px;
+        height: 20px;
+      }
+      .lds-facebook div {
+        display: inline-block;
+        position: absolute;
+        left: 8px;
+        width: 16px;
+        background: rgb(0, 0, 0);
+        animation: lds-facebook 0.8s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+      }
+      .lds-facebook div:nth-child(1) {
+        left: 8px;
+        animation-delay: -0.24s;
+      }
+      .lds-facebook div:nth-child(2) {
+        left: 32px;
+        animation-delay: -0.12s;
+      }
+      .lds-facebook div:nth-child(3) {
+        left: 56px;
+        animation-delay: 0;
+      }
+      @keyframes lds-facebook {
+        0% {
+          top: 12px;
+          height: 24px;
+        }
+        50%, 100% {
+          top: 36px;
+          height: 12px;
+        }
+      }
+
+
+      .back {
+          /* position: absolute; */
+          bottom: -80px;
+          right: -30px;
+      }

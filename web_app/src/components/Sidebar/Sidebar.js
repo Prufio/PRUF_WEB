@@ -356,8 +356,11 @@ class Sidebar extends React.Component {
     var user = (
       <div className={userWrapperClass}>
         <div className={photo}>
-        {window.addr !== undefined && (
+        {window.addr === undefined && (
         <img src={pruftoken} alt="logo" className={classes.img} />
+          )}
+        {window.addr !== undefined && (
+        <Robohash name={window.addr} className={classes.img}/>
           )}
         </div>
         <List className={classes.list}>

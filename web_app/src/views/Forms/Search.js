@@ -10,6 +10,7 @@ import Check from "@material-ui/icons/Check";
 import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
+import { ExitToApp } from "@material-ui/icons";
 
 
 // core components
@@ -20,6 +21,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import SweetAlert from "react-bootstrap-sweetalert";
 import QrReader from 'react-qr-reader'
@@ -734,6 +736,19 @@ export default function Search() {
             )}
           </CardHeader>
           <CardBody>
+            <Tooltip
+              id="tooltip-top"
+              title="Back"
+              placement="bottom"
+              classes={{ tooltip: classes.tooltip }}
+            >
+              <Button 
+              // onClick={(e) => setMoreInfo(!moreInfo)}
+              onClick={() => window.location.reload()}
+               simple color="info" justIcon>
+                <ExitToApp />
+              </Button>
+            </Tooltip>
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
             {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}

@@ -68,7 +68,7 @@ export default function Import() {
   return (
     <Card>
       <CardHeader color="info" icon>
-        <CardIcon color="info" className="MLBGradient">
+        <CardIcon color="info" className="DBGradient">
           <FlightLand />
         </CardIcon>
         <h4 className={classes.cardIconTitle}>Import Asset</h4>
