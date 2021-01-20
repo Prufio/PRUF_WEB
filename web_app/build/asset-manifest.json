@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.1ce23084.chunk.css",
-    "main.js": "/static/js/main.c8d85190.chunk.js",
-    "main.js.map": "/static/js/main.c8d85190.chunk.js.map",
+    "main.css": "/static/css/main.471944e8.chunk.css",
+    "main.js": "/static/js/main.20bace06.chunk.js",
+    "main.js.map": "/static/js/main.20bace06.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.e6710eac.js",
     "runtime-main.js.map": "/static/js/runtime-main.e6710eac.js.map",
     "static/css/2.d0176e96.chunk.css": "/static/css/2.d0176e96.chunk.css",
-    "static/js/2.a2d7de83.chunk.js": "/static/js/2.a2d7de83.chunk.js",
-    "static/js/2.a2d7de83.chunk.js.map": "/static/js/2.a2d7de83.chunk.js.map",
+    "static/js/2.465d8f3c.chunk.js": "/static/js/2.465d8f3c.chunk.js",
+    "static/js/2.465d8f3c.chunk.js.map": "/static/js/2.465d8f3c.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.2b38ff9e663d799e80f75d15cb963c00.js": "/precache-manifest.2b38ff9e663d799e80f75d15cb963c00.js",
+    "precache-manifest.bb93906f1b9e4b553141bf716d9e4fea.js": "/precache-manifest.bb93906f1b9e4b553141bf716d9e4fea.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.d0176e96.chunk.css.map": "/static/css/2.d0176e96.chunk.css.map",
-    "static/css/main.1ce23084.chunk.css.map": "/static/css/main.1ce23084.chunk.css.map",
-    "static/js/2.a2d7de83.chunk.js.LICENSE.txt": "/static/js/2.a2d7de83.chunk.js.LICENSE.txt",
-    "static/js/main.c8d85190.chunk.js.LICENSE.txt": "/static/js/main.c8d85190.chunk.js.LICENSE.txt",
+    "static/css/main.471944e8.chunk.css.map": "/static/css/main.471944e8.chunk.css.map",
+    "static/js/2.465d8f3c.chunk.js.LICENSE.txt": "/static/js/2.465d8f3c.chunk.js.LICENSE.txt",
+    "static/js/main.20bace06.chunk.js.LICENSE.txt": "/static/js/main.20bace06.chunk.js.LICENSE.txt",
     "static/media/Apartment.png": "/static/media/Apartment.27b3438d.png",
     "static/media/MacBook.png": "/static/media/MacBook.01310f2f.png",
     "static/media/MacBook.jpg": "/static/media/MacBook.f3b4a660.jpg",
@@ -27,8 +27,8 @@
     "static/media/card-2.jpeg": "/static/media/card-2.ae10829f.jpeg",
     "static/media/card-3.jpeg": "/static/media/card-3.4ae4eeff.jpeg",
     "static/media/eth-logo.png": "/static/media/eth-logo.86b356aa.png",
-    "static/media/logo-white.svg": "/static/media/logo-white.a80cd7a7.svg",
-    "static/media/logo.svg": "/static/media/logo.ee7cd8ed.svg",
+    "static/media/logo-white.svg": "/static/media/logo-white.eec7c7f6.svg",
+    "static/media/logo.svg": "/static/media/logo.5d5d9eef.svg",
     "static/media/sidebar-1.jpg": "/static/media/sidebar-1.61c4c50e.jpg",
     "static/media/sidebar-2.jpg": "/static/media/sidebar-2.d30c9e30.jpg",
     "static/media/sidebar-3.jpg": "/static/media/sidebar-3.c963330b.jpg",
@@ -37,8 +37,8 @@
   "entrypoints": [
     "static/js/runtime-main.e6710eac.js",
     "static/css/2.d0176e96.chunk.css",
-    "static/js/2.a2d7de83.chunk.js",
-    "static/css/main.1ce23084.chunk.css",
-    "static/js/main.c8d85190.chunk.js"
+    "static/js/2.465d8f3c.chunk.js",
+    "static/css/main.471944e8.chunk.css",
+    "static/js/main.20bace06.chunk.js"
   ]
 }
