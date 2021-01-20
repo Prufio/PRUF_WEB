@@ -202,7 +202,7 @@ export default function Dashboard(props) {
         const ethereum = window.ethereum;
         ethereum.enable()
   
-        _web3.eth.getAccounts().then((e) => { this.setState({ addr: e[0] }); window.addr = e[0] });
+        _web3.eth.getAccounts().then((e) => { window.addr = e[0] });
   
         window.addEventListener("accountListener", acctListener);
         setUpContractEnvironment(_web3)
@@ -652,29 +652,17 @@ export default function Dashboard(props) {
     }
   }, 500)
 
-   const balanceListener = setInterval(() => {
-    if (window.ETHBalance !== undefined && ETHBalance !== window.ETHBalance && WD === true) {
-      console.log("5")
-      return setETHBalance(window.ETHBalance);
-    }
-  }, 500)
-
   const navTypeListener = setInterval(() => {
     //Catch late window.ethereum injection case (MetaMask mobile)
-    if (isMobile && window.ethereum && WD === true) {
+    if (isMobile && window.ethereum && WD === true && window.addr === undefined) {
       window.web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0]; });
       window.addEventListener("accountListener", acctListener());
-
-    }
-  }, 500)
-  
-const lateWeb3Listener = setInterval(() => {
-  if (window.addr !== undefined && isMobile && WD === true && Object.values(window.balances).length === 0){
       window.utils.getETHBalance();
       setUpTokenVals(true, "SetupContractEnvironment")
-  }
-}, 500)
+    }
+  }, 500)
 
+ 
   const networkListener = setInterval(() => { 
     if(WD === true){
       window.web3.eth.net.getNetworkType().then((e) => { 
