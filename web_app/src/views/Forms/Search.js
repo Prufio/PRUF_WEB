@@ -11,6 +11,7 @@ import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
 import { ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
+import { isMobile } from "react-device-detect";
 
 
 // core components
@@ -765,7 +766,7 @@ export default function Search() {
                         <KeyboardArrowLeft />
                       </Button>
                     </Tooltip>
-                    <Jdenticon value={asset.idxHash}/>
+                    <Jdenticon value={asset.idxHash} />
                   </>
                 )}
               </>
@@ -825,10 +826,16 @@ export default function Search() {
             )}
           </CardBody>
           <CardFooter chart>
-            <div className={classes.stats}>
-              IDX Hash: {asset.idxHash}
-              {/* {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 42)} */}
-            </div>
+            {!isMobile && (
+              <div className={classes.stats}>
+                IDX Hash: {asset.idxHash}
+              </div>
+            )}
+            {isMobile && (
+              <div className={classes.stats}>
+                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 66)}
+              </div>
+            )}
             <div className={classes.stats}>
               <Share />
               <Print />
