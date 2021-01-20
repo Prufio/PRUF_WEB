@@ -660,7 +660,7 @@ export default function Dashboard(props) {
       console.log("5")
       return setETHBalance(window.ETHBalance);
     }
-  }, 500) 
+  }, 500)
 
   const navTypeListener = setInterval(() => {
     //Catch late window.ethereum injection case (MetaMask mobile)
