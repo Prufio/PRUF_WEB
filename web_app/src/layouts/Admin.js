@@ -94,8 +94,8 @@ export default function Dashboard(props) {
       window.ipfs = _ipfs;
   
       _web3 = require("web3");
-/*       _web3 = new Web3(_web3.givenProvider);
-      window.web3 = _web3; */
+      _web3 = new Web3(_web3.givenProvider);
+      window.web3 = _web3; 
   
       buildWindowUtils() // get the utils object and make it globally accessible
   
@@ -217,9 +217,9 @@ export default function Dashboard(props) {
         //alert("we ended up in here")
         console.log("Here")
         window.ipfsCounter = 0;
-        _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
-        setUpContractEnvironment(_web3)
-        window.web3 = _web3;
+        let fallbackAPI = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+        setUpContractEnvironment(fallbackAPI)
+        window.web3 = fallbackAPI;
   
         _ipfs = new IPFS({
           host: "ipfs.infura.io",
