@@ -672,7 +672,11 @@ export default function Search() {
                 <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
               )}
               {retrieving && (
-                <Button color="info" className="MLBGradient" disabled >Retrieving Asset. . .</Button>
+                <Button color="info" className="MLBGradient" disabled >
+                  <>
+                    Retrieving Asset<div className="lds-facebook"><div></div><div></div><div></div></div>
+                  </>
+                </Button>
               )}
             </form>
           </CardBody>
