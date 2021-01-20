@@ -95,8 +95,7 @@ export default function Home(props) {
               </CardIcon>
               <p className={classes.cardCategory}>Assets Held</p>
               <h3 className={classes.cardTitle}>
-                {/* {props.assets} <small>Assets</small> */}
-                2 <small>Assets</small>
+                {props.assets} <small>Assets</small>
               </h3>
             </CardHeader>
             <CardFooter stats>
@@ -119,9 +118,7 @@ export default function Home(props) {
               </CardIcon>
               <p className={classes.cardCategory}>ETH Balance</p>
               <h3 className={classes.cardTitle}>
-                
-              3.02 <small>Ether</small>
-                {/* {props.ether} <small>Ether</small> */}
+                 {props.ether.substring(0,7)} <small>Ether</small> 
                 </h3>
             </CardHeader>
             <CardFooter stats>
@@ -142,8 +139,7 @@ export default function Home(props) {
               </CardIcon>
               <p className={classes.cardCategory}>PRüF Balance</p>
               <h3 className={classes.cardTitle}>
-                245,642 <small>PRüF</small>
-                {/* {props.pruf} <small>PRüF</small> */}
+                {props.pruf.substring(0,9)} <small>PRüF</small>
                 </h3>
             </CardHeader>
             <CardFooter stats>

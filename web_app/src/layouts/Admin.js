@@ -39,20 +39,21 @@ export default function Dashboard(props) {
   const [bgColor, setBgColor] = React.useState("black");
   const [isKovan, setIsKovan] = React.useState(true);
   const [buildReady, setBuildReady] = React.useState(false);
-  const [ETHBalance, setETHBalance] = React.useState("0");
+  const [ETHBalance, setETHBalance] = React.useState("~");
   const [addr, setAddr] = React.useState("");
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState(false);
   
-  const [prufBalance, setPrufBalance] = React.useState("0");
-  const [assetBalance, setAssetBalance] = React.useState("0");
-  const [assetClassBalance, setAssetClassBalance] = React.useState("0");
+  const [prufBalance, setPrufBalance] = React.useState("~");
+  const [assetBalance, setAssetBalance] = React.useState("~");
+  const [assetClassBalance, setAssetClassBalance] = React.useState("~");
   const [IDBalance, setIDBalance] = React.useState("0");
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
   const [WD, setWD] = React.useState(false);
   const [hasSetUp, setHasSetUp] = React.useState(false);
+  const [assets, setAssets] = React.useState({})
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
@@ -302,7 +303,7 @@ export default function Dashboard(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={()=>(<prop.component pruf={prufBalance} ether={ETHBalance} assets={assetBalance}/>)}
+            render={()=>(<prop.component assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance}/>)}
             key={key}
           />
         );
@@ -521,6 +522,7 @@ export default function Dashboard(props) {
         setIsIDHolder(window.IDHolderBool);
         setHasFetchedBalances(window.hasFetchedBalances);
     }
+    setAssets(window.assets);
     console.log("BA: Assets after rebuild: ", window.assets)
     console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
   }
