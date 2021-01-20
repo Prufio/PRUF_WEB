@@ -672,9 +672,9 @@ export default function Search() {
                 <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
               )}
               {retrieving && (
-                  <h3>
-                    Retrieving Asset<div className="lds-facebook"><div></div><div></div><div></div></div>
-                  </h3>
+                <h3>
+                  Retrieving Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                </h3>
               )}
             </form>
           </CardBody>
@@ -708,7 +708,9 @@ export default function Search() {
               style={{ width: '100%' }}
             />
             {retrieving && (
-              <h4 >Retrieving Asset. . .</h4>
+              <h3>
+                Retrieving Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+              </h3>
             )}
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
           </CardBody>
