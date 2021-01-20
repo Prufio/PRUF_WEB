@@ -672,7 +672,9 @@ export default function Search() {
                 <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
               )}
               {retrieving && (
-                <Button color="info" className="MLBGradient" disabled >Retrieving Asset. . .</Button>
+                <h3>
+                  Retrieving Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                </h3>
               )}
             </form>
           </CardBody>
@@ -706,7 +708,9 @@ export default function Search() {
               style={{ width: '100%' }}
             />
             {retrieving && (
-              <h4 >Retrieving Asset. . .</h4>
+              <h3>
+                Retrieving Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+              </h3>
             )}
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
           </CardBody>
@@ -833,7 +837,7 @@ export default function Search() {
             )}
             {isMobile && (
               <div className={classes.stats}>
-                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(30, 66)}
+                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
               </div>
             )}
             <div className={classes.stats}>

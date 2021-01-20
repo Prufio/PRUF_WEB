@@ -313,36 +313,72 @@ export default function Dashboard(props) {
       {viewAsset && (
         <div>
           <Card>
-            <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
-              {selectedAssetObj.DisplayImage.length > 1 && (
-                <>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Back"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
-                      <KeyboardArrowLeft />
-                    </Button>
-                  </Tooltip>
-                  <img src={selectedAssetObj.DisplayImage} alt="..." />
-                </>
+            <>
+              {!isMobile && (
+                <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHoverCustom}>
+                  {selectedAssetObj.DisplayImage.length > 1 && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <img src={selectedAssetObj.DisplayImage} alt="..." />
+                    </>
+                  )}
+                  {selectedAssetObj.DisplayImage.length === 0 && (<>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Back"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                        <KeyboardArrowLeft />
+                      </Button>
+                    </Tooltip>
+                    {selectedAssetObj.identicon}
+                  </>)}
+                </CardHeader>
               )}
-              {selectedAssetObj.DisplayImage.length === 0 && (<>
-                <Tooltip
-                  id="tooltip-top"
-                  title="Back"
-                  placement="bottom"
-                  classes={{ tooltip: classes.tooltip }}
-                >
-                  <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
-                    <KeyboardArrowLeft />
-                  </Button>
-                </Tooltip>
-                {selectedAssetObj.identicon}
-              </>)}
-            </CardHeader>
+              {isMobile && (
+                <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
+                  {selectedAssetObj.DisplayImage.length > 1 && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <img src={selectedAssetObj.DisplayImage} alt="..." />
+                    </>
+                  )}
+                  {selectedAssetObj.DisplayImage.length === 0 && (<>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Back"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                        <KeyboardArrowLeft />
+                      </Button>
+                    </Tooltip>
+                    {selectedAssetObj.identicon}
+                  </>)}
+                </CardHeader>
+              )}
+            </>
             {/* <CardHeader color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
           </CardHeader> */}
@@ -488,7 +524,7 @@ export default function Dashboard(props) {
                 </FormControl>
               </div>
             </CardBody>
-            <CardFooter>
+            <CardFooter chart>
               {!isMobile && (
                 <div className={classes.stats}>
                   IDX Hash: {selectedAssetObj.idxHash}
@@ -496,7 +532,7 @@ export default function Dashboard(props) {
               )}
               {isMobile && (
                 <div className={classes.stats}>
-                  IDX Hash: {selectedAssetObj.idxHash.substring(0, 8) + selectedAssetObj.idxHash.substring(58, 66)}
+                  IDX Hash: {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}
                 </div>
               )}
               <div className={classes.stats}>
