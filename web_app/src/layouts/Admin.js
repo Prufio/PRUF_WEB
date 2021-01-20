@@ -170,6 +170,7 @@ export default function Dashboard(props) {
   
       //Give me the mobile ethereum-enabled version
       else if (isMobile && window.ethereum) {
+        alert("we ended up in here IM W.E")
         _web3 = new Web3(_web3.givenProvider);
         window.web3 = _web3;
         console.log("Here")
