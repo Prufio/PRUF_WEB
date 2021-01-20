@@ -94,8 +94,8 @@ export default function Dashboard(props) {
       window.ipfs = _ipfs;
   
       _web3 = require("web3");
-      _web3 = new Web3(_web3.givenProvider);
-      window.web3 = _web3; 
+/*       _web3 = new Web3(_web3.givenProvider);
+      window.web3 = _web3;  */
   
       buildWindowUtils() // get the utils object and make it globally accessible
   
@@ -217,9 +217,9 @@ export default function Dashboard(props) {
         //alert("we ended up in here")
         console.log("Here")
         window.ipfsCounter = 0;
-        let fallbackAPI = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
-        setUpContractEnvironment(fallbackAPI)
-        window.web3 = fallbackAPI;
+        _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+        setUpContractEnvironment(_web3)
+        window.web3 = _web3;
   
         _ipfs = new IPFS({
           host: "ipfs.infura.io",
@@ -331,9 +331,7 @@ export default function Dashboard(props) {
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
     console.log("Setting up contracts")
     if (window.ethereum !== undefined) {
-      //window.addEventListener("balances", balanceListener);
-      //window.addEventListener("assets", assetListener);
-      //window.addEventListener("network", networkListener);
+
       window._contracts = await buildContracts(_web3)
 
       await window.utils.getContracts()
