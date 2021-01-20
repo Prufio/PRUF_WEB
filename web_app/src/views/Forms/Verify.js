@@ -140,7 +140,7 @@ export default function Verify() {
             <CardIcon color="info" className="DBGradient">
               <AccountBox />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>New Owner Information</h4>
+            <h4 className={classes.cardIconTitle}>Owner Information</h4>
           </CardHeader>
           <CardBody>
             <form>
