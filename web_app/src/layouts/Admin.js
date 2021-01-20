@@ -174,8 +174,6 @@ export default function Dashboard(props) {
         alert("we ended up in here IM W.E")
         _web3 = new Web3(_web3.givenProvider);
         window.web3 = _web3;
-        console.log(_web3.eth.net.getNetworkType())
-        //alert("Is mobile and ethereum exists")
         console.log("Here")
   
         window.costs = {}
