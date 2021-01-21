@@ -470,7 +470,7 @@ class Sidebar extends React.Component {
           href="/#/admin/home"
           className={logoNormal}
         >
-          PRüF Dashboard
+          PRüF DASHBOARD
         </a>
       </div>
     );
