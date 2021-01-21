@@ -28,6 +28,7 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import QrReader from 'react-qr-reader'
 import Jdenticon from 'react-jdenticon';
 
+import imgStyles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import pruftoken from "../../assets/img/pruftoken.png";
 import macbook from "../../assets/img/MacBook.png";
@@ -35,6 +36,7 @@ import { boxShadow } from "assets/jss/material-dashboard-pro-react";
 
 
 const useStyles = makeStyles(styles);
+const useImgStyles = makeStyles(imgStyles);
 
 export default function Search() {
 
@@ -414,6 +416,7 @@ export default function Search() {
     setChecked(newChecked);
   };
   const classes = useStyles();
+  const imgClasses = useImgStyles();
   return (
     <>
       {scanQR === false && !moreInfo && (
@@ -648,7 +651,7 @@ export default function Search() {
                   />
                   <div className={classes.formCategory}>
                     <small>*</small> Required fields
-              </div>
+                  </div>
                 </>
               )}
               {IDXRawInput === true && retrieving && (
@@ -718,78 +721,121 @@ export default function Search() {
       )}
       {moreInfo && (
         <Card>
-          {/* <CardHeader   onClick={(e) => setViewAsset(!viewAsset)} className={classes.cardHeaderHover}>
-                <img src={macbook} alt="..." />
-            </CardHeader> */}
-          <CardHeader image className={classes.cardHeaderHoverCustom}>
-            {ipfsObject.photo !== undefined && (
-              <>
-                {Object.values(ipfsObject.photo).length > 0 && (
-                  <>
-                    {ipfsObject.photo.displayImage !== undefined && (
-                      <>
-                        <Tooltip
-                          id="tooltip-top"
-                          title="Back"
-                          placement="bottom"
-                          classes={{ tooltip: classes.tooltip }}
-                        >
-                          <Button onClick={() => window.location.reload()} x-large color="info" justIcon className="back">
-                            <KeyboardArrowLeft />
-                          </Button>
-                        </Tooltip>
-                        <img src={ipfsObject.photo.displayImage} alt="logo" />
-                      </>
-                    )}
-                    {ipfsObject.photo.displayImage === undefined && (
-                      <>
-                        <Tooltip
-                          id="tooltip-top"
-                          title="Back"
-                          placement="bottom"
-                          classes={{ tooltip: classes.tooltip }}
-                        >
-                          <Button onClick={() => window.location.reload()} x-large color="info" justIcon className="back">
-                            <KeyboardArrowLeft />
-                          </Button>
-                        </Tooltip>
-                        <img src={Object.values(ipfsObject.photo)[0]} alt="logo" />
-                      </>
-                    )}
-                  </>
-                )}
-                {Object.values(ipfsObject.photo).length === 0 && (
-                  <>
-                    <Tooltip
-                      id="tooltip-top"
-                      title="Back"
-                      placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <Button onClick={() => window.location.reload()} x-large color="info" justIcon className="back">
-                        <KeyboardArrowLeft />
-                      </Button>
-                    </Tooltip>
-                    <Jdenticon value={asset.idxHash} />
-                  </>
-                )}
-              </>
-            )}
-          </CardHeader>
+          {!isMobile && (
+            <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+              {ipfsObject.photo !== undefined && (
+                <>
+                  {Object.values(ipfsObject.photo).length > 0 && (
+                    <>
+                      {ipfsObject.photo.displayImage !== undefined && (
+                        <>
+                          <Tooltip
+                            id="tooltip-top"
+                            title="Back"
+                            placement="bottom"
+                            classes={{ tooltip: classes.tooltip }}
+                          >
+                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                              <KeyboardArrowLeft />
+                            </Button>
+                          </Tooltip>
+                          <img src={ipfsObject.photo.displayImage} alt="..." />
+                        </>
+                      )}
+                      {ipfsObject.photo.displayImage === undefined && (
+                        <>
+                          <Tooltip
+                            id="tooltip-top"
+                            title="Back"
+                            placement="bottom"
+                            classes={{ tooltip: classes.tooltip }}
+                          >
+                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                              <KeyboardArrowLeft />
+                            </Button>
+                          </Tooltip>
+                          <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                        </>
+                      )}
+                    </>
+                  )}
+                  {Object.values(ipfsObject.photo).length === 0 && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <Jdenticon value={asset.idxHash} />
+                    </>
+                  )}
+                </>
+              )}
+            </CardHeader>
+          )}
+          {isMobile && (
+            <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+              {ipfsObject.photo !== undefined && (
+                <>
+                  {Object.values(ipfsObject.photo).length > 0 && (
+                    <>
+                      {ipfsObject.photo.displayImage !== undefined && (
+                        <>
+                          <Tooltip
+                            id="tooltip-top"
+                            title="Back"
+                            placement="bottom"
+                            classes={{ tooltip: classes.tooltip }}
+                          >
+                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                              <KeyboardArrowLeft />
+                            </Button>
+                          </Tooltip>
+                          <img src={ipfsObject.photo.displayImage} alt="..." />
+                        </>
+                      )}
+                      {ipfsObject.photo.displayImage === undefined && (
+                        <>
+                          <Tooltip
+                            id="tooltip-top"
+                            title="Back"
+                            placement="bottom"
+                            classes={{ tooltip: classes.tooltip }}
+                          >
+                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                              <KeyboardArrowLeft />
+                            </Button>
+                          </Tooltip>
+                          <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                        </>
+                      )}
+                    </>
+                  )}
+                  {Object.values(ipfsObject.photo).length === 0 && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <Jdenticon value={asset.idxHash} />
+                    </>
+                  )}
+                </>
+              )}
+            </CardHeader>
+          )}
           <CardBody>
-            {/* <Tooltip
-              id="tooltip-top"
-              title="Back"
-              placement="bottom"
-              classes={{ tooltip: classes.tooltip }}
-            >
-              <Button
-                // onClick={(e) => setMoreInfo(!moreInfo)}
-                onClick={() => window.location.reload()}
-                simple color="info" justIcon>
-                <ExitToApp />
-              </Button>
-            </Tooltip> */}
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
             {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
