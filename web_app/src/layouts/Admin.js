@@ -60,6 +60,7 @@ export default function Dashboard(props) {
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
+  
   const mainPanelClasses =
     classes.mainPanel +
     " " +
@@ -72,6 +73,57 @@ export default function Dashboard(props) {
   const mainPanel = React.createRef();
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
+    if(window.ethereum){
+    window.ethereum.on("accountsChanged", function (accounts) {
+      window.web3.eth.getAccounts().then((e) => {
+        if (window.addr !== e[0]) {
+          if (e[0] === undefined || e[0] === null) {
+            console.log("Here")
+
+            window.ETHBalance = "0";
+
+            window.balances = ["0", "0", "0", "0"];
+            setAssetClassBalance("~");
+            setAssetBalance("~");
+            setIDBalance("0")
+            setIsAssetHolder(false);
+            setIsAssetClassHolder(false);
+            setIsIDHolder(false);
+            setHasFetchedBalances(false);
+            setETHBalance("~");
+            setPrufBalance("~");
+            setAssets({});
+
+            window.addr = "";
+
+          }
+
+          //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
+
+          window.addr = e[0];
+          window.assetClass = undefined;
+          window.isAuthUser = false;
+          window.isACAdmin = false;
+          setAddr(e[0])
+          setAssets({});
+          setAssetClassBalance("~");
+          setAssetBalance("~");
+          setIDBalance("0")
+          setIsAssetHolder(false);
+          setIsAssetClassHolder(false);
+          setIsIDHolder(false);
+          setHasFetchedBalances(false);
+          setETHBalance("~");
+          setPrufBalance("~");
+          window.recount = true;
+          window.resetInfo = true;
+          console.log("///////in acctChanger////////");
+        }
+        else { return console.log("Something bit in the acct listener, but no changes made.") }
+      });
+    });
+  }
+
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
@@ -162,7 +214,7 @@ export default function Dashboard(props) {
         ethereum.enable()
   
         _web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0] });
-        window.addEventListener("accountListener", acctListener);
+        //window.addEventListener("accountListener", acctListener);
         console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
         setUpContractEnvironment(_web3)
         setIsMounted(true)
@@ -204,7 +256,7 @@ export default function Dashboard(props) {
   
         _web3.eth.getAccounts().then((e) => { window.addr = e[0] });
   
-        window.addEventListener("accountListener", acctListener);
+        //window.addEventListener("accountListener", acctListener);
         setUpContractEnvironment(_web3)
   
   
@@ -241,12 +293,6 @@ export default function Dashboard(props) {
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
-      // window.removeEventListener("resize", resizeFunction);
-      // window.removeEventListener("balances", balanceListener);
-      // window.removeEventListener("assets", assetListener);
-      // window.removeEventListener("network", networkListener);
-      // window.removeEventListener("accountListener", acctListener);
-      // window.removeEventListener("navigator", navTypeListener);
     };
   });
   // functions for changeing the states from components
@@ -528,11 +574,53 @@ export default function Dashboard(props) {
     console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
   }
 
+  /* const acctListener = () => {
+    console.log("I'm listening..................")
+    window.ethereum.on("accountsChanged", function (accounts) {
+      window.web3.eth.getAccounts().then((e) => {
+        if (window.addr !== e[0]) {
+          if (e[0] === undefined || e[0] === null) {
+            console.log("Here")
+
+            window.ETHBalance = "0";
+
+            window.balances = ["0", "0", "0", "0"];
+            setAssetClassBalance("0");
+            setAssetBalance("0");
+            setIDBalance("0")
+            setIsAssetHolder(false);
+            setIsAssetClassHolder(false);
+            setIsIDHolder(false);
+            setHasFetchedBalances(false);
+            setETHBalance("0");
+            setPrufBalance("0");
+
+            window.addr = "";
+
+          }
+
+          //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
+
+          window.addr = e[0];
+          window.assetClass = undefined;
+          window.isAuthUser = false;
+          window.isACAdmin = false;
+          setAddr(e[0])
+          window.recount = true;
+          window.resetInfo = true;
+          console.log("///////in acctChanger////////");
+        }
+        else { console.log("Something bit in the acct listener, but no changes made.") }
+      });
+    });
+  }; */
+
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
   const setUpTokenVals = async (willSetup, who) => {
     console.log("STV: Setting up balances, called from ", who)
 
     await window.utils.determineTokenBalance().then((e)=>{ console.log(e); 
+      if(e === undefined) return console.log("Account Locked")
       setAssetBalance(e.assetBalance); 
       setAssetClassBalance(e.assetClassBalance);
       setPrufBalance(e.prufTokenBalance);
@@ -563,50 +651,6 @@ export default function Dashboard(props) {
         window.ipfsCounter++
         console.log(window.ipfsCounter)
       }
-    });
-  };
-
-  const acctListener = async () => {
-    const ethereum = window.ethereum;
-    const self = this;
-    var _web3 = require("web3");
-    _web3 = new Web3(_web3.givenProvider);
-    ethereum.on("accountsChanged", function (accounts) {
-      _web3.eth.getAccounts().then((e) => {
-        if (window.addr !== e[0]) {
-          if (e[0] === undefined || e[0] === null) {
-            console.log("Here")
-
-            window.ETHBalance = "0";
-
-            window.balances = ["0", "0", "0", "0"];
-            setAssetClassBalance("0");
-            setAssetBalance("0");
-            setIDBalance("0")
-            setIsAssetHolder(false);
-            setIsAssetClassHolder(false);
-            setIsIDHolder(false);
-            setHasFetchedBalances(false);
-            setETHBalance("0");
-            setPrufBalance("0");
-
-            window.addr = "";
-
-          }
-
-          if (window.location.href !== "/#/asset-dashboard") { window.location.href = "/#/admin/home" }
-
-          window.addr = e[0];
-          window.assetClass = undefined;
-          window.isAuthUser = false;
-          window.isACAdmin = false;
-          setAddr(e[0])
-          window.recount = true;
-          window.resetInfo = true;
-          console.log("///////in acctChanger////////");
-        }
-        else { console.log("Something bit in the acct listener, but no changes made.") }
-      });
     });
   };
 
@@ -650,15 +694,16 @@ export default function Dashboard(props) {
       console.log("Assets finished rebuilding, no longer ready for rebuild")
       setBuildReady(false)
     }
-  }, 500)
+  }, 1000)
 
   const navTypeListener = setInterval(() => {
     //Catch late window.ethereum injection case (MetaMask mobile)
     if (isMobile && window.ethereum && WD === true && window.addr === undefined) {
       window.web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0]; });
-      window.addEventListener("accountListener", acctListener());
+      //window.addEventListener("accountListener", acctListener());
       window.utils.getETHBalance();
       setUpTokenVals(true, "SetupContractEnvironment")
+      console.log("Caught late ethereum")
     }
   }, 500)
 
