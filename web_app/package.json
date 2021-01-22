@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "4.9.14",
     "@material-ui/icons": "4.9.1",
+    "@metamask/detect-provider": "^1.2.0",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
     "history": "4.10.1",
