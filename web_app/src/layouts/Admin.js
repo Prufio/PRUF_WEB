@@ -62,11 +62,29 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
 
+  const handleEthereum = () => {
+    let web3;
+    const { ethereum } = window;
+    if (ethereum) {
+      alert('Ethereum successfully detected!')
+      //console.log('Ethereum successfully detected!');
+      // Access the decentralized web!
+      web3 = new Web3(web3.givenProvider);
+      setUpContractEnvironment(web3)
+      window.web3 = web3;
+    }
+    else{
+      web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+      setUpContractEnvironment(web3)
+      window.web3 = web3;
+    }
+  }
+
   const acctListener = async () => {
 
     window.ethereum.on("accountsChanged", (e) => {
       console.log("Accounts changed")
-        if (window.addr !== e[0]) {
+        if (window.addr !== e[0].toLowerCase()) {
           if (e[0] === undefined || e[0] === null) {
             console.log("Here")
 
@@ -90,11 +108,11 @@ export default function Dashboard(props) {
 
           //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
 
-          window.addr = e[0];
+          window.addr = e[0].toLowerCase();
           window.assetClass = undefined;
           window.isAuthUser = false;
           window.isACAdmin = false;
-          setAddr(e[0])
+          setAddr(e[0].toLowerCase())
           setAssets({});
           setAssetClassBalance("~");
           setAssetBalance("~");
@@ -214,7 +232,6 @@ export default function Dashboard(props) {
         window.resetInfo = false;
         const ethereum = window.ethereum;
   
-        //ethereum.enable()
         ethereum.request({
           method: 'eth_accounts',
           params: {},
@@ -224,7 +241,12 @@ export default function Dashboard(props) {
             window.addr = accounts[0].toLowerCase()
           }
           else{
-            ethereum.enable()
+            ethereum.send('eth_requestAccounts').then((accounts)=>{
+              if (accounts[0] !== undefined){
+                console.log("got accounts")
+                window.addr = accounts[0].toLowerCase()
+              }
+            })
           }
         })
   
@@ -234,11 +256,14 @@ export default function Dashboard(props) {
       }
 
       else {
-        console.log("Here")
+        window.addEventListener('ethereum#initialized', handleEthereum, {
+          once: true,
+        });
+        setTimeout(handleEthereum, 3000); // 3 seconds
+
+        console.log("In startup else clause")
+
         window.ipfsCounter = 0;
-        _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
-        setUpContractEnvironment(_web3)
-        window.web3 = _web3;
   
         _ipfs = new IPFS({
           host: "ipfs.infura.io",
@@ -541,47 +566,6 @@ export default function Dashboard(props) {
     console.log("BA: AssetClasses after rebuild: ", window.assetClasses)
   }
 
-  /* const acctListener = () => {
-    console.log("I'm listening..................")
-    window.ethereum.on("accountsChanged", function (accounts) {
-      window.web3.eth.getAccounts().then((e) => {
-        if (window.addr !== e[0]) {
-          if (e[0] === undefined || e[0] === null) {
-            console.log("Here")
-
-            window.ETHBalance = "0";
-
-            window.balances = ["0", "0", "0", "0"];
-            setAssetClassBalance("0");
-            setAssetBalance("0");
-            setIDBalance("0")
-            setIsAssetHolder(false);
-            setIsAssetClassHolder(false);
-            setIsIDHolder(false);
-            setHasFetchedBalances(false);
-            setETHBalance("0");
-            setPrufBalance("0");
-
-            window.addr = "";
-
-          }
-
-          //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
-
-          window.addr = e[0];
-          window.assetClass = undefined;
-          window.isAuthUser = false;
-          window.isACAdmin = false;
-          setAddr(e[0])
-          window.recount = true;
-          window.resetInfo = true;
-          console.log("///////in acctChanger////////");
-        }
-        else { console.log("Something bit in the acct listener, but no changes made.") }
-      });
-    });
-  }; */
-
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
   const setUpTokenVals = async (willSetup, who) => {
     console.log("STV: Setting up balances, called from ", who)
@@ -663,16 +647,26 @@ export default function Dashboard(props) {
     }
   }, 1000)
 
-  const navTypeListener = setInterval(() => {
+  /* const navTypeListener = setInterval(() => {
     //Catch late window.ethereum injection case (MetaMask mobile)
     if (isMobile && window.ethereum && WD === true && window.addr === undefined) {
-      window.web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0]; });
-      //window.addEventListener("accountListener", acctListener());
+      window.ethereum.request({
+        method: 'eth_accounts',
+        params: {},
+      }).then((accounts)=>{
+        if (accounts[0] !== undefined){
+          console.log("got accounts")
+          window.addr = accounts[0].toLowerCase()
+        }
+        else{
+          window.ethereum.send('eth_requestAccounts')
+        }
+      })
       window.utils.getETHBalance();
       setUpTokenVals(true, "SetupContractEnvironment")
       console.log("Caught late ethereum")
     }
-  }, 500)
+  }, 500) */
 
  
   const networkListener = setInterval(() => { 
