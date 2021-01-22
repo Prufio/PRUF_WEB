@@ -53,104 +53,19 @@ export default function FixedPlugin(props) {
           <i className="fa fa-cog fa-2x" />
         </div>
         <ul className="dropdown-menu">
-          <li className="header-title">SIDEBAR FILTERS</li>
-          <li className="adjustments-line">
-            <a className="switch-trigger active-color">
-              <div className="badge-colors text-center">
-                <span
-                  className={
-                    props.color === "purple"
-                      ? "badge filter badge-purple active"
-                      : "badge filter badge-purple"
-                  }
-                  data-color="purple"
-                  onClick={() => {
-                    props.handleColorClick("purple");
-                  }}
-                />
-                <span
-                  className={
-                    props.color === "blue"
-                      ? "badge filter badge-blue active"
-                      : "badge filter badge-blue"
-                  }
-                  data-color="blue"
-                  onClick={() => {
-                    props.handleColorClick("blue");
-                  }}
-                />
-                <span
-                  className={
-                    props.color === "green"
-                      ? "badge filter badge-green active"
-                      : "badge filter badge-green"
-                  }
-                  data-color="green"
-                  onClick={() => {
-                    props.handleColorClick("green");
-                  }}
-                />
-                <span
-                  className={
-                    props.color === "red"
-                      ? "badge filter badge-red active"
-                      : "badge filter badge-red"
-                  }
-                  data-color="red"
-                  onClick={() => {
-                    props.handleColorClick("red");
-                  }}
-                />
-                <span
-                  className={
-                    props.color === "orange"
-                      ? "badge filter badge-orange active"
-                      : "badge filter badge-orange"
-                  }
-                  data-color="orange"
-                  onClick={() => {
-                    props.handleColorClick("orange");
-                  }}
-                />
-                <span
-                  className={
-                    props.color === "white"
-                      ? "badge filter badge-white active"
-                      : "badge filter badge-white"
-                  }
-                  data-color="orange"
-                  onClick={() => {
-                    props.handleColorClick("white");
-                  }}
-                />
-                <span
-                  className={
-                    props.color === "rose"
-                      ? "badge filter badge-rose active"
-                      : "badge filter badge-rose"
-                  }
-                  data-color="orange"
-                  onClick={() => {
-                    props.handleColorClick("rose");
-                  }}
-                />
-              </div>
-              <div className="clearfix" />
-            </a>
-          </li>
           <li className="header-title">SIDEBAR BACKGROUND</li>
           <li className="adjustments-line">
             <a className="switch-trigger active-color">
               <div className="badge-colors text-center">
                 <span
                   className={
-                    props.bgColor === "blue"
-                      ? "badge filter badge-blue active"
-                      : "badge filter badge-blue"
+                    props.bgColor === "black"
+                      ? "badge filter badge-black active"
+                      : "badge filter badge-black"
                   }
                   data-color="orange"
                   onClick={() => {
-                    props.handleBgColorClick("blue");
+                    props.handleBgColorClick("black");
                   }}
                 />
                 <span
@@ -166,13 +81,13 @@ export default function FixedPlugin(props) {
                 />
                 <span
                   className={
-                    props.bgColor === "black"
-                      ? "badge filter badge-black active"
-                      : "badge filter badge-black"
+                    props.bgColor === "darkBlue"
+                      ? "badge filter badge-darkBlue active"
+                      : "badge filter badge-darkBlue"
                   }
                   data-color="orange"
                   onClick={() => {
-                    props.handleBgColorClick("black");
+                    props.handleBgColorClick("darkBlue");
                   }}
                 />
               </div>
@@ -273,7 +188,7 @@ FixedPlugin.propTypes = {
   handleFixedClick: PropTypes.func,
   miniActive: PropTypes.bool,
   fixedClasses: PropTypes.string,
-  bgColor: PropTypes.oneOf(["white", "black", "blue"]),
+  bgColor: PropTypes.oneOf(["white", "black", "darkBlue"]),
   color: PropTypes.oneOf([
     "white",
     "red",
@@ -281,7 +196,8 @@ FixedPlugin.propTypes = {
     "green",
     "blue",
     "purple",
-    "rose"
+    "rose",
+    "darkBlue"
   ]),
   handleBgColorClick: PropTypes.func,
   handleColorClick: PropTypes.func,

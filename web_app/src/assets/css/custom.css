@@ -202,3 +202,7 @@ body {
         bottom: -80px;
         right: -30px;
       }
+
+      .fixed-plugin .badge-darkBlue {
+        background-color: #002a40 !important;
+      }

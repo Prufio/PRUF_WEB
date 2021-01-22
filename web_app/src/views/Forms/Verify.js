@@ -1,5 +1,8 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import QrReader from 'react-qr-reader'
+import swal from 'sweetalert';
+// import SweetAlert from "react-bootstrap-sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormLabel from "@material-ui/core/FormLabel";
@@ -36,12 +39,60 @@ export default function Verify() {
   const [checked, setChecked] = React.useState([24, 22]);
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
+  const [scanQR, setScanQR] = React.useState(false)
+  const [result, setResult] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [transaction, setTransaction] = React.useState(false);
+  const [QRValue, setQRValue] = React.useState("");
+  const [verifying, setVerifying] = React.useState(false);
+
+  const [IDXRawInput, setIDXRawInputInput] = React.useState(false);
+
+  const [manufacturer, setManufacturer] = React.useState("");
+  const [type, setType] = React.useState("");
+  const [model, setModel] = React.useState("");
+  const [serial, setSerial] = React.useState("");
+  const [IDXRaw, setIDXRaw] = React.useState("");
+
+  const [loginManufacturer, setloginManufacturer] = React.useState("");
+  const [loginType, setloginType] = React.useState("");
+  const [loginModel, setloginModel] = React.useState("");
+  const [loginSerial, setloginSerial] = React.useState("");
+  const [loginIDX, setloginIDX] = React.useState("");
+
+  const [loginManufacturerState, setloginManufacturerState] = React.useState("");
+  const [loginTypeState, setloginTypeState] = React.useState("");
+  const [loginModelState, setloginModelState] = React.useState("");
+  const [loginSerialState, setloginSerialState] = React.useState("");
+  const [loginIDXState, setloginIDXState] = React.useState("");
+
+  const [first, setFirst] = React.useState("");
+  const [middle, setMiddle] = React.useState("");
+  const [last, setLast] = React.useState("");
+  const [ID, setID] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const [loginFirst, setloginFirst] = React.useState("");
+  const [loginLast, setloginLast] = React.useState("");
+  const [loginID, setloginID] = React.useState("");
+  const [loginPassword, setloginPassword] = React.useState("");
+
+  const [loginFirstState, setloginFirstState] = React.useState("");
+  const [loginLastState, setloginLastState] = React.useState("");
+  const [loginIDState, setloginIDState] = React.useState("");
+  const [loginPasswordState, setloginPasswordState] = React.useState("");
+
+  const [txHash, setTxHash] = React.useState("");
+  const [verifyResult, setVerifyResult] = React.useState("");
+
   const handleChange = event => {
     setSelectedValue(event.target.value);
   };
+
   const handleChangeEnabled = event => {
     setSelectedEnabled(event.target.value);
   };
+
   const handleToggle = value => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -53,86 +104,601 @@ export default function Verify() {
     }
     setChecked(newChecked);
   };
+
+  const handleScanQR = event => {
+    setScanQR(!scanQR);
+    setQRValue("")
+    console.log("new value", !scanQR)
+  };
+
+  const clearForms = event => {
+    setManufacturer("");
+    setType("");
+    setModel("");
+    setSerial("");
+    setIDXRaw("");
+    setFirst("");
+    setMiddle("");
+    setLast("");
+    setID("");
+    setPassword("");
+
+
+    setloginManufacturerState("");
+    setloginTypeState("");
+    setloginModelState("");
+    setloginSerialState("");
+    setloginIDXState("");
+    setloginFirstState("");
+    setloginLastState("");
+    setloginIDState("");
+    setloginPasswordState("");
+    console.log("clearing forms")
+  };
+
+  const verifyAsset = async () => {
+    if (!IDXRawInput) {
+      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+
+        if (loginType === "") {
+          setloginTypeState("error");
+        }
+        if (loginManufacturer === "") {
+          setloginManufacturerState("error");
+        }
+        if (loginModel === "") {
+          setloginModelState("error");
+        }
+        if (loginSerial === "") {
+          setloginSerialState("error");
+        }
+        if (loginFirst === "") {
+          setloginFirstState("error");
+        }
+        if (loginLast === "") {
+          setloginLastState("error");
+        }
+        if (loginID === "") {
+          setloginIDState("error");
+        }
+        if (loginPassword === "") {
+          setloginPasswordState("error");
+        }
+        return;
+      }
+    }
+
+    if (IDXRawInput) {
+      if (loginIDXState === "") {
+        setloginIDXState("error");
+        return;
+      }
+    }
+
+    console.log("in vr")
+    let ipfsHash;
+    let tempResult;
+    let idxHash;
+    let rgtHashRaw;
+    let rgtHash
+    {
+      IDXRawInput === true && (
+        idxHash = IDXRaw
+      )
+    }
+    {
+      IDXRawInput === false && (
+        idxHash = window.web3.utils.soliditySha3(
+          String(type).replace(/\s/g, ''),
+          String(manufacturer).replace(/\s/g, ''),
+          String(model).replace(/\s/g, ''),
+          String(serial).replace(/\s/g, ''),
+        )
+      )
+    }
+    {
+      middle === "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+    {
+      middle !== "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(middle).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+
+    console.log("idxHash", idxHash);
+    console.log("rgtHash", rgtHash);
+    console.log("addr: ", window.addr);
+    setVerifying(true)
+    await window.contracts.STOR.methods
+      ._verifyRightsHolder(idxHash, rgtHash)
+      .call(
+        function (_error, _result) {
+          if (_error) {
+            console.log(_error)
+            setError(_error);
+            setResult("");
+            setVerifying(false)
+          }
+          else if (_result === "0") {
+            console.log("verify not confirmed");
+            swal({
+              title: "Match Failed!",
+              text: "Please make sure forms are filled out correctly.",
+              icon: "warning",
+              button: "Close",
+            });
+            setVerifying(false)
+          }
+          else {
+            console.log("verify confirmed");
+            swal({
+              title: "Match Confirmed!",
+              // text: "Check your TX here:" + txHash,
+              icon: "success",
+              button: "Close",
+            });
+            setError("");
+            setVerifying(false)
+          }
+        });
+    return clearForms()
+  }
+
+  const blockchainVerifyAsset = async () => {
+    if (!IDXRawInput) {
+      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+
+        if (loginType === "") {
+          setloginTypeState("error");
+        }
+        if (loginManufacturer === "") {
+          setloginManufacturerState("error");
+        }
+        if (loginModel === "") {
+          setloginModelState("error");
+        }
+        if (loginSerial === "") {
+          setloginSerialState("error");
+        }
+        if (loginFirst === "") {
+          setloginFirstState("error");
+        }
+        if (loginLast === "") {
+          setloginLastState("error");
+        }
+        if (loginID === "") {
+          setloginIDState("error");
+        }
+        if (loginPassword === "") {
+          setloginPasswordState("error");
+        }
+        return;
+      }
+    }
+
+    if (IDXRawInput) {
+      if (loginIDXState === "") {
+        setloginIDXState("error");
+        return;
+      }
+    }
+
+    console.log("in bvr")
+    let ipfsHash;
+    let tempResult;
+    let idxHash;
+    let rgtHash;
+    {
+      IDXRawInput === true && (
+        idxHash = IDXRaw
+      )
+    }
+    {
+      IDXRawInput === false && (
+        idxHash = window.web3.utils.soliditySha3(
+          String(type).replace(/\s/g, ''),
+          String(manufacturer).replace(/\s/g, ''),
+          String(model).replace(/\s/g, ''),
+          String(serial).replace(/\s/g, ''),
+        )
+      )
+    }
+    {
+      middle === "" && (
+        rgtHash = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+    {
+      middle !== "" && (
+        rgtHash = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(middle).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+    console.log("idxHash", idxHash);
+    console.log("rgtHash", rgtHash);
+    console.log("addr: ", window.addr);
+    setVerifying(true)
+
+    await window.contracts.STOR.methods
+      .blockchainVerifyRightsHolder(idxHash, rgtHash)
+      .send({ from: window.addr })
+      .on("error", function (_error) {
+        setVerifying(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        console.log(Object.values(_error)[0].transactionHash);
+        console.log(_error)
+        setError(_error);
+        clearForms()
+      })
+      .on("receipt", (receipt) => {
+        setVerifying(false)
+        setTxHash(receipt.transactionHash)
+        setVerifyResult(receipt.events.REPORT.returnValues._msg)
+        console.log("verify Result :", verifyResult);
+      });
+
+    {
+      verifyResult === "Match confirmed" && (
+        console.log("verify conf")
+      )
+    }
+
+    {
+      verifyResult !== "Match confirmed" && (
+        console.log("verify not conf")
+      )
+    }
+
+    return clearForms()
+  }
+
   const classes = useStyles();
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={6}>
-        <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
-              <Category />
-            </CardIcon>
-            <h4 className={classes.cardIconTitle}>Asset Information</h4>
-          </CardHeader>
-          <CardBody>
-            <form>
-              <CustomInput
-                labelText="Manufacturer"
-                id="manufacturer"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                  // type: "email"
-                // }}
-              />
-              <CustomInput
-                labelText="Type"
-                id="type"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
-              />
-              <CustomInput
-                labelText="Model"
-                id="model"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                  // type: "email"
-                // }}
-              />
-              <CustomInput
-                labelText="Serial"
-                id="serial"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
-              />
-              <div className={classes.checkboxAndRadio}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      tabIndex={-1}
-                      onClick={() => handleToggle(2)}
-                      checkedIcon={<Check className={classes.checkedIcon} />}
-                      icon={<Check className={classes.uncheckedIcon} />}
-                      classes={{
-                        checked: classes.checked,
-                        root: classes.checkRoot
+        {!scanQR && QRValue === "" && (
+          <Card>
+            <CardHeader color="info" icon>
+              <CardIcon color="info" className="DBGradient">
+                <Category />
+              </CardIcon>
+              <h4 className={classes.cardIconTitle}>Asset Information</h4>
+            </CardHeader>
+            <CardBody>
+              <form>
+                {IDXRawInput === false && !verifying && (
+                  <>
+                    <CustomInput
+                      success={loginManufacturerState === "success"}
+                      error={loginManufacturerState === "error"}
+                      labelText="Manufacturer *"
+                      id="manufacturer"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setManufacturer(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginManufacturerState("success");
+                          } else {
+                            setloginManufacturerState("error");
+                          }
+                          setloginManufacturer(event.target.value);
+                        },
                       }}
                     />
-                  }
-                  classes={{
-                    label: classes.label,
-                    root: classes.labelRoot
-                  }}
-                  label="Input IDX Hash"
-                />
+                    <CustomInput
+                      success={loginTypeState === "success"}
+                      error={loginTypeState === "error"}
+                      labelText="Type *"
+                      id="type"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setType(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginTypeState("success");
+                          } else {
+                            setloginTypeState("error");
+                          }
+                          setloginType(event.target.value);
+                        },
+                      }}
+                    />
+                    <CustomInput
+                      success={loginModelState === "success"}
+                      error={loginModelState === "error"}
+                      labelText="Model *"
+                      id="model"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setModel(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginModelState("success");
+                          } else {
+                            setloginModelState("error");
+                          }
+                          setloginModel(event.target.value);
+                        },
+                      }}
+                    />
+                    <CustomInput
+                      success={loginSerialState === "success"}
+                      error={loginSerialState === "error"}
+                      labelText="Serial *"
+                      id="serial"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setSerial(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginSerialState("success");
+                          } else {
+                            setloginSerialState("error");
+                          }
+                          setloginSerial(event.target.value);
+                        },
+                      }}
+                    />
+                    <div className={classes.formCategory}>
+                      <small>*</small> Required fields
               </div>
-              <Button color="info" className="MLBGradient">Scan QR</Button>
-            </form>
-          </CardBody>
-        </Card>
+                  </>
+                )}
+                {IDXRawInput === false && verifying && (
+                  <>
+                    <CustomInput
+                      labelText={manufacturer}
+                      id="manufacturer"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      labelText={type}
+                      id="type"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      labelText={model}
+                      id="model"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      labelText={serial}
+                      id="serial"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                  </>
+                )}
+                {IDXRawInput === true && (
+                  <>
+                    <CustomInput
+                      id="manufacturer"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        placeholder: "Disabled",
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      id="type"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        placeholder: "Disabled",
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      id="model"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        placeholder: "Disabled",
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      id="serial"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        placeholder: "Disabled",
+                        disabled: true
+                      }}
+                    />
+                  </>
+                )}
+                {!verifying && (
+                  <div className={classes.checkboxAndRadio}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          tabIndex={-1}
+                          onClick={() => setIDXRawInputInput(!IDXRawInput)}
+                          checkedIcon={<Check className={classes.checkedIcon} />}
+                          icon={<Check className={classes.uncheckedIcon} />}
+                          classes={{
+                            checked: classes.checked,
+                            root: classes.checkRoot
+                          }}
+                        />
+                      }
+                      classes={{
+                        label: classes.label,
+                        root: classes.labelRoot
+                      }}
+                      label="Input IDX Hash"
+                    />
+                  </div>
+                )}
+                {IDXRawInput === true && !verifying && (
+                  <>
+                    <CustomInput
+                      success={loginIDXState === "success"}
+                      error={loginIDXState === "error"}
+                      labelText="IDX Hash *"
+                      id="IDX"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setIDXRaw(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginIDXState("success");
+                          } else {
+                            setloginIDXState("error");
+                          }
+                          setloginIDX(event.target.value);
+                        },
+                      }}
+                    />
+                    <div className={classes.formCategory}>
+                      <small>*</small> Required fields
+                  </div>
+                  </>
+                )}
+                {IDXRawInput === true && verifying && (
+                  <>
+                    <CustomInput
+                      labelText={IDXRaw}
+                      id="IDX"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                  </>
+                )}
+                {!verifying && (
+                  <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR</Button>
+                )}
+              </form>
+            </CardBody>
+          </Card>
+        )}
+
+        {scanQR === true && QRValue === "" && (
+          <Card>
+            <CardHeader color="info" icon>
+              <CardIcon color="info" className="DBGradient">
+                <Category />
+              </CardIcon>
+              <h4 className={classes.cardIconTitle}>QR Scanner</h4>
+            </CardHeader>
+            <CardBody>
+              <QrReader
+                className="qrReader"
+                scanDelay={300}
+                onScan={(result) => {
+                  if (result) {
+                    // retrieveRecordQR(result);
+                    setQRValue(result);
+                  }
+
+                }}
+                onError={(err) => {
+                  if (err) {
+                    console.info(err);
+                  }
+                }}
+
+                style={{ width: '100%' }}
+              />
+              {verifying && (
+                <h3>
+                  verifying Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                </h3>
+              )}
+              <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
+            </CardBody>
+          </Card>
+        )}
+
+        {QRValue !== "" && (
+          <Card>
+            <CardHeader color="info" icon>
+              <CardIcon color="info" className="DBGradient">
+                <Category />
+              </CardIcon>
+              <h4 className={classes.cardIconTitle}>Asset Information</h4>
+            </CardHeader>
+            <CardBody>
+              <CustomInput
+                labelText={"IDX : " + QRValue}
+                id="IDX"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: true
+                }}
+              />
+              <Button onClick={() => setQRValue("")} color="info" className="MLBGradient">Back</Button>
+            </CardBody>
+          </Card>
+        )}
       </GridItem>
       <GridItem xs={12} sm={12} md={6}>
         <Card>
@@ -144,61 +710,180 @@ export default function Verify() {
           </CardHeader>
           <CardBody>
             <form>
-              <CustomInput
-                labelText="First Name"
-                id="first-name"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                  // type: "email"
-                // }}
-              />
-              <CustomInput
-                labelText="Middle Name"
-                id="middle-name"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
-              />
-              <CustomInput
-                labelText="Last Name"
-                id="last-name"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                  // type: "email"
-                // }}
-              />
-              <CustomInput
-                labelText="ID Number"
-                id="id-number"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
-              />
-              <CustomInput
-                labelText="Password"
-                id="password"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                inputProps={{
-                  type: "password",
-                  autoComplete: "off"
-                }}
-              />
-              <Button color="info" className="MLBGradient">Verify</Button>
-              <Button color="info" className="MLBGradient">Blockchain Verify</Button>
+              <>
+                {!verifying && (
+                  <>
+                    <CustomInput
+                      success={loginFirstState === "success"}
+                      error={loginFirstState === "error"}
+                      labelText="First Name *"
+                      id="firstName"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setFirst(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginFirstState("success");
+                          } else {
+                            setloginFirstState("error");
+                          }
+                          setloginFirst(event.target.value);
+                        },
+                      }}
+                    />
+                    <CustomInput
+                      labelText="Middle Name"
+                      id="middleName"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setMiddle(event.target.value.trim())
+                        },
+                      }}
+                    />
+                    <CustomInput
+                      success={loginLastState === "success"}
+                      error={loginLastState === "error"}
+                      labelText="Last Name *"
+                      id="lastName"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setLast(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginLastState("success");
+                          } else {
+                            setloginLastState("error");
+                          }
+                          setloginLast(event.target.value);
+                        },
+                      }}
+                    />
+                    <CustomInput
+                      success={loginIDState === "success"}
+                      error={loginIDState === "error"}
+                      labelText="ID Number *"
+                      id="idNumber"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setID(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginIDState("success");
+                          } else {
+                            setloginIDState("error");
+                          }
+                          setloginID(event.target.value);
+                        },
+                      }}
+                    />
+                    <CustomInput
+                      success={loginPasswordState === "success"}
+                      error={loginPasswordState === "error"}
+                      labelText="Password *"
+                      id="password"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        type: "password",
+                        onChange: event => {
+                          setPassword(event.target.value.trim())
+                          if (event.target.value !== "") {
+                            setloginPasswordState("success");
+                          } else {
+                            setloginPasswordState("error");
+                          }
+                          setloginPassword(event.target.value);
+                        },
+                      }}
+                    />
+                    <div className={classes.formCategory}>
+                      <small>*</small> Required fields
+              </div>
+                  </>
+                )}
+                {verifying && (
+                  <>
+                    <CustomInput
+                      labelText={first}
+                      id="first"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      labelText={middle}
+                      id="middle"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      labelText={last}
+                      id="last"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      labelText={ID}
+                      id="ID"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                    <CustomInput
+                      labelText={password}
+                      id="password"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        type: "password",
+                        disabled: true
+                      }}
+                    />
+                  </>
+                )}
+              </>
+              {!verifying && (
+                <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
+              )}
+              {!verifying && (
+                <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify</Button>
+              )}
+              {verifying && (
+                <h3>
+                  Verifying Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                </h3>
+              )}
+              {/* <Button color="info" className="MLBGradient" onClick={() => swal({
+                title: "Match Confirmed!",
+                text: "Check your TX here:" + txHash,
+                icon: "success",
+                button: "Close",
+              })}>alert</Button> */}
             </form>
           </CardBody>
         </Card>
