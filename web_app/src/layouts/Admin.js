@@ -64,20 +64,19 @@ export default function Dashboard(props) {
 
   const handleEthereum = () => {
     let web3;
-    const { ethereum } = window;
+    const ethereum = window.ethereum;
     if (ethereum) {
       alert('Ethereum successfully detected!')
       //console.log('Ethereum successfully detected!');
       // Access the decentralized web!
       web3 = new Web3(web3.givenProvider);
-      setUpContractEnvironment(web3)
       window.web3 = web3;
     }
     else{
       web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
-      setUpContractEnvironment(web3)
       window.web3 = web3;
     }
+    setUpContractEnvironment(web3)
   }
 
   const acctListener = async () => {
