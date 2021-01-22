@@ -6,7 +6,7 @@ import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
 
-import Robohash from 'react-robohash';
+import Blockies from 'react-blockies';
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -22,12 +22,48 @@ import Icon from "@material-ui/core/Icon";
 import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
 
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.js";
-
-import avatar from "assets/img/faces/avatar.jpg";
 import pruftoken from "assets/img/pruftoken.png";
 
-
 var ps;
+
+const getPrufColor = (type) => {
+  let color;
+  switch(type){
+    case "primary" : {
+      if(isNaN(window.addr.charAt(8))){
+        color = "#005480"
+      }
+      else{
+        color = "#2b00ff"
+      }
+      break
+    }
+
+    case "secondary" : {
+      if(isNaN(window.addr.charAt(10))){
+        color = "#00a8ff"
+      }
+      else{
+        color = "#017ec0"
+      }
+    break
+    }
+
+    case "analogous" : {
+      if(isNaN(window.addr.charAt(12))){
+        color = "#00ff55"
+      }
+      else{
+        color = "#ff1500"
+      }
+      break
+    }
+
+    default : {break}
+  }
+
+  return color
+}
 
 // We've created this component so we can have a ref to the wrapper of the links that appears in our sidebar.
 // This was necessary so that we could initialize PerfectScrollbar on the links.
@@ -49,6 +85,7 @@ class SidebarWrapper extends React.Component {
     }
   }
   render() {
+
     const { className, user, headerLinks, links } = this.props;
     return (
       <div className={className} ref={this.sidebarWrapper}>
@@ -359,8 +396,11 @@ class Sidebar extends React.Component {
         {window.addr === undefined && (
         <img src={pruftoken} alt="logo" className={classes.img} />
           )}
-        {window.addr !== undefined && (
-        <Robohash name={window.addr} className={classes.img}/>
+          {window.addr === "" && (
+        <img src={pruftoken} alt="logo" className={classes.img} />
+          )}
+        {window.addr !== undefined && window.addr !== "" &&(
+        <Blockies scale={4} color={getPrufColor("primary")} bgColor={getPrufColor("secondary")} spotColor={getPrufColor("analogous")} size={15} seed={window.addr} className={classes.img}/>
           )}
         </div>
         <List className={classes.list}>
@@ -470,7 +510,7 @@ class Sidebar extends React.Component {
           href="/#/admin/home"
           className={logoNormal}
         >
-          PRüF Dashboard
+          PRüF DASHBOARD
         </a>
       </div>
     );

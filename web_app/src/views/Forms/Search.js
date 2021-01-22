@@ -837,7 +837,7 @@ export default function Search() {
           )}
           <CardBody>
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
-            <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(ID:{asset.assetClass})</h4>
+            <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(NODE ID:{asset.assetClass})</h4>
             {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
             {currency !== "" && (
               <>

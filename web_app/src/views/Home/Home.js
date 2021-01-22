@@ -139,7 +139,9 @@ export default function Home(props) {
               </CardIcon>
               <p className={classes.cardCategory}>PRüF Balance</p>
               <h3 className={classes.cardTitle}>
-                {props.pruf.substring(0,9)} <small>PRüF</small>
+                {props.pruf !== "~" 
+                ? <>{String(Math.round(Number(props.pruf)*100)/100)} <small>PRüF</small></>
+                : <>{props.pruf} <small>PRüF</small></>}
                 </h3>
             </CardHeader>
             <CardFooter stats>
