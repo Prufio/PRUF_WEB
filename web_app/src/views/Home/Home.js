@@ -140,7 +140,7 @@ export default function Home(props) {
               <p className={classes.cardCategory}>PRüF Balance</p>
               <h3 className={classes.cardTitle}>
                 {props.pruf !== "~" 
-                ? <>{Math.round(Number(props.pruf)*1000000)/1000000} <small>PRüF</small></>
+                ? <>{String(Math.round(Number(props.pruf)*100)/100)} <small>PRüF</small></>
                 : <>{props.pruf} <small>PRüF</small></>}
                 </h3>
             </CardHeader>

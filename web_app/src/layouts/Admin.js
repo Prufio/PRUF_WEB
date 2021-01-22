@@ -54,28 +54,18 @@ export default function Dashboard(props) {
   const [WD, setWD] = React.useState(false);
   const [hasSetUp, setHasSetUp] = React.useState(false);
   const [assets, setAssets] = React.useState({})
+  const [hasClearedBalance, setHasClearedBalance] = React.useState(false)
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
-  
-  const mainPanelClasses =
-    classes.mainPanel +
-    " " +
-    cx({
-      [classes.mainPanelSidebarMini]: miniActive,
-      [classes.mainPanelWithPerfectScrollbar]:
-        navigator.platform.indexOf("Win") > -1
-    });
-  // ref for main panel div
-  const mainPanel = React.createRef();
-  // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
-  React.useEffect(() => {
-    if(window.ethereum){
-    window.ethereum.on("accountsChanged", function (accounts) {
-      window.web3.eth.getAccounts().then((e) => {
+
+  const acctListener = async () => {
+
+    window.ethereum.on("accountsChanged", (e) => {
+      console.log("Accounts changed")
         if (window.addr !== e[0]) {
           if (e[0] === undefined || e[0] === null) {
             console.log("Here")
@@ -93,7 +83,7 @@ export default function Dashboard(props) {
             setETHBalance("~");
             setPrufBalance("~");
             setAssets({});
-
+            setAddr("")
             window.addr = "";
 
           }
@@ -120,9 +110,22 @@ export default function Dashboard(props) {
           console.log("///////in acctChanger////////");
         }
         else { return console.log("Something bit in the acct listener, but no changes made.") }
-      });
     });
-  }
+    } 
+  
+  const mainPanelClasses =
+    classes.mainPanel +
+    " " +
+    cx({
+      [classes.mainPanelSidebarMini]: miniActive,
+      [classes.mainPanelWithPerfectScrollbar]:
+        navigator.platform.indexOf("Win") > -1
+    });
+  // ref for main panel div
+  const mainPanel = React.createRef();
+  // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
+  React.useEffect(() => {
+    if(window.ethereum){window.addEventListener("accountListener", acctListener())}
 
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
@@ -151,12 +154,12 @@ export default function Dashboard(props) {
   
       buildWindowUtils() // get the utils object and make it globally accessible
   
-      const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
+/*       const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
         timeOutCounter++;
         setTimeout(() => { if (!window.ethereum && timeOutCounter < 5) checkForEthereum() }, 500);
-      }
+      } */
   
-      checkForEthereum();
+      //checkForEthereum();
   
       window.jdenticon_config = {
         hues: [196],
@@ -185,7 +188,7 @@ export default function Dashboard(props) {
       window.menuChange = undefined;
   
       //Give me the desktop version
-      if (!isMobile && window.ethereum) {
+      if (window.ethereum) {
         _web3 = new Web3(_web3.givenProvider);
         window.web3 = _web3;
         //alert("Is desktop and ethereum exists")
@@ -211,62 +214,26 @@ export default function Dashboard(props) {
         window.resetInfo = false;
         const ethereum = window.ethereum;
   
-        ethereum.enable()
+        //ethereum.enable()
+        ethereum.request({
+          method: 'eth_accounts',
+          params: {},
+        }).then((accounts)=>{
+          if (accounts[0] !== undefined){
+            console.log("got accounts")
+            window.addr = accounts[0].toLowerCase()
+          }
+          else{
+            ethereum.enable()
+          }
+        })
   
-        _web3.eth.getAccounts().then((e) => { setAddr(e[0]); window.addr = e[0] });
-        //window.addEventListener("accountListener", acctListener);
         console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
         setUpContractEnvironment(_web3)
         setIsMounted(true)
       }
-  
-      //Give me the mobile ethereum-enabled version
-      else if (isMobile && window.ethereum) {
-        _web3 = new Web3(_web3.givenProvider);
-        window.web3 = _web3;
-        console.log("Here")
-  
-        window.costs = {}
-        window.additionalElementArrays = {
-          photo: [],
-          text: [],
-          name: ""
-        }
-        window.assetTokenInfo = {
-          assetClass: undefined,
-          idxHash: undefined,
-          name: undefined,
-          photos: undefined,
-          text: undefined,
-          status: undefined,
-        }
-        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-        window.resetInfo = false;
-  
-        _ipfs = new IPFS({
-          host: "ipfs.infura.io",
-          port: 5001,
-          protocol: "https",
-        });
-  
-        window.ipfs = _ipfs;
 
-        const ethereum = window.ethereum;
-        ethereum.enable()
-  
-        _web3.eth.getAccounts().then((e) => { window.addr = e[0] });
-  
-        //window.addEventListener("accountListener", acctListener);
-        setUpContractEnvironment(_web3)
-  
-  
-        setIsMounted(true)
-      }
-  
-      //Give me the read-only version
       else {
-        //alert("Else clause")
-        //alert("we ended up in here")
         console.log("Here")
         window.ipfsCounter = 0;
         _web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
@@ -294,7 +261,7 @@ export default function Dashboard(props) {
         ps.destroy();
       }
     };
-  });
+  },[]);
   // functions for changeing the states from components
   const handleImageClick = image => {
     setImage(image);
@@ -480,7 +447,7 @@ export default function Dashboard(props) {
     
   }
 
-  const buildAssets = () => {
+  const buildAssets = async () => {
     console.log("BA: In buildAssets. IPFS operation count: ", window.ipfsCounter)
     window.ipfsCounter = 0;
     let tempDescArray = [];
