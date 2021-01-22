@@ -42,6 +42,9 @@ const badgeStyle = {
   },
   gray: {
     backgroundColor: grayColor[0]
+  },
+  darkBlue: {
+    backgroundColor: primaryColor[6]
   }
 };
 

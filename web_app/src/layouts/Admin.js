@@ -36,7 +36,7 @@ export default function Dashboard(props) {
   const [miniActive, setMiniActive] = React.useState(false);
   const [image, setImage] = React.useState(require("assets/img/sidebar-2.jpg"));
   const [color, setColor] = React.useState("blue");
-  const [bgColor, setBgColor] = React.useState("black");
+  const [bgColor, setBgColor] = React.useState("darkBlue");
   const [isKovan, setIsKovan] = React.useState(true);
   const [buildReady, setBuildReady] = React.useState(false);
   const [ETHBalance, setETHBalance] = React.useState("~");

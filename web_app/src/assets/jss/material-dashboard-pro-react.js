@@ -103,7 +103,7 @@ const defaultFont = {
   lineHeight: "1.5em"
 };
 
-const primaryColor = ["#9c27b0", "#ab47bc", "#8e24aa", "#af2cc5", "#7b1fa2", "#00a8ff"];
+const primaryColor = ["#9c27b0", "#ab47bc", "#8e24aa", "#af2cc5", "#7b1fa2", "#00a8ff", "#002a40"];
 const warningColor = [
   "#ff9800",
   "#ffa726",
@@ -139,7 +139,8 @@ const infoColor = [
   "#0097a7",
   "#c4e3f3",
   "#d9edf7",
-  "#00a8ff"
+  "#00a8ff",
+  "#002a40"
 ];
 const roseColor = ["#e91e63", "#ec407a", "#d81b60", "#eb3573", "#c2185b"];
 const grayColor = [
@@ -164,6 +165,7 @@ const grayColor = [
   "#505050"
 ];
 const blackColor = "#000";
+const darkBlueColor = "#002a40";
 const whiteColor = "#FFF";
 const twitterColor = "#55acee";
 const facebookColor = "#3b5998";
@@ -398,6 +400,7 @@ export {
   roseColor,
   grayColor,
   blackColor,
+  darkBlueColor,
   whiteColor,
   twitterColor,
   facebookColor,

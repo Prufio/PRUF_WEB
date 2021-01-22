@@ -13,6 +13,7 @@ import {
   roseColor,
   whiteColor,
   blackColor,
+  darkBlueColor,
   grayColor,
   hexToRgb
 } from "assets/jss/material-dashboard-pro-react.js";
@@ -86,6 +87,13 @@ const sidebarStyle = theme => ({
     color: whiteColor,
     "&:after": {
       background: infoColor[0],
+      opacity: ".93"
+    }
+  },
+  darkBlueBackground: {
+    color: whiteColor,
+    "&:after": {
+      background: darkBlueColor,
       opacity: ".93"
     }
   },
@@ -390,7 +398,7 @@ const sidebarStyle = theme => ({
   blue: {
     "&,&:hover,&:focus": {
       color: whiteColor,
-      backgroundColor: infoColor[7],
+      backgroundColor: infoColor[0],
       boxShadow:
         "0 12px 20px -10px rgba(" +
         hexToRgb(infoColor[0]) +
@@ -398,6 +406,20 @@ const sidebarStyle = theme => ({
         hexToRgb(blackColor) +
         ",.12), 0 7px 8px -5px rgba(" +
         hexToRgb(infoColor[0]) +
+        ",.2)"
+    }
+  },
+  darkBlue: {
+    "&,&:hover,&:focus": {
+      color: whiteColor,
+      backgroundColor: darkBlueColor,
+      boxShadow:
+        "0 12px 20px -10px rgba(" +
+        hexToRgb(infoColor[8]) +
+        ",.28), 0 4px 20px 0 rgba(" +
+        hexToRgb(blackColor) +
+        ",.12), 0 7px 8px -5px rgba(" +
+        hexToRgb(infoColor[8]) +
         ",.2)"
     }
   },
