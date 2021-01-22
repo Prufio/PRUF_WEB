@@ -61,23 +61,72 @@ export default function Dashboard(props) {
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
+  const handleNoEthereum = () => {
+    console.log("No ethereum object available");
+    let web3;
+    web3 = require("web3");
+    web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+    setUpContractEnvironment(web3)
+    window.web3 = web3;
+    setIsMounted(true);
+  }
 
   const handleEthereum = () => {
+    if(window.ethereum){
+    console.log("Found ethereum object");
     let web3;
-    const { ethereum } = window;
-    if (ethereum) {
-      alert('Ethereum successfully detected!')
-      //console.log('Ethereum successfully detected!');
-      // Access the decentralized web!
+    web3 = require("web3");
+    const ethereum = window.ethereum;
+    console.log("Here")
+
       web3 = new Web3(web3.givenProvider);
-      setUpContractEnvironment(web3)
       window.web3 = web3;
-    }
-    else{
-      web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+      window.costs = {}
+      window.additionalElementArrays = {
+        photo: [],
+        text: [],
+        name: ""
+      }
+
+      //More globals (eth-is-connected specific)
+      window.assetTokenInfo = {
+        assetClass: undefined,
+        idxHash: undefined,
+        name: undefined,
+        photos: undefined,
+        text: undefined,
+        status: undefined,
+      }
+
+      window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+      window.resetInfo = false;
+
+      ethereum.request({
+        method: 'eth_accounts',
+        params: {},
+      }).then((accounts)=>{
+        if (accounts[0] !== undefined){
+          console.log("got accounts")
+          window.addr = accounts[0].toLowerCase()
+        }
+        else{
+          ethereum.send('eth_requestAccounts').then((accounts)=>{
+            if (accounts[0] !== undefined){
+              console.log("got accounts")
+              window.addr = accounts[0].toLowerCase()
+            }
+          })
+        }
+      })
+
+      console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
       setUpContractEnvironment(web3)
-      window.web3 = web3;
+
+      setIsMounted(true)
     }
+      else{
+        handleNoEthereum();
+      }
   }
 
   const acctListener = async () => {
@@ -141,8 +190,75 @@ export default function Dashboard(props) {
     });
   // ref for main panel div
   const mainPanel = React.createRef();
+  
+  window.onload = () => {
+    window.balances = {}
+    let timeOutCounter = 0;
+    window.recount = false;
+    let _ipfs;
+
+    _ipfs = new IPFS({
+      host: "ipfs.infura.io",
+      port: 5001,
+      protocol: "https",
+    });
+
+    window.ipfs = _ipfs;
+
+    buildWindowUtils() // get the utils object and make it globally accessible
+
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+        color: [0.36, 0.70],
+        grayscale: [0.24, 0.82]
+      },
+      saturation: {
+        color: 0.75,
+        grayscale: 0.10
+      },
+      backColor: "#ffffffff"
+    };
+
+    //Declare a few globals
+    window.sentPacket = undefined;
+    window.isSettingUpContracts = false;
+    window.hasLoadedAssets = false;
+    let refString = String(window.location.href);
+    if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
+      //window.location.href = '/#/admin/home';
+    } else {
+      window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+      console.log("Here is the search:", window.location.hash)
+    }
+    window.menuChange = undefined;
+
+    window.ipfsCounter = 0;
+
+    _ipfs = new IPFS({
+      host: "ipfs.infura.io",
+      port: 5001,
+      protocol: "https",
+    });
+
+    window.ipfs = _ipfs;
+    //Give me the desktop version
+    if (window.ethereum) {
+      handleEthereum()
+    }
+
+    else {
+      console.log("In startup else clause")
+      window.addEventListener('ethereum#initialized', handleEthereum, {
+        once: true,
+      });
+      setTimeout(handleEthereum, 3300); // 3.3 seconds
+    }
+  }
+  
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
+
     if(window.ethereum){window.addEventListener("accountListener", acctListener())}
 
     if (navigator.platform.indexOf("Win") > -1) {
@@ -152,132 +268,6 @@ export default function Dashboard(props) {
       });
       document.body.style.overflow = "hidden";
     }
-    if(!isMounted){
-      window.balances = {}
-      let timeOutCounter = 0;
-      window.recount = false;
-      let _web3, _ipfs;
-  
-      _ipfs = new IPFS({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-      });
-  
-      window.ipfs = _ipfs;
-  
-      _web3 = require("web3");
-/*       _web3 = new Web3(_web3.givenProvider);
-      window.web3 = _web3;  */
-  
-      buildWindowUtils() // get the utils object and make it globally accessible
-  
-/*       const checkForEthereum = () => { //Wait for MetaMask mobile to serve window.ethereum 
-        timeOutCounter++;
-        setTimeout(() => { if (!window.ethereum && timeOutCounter < 5) checkForEthereum() }, 500);
-      } */
-  
-      //checkForEthereum();
-  
-      window.jdenticon_config = {
-        hues: [196],
-        lightness: {
-          color: [0.36, 0.70],
-          grayscale: [0.24, 0.82]
-        },
-        saturation: {
-          color: 0.75,
-          grayscale: 0.10
-        },
-        backColor: "#ffffffff"
-      };
-  
-      //Declare a few globals
-      window.sentPacket = undefined;
-      window.isSettingUpContracts = false;
-      window.hasLoadedAssets = false;
-      let refString = String(window.location.href);
-      if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
-        //window.location.href = '/#/admin/home';
-      } else {
-        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
-        console.log("Here is the search:", window.location.hash)
-      }
-      window.menuChange = undefined;
-  
-      //Give me the desktop version
-      if (window.ethereum) {
-        _web3 = new Web3(_web3.givenProvider);
-        window.web3 = _web3;
-        //alert("Is desktop and ethereum exists")
-        console.log("Here")
-        window.costs = {}
-        window.additionalElementArrays = {
-          photo: [],
-          text: [],
-          name: ""
-        }
-  
-        //More globals (eth-is-connected specific)
-        window.assetTokenInfo = {
-          assetClass: undefined,
-          idxHash: undefined,
-          name: undefined,
-          photos: undefined,
-          text: undefined,
-          status: undefined,
-        }
-  
-        window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-        window.resetInfo = false;
-        const ethereum = window.ethereum;
-  
-        ethereum.request({
-          method: 'eth_accounts',
-          params: {},
-        }).then((accounts)=>{
-          if (accounts[0] !== undefined){
-            console.log("got accounts")
-            window.addr = accounts[0].toLowerCase()
-          }
-          else{
-            ethereum.send('eth_requestAccounts').then((accounts)=>{
-              if (accounts[0] !== undefined){
-                console.log("got accounts")
-                window.addr = accounts[0].toLowerCase()
-              }
-            })
-          }
-        })
-  
-        console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
-        setUpContractEnvironment(_web3)
-        setIsMounted(true)
-      }
-
-      else {
-        window.addEventListener('ethereum#initialized', handleEthereum, {
-          once: true,
-        });
-        setTimeout(handleEthereum, 3000); // 3 seconds
-
-        console.log("In startup else clause")
-
-        window.ipfsCounter = 0;
-  
-        _ipfs = new IPFS({
-          host: "ipfs.infura.io",
-          port: 5001,
-          protocol: "https",
-        });
-  
-        window.ipfs = _ipfs;
-  
-        setIsMounted(true)
-      }
-    }
-
-    
     window.addEventListener("resize", resizeFunction);
 
     // Specify how to clean up after this effect:
@@ -646,28 +636,6 @@ export default function Dashboard(props) {
       setBuildReady(false)
     }
   }, 1000)
-
-  /* const navTypeListener = setInterval(() => {
-    //Catch late window.ethereum injection case (MetaMask mobile)
-    if (isMobile && window.ethereum && WD === true && window.addr === undefined) {
-      window.ethereum.request({
-        method: 'eth_accounts',
-        params: {},
-      }).then((accounts)=>{
-        if (accounts[0] !== undefined){
-          console.log("got accounts")
-          window.addr = accounts[0].toLowerCase()
-        }
-        else{
-          window.ethereum.send('eth_requestAccounts')
-        }
-      })
-      window.utils.getETHBalance();
-      setUpTokenVals(true, "SetupContractEnvironment")
-      console.log("Caught late ethereum")
-    }
-  }, 500) */
-
  
   const networkListener = setInterval(() => { 
     if(WD === true){
