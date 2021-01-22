@@ -190,8 +190,75 @@ export default function Dashboard(props) {
     });
   // ref for main panel div
   const mainPanel = React.createRef();
+  
+  window.onload = () => {
+    window.balances = {}
+    let timeOutCounter = 0;
+    window.recount = false;
+    let _ipfs;
+
+    _ipfs = new IPFS({
+      host: "ipfs.infura.io",
+      port: 5001,
+      protocol: "https",
+    });
+
+    window.ipfs = _ipfs;
+
+    buildWindowUtils() // get the utils object and make it globally accessible
+
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+        color: [0.36, 0.70],
+        grayscale: [0.24, 0.82]
+      },
+      saturation: {
+        color: 0.75,
+        grayscale: 0.10
+      },
+      backColor: "#ffffffff"
+    };
+
+    //Declare a few globals
+    window.sentPacket = undefined;
+    window.isSettingUpContracts = false;
+    window.hasLoadedAssets = false;
+    let refString = String(window.location.href);
+    if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
+      //window.location.href = '/#/admin/home';
+    } else {
+      window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
+      console.log("Here is the search:", window.location.hash)
+    }
+    window.menuChange = undefined;
+
+    window.ipfsCounter = 0;
+
+    _ipfs = new IPFS({
+      host: "ipfs.infura.io",
+      port: 5001,
+      protocol: "https",
+    });
+
+    window.ipfs = _ipfs;
+    //Give me the desktop version
+    if (window.ethereum) {
+      handleEthereum()
+    }
+
+    else {
+      console.log("In startup else clause")
+      window.addEventListener('ethereum#initialized', handleEthereum, {
+        once: true,
+      });
+      setTimeout(handleEthereum, 3300); // 3.3 seconds
+    }
+  }
+  
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
+
     if(window.ethereum){window.addEventListener("accountListener", acctListener())}
 
     if (navigator.platform.indexOf("Win") > -1) {
@@ -201,72 +268,6 @@ export default function Dashboard(props) {
       });
       document.body.style.overflow = "hidden";
     }
-    if(!isMounted){
-      window.balances = {}
-      let timeOutCounter = 0;
-      window.recount = false;
-      let _ipfs;
-  
-      _ipfs = new IPFS({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-      });
-  
-      window.ipfs = _ipfs;
-  
-      buildWindowUtils() // get the utils object and make it globally accessible
-  
-      window.jdenticon_config = {
-        hues: [196],
-        lightness: {
-          color: [0.36, 0.70],
-          grayscale: [0.24, 0.82]
-        },
-        saturation: {
-          color: 0.75,
-          grayscale: 0.10
-        },
-        backColor: "#ffffffff"
-      };
-  
-      //Declare a few globals
-      window.sentPacket = undefined;
-      window.isSettingUpContracts = false;
-      window.hasLoadedAssets = false;
-      let refString = String(window.location.href);
-      if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
-        //window.location.href = '/#/admin/home';
-      } else {
-        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66)
-        console.log("Here is the search:", window.location.hash)
-      }
-      window.menuChange = undefined;
-
-      window.ipfsCounter = 0;
-  
-      _ipfs = new IPFS({
-        host: "ipfs.infura.io",
-        port: 5001,
-        protocol: "https",
-      });
-
-      window.ipfs = _ipfs;
-      //Give me the desktop version
-      if (window.ethereum) {
-        handleEthereum()
-      }
-
-      else {
-        console.log("In startup else clause")
-        window.addEventListener('ethereum#initialized', handleEthereum, {
-          once: true,
-        });
-        setTimeout(handleEthereum, 3300); // 3.3 seconds
-      }
-    }
-
-    
     window.addEventListener("resize", resizeFunction);
 
     // Specify how to clean up after this effect:
