@@ -2,6 +2,7 @@ import React from "react";
 import "../../assets/css/custom.css";
 import QrReader from 'react-qr-reader'
 import swal from 'sweetalert';
+import { isMobile } from "react-device-detect";
 // import SweetAlert from "react-bootstrap-sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -46,7 +47,7 @@ export default function Verify() {
   const [QRValue, setQRValue] = React.useState("");
   const [verifying, setVerifying] = React.useState(false);
 
-  const [IDXRawInput, setIDXRawInputInput] = React.useState(false);
+  const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
   const [manufacturer, setManufacturer] = React.useState("");
   const [type, setType] = React.useState("");
@@ -123,7 +124,6 @@ export default function Verify() {
     setID("");
     setPassword("");
 
-
     setloginManufacturerState("");
     setloginTypeState("");
     setloginModelState("");
@@ -133,11 +133,16 @@ export default function Verify() {
     setloginLastState("");
     setloginIDState("");
     setloginPasswordState("");
+
+    setIDXRaw("");
+    setIDXRawInput(false);
+    setScanQR(false);
+    setQRValue("");
     console.log("clearing forms")
   };
 
   const verifyAsset = async () => {
-    if (!IDXRawInput) {
+    if (!IDXRawInput && QRValue === "") {
       if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
         if (loginType === "") {
@@ -171,6 +176,7 @@ export default function Verify() {
     if (IDXRawInput) {
       if (loginIDXState === "") {
         setloginIDXState("error");
+        console.log("in here")
         return;
       }
     }
@@ -186,8 +192,15 @@ export default function Verify() {
         idxHash = IDXRaw
       )
     }
+
     {
-      IDXRawInput === false && (
+      QRValue !== "" && (
+        idxHash = QRValue
+      )
+    }
+
+    {
+      IDXRawInput === false && QRValue === "" &&(
         idxHash = window.web3.utils.soliditySha3(
           String(type).replace(/\s/g, ''),
           String(manufacturer).replace(/\s/g, ''),
@@ -309,7 +322,13 @@ export default function Verify() {
       )
     }
     {
-      IDXRawInput === false && (
+      QRValue !== "" && (
+        idxHash = QRValue
+      )
+    }
+
+    {
+      IDXRawInput === false && QRValue === "" &&(
         idxHash = window.web3.utils.soliditySha3(
           String(type).replace(/\s/g, ''),
           String(manufacturer).replace(/\s/g, ''),
@@ -362,16 +381,25 @@ export default function Verify() {
         console.log("verify Result :", verifyResult);
       });
 
-    {
-      verifyResult === "Match confirmed" && (
-        console.log("verify conf")
-      )
+
+    if (verifyResult === "Match confirmed") {
+      swal({
+        title: "Match Confirmed!",
+        text: "Check out your TX here:" + txHash,
+        icon: "success",
+        button: "Close",
+      });
+      console.log("verify conf")
     }
 
-    {
-      verifyResult !== "Match confirmed" && (
-        console.log("verify not conf")
-      )
+    if (verifyResult !== "Match confirmed") {
+      swal({
+        title: "Match Failed!",
+        text: "Please make sure all forms are filled out correctly. Check out your TX here:" + txHash,
+        icon: "success",
+        button: "Close",
+      });
+      console.log("verify not conf")
     }
 
     return clearForms()
@@ -573,7 +601,7 @@ export default function Verify() {
                       control={
                         <Checkbox
                           tabIndex={-1}
-                          onClick={() => setIDXRawInputInput(!IDXRawInput)}
+                          onClick={() => setIDXRawInput(!IDXRawInput)}
                           checkedIcon={<Check className={classes.checkedIcon} />}
                           icon={<Check className={classes.uncheckedIcon} />}
                           classes={{
@@ -619,16 +647,31 @@ export default function Verify() {
                 )}
                 {IDXRawInput === true && verifying && (
                   <>
-                    <CustomInput
-                      labelText={IDXRaw}
-                      id="IDX"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true
-                      }}
-                    />
+                    {!isMobile && (
+                      <CustomInput
+                        labelText={IDXRaw}
+                        id="IDX"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                    )}
+
+                    {isMobile && (
+                      <CustomInput
+                        labelText={IDXRaw.substring(0, 12) + "..." + IDXRaw.substring(54, 66)}
+                        id="IDX"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                    )}
                   </>
                 )}
                 {!verifying && (

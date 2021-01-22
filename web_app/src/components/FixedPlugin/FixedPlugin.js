@@ -96,23 +96,6 @@ export default function FixedPlugin(props) {
           </li>
           <li className="adjustments-line">
             <a className="switch-trigger">
-              <p className="switch-label">Sidebar Mini</p>
-              <Switch
-                checked={props.miniActive}
-                onChange={handleChange("miniActive")}
-                value="sidebarMini"
-                classes={{
-                  switchBase: classesObj.switchBase,
-                  checked: classesObj.switchChecked,
-                  thumb: classesObj.switchIcon,
-                  track: classesObj.switchBar
-                }}
-              />
-              <div className="clearfix" />
-            </a>
-          </li>
-          <li className="adjustments-line">
-            <a className="switch-trigger">
               <p className="switch-label">Sidebar Image</p>
               <Switch
                 checked={showImage}
