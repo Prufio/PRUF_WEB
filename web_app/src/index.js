@@ -17,10 +17,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
-
+import detectEthereumProvider from '@metamask/detect-provider'
 import AdminLayout from "layouts/Admin.js";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
+
+setTimeout(()=>{}, 1000)
 
 
 ReactDOM.render(

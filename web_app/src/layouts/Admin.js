@@ -255,7 +255,7 @@ export default function Dashboard(props) {
       setTimeout(handleEthereum, 3300); // 3.3 seconds
     }
   }
-  
+
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
 
@@ -358,7 +358,7 @@ export default function Dashboard(props) {
     window.isSettingUpContracts = true;
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
     console.log("Setting up contracts")
-    if (window.ethereum !== undefined) {
+    if (window.ethereum) {
       window._contracts = await buildContracts(_web3)
 
       await window.utils.getContracts()
