@@ -312,10 +312,12 @@ export default function Verify() {
     }
 
     console.log("in bvr")
-    let ipfsHash;
-    let tempResult;
     let idxHash;
     let rgtHash;
+    let rgtHashRaw;
+    let receiptVal;
+    let tempTxHash;
+
     {
       IDXRawInput === true && (
         idxHash = IDXRaw
@@ -339,7 +341,7 @@ export default function Verify() {
     }
     {
       middle === "" && (
-        rgtHash = window.web3.utils.soliditySha3(
+        rgtHashRaw = window.web3.utils.soliditySha3(
           String(first).replace(/\s/g, ''),
           String(last).replace(/\s/g, ''),
           String(ID).replace(/\s/g, ''),
@@ -349,7 +351,7 @@ export default function Verify() {
     }
     {
       middle !== "" && (
-        rgtHash = window.web3.utils.soliditySha3(
+        rgtHashRaw = window.web3.utils.soliditySha3(
           String(first).replace(/\s/g, ''),
           String(middle).replace(/\s/g, ''),
           String(last).replace(/\s/g, ''),
@@ -358,6 +360,9 @@ export default function Verify() {
         )
       )
     }
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", window.addr);
@@ -368,6 +373,7 @@ export default function Verify() {
       .send({ from: window.addr })
       .on("error", function (_error) {
         setVerifying(false);
+        tempTxHash = Object.values(_error)[0].transactionHash;
         setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
         console.log(_error)
@@ -375,28 +381,30 @@ export default function Verify() {
         clearForms()
       })
       .on("receipt", (receipt) => {
+        receiptVal = receipt.events.REPORT.returnValues._msg;
         setVerifying(false)
         setTxHash(receipt.transactionHash)
-        setVerifyResult(receipt.events.REPORT.returnValues._msg)
-        console.log("verify Result :", verifyResult);
+        tempTxHash = receipt.transactionHash
+        setVerifyResult(receiptVal)
+        console.log("verify Result :", receiptVal);
       });
 
 
-    if (verifyResult === "Match confirmed") {
+    if (receiptVal === "Match confirmed") {
       swal({
         title: "Match Confirmed!",
-        text: "Check out your TX here:" + txHash,
+        text: "Check out your TX here:" + tempTxHash,
         icon: "success",
         button: "Close",
       });
       console.log("verify conf")
     }
 
-    if (verifyResult !== "Match confirmed") {
+    if (receiptVal !== "Match confirmed") {
       swal({
         title: "Match Failed!",
-        text: "Please make sure all forms are filled out correctly. Check out your TX here:" + txHash,
-        icon: "success",
+        text: "Please make sure all forms are filled out correctly. Check out your TX here:" + tempTxHash,
+        icon: "warning",
         button: "Close",
       });
       console.log("verify not conf")
