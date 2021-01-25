@@ -46,20 +46,31 @@ export default function NewRecord() {
   const [nameTag, setNameTag] = React.useState("");
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("")
 
+  const [assetName, setAssetName] = React.useState("");
   const [manufacturer, setManufacturer] = React.useState("");
   const [type, setType] = React.useState("");
   const [model, setModel] = React.useState("");
   const [serial, setSerial] = React.useState("");
+
+
+  const [descriptionName, setDescriptionName] = React.useState("");
+  const [description, setDescription] = React.useState("");
 
   const [loginManufacturer, setloginManufacturer] = React.useState("");
   const [loginType, setloginType] = React.useState("");
   const [loginModel, setloginModel] = React.useState("");
   const [loginSerial, setloginSerial] = React.useState("");
 
+  const [loginDescriptionName, setloginDescriptionName] = React.useState("");
+  const [loginDescription, setloginDescription] = React.useState("");
+
   const [loginManufacturerState, setloginManufacturerState] = React.useState("");
   const [loginTypeState, setloginTypeState] = React.useState("");
   const [loginModelState, setloginModelState] = React.useState("");
   const [loginSerialState, setloginSerialState] = React.useState("");
+
+  const [loginDescriptionNameState, setloginDescriptionNameState] = React.useState("");
+  const [loginDescriptionState, setloginDescriptionState] = React.useState("");
 
   const [first, setFirst] = React.useState("");
   const [middle, setMiddle] = React.useState("");
@@ -110,10 +121,33 @@ export default function NewRecord() {
 
   const checkAsset = async (idxHash) => {
 
-      let ipfsObj;
-      setShowHelp(false);
+    let ipfsObj;
+    setShowHelp(false);
 
-      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+    if (nameTag !== "") {
+      ipfsObj = { photo: {}, text: {}, name: String(this.state.nameTag) }
+    }
+
+    else {
+      ipfsObj = { photo: {}, text: {}, name: "" }
+    }
+
+    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+
+    if (doesExist) {
+      return
+    }
+
+    else {
+      setSubmittedIdxHash(idxHash)
+      return await window.utils.addIPFSJSONObject(ipfsObj).then(() => { newRecord() })
+    }
+  }
+
+  const newRecord = async () => { //create a new asset record
+    
+    
+    if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "" || (loginDescription === "" && loginDescriptionName !== "") || (loginDescriptionName === "" && loginDescription !== "")) {
 
       if (loginType === "") {
         setloginTypeState("error");
@@ -139,37 +173,16 @@ export default function NewRecord() {
       if (loginPassword === "") {
         setloginPasswordState("error");
       }
-      return false;
+      if (loginDescription === "" && loginDescriptionName !== "") {
+        setloginDescriptionState("error");
+        return;
+      }
+      if (loginDescriptionName === "" && loginDescription !== "") {
+        setloginDescriptionNameState("error");
+        return;
+      }
+      return;
     }
-
-    if (nameTag !== "") {
-      ipfsObj = { photo: {}, text: {}, name: String(this.state.nameTag) }
-    } 
-
-    else{
-      ipfsObj = { photo: {}, text: {}, name: "" }
-    }
-
-    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
-
-    if (doesExist) {
-      return 
-    }
-
-    else { 
-      setSubmittedIdxHash(idxHash)
-      return await window.utils.addIPFSJSONObject(ipfsObj).then(()=>{newRecord()}) 
-    }
-  }
-
-  const newRecord = async () => { //create a new asset record
-
-    setShowHelp(false);
-    setTxStatus(false);
-    setTxHash("");
-    setError(undefined);
-    //setResult("");
-    setTransactionActive(true);
 
     var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
     var rgtHashRaw, idxHash;
@@ -191,12 +204,18 @@ export default function NewRecord() {
 
     let checkedIn = checkAsset(idxHash);
 
-    if(!checkedIn){return}
+    if (!checkedIn) { return }
 
     var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
 
     rgtHash = window.utils.tenThousandHashesOf(rgtHash)
 
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+    //setResult("");
+    setTransactionActive(true);
     console.log("idxHash", idxHash);
     console.log("New rgtRaw", rgtHashRaw);
     console.log("New rgtHash", rgtHash);
@@ -298,6 +317,7 @@ export default function NewRecord() {
               </FormControl>
             </form>
           </CardBody>
+          <br/>
         </Card>
       )}
       {assetClass !== "" && (
@@ -315,6 +335,18 @@ export default function NewRecord() {
                   <h4>AC Selected: {assetClass} </h4>
                   {!transactionActive && (
                     <>
+                      <CustomInput
+                        labelText="Asset Name"
+                        id="assetName"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event => {
+                            setAssetName(event.target.value.trim())
+                          },
+                        }}
+                      />
                       <CustomInput
                         success={loginManufacturerState === "success"}
                         error={loginManufacturerState === "error"}
@@ -402,6 +434,18 @@ export default function NewRecord() {
                   )}
                   {transactionActive && (
                     <>
+                      {assetName !== "" && (
+                        <CustomInput
+                          labelText={assetName}
+                          id="assetName"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            disabled: true
+                          }}
+                        />
+                      )}
                       <CustomInput
                         labelText={manufacturer}
                         id="manufacturer"
@@ -638,33 +682,55 @@ export default function NewRecord() {
               </CardHeader>
               <CardBody>
                 <form>
+
                   <CustomInput
-                    labelText="Description Title"
-                    id="description"
+                    success={loginDescriptionNameState === "success"}
+                    error={loginDescriptionNameState === "error"}
+                    labelText="Description Name"
+                    id="descriptionName"
                     formControlProps={{
                       fullWidth: true
                     }}
-                  // inputProps={{
-                  // type: "email"
-                  // }}
+                    inputProps={{
+                      onChange: event => {
+                        setDescriptionName(event.target.value.trim())
+                        if (event.target.value !== "") {
+                          setloginDescriptionNameState("success");
+                        } else {
+                          setloginDescriptionNameState("error");
+                        }
+                        setloginDescriptionName(event.target.value);
+                      },
+                    }}
                   />
+
                   <CustomInput
+                    success={loginDescriptionState === "success"}
+                    error={loginDescriptionState === "error"}
                     labelText="Description"
                     id="description"
                     formControlProps={{
                       fullWidth: true
                     }}
-                  // inputProps={{
-                  // type: "email"
-                  // }}
+                    inputProps={{
+                      onChange: event => {
+                        setDescription(event.target.value.trim())
+                        if (event.target.value !== "") {
+                          setloginDescriptionState("success");
+                        } else {
+                          setloginDescriptionState("error");
+                        }
+                        setloginDescription(event.target.value);
+                      },
+                    }}
                   />
-                  <br />
-                  <Add />
+                  {/* <br /> */}
+                  {/* <Add /> */}
                 </form>
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
+          {/* <GridItem xs={12} sm={12} md={6}>
             <Card>
               <CardHeader color="info" icon>
                 <CardIcon color="info" className="DBGradient">
@@ -689,11 +755,10 @@ export default function NewRecord() {
                       fullWidth: true
                     }}
                   />
-                  {/* <Button color="rose">Create New Record</Button> */}
                 </form>
               </CardBody>
             </Card>
-          </GridItem>
+          </GridItem> */}
         </>
       )}
     </GridContainer>
