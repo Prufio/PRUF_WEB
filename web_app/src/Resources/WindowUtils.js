@@ -8,7 +8,7 @@ function buildWindowUtils() {
     var tempHash = varToHash;
     for (var i = 0; i < 10000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
-      console.log(tempHash);
+      //console.log(tempHash);
     }
     return tempHash;
   }

@@ -121,42 +121,6 @@ export default function NewRecord() {
 
   const checkAsset = async () => {
 
-    idxHash = window.web3.utils.soliditySha3(
-      String(type).replace(/\s/g, ''),
-      String(manufacturer).replace(/\s/g, ''),
-      String(model).replace(/\s/g, ''),
-      String(serial).replace(/\s/g, ''),
-    )
-
-    let ipfsObj;
-    setShowHelp(false);
-
-    if (nameTag !== "") {
-      ipfsObj = { photo: {}, text: {}, name: String(this.state.nameTag) }
-    }
-
-    else {
-      ipfsObj = { photo: {}, text: {}, name: "" }
-    }
-
-    if (description !== "") {
-      ipfsObj.text.Description = description;
-    }
-
-    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
-
-    if (doesExist) {
-      return
-    }
-
-    else {
-      setSubmittedIdxHash(idxHash)
-      return await window.utils.addIPFSJSONObject(ipfsObj).then(() => { _newRecord() })
-    }
-  }
-
-  const _newRecord = async () => { //create a new asset record
-
     if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
       if (loginType === "") {
@@ -194,6 +158,43 @@ export default function NewRecord() {
       return;
     }
 
+    let idxHash = window.web3.utils.soliditySha3(
+      String(type).replace(/\s/g, ''),
+      String(manufacturer).replace(/\s/g, ''),
+      String(model).replace(/\s/g, ''),
+      String(serial).replace(/\s/g, ''),
+    )
+
+    let ipfsObj;
+    setShowHelp(false);
+
+    if (nameTag !== "") {
+      ipfsObj = { photo: {}, text: {}, name: String(nameTag) }
+    }
+
+    else {
+      ipfsObj = { photo: {}, text: {}, name: "" }
+    }
+
+    if (description !== "") {
+      ipfsObj.text.Description = description;
+    }
+
+    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+
+    if (doesExist) {
+      return
+    }
+
+    else {
+      setSubmittedIdxHash(idxHash)
+      await window.utils.addIPFSJSONObject(ipfsObj)
+      setTimeout(_newRecord, 3000)
+    }
+  }
+
+  const _newRecord = async () => { //create a new asset record
+    //console.log("assetClass: ", assetClass)
     var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
     var rgtHashRaw, idxHash;
 
@@ -287,7 +288,7 @@ export default function NewRecord() {
                     select: classes.select
                   }}
                   value={simpleSelect}
-                  onChange={ACLogin}
+                  onChange={(e)=>{ACLogin(e)}}
                   inputProps={{
                     name: "simpleSelect",
                     id: "simple-select"
@@ -306,7 +307,7 @@ export default function NewRecord() {
                       root: classes.selectMenuItem,
                       selected: classes.selectMenuItemSelected
                     }}
-                    value="100003"
+                    value="1000003"
                   >
                     Trinkets
                           </MenuItem>
@@ -315,7 +316,7 @@ export default function NewRecord() {
                       root: classes.selectMenuItem,
                       selected: classes.selectMenuItemSelected
                     }}
-                    value="100004"
+                    value="1000004"
                   >
                     Personal Computers
                           </MenuItem>
@@ -349,7 +350,7 @@ export default function NewRecord() {
                         }}
                         inputProps={{
                           onChange: event => {
-                            setAssetName(event.target.value.trim())
+                            setNameTag(event.target.value.trim())
                           },
                         }}
                       />

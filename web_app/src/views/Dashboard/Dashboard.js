@@ -138,7 +138,7 @@ export default function Dashboard(props) {
   const generateAssetDash = (obj) => {
     if (Object.values(obj).length > 0 && obj.names.length > 0) {
       let component = [];
-      console.log(obj)
+      //console.log(obj)
 
       for (let i = 0; i < obj.ids.length; i++) {
         //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
@@ -203,7 +203,7 @@ export default function Dashboard(props) {
                     placement="bottom"
                     classes={{ tooltip: classes.tooltip }}
                   >
-                    <Button simple color="info" justIcon onClick={() => window.location.reload()}>
+                    <Button simple color="info" justIcon onClick={() => {window.resetInfo = true; window.recount = true;}}>
                       <Refresh className={classes.underChartIcons} />
                     </Button>
                   </Tooltip>

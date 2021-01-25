@@ -610,6 +610,12 @@ export default function Dashboard(props) {
       console.log("11")
       window.hasLoadedAssetClasses = false;
       window.hasLoadedAssets = false;
+      setAssets({});
+      setAssetBalance("~");
+      setIsAssetHolder(false);
+      setHasFetchedBalances(false);
+      setETHBalance("~");
+      setPrufBalance("~");
       setBuildReady(false)
       console.log("WD: setting up assets (Step one)")
       setUpAssets("AssetListener")
