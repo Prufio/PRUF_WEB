@@ -37,10 +37,15 @@ const useStyles = makeStyles(styles);
 
 export default function NewRecord() {
   const [error, setError] = React.useState("");
+  const [showHelp, setShowHelp] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ACSelected, setACSelected] = React.useState(false);
   const [AC, setAC] = React.useState("");
+  const [idxHash, setIdxHash] = React.useState("");
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [assetClass, setAssetClass] = React.useState("");
+  const [nameTag, setNameTag] = React.useState("");
 
   const [manufacturer, setManufacturer] = React.useState("");
   const [type, setType] = React.useState("");
@@ -80,8 +85,7 @@ export default function NewRecord() {
     setAC(event.target.value);
   };
 
-
-  const clearForms = event => {
+  const clearForms = () => {
     setManufacturer("");
     setType("");
     setModel("");
@@ -165,11 +169,11 @@ export default function NewRecord() {
     setTxStatus(false);
     setTxHash("");
     setError(undefined);
-    setResult("");
+    //setResult("");
     setTransactionActive(true);
 
     var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
-    var rgtRaw;
+    var rgtHashRaw;
 
     idxHash = window.web3.utils.soliditySha3(
       String(type).replace(/\s/g, ''),
@@ -190,12 +194,12 @@ export default function NewRecord() {
 
     if(!checkedIn){return}
 
-    var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
+    var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
 
     rgtHash = window.utils.tenThousandHashesOf(rgtHash)
 
     console.log("idxHash", idxHash);
-    console.log("New rgtRaw", rgtRaw);
+    console.log("New rgtRaw", rgtHashRaw);
     console.log("New rgtHash", rgtHash);
     console.log("addr: ", window.addr);
     console.log("AC: ", assetClass);
@@ -218,7 +222,7 @@ export default function NewRecord() {
         setError(Object.values(_error)[0]);
         setAssetClass("")
         setIdxHash("")
-        clearForm();
+        clearForms();
       })
       .on("receipt", (receipt) => {
         setTransactionActive(false);
