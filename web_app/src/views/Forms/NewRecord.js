@@ -132,6 +132,10 @@ export default function NewRecord() {
       ipfsObj = { photo: {}, text: {}, name: "" }
     }
 
+    if (description !== "") {
+      ipfsObj.text.description = description;
+    }
+
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
     if (doesExist) {
@@ -140,12 +144,11 @@ export default function NewRecord() {
 
     else {
       setSubmittedIdxHash(idxHash)
-      return await window.utils.addIPFSJSONObject(ipfsObj).then(() => { newRecord() })
+      return await window.utils.addIPFSJSONObject(ipfsObj).then(() => { _newRecord() })
     }
   }
 
-  const newRecord = async () => { //create a new asset record
-
+  const _newRecord = async () => { //create a new asset record
     
     if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "" || (loginDescription === "" && loginDescriptionName !== "") || (loginDescriptionName === "" && loginDescription !== "")) {
 
@@ -202,9 +205,9 @@ export default function NewRecord() {
       String(password).replace(/\s/g, ''),
     )
 
-    let checkedIn = checkAsset(idxHash);
+    //let checkedIn = checkAsset(idxHash);
 
-    if (!checkedIn) { return }
+    //if (!checkedIn) { return }
 
     var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
 
@@ -600,7 +603,7 @@ export default function NewRecord() {
                         />
                         <div className={classes.formCategory}>
                           <small>*</small> Required fields
-              </div>
+                    </div>
                       </>
                     )}
                     {transactionActive && (
@@ -660,7 +663,7 @@ export default function NewRecord() {
                     )}
                   </>
                   {!transactionActive && (
-                    <Button color="info" className="MLBGradient" onClick={() => newRecord()}>Create New Record</Button>
+                    <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Record</Button>
                   )}
                   {transactionActive && (
                     <h3>
