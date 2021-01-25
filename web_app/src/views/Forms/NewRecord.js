@@ -145,7 +145,7 @@ export default function NewRecord() {
   }
 
   const newRecord = async () => { //create a new asset record
-    
+
     
     if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "" || (loginDescription === "" && loginDescriptionName !== "") || (loginDescriptionName === "" && loginDescription !== "")) {
 
@@ -664,7 +664,7 @@ export default function NewRecord() {
                   )}
                   {transactionActive && (
                     <h3>
-                      Creating Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                      Creating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                     </h3>
                   )}
                 </form>

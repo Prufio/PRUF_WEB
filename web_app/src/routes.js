@@ -4,7 +4,6 @@ import Home from "views/Home/Home.js";
 import NewRecord from "views/Forms/NewRecord.js";
 import Recycle from "views/Forms/Recycle.js";
 import Verify from "views/Forms/Verify.js";
-import Counter from "views/Forms/Counter.js";
 import Discard from "views/Forms/Discard.js";
 import EscrowManager from "views/Forms/EscrowManager.js";
 import Export from "views/Forms/Export.js";
@@ -93,15 +92,6 @@ var dashRoutes = [
     state: "formsCollapse2",
     views: [
       {
-        path: "/counter",
-        name: "Counter",
-        rtlName: "أشكال عادية",
-        mini: "C",
-        rtlMini: "صو",
-        component: Counter,
-        layout: "/admin"
-      },
-      {
         path: "/discard-asset",
         name: "Discard Asset",
         rtlName: "أشكال عادية",
@@ -175,21 +165,5 @@ var dashRoutes = [
       },
     ]
   },
-  // {
-  //   path: "/view-asset",
-  //   name: "View Asset",
-  //   rtlName: "لوحة القيادة",
-  //   icon: DashboardIcon,
-  //   component: ViewAsset,
-  //   layout: "/admin"
-  // },
-  // {
-  //   path: "/retrieved-record",
-  //   name: "Retrieved Record",
-  //   rtlName: "لوحة القيادة",
-  //   icon: DashboardIcon,
-  //   component: RetrievedRecord,
-  //   layout: "/admin"
-  // },
 ];
 export default dashRoutes;
