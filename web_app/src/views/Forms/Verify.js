@@ -2,6 +2,7 @@ import React from "react";
 import "../../assets/css/custom.css";
 import QrReader from 'react-qr-reader'
 import swal from 'sweetalert';
+import { isMobile } from "react-device-detect";
 // import SweetAlert from "react-bootstrap-sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -46,7 +47,7 @@ export default function Verify() {
   const [QRValue, setQRValue] = React.useState("");
   const [verifying, setVerifying] = React.useState(false);
 
-  const [IDXRawInput, setIDXRawInputInput] = React.useState(false);
+  const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
   const [manufacturer, setManufacturer] = React.useState("");
   const [type, setType] = React.useState("");
@@ -123,7 +124,6 @@ export default function Verify() {
     setID("");
     setPassword("");
 
-
     setloginManufacturerState("");
     setloginTypeState("");
     setloginModelState("");
@@ -133,11 +133,16 @@ export default function Verify() {
     setloginLastState("");
     setloginIDState("");
     setloginPasswordState("");
+
+    setIDXRaw("");
+    setIDXRawInput(false);
+    setScanQR(false);
+    setQRValue("");
     console.log("clearing forms")
   };
 
   const verifyAsset = async () => {
-    if (!IDXRawInput) {
+    if (!IDXRawInput && QRValue === "") {
       if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
         if (loginType === "") {
@@ -171,6 +176,7 @@ export default function Verify() {
     if (IDXRawInput) {
       if (loginIDXState === "") {
         setloginIDXState("error");
+        console.log("in here")
         return;
       }
     }
@@ -186,8 +192,15 @@ export default function Verify() {
         idxHash = IDXRaw
       )
     }
+
     {
-      IDXRawInput === false && (
+      QRValue !== "" && (
+        idxHash = QRValue
+      )
+    }
+
+    {
+      IDXRawInput === false && QRValue === "" &&(
         idxHash = window.web3.utils.soliditySha3(
           String(type).replace(/\s/g, ''),
           String(manufacturer).replace(/\s/g, ''),
@@ -299,17 +312,25 @@ export default function Verify() {
     }
 
     console.log("in bvr")
-    let ipfsHash;
-    let tempResult;
     let idxHash;
     let rgtHash;
+    let rgtHashRaw;
+    let receiptVal;
+    let tempTxHash;
+
     {
       IDXRawInput === true && (
         idxHash = IDXRaw
       )
     }
     {
-      IDXRawInput === false && (
+      QRValue !== "" && (
+        idxHash = QRValue
+      )
+    }
+
+    {
+      IDXRawInput === false && QRValue === "" &&(
         idxHash = window.web3.utils.soliditySha3(
           String(type).replace(/\s/g, ''),
           String(manufacturer).replace(/\s/g, ''),
@@ -320,7 +341,7 @@ export default function Verify() {
     }
     {
       middle === "" && (
-        rgtHash = window.web3.utils.soliditySha3(
+        rgtHashRaw = window.web3.utils.soliditySha3(
           String(first).replace(/\s/g, ''),
           String(last).replace(/\s/g, ''),
           String(ID).replace(/\s/g, ''),
@@ -330,7 +351,7 @@ export default function Verify() {
     }
     {
       middle !== "" && (
-        rgtHash = window.web3.utils.soliditySha3(
+        rgtHashRaw = window.web3.utils.soliditySha3(
           String(first).replace(/\s/g, ''),
           String(middle).replace(/\s/g, ''),
           String(last).replace(/\s/g, ''),
@@ -339,6 +360,9 @@ export default function Verify() {
         )
       )
     }
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", window.addr);
@@ -349,6 +373,7 @@ export default function Verify() {
       .send({ from: window.addr })
       .on("error", function (_error) {
         setVerifying(false);
+        tempTxHash = Object.values(_error)[0].transactionHash;
         setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
         console.log(_error)
@@ -356,22 +381,33 @@ export default function Verify() {
         clearForms()
       })
       .on("receipt", (receipt) => {
+        receiptVal = receipt.events.REPORT.returnValues._msg;
         setVerifying(false)
         setTxHash(receipt.transactionHash)
-        setVerifyResult(receipt.events.REPORT.returnValues._msg)
-        console.log("verify Result :", verifyResult);
+        tempTxHash = receipt.transactionHash
+        setVerifyResult(receiptVal)
+        console.log("verify Result :", receiptVal);
       });
 
-    {
-      verifyResult === "Match confirmed" && (
-        console.log("verify conf")
-      )
+
+    if (receiptVal === "Match confirmed") {
+      swal({
+        title: "Match Confirmed!",
+        text: "Check out your TX here:" + tempTxHash,
+        icon: "success",
+        button: "Close",
+      });
+      console.log("verify conf")
     }
 
-    {
-      verifyResult !== "Match confirmed" && (
-        console.log("verify not conf")
-      )
+    if (receiptVal !== "Match confirmed") {
+      swal({
+        title: "Match Failed!",
+        text: "Please make sure all forms are filled out correctly. Check out your TX here:" + tempTxHash,
+        icon: "warning",
+        button: "Close",
+      });
+      console.log("verify not conf")
     }
 
     return clearForms()
@@ -573,7 +609,7 @@ export default function Verify() {
                       control={
                         <Checkbox
                           tabIndex={-1}
-                          onClick={() => setIDXRawInputInput(!IDXRawInput)}
+                          onClick={() => setIDXRawInput(!IDXRawInput)}
                           checkedIcon={<Check className={classes.checkedIcon} />}
                           icon={<Check className={classes.uncheckedIcon} />}
                           classes={{
@@ -619,16 +655,31 @@ export default function Verify() {
                 )}
                 {IDXRawInput === true && verifying && (
                   <>
-                    <CustomInput
-                      labelText={IDXRaw}
-                      id="IDX"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true
-                      }}
-                    />
+                    {!isMobile && (
+                      <CustomInput
+                        labelText={IDXRaw}
+                        id="IDX"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                    )}
+
+                    {isMobile && (
+                      <CustomInput
+                        labelText={IDXRaw.substring(0, 12) + "..." + IDXRaw.substring(54, 66)}
+                        id="IDX"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                    )}
                   </>
                 )}
                 {!verifying && (

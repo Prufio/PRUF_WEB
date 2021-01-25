@@ -159,14 +159,14 @@ export default function Home(props) {
       <br />
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
-          <Card product className={classes.cardHover}>
+          <Card product>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={e => e.preventDefault()}>
                 <img src={Apartment} alt="..." />
               </a>
             </CardHeader>
             <CardBody>
-              <div className={classes.cardHoverUnder}>
+              {/* <div className={classes.cardHoverUnder}>
                 <Tooltip
                   id="tooltip-top"
                   title="View"
@@ -197,7 +197,7 @@ export default function Home(props) {
                     <Edit className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
-              </div>
+              </div> */}
               <h4 className={classes.cardProductTitle}>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
                   Cozy 5 Stars Apartment
@@ -219,14 +219,14 @@ export default function Home(props) {
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
-          <Card product className={classes.cardHover}>
+          <Card product>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={e => e.preventDefault()}>
                 <img src={priceImage3} alt="..." />
               </a>
             </CardHeader>
             <CardBody>
-              <div className={classes.cardHoverUnder}>
+              {/* <div className={classes.cardHoverUnder}>
                 <Tooltip
                   id="tooltip-top"
                   title="View"
@@ -257,7 +257,7 @@ export default function Home(props) {
                     <Edit className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
-              </div>
+              </div> */}
               <h4 className={classes.cardProductTitle}>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
                   16th Century Castle
@@ -278,14 +278,14 @@ export default function Home(props) {
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
-          <Card product className={classes.cardHover}>
+          <Card product>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={e => e.preventDefault()}>
                 <img src={Patek} alt="..." />
               </a>
             </CardHeader>
             <CardBody>
-              <div className={classes.cardHoverUnder}>
+              {/* <div className={classes.cardHoverUnder}>
                 <Tooltip
                   id="tooltip-top"
                   title="View"
@@ -316,7 +316,7 @@ export default function Home(props) {
                     <Edit className={classes.underChartIcons} />
                   </Button>
                 </Tooltip>
-              </div>
+              </div> */}
               <h4 className={classes.cardProductTitle}>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
                   Patek Philippe
