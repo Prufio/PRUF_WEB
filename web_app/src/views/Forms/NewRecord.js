@@ -38,7 +38,7 @@ const useStyles = makeStyles(styles);
 export default function NewRecord() {
   const [error, setError] = React.useState("");
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [transaction, setTransaction] = React.useState(false);
+  const [transactionActive, setTransactionActive] = React.useState(false);
   const [ACSelected, setACSelected] = React.useState(false);
   const [AC, setAC] = React.useState("");
 
@@ -78,7 +78,6 @@ export default function NewRecord() {
 
   const ACLogin = event => {
     setAC(event.target.value);
-    setACSelected(true);
   };
 
 
@@ -107,163 +106,60 @@ export default function NewRecord() {
     console.log("clearing forms")
   };
 
+  const checkAsset = async (idxHash) => {
 
-  // const newRecord = async () => {
-  //   if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+      let ipfsObj;
+      setShowHelp(false);
 
-  //     if (loginType === "") {
-  //       setloginTypeState("error");
-  //     }
-  //     if (loginManufacturer === "") {
-  //       setloginManufacturerState("error");
-  //     }
-  //     if (loginModel === "") {
-  //       setloginModelState("error");
-  //     }
-  //     if (loginSerial === "") {
-  //       setloginSerialState("error");
-  //     }
-  //     if (loginFirst === "") {
-  //       setloginFirstState("error");
-  //     }
-  //     if (loginLast === "") {
-  //       setloginLastState("error");
-  //     }
-  //     if (loginID === "") {
-  //       setloginIDState("error");
-  //     }
-  //     if (loginPassword === "") {
-  //       setloginPasswordState("error");
-  //     }
-  //     return;
-  //   }
+      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
-  //   console.log("in bvr")
-  //   let idxHash;
-  //   let rgtHash;
-  //   let rgtHashRaw;
-  //   let receiptVal;
-  //   let tempTxHash;
-
-  //   idxHash = window.web3.utils.soliditySha3(
-  //     String(type).replace(/\s/g, ''),
-  //     String(manufacturer).replace(/\s/g, ''),
-  //     String(model).replace(/\s/g, ''),
-  //     String(serial).replace(/\s/g, ''),
-  //   )
-  //   {
-  //     middle === "" && (
-  //       rgtHashRaw = window.web3.utils.soliditySha3(
-  //         String(first).replace(/\s/g, ''),
-  //         String(last).replace(/\s/g, ''),
-  //         String(ID).replace(/\s/g, ''),
-  //         String(password).replace(/\s/g, ''),
-  //       )
-  //     )
-  //   }
-  //   {
-  //     middle !== "" && (
-  //       rgtHashRaw = window.web3.utils.soliditySha3(
-  //         String(first).replace(/\s/g, ''),
-  //         String(middle).replace(/\s/g, ''),
-  //         String(last).replace(/\s/g, ''),
-  //         String(ID).replace(/\s/g, ''),
-  //         String(password).replace(/\s/g, ''),
-  //       )
-  //     )
-  //   }
-
-  //   rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
-
-  //   console.log("idxHash", idxHash);
-  //   console.log("rgtHash", rgtHash);
-  //   console.log("addr: ", window.addr);
-  //   setTransaction(true)
-
-  //   await window.contracts.APP_NC.methods
-  //     .newRecordWithDescription(idxHash, rgtHash, AC, "10000")
-  //     .send({ from: window.addr })
-  //     .on("error", function (_error) {
-  //       setTransaction(false);
-  //       tempTxHash = Object.values(_error)[0].transactionHash;
-  //       setTxHash(Object.values(_error)[0].transactionHash);
-  //       console.log(Object.values(_error)[0].transactionHash);
-  //       console.log(_error)
-  //       setError(_error);
-  //       clearForms()
-  //     })
-  //     .on("receipt", (receipt) => {
-  //       receiptVal = receipt.events.REPORT.returnValues._msg;
-  //       setTransaction(false)
-  //       setTxHash(receipt.transactionHash)
-  //       tempTxHash = receipt.transactionHash
-  //       console.log("verify Result :", receiptVal);
-  //     });
-
-
-    // if (receiptVal === "Match confirmed") {
-    //   swal({
-    //     title: "Match Confirmed!",
-    //     text: "Check out your TX here:" + tempTxHash,
-    //     icon: "success",
-    //     button: "Close",
-    //   });
-    //   console.log("verify conf")
-    // }
-
-    // if (receiptVal !== "Match confirmed") {
-    //   swal({
-    //     title: "Match Failed!",
-    //     text: "Please make sure all forms are filled out correctly. Check out your TX here:" + tempTxHash,
-    //     icon: "warning",
-    //     button: "Close",
-    //   });
-    //   console.log("verify not conf")
-    // }
-
-  //   return clearForms()
-  // }
-
-
-  const [idxHash, setIdxHash] = React.useState("")
-  const [assetClass, setAssetClass] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-  const [idxHash, setIdxHash] = React.useState("")
-
-  const checkAsset = async () => {
-    setShowHelp(false);
-    let ipfsObj = { photo: {}, text: {}, name: "" }
+      if (loginType === "") {
+        setloginTypeState("error");
+      }
+      if (loginManufacturer === "") {
+        setloginManufacturerState("error");
+      }
+      if (loginModel === "") {
+        setloginModelState("error");
+      }
+      if (loginSerial === "") {
+        setloginSerialState("error");
+      }
+      if (loginFirst === "") {
+        setloginFirstState("error");
+      }
+      if (loginLast === "") {
+        setloginLastState("error");
+      }
+      if (loginID === "") {
+        setloginIDState("error");
+      }
+      if (loginPassword === "") {
+        setloginPasswordState("error");
+      }
+      return false;
+    }
 
     if (nameTag !== "") {
       ipfsObj = { photo: {}, text: {}, name: String(this.state.nameTag) }
-    }
+    } 
 
-    let idxHash = window.web3.utils.soliditySha3(
-      String(this.state.type).replace(/\s/g, ''),
-      String(this.state.manufacturer).replace(/\s/g, ''),
-      String(this.state.model).replace(/\s/g, ''),
-      String(this.state.serial).replace(/\s/g, '')
-    );
+    else{
+      ipfsObj = { photo: {}, text: {}, name: "" }
+    }
 
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
-    if (!doesExist) {
-      setIdxHash(idxHash);
-      await window.utils.addIPFSJSONObject(ipfsObj)
+    if (doesExist) {
+      setIdxHash("");
     }
 
-    else { return }
+    else { 
+      return await window.utils.addIPFSJSONObject(ipfsObj).then(()=>{newRecord()}) 
+    }
   }
 
-  const _newRecord = async () => { //create a new asset record
+  const newRecord = async () => { //create a new asset record
 
     setShowHelp(false);
     setTxStatus(false);
@@ -275,16 +171,27 @@ export default function NewRecord() {
     var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
     var rgtRaw;
 
-    rgtRaw = window.web3.utils.soliditySha3(
-      String(this.state.first).replace(/\s/g, ''),
-      String(this.state.middle).replace(/\s/g, ''),
-      String(this.state.surname).replace(/\s/g, ''),
-      String(this.state.id).replace(/\s/g, ''),
-      String(this.state.secret).replace(/\s/g, '')
-    );
+    idxHash = window.web3.utils.soliditySha3(
+      String(type).replace(/\s/g, ''),
+      String(manufacturer).replace(/\s/g, ''),
+      String(model).replace(/\s/g, ''),
+      String(serial).replace(/\s/g, ''),
+    )
+
+    rgtHashRaw = window.web3.utils.soliditySha3(
+      String(first).replace(/\s/g, ''),
+      String(middle).replace(/\s/g, ''),
+      String(last).replace(/\s/g, ''),
+      String(ID).replace(/\s/g, ''),
+      String(password).replace(/\s/g, ''),
+    )
+
+    let checkedIn = checkAsset(idxHash);
+
+    if(!checkedIn){return}
 
     var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
-    
+
     rgtHash = window.utils.tenThousandHashesOf(rgtHash)
 
     console.log("idxHash", idxHash);
@@ -405,7 +312,7 @@ export default function NewRecord() {
               <CardBody>
                 <form>
                   <h4>AC Selected: {AC} </h4>
-                  {!transaction && (
+                  {!transactionActive && (
                     <>
                       <CustomInput
                         success={loginManufacturerState === "success"}
@@ -492,7 +399,7 @@ export default function NewRecord() {
               </div>
                     </>
                   )}
-                  {transaction && (
+                  {transactionActive && (
                     <>
                       <CustomInput
                         labelText={manufacturer}
@@ -551,7 +458,7 @@ export default function NewRecord() {
               <CardBody>
                 <form>
                   <>
-                    {!transaction && (
+                    {!transactionActive && (
                       <>
                         <CustomInput
                           success={loginFirstState === "success"}
@@ -651,7 +558,7 @@ export default function NewRecord() {
               </div>
                       </>
                     )}
-                    {transaction && (
+                    {transactionActive && (
                       <>
                         <CustomInput
                           labelText={first}
@@ -707,10 +614,10 @@ export default function NewRecord() {
                       </>
                     )}
                   </>
-                  {!transaction && (
+                  {!transactionActive && (
                     <Button color="info" className="MLBGradient" onClick={() => newRecord()}>Create New Record</Button>
                   )}
-                  {transaction && (
+                  {transactionActive && (
                     <h3>
                       Creating Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
                     </h3>
