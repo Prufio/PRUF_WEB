@@ -41,8 +41,6 @@ export default function NewRecord() {
   const [showHelp, setShowHelp] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
-  const [ACSelected, setACSelected] = React.useState(false);
-  const [AC, setAC] = React.useState("");
   const [txStatus, setTxStatus] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
   const [nameTag, setNameTag] = React.useState("");
@@ -83,7 +81,7 @@ export default function NewRecord() {
 
 
   const ACLogin = event => {
-    setAC(event.target.value);
+    setAssetClass(event.target.value);
   };
 
   const clearForms = () => {
@@ -106,8 +104,7 @@ export default function NewRecord() {
     setloginIDState("");
     setloginPasswordState("");
 
-    setAC("");
-    setACSelected(false);
+    setAssetClass("");
     console.log("clearing forms")
   };
 
@@ -239,7 +236,7 @@ export default function NewRecord() {
   const classes = useStyles();
   return (
     <GridContainer>
-      {!ACSelected && (
+      {assetClass === "" && (
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info" className="DBGradient">
@@ -303,7 +300,7 @@ export default function NewRecord() {
           </CardBody>
         </Card>
       )}
-      {ACSelected && (
+      {assetClass !== "" && (
         <>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
@@ -315,7 +312,7 @@ export default function NewRecord() {
               </CardHeader>
               <CardBody>
                 <form>
-                  <h4>AC Selected: {AC} </h4>
+                  <h4>AC Selected: {assetClass} </h4>
                   {!transactionActive && (
                     <>
                       <CustomInput
