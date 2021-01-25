@@ -252,7 +252,7 @@ export default function Dashboard(props) {
 
     else if (Object.values(obj).length > 0 && obj.names.length === 0) { console.log(obj); return <h1>No assets held by user</h1> }
 
-    else { console.log(obj); return <><h3>Loading held assets</h3> <div className="lds-facebook"><div></div><div></div><div></div></div></> }
+    else { console.log(obj); return <><h3>Loading held assets</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
 
   }
 

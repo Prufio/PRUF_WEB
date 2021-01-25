@@ -719,7 +719,7 @@ export default function Verify() {
               />
               {verifying && (
                 <h3>
-                  verifying Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                  verifying Asset<div className="lds-ellipsis"><div></div><div></div><div></div></div>
                 </h3>
               )}
               <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
@@ -926,7 +926,7 @@ export default function Verify() {
               )}
               {verifying && (
                 <h3>
-                  Verifying Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                  Verifying Asset<div className="lds-ellipsis"><div></div><div></div><div></div></div>
                 </h3>
               )}
               {/* <Button color="info" className="MLBGradient" onClick={() => swal({

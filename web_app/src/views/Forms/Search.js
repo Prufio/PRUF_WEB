@@ -676,7 +676,7 @@ export default function Search() {
               )}
               {retrieving && (
                 <h3>
-                  Retrieving Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                  Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                 </h3>
               )}
             </form>
@@ -698,7 +698,6 @@ export default function Search() {
               onScan={(result) => {
                 if (result) {
                   retrieveRecordQR(result);
-                  // setQRValue(result);
                 }
 
               }}
@@ -712,7 +711,7 @@ export default function Search() {
             />
             {retrieving && (
               <h3>
-                Retrieving Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
               </h3>
             )}
             <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>

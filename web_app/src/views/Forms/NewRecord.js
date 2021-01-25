@@ -53,7 +53,7 @@ export default function NewRecord() {
   const [serial, setSerial] = React.useState("");
 
 
-  const [descriptionName, setDescriptionName] = React.useState("");
+  // const [descriptionName, setDescriptionName] = React.useState("");
   const [description, setDescription] = React.useState("");
 
   const [loginManufacturer, setloginManufacturer] = React.useState("");
@@ -61,8 +61,8 @@ export default function NewRecord() {
   const [loginModel, setloginModel] = React.useState("");
   const [loginSerial, setloginSerial] = React.useState("");
 
-  const [loginDescriptionName, setloginDescriptionName] = React.useState("");
-  const [loginDescription, setloginDescription] = React.useState("");
+  // const [loginDescriptionName, setloginDescriptionName] = React.useState("");
+  // const [loginDescription, setloginDescription] = React.useState("");
 
   const [loginManufacturerState, setloginManufacturerState] = React.useState("");
   const [loginTypeState, setloginTypeState] = React.useState("");
@@ -156,9 +156,8 @@ export default function NewRecord() {
   }
 
   const _newRecord = async () => { //create a new asset record
-    
-    
-    if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "" || (loginDescription === "" && loginDescriptionName !== "") || (loginDescriptionName === "" && loginDescription !== "")) {
+
+    if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
       if (loginType === "") {
         setloginTypeState("error");
@@ -184,14 +183,14 @@ export default function NewRecord() {
       if (loginPassword === "") {
         setloginPasswordState("error");
       }
-      if (loginDescription === "" && loginDescriptionName !== "") {
-        setloginDescriptionState("error");
-        return;
-      }
-      if (loginDescriptionName === "" && loginDescription !== "") {
-        setloginDescriptionNameState("error");
-        return;
-      }
+      // if (loginDescription === "" && loginDescriptionName !== "") {
+      //   setloginDescriptionState("error");
+      //   return;
+      // }
+      // if (loginDescriptionName === "" && loginDescription !== "") {
+      //   setloginDescriptionNameState("error");
+      //   return;
+      // }
       return;
     }
 
@@ -324,7 +323,7 @@ export default function NewRecord() {
               </FormControl>
             </form>
           </CardBody>
-          <br/>
+          <br />
         </Card>
       )}
       {assetClass !== "" && (
@@ -671,7 +670,7 @@ export default function NewRecord() {
                   )}
                   {transactionActive && (
                     <h3>
-                      Creating Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                      Creating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                     </h3>
                   )}
                 </form>
@@ -690,7 +689,7 @@ export default function NewRecord() {
               <CardBody>
                 <form>
 
-                  <CustomInput
+                  {/* <CustomInput
                     success={loginDescriptionNameState === "success"}
                     error={loginDescriptionNameState === "error"}
                     labelText="Description Name"
@@ -709,11 +708,9 @@ export default function NewRecord() {
                         setloginDescriptionName(event.target.value);
                       },
                     }}
-                  />
-
-                  <CustomInput
-                    success={loginDescriptionState === "success"}
-                    error={loginDescriptionState === "error"}
+                  /> */}
+                  {!transactionActive && (
+                    <CustomInput
                     labelText="Description"
                     id="description"
                     formControlProps={{
@@ -722,17 +719,24 @@ export default function NewRecord() {
                     inputProps={{
                       onChange: event => {
                         setDescription(event.target.value.trim())
-                        if (event.target.value !== "") {
-                          setloginDescriptionState("success");
-                        } else {
-                          setloginDescriptionState("error");
-                        }
-                        setloginDescription(event.target.value);
                       },
                     }}
                   />
+                  )}
                   {/* <br /> */}
                   {/* <Add /> */}
+                  {transactionActive && description !== "" && (
+                    <CustomInput
+                      labelText={description}
+                      id="first"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        disabled: true
+                      }}
+                    />
+                  )}
                 </form>
               </CardBody>
             </Card>

@@ -115,7 +115,6 @@ export default function Recycle() {
 
   const handleScanQR = event => {
     setScanQR(!scanQR);
-    setQRValue("")
     console.log("new value", !scanQR)
   };
 
@@ -356,6 +355,7 @@ export default function Recycle() {
               </FormControl>
             </form>
           </CardBody>
+          <br/>
         </Card>
       )}
       {assetClass !== "" && (
@@ -662,7 +662,7 @@ export default function Recycle() {
                   />
                   {recycling && (
                     <h3>
-                      recycling Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
+                      Recycling Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                     </h3>
                   )}
                   <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
@@ -863,11 +863,6 @@ export default function Recycle() {
                   </>
                   {!recycling && (
                     <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
-                  )}
-                  {recycling && (
-                    <h3>
-                      Recycling Asset<div className="lds-facebookRR"><div></div><div></div><div></div></div>
-                    </h3>
                   )}
                   {/* <Button color="info" className="MLBGradient" onClick={() => swal({
                 title: "Match Confirmed!",
