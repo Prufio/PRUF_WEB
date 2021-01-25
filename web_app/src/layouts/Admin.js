@@ -6,6 +6,8 @@ import buildContracts from "./../Resources/Contracts";
 import buildWindowUtils from "./../Resources/WindowUtils";
 import { isMobile, browserName, engineVersion, getUA } from "react-device-detect";
 import { Switch, Route, Redirect } from "react-router-dom";
+import detectEthereumProvider from '@metamask/detect-provider'
+
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -27,6 +29,7 @@ import { SettingsPowerRounded } from "@material-ui/icons";
 var ps;
 
 const useStyles = makeStyles(styles);
+
 
 export default function Dashboard(props) {
   const { ...rest } = props;
@@ -55,12 +58,17 @@ export default function Dashboard(props) {
   const [hasSetUp, setHasSetUp] = React.useState(false);
   const [assets, setAssets] = React.useState({})
   const [hasClearedBalance, setHasClearedBalance] = React.useState(false)
+  const [ethereum, setEthereum] = React.useState({})
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
+
+ /*  const getEth = async () => {await setEthereum(detectEthereumProvider());}
+  getEth() */
+
   const handleNoEthereum = () => {
     console.log("No ethereum object available");
     let web3;
@@ -77,7 +85,7 @@ export default function Dashboard(props) {
     let web3;
     web3 = require("web3");
     const ethereum = window.ethereum;
-    console.log("Here")
+    console.log("Here");
 
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
@@ -640,11 +648,11 @@ export default function Dashboard(props) {
   const networkListener = setInterval(() => { 
     if(WD === true){
       window.web3.eth.net.getNetworkType().then((e) => { 
-        if (e === "kovan" && !isKovan) { setIsKovan(true) } 
-        else if (e !== "kovan") { setIsKovan(false) }  
+        if (e === "kovan" && isKovan === false) { setIsKovan(true) } 
+        else if (e !== "kovan" && isKovan !== false) { setIsKovan(false) }  
       })
     }
-  }, 500)
+  }, 1000)
 
   return (
     <div className={classes.wrapper}>

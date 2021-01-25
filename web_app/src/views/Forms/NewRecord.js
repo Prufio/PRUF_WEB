@@ -35,26 +35,107 @@ import { Description } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function NewRecord() {
-  // const [checked, setChecked] = React.useState([24, 22]);
-  // const [selectedEnabled, setSelectedEnabled] = React.useState("b");
-  // const [selectedValue, setSelectedValue] = React.useState(null);
-  // const handleChange = event => {
-  //   setSelectedValue(event.target.value);
-  // };
-  // const handleChangeEnabled = event => {
-  //   setSelectedEnabled(event.target.value);
-  // };
-  // const handleToggle = value => {
-  //   const currentIndex = checked.indexOf(value);
-  //   const newChecked = [...checked];
 
-  //   if (currentIndex === -1) {
-  //     newChecked.push(value);
-  //   } else {
-  //     newChecked.splice(currentIndex, 1);
-  //   }
-  //   setChecked(newChecked);
-  // };
+  const [idxHash, setIdxHash] = React.useState("")
+  const [assetClass, setAssetClass] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+  const [idxHash, setIdxHash] = React.useState("")
+
+  const checkAsset = async () => {
+    setShowHelp(false);
+    let ipfsObj = { photo: {}, text: {}, name: "" }
+
+    if (nameTag !== "") {
+      ipfsObj = { photo: {}, text: {}, name: String(this.state.nameTag) }
+    }
+
+    let idxHash = window.web3.utils.soliditySha3(
+      String(this.state.type).replace(/\s/g, ''),
+      String(this.state.manufacturer).replace(/\s/g, ''),
+      String(this.state.model).replace(/\s/g, ''),
+      String(this.state.serial).replace(/\s/g, '')
+    );
+
+    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+
+    if (!doesExist) {
+      setIdxHash(idxHash);
+      await window.utils.addIPFSJSONObject(ipfsObj)
+    }
+
+    else { return }
+  }
+
+  const _newRecord = async () => { //create a new asset record
+
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+    setResult("");
+    setTransactionActive(true);
+
+    var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
+    var rgtRaw;
+
+    rgtRaw = window.web3.utils.soliditySha3(
+      String(this.state.first).replace(/\s/g, ''),
+      String(this.state.middle).replace(/\s/g, ''),
+      String(this.state.surname).replace(/\s/g, ''),
+      String(this.state.id).replace(/\s/g, ''),
+      String(this.state.secret).replace(/\s/g, '')
+    );
+
+    var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtRaw);
+    
+    rgtHash = window.utils.tenThousandHashesOf(rgtHash)
+
+    console.log("idxHash", idxHash);
+    console.log("New rgtRaw", rgtRaw);
+    console.log("New rgtHash", rgtHash);
+    console.log("addr: ", window.addr);
+    console.log("AC: ", assetClass);
+    console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+    console.log("IPFS bytes32: ", ipfsHash);
+
+    await window.contracts.APP_NC.methods
+      .$newRecordWithDescription(
+        idxHash,
+        rgtHash,
+        assetClass,
+        "1000000",
+        ipfsHash
+      )
+      .send({ from: window.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        setError(Object.values(_error)[0]);
+        setAssetClass("")
+        setIdxHash("")
+        clearForm();
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        setTxHash(receipt.transactionHash);
+        window.resetInfo = true;
+        window.recount = true;
+      });
+
+    setIdxHash("");
+    setAssetClass("");
+  }
+
   const classes = useStyles();
   return (
     <GridContainer>
