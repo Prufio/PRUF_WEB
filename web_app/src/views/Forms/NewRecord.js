@@ -119,7 +119,14 @@ export default function NewRecord() {
     console.log("clearing forms")
   };
 
-  const checkAsset = async (idxHash) => {
+  const checkAsset = async () => {
+
+    idxHash = window.web3.utils.soliditySha3(
+      String(type).replace(/\s/g, ''),
+      String(manufacturer).replace(/\s/g, ''),
+      String(model).replace(/\s/g, ''),
+      String(serial).replace(/\s/g, ''),
+    )
 
     let ipfsObj;
     setShowHelp(false);
@@ -133,7 +140,7 @@ export default function NewRecord() {
     }
 
     if (description !== "") {
-      ipfsObj.text.description = description;
+      ipfsObj.text.Description = description;
     }
 
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
@@ -206,13 +213,9 @@ export default function NewRecord() {
       String(password).replace(/\s/g, ''),
     )
 
-    //let checkedIn = checkAsset(idxHash);
-
-    //if (!checkedIn) { return }
-
     var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
 
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash)
+    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     setShowHelp(false);
     setTxStatus(false);
