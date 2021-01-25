@@ -36,16 +36,17 @@ import { Description } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function NewRecord() {
+
   const [error, setError] = React.useState("");
   const [showHelp, setShowHelp] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ACSelected, setACSelected] = React.useState(false);
   const [AC, setAC] = React.useState("");
-  const [idxHash, setIdxHash] = React.useState("");
   const [txStatus, setTxStatus] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
   const [nameTag, setNameTag] = React.useState("");
+  const [submittedIdxHash, setSubmittedIdxHash] = React.useState("")
 
   const [manufacturer, setManufacturer] = React.useState("");
   const [type, setType] = React.useState("");
@@ -155,10 +156,11 @@ export default function NewRecord() {
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
     if (doesExist) {
-      setIdxHash("");
+      return 
     }
 
     else { 
+      setSubmittedIdxHash(idxHash)
       return await window.utils.addIPFSJSONObject(ipfsObj).then(()=>{newRecord()}) 
     }
   }
@@ -173,7 +175,7 @@ export default function NewRecord() {
     setTransactionActive(true);
 
     var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
-    var rgtHashRaw;
+    var rgtHashRaw, idxHash;
 
     idxHash = window.web3.utils.soliditySha3(
       String(type).replace(/\s/g, ''),
@@ -221,7 +223,6 @@ export default function NewRecord() {
         setTxHash(Object.values(_error)[0].transactionHash);
         setError(Object.values(_error)[0]);
         setAssetClass("")
-        setIdxHash("")
         clearForms();
       })
       .on("receipt", (receipt) => {
@@ -232,7 +233,6 @@ export default function NewRecord() {
         window.recount = true;
       });
 
-    setIdxHash("");
     setAssetClass("");
   }
 
