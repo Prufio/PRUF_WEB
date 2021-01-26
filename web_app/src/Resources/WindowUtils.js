@@ -40,9 +40,8 @@ function buildWindowUtils() {
     return (time);
   }
 
-  const _getETHBalance = async () => {
-    if (window.addr === undefined) { return 0 }
-    let addr = window.addr;
+  const _getETHBalance = async (addr) => {
+    if (addr === undefined) { return 0 }
     await window.web3.eth.getBalance(addr, (err, balance) => {
       if (err) { } else {
         window.ETHBalance = window.web3.utils.fromWei(balance, "ether")
@@ -863,7 +862,7 @@ function buildWindowUtils() {
     }
   }
 
-  const _resolveACFromID = async (AC) => {
+  const _resolveACFromID = async (AC, addr) => {
     let temp;
     if (window.contracts !== undefined) {
       await window.contracts.AC_MGR.methods
@@ -879,7 +878,7 @@ function buildWindowUtils() {
     }
     let acData = await window.utils.getACData("id", AC)
 
-    if (window.addr !== undefined) {
+    if (addr !== undefined) {
       await window.utils.checkCreds(acData, AC);
       await window.utils.getCosts(6, AC);
     }
@@ -890,7 +889,7 @@ function buildWindowUtils() {
 
   }
 
-  const _checkCreds = async (acData, AC) => {
+  const _checkCreds = async (acData, AC, addr) => {
     window.isAuthUser = undefined;
     let custodyType = acData.custodyType
 
@@ -902,7 +901,7 @@ function buildWindowUtils() {
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
           else {
-            if (_result === window.addr) {
+            if (_result === addr) {
               window.isACAdmin = true;
             }
             else {
@@ -912,7 +911,7 @@ function buildWindowUtils() {
         });
 
       if (custodyType === "Custodial") {
-        let addrHash = await window.web3.utils.soliditySha3(window.addr)
+        let addrHash = await window.web3.utils.soliditySha3(addr)
         await window.contracts.AC_MGR.methods
           .getUserType(addrHash, AC)
           .call((_error, _result) => {
@@ -932,7 +931,7 @@ function buildWindowUtils() {
 
       else if (custodyType === "Non-Custodial") {
         await window.contracts.ID_TKN.methods
-          .balanceOf(window.addr)
+          .balanceOf(addr)
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
@@ -1153,27 +1152,27 @@ function buildWindowUtils() {
     console.log("contracts: ", window.contracts)
   };
 
-  const _determineTokenBalance = async () => {
+  const _determineTokenBalance = async (addr) => {
 
-    if (window.contracts !== undefined && window.addr !== undefined) {
+    if (window.contracts !== undefined && addr !== undefined) {
       let _assetClassBal, _assetBal, _IDTokenBal, _prufTokenBal;
       console.log("getting balance info from token contracts...")
-      await window.contracts.A_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      await window.contracts.A_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
         else { _assetBal = result; console.log("assetBal: ", _assetBal); }
       });
 
-      await window.contracts.AC_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      await window.contracts.AC_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
         else { _assetClassBal = result; console.log("assetClassBal", _assetClassBal); }
       });
 
-      await window.contracts.ID_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      await window.contracts.ID_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
         else { _IDTokenBal = result; console.log("IDTokenBal", _IDTokenBal); }
       });
 
-      await window.contracts.UTIL_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      await window.contracts.UTIL_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
         else { _prufTokenBal = window.web3.utils.fromWei(result, 'ether'); console.log("prufTokenBal", _prufTokenBal); }
       });
@@ -1212,7 +1211,7 @@ function buildWindowUtils() {
     }
   }
 
-  const _getAssetClassTokenInfo = async () => {
+  const _getAssetClassTokenInfo = async (addr) => {
     if (window.balances === undefined) { return 0 }
     let tknIDArray = [], roots = [], discounts = [], custodyTypes = [], exData = [], names = [];
     console.log("GACTI: In _getAssetClassTokenInfo")
@@ -1220,7 +1219,7 @@ function buildWindowUtils() {
     if (Number(window.balances.assetClassBalance) > 0) {
 
       for (let i = 0; i < window.balances.assetClassBalance; i++) {
-        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
+        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(addr, i)
           .call((_error, _result) => {
             if (_error) {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
@@ -1293,7 +1292,7 @@ function buildWindowUtils() {
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }
 
-  const _getAssetTokenInfo = async () => {
+  const _getAssetTokenInfo = async (addr) => {
 
     if (window.balances === undefined) { return }
 
@@ -1312,7 +1311,7 @@ function buildWindowUtils() {
 
 
       for (let i = 0; i < window.balances.assetBalance; i++) {
-        await window.contracts.A_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
+        await window.contracts.A_TKN.methods.tokenOfOwnerByIndex(addr, i)
           .call((_error, _result) => {
             if (_error) {
               return (console.log("IN ERROR IN ERROR IN ERROR"))

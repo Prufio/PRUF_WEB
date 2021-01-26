@@ -230,7 +230,7 @@ export default function Search(props) {
     setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
-      .send({ from: window.addr })
+      .send({ from: props.addr })
       .on("error", function (_error) {
         setMoreInfo(false);
         setTransaction(false);
@@ -399,7 +399,8 @@ export default function Search(props) {
     let idxHash = query;
 
     console.log("idxHash", idxHash);
-    console.log("addr: ", window.addr);
+    console.log("addr: ", props.addr);
+    
     // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
     // await window.contracts.STOR.methods
     //   .getPriceData(idxHash)

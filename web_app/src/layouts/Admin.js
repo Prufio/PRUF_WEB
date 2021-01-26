@@ -116,22 +116,22 @@ export default function Dashboard(props) {
       }).then((accounts)=>{
         if (accounts[0] !== undefined){
           console.log("got accounts")
-          window.addr = accounts[0].toLowerCase()
           setAddr(accounts[0].toLowerCase())
+          setUpContractEnvironment(web3, accounts[0].toLowerCase())
         }
         else{
           ethereum.send('eth_requestAccounts').then((accounts)=>{
             if (accounts[0] !== undefined){
               console.log("got accounts")
-              window.addr = accounts[0].toLowerCase()
               setAddr(accounts[0].toLowerCase())
+              setUpContractEnvironment(web3, accounts[0].toLowerCase())
             }
           })
         }
       })
 
       console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
-      setUpContractEnvironment(web3)
+      
 
       setIsMounted(true)
     }
@@ -144,7 +144,7 @@ export default function Dashboard(props) {
 
     window.ethereum.on("accountsChanged", (e) => {
       console.log("Accounts changed")
-        if (window.addr !== e[0].toLowerCase()) {
+        if (addr !== e[0].toLowerCase()) {
           if (e[0] === undefined || e[0] === null) {
             console.log("Here")
 
@@ -162,13 +162,11 @@ export default function Dashboard(props) {
             setPrufBalance("~");
             setAssets({});
             setAddr("")
-            window.addr = "";
 
           }
 
           //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
 
-          window.addr = e[0].toLowerCase();
           window.assetClass = undefined;
           window.isAuthUser = false;
           window.isACAdmin = false;
@@ -364,7 +362,7 @@ export default function Dashboard(props) {
     }
   };
 
-  const setUpContractEnvironment = async (_web3) => {
+  const setUpContractEnvironment = async (_web3, _addr) => {
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
@@ -374,9 +372,9 @@ export default function Dashboard(props) {
 
       await window.utils.getContracts()
 
-      if (window.addr !== undefined) {
-        await window.utils.getETHBalance();
-        await setUpTokenVals(true, "SetupContractEnvironment")
+      if (_addr !== undefined) {
+        await window.utils.getETHBalance(_addr);
+        await setUpTokenVals(true, "SetupContractEnvironment", _addr)
       }
 
 
@@ -397,7 +395,7 @@ export default function Dashboard(props) {
 
   }
 
-  const setUpAssets = async (who) => {
+  const setUpAssets = async (who, _addr) => {
     console.log("SUA, called from ", who)
 
     window.hasNoAssets = false;
@@ -422,16 +420,9 @@ export default function Dashboard(props) {
       window.acTknIDs = [];
       if (window.balances !== undefined) window.balances.assetBalance = 0;
       window.recount = false
-      await window.utils.getETHBalance();
-      return setUpTokenVals(true, "SUA recount")
+      await window.utils.getETHBalance(_addr);
+      return setUpTokenVals(true, "SUA recount", _addr)
     }
-
-    //Do a full update if the balances are returning undefined at this stage (They should never do this)
-    /* else if (Object.values(window.balances) === [0,0,0,0]) {
-      console.log("balances undefined, trying to get them...");
-      //if (window.addr === undefined) { return this.forceUpdate }
-      return this.setUpTokenVals(true);
-    } */
 
     console.log("SA: In setUpAssets")
 
@@ -441,8 +432,8 @@ export default function Dashboard(props) {
 
     //Get all asset token profiles for parsing
 
-    await window.utils.getAssetTokenInfo()
-    window.assetClasses = await window.utils.getAssetClassTokenInfo()
+    await window.utils.getAssetTokenInfo(_addr)
+    window.assetClasses = await window.utils.getAssetClassTokenInfo(_addr)
 
     if (window.aTknIDs === undefined) { return }
 
@@ -568,10 +559,10 @@ export default function Dashboard(props) {
   }
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-  const setUpTokenVals = async (willSetup, who) => {
+  const setUpTokenVals = async (willSetup, who, _addr) => {
     console.log("STV: Setting up balances, called from ", who)
 
-    await window.utils.determineTokenBalance().then((e)=>{ console.log(e); 
+    await window.utils.determineTokenBalance(_addr).then((e)=>{ console.log(e); 
       if(e === undefined) return console.log("Account Locked")
       setAssetBalance(e.assetBalance); 
       setAssetClassBalance(e.assetClassBalance);
@@ -586,7 +577,7 @@ export default function Dashboard(props) {
 
     await console.log(window.balances)
     if (willSetup) {
-      return setUpAssets("setUpTokenVals")
+      return setUpAssets("setUpTokenVals", _addr)
     }
     
   }
@@ -621,7 +612,7 @@ export default function Dashboard(props) {
       setPrufBalance("~");
       setBuildReady(false)
       console.log("WD: setting up assets (Step one)")
-      setUpAssets("AssetListener")
+      setUpAssets("AssetListener", addr)
       window.resetInfo = false
     }
 
