@@ -716,7 +716,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result.toLowercase === addr) {
+            if (_result.toLowerCase() === addr.toLowerCase()) {
               tempBool = true
             }
             else { tempBool = false }
@@ -731,7 +731,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result === addr) {
+            if (_result.toLowerCase() === addr.toLowerCase()) {
               tempBool = true
             }
             else { tempBool = false }

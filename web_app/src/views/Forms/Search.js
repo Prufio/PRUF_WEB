@@ -380,7 +380,7 @@ export default function Search(props) {
       setRecycled(true)
     }
 
-    await window.utils.checkHoldsToken("asset", idxHash)
+    await window.utils.checkHoldsToken("asset", idxHash, props.addr)
       .then((e) => {
         console.log("is Owner Of", e)
         if (e) {
