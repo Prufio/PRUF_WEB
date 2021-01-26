@@ -1,10 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
-// react plugin for creating charts
-import ChartistGraph from "react-chartist";
-// react plugin for creating vector maps
-import { VectorMap } from "react-jvectormap";
-
+import swal from 'sweetalert';
 import { isMobile } from "react-device-detect";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";

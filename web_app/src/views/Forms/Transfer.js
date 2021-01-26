@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormLabel from "@material-ui/core/FormLabel";
@@ -33,49 +34,129 @@ import { SwapHoriz } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function Transfer() {
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const handleChange = event => {
-    setSelectedValue(event.target.value);
-  };
-  const handleChangeEnabled = event => {
-    setSelectedEnabled(event.target.value);
-  };
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+export default function Transfer(props) {
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
+  const [address, setAddress] = React.useState("");
+  const [loginAddress, setloginAddress] = React.useState("");
+  const [loginAddressState, setloginAddressState] = React.useState("");
+  const [transactionActive, setTransactionActive] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [showHelp, setShowHelp] = React.useState(false);
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [txHash, setTxHash] = React.useState("");
+
+  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+
+  const link = document.createElement('div')
+
+  window.sentPacket = null
+
+  const transferAsset = async () => { //transfer held asset
+
+    if (loginAddress === "") {
+      setloginAddressState("error");
+      return;
     }
-    setChecked(newChecked);
+
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+
+    setTransactionActive(true);
+
+    await window.contracts.A_TKN.methods
+      .safeTransferFrom(
+        props.addr,
+        address,
+        assetInfo.idxHash
+      )
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        link.innerHTML = "Check out your TX <a href='https://kovan.etherscan.io/tx/ + tempTxHash'>here</a>"
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Transaction Failed!",
+          content: link,
+          icon: "Warning",
+          button: "Close",
+        });
+        clearForms();
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        link.innerHTML = "Check out your TX <a href='https://kovan.etherscan.io/tx/ + tempTxHash' target='_blank'>here</a>"
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Transaction Confirmed!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        window.resetInfo = true;
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
+      });
+
+  }
+
+  const clearForms = () => {
+    setAddress("");
+    setloginAddressState("");
+    console.log("clearing forms")
   };
   const classes = useStyles();
   return (
-        <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
-              <SwapHoriz />
-            </CardIcon>
-            <h4 className={classes.cardIconTitle}>Transfer Asset</h4>
-          </CardHeader>
-          <CardBody>
-            <form>
-              <h4>Asset Selected: </h4>
-              <CustomInput
-                labelText="Recieveing Address"
-                id="manufacturer"
-                formControlProps={{
-                  fullWidth: true
-                }}
-              />
-              <Button color="info" className="MLBGradient">Transfer Asset</Button>
-            </form>
-          </CardBody>
-        </Card>
+    <Card>
+      <CardHeader color="info" icon>
+        <CardIcon color="info" className="DBGradient">
+          <SwapHoriz />
+        </CardIcon>
+        <h4 className={classes.cardIconTitle}>Transfer Asset</h4>
+      </CardHeader>
+      <CardBody>
+        <form>
+          <h4>Asset Selected: {assetInfo.name}</h4>
+          <CustomInput
+            success={loginAddressState === "success"}
+            error={loginAddressState === "error"}
+            labelText="Recieving Address *"
+            id="address"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              onChange: event => {
+                setAddress(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginAddressState("success");
+                } else {
+                  setloginAddressState("error");
+                }
+                setloginAddress(event.target.value);
+              },
+            }}
+          />
+          <div className={classes.formCategory}>
+            <small>*</small> Required fields
+              </div>
+          {!transactionActive && (
+            <Button color="info" className="MLBGradient"onClick={() => transferAsset()}>Transfer Asset</Button>
+          )}
+          {transactionActive && (
+            <h3>
+              Transfering Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+        </form>
+      </CardBody>
+    </Card>
   );
 }

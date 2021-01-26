@@ -716,7 +716,7 @@ export default function Search(props) {
                       label: classes.label,
                       root: classes.labelRoot
                     }}
-                    label="Input IDX Hash"
+                    label="Search via IDX Hash"
                   />
                 </div>
               )}
@@ -762,7 +762,7 @@ export default function Search(props) {
                 </>
               )}
               {!retrieving && (
-                <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR</Button>
+                <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR Code</Button>
               )}
               {!retrieving && (
                 <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>

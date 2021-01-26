@@ -684,8 +684,8 @@ export default function NewRecord(props) {
                 <CardIcon color="info" className="DBGradient">
                   <Description />
                 </CardIcon>
-                <h4 className={classes.cardIconTitle}>Asset Description</h4>
-                <h4 className={classes.cardIconTitle}>(optional)</h4>
+                <h4 className={classes.cardIconTitle}>Asset Description (optional)</h4>
+                {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
               </CardHeader>
               <CardBody>
                 <form>

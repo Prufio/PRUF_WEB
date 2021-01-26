@@ -47,8 +47,8 @@ export default function Dashboard(props) {
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState(false);
-  const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0],routes[1],routes[3],routes[4]])
-  
+  const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0], routes[1], routes[3], routes[4]])
+
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [assetClassBalance, setAssetClassBalance] = React.useState("~");
@@ -67,8 +67,8 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
 
- /*  const getEth = async () => {await setEthereum(detectEthereumProvider());}
-  getEth() */
+  /*  const getEth = async () => {await setEthereum(detectEthereumProvider());}
+   getEth() */
   //console.log(routes);
   const handleNoEthereum = () => {
     console.log("No ethereum object available");
@@ -81,12 +81,12 @@ export default function Dashboard(props) {
   }
 
   const handleEthereum = () => {
-    if(window.ethereum){
-    console.log("Found ethereum object");
-    let web3;
-    web3 = require("web3");
-    const ethereum = window.ethereum;
-    console.log("Here");
+    if (window.ethereum) {
+      console.log("Found ethereum object");
+      let web3;
+      web3 = require("web3");
+      const ethereum = window.ethereum;
+      console.log("Here");
 
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
@@ -113,15 +113,15 @@ export default function Dashboard(props) {
       ethereum.request({
         method: 'eth_accounts',
         params: {},
-      }).then((accounts)=>{
-        if (accounts[0] !== undefined){
+      }).then((accounts) => {
+        if (accounts[0] !== undefined) {
           console.log("got accounts")
           setAddr(accounts[0].toLowerCase())
           setUpContractEnvironment(web3, accounts[0].toLowerCase())
         }
-        else{
-          ethereum.send('eth_requestAccounts').then((accounts)=>{
-            if (accounts[0] !== undefined){
+        else {
+          ethereum.send('eth_requestAccounts').then((accounts) => {
+            if (accounts[0] !== undefined) {
               console.log("got accounts")
               setAddr(accounts[0].toLowerCase())
               setUpContractEnvironment(web3, accounts[0].toLowerCase())
@@ -131,47 +131,26 @@ export default function Dashboard(props) {
       })
 
       console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
-      
+
 
       setIsMounted(true)
     }
-      else{
-        handleNoEthereum();
-      }
+    else {
+      handleNoEthereum();
+    }
   }
 
   const acctListener = async () => {
 
     window.ethereum.on("accountsChanged", (e) => {
       console.log("Accounts changed")
-        if (addr !== e[0].toLowerCase()) {
-          if (e[0] === undefined || e[0] === null) {
-            console.log("Here")
+      if (addr !== e[0].toLowerCase()) {
+        if (e[0] === undefined || e[0] === null) {
+          console.log("Here")
 
-            window.ETHBalance = "0";
+          window.ETHBalance = "0";
 
-            window.balances = ["0", "0", "0", "0"];
-            setAssetClassBalance("~");
-            setAssetBalance("~");
-            setIDBalance("0")
-            setIsAssetHolder(false);
-            setIsAssetClassHolder(false);
-            setIsIDHolder(false);
-            setHasFetchedBalances(false);
-            setETHBalance("~");
-            setPrufBalance("~");
-            setAssets({});
-            setAddr("")
-
-          }
-
-          //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
-
-          window.assetClass = undefined;
-          window.isAuthUser = false;
-          window.isACAdmin = false;
-          setAddr(e[0].toLowerCase())
-          setAssets({});
+          window.balances = ["0", "0", "0", "0"];
           setAssetClassBalance("~");
           setAssetBalance("~");
           setIDBalance("0")
@@ -181,14 +160,35 @@ export default function Dashboard(props) {
           setHasFetchedBalances(false);
           setETHBalance("~");
           setPrufBalance("~");
-          window.recount = true;
-          window.resetInfo = true;
-          console.log("///////in acctChanger////////");
+          setAssets({});
+          setAddr("")
+
         }
-        else { return console.log("Something bit in the acct listener, but no changes made.") }
+
+        //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
+
+        window.assetClass = undefined;
+        window.isAuthUser = false;
+        window.isACAdmin = false;
+        setAddr(e[0].toLowerCase())
+        setAssets({});
+        setAssetClassBalance("~");
+        setAssetBalance("~");
+        setIDBalance("0")
+        setIsAssetHolder(false);
+        setIsAssetClassHolder(false);
+        setIsIDHolder(false);
+        setHasFetchedBalances(false);
+        setETHBalance("~");
+        setPrufBalance("~");
+        window.recount = true;
+        window.resetInfo = true;
+        console.log("///////in acctChanger////////");
+      }
+      else { return console.log("Something bit in the acct listener, but no changes made.") }
     });
-    } 
-  
+  }
+
   const mainPanelClasses =
     classes.mainPanel +
     " " +
@@ -199,7 +199,7 @@ export default function Dashboard(props) {
     });
   // ref for main panel div
   const mainPanel = React.createRef();
-  
+
   window.onload = () => {
     window.balances = {}
     let timeOutCounter = 0;
@@ -268,7 +268,7 @@ export default function Dashboard(props) {
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
 
-    if(window.ethereum){window.addEventListener("accountListener", acctListener())}
+    if (window.ethereum) { window.addEventListener("accountListener", acctListener()) }
 
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
@@ -285,7 +285,7 @@ export default function Dashboard(props) {
         ps.destroy();
       }
     };
-  },[]);
+  }, []);
   // functions for changeing the states from components
   const handleImageClick = image => {
     setImage(image);
@@ -344,7 +344,7 @@ export default function Dashboard(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={()=>(<prop.component addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance}/>)}
+            render={() => (<prop.component addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance} />)}
             key={key}
           />
         );
@@ -461,7 +461,7 @@ export default function Dashboard(props) {
     console.log("Prebuild Assets: ", window.assets)
     console.log("Bools...", isAssetHolder, isAssetClassHolder, isIDHolder)
     console.log(window.ipfsCounter >= window.aTknIDs.length, window.aTknIDs.length > 0, WD)
-    
+
   }
 
   const buildAssets = async () => {
@@ -543,15 +543,15 @@ export default function Dashboard(props) {
       window.hasLoadedAssets = true;
     }
 
-    if(window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance){
-        setAssetBalance(window.balances.assetBalance);
-        setAssetClassBalance(window.balances.assetClassBalance);
-        setPrufBalance(window.balances.prufTokenBalance);
-        setIDBalance(window.balances.IDTokenBalance);
-        setIsAssetHolder(window.window.assetHolderBool);
-        setIsAssetClassHolder(window.assetClassHolderBool);
-        setIsIDHolder(window.IDHolderBool);
-        setHasFetchedBalances(window.hasFetchedBalances);
+    if (window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance) {
+      setAssetBalance(window.balances.assetBalance);
+      setAssetClassBalance(window.balances.assetClassBalance);
+      setPrufBalance(window.balances.prufTokenBalance);
+      setIDBalance(window.balances.IDTokenBalance);
+      setIsAssetHolder(window.window.assetHolderBool);
+      setIsAssetClassHolder(window.assetClassHolderBool);
+      setIsIDHolder(window.IDHolderBool);
+      setHasFetchedBalances(window.hasFetchedBalances);
     }
     setAssets(window.assets);
     console.log("BA: Assets after rebuild: ", window.assets)
@@ -562,9 +562,10 @@ export default function Dashboard(props) {
   const setUpTokenVals = async (willSetup, who, _addr) => {
     console.log("STV: Setting up balances, called from ", who)
 
-    await window.utils.determineTokenBalance(_addr).then((e)=>{ console.log(e); 
-      if(e === undefined) return console.log("Account Locked")
-      setAssetBalance(e.assetBalance); 
+    await window.utils.determineTokenBalance(_addr).then((e) => {
+      console.log(e);
+      if (e === undefined) return console.log("Account Locked")
+      setAssetBalance(e.assetBalance);
       setAssetClassBalance(e.assetClassBalance);
       setPrufBalance(e.prufTokenBalance);
       setIDBalance(e.IDTokenBalance);
@@ -579,7 +580,7 @@ export default function Dashboard(props) {
     if (willSetup) {
       return setUpAssets("setUpTokenVals", _addr)
     }
-    
+
   }
 
   const getIPFSJSONObject = (lookup, descElement) => {
@@ -644,12 +645,12 @@ export default function Dashboard(props) {
       setBuildReady(false)
     }
   }, 1000)
- 
-  const networkListener = setInterval(() => { 
-    if(WD === true){
-      window.web3.eth.net.getNetworkType().then((e) => { 
-        if (e === "kovan" && isKovan === false) { setIsKovan(true) } 
-        else if (e !== "kovan" && isKovan !== false) { setIsKovan(false) }  
+
+  const networkListener = setInterval(() => {
+    if (WD === true) {
+      window.web3.eth.net.getNetworkType().then((e) => {
+        if (e === "kovan" && isKovan === false) { setIsKovan(true) }
+        else if (e !== "kovan" && isKovan !== false) { setIsKovan(false) }
       })
     }
   }, 1000)
