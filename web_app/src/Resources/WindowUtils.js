@@ -715,7 +715,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result.toLowerCase() === addr.toLowerCase()) {
+            if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               tempBool = true
             }
             else { tempBool = false }
@@ -730,7 +730,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result.toLowerCase() === addr.toLowerCase()) {
+            if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               tempBool = true
             }
             else { tempBool = false }
@@ -901,7 +901,7 @@ function buildWindowUtils() {
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
           else {
-            if (_result === addr) {
+            if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               window.isACAdmin = true;
             }
             else {
@@ -911,7 +911,7 @@ function buildWindowUtils() {
         });
 
       if (custodyType === "Custodial") {
-        let addrHash = await window.web3.utils.soliditySha3(addr)
+        let addrHash = await window.web3.utils.soliditySha3(window.web3.utils.toChecksumAddress(addr))
         await window.contracts.AC_MGR.methods
           .getUserType(addrHash, AC)
           .call((_error, _result) => {
@@ -1317,7 +1317,6 @@ function buildWindowUtils() {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
             } else {
               let resStr;
-              //console.log(window.web3.utils.numberToHex(_result))
               resStr = window.web3.utils.numberToHex(_result);
               while (resStr.length < 66) {
                 resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)

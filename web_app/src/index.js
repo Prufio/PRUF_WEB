@@ -22,8 +22,6 @@ import AdminLayout from "layouts/Admin.js";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 
-//setTimeout(async () => {let provider = await detectEthereumProvider(); if(provider){alert("Ethereum detected")}else{alert("No ethereum detected")}}, 1)
-
 
 ReactDOM.render(
   <HashRouter>
