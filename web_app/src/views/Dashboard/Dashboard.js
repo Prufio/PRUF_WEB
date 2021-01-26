@@ -94,7 +94,6 @@ export default function Dashboard(props) {
 
   })
 
-
   const [viewAsset, setViewAsset] = React.useState(false)
   const [checkedA, setCheckedA] = React.useState(true);
   const [checkedB, setCheckedB] = React.useState(false);
@@ -257,34 +256,54 @@ export default function Dashboard(props) {
   }
 
   const handleSimple = event => {
+    window.sentPacket = selectedAssetObj
     setSimpleSelect(event.target.value);
-    if (event.target.value === "transfer") {
-      return window.location.href = "/#/admin/transfer-asset"
+    let e=event.target.value, href;
+
+    switch (e) {
+      case "transfer" : {
+        href = "/#/admin/transfer-asset";
+        break
+      }
+      case "escrow" : {
+        href = "/#/admin/escrow-manager";
+        break
+      }
+      case "import" : {
+        href = "/#/admin/import-asset";
+        break
+      }
+      case "export" : {
+        href = "/#/admin/export-asset";
+        break
+      }
+      case "discard" : {
+        href = "/#/admin/discard-asset";
+        break
+      }
+      case "change-status" : {
+        href = "/#/admin/modify-status";
+        break
+      }
+      case "decrement-counter" : {
+        href = "/#/admin/counter";
+        break
+      }
+      case "edit-information" : {
+        href = "/#/admin/modify-description";
+        break
+      }
+      case "edit-rightsholder" : {
+        href = "/#/admin/modify-rightsholder";
+        break
+      }
+      default : {
+        console.log("Invalid menu selection: '", e, "'"); 
+        break
+      }
     }
-    if (event.target.value === "escrow") {
-      return window.location.href = "/#/admin/escrow-manager"
-    }
-    if (event.target.value === "import") {
-      return window.location.href = "/#/admin/import-asset"
-    }
-    if (event.target.value === "export") {
-      return window.location.href = "/#/admin/export-asset"
-    }
-    if (event.target.value === "discard") {
-      return window.location.href = "/#/admin/discard-asset"
-    }
-    if (event.target.value === "change-status") {
-      return window.location.href = "/#/admin/modify-status"
-    }
-    if (event.target.value === "decrement-counter") {
-      return window.location.href = "/#/admin/counter"
-    }
-    if (event.target.value === "edit-information") {
-      return window.location.href = "/#/admin/modify-description"
-    }
-    if (event.target.value === "edit-rightsholder") {
-      return window.location.href = "/#/admin/modify-rightsholder"
-    }
+
+    return window.location.href = href;
   };
 
   const classes = useStyles();
@@ -398,6 +417,7 @@ export default function Dashboard(props) {
                   <ExitToApp />
                   </Button>
                   </Tooltip> */}
+
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
               <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
@@ -544,6 +564,6 @@ export default function Dashboard(props) {
         </div>
       )
       }
-    </div >
+    </div>
   );
 }

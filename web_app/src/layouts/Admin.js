@@ -68,7 +68,7 @@ export default function Dashboard(props) {
 
  /*  const getEth = async () => {await setEthereum(detectEthereumProvider());}
   getEth() */
-
+  console.log(routes);
   const handleNoEthereum = () => {
     console.log("No ethereum object available");
     let web3;
@@ -663,7 +663,7 @@ export default function Dashboard(props) {
   return (
     <div className={classes.wrapper}>
       <Sidebar
-        routes={routes}
+        routes={[routes[0],routes[1],routes[3],routes[4].views[0]]}
         logoText={"Creative Tim"}
         logo={logo}
         image={image}
