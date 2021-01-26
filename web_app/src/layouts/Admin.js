@@ -47,6 +47,7 @@ export default function Dashboard(props) {
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState(false);
+  const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0],routes[1],routes[3],routes[4].views[0]])
   
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
@@ -68,7 +69,7 @@ export default function Dashboard(props) {
 
  /*  const getEth = async () => {await setEthereum(detectEthereumProvider());}
   getEth() */
-  console.log(routes);
+  //console.log(routes);
   const handleNoEthereum = () => {
     console.log("No ethereum object available");
     let web3;
@@ -663,7 +664,7 @@ export default function Dashboard(props) {
   return (
     <div className={classes.wrapper}>
       <Sidebar
-        routes={[routes[0],routes[1],routes[3],routes[4].views[0]]}
+        routes={sidebarRoutes}
         logoText={"Creative Tim"}
         logo={logo}
         image={image}
