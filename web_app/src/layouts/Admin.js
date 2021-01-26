@@ -82,11 +82,11 @@ export default function Dashboard(props) {
 
   const handleEthereum = () => {
     if (window.ethereum) {
-      console.log("Found ethereum object");
+      //console.log("Found ethereum object");
       let web3;
       web3 = require("web3");
       const ethereum = window.ethereum;
-      console.log("Here");
+      //console.log("Here");
 
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
@@ -99,21 +99,21 @@ export default function Dashboard(props) {
 
       web3.eth.net.getNetworkType().then((e) => { 
         if (e === "kovan") { 
-          console.log("kovan"); 
+          //console.log("kovan"); 
           window.isKovan = true;
           ethereum.request({
             method: 'eth_accounts',
             params: {},
           }).then((accounts)=>{
             if (accounts[0] !== undefined){
-              console.log("got accounts")
+              //console.log("got accounts")
               setAddr(String(window.web3.utils.toChecksumAddress(accounts[0])))
               setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]))
             }
             else{
               ethereum.send('eth_requestAccounts').then((accounts)=>{
                 if (accounts[0] !== undefined){
-                  console.log("got accounts")
+                  //console.log("got accounts")
                   setAddr(window.web3.utils.toChecksumAddress(accounts[0]))
                   setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]))
                 }
@@ -121,7 +121,7 @@ export default function Dashboard(props) {
             }
           })
           return setIsKovan(true) } 
-        else { console.log("!kovan"); window.isKovan = false; return setIsKovan(false) }  
+        else { /* console.log("!kovan"); */ window.isKovan = false; return setIsKovan(false) }  
       })
 
       //More globals (eth-is-connected specific)
@@ -137,7 +137,7 @@ export default function Dashboard(props) {
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
 
-      console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
+      //console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
 
 
       setIsMounted(true)
@@ -152,6 +152,12 @@ export default function Dashboard(props) {
         window.location.reload()
     });
   }
+
+  /* const messageListener = () => {
+    window.ethereum.on('message', (message) => {
+        console.log(message)
+    });
+  } */
 
   const acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
@@ -282,11 +288,13 @@ export default function Dashboard(props) {
   }
 
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
+
   React.useEffect(() => {
 
     if(window.ethereum){
       window.addEventListener("chainListener", chainListener())
       window.addEventListener("accountListener", acctListener())
+      /* window.addEventListener("messageListener", messageListener()) */
     }
 
     if (navigator.platform.indexOf("Win") > -1) {
@@ -383,11 +391,11 @@ export default function Dashboard(props) {
 
   const setUpContractEnvironment = async (_web3, _addr) => {
     if(window.isKovan === false){return}
-    console.log("IN SUCE, addr:", _addr)
+    //console.log("IN SUCE, addr:", _addr)
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
-    console.log("Setting up contracts")
+    //console.log("Setting up contracts")
     if (window.ethereum) {
       window._contracts = await buildContracts(_web3)
 
@@ -399,7 +407,7 @@ export default function Dashboard(props) {
       }
 
 
-      console.log("bools...", window.assetHolderBool, window.assetClassHolderBool, window.IDHolderBool)
+      //console.log("bools...", window.assetHolderBool, window.assetClassHolderBool, window.IDHolderBool)
       window.isSettingUpContracts = false;
       setWD(true)
     }
@@ -463,7 +471,7 @@ export default function Dashboard(props) {
       await getIPFSJSONObject(window.ipfsHashArray[i], tempDescObj["desc" + i])
     }
 
-    console.log("Temp description obj: ", tempDescObj)
+    //console.log("Temp description obj: ", tempDescObj)
 
     for (let x = 0; x < window.aTknIDs.length; x++) {
       let tempArray = tempDescObj["desc" + x]
@@ -478,10 +486,10 @@ export default function Dashboard(props) {
 
     setWD(true)
 
-    console.log("IPFS operation count: ", window.ipfsCounter)
-    console.log("Prebuild Assets: ", window.assets)
-    console.log("Bools...", isAssetHolder, isAssetClassHolder, isIDHolder)
-    console.log(window.ipfsCounter >= window.aTknIDs.length, window.aTknIDs.length > 0, WD)
+    //console.log("IPFS operation count: ", window.ipfsCounter)
+    //console.log("Prebuild Assets: ", window.assets)
+    //console.log("Bools...", isAssetHolder, isAssetClassHolder, isIDHolder)
+    //console.log(window.ipfsCounter >= window.aTknIDs.length, window.aTknIDs.length > 0, WD)
 
   }
 
@@ -584,7 +592,7 @@ export default function Dashboard(props) {
     console.log("STV: Setting up balances, called from ", who)
 
     await window.utils.determineTokenBalance(_addr).then((e) => {
-      console.log(e);
+      //console.log(e);
       if (e === undefined) return console.log("Account Locked")
       setAssetBalance(e.assetBalance);
       setAssetClassBalance(e.assetClassBalance);
@@ -644,7 +652,6 @@ export default function Dashboard(props) {
           setUpAssets("AssetListener", accounts[0])
         }
       })
-      //setUpAssets("AssetListener", addr)
       window.resetInfo = false
     }
 
@@ -653,7 +660,7 @@ export default function Dashboard(props) {
       if (window.assets.ids.length > 0 && window.assets.names.length === 0 &&
         buildReady === true && Object.values(window.assets.descriptions).length === window.aTknIDs.length && window.aTknIDs.length > 0) {
         if (window.ipfsCounter >= window.aTknIDs.length && window.resetInfo === false) {
-          console.log("10")
+          //console.log("10")
           console.log("WD: rebuilding assets (Last Step)")
           buildAssets()
         }
@@ -663,7 +670,7 @@ export default function Dashboard(props) {
     //In the case of a completed recount and rough asset build, make asset info usable for app
     if (window.aTknIDs !== undefined && buildReady === false) {
       if (window.ipfsCounter >= window.aTknIDs.length && window.aTknIDs.length > 0 && WD === true) {
-        console.log("12")
+        //console.log("12")
         console.log("Assets are ready for rebuild")
         setBuildReady(true)
       }
@@ -671,11 +678,11 @@ export default function Dashboard(props) {
 
     //Assets finished rebuilding, flip rebuild switch
     else if (buildReady === true && window.ipfsCounter < window.aTknIDs.length && WD === false) {
-      console.log("13")
+      //console.log("13")
       console.log("Assets finished rebuilding, no longer ready for rebuild")
       setBuildReady(false)
     }
-  }, 1000)
+  }, 1500)
 
   return (
     <div className={classes.wrapper}>

@@ -45,7 +45,7 @@ function buildWindowUtils() {
     await window.web3.eth.getBalance(addr, (err, balance) => {
       if (err) { } else {
         window.ETHBalance = window.web3.utils.fromWei(balance, "ether")
-        console.log("UTILS: Wallet balance: ", window.ETHBalance)
+        //console.log("UTILS: Wallet balance: ", window.ETHBalance)
       }
     });
   }
@@ -1156,25 +1156,25 @@ function buildWindowUtils() {
 
     if (window.contracts !== undefined && addr !== undefined) {
       let _assetClassBal, _assetBal, _IDTokenBal, _prufTokenBal;
-      console.log("getting balance info from token contracts...")
+      //console.log("getting balance info from token contracts...")
       await window.contracts.A_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _assetBal = result; console.log("assetBal: ", _assetBal); }
+        else { _assetBal = result; /* console.log("assetBal: ", _assetBal); */ }
       });
 
       await window.contracts.AC_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _assetClassBal = result; console.log("assetClassBal", _assetClassBal); }
+        else { _assetClassBal = result; /* console.log("assetClassBal", _assetClassBal); */ }
       });
 
       await window.contracts.ID_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _IDTokenBal = result; console.log("IDTokenBal", _IDTokenBal); }
+        else { _IDTokenBal = result; /* console.log("IDTokenBal", _IDTokenBal); */ }
       });
 
       await window.contracts.UTIL_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _prufTokenBal = window.web3.utils.fromWei(result, 'ether'); console.log("prufTokenBal", _prufTokenBal); }
+        else { _prufTokenBal = window.web3.utils.fromWei(result, 'ether'); /* console.log("prufTokenBal", _prufTokenBal); */ }
       });
 
       if (Number(_assetBal) > 0) {
@@ -1214,7 +1214,7 @@ function buildWindowUtils() {
   const _getAssetClassTokenInfo = async (addr) => {
     if (window.balances === undefined) { return 0 }
     let tknIDArray = [], roots = [], discounts = [], custodyTypes = [], exData = [], names = [];
-    console.log("GACTI: In _getAssetClassTokenInfo")
+    //console.log("GACTI: In _getAssetClassTokenInfo")
 
     if (Number(window.balances.assetClassBalance) > 0) {
 
@@ -1231,7 +1231,7 @@ function buildWindowUtils() {
           });
       }
       
-      console.log("AC IDs: ", tknIDArray);
+      //console.log("AC IDs: ", tknIDArray);
 
       for (let i = 0; i < tknIDArray.length; i++) {
         await window.contracts.AC_MGR.methods
@@ -1280,7 +1280,7 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
+              //console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
               names.push(_result)
             }
           });
@@ -1296,7 +1296,7 @@ function buildWindowUtils() {
 
     if (window.balances === undefined) { return }
 
-    console.log("GATI: In _getAssetTokenInfo")
+    //console.log("GATI: In _getAssetTokenInfo")
     //alert("IN GATI")
 
     if (Number(window.balances.assetBalance) > 0) {
@@ -1540,8 +1540,8 @@ function buildWindowUtils() {
 
   }
 
-  console.log("Setting up window utils")
-  return console.log("Utils loaded: ", window.utils)
+  //console.log("Setting up window utils")
+  return //console.log("Utils loaded: ", window.utils)
 }
 
 export default buildWindowUtils
