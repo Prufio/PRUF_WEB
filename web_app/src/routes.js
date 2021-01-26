@@ -13,20 +13,18 @@ import ModifyStatus from "views/Forms/ModifyStatus.js";
 import ModifyRGT from "views/Forms/ModifyRGT.js";
 import Transfer from "views/Forms/Transfer.js";
 import Search from "views/Forms/Search.js";
-import ViewAsset from "views/ViewAsset/ViewAsset.js";
-import RetrievedRecord from "views/RetrievedRecord/RetrievedRecord.js";
 
 // @material-ui/icons
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import HomeIcon from "@material-ui/icons/Home";
+import DashboardIcon from "@material-ui/icons/DashboardOutlined";
+import HomeIcon from "@material-ui/icons/HomeOutlined";
 import SearchIcon from "@material-ui/icons/Search";
 import HowToReg from "@material-ui/icons/HowToReg";
+import NewRecordIcon from "@material-ui/icons/LibraryAddOutlined";
 
 var dashRoutes = [
   {
     path: "/home",
     name: "Home",
-    rtlName: "لوحة القيادة",
     icon: HomeIcon,
     component: Home,
     layout: "/admin"
@@ -34,7 +32,6 @@ var dashRoutes = [
   {
     path: "/dashboard",
     name: "Asset Dashboard",
-    rtlName: "لوحة القيادة",
     icon: DashboardIcon,
     component: Dashboard,
     layout: "/admin"
@@ -42,7 +39,6 @@ var dashRoutes = [
   {
     path: "/verify-asset",
     name: "Verify",
-    rtlName: "لوحة القيادة",
     icon: HowToReg,
     component: Verify,
     layout: "/admin"
@@ -50,120 +46,62 @@ var dashRoutes = [
   {
     path: "/search",
     name: "Search",
-    rtlName: "لوحة القيادة",
     icon: SearchIcon,
     component: Search,
     layout: "/admin"
   },
   {
-    collapse: true,
+    path: "/new-record",
     name: "New Record",
-    rtlName: "إستمارات",
-    icon: "note_add",
-    state: "formsCollapse",
-    views: [
-      {
-        path: "/new-record",
-        name: "New Record",
-        rtlName: "أشكال عادية",
-        mini: "NR",
-        // icon: "cachced",
-        rtlMini: "صو",
-        component: NewRecord,
-        layout: "/admin"
-      },
-      {
-        path: "/recycle-asset",
-        name: "Recycle",
-        rtlName: "أشكال عادية",
-        mini: "R",
-        // icon: "cachced",
-        rtlMini: "صو",
-        component: Recycle,
-        layout: "/admin"
-      },
-    ]
+    icon: NewRecordIcon,
+    component: NewRecord,
+    layout: "/admin"
   },
   {
-    collapse: true,
-    name: "Modify Asset",
-    rtlName: "إستمارات",
-    icon: "edit",
-    state: "formsCollapse2",
-    views: [
-      {
-        path: "/discard-asset",
-        name: "Discard Asset",
-        rtlName: "أشكال عادية",
-        mini: "DA",
-        rtlMini: "صو",
-        component: Discard,
-        layout: "/admin"
-      },
-      {
-        path: "/escrow-manager",
-        name: "Escrow Manager",
-        rtlName: "أشكال عادية",
-        mini: "EM",
-        rtlMini: "صو",
-        component: EscrowManager,
-        layout: "/admin"
-      },
-      {
-        path: "/export-asset",
-        name: "Export Asset",
-        rtlName: "أشكال عادية",
-        mini: "EA",
-        rtlMini: "صو",
-        component: Export,
-        layout: "/admin"
-      },
-      {
-        path: "/import-asset",
-        name: "Import Asset",
-        rtlName: "أشكال عادية",
-        mini: "IA",
-        rtlMini: "صو",
-        component: Import,
-        layout: "/admin"
-      },
-      {
-        path: "/modify-description",
-        name: "Modify Description",
-        rtlName: "أشكال عادية",
-        mini: "MD",
-        rtlMini: "صو",
-        component: ModifyDescription,
-        layout: "/admin"
-      },
-      {
-        path: "/modify-status",
-        name: "Modify Status",
-        rtlName: "أشكال عادية",
-        mini: "MS",
-        rtlMini: "صو",
-        component: ModifyStatus,
-        layout: "/admin"
-      },
-      {
-        path: "/modify-rightsholder",
-        name: "Modify Rightsholder",
-        rtlName: "أشكال عادية",
-        mini: "MR",
-        rtlMini: "صو",
-        component: ModifyRGT,
-        layout: "/admin"
-      },
-      {
-        path: "/transfer-asset",
-        name: "Transfer",
-        rtlName: "أشكال عادية",
-        mini: "T",
-        rtlMini: "صو",
-        component: Transfer,
-        layout: "/admin"
-      },
-    ]
+    path: "/recycle-asset",
+    component: Recycle,
+    layout: "/admin"
+  },
+
+  {
+    path: "/discard-asset",
+    component: Discard,
+    layout: "/admin"
+  },
+  {
+    path: "/escrow-manager",
+    component: EscrowManager,
+    layout: "/admin"
+  },
+  {
+    path: "/export-asset",
+    component: Export,
+    layout: "/admin"
+  },
+  {
+    path: "/import-asset",
+    component: Import,
+    layout: "/admin"
+  },
+  {
+    path: "/modify-description",
+    component: ModifyDescription,
+    layout: "/admin"
+  },
+  {
+    path: "/modify-status",
+    component: ModifyStatus,
+    layout: "/admin"
+  },
+  {
+    path: "/modify-rightsholder",
+    component: ModifyRGT,
+    layout: "/admin"
+  },
+  {
+    path: "/transfer-asset",
+    component: Transfer,
+    layout: "/admin"
   },
 ];
 export default dashRoutes;

@@ -47,7 +47,7 @@ export default function Dashboard(props) {
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState(false);
-  const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0],routes[1],routes[3],routes[4].views[0]])
+  const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0],routes[1],routes[3],routes[4]])
   
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");

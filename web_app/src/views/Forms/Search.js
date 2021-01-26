@@ -2,7 +2,14 @@ import React from "react";
 import "../../assets/css/custom.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Icon from "@material-ui/core/Icon";
+import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import InputLabel from "@material-ui/core/InputLabel";
+import Switch from "@material-ui/core/Switch";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Danger from "components/Typography/Danger.js";
 import Checkbox from "@material-ui/core/Checkbox";
 
 // @material-ui/icons
@@ -10,6 +17,7 @@ import Check from "@material-ui/icons/Check";
 import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
+import Create from "@material-ui/icons/Create";
 import { ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
 import { isMobile } from "react-device-detect";
 
@@ -40,6 +48,7 @@ const useImgStyles = makeStyles(imgStyles);
 
 export default function Search(props) {
 
+  const [simpleSelect, setSimpleSelect] = React.useState("");
   const [checked, setChecked] = React.useState([24, 22]);
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
@@ -59,9 +68,12 @@ export default function Search(props) {
   const [asset, setAsset] = React.useState({});
   const [price, setPrice] = React.useState("");
   const [currency, setCurrency] = React.useState("");
+  const [recycled, setRecycled] = React.useState(false);
   const [transaction, setTransaction] = React.useState(false);
   const [QRValue, setQRValue] = React.useState("");
   const [retrieving, setRetrieving] = React.useState(false);
+  const [ownerOf, setOwnerOf] = React.useState(false);
+  const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
 
   const [IDXRawInput, setIDXRawInputInput] = React.useState(false);
 
@@ -83,6 +95,57 @@ export default function Search(props) {
   const [loginSerialState, setloginSerialState] = React.useState("");
   const [loginIDXState, setloginIDXState] = React.useState("");
 
+
+  const handleSimple = event => {
+    window.sentPacket = selectedAssetObj
+    setSimpleSelect(event.target.value);
+    let e = event.target.value, href;
+
+    switch (e) {
+      case "transfer": {
+        href = "/#/admin/transfer-asset";
+        break
+      }
+      case "escrow": {
+        href = "/#/admin/escrow-manager";
+        break
+      }
+      case "import": {
+        href = "/#/admin/import-asset";
+        break
+      }
+      case "export": {
+        href = "/#/admin/export-asset";
+        break
+      }
+      case "discard": {
+        href = "/#/admin/discard-asset";
+        break
+      }
+      case "change-status": {
+        href = "/#/admin/modify-status";
+        break
+      }
+      case "decrement-counter": {
+        href = "/#/admin/counter";
+        break
+      }
+      case "edit-information": {
+        href = "/#/admin/modify-description";
+        break
+      }
+      case "edit-rightsholder": {
+        href = "/#/admin/modify-rightsholder";
+        break
+      }
+      default: {
+        console.log("Invalid menu selection: '", e, "'");
+        break
+      }
+    }
+
+    return window.location.href = href;
+  };
 
   const handleChange = event => {
     setSelectedValue(event.target.value);
@@ -178,6 +241,10 @@ export default function Search(props) {
         window.location.href = "/#/admin/dashboard"
         console.log(receipt.events.REPORT.returnValues._msg);
       });
+  }
+
+  const recycleAsset = async () => {
+    window.location.href = "/#/admin/recycle-asset"
   }
 
   const retrieveRecord = async () => {
@@ -309,6 +376,18 @@ export default function Search(props) {
       status: window.assetInfo.status,
       idxHash: idxHash,
     })
+    if (window.assetInfo.statusNum == "60") {
+      setRecycled(true)
+    }
+
+    await window.utils.checkHoldsToken("asset", idxHash)
+      .then((e) => {
+        console.log("is Owner Of", e)
+        if (e) {
+          setOwnerOf(true)
+        }
+      })
+
     return setMoreInfo(true);
   }
 
@@ -401,6 +480,19 @@ export default function Search(props) {
       status: window.assetInfo.status,
       idxHash: idxHash,
     })
+    if (window.assetInfo.statusNum == "60") {
+      setRecycled(true)
+    }
+
+    await window.utils.checkHoldsToken("asset", idxHash)
+      .then((e) => {
+        console.log("is Owner Of", e)
+        if (e) {
+          setOwnerOf(true)
+        }
+      })
+
+
     return setMoreInfo(true);
   }
 
@@ -866,12 +958,139 @@ export default function Search(props) {
               </>
             )}
             <br />
-            {currency !== "" && !transaction && (
+            {/* {currency !== "" && !transaction && (
               <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
             )}
 
             {currency !== "" && transaction && (
               <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
+            )} */}
+            {recycled && !transaction && (
+              <>
+                <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
+                <Button onClick={() => { recycleAsset() }} color="info" className="MLBGradient">Recycle Asset</Button>
+              </>
+            )}
+            {ownerOf && (
+              <div className={classes.stats}>
+                <Danger>
+                  <Create
+                    className="functionSelectorIcon" />
+                </Danger>
+                <FormControl
+                  fullWidth
+                  className={classes.selectFormControl}
+                >
+                  <InputLabel>
+                    Edit Asset
+                        </InputLabel>
+                  <Select
+                    className="functionSelector"
+                    MenuProps={{
+                      className: classes.selectMenu
+                    }}
+                    classes={{
+                      select: classes.select
+                    }}
+                    value={simpleSelect}
+                    onChange={handleSimple}
+                    inputProps={{
+                      name: "simpleSelect",
+                      id: "simple-select"
+                    }}
+                  >
+                    <MenuItem
+                      disabled
+                      classes={{
+                        root: classes.selectMenuItem
+                      }}
+                    >
+                      Select Function
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="transfer"
+                    >
+                      Transfer
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="escrow"
+                    >
+                      Escrow
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="import"
+                    >
+                      Import
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="export"
+                    >
+                      Export
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="discard"
+                    >
+                      Discard
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="change-status"
+                    >
+                      Change Status
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="decrement-counter"
+                    >
+                      Decrement Counter
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="edit-information"
+                    >
+                      Edit Information
+                          </MenuItem>
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value="edit-rightsholder"
+                    >
+                      Edit Rightsholder
+                          </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
             )}
           </CardBody>
           <CardFooter chart>
