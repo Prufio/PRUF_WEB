@@ -198,7 +198,7 @@ export default function Dashboard(props) {
                     placement="bottom"
                     classes={{ tooltip: classes.tooltip }}
                   >
-                    <Button simple color="info" justIcon onClick={() => {window.resetInfo = true; window.recount = true;}}>
+                    <Button simple color="info" justIcon onClick={() => { window.resetInfo = true; window.recount = true; }}>
                       <Refresh className={classes.underChartIcons} />
                     </Button>
                   </Tooltip>
@@ -247,54 +247,54 @@ export default function Dashboard(props) {
 
     else if (props.assets === "0") { return <h1>No assets held by user</h1> }
 
-    else {return <><h3>Loading held assets</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
+    else { return <><h3>Loading held assets</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
 
   }
 
   const handleSimple = event => {
     window.sentPacket = selectedAssetObj
     setSimpleSelect(event.target.value);
-    let e=event.target.value, href;
+    let e = event.target.value, href;
 
     switch (e) {
-      case "transfer" : {
+      case "transfer": {
         href = "/#/admin/transfer-asset";
         break
       }
-      case "escrow" : {
+      case "escrow": {
         href = "/#/admin/escrow-manager";
         break
       }
-      case "import" : {
+      case "import": {
         href = "/#/admin/import-asset";
         break
       }
-      case "export" : {
+      case "export": {
         href = "/#/admin/export-asset";
         break
       }
-      case "discard" : {
+      case "discard": {
         href = "/#/admin/discard-asset";
         break
       }
-      case "change-status" : {
+      case "change-status": {
         href = "/#/admin/modify-status";
         break
       }
-      case "decrement-counter" : {
+      case "decrement-counter": {
         href = "/#/admin/counter";
         break
       }
-      case "edit-information" : {
+      case "edit-information": {
         href = "/#/admin/modify-description";
         break
       }
-      case "edit-rightsholder" : {
+      case "edit-rightsholder": {
         href = "/#/admin/modify-rightsholder";
         break
       }
-      default : {
-        console.log("Invalid menu selection: '", e, "'"); 
+      default: {
+        console.log("Invalid menu selection: '", e, "'");
         break
       }
     }
@@ -339,7 +339,7 @@ export default function Dashboard(props) {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                        <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
@@ -353,7 +353,7 @@ export default function Dashboard(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                      <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
                         <KeyboardArrowLeft />
                       </Button>
                     </Tooltip>
@@ -371,7 +371,7 @@ export default function Dashboard(props) {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                        <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
@@ -385,7 +385,7 @@ export default function Dashboard(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button onClick={(e) => moreInfo("back")} x-large color="info" justIcon className="back">
+                      <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
                         <KeyboardArrowLeft />
                       </Button>
                     </Tooltip>
@@ -426,9 +426,9 @@ export default function Dashboard(props) {
                   className={classes.selectFormControl}
                 >
                   <InputLabel className="functionSelectorText">
-                <Danger>
-                  <Create className="functionSelectorIcon"/>
-                </Danger>
+                    <Danger>
+                      <Create className="functionSelectorIcon" />
+                    </Danger>
                     Edit Asset
                         </InputLabel>
                   <Select
@@ -462,7 +462,7 @@ export default function Dashboard(props) {
                     >
                       Transfer
                           </MenuItem>
-                    <MenuItem
+                    {/* <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
@@ -470,7 +470,7 @@ export default function Dashboard(props) {
                       value="escrow"
                     >
                       Escrow
-                          </MenuItem>
+                          </MenuItem> */}
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,

@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormLabel from "@material-ui/core/FormLabel";
@@ -32,27 +33,162 @@ import { TransferWithinAStation } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function EscrowManager() {
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const handleChange = event => {
-    setSelectedValue(event.target.value);
-  };
-  const handleChangeEnabled = event => {
-    setSelectedEnabled(event.target.value);
-  };
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+export default function EscrowManager(props) {
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
+  const [address, setAddress] = React.useState("");
+  const [loginAddress, setloginAddress] = React.useState("");
+  const [loginAddressState, setloginAddressState] = React.useState("");
+  const [transactionActive, setTransactionActive] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [showHelp, setShowHelp] = React.useState(false);
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [txHash, setTxHash] = React.useState("");
+  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+  const [isSettingEscrow, setIsSettingEscrow] = React.useState(undefined)
+  const [escrowOwner, setEscrowOwner] = React.useState("")
+  const [escrowTime, setEscrowTime] = React.useState("")
+  const [escrowStatus, setEscrowStatus] = React.useState("")
+
+  const [loginEscrowOwner, setloginEscrowOwner] = React.useState("")
+  const [loginEscrowTime, setloginEscrowTime] = React.useState("")
+  const [loginEescrowStatus, setloginEscrowStatus] = React.useState("")
+
+  const [loginEscrowOwnerState, setloginEscrowOwnerState] = React.useState("")
+  const [loginEscrowTimeState, setloginEscrowTimeState] = React.useState("")
+  const [loginEscrowStatusState, setloginEscrowStatusState] = React.useState("")
+
+  const link = document.createElement('div')
+
+  window.sentPacket = null
+
+
+  const setEscrow = async () => { //transfer held asset
+
+    if (loginAddress === "") {
+      setloginAddressState("error");
+      return;
     }
-    setChecked(newChecked);
+
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+
+    setTransactionActive(true);
+
+    await window.contracts.ECR.methods
+      .setEscrow(
+        assetInfo.idxHash,
+        address,
+        assetInfo.idxHash
+      )
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Transfer Failed!",
+          content: link,
+          icon: "Warning",
+          button: "Close",
+        });
+        clearForms();
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Transfer Successful!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        window.resetInfo = true;
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
+      });
+
+  }
+
+  
+  const endEscrow = async () => { //transfer held asset
+
+    if (loginAddress === "") {
+      setloginAddressState("error");
+      return;
+    }
+
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+
+    setTransactionActive(true);
+
+    await window.contracts.A_TKN.methods
+      .safeTransferFrom(
+        props.addr,
+        address,
+        assetInfo.idxHash
+      )
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Transfer Failed!",
+          content: link,
+          icon: "Warning",
+          button: "Close",
+        });
+        clearForms();
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Transfer Successful!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        window.resetInfo = true;
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
+      });
+
+  }
+
+  const clearForms = () => {
+    setAddress("");
+    setloginAddressState("");
+    console.log("clearing forms")
   };
+
   const classes = useStyles();
   return (
         <Card>
@@ -64,71 +200,81 @@ export default function EscrowManager() {
           </CardHeader>
           <CardBody>
             <form>
-              <h4>Asset Selected: </h4>
-              <CustomInput
-                labelText="Manufacturer"
-                id="manufacturer"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                  // type: "email"
-                // }}
-              />
-              <CustomInput
-                labelText="Type"
-                id="type"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
-              />
-              <CustomInput
-                labelText="Model"
-                id="model"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                  // type: "email"
-                // }}
-              />
-              <CustomInput
-                labelText="Serial"
-                id="serial"
-                formControlProps={{
-                  fullWidth: true
-                }}
-                // inputProps={{
-                //   type: "password",
-                //   autoComplete: "off"
-                // }}
-              />
-              <div className={classes.checkboxAndRadio}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      tabIndex={-1}
-                      onClick={() => handleToggle(2)}
-                      checkedIcon={<Check className={classes.checkedIcon} />}
-                      icon={<Check className={classes.uncheckedIcon} />}
-                      classes={{
-                        checked: classes.checked,
-                        root: classes.checkRoot
-                      }}
-                    />
-                  }
-                  classes={{
-                    label: classes.label,
-                    root: classes.labelRoot
-                  }}
-                  label="Input IDX Hash"
-                />
-              </div>
-              <Button color="info" className="MLBGradient">Scan QR</Button>
+              <h4>Asset Selected: {assetInfo.name}</h4>
+              {!isSettingEscrow && (
+              <h4>Current Status: {assetInfo.status}</h4>
+              )}
+        {isSettingEscrow && (
+          <>
+          <CustomInput
+            success={loginEscrowOwnerState === "success"}
+            error={loginEscrowOwnerState === "error"}
+            labelText="Escrow Agent Address *"
+            id="address"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              onChange: event => {
+                setEscrowOwner(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginEscrowOwnerState("success");
+                } else {
+                  setloginEscrowOwnerState("error");
+                }
+                setloginEscrowOwner(event.target.value);
+              },
+            }}
+          />
+          <CustomInput
+            success={loginEscrowTimeState === "success"}
+            error={loginEscrowTimeState === "error"}
+            labelText="Escrow Period *"
+            id="time"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              type: "number",
+              onChange: event => {
+                setEscrowTime(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginEscrowTimeState("success");
+                } else {
+                  setloginEscrowTimeState("error");
+                }
+                setloginEscrowTime(event.target.value);
+              },
+            }}
+          />
+          <CustomInput
+            success={loginAddressState === "success"}
+            error={loginAddressState === "error"}
+            labelText="Recieving Address *"
+            id="address"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              onChange: event => {
+                setAddress(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginAddressState("success");
+                } else {
+                  setloginAddressState("error");
+                }
+                setloginAddress(event.target.value);
+              },
+            }}
+          />
+          </>
+        )}
+          {!transactionActive && assetInfo.statusNum == "50" || assetInfo.statusNum == "56" && (
+            <Button color="info" className="MLBGradient"onClick={() => setIsSettingEscrow(false)}>End Escrow</Button>
+          )}
+          {!transactionActive && assetInfo.statusNum !== "50" || assetInfo.statusNum !== "56" && (
+            <Button color="info" className="MLBGradient"onClick={() => setIsSettingEscrow(true)}>Set Escrow</Button>
+          )}
             </form>
           </CardBody>
         </Card>

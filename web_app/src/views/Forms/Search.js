@@ -400,7 +400,7 @@ export default function Search(props) {
 
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
-    
+
     // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
     // await window.contracts.STOR.methods
     //   .getPriceData(idxHash)
@@ -979,9 +979,9 @@ export default function Search(props) {
                   className={classes.selectFormControl}
                 >
                   <InputLabel className="functionSelectorText">
-                <Danger>
-                  <Create className="functionSelectorIcon"/>
-                </Danger>
+                    <Danger>
+                      <Create className="functionSelectorIcon" />
+                    </Danger>
                     Edit Asset
                         </InputLabel>
                   <Select
@@ -1015,7 +1015,7 @@ export default function Search(props) {
                     >
                       Transfer
                           </MenuItem>
-                    <MenuItem
+                    {/* <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
@@ -1023,7 +1023,7 @@ export default function Search(props) {
                       value="escrow"
                     >
                       Escrow
-                          </MenuItem>
+                          </MenuItem> */}
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,

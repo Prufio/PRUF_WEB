@@ -598,7 +598,7 @@ Sidebar.defaultProps = {
 
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired,
-  bgColor: PropTypes.oneOf(["white", "black", "blue"]),
+  bgColor: PropTypes.oneOf(["white", "black", "blue", "darkBlue"]),
   rtlActive: PropTypes.bool,
   color: PropTypes.oneOf([
     "white",
