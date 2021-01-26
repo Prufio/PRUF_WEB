@@ -54,13 +54,15 @@ body {
     object-fit: cover !important;
 }
 
-.functionSelector {
-    /* top: -20px !important; */
-    width: 100px;
-}
-
 .functionSelectorIcon {
-    bottom: -20px !important;
+  left: -25px !important;
+  bottom: -2px !important;
+    position: absolute !important;
+}
+.functionSelectorText {
+  left: 25px !important;
+  /* bottom: -2px !important; */
+    /* position: absolute !important; */
 }
 
 .functionSelectorAD {
@@ -260,7 +262,7 @@ body {
           position: relative;
           width: 55px;
           height: 55px;
-          bottom: -5.5px;
+          bottom: -15px;
         }
         .lds-ellipsisIF div {
           position: absolute;

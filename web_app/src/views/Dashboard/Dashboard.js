@@ -424,20 +424,18 @@ export default function Dashboard(props) {
               <p className={classes.cardCategory}>Description: {selectedAssetObj.Description}</p>
 
               <br />
-              <div className={classes.stats}>
-                <Danger>
-                  <Create
-                    className="functionSelectorIcon" />
-                </Danger>
+              <div>
                 <FormControl
                   fullWidth
                   className={classes.selectFormControl}
                 >
-                  <InputLabel>
+                  <InputLabel className="functionSelectorText">
+                <Danger>
+                  <Create className="functionSelectorIcon"/>
+                </Danger>
                     Edit Asset
-                          </InputLabel>
+                        </InputLabel>
                   <Select
-                    className="functionSelector"
                     MenuProps={{
                       className: classes.selectMenu
                     }}
@@ -458,7 +456,7 @@ export default function Dashboard(props) {
                       }}
                     >
                       Select Function
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -467,7 +465,7 @@ export default function Dashboard(props) {
                       value="transfer"
                     >
                       Transfer
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -476,7 +474,7 @@ export default function Dashboard(props) {
                       value="escrow"
                     >
                       Escrow
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -485,7 +483,7 @@ export default function Dashboard(props) {
                       value="import"
                     >
                       Import
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -494,7 +492,7 @@ export default function Dashboard(props) {
                       value="export"
                     >
                       Export
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -503,7 +501,7 @@ export default function Dashboard(props) {
                       value="discard"
                     >
                       Discard
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -512,7 +510,7 @@ export default function Dashboard(props) {
                       value="change-status"
                     >
                       Change Status
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -521,7 +519,7 @@ export default function Dashboard(props) {
                       value="decrement-counter"
                     >
                       Decrement Counter
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -530,7 +528,7 @@ export default function Dashboard(props) {
                       value="edit-information"
                     >
                       Edit Information
-                            </MenuItem>
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -539,7 +537,7 @@ export default function Dashboard(props) {
                       value="edit-rightsholder"
                     >
                       Edit Rightsholder
-                            </MenuItem>
+                          </MenuItem>
                   </Select>
                 </FormControl>
               </div>

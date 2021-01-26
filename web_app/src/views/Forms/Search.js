@@ -652,7 +652,7 @@ export default function Search(props) {
                   />
                 </>
               )}
-              {IDXRawInput === true && (
+              {IDXRawInput === true && !retrieving && (
                 <>
                   <CustomInput
                     id="manufacturer"
@@ -972,20 +972,18 @@ export default function Search(props) {
               </>
             )}
             {ownerOf && (
-              <div className={classes.stats}>
-                <Danger>
-                  <Create
-                    className="functionSelectorIcon" />
-                </Danger>
+              <div>
                 <FormControl
                   fullWidth
                   className={classes.selectFormControl}
                 >
-                  <InputLabel>
+                  <InputLabel className="functionSelectorText">
+                <Danger>
+                  <Create className="functionSelectorIcon"/>
+                </Danger>
                     Edit Asset
                         </InputLabel>
                   <Select
-                    className="functionSelector"
                     MenuProps={{
                       className: classes.selectMenu
                     }}
