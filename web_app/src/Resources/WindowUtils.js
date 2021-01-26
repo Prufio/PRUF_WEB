@@ -40,9 +40,8 @@ function buildWindowUtils() {
     return (time);
   }
 
-  const _getETHBalance = async () => {
-    if (window.addr === undefined) { return 0 }
-    let addr = window.addr;
+  const _getETHBalance = async (addr) => {
+    if (addr === undefined) { return 0 }
     await window.web3.eth.getBalance(addr, (err, balance) => {
       if (err) { } else {
         window.ETHBalance = window.web3.utils.fromWei(balance, "ether")

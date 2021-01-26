@@ -118,6 +118,7 @@ export default function Dashboard(props) {
           console.log("got accounts")
           window.addr = accounts[0].toLowerCase()
           setAddr(accounts[0].toLowerCase())
+          setUpContractEnvironment(web3, accounts[0].toLowerCase())
         }
         else{
           ethereum.send('eth_requestAccounts').then((accounts)=>{
@@ -125,13 +126,14 @@ export default function Dashboard(props) {
               console.log("got accounts")
               window.addr = accounts[0].toLowerCase()
               setAddr(accounts[0].toLowerCase())
+              setUpContractEnvironment(web3, accounts[0].toLowerCase())
             }
           })
         }
       })
 
       console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
-      setUpContractEnvironment(web3)
+      
 
       setIsMounted(true)
     }
@@ -364,7 +366,7 @@ export default function Dashboard(props) {
     }
   };
 
-  const setUpContractEnvironment = async (_web3) => {
+  const setUpContractEnvironment = async (_web3, _addr) => {
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
@@ -374,8 +376,8 @@ export default function Dashboard(props) {
 
       await window.utils.getContracts()
 
-      if (window.addr !== undefined) {
-        await window.utils.getETHBalance();
+      if (_addr !== undefined) {
+        await window.utils.getETHBalance(_addr);
         await setUpTokenVals(true, "SetupContractEnvironment")
       }
 
@@ -422,7 +424,7 @@ export default function Dashboard(props) {
       window.acTknIDs = [];
       if (window.balances !== undefined) window.balances.assetBalance = 0;
       window.recount = false
-      await window.utils.getETHBalance();
+      await window.utils.getETHBalance(addr);
       return setUpTokenVals(true, "SUA recount")
     }
 
