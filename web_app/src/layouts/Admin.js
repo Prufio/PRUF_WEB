@@ -97,6 +97,33 @@ export default function Dashboard(props) {
         name: ""
       }
 
+      web3.eth.net.getNetworkType().then((e) => { 
+        if (e === "kovan") { 
+          console.log("kovan"); 
+          window.isKovan = true;
+          ethereum.request({
+            method: 'eth_accounts',
+            params: {},
+          }).then((accounts)=>{
+            if (accounts[0] !== undefined){
+              console.log("got accounts")
+              setAddr(String(window.web3.utils.toChecksumAddress(accounts[0])))
+              setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]))
+            }
+            else{
+              ethereum.send('eth_requestAccounts').then((accounts)=>{
+                if (accounts[0] !== undefined){
+                  console.log("got accounts")
+                  setAddr(window.web3.utils.toChecksumAddress(accounts[0]))
+                  setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]))
+                }
+              })
+            }
+          })
+          return setIsKovan(true) } 
+        else { console.log("!kovan"); window.isKovan = false; return setIsKovan(false) }  
+      })
+
       //More globals (eth-is-connected specific)
       window.assetTokenInfo = {
         assetClass: undefined,
@@ -110,26 +137,6 @@ export default function Dashboard(props) {
       window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
       window.resetInfo = false;
 
-      ethereum.request({
-        method: 'eth_accounts',
-        params: {},
-      }).then((accounts) => {
-        if (accounts[0] !== undefined) {
-          console.log("got accounts")
-          setAddr(accounts[0].toLowerCase())
-          setUpContractEnvironment(web3, accounts[0].toLowerCase())
-        }
-        else {
-          ethereum.send('eth_requestAccounts').then((accounts) => {
-            if (accounts[0] !== undefined) {
-              console.log("got accounts")
-              setAddr(accounts[0].toLowerCase())
-              setUpContractEnvironment(web3, accounts[0].toLowerCase())
-            }
-          })
-        }
-      })
-
       console.log("SETTING STUFF UP...... POSSIBLY AGAIN")
 
 
@@ -140,17 +147,44 @@ export default function Dashboard(props) {
     }
   }
 
-  const acctListener = async () => {
+  const chainListener = () => {
+    window.ethereum.on('chainChanged', (chainId) => {
+        window.location.reload()
+    });
+  }
 
+  const acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
+      console.log("new: ",e[0], "old: ", addr)
       console.log("Accounts changed")
-      if (addr !== e[0].toLowerCase()) {
-        if (e[0] === undefined || e[0] === null) {
-          console.log("Here")
+        //if (window.web3.utils.toChecksumAddress(addr) !== window.web3.utils.toChecksumAddress(e[0])) {
+          if (e[0] === undefined || e[0] === null) {
+            console.log("Here")
 
           window.ETHBalance = "0";
 
-          window.balances = ["0", "0", "0", "0"];
+            window.balances = ["0", "0", "0", "0"];
+            setAssetClassBalance("~");
+            setAssetBalance("~");
+            setIDBalance("0")
+            setIsAssetHolder(false);
+            setIsAssetClassHolder(false);
+            setIsIDHolder(false);
+            setHasFetchedBalances(false);
+            setETHBalance("~");
+            setPrufBalance("~");
+            setAssets({});
+            setAddr("")
+
+          }
+
+          //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
+
+          window.assetClass = undefined;
+          window.isAuthUser = false;
+          window.isACAdmin = false;
+          setAddr(window.web3.utils.toChecksumAddress(e[0]))
+          setAssets({});
           setAssetClassBalance("~");
           setAssetBalance("~");
           setIDBalance("0")
@@ -160,32 +194,11 @@ export default function Dashboard(props) {
           setHasFetchedBalances(false);
           setETHBalance("~");
           setPrufBalance("~");
-          setAssets({});
-          setAddr("")
-
-        }
-
-        //if (window.location.href !== "/#/admin/dashboard") { window.location.href = "/#/admin/home" }
-
-        window.assetClass = undefined;
-        window.isAuthUser = false;
-        window.isACAdmin = false;
-        setAddr(e[0].toLowerCase())
-        setAssets({});
-        setAssetClassBalance("~");
-        setAssetBalance("~");
-        setIDBalance("0")
-        setIsAssetHolder(false);
-        setIsAssetClassHolder(false);
-        setIsIDHolder(false);
-        setHasFetchedBalances(false);
-        setETHBalance("~");
-        setPrufBalance("~");
-        window.recount = true;
-        window.resetInfo = true;
-        console.log("///////in acctChanger////////");
-      }
-      else { return console.log("Something bit in the acct listener, but no changes made.") }
+          window.recount = true;
+          window.resetInfo = true;
+          console.log("///////in acctChanger////////");
+        //}
+        //else { return console.log("Something bit in the acct listener, but no changes made.") }
     });
   }
 
@@ -263,12 +276,17 @@ export default function Dashboard(props) {
       });
       setTimeout(handleEthereum, 3300); // 3.3 seconds
     }
+
+
   }
 
   // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
   React.useEffect(() => {
 
-    if (window.ethereum) { window.addEventListener("accountListener", acctListener()) }
+    if(window.ethereum){
+      window.addEventListener("chainListener", chainListener())
+      window.addEventListener("accountListener", acctListener())
+    }
 
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
@@ -363,6 +381,8 @@ export default function Dashboard(props) {
   };
 
   const setUpContractEnvironment = async (_web3, _addr) => {
+    if(window.isKovan === false){return}
+    console.log("IN SUCE, addr:", _addr)
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
     _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
@@ -613,7 +633,16 @@ export default function Dashboard(props) {
       setPrufBalance("~");
       setBuildReady(false)
       console.log("WD: setting up assets (Step one)")
-      setUpAssets("AssetListener", addr)
+      window.ethereum.request({
+        method: 'eth_accounts',
+        params: {},
+      }).then((accounts)=>{
+        if (accounts[0] !== undefined){
+          console.log("got accounts")
+          setUpAssets("AssetListener", accounts[0])
+        }
+      })
+      //setUpAssets("AssetListener", addr)
       window.resetInfo = false
     }
 
@@ -643,15 +672,6 @@ export default function Dashboard(props) {
       console.log("13")
       console.log("Assets finished rebuilding, no longer ready for rebuild")
       setBuildReady(false)
-    }
-  }, 1000)
-
-  const networkListener = setInterval(() => {
-    if (WD === true) {
-      window.web3.eth.net.getNetworkType().then((e) => {
-        if (e === "kovan" && isKovan === false) { setIsKovan(true) }
-        else if (e !== "kovan" && isKovan !== false) { setIsKovan(false) }
-      })
     }
   }, 1000)
 
