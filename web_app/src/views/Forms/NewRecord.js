@@ -35,7 +35,7 @@ import { Description } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function NewRecord() {
+export default function NewRecord(props) {
 
   const [error, setError] = React.useState("");
   const [showHelp, setShowHelp] = React.useState(false);
@@ -226,7 +226,7 @@ export default function NewRecord() {
     console.log("idxHash", idxHash);
     console.log("New rgtRaw", rgtHashRaw);
     console.log("New rgtHash", rgtHash);
-    console.log("addr: ", window.addr);
+    console.log("addr: ", props.addr);
     console.log("AC: ", assetClass);
     console.log("IPFS bs58: ", window.rawIPFSHashTemp);
     console.log("IPFS bytes32: ", ipfsHash);
@@ -239,7 +239,7 @@ export default function NewRecord() {
         "1000000",
         ipfsHash
       )
-      .send({ from: window.addr })
+      .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
         setTxStatus(false);

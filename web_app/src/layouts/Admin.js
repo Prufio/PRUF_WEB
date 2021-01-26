@@ -117,12 +117,14 @@ export default function Dashboard(props) {
         if (accounts[0] !== undefined){
           console.log("got accounts")
           window.addr = accounts[0].toLowerCase()
+          setAddr(accounts[0].toLowerCase())
         }
         else{
           ethereum.send('eth_requestAccounts').then((accounts)=>{
             if (accounts[0] !== undefined){
               console.log("got accounts")
               window.addr = accounts[0].toLowerCase()
+              setAddr(accounts[0].toLowerCase())
             }
           })
         }
@@ -344,7 +346,7 @@ export default function Dashboard(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={()=>(<prop.component assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance}/>)}
+            render={()=>(<prop.component addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance}/>)}
             key={key}
           />
         );
@@ -665,6 +667,7 @@ export default function Dashboard(props) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={sidebarRoutes}
+        addr={addr}
         logoText={"Creative Tim"}
         logo={logo}
         image={image}

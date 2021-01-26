@@ -707,7 +707,7 @@ function buildWindowUtils() {
     return tempBool;
   }
 
-  const _checkHoldsToken = async (req, id) => {
+  const _checkHoldsToken = async (req, id, addr) => {
     let tempBool;
     if (req === "asset") {
       await window.contracts.A_TKN.methods
@@ -716,7 +716,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result === window.addr) {
+            if (_result.toLowercase === addr) {
               tempBool = true
             }
             else { tempBool = false }
@@ -731,7 +731,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result === window.addr) {
+            if (_result === addr) {
               tempBool = true
             }
             else { tempBool = false }

@@ -26,11 +26,11 @@ import pruftoken from "assets/img/pruftoken.png";
 
 var ps;
 
-const getPrufColor = (type) => {
+const getPrufColor = (type, addr) => {
   let color;
   switch(type){
     case "primary" : {
-      if(isNaN(window.addr.charAt(8))){
+      if(isNaN(addr.charAt(8))){
         color = "#005480"
       }
       else{
@@ -40,7 +40,7 @@ const getPrufColor = (type) => {
     }
 
     case "secondary" : {
-      if(isNaN(window.addr.charAt(10))){
+      if(isNaN(addr.charAt(10))){
         color = "#00a8ff"
       }
       else{
@@ -50,7 +50,7 @@ const getPrufColor = (type) => {
     }
 
     case "analogous" : {
-      if(isNaN(window.addr.charAt(12))){
+      if(isNaN(addr.charAt(12))){
         color = "#00ff55"
       }
       else{
@@ -345,6 +345,7 @@ class Sidebar extends React.Component {
       logoText,
       routes,
       bgColor,
+      addr,
       rtlActive
     } = this.props;
     const itemText =
@@ -393,14 +394,14 @@ class Sidebar extends React.Component {
     var user = (
       <div className={userWrapperClass}>
         <div className={photo}>
-        {window.addr === undefined && (
+        {addr === undefined && (
         <img src={pruftoken} alt="logo" className={classes.img} />
           )}
-          {window.addr === "" && (
+          {addr === "" && (
         <img src={pruftoken} alt="logo" className={classes.img} />
           )}
-        {window.addr !== undefined && window.addr !== "" &&(
-        <Blockies scale={4} color={getPrufColor("primary")} bgColor={getPrufColor("secondary")} spotColor={getPrufColor("analogous")} size={15} seed={window.addr} className={classes.img}/>
+        {addr !== undefined && addr !== "" &&(
+        <Blockies scale={4} color={getPrufColor("primary",addr)} bgColor={getPrufColor("secondary",addr)} spotColor={getPrufColor("analogous",addr)} size={15} seed={addr} className={classes.img}/>
           )}
         </div>
         <List className={classes.list}>
@@ -409,9 +410,9 @@ class Sidebar extends React.Component {
               to={"#"}
               className={classes.itemLink + " " + classes.userCollapseButton}
               onClick={() => this.openCollapse("openAvatar")}
-            > {window.addr !== undefined && (
+            > {addr !== undefined && (
               <ListItemText
-                primary={window.addr.substring(0,8) + "..." + window.addr.substring(34,42)}
+                primary={addr.substring(0,8) + "..." + addr.substring(34,42)}
                 secondary={
                   <b
                     className={
@@ -427,7 +428,7 @@ class Sidebar extends React.Component {
                 className={itemText + " " + classes.userItemText}
               />
               )}
-              {window.addr === undefined && (
+              {addr === undefined && (
                 <ListItemText
                 primary={"User address unavailable"}
                 secondary={

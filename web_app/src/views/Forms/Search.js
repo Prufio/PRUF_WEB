@@ -38,7 +38,7 @@ import { boxShadow } from "assets/jss/material-dashboard-pro-react";
 const useStyles = makeStyles(styles);
 const useImgStyles = makeStyles(imgStyles);
 
-export default function Search() {
+export default function Search(props) {
 
   const [checked, setChecked] = React.useState([24, 22]);
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
@@ -228,7 +228,7 @@ export default function Search() {
       )
     }
     console.log("idxHash", idxHash);
-    console.log("addr: ", window.addr);
+    console.log("addr: ", props.addr);
     // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
     // await window.contracts.STOR.methods
     //   .getPriceData(idxHash)
