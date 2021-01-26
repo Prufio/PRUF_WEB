@@ -162,7 +162,7 @@ export default function Dashboard(props) {
             console.log("Here")
 
           window.ETHBalance = "0";
-
+            window.ipfsCounter = 0;
             window.balances = ["0", "0", "0", "0"];
             setAssetClassBalance("~");
             setAssetBalance("~");
@@ -183,6 +183,7 @@ export default function Dashboard(props) {
           window.assetClass = undefined;
           window.isAuthUser = false;
           window.isACAdmin = false;
+          window.ipfsCounter = 0;
           setAddr(window.web3.utils.toChecksumAddress(e[0]))
           setAssets({});
           setAssetClassBalance("~");
@@ -613,7 +614,7 @@ export default function Dashboard(props) {
       } else {
         descElement.push(result)
         window.ipfsCounter++
-        console.log(window.ipfsCounter)
+        //console.log(window.ipfsCounter)
       }
     });
   };
@@ -623,6 +624,7 @@ export default function Dashboard(props) {
     //If reset was remotely requested, begin full asset recount
     if (window.resetInfo === true) {
       console.log("11")
+      window.ipfsCounter = 0
       window.hasLoadedAssetClasses = false;
       window.hasLoadedAssets = false;
       setAssets({});

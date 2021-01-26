@@ -78,10 +78,12 @@ export default function Transfer(props) {
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
         tempTxHash = Object.values(_error)[0].transactionHash
-        link.innerHTML = "Check out your TX <a href='https://kovan.etherscan.io/tx/ + tempTxHash'>here</a>"
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
         setError(Object.values(_error)[0]);
         swal({
-          title: "Transaction Failed!",
+          title: "Transfer Failed!",
           content: link,
           icon: "Warning",
           button: "Close",
@@ -92,10 +94,12 @@ export default function Transfer(props) {
         setTransactionActive(false);
         setTxStatus(receipt.status);
         tempTxHash = receipt.transactionHash
-        link.innerHTML = "Check out your TX <a href='https://kovan.etherscan.io/tx/ + tempTxHash' target='_blank'>here</a>"
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
         swal({
-          title: "Transaction Confirmed!",
+          title: "Transfer Successful!",
           content: link,
           icon: "success",
           button: "Close",
@@ -152,7 +156,7 @@ export default function Transfer(props) {
           )}
           {transactionActive && (
             <h3>
-              Transfering Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Transferring Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </form>

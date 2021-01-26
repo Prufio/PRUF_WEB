@@ -97,7 +97,7 @@ export default function Search(props) {
 
 
   const handleSimple = event => {
-    window.sentPacket = selectedAssetObj
+    window.sentPacket = asset
     setSimpleSelect(event.target.value);
     let e = event.target.value, href;
 

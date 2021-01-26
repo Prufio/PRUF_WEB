@@ -245,9 +245,9 @@ export default function Dashboard(props) {
       return component
     }
 
-    else if (props.assets === "0") { console.log(obj); return <h1>No assets held by user</h1> }
+    else if (props.assets === "0") { return <h1>No assets held by user</h1> }
 
-    else { console.log(obj); return <><h3>Loading held assets</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
+    else {return <><h3>Loading held assets</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
 
   }
 
