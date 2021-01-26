@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -34,127 +35,188 @@ import { FlightLand } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function Import() {
-
-  const [checkedA, setCheckedA] = React.useState(true);
-  const [checkedB, setCheckedB] = React.useState(false);
+export default function Import(props) {
+  const [assetClass, setAssetClass] = React.useState("");
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [multipleSelect, setMultipleSelect] = React.useState([]);
-  const [tags, setTags] = React.useState(["pizza", "pasta", "parmesan"]);
-  const handleSimple = event => {
-    setSimpleSelect(event.target.value);
-  };
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const handleChange = event => {
-    setSelectedValue(event.target.value);
-  };
-  const handleChangeEnabled = event => {
-    setSelectedEnabled(event.target.value);
-  };
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const [transactionActive, setTransactionActive] = React.useState(false);
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
+  const [error, setError] = React.useState("");
+  const [showHelp, setShowHelp] = React.useState(false);
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [txHash, setTxHash] = React.useState("");
+
+  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+
+  const link = document.createElement('div')
+
+  window.sentPacket = null
+
   const classes = useStyles();
+
+  if (assetInfo.status !== "70") {
+    swal({
+      title: "Asset not in correct status!",
+      text: "This asset is not in exported status, please export asset before attempting to import it.",
+      icon: "warning",
+      button: "Close",
+    });
+    return window.location.href = "/#/admin/dashboard"
+  }
+
+  const ACLogin = event => {
+    setAssetClass(event.target.value);
+  };
+
+  const importAsset = async () => { //transfer held asset
+
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+
+    setTransactionActive(true);
+
+    await window.contracts.APP_NC.methods
+      .importAsset(
+        assetInfo.idxHash,
+        assetClass,
+      )
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Import Failed!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Import Successful!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        window.resetInfo = true;
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
+      });
+
+  }
+
   return (
-    <Card>
-      <CardHeader color="info" icon>
-        <CardIcon color="info" className="DBGradient">
-          <FlightLand />
-        </CardIcon>
-        <h4 className={classes.cardIconTitle}>Import Asset</h4>
-      </CardHeader>
-      <CardBody>
-        <form>
-              <h4>Asset Selected: </h4>
+    <>
+      {assetClass === "" && (
+        <Card>
+          <CardHeader color="info" icon>
+            <CardIcon color="info" className="DBGradient">
+              <Category />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
               <FormControl
-          fullWidth
-          className={classes.selectFormControl}
-        >
-          <InputLabel
-          >
-            Select Asset Class
-                        </InputLabel>
-          <Select
-            MenuProps={{
-              className: classes.selectMenu
-            }}
-            classes={{
-              select: classes.select
-            }}
-            value={simpleSelect}
-            onChange={handleSimple}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select"
-            }}
-          >
-            <MenuItem
-              disabled
-              classes={{
-                root: classes.selectMenuItem
-              }}
-            >
-              Select Asset Class
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-          </Select>
-        </FormControl>
-        </form>
-      </CardBody>
-    </Card>
+                fullWidth
+                className={classes.selectFormControl}
+              >
+                <InputLabel
+                >
+                  Select Asset Class
+                      </InputLabel>
+                <Select
+                  MenuProps={{
+                    className: classes.selectMenu
+                  }}
+                  classes={{
+                    select: classes.select
+                  }}
+                  value={simpleSelect}
+                  onChange={(e) => { ACLogin(e) }}
+                  inputProps={{
+                    name: "simpleSelect",
+                    id: "simple-select"
+                  }}
+                >
+                  <MenuItem
+                    disabled
+                    classes={{
+                      root: classes.selectMenuItem
+                    }}
+                  >
+                    Select Asset Class
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value="1000003"
+                  >
+                    Trinkets
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value="1000004"
+                  >
+                    Personal Computers
+                        </MenuItem>
+                </Select>
+              </FormControl>
+            </form>
+          </CardBody>
+          <br />
+        </Card>
+      )}
+      {assetClass !== "" && (
+        <Card>
+          <CardHeader color="info" icon>
+            <CardIcon color="info" className="DBGradient">
+              <FlightLand />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>Import Asset</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              {!transactionActive && (
+                <>
+                  <h4>AssetClass Selected: {assetClass} </h4>
+                  <h4>Asset Selected: {assetInfo.name}</h4>
+                  <br />
+                  <h5>You are attempting to import {assetInfo.name} into asset class {assetClass}.</h5>
+                </>
+              )}
+              {!transactionActive && (
+                <Button color="info" className="MLBGradient" onClick={() => importAsset()}>Import Asset</Button>
+              )}
+              {transactionActive && (
+                <h3>
+                  Importing Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                </h3>
+              )}
+            </form>
+          </CardBody>
+        </Card>
+      )}
+    </>
   );
 }

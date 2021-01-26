@@ -1,4 +1,5 @@
 import React from "react";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -90,6 +91,7 @@ export default function NewRecord(props) {
 
   const [txHash, setTxHash] = React.useState("");
 
+  const link = document.createElement('div')
 
   const ACLogin = event => {
     setAssetClass(event.target.value);
@@ -195,6 +197,7 @@ export default function NewRecord(props) {
 
   const _newRecord = async () => { //create a new asset record
     //console.log("assetClass: ", assetClass)
+    let tempTxHash;
     var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
     var rgtHashRaw, idxHash;
 
@@ -244,14 +247,33 @@ export default function NewRecord(props) {
         setTransactionActive(false);
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
         setError(Object.values(_error)[0]);
-        setAssetClass("")
+        swal({
+          title: "Asset Creation Failed!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
         clearForms();
       })
       .on("receipt", (receipt) => {
         setTransactionActive(false);
         setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
+        swal({
+          title: "Asset Created!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
         window.resetInfo = true;
         window.recount = true;
       });
@@ -288,7 +310,7 @@ export default function NewRecord(props) {
                     select: classes.select
                   }}
                   value={simpleSelect}
-                  onChange={(e)=>{ACLogin(e)}}
+                  onChange={(e) => { ACLogin(e) }}
                   inputProps={{
                     name: "simpleSelect",
                     id: "simple-select"
@@ -712,17 +734,17 @@ export default function NewRecord(props) {
                   /> */}
                   {!transactionActive && (
                     <CustomInput
-                    labelText="Description"
-                    id="description"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setDescription(event.target.value.trim())
-                      },
-                    }}
-                  />
+                      labelText="Description"
+                      id="description"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        onChange: event => {
+                          setDescription(event.target.value.trim())
+                        },
+                      }}
+                    />
                   )}
                   {/* <br /> */}
                   {/* <Add /> */}

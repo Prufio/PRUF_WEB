@@ -85,7 +85,7 @@ export default function Transfer(props) {
         swal({
           title: "Transfer Failed!",
           content: link,
-          icon: "Warning",
+          icon: "warning",
           button: "Close",
         });
         clearForms();
@@ -152,7 +152,7 @@ export default function Transfer(props) {
             <small>*</small> Required fields
               </div>
           {!transactionActive && (
-            <Button color="info" className="MLBGradient"onClick={() => transferAsset()}>Transfer Asset</Button>
+            <Button color="info" className="MLBGradient" onClick={() => transferAsset()}>Transfer Asset</Button>
           )}
           {transactionActive && (
             <h3>
