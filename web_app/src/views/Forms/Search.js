@@ -59,6 +59,7 @@ export default function Search(props) {
   const [result, setResult] = React.useState("");
   const [idxQuery, setIdxQuery] = React.useState("");
   const [wasSentQuery, setWasSentQuery] = React.useState(false);
+  const [gotQuery, setGotQuery] = React.useState(false);
   const [error, setError] = React.useState("");
   const [inscription, setInscription] = React.useState("");
   const [moreInfo, setMoreInfo] = React.useState(false);
@@ -74,6 +75,7 @@ export default function Search(props) {
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
+  const [hasMounted, setHasMounted]  = React.useState(false);
 
   const [IDXRawInput, setIDXRawInputInput] = React.useState(false);
 
@@ -94,6 +96,28 @@ export default function Search(props) {
   const [loginModelState, setloginModelState] = React.useState("");
   const [loginSerialState, setloginSerialState] = React.useState("");
   const [loginIDXState, setloginIDXState] = React.useState("");
+
+  React.useEffect(() => {
+    let refString = String(window.location.href);
+
+    if(!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66){
+      setRetrieving(true)
+      setWasSentQuery(true)
+      setGotQuery(true)
+    }
+
+    if(window.contracts !== undefined && wasSentQuery){
+      let query = refString.substring(refString.indexOf('0x'), refString.length)
+      setWasSentQuery(false)
+      retrieveRecordQR(query)
+    }
+
+    else{console.log(false)}
+  })
+
+  
+
+
 
   const handleSimple = event => {
     window.sentPacket = asset
@@ -381,7 +405,7 @@ export default function Search(props) {
 
     await window.utils.checkHoldsToken("asset", idxHash, props.addr)
       .then((e) => {
-        console.log("is Owner Of", e)
+        console.log("is Owner Of? ", e)
         if (e) {
           setOwnerOf(true)
         }
@@ -484,7 +508,7 @@ export default function Search(props) {
       setRecycled(true)
     }
 
-    await window.utils.checkHoldsToken("asset", idxHash)
+    await window.utils.checkHoldsToken("asset", idxHash, props.addr)
       .then((e) => {
         console.log("is Owner Of", e)
         if (e) {
