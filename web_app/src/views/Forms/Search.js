@@ -57,7 +57,7 @@ export default function Search(props) {
   const [data, setData] = React.useState("");
   const [idxHash, setIdxHash] = React.useState("");
   const [result, setResult] = React.useState("");
-  const [queryValue, setQueryValue] = React.useState("");
+  const [idxQuery, setIdxQuery] = React.useState("");
   const [wasSentQuery, setWasSentQuery] = React.useState(false);
   const [error, setError] = React.useState("");
   const [inscription, setInscription] = React.useState("");
@@ -94,7 +94,6 @@ export default function Search(props) {
   const [loginModelState, setloginModelState] = React.useState("");
   const [loginSerialState, setloginSerialState] = React.useState("");
   const [loginIDXState, setloginIDXState] = React.useState("");
-
 
   const handleSimple = event => {
     window.sentPacket = asset
