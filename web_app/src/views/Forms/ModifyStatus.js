@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -27,37 +28,174 @@ import { ScatterPlot } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function ModifyStatus() {
-
-  const [checkedA, setCheckedA] = React.useState(true);
-  const [checkedB, setCheckedB] = React.useState(false);
+export default function ModifyStatus(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [multipleSelect, setMultipleSelect] = React.useState([]);
-  const [tags, setTags] = React.useState(["pizza", "pasta", "parmesan"]);
-  const handleSimple = event => {
-    setSimpleSelect(event.target.value);
-  };
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const handleChange = event => {
-    setSelectedValue(event.target.value);
-  };
-  const handleChangeEnabled = event => {
-    setSelectedEnabled(event.target.value);
-  };
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const [transactionActive, setTransactionActive] = React.useState(false);
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
+  const [error, setError] = React.useState("");
+  const [showHelp, setShowHelp] = React.useState(false);
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [txHash, setTxHash] = React.useState("");
+
+  const [status, setStatus] = React.useState("");
+
+  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+
+  const link = document.createElement('div')
+
+  window.sentPacket = null
+
   const classes = useStyles();
+  
+  if(assetInfo === undefined || assetInfo === null) {
+    return window.location.href = "/#/admin/home"
+  }
+  
+
+  const handleSimple = event => {
+    let status;
+    let e = event.target.value
+
+    switch (e) {
+      case "transferrable": {
+        status = Number(51);
+        break
+      }
+      case "nontransferrable": {
+        status = Number(52);
+        break
+      }
+      case "stolen": {
+        status = Number(53);
+        break
+      }
+      case "lost": {
+        status = Number(54);
+        break
+      }
+      case "discardable": {
+        status = Number(59);
+        break
+      }
+      default: {
+        console.log("Invalid status selection: '", e, "'");
+        break
+      }
+    }
+
+    return setStatus(status);
+  };
+
+  const modifyStatus = async () => { //export held asset
+
+    if(status === 53 || status === 54) {
+      return modifyStatusLS()
+    }
+
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+
+    setTransactionActive(true);
+
+    await window.contracts.NP_NC.methods
+      ._modStatus(
+        assetInfo.idxHash,
+        status
+      )
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Status Modification Failed!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Status Modification Successful!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        window.resetInfo = true;
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
+      });
+
+  }
+  
+  const modifyStatusLS = async () => { //export held asset
+
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+
+    setTransactionActive(true);
+
+    await window.contracts.NP_NC.methods
+      ._setLostOrStolen(
+        assetInfo.idxHash,
+        status
+      )
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Status Modification Failed!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Status Modification Successful!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        window.resetInfo = true;
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
+      });
+
+  }
+
   return (
     <Card>
       <CardHeader color="info" icon>
@@ -68,8 +206,8 @@ export default function ModifyStatus() {
       </CardHeader>
       <CardBody>
         <form>
-              <h4>Asset Selected: </h4>
-              <h4>Current Status: </h4>
+              <h4>Asset Selected: {assetInfo.name}</h4>
+              <h4>Current Status: {assetInfo.status}</h4>
           <FormControl
           fullWidth
           className={classes.selectFormControl}
@@ -105,48 +243,59 @@ export default function ModifyStatus() {
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value=""
+              value="transferrable"
             >
-              Placeholder
+              Transferrable
                           </MenuItem>
             <MenuItem
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value=""
+              value="nontransferrable"
             >
-              Placeholder
+              Non-Transferrable
                           </MenuItem>
             <MenuItem
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value=""
+              value="stolen"
             >
-              Placeholder
+              Stolen
                           </MenuItem>
             <MenuItem
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value=""
+              value="lost"
             >
-              Placeholder
+              Lost
                           </MenuItem>
             <MenuItem
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value=""
+              value="discardable"
             >
-              Placeholder
+              Discardable
                           </MenuItem>
           </Select>
         </FormControl>
+        {!transactionActive && status !== "" && (
+            <Button color="info" className="MLBGradient" onClick={() => modifyStatus()}>Modify Status</Button>
+          )}
+        {!transactionActive && status === "" && (
+            <Button disabled color="info" className="MLBGradient">Modify Status</Button>
+          )}
+          {transactionActive && (
+            <h3>
+               Modifying Status<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
         </form>
       </CardBody>
     </Card>

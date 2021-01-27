@@ -121,14 +121,14 @@ export default function Search(props) {
         href = "/#/admin/discard-asset";
         break
       }
-      case "change-status": {
+      case "modify-status": {
         href = "/#/admin/modify-status";
         break
       }
-      case "decrement-counter": {
-        href = "/#/admin/counter";
-        break
-      }
+      // case "decrement-counter": {
+      //   href = "/#/admin/counter";
+      //   break
+      // }
       case "edit-information": {
         href = "/#/admin/modify-description";
         break
@@ -1055,11 +1055,11 @@ export default function Search(props) {
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
                       }}
-                      value="change-status"
+                      value="modify-status"
                     >
-                      Change Status
+                      Modify Status
                           </MenuItem>
-                    <MenuItem
+                    {/* <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
@@ -1067,7 +1067,7 @@ export default function Search(props) {
                       value="decrement-counter"
                     >
                       Decrement Counter
-                          </MenuItem>
+                          </MenuItem> */}
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -1075,7 +1075,7 @@ export default function Search(props) {
                       }}
                       value="edit-information"
                     >
-                      Edit Information
+                      Modify Asset Information
                           </MenuItem>
                     <MenuItem
                       classes={{

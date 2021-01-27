@@ -51,6 +51,18 @@ export default function Transfer(props) {
 
   window.sentPacket = null
 
+  const clearForms = () => {
+    setAddress("");
+    setloginAddressState("");
+    console.log("clearing forms")
+  };
+  
+  const classes = useStyles();
+
+  if(assetInfo === undefined || assetInfo === null) {
+    return window.location.href = "/#/admin/home"
+  }
+
   const transferAsset = async () => { //transfer held asset
 
     if (loginAddress === "") {
@@ -111,12 +123,6 @@ export default function Transfer(props) {
 
   }
 
-  const clearForms = () => {
-    setAddress("");
-    setloginAddressState("");
-    console.log("clearing forms")
-  };
-  const classes = useStyles();
   return (
     <Card>
       <CardHeader color="info" icon>

@@ -1,154 +1,181 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import { isMobile } from "react-device-detect";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import Switch from "@material-ui/core/Switch";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
 
 // core components
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardText from "components/Card/CardText.js";
-import CardIcon from "components/Card/CardIcon.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
 import CardBody from "components/Card/CardBody.js";
+import { Description, ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
+import CardFooter from "components/Card/CardFooter.js";
+import Share from "@material-ui/icons/Share";
+import Print from "@material-ui/icons/Print";
 
-import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
+import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 
 const useStyles = makeStyles(styles);
 
 export default function ModifyDescription() {
+  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
 
-  const [checkedA, setCheckedA] = React.useState(true);
-  const [checkedB, setCheckedB] = React.useState(false);
-  const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [multipleSelect, setMultipleSelect] = React.useState([]);
-  const [tags, setTags] = React.useState(["pizza", "pasta", "parmesan"]);
-  const handleSimple = event => {
-    setSimpleSelect(event.target.value);
-  };
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const handleChange = event => {
-    setSelectedValue(event.target.value);
-  };
-  const handleChangeEnabled = event => {
-    setSelectedEnabled(event.target.value);
-  };
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const link = document.createElement('div')
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
+
+  window.sentPacket = null
+
   const classes = useStyles();
+
+  if (assetInfo === undefined || assetInfo === null) {
+    return window.location.href = "/#/admin/home"
+  }
+
   return (
     <Card>
-      <CardHeader color="info" icon>
-        <CardIcon color="info" className="DBGradient">
-        <span class="material-icons">
-history_edu
-</span>
-        </CardIcon>
-        <h4 className={classes.cardIconTitle}>Modify Description</h4>
-      </CardHeader>
+      <>
+        {!isMobile && (
+          <CardHeader image className={classes.cardHeaderHoverCustom}>
+            {assetInfo.DisplayImage.length > 1 && (
+              <>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Back"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button large color="info" justIcon className="back">
+                    <KeyboardArrowLeft />
+                  </Button>
+                </Tooltip>
+                <img src={assetInfo.DisplayImage} alt="..." />
+              </>
+            )}
+            {assetInfo.DisplayImage.length === 0 && (<>
+              <Tooltip
+                id="tooltip-top"
+                title="Back"
+                placement="bottom"
+                classes={{ tooltip: classes.tooltip }}
+              >
+                <Button large color="info" justIcon className="back">
+                  <KeyboardArrowLeft />
+                </Button>
+              </Tooltip>
+              {assetInfo.identicon}
+            </>)}
+          </CardHeader>
+        )}
+        {isMobile && (
+          <CardHeader image className={classes.cardHeaderHover}>
+            {assetInfo.DisplayImage.length > 1 && (
+              <>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Back"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button large color="info" justIcon className="back">
+                    <KeyboardArrowLeft />
+                  </Button>
+                </Tooltip>
+                <img src={assetInfo.DisplayImage} alt="..." />
+              </>
+            )}
+            {assetInfo.DisplayImage.length === 0 && (<>
+              <Tooltip
+                id="tooltip-top"
+                title="Back"
+                placement="bottom"
+                classes={{ tooltip: classes.tooltip }}
+              >
+                <Button large color="info" justIcon className="back">
+                  <KeyboardArrowLeft />
+                </Button>
+              </Tooltip>
+              {assetInfo.identicon}
+            </>)}
+          </CardHeader>
+        )}
+      </>
       <CardBody>
-        <form>
-              <h4>Asset Selected: </h4>
-          <FormControl
-          fullWidth
-          className={classes.selectFormControl}
-        >
-          <InputLabel
-          >
-            Please Select Element
-                        </InputLabel>
-          <Select
-            MenuProps={{
-              className: classes.selectMenu
-            }}
-            classes={{
-              select: classes.select
-            }}
-            value={simpleSelect}
-            onChange={handleSimple}
+        <h4 className={classes.cardTitle}>
+          Name:
+        <div className="input">
+            <CustomInput
+              // labelText={assetInfo.name}
+              id="assetName"
+              formControlProps={{
+                fullWidth: true
+              }}
             inputProps={{
-              name: "simpleSelect",
-              id: "simple-select"
+              defaultValue: assetInfo.name
+              // onChange: event => {
+              //   setNameTag(event.target.value.trim())
+              // },
             }}
-          >
-            <MenuItem
-              disabled
-              classes={{
-                root: classes.selectMenuItem
+            />
+          </div>
+        </h4>
+        <h4 className={classes.cardTitle}>Class: {assetInfo.assetClassName} (NODE ID: {assetInfo.assetClass})</h4>
+        <h4 className={classes.cardTitle}>Status: {assetInfo.status}</h4>
+        <p className={classes.cardCategory}>
+          Description: 
+        <div className="inputDescription">
+            <CustomInput
+              // labelText={assetInfo.Description}
+              id="assetName"
+              // value={currentDescription}
+              formControlProps={{
+                fullWidth: true
               }}
-            >
-              Please Select Element
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
+            inputProps={{
+              defaultValue: assetInfo.Description
+              // onChange: event => {
+              //   setNameTag(event.target.value.trim())
+              // },
+            }}
+            />
+          </div>
+          </p>
+          <CustomInput
+              labelText="Add Text Field"
+              id="extraField"
+              // value={currentDescription}
+              formControlProps={{
+                fullWidth: true
               }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value=""
-            >
-              Placeholder
-                          </MenuItem>
-          </Select>
-        </FormControl>
-        </form>
+            // inputProps={{
+              // defaultValue: assetInfo.Description
+              // onChange: event => {
+              //   setNameTag(event.target.value.trim())
+              // },
+            // }}
+            />
       </CardBody>
+      <CardFooter chart>
+        {!isMobile && (
+          <div className={classes.stats}>
+            IDX Hash: {assetInfo.idxHash}
+          </div>
+        )}
+        {isMobile && (
+          <div className={classes.stats}>
+            IDX Hash: {assetInfo.idxHash.substring(0, 12) + "..." + assetInfo.idxHash.substring(54, 66)}
+          </div>
+        )}
+        <div className={classes.stats}>
+          <Share />
+          <Print />
+        </div>
+      </CardFooter>
     </Card>
   );
 }
