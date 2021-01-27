@@ -78,10 +78,8 @@ export default function Dashboard(props) {
       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
         return
       } else {
-        setIdxQuery(refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66));
-        window.location.href = '/#/admin/search/';
-        console.log("Here is the search:", window.location.hash);
-      } 
+        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.length);
+      }
     });
     window.web3 = web3;
     return setIsMounted(true);
@@ -113,16 +111,7 @@ export default function Dashboard(props) {
           }).then((accounts)=>{
             if (accounts[0] !== undefined){
               setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-              setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0])).then(()=>{
-                let refString = String(window.location.href);
-                if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
-                  return
-                } else {
-                  setIdxQuery(refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66));
-                  window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.indexOf('0x') + 66);
-                  console.log("Here is the search:", window.location.hash);
-                } 
-              });
+              setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
             }
             else{
               ethereum.send('eth_requestAccounts').then((accounts)=>{
@@ -229,7 +218,7 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
-  let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length))
+  let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length)), _idxQuery = "";
 
   window.onload = () => {
     window.balances = {};
@@ -242,9 +231,16 @@ export default function Dashboard(props) {
       port: 5001,
       protocol: "https",
     });
-    console.log(hrefStr);
-    if(hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home"){
-      window.location.href = "/#/admin/home"
+
+    if (hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66) {
+      _idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
+      setIdxQuery(hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
+      console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
+      window.location.href = '/#/admin/search/' + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66);
+    }
+
+    else if(hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home"){
+      window.location.href = "/#/admin/home";
     }
 
     window.ipfs = _ipfs;
