@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Warning from "components/Typography/Warning.js";
@@ -19,44 +20,106 @@ import { DeleteOutline, FlightTakeoff } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function Export() {
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
-  const [selectedValue, setSelectedValue] = React.useState(null);
-  const handleChange = event => {
-    setSelectedValue(event.target.value);
-  };
-  const handleChangeEnabled = event => {
-    setSelectedEnabled(event.target.value);
-  };
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+export default function Export(props) {
+  const [simpleSelect, setSimpleSelect] = React.useState("");
+  const [transactionActive, setTransactionActive] = React.useState(false);
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
+  const [error, setError] = React.useState("");
+  const [showHelp, setShowHelp] = React.useState(false);
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [txHash, setTxHash] = React.useState("");
+
+  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+
+  const link = document.createElement('div')
+
+  window.sentPacket = null
+
   const classes = useStyles();
+
+  if(assetInfo === undefined || assetInfo === null) {
+    return window.location.href = "/#/admin/home"
+  }
+  
+  const exportAsset = async () => { //export held asset
+
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
+
+    setTransactionActive(true);
+
+    await window.contracts.NP_NC.methods
+      ._exportNC(
+        assetInfo.idxHash,
+      )
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Import Failed!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      })
+      .on("receipt", (receipt) => {
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Import Successful!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        window.resetInfo = true;
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
+      });
+
+  }
+
   return (
-    <Card>
-      <CardHeader color="info" icon>
-        <CardIcon color="info" className="DBGradient">
-          <FlightTakeoff />
-        </CardIcon>
-        <h3 className={classes.cardIconTitle}>Export Asset</h3>
-      </CardHeader>
-      <CardBody>
-        <form>
-          <h4>Asset Selected: </h4>
-          <Danger><h4>Disclaimer:</h4></Danger>
-          <h5> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</h5>
-          <Button color="info" className="MLBGradient">Export Asset</Button>
-        </form>
-      </CardBody>
-    </Card>
+  <Card>
+    <CardHeader color="info" icon>
+      <CardIcon color="info" className="DBGradient">
+        <FlightTakeoff />
+      </CardIcon>
+      <h4 className={classes.cardIconTitle}>Export Asset</h4>
+    </CardHeader>
+    <CardBody>
+      <form>
+        {!transactionActive && (
+          <>
+            <h4>Asset Selected: {assetInfo.name}</h4>
+            <br />
+            <h5>You are attempting to export {assetInfo.name}.</h5>
+          </>
+        )}
+        {!transactionActive && (
+          <Button color="info" className="MLBGradient" onClick={() => exportAsset()}>Export Asset</Button>
+        )}
+        {transactionActive && (
+          <h3>
+            Exporting Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+          </h3>
+        )}
+      </form>
+    </CardBody>
+  </Card>
   );
 }

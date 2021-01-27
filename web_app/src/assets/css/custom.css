@@ -325,3 +325,14 @@ body {
       .fixed-plugin .badge-darkBlue {
         background-color: #002a40 !important;
       }
+
+      .input {
+        top: -20px !important;
+        left: 80px !important;
+        position: absolute !important;
+      }
+      .inputDescription {
+        top: 70px !important;
+        left: 100px !important;
+        position: absolute !important;
+      }

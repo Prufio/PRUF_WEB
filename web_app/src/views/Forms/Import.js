@@ -52,6 +52,10 @@ export default function Import(props) {
   window.sentPacket = null
 
   const classes = useStyles();
+  
+  if(assetInfo === undefined || assetInfo === null) {
+    return window.location.href = "/#/admin/home"
+  }
 
   if (assetInfo.status !== "70") {
     swal({
@@ -67,7 +71,7 @@ export default function Import(props) {
     setAssetClass(event.target.value);
   };
 
-  const importAsset = async () => { //transfer held asset
+  const importAsset = async () => { //import held asset
 
     let tempTxHash;
     setShowHelp(false);

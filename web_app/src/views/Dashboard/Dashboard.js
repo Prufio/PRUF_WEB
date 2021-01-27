@@ -5,19 +5,14 @@ import { isMobile } from "react-device-detect";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-import Icon from "@material-ui/core/Icon";
 import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import InputLabel from "@material-ui/core/InputLabel";
-import Switch from "@material-ui/core/Switch";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
 // @material-ui/icons
 // import ContentCopy from "@material-ui/icons/ContentCopy";
 // import InfoOutline from "@material-ui/icons/InfoOutline";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
 import Refresh from "@material-ui/icons/Refresh";
 import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
@@ -36,45 +31,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import pruftoken from "assets/img/pruftoken.png";
-import macbook from "../../assets/img/MacBook.jpg";
-import Nike from "assets/img/Nike.png";
-import Mustang from "assets/img/Mustang.png";
-
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
-} from "variables/charts";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-
-import priceImage1 from "assets/img/card-2.jpeg";
-import priceImage2 from "assets/img/card-3.jpeg";
-import priceImage3 from "assets/img/card-1.jpeg";
 import { ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
-import { supportsGoWithoutReloadUsingHash } from "history/DOMUtils";
-
-const us_flag = require("assets/img/flags/US.png");
-const de_flag = require("assets/img/flags/DE.png");
-const au_flag = require("assets/img/flags/AU.png");
-const gb_flag = require("assets/img/flags/GB.png");
-const ro_flag = require("assets/img/flags/RO.png");
-const br_flag = require("assets/img/flags/BR.png");
-
-var mapData = {
-  AU: 760,
-  BR: 550,
-  CA: 120,
-  DE: 1300,
-  FR: 540,
-  GB: 690,
-  GE: 200,
-  IN: 200,
-  RO: 600,
-  RU: 300,
-  US: 2920
-};
 
 const useStyles = makeStyles(styles);
 
@@ -277,14 +236,14 @@ export default function Dashboard(props) {
         href = "/#/admin/discard-asset";
         break
       }
-      case "change-status": {
+      case "modify-status": {
         href = "/#/admin/modify-status";
         break
       }
-      case "decrement-counter": {
-        href = "/#/admin/counter";
-        break
-      }
+      // case "decrement-counter": {
+      //   href = "/#/admin/counter";
+      //   break
+      // }
       case "edit-information": {
         href = "/#/admin/modify-description";
         break
@@ -394,25 +353,7 @@ export default function Dashboard(props) {
                 </CardHeader>
               )}
             </>
-            {/* <CardHeader color="info" className="DBGradient">
-            <img src={macbook} alt="logo" className="assetImage" />
-          </CardHeader> */}
             <CardBody>
-              {/* <Tooltip
-                  id="tooltip-top"
-                  title="Back"
-                  placement="top" color="info"
-                  // classes={{ tooltip: classes.tooltip }}
-                  >
-                  <Button 
-                  onClick={(e) => setViewAsset(!viewAsset)}
-                  className="exitAsset" 
-                  simple
-                  justIcon color="success"
-                  >
-                  <ExitToApp />
-                  </Button>
-                  </Tooltip> */}
 
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
@@ -503,11 +444,11 @@ export default function Dashboard(props) {
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
                       }}
-                      value="change-status"
+                      value="modify-status"
                     >
-                      Change Status
+                      Modify Status
                           </MenuItem>
-                    <MenuItem
+                    {/* <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
@@ -515,7 +456,7 @@ export default function Dashboard(props) {
                       value="decrement-counter"
                     >
                       Decrement Counter
-                          </MenuItem>
+                          </MenuItem> */}
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -523,7 +464,7 @@ export default function Dashboard(props) {
                       }}
                       value="edit-information"
                     >
-                      Edit Information
+                      Modify Asset Information
                           </MenuItem>
                     <MenuItem
                       classes={{
