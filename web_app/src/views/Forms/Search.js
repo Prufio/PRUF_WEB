@@ -39,7 +39,7 @@ import Jdenticon from 'react-jdenticon';
 import imgStyles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import pruftoken from "../../assets/img/pruftoken.png";
-import macbook from "../../assets/img/MacBook.png";
+import placeholder from "../../assets/img/placeholder.jpg";
 import { boxShadow } from "assets/jss/material-dashboard-pro-react";
 
 
@@ -75,9 +75,9 @@ export default function Search(props) {
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
-  const [hasMounted, setHasMounted]  = React.useState(false);
+  const [hasMounted, setHasMounted] = React.useState(false);
 
-  const [IDXRawInput, setIDXRawInputInput] = React.useState(false);
+  const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
   const [manufacturer, setManufacturer] = React.useState("");
   const [type, setType] = React.useState("");
@@ -96,26 +96,27 @@ export default function Search(props) {
   const [loginModelState, setloginModelState] = React.useState("");
   const [loginSerialState, setloginSerialState] = React.useState("");
   const [loginIDXState, setloginIDXState] = React.useState("");
+  const [selectedImage, setSelectedImage] = React.useState("")
 
   React.useEffect(() => {
     let refString = String(window.location.href);
 
-    if(!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66){
+    if (!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66) {
       setRetrieving(true)
       setWasSentQuery(true)
       setGotQuery(true)
     }
 
-    if(window.contracts !== undefined && wasSentQuery){
+    if (window.contracts !== undefined && wasSentQuery) {
       let query = refString.substring(refString.indexOf('0x'), refString.length)
       setWasSentQuery(false)
       retrieveRecordQR(query)
     }
 
-    else{console.log(false)}
+    else { console.log(false) }
   })
 
-  
+
 
 
 
@@ -192,7 +193,9 @@ export default function Search(props) {
         return setIpfsObject({})
       } else {
         console.log(lookup, "Here's what we found for asset description: ", result);
-        return setIpfsObject(JSON.parse(result))
+        let tempObj = JSON.parse(result)
+        setSelectedImage(tempObj.photo.displayImage || Object.values(tempObj.photo)[0] || "")
+        setIpfsObject(tempObj)
       }
     });
   };
@@ -531,6 +534,38 @@ export default function Search(props) {
     }
     setChecked(newChecked);
   };
+
+
+  const generateThumbs = (obj) => {
+    console.log("obj", obj)
+    if (!obj.photo) {
+      return []
+    }
+    else if (Object.values(obj.photo).length === 0) {
+      return (
+        <div className="assetImageSelectorButton">
+          <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
+        </div>
+      )
+    }
+    let component = [], photos = Object.values(obj.photo);
+    console.log("photos", photos)
+    for (let i = 0; i < photos.length; i++) {
+      component.push(
+        <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
+          <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
+        </div>
+      )
+    }
+    return component
+  }
+
+  const showImage = (e) => {
+    console.log(selectedImage)
+    console.log(e)
+    setSelectedImage(e)
+  }
+
   const classes = useStyles();
   const imgClasses = useImgStyles();
   return (
@@ -726,7 +761,7 @@ export default function Search(props) {
                     control={
                       <Checkbox
                         tabIndex={-1}
-                        onClick={() => setIDXRawInputInput(!IDXRawInput)}
+                        onClick={() => setIDXRawInput(!IDXRawInput)}
                         checkedIcon={<Check className={classes.checkedIcon} />}
                         icon={<Check className={classes.uncheckedIcon} />}
                         classes={{
@@ -854,7 +889,7 @@ export default function Search(props) {
                               <KeyboardArrowLeft />
                             </Button>
                           </Tooltip>
-                          <img src={ipfsObject.photo.displayImage} alt="..." />
+                          <img src={selectedImage} alt="..." />
                         </>
                       )}
                       {ipfsObject.photo.displayImage === undefined && (
@@ -911,7 +946,7 @@ export default function Search(props) {
                               <KeyboardArrowLeft />
                             </Button>
                           </Tooltip>
-                          <img src={ipfsObject.photo.displayImage} alt="..." />
+                          <img src={selectedImage} alt="..." />
                         </>
                       )}
                       {ipfsObject.photo.displayImage === undefined && (
@@ -951,6 +986,11 @@ export default function Search(props) {
             </CardHeader>
           )}
           <CardBody>
+            {ipfsObject.photo !== {} && (
+              <div className="imageSelector">
+                {generateThumbs(ipfsObject)}
+              </div>
+            )}
             <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
             <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(NODE ID:{asset.assetClass})</h4>
             {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}

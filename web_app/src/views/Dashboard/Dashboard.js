@@ -32,8 +32,9 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
+import { AddPhotoAlternate, AddPhotoAlternateOutlined, ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -213,6 +214,13 @@ export default function Dashboard(props) {
   const generateThumbs = (obj) => {
     let component = [], photos = Object.values(obj.photo);
     console.log("photos",photos)
+    if (photos.length === 0) {
+      return (
+        <div className="assetImageSelectorButton">
+          <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
+        </div>
+      )
+    }
     for (let i = 0; i < photos.length; i++) {
       component.push(
         <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
@@ -354,7 +362,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <img src={selectedAssetObj.DisplayImage} alt="..." />
+                      <img src={selectedImage} alt="..." />
                     </>
                   )}
                   {selectedAssetObj.DisplayImage.length === 0 && (<>

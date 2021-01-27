@@ -49,6 +49,12 @@ body {
     object-fit: cover !important;
 }
 
+.submitChanges {
+    background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+    object-fit: cover !important;
+    /* left: 400px; */
+}
+
 .LBGradient {
     background: linear-gradient(0deg, #00a8ff, #00c3ff) !important;
     object-fit: cover !important;
@@ -318,8 +324,14 @@ body {
       .back {
         background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
         object-fit: cover !important;
-        bottom: -80px;
-        right: -30px;
+        bottom: -60px;
+        right: -10px;
+      }
+      .settings {
+        background: linear-gradient(0deg, #b4b3b3, #949494) !important;
+        object-fit: cover !important;
+        bottom: -120px;
+        right: 33px;
       }
 
       .fixed-plugin .badge-darkBlue {
@@ -327,12 +339,12 @@ body {
       }
 
       .input {
-        top: -20px !important;
+        top: 105px !important;
         left: 80px !important;
         position: absolute !important;
       }
       .inputDescription {
-        top: 70px !important;
+        top: 200px !important;
         left: 100px !important;
         position: absolute !important;
       }
@@ -384,10 +396,27 @@ body {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(2, 43, 82, 0.4);
 }
 
+.imageSelectorPlus {
+  display: flex;
+  width: 25px;
+  height: 80px;
+  background-color: #888888ce;
+  border-radius: 0rem 0.5rem 0.5rem 0rem;
+  z-index: 3000;
+  position: absolute;
+  margin-top: 2.5px;
+  margin-left: -0.1rem;
+  align-items: center;
+}
+/* 
+.imagePlus {
+  margin
+} */
+
 .imageSelectorImage {
   width: 100px;
   height: 80px;
-  /* margin-left: 0.3rem; */
+  z-index: 2000;
   object-fit: cover;
 }
 

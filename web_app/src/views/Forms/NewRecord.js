@@ -149,14 +149,6 @@ export default function NewRecord(props) {
       if (loginPassword === "") {
         setloginPasswordState("error");
       }
-      // if (loginDescription === "" && loginDescriptionName !== "") {
-      //   setloginDescriptionState("error");
-      //   return;
-      // }
-      // if (loginDescriptionName === "" && loginDescription !== "") {
-      //   setloginDescriptionNameState("error");
-      //   return;
-      // }
       return;
     }
 
