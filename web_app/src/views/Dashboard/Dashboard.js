@@ -210,6 +210,26 @@ export default function Dashboard(props) {
 
   }
 
+  const generateThumbs = (obj) => {
+    let component = [], photos = Object.values(obj.photo);
+    console.log("photos",photos)
+    for (let i = 0; i < photos.length; i++) {
+      component.push(
+        <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
+          <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
+        </div>
+      )
+    }
+
+    return component
+  }
+
+  const showImage = (e) => {
+    console.log(selectedImage)
+    console.log(e)
+    setSelectedImage(e)
+  }
+
   const handleSimple = event => {
     window.sentPacket = selectedAssetObj
     setSimpleSelect(event.target.value);
@@ -302,7 +322,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <img src={selectedAssetObj.DisplayImage} alt="..." />
+                      <img src={selectedImage} alt="..." />
                     </>
                   )}
                   {selectedAssetObj.DisplayImage.length === 0 && (<>
@@ -354,7 +374,10 @@ export default function Dashboard(props) {
               )}
             </>
             <CardBody>
-
+            <div className="imageSelector">
+              {generateThumbs(selectedAssetObj)}
+            </div>
+                    <br/>
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
               <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
