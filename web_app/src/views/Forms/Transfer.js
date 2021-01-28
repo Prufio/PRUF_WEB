@@ -46,7 +46,7 @@ export default function Transfer(props) {
     return window.location.href = "/#/admin/home"
   }
 
-  if (assetInfo.status !== "51") {
+  if (assetInfo.statusNum !== "51") {
     swal({
       title: "Asset not in correct status!",
       text: "This asset is not in a transferrable status, please set asset into transferrable status before attempting to transfer.",

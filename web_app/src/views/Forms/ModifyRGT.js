@@ -53,7 +53,7 @@ export default function ModifyRGT() {
     return window.location.href = "/#/admin/home"
   }
 
-  if (assetInfo.status !== "53" || assetInfo.status !== "54") {
+  if (assetInfo.statusNum !== "53" || assetInfo.statusNum !== "54") {
     swal({
       title: "Asset not in correct status!",
       text: "This asset is not in a transferrable status, please set asset into transferrable status before attempting to export.",

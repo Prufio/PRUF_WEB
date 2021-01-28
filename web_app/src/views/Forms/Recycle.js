@@ -95,7 +95,7 @@ export default function Recycle() {
     return window.location.href = "/#/admin/home"
   }
 
-  if (assetInfo.status === "60") {
+  if (assetInfo.statusNum === "60") {
     swal({
       title: "Asset not in correct status!",
       text: "This asset is not in a recyclable status, please set asset into a discarded status before attempting to recycle.",

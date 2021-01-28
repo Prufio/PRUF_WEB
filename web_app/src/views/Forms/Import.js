@@ -45,7 +45,7 @@ export default function Import(props) {
     return window.location.href = "/#/admin/home"
   }
 
-  if (assetInfo.status !== "70") {
+  if (assetInfo.statusNum !== "70") {
     swal({
       title: "Asset not in correct status!",
       text: "This asset is not in exported status, please export asset before attempting to import it.",
