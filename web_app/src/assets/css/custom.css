@@ -1,6 +1,10 @@
 
+/* html {
+  overflow-y:hidden !important;
+} */
 body {
     background: linear-gradient(0deg, rgba(0, 83, 128, 0.212), #015f9218) !important;
+    /* overflow-x: hidden !important; */
 }
 
 /* body {
@@ -339,9 +343,9 @@ body {
       }
 
       .input {
-        top: 105px !important;
-        left: 80px !important;
-        position: absolute !important;
+        /* top: 105px !important; */
+        right: -10px !important;
+        /* position: absolute !important; */
       }
       .inputDescription {
         top: 200px !important;
@@ -436,4 +440,8 @@ body {
   width: 52px;
   height: 52px;
   margin-left: 0.3rem;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #017ec0 !important;
 }

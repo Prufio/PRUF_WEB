@@ -1033,7 +1033,7 @@ export default function Search(props) {
                     <Danger>
                       <Create className="functionSelectorIcon" />
                     </Danger>
-                    Edit Asset
+                    Modify Asset
                         </InputLabel>
                   <Select
                     MenuProps={{
@@ -1127,7 +1127,7 @@ export default function Search(props) {
                       }}
                       value="edit-information"
                     >
-                      Modify Asset Information
+                      Change Asset Information
                           </MenuItem>
                     <MenuItem
                       classes={{

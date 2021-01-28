@@ -395,7 +395,7 @@ export default function Dashboard(props) {
                     <Danger>
                       <Create className="functionSelectorIcon" />
                     </Danger>
-                    Edit Asset
+                    Modify Asset
                         </InputLabel>
                   <Select
                     MenuProps={{
@@ -489,7 +489,7 @@ export default function Dashboard(props) {
                       }}
                       value="edit-information"
                     >
-                      Modify Asset Information
+                      Change Asset Information
                           </MenuItem>
                     <MenuItem
                       classes={{
