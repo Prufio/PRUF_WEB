@@ -2,6 +2,7 @@ import React from "react";
 import "../../assets/css/custom.css";
 import { isMobile } from "react-device-detect";
 import swal from 'sweetalert';
+import base64 from 'base64-arraybuffer';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -42,6 +43,49 @@ export default function ModifyDescription() {
       setHasMounted(true)
     }
   })
+
+  let fileInput = React.createRef();
+  
+  const handleClick = () => {
+    fileInput.current.click();
+  }
+  const getImageFromLastUrl = () => {
+    window.ipfs.cat(lastImage.hash, async (error, result) => {
+      if (error) {
+        console.log(lookup, "Something went wrong. Unable to find file on IPFS");
+      } else {
+        console.log(base64.decode(result))
+      }
+  })
+}
+
+  const uploadImage = (e) => {
+    e.preventDefault()
+    let file;
+    console.log(e.target.files[0]);
+    if(e !== undefined){
+      file = e.target.files[0]
+    }
+    const reader = new FileReader();
+    reader.onloadend = (e) => {  
+      const fileType = file.type;
+      const prefix = `data:${fileType};base64,`;
+      const buf = Buffer(reader.result);
+      const base64buf =prefix +  base64.encode(buf);
+      window.ipfs.add(base64buf, (err, hash) => { // Upload buffer to IPFS
+        if (err) {
+          console.error(err)
+          return
+        }
+  
+        let url = `https://ipfs.io/ipfs/${hash}`
+        console.log(`Url --> ${url}`)
+        setLastImage({hash, url})
+      })
+    }
+    //const photo = document.getElementById("photo");
+    reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
+  }
 
   window.sentPacket = null
 
@@ -198,7 +242,8 @@ export default function ModifyDescription() {
       <CardBody>
 
         <div className="imageSelector">
-          <div className="imageSelectorPlus"><AddPhotoAlternateOutlined /></div>
+          <input type="file" onChange={uploadImage} ref={fileInput}/>
+          <div className="imageSelectorPlus"><AddPhotoAlternateOutlined onClick={(e)=>{handleClick()}}/></div>
           {generateThumbs(assetInfo)}
         </div>
         <br />
