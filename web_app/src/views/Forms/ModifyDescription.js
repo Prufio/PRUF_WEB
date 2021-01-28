@@ -13,22 +13,28 @@ import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
 import { AddPhotoAlternateOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
+import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
 import placeholder from "../../assets/img/placeholder.jpg";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
+import formStyles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 
 const useStyles = makeStyles(styles);
+const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription() {
   const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
   const [selectedImage, setSelectedImage] = React.useState("")
   const [hasMounted, setHasMounted] = React.useState(false);
-  // const link = document.createElement('div')
+  const [advancedInput, setAdvancedInput] = React.useState(false);
 
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
@@ -40,6 +46,7 @@ export default function ModifyDescription() {
   window.sentPacket = null
 
   const classes = useStyles();
+  const formClasses = useFormStyles();
 
   if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
@@ -195,38 +202,107 @@ export default function ModifyDescription() {
           {generateThumbs(assetInfo)}
         </div>
         <br />
-        <h4 className={classes.cardTitle}>
-          Name:
+        <h4>
+          {/* Name:
         <>
             <CustomInput
+              className="input"
               id="assetName"
               inputProps={{
                 defaultValue: assetInfo.name
               }}
             />
-          </>
+          </> */}
+          <TextField
+            id="outlined-full-width"
+            label="Name"
+            // style={{ margin: 8 }}
+            // placeholder="Placeholder"
+            defaultValue={assetInfo.name}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+          />
         </h4>
-        <h4 className={classes.cardTitle}>Class: {assetInfo.assetClassName} (NODE ID: {assetInfo.assetClass})</h4>
-        <h4 className={classes.cardTitle}>Status: {assetInfo.status}</h4>
-        <p className={classes.cardCategory}>
-          Description:
-          <>
-            <CustomInput
-              id="assetName"
+        <p
+        // className={classes.cardCategory}
+        >
+          {/* Description:
+          <> */}
+          {/* <TextField
+              id="outlined-multiline-static"
+              rows={4}
               inputProps={{
                 defaultValue: assetInfo.Description
               }}
-            />
-          </>
+            /> */}
+          <TextField
+            id="outlined-multiline-static"
+            label="Description"
+            multiline
+            rows={4}
+            defaultValue={assetInfo.Description}
+            variant="outlined"
+            fullWidth
+          />
+          {/* // </> */}
         </p>
-        <CustomInput
-          labelText="Add Text Field"
-          id="extraField"
-          formControlProps={{
-            fullWidth: true
+        <TextField
+          id="outlined-full-width"
+          label="Add Data Field"
+          // style={{ margin: 8 }}
+          // placeholder="Input Here"
+          // defaultValue={assetInfo.name}
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
           }}
+          variant="outlined"
         />
+        <div className={formClasses.checkboxAndRadio}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                tabIndex={-1}
+                onClick={() => setAdvancedInput(!advancedInput)}
+                checkedIcon={<Check className={formClasses.checkedIcon} />}
+                icon={<Check className={formClasses.uncheckedIcon} />}
+                classes={{
+                  checked: formClasses.checked,
+                  root: formClasses.checkRoot
+                }}
+              />
+            }
+            classes={{
+              label: formClasses.label,
+              root: formClasses.labelRoot
+            }}
+            label="Advanced Options"
+          />
+        </div>
+        {advancedInput && (
+          <div>
+            <TextField
+              id="outlined-full-width"
+              label="Add Raw JSON object"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              helperText="e.g, {'MyImage': 'MyBeautifuImage.png', 'TextEntry': 'I Like Trains'}"
+            />
+            <Button color="info" className="submitChanges">Submit JSON Object</Button>
+            <Button color="info" className="submitChanges">Download Full JSON File</Button>
+          </div>
+        )}
         <Button color="info" className="submitChanges">Submit Changes</Button>
+
       </CardBody>
       <CardFooter chart>
         {!isMobile && (
