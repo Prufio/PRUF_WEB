@@ -53,10 +53,10 @@ export default function ModifyRGT() {
     return window.location.href = "/#/admin/home"
   }
 
-  if (assetInfo.statusNum !== "53" || assetInfo.statusNum !== "54") {
+  if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
     swal({
       title: "Asset not in correct status!",
-      text: "This asset is not in a transferrable status, please set asset into transferrable status before attempting to export.",
+      text: "This asset is not in a lost or stolen status, please set asset into a non lost or stolen status before attempting to modify.",
       icon: "warning",
       button: "Close",
     });

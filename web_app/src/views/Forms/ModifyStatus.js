@@ -45,7 +45,7 @@ export default function ModifyStatus(props) {
     return window.location.href = "/#/admin/home"
   }
 
-  if (assetInfo.statusNum !== "50" || assetInfo.statusNum !== "56") {
+  if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56") {
     swal({
       title: "Asset not in correct status!",
       text: "This asset is not in a modifyable status, please set asset into a non-escrow status before attempting to modify.",
