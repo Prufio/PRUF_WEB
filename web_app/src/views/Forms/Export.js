@@ -3,25 +3,21 @@ import "../../assets/css/custom.css";
 import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import Warning from "components/Typography/Warning.js";
-import Danger from "components/Typography/Danger.js";
 
 
 // core components
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardText from "components/Card/CardText.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { DeleteOutline, FlightTakeoff } from "@material-ui/icons";
+import { FlightTakeoff } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
 export default function Export(props) {
-  const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
 
   const [error, setError] = React.useState("");
@@ -39,6 +35,16 @@ export default function Export(props) {
 
   if(assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
+  }
+
+  if (assetInfo.status !== "51") {
+    swal({
+      title: "Asset not in correct status!",
+      text: "This asset is not in a transferrable status, please set asset into transferrable status before attempting to export.",
+      icon: "warning",
+      button: "Close",
+    });
+    return window.location.href = "/#/admin/dashboard"
   }
   
   const exportAsset = async () => { //export held asset

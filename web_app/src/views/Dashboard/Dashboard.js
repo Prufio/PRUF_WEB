@@ -1,6 +1,5 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from 'sweetalert';
 import { isMobile } from "react-device-detect";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,7 +22,6 @@ import Edit from "@material-ui/icons/Edit";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
-import Table from "components/Table/Table.js";
 import Button from "components/CustomButtons/Button.js";
 import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
@@ -34,7 +32,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { AddPhotoAlternate, AddPhotoAlternateOutlined, ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
+import { KeyboardArrowLeft } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -51,16 +49,12 @@ export default function Dashboard(props) {
   })
 
   const [viewAsset, setViewAsset] = React.useState(false)
-  const [checkedA, setCheckedA] = React.useState(true);
-  const [checkedB, setCheckedB] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [assetObj, setAssetObj] = React.useState({});
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
   const [identicon, setIdenticon] = React.useState(<></>);
   const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
-  const [reset, setReset] = React.useState("")
 
   const moreInfo = (e) => {
     const url = String(baseURL) + String(e.idxHash)

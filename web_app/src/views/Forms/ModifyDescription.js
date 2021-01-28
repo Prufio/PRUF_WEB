@@ -14,7 +14,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import CardBody from "components/Card/CardBody.js";
-import { AddPhotoAlternateOutlined, Description, ExitToApp, KeyboardArrowLeft, Settings } from "@material-ui/icons";
+import { AddPhotoAlternateOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import CardFooter from "components/Card/CardFooter.js";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
@@ -28,8 +28,7 @@ export default function ModifyDescription() {
   const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
   const [selectedImage, setSelectedImage] = React.useState("")
   const [hasMounted, setHasMounted] = React.useState(false);
-  const [simpleSelect, setSimpleSelect] = React.useState("");
-  const link = document.createElement('div')
+  // const link = document.createElement('div')
 
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
