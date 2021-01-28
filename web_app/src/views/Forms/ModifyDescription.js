@@ -109,12 +109,12 @@ export default function ModifyDescription() {
     swal("What would you like to do with this image?", {
       buttons: {
         delete: {
-          text: "Delete Image",
+          text: "Delete",
           value: "delete"
         },
         profile: {
-          text: "Set as Profile Image",
-          value: "profile"
+          text: "Set Default",
+          value: "default"
         },
         back: {
           text: "Go Back",
