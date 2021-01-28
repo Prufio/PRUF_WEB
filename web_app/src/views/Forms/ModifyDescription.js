@@ -27,8 +27,16 @@ const useStyles = makeStyles(styles);
 
 export default function ModifyDescription() {
   const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
-  const [selectedImage, setSelectedImage] = React.useState("")
+  const [customJSON, setCustomJSON] = React.useState("")
+  const [newDescription, setNewDescription] = React.useState("");
+  const [selectedImage, setSelectedImage] = React.useState("");
+  const [newName, setNewName] = React.useState("");
+  const [newDisplayImage, setNewDisplayImage] = React.useState("");
   const [hasMounted, setHasMounted] = React.useState(false);
+  const [lastImage, setLastImage] = React.useState({});
+  const [additionalImages, setAdditionalImages] = React.useState([]);
+  const [additionalText, setAdditionalText] = React.useState([]);
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   // const link = document.createElement('div')
 
   React.useEffect(() => {
@@ -43,29 +51,29 @@ export default function ModifyDescription() {
   const handleClick = () => {
     fileInput.current.click();
   }
-  const getImageFromLastUrl = () => {
-    window.ipfs.cat(lastImage.hash, async (error, result) => {
-      if (error) {
-        console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-      } else {
-        console.log(base64.decode(result))
-      }
-  })
-}
+
+  const download = async (buffer) => {
+    //console.log(buffer);
+    if (!buffer) return;
+    let tempArray = additionalImages;
+    tempArray.push(buffer)
+    console.log(tempArray)
+    setAdditionalImages(tempArray)
+    return forceUpdate()
+  }
 
   const uploadImage = (e) => {
     e.preventDefault()
+    if(!e.target.files[0]) return
     let file;
     console.log(e.target.files[0]);
-    if(e !== undefined){
       file = e.target.files[0]
-    }
     const reader = new FileReader();
     reader.onloadend = (e) => {  
       const fileType = file.type;
       const prefix = `data:${fileType};base64,`;
       const buf = Buffer(reader.result);
-      const base64buf =prefix +  base64.encode(buf);
+      const base64buf = prefix +  base64.encode(buf);
       window.ipfs.add(base64buf, (err, hash) => { // Upload buffer to IPFS
         if (err) {
           console.error(err)
@@ -74,7 +82,7 @@ export default function ModifyDescription() {
   
         let url = `https://ipfs.io/ipfs/${hash}`
         console.log(`Url --> ${url}`)
-        setLastImage({hash, url})
+        download(base64buf)
       })
     }
     //const photo = document.getElementById("photo");
@@ -93,12 +101,16 @@ export default function ModifyDescription() {
     swal("What would you like to do with this image?", {
       buttons: {
         delete: {
-          text: "Delete image",
+          text: "Delete Image",
           value: "delete"
         },
         profile: {
           text: "Set as Profile Image",
           value: "profile"
+        },
+        back: {
+          text: "Go Back",
+          value: "back"
         }
       },
     })
@@ -139,26 +151,39 @@ export default function ModifyDescription() {
             swal("Profile image set!");
             break;
 
+          case "back":
+            break;
+
           default:
             return;
         }
       });
   }
 
-  const generateThumbs = (obj) => {
+  const generateThumbs = (obj, arr) => {
     let component = [], photos = Object.values(obj.photo);
-    console.log("photos", photos)
-    if (photos.length === 0) {
+    console.log("photos", photos, "additional Images", additionalImages)
+    
+    if (photos.length === 0 && arr.length === 0) {
       return (
         <div className="assetImageSelectorButton">
           <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
         </div>
       )
     }
-    for (let i = 0; i < photos.length; i++) {
+
+    for (let i = 0; i < photos.length; i++ ) {
+        component.push(
+          <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
+            <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
+          </div>
+        ) 
+    }
+
+    for (let i = 0; i < arr.length; i++ ){
       component.push(
-        <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
-          <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
+        <div key={"addThumb"+String(i)} value={arr[i]} className="assetImageSelectorButton" onClick={() => { showImage(arr[i]) }}>
+          <img title="View Image" src={arr[i]} className="imageSelectorImage" alt="" />
         </div>
       )
     }
@@ -237,7 +262,7 @@ export default function ModifyDescription() {
         <div className="imageSelector">
           <input type="file" onChange={uploadImage} ref={fileInput}/>
           <div className="imageSelectorPlus"><AddPhotoAlternateOutlined onClick={(e)=>{handleClick()}}/></div>
-          {generateThumbs(assetInfo)}
+          {generateThumbs(assetInfo, additionalImages)}
         </div>
         <br />
         <h4 className={classes.cardTitle}>
@@ -271,7 +296,7 @@ export default function ModifyDescription() {
             fullWidth: true
           }}
         />
-        <Button color="info" className="submitChanges">Submit Changes</Button>
+        <Button onClick={()=>{}} color="info" className="submitChanges">Submit Changes</Button>
       </CardBody>
       <CardFooter chart>
         {!isMobile && (
