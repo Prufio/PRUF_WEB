@@ -2,11 +2,9 @@ import React from "react";
 import "../../assets/css/custom.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import InputLabel from "@material-ui/core/InputLabel";
-import Switch from "@material-ui/core/Switch";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Danger from "components/Typography/Danger.js";
@@ -18,7 +16,7 @@ import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
 import Create from "@material-ui/icons/Create";
-import { ExitToApp, KeyboardArrowLeft } from "@material-ui/icons";
+import { KeyboardArrowLeft } from "@material-ui/icons";
 import { isMobile } from "react-device-detect";
 
 
@@ -32,15 +30,12 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import SweetAlert from "react-bootstrap-sweetalert";
 import QrReader from 'react-qr-reader'
 import Jdenticon from 'react-jdenticon';
 
 import imgStyles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import pruftoken from "../../assets/img/pruftoken.png";
 import placeholder from "../../assets/img/placeholder.jpg";
-import { boxShadow } from "assets/jss/material-dashboard-pro-react";
 
 
 const useStyles = makeStyles(styles);
@@ -53,17 +48,13 @@ export default function Search(props) {
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
-  const [alert, setAlert] = React.useState(null);
   const [data, setData] = React.useState("");
-  const [idxHash, setIdxHash] = React.useState("");
   const [result, setResult] = React.useState("");
-  const [idxQuery, setIdxQuery] = React.useState("");
   const [wasSentQuery, setWasSentQuery] = React.useState(false);
   const [gotQuery, setGotQuery] = React.useState(false);
   const [error, setError] = React.useState("");
   const [inscription, setInscription] = React.useState("");
   const [moreInfo, setMoreInfo] = React.useState(false);
-  const [forSale, setForSale] = React.useState(false);
   const [authLevel, setAuthLevel] = React.useState("");
   const [ipfsObject, setIpfsObject] = React.useState({});
   const [asset, setAsset] = React.useState({});
@@ -71,11 +62,8 @@ export default function Search(props) {
   const [currency, setCurrency] = React.useState("");
   const [recycled, setRecycled] = React.useState(false);
   const [transaction, setTransaction] = React.useState(false);
-  const [QRValue, setQRValue] = React.useState("");
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
-  const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
-  const [hasMounted, setHasMounted] = React.useState(false);
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 

@@ -41,6 +41,15 @@ export default function Discard(props) {
     return window.location.href = "/#/admin/home"
   }
 
+  if (assetInfo.statusNum !== "59") {
+    swal({
+      title: "Asset not in correct status!",
+      text: "This asset is not in discardable status, please set asset into discardable status before attempting to discard.",
+      icon: "warning",
+      button: "Close",
+    });
+    return window.location.href = "/#/admin/dashboard"
+  }
 
   const discardAsset = async () => { //export held asset
 
