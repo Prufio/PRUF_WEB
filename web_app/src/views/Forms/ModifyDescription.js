@@ -442,6 +442,7 @@ export default function ModifyDescription(props) {
               }}
             /> */}
           <TextField
+            className="editDescriptionField"
             onChange={(e) => { handleDescription(e.target.value) }}
             id="outlined-multiline-static"
             label="Description"

@@ -109,7 +109,7 @@ export default function Search(props) {
 
 
   const handleSimple = event => {
-    window.sentPacket = asset
+    window.sentPacket = Object.assign(asset, ipfsObject);
     setSimpleSelect(event.target.value);
     let e = event.target.value, href;
 
@@ -310,7 +310,6 @@ export default function Search(props) {
     }
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
-    // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
     // await window.contracts.STOR.methods
     //   .getPriceData(idxHash)
     //   .call(

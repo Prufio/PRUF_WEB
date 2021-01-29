@@ -104,6 +104,7 @@ export default function Dashboard(props) {
                       Description: obj.descriptions[i].text.Description,
                       note: obj.notes[i],
                       text: obj.descriptions[i].text,
+                      urls: obj.descriptions[i].urls,
                       photo: obj.descriptions[i].photo,
                       identicon: obj.identiconsLG[i]
                     })}>
@@ -169,6 +170,7 @@ export default function Dashboard(props) {
                       Description: obj.descriptions[i].text.Description,
                       note: obj.notes[i],
                       text: obj.descriptions[i].text,
+                      urls: obj.descriptions[i].urls,
                       photo: obj.descriptions[i].photo,
                       identicon: obj.identiconsLG[i]
                     })}>
