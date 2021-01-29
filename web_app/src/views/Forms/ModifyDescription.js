@@ -31,11 +31,13 @@ import formStyles from "assets/jss/material-dashboard-pro-react/views/regularFor
 const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
 
+if (window.contracts === undefined) { window.location.href = "/#/admin/home" }
+
 export default function ModifyDescription(props) {
-  const [asset, ] = React.useState(window.sentPacket)
-  const [assetInfo, ] = React.useState({photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name});
-  const [newAssetInfo, setNewAssetInfo] = React.useState({photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name});
-  const [idxHash, ] = React.useState(window.sentPacket.idxHash)
+  const [asset,] = React.useState(window.sentPacket)
+  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name });
+  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name });
+  const [idxHash,] = React.useState(window.sentPacket.idxHash)
   const [customJSON, setCustomJSON] = React.useState("")
   const [selectedImage, setSelectedImage] = React.useState("");
   const [selectedKey, setSelectedKey] = React.useState("");
@@ -50,9 +52,9 @@ export default function ModifyDescription(props) {
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
       setSelectedImage(assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || "")
-      if(assetInfo.photo.DisplayImage){
+      if (assetInfo.photo.DisplayImage) {
         setSelectedKey("DisplayImage");
-      } else if (Object.values(assetInfo.photo)[0]) {
+      } else if (Object.values(assetInfo.photo)[0] !== undefined) {
         setSelectedKey(Object.keys(assetInfo.photo)[0]);
       } else {
         setSelectedKey("");
@@ -68,20 +70,63 @@ export default function ModifyDescription(props) {
     fileInput.current.click();
   }
 
+  const getRandomInt = () => {
+    return Math.floor(Math.random() * Math.floor(99999));
+  }
+
+  const generateNewKey = (obj) => {
+    let key = "PRAT_Image_"+String(Object.values(obj.photo).length+getRandomInt())
+
+    if(obj.photo[key]){
+      return generateNewKey(obj)
+    }
+
+    else{
+      return key
+    }
+  }
+
   const removeElement = (type, rem) => {
     let tempObj = newAssetInfo;
     delete tempObj[type][rem];
     console.log(tempObj)
     setNewAssetInfo(tempObj);
+    if(type=image){
+      if(rem === "DisplayImage" && Object.values(tempObj.photo)[0]){
+        setSelectedImage(Object.values(tempObj.photo)[0])
+        setSelectedKey(Object.keys(tempObj.photo)[0])
+      }
+       else if (rem !== "DisplayImage" && tempObj.photo.DisplayImage) {
+        setSelectedImage(tempObj.photo.DisplayImage)
+        setSelectedKey("DisplayImage")
+      } 
+      else if (rem !== "DisplayImage" && Object.values(tempObj.photo)[0]) {
+        setSelectedImage(Object.values(tempObj.photo)[0])
+        setSelectedKey(Object.keys(tempObj.photo)[0])
+      } 
+      else {
+        setSelectedImage("")
+        setSelectedKey("")
+      }
+      
+    }
     return forceUpdate()
   }
 
-  const setDisplayImage = () => {
+  const setDisplayImage = (img ,key) => {
+    console.log("Deleting: ", key)
     let tempObj = newAssetInfo;
-    tempObj.photo.DisplayImage = selectedImage;
-    delete tempObj.photo[selectedKey]
+    if(key === "DisplayImage"){return console.log("Nothing was done. Already set.")}
+    let newKey = generateNewKey(tempObj)
+    if(tempObj.photo.DisplayImage){
+      tempObj.photo[newKey] = tempObj.photo.DisplayImage
+    }
+    tempObj.photo.DisplayImage = img;
+    delete tempObj.photo[key];
+    console.log(tempObj);
     setNewAssetInfo(tempObj);
     setSelectedImage(tempObj.photo.DisplayImage);
+    setSelectedKey("DisplayImage");
     return forceUpdate()
   }
 
@@ -91,7 +136,7 @@ export default function ModifyDescription(props) {
   }
 
   const submitChanges = () => {
-    window.ipfs.add(newAssetInfo, (err, hash) => { // Upload buffer to IPFS
+    window.ipfs.add(JSON.stringify(newAssetInfo), (err, hash) => { // Upload buffer to IPFS
       if (err) {
         console.error(err)
         return
@@ -106,7 +151,7 @@ export default function ModifyDescription(props) {
 
   const updateAssetInfo = async (hash) => {
     setHelp(false)
-    if(!hash || !idxHash){return}
+    if (!hash || !idxHash) { return }
 
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
@@ -136,6 +181,71 @@ export default function ModifyDescription(props) {
     setNewAssetInfo(tempObj);
   }
 
+  const renderImage = (mobile) => {
+    if (!mobile) {
+      if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
+        return (
+          <CardHeader image className={classes.cardHeaderHoverCustom}>
+            <Button large color="info" justIcon className="back">
+              <KeyboardArrowLeft />
+            </Button>
+            <Button large color="info" justIcon className="settings" onClick={() => { settings() }}>
+              <Settings />
+            </Button>
+            <img src={selectedImage} alt="..." />
+          </CardHeader>
+        )
+      } else if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+        return (
+          <CardHeader image className={classes.cardHeaderHoverCustom}>
+            <Tooltip
+              id="tooltip-top"
+              title="Back"
+              placement="bottom"
+              classes={{ tooltip: classes.tooltip }}
+            >
+              <Button large color="info" justIcon className="back">
+                <KeyboardArrowLeft />
+              </Button>
+            </Tooltip>
+            {asset.identicon}
+          </CardHeader>
+        )
+      }
+    }
+    else if (mobile) {
+      if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
+        return (
+          <CardHeader image className={classes.cardHeaderHover}>
+            <Button large color="info" justIcon className="back">
+              <KeyboardArrowLeft />
+            </Button>
+            <Button large color="info" justIcon className="settings" onClick={() => { settings() }}>
+              <Settings />
+            </Button>
+            <img src={selectedImage} alt="..." />
+          </CardHeader>
+        )
+      } else if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+        return (
+          <CardHeader image className={classes.cardHeaderHover}>
+            <Tooltip
+              id="tooltip-top"
+              title="Back"
+              placement="bottom"
+              classes={{ tooltip: classes.tooltip }}
+            >
+              <Button large color="info" justIcon className="back">
+                <KeyboardArrowLeft />
+              </Button>
+            </Tooltip>
+            {asset.identicon}
+          </CardHeader>
+        )
+      }
+    }
+  }
+
   const download = async (buffer, fileName) => {
     if (!buffer) return;
     let tempObj = newAssetInfo;
@@ -147,17 +257,17 @@ export default function ModifyDescription(props) {
 
   const uploadImage = (e) => {
     e.preventDefault()
-    if(!e.target.files[0]) return
+    if (!e.target.files[0]) return
     let file;
     //console.log(e.target.files[0]);
-      file = e.target.files[0]
+    file = e.target.files[0]
     const reader = new FileReader();
-    reader.onloadend = (e) => {  
+    reader.onloadend = (e) => {
       const fileType = file.type;
       const fileName = file.name;
       const prefix = `data:${fileType};base64,`;
       const buf = Buffer(reader.result);
-      const base64buf = prefix +  base64.encode(buf);
+      const base64buf = prefix + base64.encode(buf);
       download(base64buf, fileName)
     }
     //const photo = document.getElementById("photo");
@@ -222,9 +332,9 @@ export default function ModifyDescription(props) {
               })
             break;
 
-          case "profile":
-            setDisplayImage(selectedImage)
-            swal("Profile image set!");
+          case "default":
+            setDisplayImage(selectedImage, selectedKey)
+            swal("Default image set!");
             break;
 
           case "back":
@@ -240,7 +350,7 @@ export default function ModifyDescription(props) {
     console.log(obj);
     let component = [], photos = Object.values(obj.photo), keys = Object.keys(obj.photo);
     console.log("photos", photos)
-    
+
     if (photos.length === 0) {
       return (
         <div className="assetImageSelectorButton">
@@ -248,89 +358,34 @@ export default function ModifyDescription(props) {
         </div>
       )
     }
-    for (let i = 0; i < photos.length; i++ ) {
-        component.push(
-          <div key={"thumb" + String(i)} value={keys[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i], keys[i]) }}>
-            <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
-          </div>
-        ) 
+    for (let i = 0; i < photos.length; i++) {
+      component.push(
+        <div key={"thumb" + String(i)} value={keys[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i], keys[i]) }}>
+          <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
+        </div>
+      )
     }
     return component
   }
 
-  const showImage = (e) => {
-    console.log(selectedImage)
-    console.log(e)
-    setSelectedImage(e)
-    setSelectedKey(e)
+  const showImage = (img, key) => {
+    console.log(img, key)
+    //console.log(selectedImage)
+    console.log(img)
+    setSelectedImage(img)
+    setSelectedKey(key)
   }
 
   return (
     <Card>
       <>
-        {!isMobile && (
-          <CardHeader image className={classes.cardHeaderHoverCustom}>
-            {newAssetInfo.photo.DisplayImage || Object.values(newAssetInfo.photo).length > 0 && (
-              <>
-                <Button large color="info" justIcon className="back">
-                  <KeyboardArrowLeft />
-                </Button>
-                <Button large color="info" justIcon className="settings" onClick={() => { settings() }}>
-                  <Settings />
-                </Button>
-                <img src={selectedImage} alt="..." />
-              </>
-            )}
-            {!newAssetInfo.photo.DisplayImage && Object.values(newAssetInfo.photo).length === 0 && (<>
-              <Tooltip
-                id="tooltip-top"
-                title="Back"
-                placement="bottom"
-                classes={{ tooltip: classes.tooltip }}
-              >
-                <Button large color="info" justIcon className="back">
-                  <KeyboardArrowLeft />
-                </Button>
-              </Tooltip>
-              {asset.identicon}
-            </>)}
-          </CardHeader>
-        )}
-        
-        {isMobile && (
-          <CardHeader image className={classes.cardHeaderHover}>
-            {newAssetInfo.photo.DisplayImage || Object.values(newAssetInfo.photo).length > 0 && (
-              <>
-                <Button large color="info" justIcon className="back">
-                  <KeyboardArrowLeft />
-                </Button>
-                <Button large color="info" justIcon className="settings" onClick={() => { settings() }}>
-                  <Settings />
-                </Button>
-                <img src={selectedImage} alt="..." />
-              </>
-            )}
-            {!newAssetInfo.photo.DisplayImage && Object.values(newAssetInfo.photo).length === 0 && (<>
-              <Tooltip
-                id="tooltip-top"
-                title="Back"
-                placement="bottom"
-                classes={{ tooltip: classes.tooltip }}
-              >
-                <Button large color="info" justIcon className="back">
-                  <KeyboardArrowLeft />
-                </Button>
-              </Tooltip>
-              {asset.identicon}
-            </>)}
-          </CardHeader>
-        )}
+        {renderImage(isMobile)}
       </>
       <CardBody>
 
         <div className="imageSelector">
-          <input type="file" onChange={uploadImage} ref={fileInput}/>
-          <div className="imageSelectorPlus"><AddPhotoAlternateOutlined onClick={(e)=>{handleClick()}}/></div>
+          <input type="file" onChange={uploadImage} ref={fileInput} />
+          <div className="imageSelectorPlus"><AddPhotoAlternateOutlined onClick={(e) => { handleClick() }} /></div>
           {generateThumbs(newAssetInfo)}
         </div>
         <br />
@@ -346,7 +401,7 @@ export default function ModifyDescription(props) {
             />
           </> */}
           <TextField
-            onChange={(e)=>{handleName(e.target.value)}}
+            onChange={(e) => { handleName(e.target.value) }}
             id="outlined-full-width"
             label="Name"
             // style={{ margin: 8 }}
@@ -362,7 +417,7 @@ export default function ModifyDescription(props) {
         </h4>
         <p>
           <TextField
-            onChange={(e)=>{handleDescription(e.target.value)}}
+            onChange={(e) => { handleDescription(e.target.value) }}
             id="outlined-multiline-static"
             label="Description"
             multiline
@@ -406,7 +461,7 @@ export default function ModifyDescription(props) {
         {advancedInput && (
           <div>
             <TextField
-              onChange={(e)=>{setCustomJSON(e.target.value)}}
+              onChange={(e) => { setCustomJSON(e.target.value) }}
               id="outlined-full-width"
               label="Add Raw JSON object"
               fullWidth
@@ -421,7 +476,7 @@ export default function ModifyDescription(props) {
             <Button color="info" className="submitChanges">Backup JSON File</Button>
           </div>
         )}
-        <Button onClick={()=>{submitChanges()}} color="info" className="submitChanges">Submit Changes</Button>
+        <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
 
       </CardBody>
       <CardFooter chart>
