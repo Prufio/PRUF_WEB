@@ -59,6 +59,7 @@ export default function ModifyDescription(props) {
       } else {
         setSelectedKey("");
       }
+      window.sentPacket = {};
       setHasMounted(true)
     }
   })
@@ -246,12 +247,30 @@ export default function ModifyDescription(props) {
     }
   }
 
-  const download = async (buffer, fileName) => {
+  const download = async (buffer, fileName, iteration) => {
     if (!buffer) return;
+    if(!iteration){
+      iteration = 1;
+    }
     let tempObj = newAssetInfo;
+    if(tempObj.photo[fileName]){
+      console.log("Already exists, adding copy")
+      let tempFN = fileName
+      tempFN+="_("+iteration+")"
+      if(tempObj.photo[tempFN]) {
+        return download(buffer, fileName, iteration+1)
+      }
+      else{
+        fileName = tempFN
+      }
+    }
     tempObj.photo[fileName] = buffer;
     console.log(tempObj);
     setNewAssetInfo(tempObj);
+    if(selectedImage === ""){
+      setSelectedImage(tempObj.photo[fileName])
+      setSelectedKey(fileName)
+    }
     return forceUpdate()
   }
 
@@ -276,10 +295,6 @@ export default function ModifyDescription(props) {
 
   const classes = useStyles();
   const formClasses = useFormStyles();
-
-  if (asset === undefined || asset === null) {
-    return window.location.href = "/#/admin/home"
-  }
 
   const settings = () => {
     swal("What would you like to do with this image?", {
@@ -384,7 +399,6 @@ export default function ModifyDescription(props) {
       <CardBody>
 
         <div className="imageSelector">
-          <input type="file" onChange={uploadImage} ref={fileInput} />
           <div className="imageSelectorPlus"><AddPhotoAlternateOutlined onClick={(e) => { handleClick() }} /></div>
           {generateThumbs(newAssetInfo)}
         </div>
@@ -510,6 +524,7 @@ export default function ModifyDescription(props) {
           <Print />
         </div>
       </CardFooter>
+      <input type="file" onChange={uploadImage} ref={fileInput} />
     </Card>
   );
 }
