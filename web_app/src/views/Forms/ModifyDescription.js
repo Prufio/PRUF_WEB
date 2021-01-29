@@ -91,6 +91,25 @@ export default function ModifyDescription(props) {
     delete tempObj[type][rem];
     console.log(tempObj)
     setNewAssetInfo(tempObj);
+    if(type=image){
+      if(rem === "DisplayImage" && Object.values(tempObj.photo)[0]){
+        setSelectedImage(Object.values(tempObj.photo)[0])
+        setSelectedKey(Object.keys(tempObj.photo)[0])
+      }
+       else if (rem !== "DisplayImage" && tempObj.photo.DisplayImage) {
+        setSelectedImage(tempObj.photo.DisplayImage)
+        setSelectedKey("DisplayImage")
+      } 
+      else if (rem !== "DisplayImage" && Object.values(tempObj.photo)[0]) {
+        setSelectedImage(Object.values(tempObj.photo)[0])
+        setSelectedKey(Object.keys(tempObj.photo)[0])
+      } 
+      else {
+        setSelectedImage("")
+        setSelectedKey("")
+      }
+      
+    }
     return forceUpdate()
   }
 
