@@ -334,7 +334,7 @@ body {
       .settings {
         background: linear-gradient(0deg, #b4b3b3, #949494) !important;
         object-fit: cover !important;
-        bottom: -120px;
+        /* bottom: -120px; */
         right: 33px;
       }
 
@@ -346,6 +346,11 @@ body {
         /* top: 105px !important; */
         right: -10px !important;
         /* position: absolute !important; */
+      }
+
+      .imageInput {
+        width: 0px !important;
+        height: 0px !important;
       }
       .inputDescription {
         top: 200px !important;

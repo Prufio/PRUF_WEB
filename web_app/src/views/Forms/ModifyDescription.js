@@ -34,6 +34,12 @@ const useFormStyles = makeStyles(formStyles);
 if (window.contracts === undefined) { window.location.href = "/#/admin/home" }
 
 export default function ModifyDescription(props) {
+  const [transactionActive, setTransactionActive] = React.useState(false);
+
+  const [error, setError] = React.useState("");
+  const [showHelp, setShowHelp] = React.useState(false);
+  const [txStatus, setTxStatus] = React.useState(false);
+  const [txHash, setTxHash] = React.useState("");
   const [asset,] = React.useState(window.sentPacket)
   const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name });
   const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name });
@@ -48,6 +54,7 @@ export default function ModifyDescription(props) {
   // const link = document.createElement('div')
   const [advancedInput, setAdvancedInput] = React.useState(false);
   const image = "photo", text = "text";
+  const link = document.createElement('div')
 
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
@@ -75,13 +82,13 @@ export default function ModifyDescription(props) {
   }
 
   const generateNewKey = (obj) => {
-    let key = "PRAT_Image_"+String(Object.values(obj.photo).length+getRandomInt())
+    let key = "PRAT_Image_" + String(Object.values(obj.photo).length + getRandomInt())
 
-    if(obj.photo[key]){
+    if (obj.photo[key]) {
       return generateNewKey(obj)
     }
 
-    else{
+    else {
       return key
     }
   }
@@ -91,34 +98,34 @@ export default function ModifyDescription(props) {
     delete tempObj[type][rem];
     console.log(tempObj)
     setNewAssetInfo(tempObj);
-    if(type=image){
-      if(rem === "DisplayImage" && Object.values(tempObj.photo)[0]){
+    if (type = image) {
+      if (rem === "DisplayImage" && Object.values(tempObj.photo)[0]) {
         setSelectedImage(Object.values(tempObj.photo)[0])
         setSelectedKey(Object.keys(tempObj.photo)[0])
       }
-       else if (rem !== "DisplayImage" && tempObj.photo.DisplayImage) {
+      else if (rem !== "DisplayImage" && tempObj.photo.DisplayImage) {
         setSelectedImage(tempObj.photo.DisplayImage)
         setSelectedKey("DisplayImage")
-      } 
+      }
       else if (rem !== "DisplayImage" && Object.values(tempObj.photo)[0]) {
         setSelectedImage(Object.values(tempObj.photo)[0])
         setSelectedKey(Object.keys(tempObj.photo)[0])
-      } 
+      }
       else {
         setSelectedImage("")
         setSelectedKey("")
       }
-      
+
     }
     return forceUpdate()
   }
 
-  const setDisplayImage = (img ,key) => {
+  const setDisplayImage = (img, key) => {
     console.log("Deleting: ", key)
     let tempObj = newAssetInfo;
-    if(key === "DisplayImage"){return console.log("Nothing was done. Already set.")}
+    if (key === "DisplayImage") { return console.log("Nothing was done. Already set.") }
     let newKey = generateNewKey(tempObj)
-    if(tempObj.photo.DisplayImage){
+    if (tempObj.photo.DisplayImage) {
       tempObj.photo[newKey] = tempObj.photo.DisplayImage
     }
     tempObj.photo.DisplayImage = img;
@@ -155,17 +162,49 @@ export default function ModifyDescription(props) {
 
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
+    let tempTxHash;
+    setShowHelp(false);
+    setTxStatus(false);
+    setTxHash("");
+    setError(undefined);
 
+    setTransactionActive(true);
     await window.contracts.NP_NC.methods
       ._modIpfs1(idxHash, hash)
       .send({ from: props.addr })
       .on("error", function (_error) {
-        console.log(_error)
+        setTransactionActive(false);
+        setTxStatus(false);
+        setTxHash(Object.values(_error)[0].transactionHash);
+        tempTxHash = Object.values(_error)[0].transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setError(Object.values(_error)[0]);
+        swal({
+          title: "Information Change Failed!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
       })
       .on("receipt", (receipt) => {
-        console.log(receipt.status);
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(receipt.transactionHash);
+        swal({
+          title: "Information Change Successful!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
         window.resetInfo = true;
-        return window.location.href = '/#/admin/dashboard'
+        window.recount = true;
+        window.location.href = "/#/admin/dashboard"
       });
   }
 
@@ -182,14 +221,14 @@ export default function ModifyDescription(props) {
   }
 
   const renderImage = (mobile) => {
+    console.log("AI",assetInfo)
+    console.log("NAI",newAssetInfo)
     if (!mobile) {
       if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
-            <Button large color="info" justIcon className="back">
-              <KeyboardArrowLeft />
-            </Button>
-            <Button large color="info" justIcon className="settings" onClick={() => { settings() }}>
+            
+            <Button large color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
             <img src={selectedImage} alt="..." />
@@ -204,9 +243,6 @@ export default function ModifyDescription(props) {
               placement="bottom"
               classes={{ tooltip: classes.tooltip }}
             >
-              <Button large color="info" justIcon className="back">
-                <KeyboardArrowLeft />
-              </Button>
             </Tooltip>
             {asset.identicon}
           </CardHeader>
@@ -217,10 +253,8 @@ export default function ModifyDescription(props) {
       if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
-            <Button large color="info" justIcon className="back">
-              <KeyboardArrowLeft />
-            </Button>
-            <Button large color="info" justIcon className="settings" onClick={() => { settings() }}>
+            
+            <Button large color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
             <img src={selectedImage} alt="..." />
@@ -235,9 +269,6 @@ export default function ModifyDescription(props) {
               placement="bottom"
               classes={{ tooltip: classes.tooltip }}
             >
-              <Button large color="info" justIcon className="back">
-                <KeyboardArrowLeft />
-              </Button>
             </Tooltip>
             {asset.identicon}
           </CardHeader>
@@ -384,28 +415,16 @@ export default function ModifyDescription(props) {
       <CardBody>
 
         <div className="imageSelector">
-          <input type="file" onChange={uploadImage} ref={fileInput} />
-          <div className="imageSelectorPlus"><AddPhotoAlternateOutlined onClick={(e) => { handleClick() }} /></div>
+        <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput"/>
+          <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
           {generateThumbs(newAssetInfo)}
         </div>
         <br />
         <h4>
-          {/* Name:
-        <>
-            <CustomInput
-              className="input"
-              id="assetName"
-              inputProps={{
-                defaultValue: assetInfo.name
-              }}
-            />
-          </> */}
           <TextField
             onChange={(e) => { handleName(e.target.value) }}
             id="outlined-full-width"
             label="Name"
-            // style={{ margin: 8 }}
-            // placeholder="Placeholder"
             defaultValue={newAssetInfo.name}
             fullWidth
             margin="normal"
@@ -419,7 +438,7 @@ export default function ModifyDescription(props) {
           <TextField
             onChange={(e) => { handleDescription(e.target.value) }}
             id="outlined-multiline-static"
-            label="Description"
+            label="Description:"
             multiline
             rows={4}
             defaultValue={newAssetInfo.text.Description}
@@ -427,16 +446,6 @@ export default function ModifyDescription(props) {
             fullWidth
           />
         </p>
-        <TextField
-          id="outlined-full-width"
-          label="Add Data Field"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
         <div className={formClasses.checkboxAndRadio}>
           <FormControlLabel
             control={
@@ -462,22 +471,30 @@ export default function ModifyDescription(props) {
           <div>
             <TextField
               onChange={(e) => { setCustomJSON(e.target.value) }}
-              id="outlined-full-width"
-              label="Add Raw JSON object"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
+              id="outlined-multiline-static"
+              label="Raw JSON Object"
+              multiline
+              rows={4}
+              defaultValue={JSON.stringify(newAssetInfo)}
               variant="outlined"
+              fullWidth
               helperText="e.g, {name: 'Asset name', photo: {photoKey1: photoVal1, ...}, text: {textKeyStr1: textValStr1, ...}}"
             />
-            <Button color="info" className="submitChanges">Upload File</Button>
-            <Button color="info" className="submitChanges">Backup JSON File</Button>
+            <Button color="info" className="submitChanges">Upload Custom JSON File</Button>
+            <Button color="info" className="submitChanges">Backup Configuration</Button>
           </div>
         )}
-        <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
-
+        {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
+          <Button disabled color="info" className="submitChanges">Submit Changes</Button>
+        )}
+        {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
+          <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
+        )}
+        {transactionActive && (
+          <h3>
+            Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+          </h3>
+        )}
       </CardBody>
       <CardFooter chart>
         {!isMobile && (

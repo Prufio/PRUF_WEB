@@ -33,6 +33,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { KeyboardArrowLeft } from "@material-ui/icons";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(styles);
 
@@ -201,7 +202,7 @@ export default function Dashboard(props) {
 
   const generateThumbs = (obj) => {
     let component = [], photos = Object.values(obj.photo);
-    console.log("photos",photos)
+    console.log("photos", photos)
     if (photos.length === 0) {
       return (
         <div className="assetImageSelectorButton">
@@ -371,14 +372,23 @@ export default function Dashboard(props) {
               )}
             </>
             <CardBody>
-            <div className="imageSelector">
-              {generateThumbs(selectedAssetObj)}
-            </div>
-                    <br/>
+              <div className="imageSelector">
+                {generateThumbs(selectedAssetObj)}
+              </div>
+              <br />
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
               <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
-              <p className={classes.cardCategory}>Description: {selectedAssetObj.Description}</p>
+              <TextField
+                id="outlined-multiline-static"
+                label="Description"
+                multiline
+                rows={4}
+                defaultValue={selectedAssetObj.Description}
+                variant="outlined"
+                fullWidth
+                disabled
+              />
 
               <br />
               <div>
