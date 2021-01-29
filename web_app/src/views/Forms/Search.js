@@ -36,6 +36,7 @@ import Jdenticon from 'react-jdenticon';
 import imgStyles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import placeholder from "../../assets/img/placeholder.jpg";
+import TextField from "@material-ui/core/TextField";
 
 
 const useStyles = makeStyles(styles);
@@ -263,9 +264,9 @@ export default function Search(props) {
 
   const retrieveRecord = async () => {
     if (!IDXRawInput) {
-      if (loginTypeState === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
+      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
 
-        if (loginTypeState === "") {
+        if (loginType === "") {
           setloginTypeState("error");
         }
         if (loginManufacturer === "") {
@@ -282,7 +283,7 @@ export default function Search(props) {
     }
 
     if (IDXRawInput) {
-      if (loginIDXState === "") {
+      if (loginIDX === "") {
         setloginIDXState("error");
         return;
       }
@@ -698,7 +699,7 @@ export default function Search(props) {
                   />
                 </>
               )}
-              {IDXRawInput === true && !retrieving && (
+              {/* {IDXRawInput === true && !retrieving && (
                 <>
                   <CustomInput
                     id="manufacturer"
@@ -741,7 +742,7 @@ export default function Search(props) {
                     }}
                   />
                 </>
-              )}
+              )} */}
               {!retrieving && (
                 <div className={classes.checkboxAndRadio}>
                   <FormControlLabel
@@ -991,21 +992,35 @@ export default function Search(props) {
               <>
                 {
                   ipfsObject.text.Description !== undefined && (
-                    <p className={classes.cardCategory}>
-                      Description: {ipfsObject.text.Description}
-                    </p>
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="Description"
+                      multiline
+                      rows={4}
+                      defaultValue={ipfsObject.text.Description}
+                      variant="outlined"
+                      fullWidth
+                      disabled
+                    />
                   )
                 }
                 {ipfsObject.text.Description === undefined && (
-                  <p className={classes.cardCategory}>
-                    Description: None
-                  </p>
+                  <TextField
+                  id="outlined-multiline-static"
+                  label="Description: None"
+                  multiline
+                  rows={4}
+                  defaultValue={ipfsObject.text.Description}
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
                 )}
-                {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
+                {/* {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
                   <p className={classes.cardCategory}>
                     Text Element: {Object.values(ipfsObject.text)[0]}
                   </p>
-                )}
+                )} */}
               </>
             )}
             <br />
