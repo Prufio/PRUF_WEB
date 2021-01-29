@@ -224,8 +224,8 @@ export default function Dashboard(props) {
   }
 
   const showImage = (e) => {
-    console.log(selectedImage)
-    console.log(e)
+    //console.log(selectedImage)
+    //console.log(e)
     setSelectedImage(e)
   }
 

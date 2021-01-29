@@ -41,8 +41,8 @@ export default function ModifyDescription(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
   const [asset,] = React.useState(window.sentPacket)
-  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name });
-  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name });
+  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls});
+  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls });
   const [idxHash,] = React.useState(window.sentPacket.idxHash)
   const [customJSON, setCustomJSON] = React.useState("")
   const [selectedImage, setSelectedImage] = React.useState("");
@@ -55,10 +55,10 @@ export default function ModifyDescription(props) {
   const [advancedInput, setAdvancedInput] = React.useState(false);
   const image = "photo", text = "text";
   const link = document.createElement('div')
-  const [URL, setURL] = React.useState("");
+  const [currentUrl, setCurrentUrl] = React.useState("");
+  const [currentUrlKey, setCurrentUrlKey] = React.useState("");
   const [loginURL, setloginURL] = React.useState("");
   const [loginURLState, setloginURLState] = React.useState("");
-  const [URLTitle, setURLTitle] = React.useState("");
   const [loginURLTitle, setloginURLTitle] = React.useState("");
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
 
@@ -103,7 +103,7 @@ export default function ModifyDescription(props) {
   const removeElement = (type, rem) => {
     let tempObj = newAssetInfo;
     delete tempObj[type][rem];
-    console.log(tempObj)
+    //console.log(tempObj)
     setNewAssetInfo(tempObj);
     if (type = image) {
       if (rem === "DisplayImage" && Object.values(tempObj.photo)[0]) {
@@ -122,7 +122,6 @@ export default function ModifyDescription(props) {
         setSelectedImage("")
         setSelectedKey("")
       }
-
     }
     return forceUpdate()
   }
@@ -137,7 +136,7 @@ export default function ModifyDescription(props) {
     }
     tempObj.photo.DisplayImage = img;
     delete tempObj.photo[key];
-    console.log(tempObj);
+    //console.log(tempObj);
     setNewAssetInfo(tempObj);
     setSelectedImage(tempObj.photo.DisplayImage);
     setSelectedKey("DisplayImage");
@@ -150,7 +149,20 @@ export default function ModifyDescription(props) {
   }
 
   const submitChanges = () => {
-    window.ipfs.add(JSON.stringify(newAssetInfo), (err, hash) => { // Upload buffer to IPFS
+    let payload = JSON.stringify(newAssetInfo)
+    let fileSize = Buffer.byteLength(payload, 'utf8')
+    if(fileSize > 10000000){
+      return(
+        swal({
+          title: "Document size exceeds 10 MB limit! ("+String(fileSize)+"Bytes)",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        }) 
+      )
+    }
+
+     window.ipfs.add(payload, (err, hash) => { // Upload buffer to IPFS
       if (err) {
         console.error(err)
         return
@@ -160,7 +172,7 @@ export default function ModifyDescription(props) {
       console.log(`Url --> ${url}`)
       let b32hash = window.utils.getBytes32FromIPFSHash(hash)
       updateAssetInfo(b32hash)
-    })
+    }) 
   }
 
   const updateAssetInfo = async (hash) => {
@@ -189,7 +201,7 @@ export default function ModifyDescription(props) {
         link.innerHTML = String(str1 + tempTxHash + str2)
         setError(Object.values(_error)[0]);
         swal({
-          title: "Information Change Failed!",
+          title: "Information Update Failed!",
           content: link,
           icon: "warning",
           button: "Close",
@@ -204,7 +216,7 @@ export default function ModifyDescription(props) {
         link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
         swal({
-          title: "Information Change Successful!",
+          title: "Information Successfully Updated!",
           content: link,
           icon: "success",
           button: "Close",
@@ -215,11 +227,30 @@ export default function ModifyDescription(props) {
       });
   }
 
+  const urlKeyIsGood = (e) => {
+    if(newAssetInfo.urls){
+      if(newAssetInfo.urls[e] || e === ""){
+        return false
+      }
+    }
+    return true
+  }
+
+  const submitCurrentUrl = () => {
+    let url = currentUrl, key = currentUrlKey, tempObj = newAssetInfo;
+    if(!tempObj.urls){tempObj.urls = {}}
+    tempObj.urls[key] = url;
+    console.log(tempObj)
+    setNewAssetInfo(tempObj);
+    return forceUpdate()
+  }
+
   const handleName = (e) => {
     let tempObj = newAssetInfo;
     tempObj.name = e;
     setNewAssetInfo(tempObj);
   }
+  
 
   const handleDescription = (e) => {
     let tempObj = newAssetInfo;
@@ -228,8 +259,8 @@ export default function ModifyDescription(props) {
   }
 
   const renderImage = (mobile) => {
-    console.log("AI", assetInfo)
-    console.log("NAI", newAssetInfo)
+    //console.log("AI", assetInfo)
+    //console.log("NAI", newAssetInfo)
     if (!mobile) {
       if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
         return (
@@ -291,7 +322,7 @@ export default function ModifyDescription(props) {
     }
     let tempObj = newAssetInfo;
     if(tempObj.photo[fileName]){
-      console.log("Already exists, adding copy")
+      //console.log("Already exists, adding copy")
       let tempFN = fileName
       tempFN+="_("+iteration+")"
       if(tempObj.photo[tempFN]) {
@@ -302,7 +333,7 @@ export default function ModifyDescription(props) {
       }
     }
     tempObj.photo[fileName] = buffer;
-    console.log(tempObj);
+    //console.log(tempObj);
     setNewAssetInfo(tempObj);
     if(selectedImage === ""){
       setSelectedImage(tempObj.photo[fileName])
@@ -398,10 +429,21 @@ export default function ModifyDescription(props) {
       });
   }
 
+  const generateUrls = (obj) => {
+    if(!obj.urls) {return}
+    let urls = Object.values(obj.urls), keys =  Object.keys(obj.urls), component = [];
+    for(let i = 0; i < urls.length; i++){
+      component.push(
+        <h4 className={classes.cardTitle}> {keys[i]}: {urls[i]}</h4>
+      )
+    }
+    return component
+  }
+
   const generateThumbs = (obj) => {
-    console.log(obj);
+    //console.log(obj);
     let component = [], photos = Object.values(obj.photo), keys = Object.keys(obj.photo);
-    console.log("photos", photos)
+    //console.log("photos", photos)
 
     if (photos.length === 0) {
       return (
@@ -421,9 +463,9 @@ export default function ModifyDescription(props) {
   }
 
   const showImage = (img, key) => {
-    console.log(img, key)
+    //console.log(img, key)
     //console.log(selectedImage)
-    console.log(img)
+    //console.log(img)
     setSelectedImage(img)
     setSelectedKey(key)
   }
@@ -487,20 +529,21 @@ export default function ModifyDescription(props) {
         {advancedInput && (
           <div>
             <div>
+              {generateUrls(newAssetInfo)}
               <CustomInput
                 success={loginURLState === "success"}
                 error={loginURLState === "error"}
                 labelText="URL Title"
                 id="firstName"
                 inputProps={{
-                  onChange: event => {
-                    setURL(event.target.value.trim())
-                    if (event.target.value !== "") {
+                  onChange: e => {
+                    setCurrentUrlKey(e.target.value.trim())
+                    if (e.target.value !== "") {
                       setloginURLState("success");
                     } else {
                       setloginURLState("error");
                     }
-                    setloginURL(event.target.value);
+                    setloginURL(e.target.value);
                   },
                 }}
               />
@@ -508,14 +551,14 @@ export default function ModifyDescription(props) {
               <TextField
                 success={loginURLTitleState === "success"}
                 error={loginURLTitleState === "error"}
-                onChange={event => {
-                  setURLTitle(event.target.value.trim())
-                  if (event.target.value !== "") {
+                onChange={(e) => {
+                  setCurrentUrl(e.target.value.trim())
+                  if (urlKeyIsGood(e.target.value)) {
                     setloginURLTitleState("success");
                   } else {
                     setloginURLTitleState("error");
                   }
-                  setloginURLTitle(event.target.value);
+                  setloginURLTitle(e.target.value);
                 }}
                 id="outlined-full-width"
                 label="URL"
@@ -527,7 +570,7 @@ export default function ModifyDescription(props) {
                 variant="outlined"
               />
 
-              <Button color="info" className="submitChanges">Add URL</Button>
+              <Button onClick={()=>{submitCurrentUrl()}} color="info" className="submitChanges">Add URL</Button>
             </div>
             <br/>
             <TextField
@@ -545,17 +588,17 @@ export default function ModifyDescription(props) {
             <Button color="info" className="submitChanges">Backup Configuration</Button>
           </div>
         )}
-        {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
+{/*         {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
           <Button disabled color="info" className="submitChanges">Submit Changes</Button>
-        )}
-        {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
-          <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
-        )}
-        {transactionActive && (
+        )} */}
+{/*         {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
+           */}<Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
+{/*         )} */}
+{/*         {transactionActive && (
           <h3>
             Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
           </h3>
-        )}
+        )} */}
       </CardBody>
       <CardFooter chart>
         {!isMobile && (
@@ -573,7 +616,6 @@ export default function ModifyDescription(props) {
           <Print />
         </div>
       </CardFooter>
-      <input type="file" onChange={uploadImage} ref={fileInput} />
     </Card>
   );
 }
