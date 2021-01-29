@@ -155,7 +155,7 @@ export default function Home(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      <h3>Marketspace</h3>
+      <h3>Marketspace (DEMO) </h3>
       <br />
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>

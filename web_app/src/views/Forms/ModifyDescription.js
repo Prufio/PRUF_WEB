@@ -55,6 +55,12 @@ export default function ModifyDescription(props) {
   const [advancedInput, setAdvancedInput] = React.useState(false);
   const image = "photo", text = "text";
   const link = document.createElement('div')
+  const [URL, setURL] = React.useState("");
+  const [loginURL, setloginURL] = React.useState("");
+  const [loginURLState, setloginURLState] = React.useState("");
+  const [URLTitle, setURLTitle] = React.useState("");
+  const [loginURLTitle, setloginURLTitle] = React.useState("");
+  const [loginURLTitleState, setloginURLTitleState] = React.useState("");
 
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
@@ -221,13 +227,13 @@ export default function ModifyDescription(props) {
   }
 
   const renderImage = (mobile) => {
-    console.log("AI",assetInfo)
-    console.log("NAI",newAssetInfo)
+    console.log("AI", assetInfo)
+    console.log("NAI", newAssetInfo)
     if (!mobile) {
       if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
-            
+
             <Button large color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
@@ -253,7 +259,7 @@ export default function ModifyDescription(props) {
       if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
-            
+
             <Button large color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
@@ -415,37 +421,33 @@ export default function ModifyDescription(props) {
       <CardBody>
 
         <div className="imageSelector">
-        <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput"/>
+          <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
           <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
           {generateThumbs(newAssetInfo)}
         </div>
         <br />
-        <h4>
-          <TextField
-            onChange={(e) => { handleName(e.target.value) }}
-            id="outlined-full-width"
-            label="Name"
-            defaultValue={newAssetInfo.name}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="outlined"
-          />
-        </h4>
-        <p>
-          <TextField
-            onChange={(e) => { handleDescription(e.target.value) }}
-            id="outlined-multiline-static"
-            label="Description:"
-            multiline
-            rows={4}
-            defaultValue={newAssetInfo.text.Description}
-            variant="outlined"
-            fullWidth
-          />
-        </p>
+        <TextField
+          onChange={(e) => { handleName(e.target.value) }}
+          id="outlined-full-width"
+          label="Name"
+          defaultValue={newAssetInfo.name}
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <TextField
+          onChange={(e) => { handleDescription(e.target.value) }}
+          id="outlined-multiline-static"
+          label="Description:"
+          multiline
+          rows={4}
+          defaultValue={newAssetInfo.text.Description}
+          variant="outlined"
+          fullWidth
+        />
         <div className={formClasses.checkboxAndRadio}>
           <FormControlLabel
             control={
@@ -469,6 +471,50 @@ export default function ModifyDescription(props) {
         </div>
         {advancedInput && (
           <div>
+            <div>
+              <CustomInput
+                success={loginURLState === "success"}
+                error={loginURLState === "error"}
+                labelText="URL Title"
+                id="firstName"
+                inputProps={{
+                  onChange: event => {
+                    setURL(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginURLState("success");
+                    } else {
+                      setloginURLState("error");
+                    }
+                    setloginURL(event.target.value);
+                  },
+                }}
+              />
+
+              <TextField
+                success={loginURLTitleState === "success"}
+                error={loginURLTitleState === "error"}
+                onChange={event => {
+                  setURLTitle(event.target.value.trim())
+                  if (event.target.value !== "") {
+                    setloginURLTitleState("success");
+                  } else {
+                    setloginURLTitleState("error");
+                  }
+                  setloginURLTitle(event.target.value);
+                }}
+                id="outlined-full-width"
+                label="URL"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+              />
+
+              <Button color="info" className="submitChanges">Add URL</Button>
+            </div>
+            <br/>
             <TextField
               onChange={(e) => { setCustomJSON(e.target.value) }}
               id="outlined-multiline-static"
