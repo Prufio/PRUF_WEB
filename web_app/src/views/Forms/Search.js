@@ -990,6 +990,7 @@ export default function Search(props) {
             )}
             {ipfsObject.text !== undefined && (
               <>
+                <br />
                 {
                   ipfsObject.text.Description !== undefined && (
                     <TextField
@@ -1006,15 +1007,15 @@ export default function Search(props) {
                 }
                 {ipfsObject.text.Description === undefined && (
                   <TextField
-                  id="outlined-multiline-static"
-                  label="Description: None"
-                  multiline
-                  rows={4}
-                  defaultValue={ipfsObject.text.Description}
-                  variant="outlined"
-                  fullWidth
-                  disabled
-                />
+                    id="outlined-multiline-static"
+                    label="Description: None"
+                    multiline
+                    rows={4}
+                    defaultValue={ipfsObject.text.Description}
+                    variant="outlined"
+                    fullWidth
+                    disabled
+                  />
                 )}
                 {/* {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
                   <p className={classes.cardCategory}>

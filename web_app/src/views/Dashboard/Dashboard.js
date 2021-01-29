@@ -381,6 +381,7 @@ export default function Dashboard(props) {
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
               <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
+            <br/>
               <TextField
                 id="outlined-multiline-static"
                 label="Description"
