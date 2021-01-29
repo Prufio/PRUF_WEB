@@ -360,18 +360,7 @@ export default function ModifyDescription(props) {
             variant="outlined"
           />
         </h4>
-        <p
-        // className={classes.cardCategory}
-        >
-          {/* Description:
-          <> */}
-          {/* <TextField
-              id="outlined-multiline-static"
-              rows={4}
-              inputProps={{
-                defaultValue: assetInfo.Description
-              }}
-            /> */}
+        <p>
           <TextField
             onChange={(e)=>{handleDescription(e.target.value)}}
             id="outlined-multiline-static"
@@ -382,14 +371,10 @@ export default function ModifyDescription(props) {
             variant="outlined"
             fullWidth
           />
-          {/* // </> */}
         </p>
         <TextField
           id="outlined-full-width"
           label="Add Data Field"
-          // style={{ margin: 8 }}
-          // placeholder="Input Here"
-          // defaultValue={assetInfo.name}
           fullWidth
           margin="normal"
           InputLabelProps={{
