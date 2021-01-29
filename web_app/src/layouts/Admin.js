@@ -159,12 +159,6 @@ export default function Dashboard(props) {
     });
   }
 
-  /* const messageListener = () => {
-    window.ethereum.on('message', (message) => {
-        console.log(message)
-    });
-  } */
-
   const acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
       //console.log("new: ",e[0] ?? "No new address fetched", "old: ", addr ?? "No address currently stored")
@@ -541,6 +535,7 @@ export default function Dashboard(props) {
         if (tempDescArray[x].name === "" || tempDescArray[x].name === undefined) {
           tempNameArray.push("Not Available")
         }
+        
         else {
           tempNameArray.push(tempDescArray[x].name)
         }

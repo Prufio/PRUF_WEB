@@ -38,6 +38,10 @@ body {
     max-height: 500px !important;
 }
 
+.editDescriptionField {
+  white-space: pre-wrap;
+}
+
 .DBGradient {
     background: linear-gradient(0deg, #002a40, #01476d) !important;
     object-fit: cover !important;
