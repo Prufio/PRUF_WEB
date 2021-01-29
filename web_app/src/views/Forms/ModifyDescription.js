@@ -31,41 +31,117 @@ import formStyles from "assets/jss/material-dashboard-pro-react/views/regularFor
 const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
 
-export default function ModifyDescription() {
-  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+export default function ModifyDescription(props) {
+  const [asset, ] = React.useState(window.sentPacket)
+  const [assetInfo, ] = React.useState({photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name});
+  const [newAssetInfo, setNewAssetInfo] = React.useState({photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name});
+  const [idxHash, ] = React.useState(window.sentPacket.idxHash)
   const [customJSON, setCustomJSON] = React.useState("")
-  const [newDescription, setNewDescription] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
-  const [newName, setNewName] = React.useState("");
-  const [newDisplayImage, setNewDisplayImage] = React.useState("");
+  const [selectedKey, setSelectedKey] = React.useState("");
   const [hasMounted, setHasMounted] = React.useState(false);
-  const [lastImage, setLastImage] = React.useState({});
   const [additionalImages, setAdditionalImages] = React.useState([]);
-  const [additionalText, setAdditionalText] = React.useState([]);
+  const [help, setHelp] = React.useState(false);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   // const link = document.createElement('div')
   const [advancedInput, setAdvancedInput] = React.useState(false);
+  const image = "photo", text = "text";
 
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
       setSelectedImage(assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || "")
+      if(assetInfo.photo.DisplayImage){
+        setSelectedKey("DisplayImage");
+      } else if (Object.values(assetInfo.photo)[0]) {
+        setSelectedKey(Object.keys(assetInfo.photo)[0]);
+      } else {
+        setSelectedKey("");
+      }
       setHasMounted(true)
     }
   })
 
   let fileInput = React.createRef();
-  
+  let fileInputJSON = React.createRef();
+
   const handleClick = () => {
     fileInput.current.click();
   }
 
-  const download = async (buffer) => {
-    //console.log(buffer);
+  const removeElement = (type, rem) => {
+    let tempObj = newAssetInfo;
+    delete tempObj[type][rem];
+    console.log(tempObj)
+    setNewAssetInfo(tempObj);
+    return forceUpdate()
+  }
+
+  const setDisplayImage = () => {
+    let tempObj = newAssetInfo;
+    tempObj.photo.DisplayImage = selectedImage;
+    delete tempObj.photo[selectedKey]
+    setNewAssetInfo(tempObj);
+    setSelectedImage(tempObj.photo.DisplayImage);
+    return forceUpdate()
+  }
+
+  const resetChanges = () => {
+    setNewAssetInfo(assetInfo)
+    return forceUpdate()
+  }
+
+  const submitChanges = () => {
+    window.ipfs.add(newAssetInfo, (err, hash) => { // Upload buffer to IPFS
+      if (err) {
+        console.error(err)
+        return
+      }
+
+      let url = `https://ipfs.io/ipfs/${hash}`
+      console.log(`Url --> ${url}`)
+      let b32hash = window.utils.getBytes32FromIPFSHash(hash)
+      updateAssetInfo(b32hash)
+    })
+  }
+
+  const updateAssetInfo = async (hash) => {
+    setHelp(false)
+    if(!hash || !idxHash){return}
+
+    console.log("idxHash", idxHash);
+    console.log("addr: ", props.addr);
+
+    await window.contracts.NP_NC.methods
+      ._modIpfs1(idxHash, hash)
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        console.log(_error)
+      })
+      .on("receipt", (receipt) => {
+        console.log(receipt.status);
+        window.resetInfo = true;
+        return window.location.href = '/#/admin/dashboard'
+      });
+  }
+
+  const handleName = (e) => {
+    let tempObj = newAssetInfo;
+    tempObj.name = e;
+    setNewAssetInfo(tempObj);
+  }
+
+  const handleDescription = (e) => {
+    let tempObj = newAssetInfo;
+    tempObj.text.Description = e;
+    setNewAssetInfo(tempObj);
+  }
+
+  const download = async (buffer, fileName) => {
     if (!buffer) return;
-    let tempArray = additionalImages;
-    tempArray.push(buffer)
-    console.log(tempArray)
-    setAdditionalImages(tempArray)
+    let tempObj = newAssetInfo;
+    tempObj.photo[fileName] = buffer;
+    console.log(tempObj);
+    setNewAssetInfo(tempObj);
     return forceUpdate()
   }
 
@@ -73,35 +149,25 @@ export default function ModifyDescription() {
     e.preventDefault()
     if(!e.target.files[0]) return
     let file;
-    console.log(e.target.files[0]);
+    //console.log(e.target.files[0]);
       file = e.target.files[0]
     const reader = new FileReader();
     reader.onloadend = (e) => {  
       const fileType = file.type;
+      const fileName = file.name;
       const prefix = `data:${fileType};base64,`;
       const buf = Buffer(reader.result);
       const base64buf = prefix +  base64.encode(buf);
-      window.ipfs.add(base64buf, (err, hash) => { // Upload buffer to IPFS
-        if (err) {
-          console.error(err)
-          return
-        }
-  
-        let url = `https://ipfs.io/ipfs/${hash}`
-        console.log(`Url --> ${url}`)
-        download(base64buf)
-      })
+      download(base64buf, fileName)
     }
     //const photo = document.getElementById("photo");
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
   }
 
-  window.sentPacket = null
-
   const classes = useStyles();
   const formClasses = useFormStyles();
 
-  if (assetInfo === undefined || assetInfo === null) {
+  if (asset === undefined || asset === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -142,6 +208,7 @@ export default function ModifyDescription() {
               .then((value) => {
                 switch (value) {
                   case "yes":
+                    removeElement(image, selectedKey)
                     swal("Image Deleted!")
                     break;
 
@@ -156,6 +223,7 @@ export default function ModifyDescription() {
             break;
 
           case "profile":
+            setDisplayImage(selectedImage)
             swal("Profile image set!");
             break;
 
@@ -168,34 +236,25 @@ export default function ModifyDescription() {
       });
   }
 
-  const generateThumbs = (obj, arr) => {
-    let component = [], photos = Object.values(obj.photo);
-    console.log("photos", photos, "additional Images", additionalImages)
+  const generateThumbs = (obj) => {
+    console.log(obj);
+    let component = [], photos = Object.values(obj.photo), keys = Object.keys(obj.photo);
+    console.log("photos", photos)
     
-    if (photos.length === 0 && arr.length === 0) {
+    if (photos.length === 0) {
       return (
         <div className="assetImageSelectorButton">
           <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
         </div>
       )
     }
-
     for (let i = 0; i < photos.length; i++ ) {
         component.push(
-          <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
+          <div key={"thumb" + String(i)} value={keys[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i], keys[i]) }}>
             <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
           </div>
         ) 
     }
-
-    for (let i = 0; i < arr.length; i++ ){
-      component.push(
-        <div key={"addThumb"+String(i)} value={arr[i]} className="assetImageSelectorButton" onClick={() => { showImage(arr[i]) }}>
-          <img title="View Image" src={arr[i]} className="imageSelectorImage" alt="" />
-        </div>
-      )
-    }
-
     return component
   }
 
@@ -203,6 +262,7 @@ export default function ModifyDescription() {
     console.log(selectedImage)
     console.log(e)
     setSelectedImage(e)
+    setSelectedKey(e)
   }
 
   return (
@@ -210,7 +270,7 @@ export default function ModifyDescription() {
       <>
         {!isMobile && (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
-            {assetInfo.DisplayImage.length > 1 && (
+            {newAssetInfo.photo.DisplayImage || Object.values(newAssetInfo.photo).length > 0 && (
               <>
                 <Button large color="info" justIcon className="back">
                   <KeyboardArrowLeft />
@@ -221,7 +281,7 @@ export default function ModifyDescription() {
                 <img src={selectedImage} alt="..." />
               </>
             )}
-            {assetInfo.DisplayImage.length === 0 && (<>
+            {!newAssetInfo.photo.DisplayImage && Object.values(newAssetInfo.photo).length === 0 && (<>
               <Tooltip
                 id="tooltip-top"
                 title="Back"
@@ -232,13 +292,14 @@ export default function ModifyDescription() {
                   <KeyboardArrowLeft />
                 </Button>
               </Tooltip>
-              {assetInfo.identicon}
+              {asset.identicon}
             </>)}
           </CardHeader>
         )}
+        
         {isMobile && (
           <CardHeader image className={classes.cardHeaderHover}>
-            {assetInfo.DisplayImage.length > 1 && (
+            {newAssetInfo.photo.DisplayImage || Object.values(newAssetInfo.photo).length > 0 && (
               <>
                 <Button large color="info" justIcon className="back">
                   <KeyboardArrowLeft />
@@ -249,7 +310,7 @@ export default function ModifyDescription() {
                 <img src={selectedImage} alt="..." />
               </>
             )}
-            {assetInfo.DisplayImage.length === 0 && (<>
+            {!newAssetInfo.photo.DisplayImage && Object.values(newAssetInfo.photo).length === 0 && (<>
               <Tooltip
                 id="tooltip-top"
                 title="Back"
@@ -260,7 +321,7 @@ export default function ModifyDescription() {
                   <KeyboardArrowLeft />
                 </Button>
               </Tooltip>
-              {assetInfo.identicon}
+              {asset.identicon}
             </>)}
           </CardHeader>
         )}
@@ -270,7 +331,7 @@ export default function ModifyDescription() {
         <div className="imageSelector">
           <input type="file" onChange={uploadImage} ref={fileInput}/>
           <div className="imageSelectorPlus"><AddPhotoAlternateOutlined onClick={(e)=>{handleClick()}}/></div>
-          {generateThumbs(assetInfo, additionalImages)}
+          {generateThumbs(newAssetInfo)}
         </div>
         <br />
         <h4>
@@ -285,11 +346,12 @@ export default function ModifyDescription() {
             />
           </> */}
           <TextField
+            onChange={(e)=>{handleName(e.target.value)}}
             id="outlined-full-width"
             label="Name"
             // style={{ margin: 8 }}
             // placeholder="Placeholder"
-            defaultValue={assetInfo.name}
+            defaultValue={newAssetInfo.name}
             fullWidth
             margin="normal"
             InputLabelProps={{
@@ -311,11 +373,12 @@ export default function ModifyDescription() {
               }}
             /> */}
           <TextField
+            onChange={(e)=>{handleDescription(e.target.value)}}
             id="outlined-multiline-static"
             label="Description"
             multiline
             rows={4}
-            defaultValue={assetInfo.Description}
+            defaultValue={newAssetInfo.text.Description}
             variant="outlined"
             fullWidth
           />
@@ -358,6 +421,7 @@ export default function ModifyDescription() {
         {advancedInput && (
           <div>
             <TextField
+              onChange={(e)=>{setCustomJSON(e.target.value)}}
               id="outlined-full-width"
               label="Add Raw JSON object"
               fullWidth
@@ -366,24 +430,24 @@ export default function ModifyDescription() {
                 shrink: true,
               }}
               variant="outlined"
-              helperText="e.g, {'MyImage': 'MyBeautifuImage.png', 'TextEntry': 'I Like Trains'}"
+              helperText="e.g, {name: 'Asset name', photo: {photoKey1: photoVal1, ...}, text: {textKeyStr1: textValStr1, ...}}"
             />
-            <Button color="info" className="submitChanges">Submit JSON Object</Button>
-            <Button color="info" className="submitChanges">Download Full JSON File</Button>
+            <Button color="info" className="submitChanges">Upload File</Button>
+            <Button color="info" className="submitChanges">Backup JSON File</Button>
           </div>
         )}
-        <Button color="info" className="submitChanges">Submit Changes</Button>
+        <Button onClick={()=>{submitChanges()}} color="info" className="submitChanges">Submit Changes</Button>
 
       </CardBody>
       <CardFooter chart>
         {!isMobile && (
           <div className={classes.stats}>
-            IDX Hash: {assetInfo.idxHash}
+            IDX Hash: {asset.idxHash}
           </div>
         )}
         {isMobile && (
           <div className={classes.stats}>
-            IDX Hash: {assetInfo.idxHash.substring(0, 12) + "..." + assetInfo.idxHash.substring(54, 66)}
+            IDX Hash: {asset.idxHash.substring(0, 12) + "..." + assetInfo.idxHash.substring(54, 66)}
           </div>
         )}
         <div className={classes.stats}>

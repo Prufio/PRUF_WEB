@@ -78,12 +78,6 @@ export default function Dashboard(props) {
 
   }
 
-  const sendPacket = (obj, menu, link) => {
-    window.sentPacket = obj
-    window.menuChange = menu
-    window.location.href = '/#/' + link
-  }
-
   const generateAssetDash = (obj) => {
     if (Object.values(obj).length > 0 && obj.names.length > 0) {
       let component = [];
@@ -233,7 +227,8 @@ export default function Dashboard(props) {
   }
 
   const handleSimple = event => {
-    window.sentPacket = selectedAssetObj
+    window.sentPacket = selectedAssetObj;
+    console.log(window.sentPacket);
     setSimpleSelect(event.target.value);
     let e = event.target.value, href;
 
