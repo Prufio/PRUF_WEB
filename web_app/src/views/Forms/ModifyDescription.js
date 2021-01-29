@@ -16,7 +16,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
-import { AddPhotoAlternateOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
+import { AddPhotoAlternateOutlined, Settings } from "@material-ui/icons";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import Share from "@material-ui/icons/Share";
@@ -530,7 +530,7 @@ export default function ModifyDescription(props) {
               <Button color="info" className="submitChanges">Add URL</Button>
             </div>
             <br/>
-            <TextField
+            {/* <TextField
               onChange={(e) => { setCustomJSON(e.target.value) }}
               id="outlined-multiline-static"
               label="Raw JSON Object"
@@ -539,10 +539,9 @@ export default function ModifyDescription(props) {
               defaultValue={JSON.stringify(newAssetInfo)}
               variant="outlined"
               fullWidth
-              helperText="e.g, {name: 'Asset name', photo: {photoKey1: photoVal1, ...}, text: {textKeyStr1: textValStr1, ...}}"
-            />
+            /> */}
             <Button color="info" className="submitChanges">Upload Custom JSON File</Button>
-            <Button color="info" className="submitChanges">Backup Configuration</Button>
+            <Button color="info" className="submitChanges">Download JSON File</Button>
           </div>
         )}
         {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
