@@ -238,6 +238,7 @@ export default function ModifyDescription(props) {
 
   const submitCurrentUrl = () => {
     let url = currentUrl, key = currentUrlKey, tempObj = newAssetInfo;
+    if(!key || key === ""){return}
     if(!tempObj.urls){tempObj.urls = {}}
     tempObj.urls[key] = url;
     console.log(tempObj)
@@ -533,8 +534,8 @@ export default function ModifyDescription(props) {
               <CustomInput
                 success={loginURLState === "success"}
                 error={loginURLState === "error"}
-                labelText="URL Title"
-                id="firstName"
+                labelText="Submission Name"
+                id="urlKey"
                 inputProps={{
                   onChange: e => {
                     setCurrentUrlKey(e.target.value.trim())
