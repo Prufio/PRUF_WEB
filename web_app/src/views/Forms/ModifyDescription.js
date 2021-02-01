@@ -544,7 +544,7 @@ export default function ModifyDescription(props) {
   const generateUrls = (obj) => {
     if (!obj.urls) { return }
     else if(Object.values(obj.urls).length === 0) { return }
-    let urls = Object.values(obj.urls), keys = Object.keys(obj.urls), component = [<div key="UrlHeader"><h4 className="bold_h4"> Attatched Urls</h4><hr className="bold_hr" /></div>];
+    let urls = Object.values(obj.urls), keys = Object.keys(obj.urls), component = [<div key="UrlHeader"><h4 className="bold_h4"> Attatched Links</h4><hr className="bold_hr" /></div>];
     for (let i = 0; i < urls.length; i++) {
       component.push(
         <div className="inlineDelete" key={"url" + i}>
@@ -658,7 +658,7 @@ export default function ModifyDescription(props) {
               <CustomInput
                 success={loginURLState === "success"}
                 error={loginURLState === "error"}
-                labelText="Website Name"
+                labelText="Link Name"
                 id="urlKey"
                 inputProps={{
                   onChange: e => {
@@ -686,7 +686,7 @@ export default function ModifyDescription(props) {
                   setloginURLTitle(e.target.value);
                 }}
                 id="outlined-full-width"
-                label="URL"
+                label="Link Address"
                 fullWidth
                 margin="normal"
                 placeholder="ex. 'https://foo.web/dir'"
@@ -696,15 +696,15 @@ export default function ModifyDescription(props) {
                 variant="outlined"
               />
 
-              <Button onClick={() => { submitCurrentUrl() }} color="info" className="submitChanges">Add New Url</Button>
+              <Button onClick={() => { submitCurrentUrl() }} color="info" className="advancedJSONButton">Add Link</Button>
             </div>
             <br />
             <h4 className="bold_h4"> Advanced JSON Options </h4><hr className="bold_hr" />
             <div className="URL">
             </div>
-            <Button onClick={(e) => { handleJSON() }} className="submitChanges">Upload Custom JSON File</Button>
+            <Button onClick={(e) => { handleJSON() }} className="advancedJSONButton">Upload Custom IPFS Data</Button>
             <br />
-            <Button onClick={() => createBackupJSON()} color="info" className="submitChanges">Download Current JSON File</Button>
+            <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
           </div>
 
         )}

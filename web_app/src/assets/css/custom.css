@@ -70,9 +70,18 @@ body {
 }
 
 .submitChanges {
-    background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+    background: linear-gradient(0deg, #01b13c, #01e04c) !important;
     object-fit: cover !important;
+    width: 10rem;
     /* left: 400px; */
+}
+
+.advancedJSONButton {
+  background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+  object-fit: cover !important;
+  width: 13rem;
+  max-width: 13rem;
+  /* left: 400px; */
 }
 
 .LBGradient {
