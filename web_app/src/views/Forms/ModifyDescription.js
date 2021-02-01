@@ -432,7 +432,7 @@ export default function ModifyDescription(props) {
   }
   
   const deleteURL = () => {
-    swal("What would you like to do with this URL?", {
+    swal("What would you like to do with this extension?", {
       buttons: {
         delete: {
           text: "Delete",
@@ -448,7 +448,7 @@ export default function ModifyDescription(props) {
         switch (value) {
 
           case "delete":
-            swal("Are you sure you want to delete this URL?", {
+            swal("Are you sure you want to delete this extension?", {
               buttons: {
                 yes: {
                   text: "Yes",
@@ -464,11 +464,11 @@ export default function ModifyDescription(props) {
                 switch (value) {
                   case "yes":
                     // removeElement(image, selectedKey)
-                    swal("URL Deleted!")
+                    swal("Extension Deleted!")
                     break;
 
                   case "no":
-                    swal("URL not Deleted")
+                    swal("Extension not Deleted")
                     break;
 
                   default:
@@ -627,7 +627,7 @@ export default function ModifyDescription(props) {
                 variant="outlined"
               />
 
-              <Button onClick={() => { submitCurrentUrl() }} color="info" className="submitChanges">Add Submission</Button>
+              <Button onClick={() => { submitCurrentUrl() }} color="info" className="submitChanges">Add Extension</Button>
             </div>
             <br />
             <div className="URL">
