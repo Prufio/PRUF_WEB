@@ -675,8 +675,8 @@ export default function ModifyDescription(props) {
           </div>
         )}
         <div className={classes.stats}>
+          <Print/>
           <Share />
-          <Print />
         </div>
       </CardFooter>
     </Card>

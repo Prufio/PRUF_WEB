@@ -465,3 +465,115 @@ margin-top: 25px;
 .deleteURL:hover {
 cursor:pointer;
 }
+
+.printForm {
+  display: flex;
+  width: 1000px ;
+  height: 333px;
+  background-color: #002a40;
+  border-radius: 1rem;
+  margin-top: 10rem;
+  margin-left: 6rem;
+}
+
+.printFormContent {
+  display: flex;
+  width: 650px;
+  height: 280px;
+  background-color: #028ed4;
+  border-radius: 1rem;
+  margin-top: 2.5rem;
+  margin-left: 2.5rem;
+  opacity: 0.9;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 2rem;
+}
+    
+.printQR{
+  display: flex;
+  margin-left: 2.5rem;
+  margin-top: 2.5rem;
+}
+    
+.printQR2{
+  display: flex;
+  margin-left: 42.5rem;
+  margin-top: 0.4rem;
+  position: absolute;
+  z-index: 999;
+}
+
+.printImageForm {
+  justify-content: flex-start;
+  display: flex;
+  width: 23px;
+  height: 23px;
+  object-fit: cover;
+  z-index: 5;
+}
+
+.printImageBackgroundForm {
+  margin-top: 3rem;
+  margin-left: 4rem;
+  justify-content: flex-start;
+  display: flex;
+  width: 550px;
+  height: 191px;
+  object-fit: cover;
+  z-index: 1;
+  position: absolute;
+  opacity: 0.2;
+
+}
+
+.cardIdxPrint {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 6.5rem;
+  color: white;
+  z-index: 999;
+}
+
+.cardAddrPrint {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 7rem;
+  color: white;
+  z-index: 999;
+}
+      
+.cardNamePrint {
+  font-weight: bold;
+  font-size: 2rem;
+  color: white;
+  z-index: 999;
+}
+
+.cardAcPrint {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 6.5rem;
+  color: white;
+  z-index: 999;
+}
+
+.cardDate {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 30rem;
+  margin-left: 34rem;
+  color: white;
+  z-index: 999;
+  position: absolute;
+}
+
+.cardHref {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 30rem;
+  margin-left: 8.5rem;
+  color: white;
+  z-index: 999;
+  position: absolute;
+}
