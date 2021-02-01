@@ -505,7 +505,7 @@ export default function ModifyDescription(props) {
         switch (value) {
 
           case "delete":
-            swal("Are you sure you want to delete this URL?", {
+            swal("Are you sure you want to delete this extension?", {
               buttons: {
                 yes: {
                   text: "Delete",
