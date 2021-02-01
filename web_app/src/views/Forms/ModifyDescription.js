@@ -42,8 +42,8 @@ export default function ModifyDescription(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
   const [asset,] = React.useState(window.sentPacket)
-  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls });
-  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls });
+  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls || {} });
+  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls || {} });
   const [idxHash,] = React.useState(window.sentPacket.idxHash)
   const [customJSON, setCustomJSON] = React.useState("")
   const [selectedImage, setSelectedImage] = React.useState("");
@@ -54,7 +54,6 @@ export default function ModifyDescription(props) {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   // const link = document.createElement('div')
   const [advancedInput, setAdvancedInput] = React.useState(false);
-  const image = "photo", text = "text";
   const link = document.createElement('div')
   const [currentUrl, setCurrentUrl] = React.useState("");
   const [currentUrlKey, setCurrentUrlKey] = React.useState("");
@@ -62,6 +61,10 @@ export default function ModifyDescription(props) {
   const [loginURLState, setloginURLState] = React.useState("");
   const [loginURLTitle, setloginURLTitle] = React.useState("");
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
+  const [downloadName, setDownloadName] = React.useState("")
+  const [downloadLink, setDownloadLink] = React.useState("")
+  const image = "photo", text = "text", url = "urls";
+  const fs = require('fs');
 
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
@@ -83,6 +86,10 @@ export default function ModifyDescription(props) {
 
   const handleClick = () => {
     fileInput.current.click();
+  }
+
+  const handleJSON = () => {
+    fileInputJSON.current.click();
   }
 
   const getRandomInt = () => {
@@ -150,7 +157,7 @@ export default function ModifyDescription(props) {
   }
 
   const submitChanges = () => {
-    let payload = JSON.stringify(newAssetInfo)
+    let payload = JSON.stringify(newAssetInfo,null,5)
     let fileSize = Buffer.byteLength(payload, 'utf8')
     if (fileSize > 10000000) {
       return (
@@ -241,6 +248,9 @@ export default function ModifyDescription(props) {
     let url = currentUrl, key = currentUrlKey, tempObj = newAssetInfo;
     if (!key || key === "") { return }
     if (!tempObj.urls) { tempObj.urls = {} }
+    if (!url.includes("http")){
+      url = "http://" + url
+    }
     tempObj.urls[key] = url;
     console.log(tempObj)
     setNewAssetInfo(tempObj);
@@ -317,7 +327,7 @@ export default function ModifyDescription(props) {
     }
   }
 
-  const download = async (buffer, fileName, iteration) => {
+  const addImage = async (buffer, fileName, iteration) => {
     if (!buffer) return;
     if (!iteration) {
       iteration = 1;
@@ -328,7 +338,7 @@ export default function ModifyDescription(props) {
       let tempFN = fileName
       tempFN += "_(" + iteration + ")"
       if (tempObj.photo[tempFN]) {
-        return download(buffer, fileName, iteration + 1)
+        return addImage(buffer, fileName, iteration + 1)
       }
       else {
         fileName = tempFN
@@ -357,10 +367,57 @@ export default function ModifyDescription(props) {
       const prefix = `data:${fileType};base64,`;
       const buf = Buffer(reader.result);
       const base64buf = prefix + base64.encode(buf);
-      download(base64buf, fileName)
+      addImage(base64buf, fileName)
     }
     //const photo = document.getElementById("photo");
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
+  }
+
+  const useCustomJSON = (e) => {
+    if (!e.target.files[0]) return
+    let newObj;
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      const str = reader.result
+      try {
+        newObj = JSON.parse(str);
+      } catch (file) {
+        return console.log("Error converting file to JSON.", file);
+      }
+
+      if (newObj) {
+        console.log(newObj);
+        if(newObj.name && newObj.text && newObj.photo && newObj.urls){
+          console.log("Setting new JSON config into state")
+          setNewAssetInfo(newObj);
+        }
+        else{
+          return console.log("Does not contain the requisite keys")
+        }
+        // forceUpdate()
+        // return e.target.value = null;
+      }
+    }
+    //const photo = document.getElementById("photo");
+    reader.readAsText(e.target.files[0]); // Read Provided File
+
+  }
+
+  const createBackupJSON = () => {
+    let filename;
+    if (newAssetInfo.name !== "") {
+      filename = newAssetInfo.name.replace(/ /g, "_") + '_Backup.json';
+    } else {
+      filename = 'unnamed_asset_backup.json';
+    }
+    const data = new Blob([JSON.stringify(newAssetInfo,null,5)], { type: 'application/json' })
+    const fileURL = URL.createObjectURL(data);
+    const anchorTag = document.createElement('a');
+    anchorTag.href = fileURL; anchorTag.target = '_blank'; anchorTag.className = 'imageInput';
+    anchorTag.download = filename;
+    document.body.appendChild(anchorTag);
+    anchorTag.click();
+    document.body.removeChild(anchorTag);
   }
 
   const classes = useStyles();
@@ -378,7 +435,7 @@ export default function ModifyDescription(props) {
           value: "default"
         },
         back: {
-          text: "Go Back",
+          text: "Cancel",
           value: "back"
         }
       },
@@ -391,11 +448,11 @@ export default function ModifyDescription(props) {
             swal("Are you sure you want to delete this image?", {
               buttons: {
                 yes: {
-                  text: "Yes",
+                  text: "Delete",
                   value: "yes"
                 },
                 no: {
-                  text: "No",
+                  text: "Cancel",
                   value: "no"
                 }
               }
@@ -430,16 +487,16 @@ export default function ModifyDescription(props) {
         }
       });
   }
-  
-  const deleteURL = () => {
-    swal("What would you like to do with this URL?", {
+
+  const deleteURL = (key) => {
+    swal("Delete this URL?", {
       buttons: {
         delete: {
-          text: "Delete",
+          text: "delete",
           value: "delete"
         },
         back: {
-          text: "Go Back",
+          text: "Cancel",
           value: "back"
         }
       },
@@ -451,7 +508,7 @@ export default function ModifyDescription(props) {
             swal("Are you sure you want to delete this URL?", {
               buttons: {
                 yes: {
-                  text: "Yes",
+                  text: "Delete",
                   value: "yes"
                 },
                 no: {
@@ -463,12 +520,10 @@ export default function ModifyDescription(props) {
               .then((value) => {
                 switch (value) {
                   case "yes":
-                    // removeElement(image, selectedKey)
-                    swal("URL Deleted!")
+                    removeElement(url, key)
                     break;
 
                   case "no":
-                    swal("URL not Deleted")
                     break;
 
                   default:
@@ -488,10 +543,19 @@ export default function ModifyDescription(props) {
 
   const generateUrls = (obj) => {
     if (!obj.urls) { return }
-    let urls = Object.values(obj.urls), keys = Object.keys(obj.urls), component = [];
+    else if(Object.values(obj.urls).length === 0) { return }
+    let urls = Object.values(obj.urls), keys = Object.keys(obj.urls), component = [<div key="UrlHeader"><h4 className="bold_h4"> Attatched Urls</h4><hr className="bold_hr" /></div>];
     for (let i = 0; i < urls.length; i++) {
       component.push(
-        <h4 className={classes.cardTitle}> {keys[i]}: {urls[i]}</h4>
+        <div className="inlineDelete" key={"url" + i}>
+          <div className="deleteURL" onClick={() => { deleteURL(keys[i]) }}>
+            <Danger>
+              <DeleteForever />
+            </Danger>
+          </div>
+          <h4 className={classes.cardTitle}> {keys[i]}: <a href={urls[i]} target='_blank'>{urls[i]}</a></h4>
+          <hr />
+        </div>
       )
     }
     return component
@@ -536,6 +600,7 @@ export default function ModifyDescription(props) {
 
         <div className="imageSelector">
           <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
+          <input type="file" onChange={useCustomJSON} ref={fileInputJSON} className="imageInput" />
           <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
           {generateThumbs(newAssetInfo)}
         </div>
@@ -546,6 +611,7 @@ export default function ModifyDescription(props) {
           label="Name"
           defaultValue={newAssetInfo.name}
           fullWidth
+          key={newAssetInfo.name}
           margin="normal"
           InputLabelProps={{
             shrink: true,
@@ -558,7 +624,8 @@ export default function ModifyDescription(props) {
           label="Description:"
           multiline
           rows={4}
-          defaultValue={newAssetInfo.text.Description}
+          defaultValue={newAssetInfo.text.Description || ""}
+          key={newAssetInfo.text.Description || "noKeyAvailable"}
           variant="outlined"
           fullWidth
         />
@@ -587,10 +654,11 @@ export default function ModifyDescription(props) {
           <div>
             <div>
               {generateUrls(newAssetInfo)}
+              <h4 className="bold_h4"> New Url </h4><hr className="bold_hr" />
               <CustomInput
                 success={loginURLState === "success"}
                 error={loginURLState === "error"}
-                labelText="Submission Name"
+                labelText="Website Name"
                 id="urlKey"
                 inputProps={{
                   onChange: e => {
@@ -621,41 +689,32 @@ export default function ModifyDescription(props) {
                 label="URL"
                 fullWidth
                 margin="normal"
+                placeholder="ex. 'https://foo.web/dir'"
                 InputLabelProps={{
                   shrink: true,
                 }}
                 variant="outlined"
               />
 
-              <Button onClick={() => { submitCurrentUrl() }} color="info" className="submitChanges">Add Submission</Button>
+              <Button onClick={() => { submitCurrentUrl() }} color="info" className="submitChanges">Add New Url</Button>
             </div>
             <br />
+            <h4 className="bold_h4"> Advanced JSON Options </h4><hr className="bold_hr" />
             <div className="URL">
-              <TextField
-                id="outlined-multiline-static"
-                label="Raw JSON Object"
-                multiline
-                rows={2}
-                defaultValue="Submission Name: Placeholder            URL:"
-                variant="outlined"
-                fullWidth
-                disabled
-              />
-              <div className="deleteURL" onClick={() => {deleteURL()}}> 
-                <Danger>
-                <DeleteForever/>
-                </Danger>
-              </div>
             </div>
-            <Button color="info" className="submitChanges">Upload Custom JSON File</Button>
-            <Button color="info" className="submitChanges">Download JSON File</Button>
+            <Button onClick={(e) => { handleJSON() }} className="submitChanges">Upload Custom JSON File</Button>
+            <br />
+            <Button onClick={() => createBackupJSON()} color="info" className="submitChanges">Download Current JSON File</Button>
           </div>
+
         )}
         {/*         {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
           <Button disabled color="info" className="submitChanges">Submit Changes</Button>
         )} */}
         {/*         {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
-           */}<Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
+           */}
+        <hr className="medium_hr" />
+        <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
         {/*         )} */}
         {/*         {transactionActive && (
           <h3>

@@ -204,7 +204,7 @@ export default function Dashboard(props) {
 
   const generateThumbs = (obj) => {
     let component = [], photos = Object.values(obj.photo);
-    console.log("photos", photos)
+    //console.log("photos", photos)
     if (photos.length === 0) {
       return (
         <div className="assetImageSelectorButton">
@@ -231,7 +231,7 @@ export default function Dashboard(props) {
 
   const handleSimple = event => {
     window.sentPacket = selectedAssetObj;
-    console.log(window.sentPacket);
+    //console.log(window.sentPacket);
     setSimpleSelect(event.target.value);
     let e = event.target.value, href;
 
@@ -374,9 +374,11 @@ export default function Dashboard(props) {
               )}
             </>
             <CardBody>
-              <div className="imageSelector">
-                {generateThumbs(selectedAssetObj)}
-              </div>
+              {Object.values(selectedAssetObj.photo).length > 1 &&(
+                <div className="imageSelector">
+                  {generateThumbs(selectedAssetObj)}
+                </div>
+              )}
               <br />
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
