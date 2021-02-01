@@ -34,6 +34,7 @@ import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { KeyboardArrowLeft } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
+import Printer from "../../Resources/print"
 
 const useStyles = makeStyles(styles);
 
@@ -78,6 +79,7 @@ export default function Dashboard(props) {
     window.printObj = e;
 
   }
+  
 
   const generateAssetDash = (obj) => {
     if (Object.values(obj).length > 0 && obj.names.length > 0) {
@@ -527,7 +529,7 @@ export default function Dashboard(props) {
               )}
               <div className={classes.stats}>
                 <Share />
-                <Print />
+                <Printer />
               </div>
             </CardFooter>
           </Card>

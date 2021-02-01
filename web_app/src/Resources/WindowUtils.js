@@ -1,6 +1,7 @@
 import bs58 from "bs58";
 import { QRCode } from 'react-qrcode-logo';
 import React from 'react';
+import "../assets/css/custom.css"
 
 function buildWindowUtils() {
 
@@ -1448,8 +1449,8 @@ function buildWindowUtils() {
     var date = Date().toLocaleString();
 
     return (
-      <div className="">
-        <div className="">
+      <div className="printForm">
+        <div className="printQR">
           <QRCode
             value={"https://app.pruf.io/#/retrieve-record?" + window.printObj.idxHash}
             size="256"
@@ -1459,14 +1460,14 @@ function buildWindowUtils() {
             logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
           />
         </div>
-        <div className="">https://app.pruf.io</div>
-        <div className="">{date}</div>
-        <div className="">
+        <div className="cardHref">https://app.pruf.io</div>
+        <div className="cardDate">{date}</div>
+        <div className="printFormContent">
           <img
-            className=""
+            className="printImageBackgroundForm"
             src={require("../Resources/Images/PrufPrintBackground.png")}
             alt="Pruf Print Background" />
-          <div className="">
+          <div className="printQR2">
             <QRCode
               value={"https://app.pruf.io/#/"+window.printObj.idxHash}
               size="160"
@@ -1476,9 +1477,9 @@ function buildWindowUtils() {
               logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
             />
           </div>
-          <p className="">Name : {window.printObj.name}</p>
-          <p className="">Asset Class : {window.printObj.assetClassName}</p>
-          <h4 className="">IDX : {window.printObj.idxHash}</h4>
+          <p className="cardNamePrint">Name : {window.printObj.name}</p>
+          <p className="cardAcPrint">Asset Class : {window.printObj.assetClassName}</p>
+          <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
           
         </div>
       </div >
