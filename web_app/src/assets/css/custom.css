@@ -454,3 +454,14 @@ body {
 .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: #017ec0 !important;
 }
+
+.URL {
+  display: flex;
+  flex-direction: row !important;
+}
+.deleteURL {
+margin-top: 25px;
+}
+.deleteURL:hover {
+cursor:pointer;
+}

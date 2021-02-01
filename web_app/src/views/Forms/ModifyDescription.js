@@ -16,7 +16,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
-import { AddPhotoAlternateOutlined, Settings } from "@material-ui/icons";
+import { AddPhotoAlternateOutlined, DeleteForever, DeleteForeverOutlined, Settings } from "@material-ui/icons";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import Share from "@material-ui/icons/Share";
@@ -27,6 +27,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import formStyles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
+import Danger from "components/Typography/Danger";
 
 const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
@@ -41,7 +42,7 @@ export default function ModifyDescription(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
   const [asset,] = React.useState(window.sentPacket)
-  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls});
+  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls });
   const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls });
   const [idxHash,] = React.useState(window.sentPacket.idxHash)
   const [customJSON, setCustomJSON] = React.useState("")
@@ -151,18 +152,18 @@ export default function ModifyDescription(props) {
   const submitChanges = () => {
     let payload = JSON.stringify(newAssetInfo)
     let fileSize = Buffer.byteLength(payload, 'utf8')
-    if(fileSize > 10000000){
-      return(
+    if (fileSize > 10000000) {
+      return (
         swal({
-          title: "Document size exceeds 10 MB limit! ("+String(fileSize)+"Bytes)",
+          title: "Document size exceeds 10 MB limit! (" + String(fileSize) + "Bytes)",
           content: link,
           icon: "warning",
           button: "Close",
-        }) 
+        })
       )
     }
 
-     window.ipfs.add(payload, (err, hash) => { // Upload buffer to IPFS
+    window.ipfs.add(payload, (err, hash) => { // Upload buffer to IPFS
       if (err) {
         console.error(err)
         return
@@ -172,7 +173,7 @@ export default function ModifyDescription(props) {
       console.log(`Url --> ${url}`)
       let b32hash = window.utils.getBytes32FromIPFSHash(hash)
       updateAssetInfo(b32hash)
-    }) 
+    })
   }
 
   const updateAssetInfo = async (hash) => {
@@ -228,8 +229,8 @@ export default function ModifyDescription(props) {
   }
 
   const urlKeyIsGood = (e) => {
-    if(newAssetInfo.urls){
-      if(newAssetInfo.urls[e] || e === ""){
+    if (newAssetInfo.urls) {
+      if (newAssetInfo.urls[e] || e === "") {
         return false
       }
     }
@@ -238,8 +239,8 @@ export default function ModifyDescription(props) {
 
   const submitCurrentUrl = () => {
     let url = currentUrl, key = currentUrlKey, tempObj = newAssetInfo;
-    if(!key || key === ""){return}
-    if(!tempObj.urls){tempObj.urls = {}}
+    if (!key || key === "") { return }
+    if (!tempObj.urls) { tempObj.urls = {} }
     tempObj.urls[key] = url;
     console.log(tempObj)
     setNewAssetInfo(tempObj);
@@ -251,7 +252,7 @@ export default function ModifyDescription(props) {
     tempObj.name = e;
     setNewAssetInfo(tempObj);
   }
-  
+
 
   const handleDescription = (e) => {
     let tempObj = newAssetInfo;
@@ -318,25 +319,25 @@ export default function ModifyDescription(props) {
 
   const download = async (buffer, fileName, iteration) => {
     if (!buffer) return;
-    if(!iteration){
+    if (!iteration) {
       iteration = 1;
     }
     let tempObj = newAssetInfo;
-    if(tempObj.photo[fileName]){
+    if (tempObj.photo[fileName]) {
       //console.log("Already exists, adding copy")
       let tempFN = fileName
-      tempFN+="_("+iteration+")"
-      if(tempObj.photo[tempFN]) {
-        return download(buffer, fileName, iteration+1)
+      tempFN += "_(" + iteration + ")"
+      if (tempObj.photo[tempFN]) {
+        return download(buffer, fileName, iteration + 1)
       }
-      else{
+      else {
         fileName = tempFN
       }
     }
     tempObj.photo[fileName] = buffer;
     //console.log(tempObj);
     setNewAssetInfo(tempObj);
-    if(selectedImage === ""){
+    if (selectedImage === "") {
       setSelectedImage(tempObj.photo[fileName])
       setSelectedKey(fileName)
     }
@@ -429,11 +430,66 @@ export default function ModifyDescription(props) {
         }
       });
   }
+  
+  const deleteURL = () => {
+    swal("What would you like to do with this URL?", {
+      buttons: {
+        delete: {
+          text: "Delete",
+          value: "delete"
+        },
+        back: {
+          text: "Go Back",
+          value: "back"
+        }
+      },
+    })
+      .then((value) => {
+        switch (value) {
+
+          case "delete":
+            swal("Are you sure you want to delete this URL?", {
+              buttons: {
+                yes: {
+                  text: "Yes",
+                  value: "yes"
+                },
+                no: {
+                  text: "No",
+                  value: "no"
+                }
+              }
+            })
+              .then((value) => {
+                switch (value) {
+                  case "yes":
+                    // removeElement(image, selectedKey)
+                    swal("URL Deleted!")
+                    break;
+
+                  case "no":
+                    swal("URL not Deleted")
+                    break;
+
+                  default:
+                    return;
+                }
+              })
+            break;
+
+          case "back":
+            break;
+
+          default:
+            return;
+        }
+      });
+  }
 
   const generateUrls = (obj) => {
-    if(!obj.urls) {return}
-    let urls = Object.values(obj.urls), keys =  Object.keys(obj.urls), component = [];
-    for(let i = 0; i < urls.length; i++){
+    if (!obj.urls) { return }
+    let urls = Object.values(obj.urls), keys = Object.keys(obj.urls), component = [];
+    for (let i = 0; i < urls.length; i++) {
       component.push(
         <h4 className={classes.cardTitle}> {keys[i]}: {urls[i]}</h4>
       )
@@ -571,30 +627,37 @@ export default function ModifyDescription(props) {
                 variant="outlined"
               />
 
-              <Button onClick={()=>{submitCurrentUrl()}} color="info" className="submitChanges">Add URL</Button>
+              <Button onClick={() => { submitCurrentUrl() }} color="info" className="submitChanges">Add Submission</Button>
             </div>
-            <br/>
-            {/* <TextField
-              onChange={(e) => { setCustomJSON(e.target.value) }}
-              id="outlined-multiline-static"
-              label="Raw JSON Object"
-              multiline
-              rows={4}
-              defaultValue={JSON.stringify(newAssetInfo)}
-              variant="outlined"
-              fullWidth
-            /> */}
+            <br />
+            <div className="URL">
+              <TextField
+                id="outlined-multiline-static"
+                label="Raw JSON Object"
+                multiline
+                rows={2}
+                defaultValue="Submission Name: Placeholder            URL:"
+                variant="outlined"
+                fullWidth
+                disabled
+              />
+              <div className="deleteURL" onClick={() => {deleteURL()}}> 
+                <Danger>
+                <DeleteForever/>
+                </Danger>
+              </div>
+            </div>
             <Button color="info" className="submitChanges">Upload Custom JSON File</Button>
             <Button color="info" className="submitChanges">Download JSON File</Button>
           </div>
         )}
-{/*         {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
+        {/*         {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
           <Button disabled color="info" className="submitChanges">Submit Changes</Button>
         )} */}
-{/*         {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
+        {/*         {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
            */}<Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
-{/*         )} */}
-{/*         {transactionActive && (
+        {/*         )} */}
+        {/*         {transactionActive && (
           <h3>
             Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
           </h3>
