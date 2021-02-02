@@ -20,7 +20,7 @@ class Printer extends React.Component {
                 <ReactToPrint content={() => this.componentRef}>
                     <PrintContextConsumer>
                         {({ handlePrint }) => (
-                            <div onClick={handlePrint}>
+                            <div onClick={handlePrint} className="printButton">
                             <Print />
                             </div>
                         )}

@@ -740,7 +740,7 @@ export default function ModifyDescription(props) {
         {!transactionActive && (
           <>
             <hr className="medium_hr" />
-            <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
+            <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
           </>
         )}
         {transactionActive && (
@@ -760,10 +760,6 @@ export default function ModifyDescription(props) {
             IDX Hash: {asset.idxHash.substring(0, 12) + "..." + assetInfo.idxHash.substring(54, 66)}
           </div>
         )}
-        <div className={classes.stats}>
-          <Print />
-          <Share />
-        </div>
       </CardFooter>
     </Card>
   );

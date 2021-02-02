@@ -85,8 +85,8 @@ function buildWindowUtils() {
 
   const _generateAssetClasses = () => {
 
-    if(window.assetClasses.names === undefined){console.log("Generating ACs");return _generateAssetClasses}
-    
+    if (window.assetClasses.names === undefined) { console.log("Generating ACs"); return _generateAssetClasses }
+
     if (window.assetClasses.names.length > 0) {
       let component = [
         <option key="noselect" value="null"> Select an asset class </option>];
@@ -140,10 +140,10 @@ function buildWindowUtils() {
             <option key="noselect" value="null"> Select an option </option>];
 
           for (let i = 0; i < keys.length; i++) {
-            component.push(<option size="lg" key={"option " + String(i)} value={i+1}>
+            component.push(<option size="lg" key={"option " + String(i)} value={i + 1}>
               {i + 1}:
               Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(values[i])}
-              </option>);
+            </option>);
           }
 
           return component
@@ -160,7 +160,7 @@ function buildWindowUtils() {
             component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
               {i + 1}:
               Identifier: {keys[i]}
-              </option>);
+            </option>);
           }
 
           return component
@@ -399,7 +399,7 @@ function buildWindowUtils() {
 
       });
     console.log(tempBool);
-    return {obj: tempObj, exists: tempBool};
+    return { obj: tempObj, exists: tempBool };
   }
 
   const _checkAssetExportable = async (idxHash) => {
@@ -655,9 +655,8 @@ function buildWindowUtils() {
       return (false)
     }
 
-    if(
-    isNaN(AC))
-    {
+    if (
+      isNaN(AC)) {
       AC = await window.utils.resolveAC(AC)
     }
 
@@ -666,21 +665,20 @@ function buildWindowUtils() {
       .call(function (_error, _result) {
         if (_error) {
           return (console.log("IN ERROR IN ERROR IN ERROR"))
-        } else 
-         {
-          console.log(Object.values(_result)[2]) 
+        } else {
+          console.log(Object.values(_result)[2])
           temp = Object.values(_result)[2];
           window.fetchAC = Object.values(_result)[2];
         }
       });
 
 
-      await window.contracts.AC_MGR.methods
+    await window.contracts.AC_MGR.methods
       .isSameRootAC(AC, temp)
       .call(function (_error, _result) {
         if (_error) {
           return (console.log("IN ERROR IN ERROR IN ERROR"))
-        } else if (_result === "170"){
+        } else if (_result === "170") {
           tempBool = true
         } else {
           tempBool = false
@@ -856,9 +854,9 @@ function buildWindowUtils() {
             console.log("resolved AC name ", temp, " from AC index ", AC);
           }
         });
-        return temp
+      return temp
     }
-    else{
+    else {
       return "Unable to resolve AC name"
     }
   }
@@ -1226,12 +1224,12 @@ function buildWindowUtils() {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
             } else {
               let resStr;
-              resStr = _result; 
+              resStr = _result;
               tknIDArray.push(resStr)
             }
           });
       }
-      
+
       //console.log("AC IDs: ", tknIDArray);
 
       for (let i = 0; i < tknIDArray.length; i++) {
@@ -1258,7 +1256,7 @@ function buildWindowUtils() {
             }
           });
 
-          await window.contracts.AC_MGR.methods
+        await window.contracts.AC_MGR.methods
           .prufPerShare()
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
@@ -1267,7 +1265,7 @@ function buildWindowUtils() {
             }
           });
 
-          await window.contracts.AC_MGR.methods
+        await window.contracts.AC_MGR.methods
           .upperLimit()
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
@@ -1288,7 +1286,7 @@ function buildWindowUtils() {
       }
     }
 
-    else { console.log("No asset classes held by user"); window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] } ; return window.hasNoAssetClasses = true }
+    else { console.log("No asset classes held by user"); window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }; return window.hasNoAssetClasses = true }
 
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }
@@ -1373,18 +1371,18 @@ function buildWindowUtils() {
       await window.utils.getACNames(assetClasses)
 
       //console.log(ipfsHashArray)
-        window.aTknIDs = tknIDArray;
-        //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
-        window.ipfsHashArray = ipfsHashArray;
-  
-        window.assets.countPairs = countPairs;
-  
-        window.assets.assetClasses = assetClasses;
-        window.assets.statuses = statuses;
-        window.assets.statusNums = statusNums;
-        window.assets.notes = noteArray;
-        //alert(Object.values(window.assets))
-        return true
+      window.aTknIDs = tknIDArray;
+      //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
+      window.ipfsHashArray = ipfsHashArray;
+
+      window.assets.countPairs = countPairs;
+
+      window.assets.assetClasses = assetClasses;
+      window.assets.statuses = statuses;
+      window.assets.statusNums = statusNums;
+      window.assets.notes = noteArray;
+      //alert(Object.values(window.assets))
+      return true
     }
 
     else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
@@ -1450,38 +1448,42 @@ function buildWindowUtils() {
 
     return (
       <div className="printForm">
-        <div className="printQR">
-          <QRCode
-            value={"https://app.pruf.io/#/retrieve-record?" + window.printObj.idxHash}
-            size="256"
-            fgColor="#002a40"
-            logoWidth="48.8"
-            logoHeight="64"
-            logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-          />
-        </div>
-        <div className="cardHref">https://app.pruf.io</div>
-        <div className="cardDate">{date}</div>
-        <div className="printFormContent">
-          <img
-            className="printImageBackgroundForm"
-            src={require("../Resources/Images/PrufPrintBackground.png")}
-            alt="Pruf Print Background" />
-          <div className="printQR2">
-            <QRCode
-              value={"https://app.pruf.io/#/"+window.printObj.idxHash}
-              size="160"
-              fgColor="#002a40"
-              logoWidth="32"
-              logoHeight="41.6"
-              logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-            />
-          </div>
-          <p className="cardNamePrint">Name : {window.printObj.name}</p>
-          <p className="cardAcPrint">Asset Class : {window.printObj.assetClassName}</p>
-          <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
-          
-        </div>
+        {window.pringObj !== undefined && (
+          <>
+            <div className="printQR">
+              <QRCode
+                value={"https://app.pruf.io/#/retrieve-record?" + window.printObj.idxHash}
+                size="256"
+                fgColor="#002a40"
+                logoWidth="48.8"
+                logoHeight="64"
+                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+              />
+            </div>
+            <div className="cardHref">https://app.pruf.io</div>
+            <div className="cardDate">{date}</div>
+            <div className="printFormContent">
+              <img
+                className="printImageBackgroundForm"
+                src={require("../Resources/Images/PrufPrintBackground.png")}
+                alt="Pruf Print Background" />
+              <div className="printQR2">
+                <QRCode
+                  value={"https://app.pruf.io/#/" + window.printObj.idxHash}
+                  size="160"
+                  fgColor="#002a40"
+                  logoWidth="32"
+                  logoHeight="41.6"
+                  logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                />
+              </div>
+              <p className="cardNamePrint">Name : {window.printObj.name}</p>
+              <p className="cardAcPrint">Asset Class : {window.printObj.assetClassName}</p>
+              <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
+
+            </div>
+          </>
+        )}
       </div >
     )
   }
