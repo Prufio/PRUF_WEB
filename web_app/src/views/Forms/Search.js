@@ -67,6 +67,8 @@ export default function Search(props) {
   const [transaction, setTransaction] = React.useState(false);
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
+  const [URL, setURL] = React.useState("");
+  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
@@ -368,6 +370,8 @@ export default function Search(props) {
           }
         });
 
+        setURL(String(baseURL) + String(idxHash)) 
+
     window.assetClass = tempResult[2]
     let assetClassName = await window.utils.getACName(tempResult[2])
 
@@ -392,6 +396,7 @@ export default function Search(props) {
       status: window.assetInfo.status,
       idxHash: idxHash,
     })
+
     if (window.assetInfo.statusNum == "60") {
       setRecycled(true)
     }
@@ -473,6 +478,8 @@ export default function Search(props) {
             }
           }
         });
+
+        setURL(String(baseURL) + String(idxHash)) 
 
 
     window.assetClass = tempResult[2]
@@ -1187,7 +1194,7 @@ export default function Search(props) {
                     <Share />
                   </div>
                 </RWebShare>
-                <Printer />
+                <Printer obj={{name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName}}/>
               </div>
             </CardFooter>
         </Card>
