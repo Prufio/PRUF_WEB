@@ -156,7 +156,7 @@ export default function ModifyDescription(props) {
   }
 
   const submitChanges = () => {
-    let payload = JSON.stringify(newAssetInfo,null,5)
+    let payload = JSON.stringify(newAssetInfo, null, 5)
     let fileSize = Buffer.byteLength(payload, 'utf8')
     if (fileSize > 10000000) {
       return (
@@ -247,7 +247,7 @@ export default function ModifyDescription(props) {
     let url = currentUrl, key = currentUrlKey, tempObj = newAssetInfo;
     if (!key || key === "") { return }
     if (!tempObj.urls) { tempObj.urls = {} }
-    if (!url.includes("http")){
+    if (!url.includes("http")) {
       url = "http://" + url
     }
     tempObj.urls[key] = url;
@@ -386,11 +386,11 @@ export default function ModifyDescription(props) {
 
       if (newObj) {
         console.log(newObj);
-        if(newObj.name && newObj.text && newObj.photo && newObj.urls){
+        if (newObj.name && newObj.text && newObj.photo && newObj.urls) {
           console.log("Setting new JSON config into state")
           setNewAssetInfo(newObj);
         }
-        else{
+        else {
           return console.log("Does not contain the requisite keys")
         }
         // forceUpdate()
@@ -409,7 +409,7 @@ export default function ModifyDescription(props) {
     } else {
       filename = 'unnamed_asset_backup.json';
     }
-    const data = new Blob([JSON.stringify(newAssetInfo,null,5)], { type: 'application/json' })
+    const data = new Blob([JSON.stringify(newAssetInfo, null, 5)], { type: 'application/json' })
     const fileURL = URL.createObjectURL(data);
     const anchorTag = document.createElement('a');
     anchorTag.href = fileURL; anchorTag.target = '_blank'; anchorTag.className = 'imageInput';
@@ -542,7 +542,7 @@ export default function ModifyDescription(props) {
 
   const generateUrls = (obj) => {
     if (!obj.urls) { return }
-    else if(Object.values(obj.urls).length === 0) { return }
+    else if (Object.values(obj.urls).length === 0) { return }
     let urls = Object.values(obj.urls), keys = Object.keys(obj.urls), component = [<div key="UrlHeader"><h4 className="bold_h4"> Attatched Links</h4><hr className="bold_hr" /></div>];
     for (let i = 0; i < urls.length; i++) {
       component.push(
@@ -604,52 +604,83 @@ export default function ModifyDescription(props) {
           {generateThumbs(newAssetInfo)}
         </div>
         <br />
-        <TextField
-          onChange={(e) => { handleName(e.target.value) }}
-          id="outlined-full-width"
-          label="Name"
-          defaultValue={newAssetInfo.name}
-          fullWidth
-          key={newAssetInfo.name}
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        <TextField
-          onChange={(e) => { handleDescription(e.target.value) }}
-          id="outlined-multiline-static"
-          label="Description:"
-          multiline
-          rows={4}
-          defaultValue={newAssetInfo.text.Description || ""}
-          key={newAssetInfo.text.Description || "noKeyAvailable"}
-          variant="outlined"
-          fullWidth
-        />
-        <div className={formClasses.checkboxAndRadio}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setAdvancedInput(!advancedInput)}
-                checkedIcon={<Check className={formClasses.checkedIcon} />}
-                icon={<Check className={formClasses.uncheckedIcon} />}
-                classes={{
-                  checked: formClasses.checked,
-                  root: formClasses.checkRoot
-                }}
-              />
-            }
-            classes={{
-              label: formClasses.label,
-              root: formClasses.labelRoot
-            }}
-            label="Advanced Options"
-          />
-        </div>
-        {advancedInput && (
+        {!transactionActive && (
+          <>
+            <TextField
+              onChange={(e) => { handleName(e.target.value) }}
+              id="outlined-full-width"
+              label="Name"
+              defaultValue={newAssetInfo.name}
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+            />
+            <TextField
+              onChange={(e) => { handleDescription(e.target.value) }}
+              id="outlined-multiline-static"
+              label="Description:"
+              multiline
+              rows={4}
+              defaultValue={newAssetInfo.text.Description}
+              variant="outlined"
+              fullWidth
+            />
+          </>
+        )}
+
+        {transactionActive && (
+          <>
+            <TextField
+              id="outlined-full-width"
+              label="Name"
+              defaultValue={newAssetInfo.name}
+              fullWidth
+              margin="normal"
+              disabled="true"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+            />
+            <TextField
+              disabled="true"
+              id="outlined-multiline-static"
+              label="Description:"
+              multiline
+              rows={4}
+              defaultValue={newAssetInfo.text.Description}
+              variant="outlined"
+              fullWidth
+            />
+          </>
+        )}
+        {!transactionActive && (
+          <div className={formClasses.checkboxAndRadio}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  tabIndex={-1}
+                  onClick={() => setAdvancedInput(!advancedInput)}
+                  checkedIcon={<Check className={formClasses.checkedIcon} />}
+                  icon={<Check className={formClasses.uncheckedIcon} />}
+                  classes={{
+                    checked: formClasses.checked,
+                    root: formClasses.checkRoot
+                  }}
+                />
+              }
+              classes={{
+                label: formClasses.label,
+                root: formClasses.labelRoot
+              }}
+              label="Advanced Options"
+            />
+          </div>
+        )}
+        {advancedInput && !transactionActive && (
           <div>
             <div>
               {generateUrls(newAssetInfo)}
@@ -694,7 +725,6 @@ export default function ModifyDescription(props) {
                 }}
                 variant="outlined"
               />
-
               <Button onClick={() => { submitCurrentUrl() }} color="info" className="advancedJSONButton">Add Link</Button>
             </div>
             <br />
@@ -705,21 +735,18 @@ export default function ModifyDescription(props) {
             <br />
             <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
           </div>
-
         )}
-        {/*         {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
-          <Button disabled color="info" className="submitChanges">Submit Changes</Button>
-        )} */}
-        {/*         {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
-           */}
-        <hr className="medium_hr" />
-        <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
-        {/*         )} */}
-        {/*         {transactionActive && (
+        {!transactionActive && (
+          <>
+            <hr className="medium_hr" />
+            <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
+          </>
+        )}
+        {transactionActive && (
           <h3>
             Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
           </h3>
-        )} */}
+        )}
       </CardBody>
       <CardFooter chart>
         {!isMobile && (
@@ -733,7 +760,7 @@ export default function ModifyDescription(props) {
           </div>
         )}
         <div className={classes.stats}>
-          <Print/>
+          <Print />
           <Share />
         </div>
       </CardFooter>
