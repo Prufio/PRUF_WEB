@@ -460,6 +460,7 @@ export default function Search(props) {
             setResult(Object.values(_result));
             setError("");
             tempResult = Object.values(_result);
+            window.printObj = Object.values(_result)
             if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
             console.log("ipfs data in promise", ipfsHash)
             if (Object.values(_result)[6] > 0) {
@@ -501,8 +502,6 @@ export default function Search(props) {
     if (window.assetInfo.statusNum == "60") {
       setRecycled(true)
     }
-
-    window.printObj = asset
 
     await window.utils.checkHoldsToken("asset", idxHash, props.addr)
       .then((e) => {

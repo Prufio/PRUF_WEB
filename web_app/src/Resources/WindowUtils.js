@@ -1448,7 +1448,7 @@ function buildWindowUtils() {
 
     return (
       <div className="printForm">
-        {window.pringObj !== undefined && (
+        {window.printObj !== undefined && (
           <>
             <div className="printQR">
               <QRCode
