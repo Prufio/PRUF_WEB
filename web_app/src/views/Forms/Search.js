@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
+import { RWebShare } from "react-web-share";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -37,6 +38,7 @@ import imgStyles from "assets/jss/material-dashboard-pro-react/views/dashboardSt
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import placeholder from "../../assets/img/placeholder.jpg";
 import TextField from "@material-ui/core/TextField";
+import Printer from "../../Resources/print"
 
 
 const useStyles = makeStyles(styles);
@@ -458,6 +460,7 @@ export default function Search(props) {
             setResult(Object.values(_result));
             setError("");
             tempResult = Object.values(_result);
+            window.printObj = Object.values(_result)
             if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
             console.log("ipfs data in promise", ipfsHash)
             if (Object.values(_result)[6] > 0) {
@@ -470,6 +473,7 @@ export default function Search(props) {
             }
           }
         });
+
 
     window.assetClass = tempResult[2]
     let assetClassName = await window.utils.getACName(tempResult[2])
@@ -506,6 +510,7 @@ export default function Search(props) {
           setOwnerOf(true)
         }
       })
+
 
 
     return setMoreInfo(true);
@@ -1158,22 +1163,33 @@ export default function Search(props) {
               </div>
             )}
           </CardBody>
-          <CardFooter chart>
-            {!isMobile && (
-              <div className={classes.stats}>
-                IDX Hash: {asset.idxHash}
+            <CardFooter>
+              {!isMobile && (
+                <div className={imgClasses.stats}>
+                  IDX Hash: {asset.idxHash}
+                </div>
+              )}
+              {isMobile && (
+                <div className={imgClasses.stats}>
+                  IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
+                </div>
+              )}
+              <div className={imgClasses.stats}>
+                <RWebShare
+                  className="shareMenu"
+                  data={{
+                    text: "Check out my PRüF-verified asset!",
+                    url: URL,
+                    title: "Share Asset Link",
+                  }}
+                >
+                  <div className="printButton">
+                    <Share />
+                  </div>
+                </RWebShare>
+                <Printer />
               </div>
-            )}
-            {isMobile && (
-              <div className={classes.stats}>
-                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
-              </div>
-            )}
-            <div className={classes.stats}>
-              <Share />
-              <Print />
-            </div>
-          </CardFooter>
+            </CardFooter>
         </Card>
       )}
     </>

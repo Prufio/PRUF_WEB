@@ -69,19 +69,16 @@ body {
     object-fit: cover !important;
 }
 
-.submitChanges {
+/* .submitChanges {
     background: linear-gradient(0deg, #01b13c, #01e04c) !important;
     object-fit: cover !important;
     width: 10rem;
-    /* left: 400px; */
-}
+} */
 
 .advancedJSONButton {
   background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
   object-fit: cover !important;
-  width: 13rem;
-  max-width: 13rem;
-  /* left: 400px; */
+  width: 200px;
 }
 
 .LBGradient {
@@ -399,7 +396,7 @@ body {
   border: #002a40;
   border-style: solid;
   border-width: 1px;
-  margin-left: 0.2rem;
+  margin-left: 4px;
 }
 
 .assetImageSelectorButton:Hover {
@@ -423,17 +420,12 @@ body {
   display: flex;
   width: flex;
   height: flex;
-  max-width: 35rem;
-  /* height: 85px; */
-  /* margin-left: 270px; */
-  /* margin-top: 4rem; */
+  max-width: 560px;
   overflow-x: auto;
   border: #002a409a;
   border-style: solid;
-  border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
-  padding: 0.1rem;
-  /* position: absolute; */
-  
+  border-radius: 5px 5px 5px 5px;
+  padding: 1.5px;
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(2, 43, 82, 0.4);
 }
 
@@ -442,11 +434,11 @@ body {
   width: 25px;
   height: 80px;
   background-color: #888888ce;
-  border-radius: 0rem 0.5rem 0.5rem 0rem;
+  border-radius: 0px 6px 6px 0px;
   z-index: 3000;
   position: absolute;
   margin-top: 2.5px;
-  margin-left: -0.1rem;
+  margin-left: -2px;
   align-items: center;
 }
 /* 
@@ -459,24 +451,6 @@ body {
   height: 80px;
   z-index: 2000;
   object-fit: cover;
-}
-
-.imageSelectorMobile {
-  display: flex;
-  width: flex;
-  max-width: 340px;
-  height: 85px;
-  overflow-x: auto;
-  border: #002a40;
-  border-style: solid;
-  border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
-  padding: 0.1rem;
-}
-
-.imageSelectorImageMobile {
-  width: 52px;
-  height: 52px;
-  margin-left: 0.3rem;
 }
 
 .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
@@ -496,38 +470,38 @@ cursor:pointer;
 
 .printForm {
   display: flex;
-  width: 1000px ;
+  width: 1300px ;
   height: 333px;
   background-color: #002a40;
-  border-radius: 1rem;
-  margin-top: 10rem;
-  margin-left: 6rem;
+  border-radius: 15px;
+  margin-top: 150px;
+  margin-left: 170px;
 }
 
 .printFormContent {
   display: flex;
-  width: 650px;
+  width: 930px;
   height: 280px;
   background-color: #028ed4;
-  border-radius: 1rem;
-  margin-top: 2.5rem;
-  margin-left: 2.5rem;
+  border-radius: 20px;
+  margin-top: 30px;
+  margin-left: 30px;
   opacity: 0.9;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 2rem;
+  padding: 40px;
 }
     
 .printQR{
   display: flex;
-  margin-left: 2.5rem;
-  margin-top: 2.5rem;
+  margin-left: 30px;
+  margin-top: 30px;
 }
     
 .printQR2{
   display: flex;
-  margin-left: 42.5rem;
-  margin-top: 0.4rem;
+  margin-left: 680px;
+  margin-top: -20px;
   position: absolute;
   z-index: 999;
 }
@@ -542,12 +516,12 @@ cursor:pointer;
 }
 
 .printImageBackgroundForm {
-  margin-top: 3rem;
-  margin-left: 4rem;
+  /* margin-top: 10px; */
+  margin-left: 20px;
   justify-content: flex-start;
   display: flex;
-  width: 550px;
-  height: 191px;
+  width: 650px;
+  height: 220px;
   object-fit: cover;
   z-index: 1;
   position: absolute;
@@ -556,52 +530,52 @@ cursor:pointer;
 }
 
 .cardIdxPrint {
-  font-size: 1.4rem;
+  font-size: 20px;
   font-weight: bold;
-  margin-top: 6.5rem;
-  color: white;
-  z-index: 999;
-}
-
-.cardAddrPrint {
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-top: 7rem;
+  /* margin-top: 130px; */
   color: white;
   z-index: 999;
 }
       
 .cardNamePrint {
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 40px;
   color: white;
   z-index: 999;
 }
 
 .cardAcPrint {
-  font-size: 2rem;
+  font-size: 40px;
   font-weight: bold;
-  margin-top: 6.5rem;
+  margin-top: 130px;
   color: white;
   z-index: 999;
 }
 
 .cardDate {
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: bold;
-  margin-top: 30rem;
-  margin-left: 34rem;
+  margin-top: 310px;
+  margin-left: 750px;
   color: white;
   z-index: 999;
   position: absolute;
 }
 
 .cardHref {
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: bold;
-  margin-top: 30rem;
-  margin-left: 8.5rem;
+  margin-top: 310px;
+  margin-left: 80px;
   color: white;
   z-index: 999;
   position: absolute;
+}
+
+.printButton {
+  color: black;
+}
+
+.printButton:hover {
+  cursor: pointer;
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import { isMobile } from "react-device-detect";
+import { RWebShare } from "react-web-share";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -37,7 +38,6 @@ import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 
 const useStyles = makeStyles(styles);
-
 
 export default function Dashboard(props) {
 
@@ -79,7 +79,7 @@ export default function Dashboard(props) {
     window.printObj = e;
 
   }
-  
+
 
   const generateAssetDash = (obj) => {
     if (Object.values(obj).length > 0 && obj.names.length > 0) {
@@ -376,7 +376,7 @@ export default function Dashboard(props) {
               )}
             </>
             <CardBody>
-              {Object.values(selectedAssetObj.photo).length > 1 &&(
+              {Object.values(selectedAssetObj.photo).length > 1 && (
                 <div className="imageSelector">
                   {generateThumbs(selectedAssetObj)}
                 </div>
@@ -385,7 +385,7 @@ export default function Dashboard(props) {
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
               <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
-            <br/>
+              <br />
               <TextField
                 id="outlined-multiline-static"
                 label="Description"
@@ -516,7 +516,7 @@ export default function Dashboard(props) {
                 </FormControl>
               </div>
             </CardBody>
-            <CardFooter chart>
+            <CardFooter>
               {!isMobile && (
                 <div className={classes.stats}>
                   IDX Hash: {selectedAssetObj.idxHash}
@@ -528,7 +528,18 @@ export default function Dashboard(props) {
                 </div>
               )}
               <div className={classes.stats}>
-                <Share />
+                <RWebShare
+                  className="shareMenu"
+                  data={{
+                    text: "Check out my PRüF-verified asset!",
+                    url: URL,
+                    title: "Share Asset Link",
+                  }}
+                >
+                  <div className="printButton">
+                    <Share />
+                  </div>
+                </RWebShare>
                 <Printer />
               </div>
             </CardFooter>
