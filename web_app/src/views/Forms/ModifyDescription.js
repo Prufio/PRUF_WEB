@@ -35,25 +35,24 @@ const useFormStyles = makeStyles(formStyles);
 if (window.contracts === undefined) { window.location.href = "/#/admin/home" }
 
 export default function ModifyDescription(props) {
-  const [transactionActive, setTransactionActive] = React.useState(false);
 
-  const [error, setError] = React.useState("");
+  const [asset,] = React.useState(window.sentPacket);
+  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
+  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
+  const [idxHash,] = React.useState(window.sentPacket.idxHash);
+  
+  const [transactionActive, setTransactionActive] = React.useState(false);
+  const [advancedInput, setAdvancedInput] = React.useState(false);
   const [showHelp, setShowHelp] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
+  const [help, setHelp] = React.useState(false);
+  const [hasMounted, setHasMounted] = React.useState(false);
+
   const [txHash, setTxHash] = React.useState("");
-  const [asset,] = React.useState(window.sentPacket);
-  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls || {} });
-  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo, text: window.sentPacket.text, name: window.sentPacket.name, urls: window.sentPacket.urls || {} });
-  const [idxHash,] = React.useState(window.sentPacket.idxHash);
   const [customJSON, setCustomJSON] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
   const [selectedKey, setSelectedKey] = React.useState("");
-  const [hasMounted, setHasMounted] = React.useState(false);
-  const [additionalImages, setAdditionalImages] = React.useState([]);
-  const [help, setHelp] = React.useState(false);
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
-  const [advancedInput, setAdvancedInput] = React.useState(false);
-  const link = document.createElement('div');
+  const [error, setError] = React.useState("");
   const [currentUrl, setCurrentUrl] = React.useState("");
   const [currentUrlKey, setCurrentUrlKey] = React.useState("");
   const [loginURL, setloginURL] = React.useState("");
@@ -62,6 +61,10 @@ export default function ModifyDescription(props) {
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
   const [downloadName, setDownloadName] = React.useState("");
   const [downloadLink, setDownloadLink] = React.useState("");
+
+  const [additionalImages, setAdditionalImages] = React.useState([]);
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const link = document.createElement('div');
   const image = "photo", text = "text", url = "urls";
   const fs = require('fs');
 
