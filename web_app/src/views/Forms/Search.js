@@ -17,7 +17,7 @@ import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
 import Create from "@material-ui/icons/Create";
-import { KeyboardArrowLeft } from "@material-ui/icons";
+import { KeyboardArrowLeft, Scanner } from "@material-ui/icons";
 import { isMobile } from "react-device-detect";
 
 
@@ -39,6 +39,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 import placeholder from "../../assets/img/placeholder.jpg";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
+import { QRCode } from "react-qrcode-logo";
 
 
 const useStyles = makeStyles(styles);
@@ -370,7 +371,7 @@ export default function Search(props) {
           }
         });
 
-        setURL(String(baseURL) + String(idxHash)) 
+    setURL(String(baseURL) + String(idxHash))
 
     window.assetClass = tempResult[2]
     let assetClassName = await window.utils.getACName(tempResult[2])
@@ -479,7 +480,7 @@ export default function Search(props) {
           }
         });
 
-        setURL(String(baseURL) + String(idxHash)) 
+    setURL(String(baseURL) + String(idxHash))
 
 
     window.assetClass = tempResult[2]
@@ -820,10 +821,16 @@ export default function Search(props) {
                 </>
               )}
               {!retrieving && (
-                <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR Code</Button>
+                <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
+                  <span class="material-icons">
+                    qr_code_scanner
+                  </span>
+                </div>
               )}
               {!retrieving && (
-                <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
+                <div className="MLBGradientSubmit">
+                  <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
+                </div>
               )}
               {retrieving && (
                 <h3>
@@ -1170,33 +1177,33 @@ export default function Search(props) {
               </div>
             )}
           </CardBody>
-            <CardFooter>
-              {!isMobile && (
-                <div className={imgClasses.stats}>
-                  IDX Hash: {asset.idxHash}
-                </div>
-              )}
-              {isMobile && (
-                <div className={imgClasses.stats}>
-                  IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
-                </div>
-              )}
+          <CardFooter>
+            {!isMobile && (
               <div className={imgClasses.stats}>
-                <RWebShare
-                  className="shareMenu"
-                  data={{
-                    text: "Check out my PRüF-verified asset!",
-                    url: URL,
-                    title: "Share Asset Link",
-                  }}
-                >
-                  <div className="printButton">
-                    <Share />
-                  </div>
-                </RWebShare>
-                <Printer obj={{name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName}}/>
+                IDX Hash: {asset.idxHash}
               </div>
-            </CardFooter>
+            )}
+            {isMobile && (
+              <div className={imgClasses.stats}>
+                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
+              </div>
+            )}
+            <div className={imgClasses.stats}>
+              <RWebShare
+                className="shareMenu"
+                data={{
+                  text: "Check out my PRüF-verified asset!",
+                  url: URL,
+                  title: "Share Asset Link",
+                }}
+              >
+                <div className="printButton">
+                  <Share />
+                </div>
+              </RWebShare>
+              <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
+            </div>
+          </CardFooter>
         </Card>
       )}
     </>

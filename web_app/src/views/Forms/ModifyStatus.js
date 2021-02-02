@@ -40,8 +40,8 @@ export default function ModifyStatus(props) {
   window.sentPacket = null
 
   const classes = useStyles();
-  
-  if(assetInfo === undefined || assetInfo === null) {
+
+  if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -54,7 +54,7 @@ export default function ModifyStatus(props) {
     });
     return window.location.href = "/#/admin/dashboard"
   }
-  
+
 
   const handleSimple = event => {
     let status;
@@ -92,7 +92,7 @@ export default function ModifyStatus(props) {
 
   const modifyStatus = async () => { //export held asset
 
-    if(status === 53 || status === 54) {
+    if (status === 53 || status === 54) {
       return modifyStatusLS()
     }
 
@@ -146,7 +146,7 @@ export default function ModifyStatus(props) {
       });
 
   }
-  
+
   const modifyStatusLS = async () => { //export held asset
 
     let tempTxHash;
@@ -204,100 +204,104 @@ export default function ModifyStatus(props) {
     <Card>
       <CardHeader color="info" icon>
         <CardIcon color="info" className="DBGradient">
-          <ScatterPlot/>
+          <ScatterPlot />
         </CardIcon>
         <h4 className={classes.cardIconTitle}>Modify Status</h4>
       </CardHeader>
       <CardBody>
         <form>
-              <h4>Asset Selected: {assetInfo.name}</h4>
-              <h4>Current Status: {assetInfo.status}</h4>
+          <h4>Asset Selected: {assetInfo.name}</h4>
+          <h4>Current Status: {assetInfo.status}</h4>
           <FormControl
-          fullWidth
-          className={classes.selectFormControl}
-        >
-          <InputLabel
+            fullWidth
+            className={classes.selectFormControl}
           >
-            Please Select Status
+            <InputLabel
+            >
+              Please Select Status
                         </InputLabel>
-          <Select
-            MenuProps={{
-              className: classes.selectMenu
-            }}
-            classes={{
-              select: classes.select
-            }}
-            value={simpleSelect}
-            onChange={handleSimple}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select"
-            }}
-          >
-            <MenuItem
-              disabled
+            <Select
+              MenuProps={{
+                className: classes.selectMenu
+              }}
               classes={{
-                root: classes.selectMenuItem
+                select: classes.select
+              }}
+              value={simpleSelect}
+              onChange={handleSimple}
+              inputProps={{
+                name: "simpleSelect",
+                id: "simple-select"
               }}
             >
-              Please Select Element
+              <MenuItem
+                disabled
+                classes={{
+                  root: classes.selectMenuItem
+                }}
+              >
+                Please Select Element
                           </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="transferrable"
-            >
-              Transferrable
+              <MenuItem
+                classes={{
+                  root: classes.selectMenuItem,
+                  selected: classes.selectMenuItemSelected
+                }}
+                value="transferrable"
+              >
+                Transferrable
                           </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="nontransferrable"
-            >
-              Non-Transferrable
+              <MenuItem
+                classes={{
+                  root: classes.selectMenuItem,
+                  selected: classes.selectMenuItemSelected
+                }}
+                value="nontransferrable"
+              >
+                Non-Transferrable
                           </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="stolen"
-            >
-              Stolen
+              <MenuItem
+                classes={{
+                  root: classes.selectMenuItem,
+                  selected: classes.selectMenuItemSelected
+                }}
+                value="stolen"
+              >
+                Stolen
                           </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="lost"
-            >
-              Lost
+              <MenuItem
+                classes={{
+                  root: classes.selectMenuItem,
+                  selected: classes.selectMenuItemSelected
+                }}
+                value="lost"
+              >
+                Lost
                           </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="discardable"
-            >
-              Discardable
+              <MenuItem
+                classes={{
+                  root: classes.selectMenuItem,
+                  selected: classes.selectMenuItemSelected
+                }}
+                value="discardable"
+              >
+                Discardable
                           </MenuItem>
-          </Select>
-        </FormControl>
-        {!transactionActive && status !== "" && (
-            <Button color="info" className="MLBGradient" onClick={() => modifyStatus()}>Modify Status</Button>
+            </Select>
+          </FormControl>
+          {!transactionActive && status !== "" && (
+            <div className="MLBGradientSubmit">
+              <Button color="info" className="MLBGradient" onClick={() => modifyStatus()}>Modify Status</Button>
+            </div>
           )}
-        {!transactionActive && status === "" && (
-            <Button disabled color="info" className="MLBGradient">Modify Status</Button>
+          {!transactionActive && status === "" && (
+            <div className="MLBGradientSubmit">
+              <Button disabled color="info" className="MLBGradient">Modify Status</Button>
+            </div>
           )}
           {transactionActive && (
             <h3>
-               Modifying Status<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Modifying Status<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </form>

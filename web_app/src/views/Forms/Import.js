@@ -40,8 +40,8 @@ export default function Import(props) {
   window.sentPacket = null
 
   const classes = useStyles();
-  
-  if(assetInfo === undefined || assetInfo === null) {
+
+  if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -198,7 +198,9 @@ export default function Import(props) {
                 </>
               )}
               {!transactionActive && (
-                <Button color="info" className="MLBGradient" onClick={() => importAsset()}>Import Asset</Button>
+                <div className="MLBGradientSubmit">
+                  <Button color="info" className="MLBGradient" onClick={() => importAsset()}>Import Asset</Button>
+                </div>
               )}
               {transactionActive && (
                 <h3>

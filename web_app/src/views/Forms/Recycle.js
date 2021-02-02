@@ -90,8 +90,8 @@ export default function Recycle() {
   window.sentPacket = null
 
   const classes = useStyles();
-  
-  if(assetInfo === undefined || assetInfo === null) {
+
+  if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -369,7 +369,7 @@ export default function Recycle() {
               </FormControl>
             </form>
           </CardBody>
-          <br/>
+          <br />
         </Card>
       )}
       {assetClass !== "" && (
@@ -876,7 +876,9 @@ export default function Recycle() {
                     )}
                   </>
                   {!recycling && (
-                    <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                    <div className="MLBGradientSubmit">
+                      <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                    </div>
                   )}
                   {/* <Button color="info" className="MLBGradient" onClick={() => swal({
                 title: "Match Confirmed!",

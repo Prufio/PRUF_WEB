@@ -36,8 +36,8 @@ export default function Discard(props) {
   window.sentPacket = null
 
   const classes = useStyles();
-  
-  if(assetInfo === undefined || assetInfo === null) {
+
+  if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -121,7 +121,9 @@ export default function Discard(props) {
             </>
           )}
           {!transactionActive && (
-            <Button color="info" className="MLBGradient" onClick={() => discardAsset()}>Discard Asset</Button>
+            <div className="MLBGradientSubmit">
+              <Button color="info" className="MLBGradient" onClick={() => discardAsset()}>Discard Asset</Button>
+            </div>
           )}
           {transactionActive && (
             <h3>

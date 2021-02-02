@@ -40,7 +40,7 @@ export default function ModifyDescription(props) {
   const [assetInfo,] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
   const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
   const [idxHash,] = React.useState(window.sentPacket.idxHash);
-  
+
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [advancedInput, setAdvancedInput] = React.useState(false);
   const [showHelp, setShowHelp] = React.useState(false);
@@ -740,10 +740,10 @@ export default function ModifyDescription(props) {
           </div>
         )}
         {!transactionActive && (
-          <>
+          <div className="MLBGradientSubmit">
             <hr className="medium_hr" />
             <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
-          </>
+          </div>
         )}
         {transactionActive && (
           <h3>

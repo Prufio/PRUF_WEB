@@ -39,10 +39,10 @@ export default function Transfer(props) {
     setloginAddressState("");
     console.log("clearing forms")
   };
-  
+
   const classes = useStyles();
 
-  if(assetInfo === undefined || assetInfo === null) {
+  if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -151,7 +151,9 @@ export default function Transfer(props) {
             <small>*</small> Required fields
               </div>
           {!transactionActive && (
-            <Button color="info" className="MLBGradient" onClick={() => transferAsset()}>Transfer Asset</Button>
+            <div className="MLBGradientSubmit">
+              <Button color="info" className="MLBGradient" onClick={() => transferAsset()}>Transfer Asset</Button>
+            </div>
           )}
           {transactionActive && (
             <h3>
