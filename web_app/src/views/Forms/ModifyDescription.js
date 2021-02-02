@@ -430,7 +430,7 @@ export default function ModifyDescription(props) {
         }
       });
   }
-  
+
   const deleteURL = () => {
     swal("What would you like to do with this extension?", {
       buttons: {
@@ -540,50 +540,83 @@ export default function ModifyDescription(props) {
           {generateThumbs(newAssetInfo)}
         </div>
         <br />
-        <TextField
-          onChange={(e) => { handleName(e.target.value) }}
-          id="outlined-full-width"
-          label="Name"
-          defaultValue={newAssetInfo.name}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        <TextField
-          onChange={(e) => { handleDescription(e.target.value) }}
-          id="outlined-multiline-static"
-          label="Description:"
-          multiline
-          rows={4}
-          defaultValue={newAssetInfo.text.Description}
-          variant="outlined"
-          fullWidth
-        />
-        <div className={formClasses.checkboxAndRadio}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setAdvancedInput(!advancedInput)}
-                checkedIcon={<Check className={formClasses.checkedIcon} />}
-                icon={<Check className={formClasses.uncheckedIcon} />}
-                classes={{
-                  checked: formClasses.checked,
-                  root: formClasses.checkRoot
-                }}
-              />
-            }
-            classes={{
-              label: formClasses.label,
-              root: formClasses.labelRoot
-            }}
-            label="Advanced Options"
-          />
-        </div>
-        {advancedInput && (
+        {!transactionActive && (
+          <>
+            <TextField
+              onChange={(e) => { handleName(e.target.value) }}
+              id="outlined-full-width"
+              label="Name"
+              defaultValue={newAssetInfo.name}
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+            />
+            <TextField
+              onChange={(e) => { handleDescription(e.target.value) }}
+              id="outlined-multiline-static"
+              label="Description:"
+              multiline
+              rows={4}
+              defaultValue={newAssetInfo.text.Description}
+              variant="outlined"
+              fullWidth
+            />
+          </>
+        )}
+
+        {transactionActive && (
+          <>
+            <TextField
+              id="outlined-full-width"
+              label="Name"
+              defaultValue={newAssetInfo.name}
+              fullWidth
+              margin="normal"
+              disabled="true"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+            />
+            <TextField
+              disabled="true"
+              id="outlined-multiline-static"
+              label="Description:"
+              multiline
+              rows={4}
+              defaultValue={newAssetInfo.text.Description}
+              variant="outlined"
+              fullWidth
+            />
+          </>
+        )}
+        {!transactionActive && (
+          <div className={formClasses.checkboxAndRadio}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  tabIndex={-1}
+                  onClick={() => setAdvancedInput(!advancedInput)}
+                  checkedIcon={<Check className={formClasses.checkedIcon} />}
+                  icon={<Check className={formClasses.uncheckedIcon} />}
+                  classes={{
+                    checked: formClasses.checked,
+                    root: formClasses.checkRoot
+                  }}
+                />
+              }
+              classes={{
+                label: formClasses.label,
+                root: formClasses.labelRoot
+              }}
+              label="Advanced Options"
+            />
+          </div>
+        )}
+        {advancedInput && !transactionActive && (
           <div>
             <div>
               {generateUrls(newAssetInfo)}
@@ -641,9 +674,9 @@ export default function ModifyDescription(props) {
                 fullWidth
                 disabled
               />
-              <div className="deleteURL" onClick={() => {deleteURL()}}> 
+              <div className="deleteURL" onClick={() => { deleteURL() }}>
                 <Danger>
-                <DeleteForever/>
+                  <DeleteForever />
                 </Danger>
               </div>
             </div>
@@ -651,17 +684,14 @@ export default function ModifyDescription(props) {
             <Button color="info" className="submitChanges">Download JSON File</Button>
           </div>
         )}
-        {/*         {!transactionActive && assetInfo.name === newAssetInfo.name && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && Object.values(assetInfo.photo) === Object.values(newAssetInfo.photo) && (
-          <Button disabled color="info" className="submitChanges">Submit Changes</Button>
-        )} */}
-        {/*         {!transactionActive && assetInfo.name !== newAssetInfo.name || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) || Object.values(assetInfo.photo) !== Object.values(newAssetInfo.photo) && (
-           */}<Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
-        {/*         )} */}
-        {/*         {transactionActive && (
+        {!transactionActive && (
+          <Button onClick={() => { submitChanges() }} color="info" className="submitChanges">Submit Changes</Button>
+        )}
+        {transactionActive && (
           <h3>
             Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
           </h3>
-        )} */}
+        )}
       </CardBody>
       <CardFooter chart>
         {!isMobile && (
@@ -675,7 +705,7 @@ export default function ModifyDescription(props) {
           </div>
         )}
         <div className={classes.stats}>
-          <Print/>
+          <Print />
           <Share />
         </div>
       </CardFooter>
