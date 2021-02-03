@@ -3,7 +3,6 @@ import Dashboard from "views/Dashboard/Dashboard.js";
 import Home from "views/Home/Home.js";
 import NewRecord from "views/Forms/NewRecord.js";
 import Recycle from "views/Forms/Recycle.js";
-import Verify from "views/Forms/Verify.js";
 import Discard from "views/Forms/Discard.js";
 import EscrowManager from "views/Forms/EscrowManager.js";
 import Export from "views/Forms/Export.js";
@@ -34,13 +33,6 @@ var dashRoutes = [
     name: "Asset Dashboard",
     icon: DashboardIcon,
     component: Dashboard,
-    layout: "/admin"
-  },
-  {
-    path: "/verify-asset",
-    name: "Verify",
-    icon: HowToReg,
-    component: Verify,
     layout: "/admin"
   },
   {

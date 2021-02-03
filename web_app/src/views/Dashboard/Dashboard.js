@@ -270,10 +270,6 @@ export default function Dashboard(props) {
         href = "/#/admin/modify-status";
         break
       }
-      // case "decrement-counter": {
-      //   href = "/#/admin/counter";
-      //   break
-      // }
       case "edit-information": {
         href = "/#/admin/modify-description";
         break
