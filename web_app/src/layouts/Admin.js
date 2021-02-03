@@ -49,6 +49,7 @@ export default function Dashboard(props) {
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState(false);
   const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0], routes[1], routes[3], routes[4]]);
+  const [sps, setSps] = React.useState(undefined)
 
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
@@ -297,11 +298,14 @@ export default function Dashboard(props) {
     }
 
     if (navigator.platform.indexOf("Win") > -1) {
+      console.log("*****Using ps*****");
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
         suppressScrollY: false
       });
       document.body.style.overflow = "hidden";
+      setSps(ps);
+      console.log(ps);
     }
     window.addEventListener("resize", resizeFunction);
 
@@ -370,7 +374,7 @@ export default function Dashboard(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={() => (<prop.component idxQuery = {idxQuery} addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance} />)}
+            render={() => (<prop.component ps={sps} idxQuery={idxQuery} addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance} />)}
             key={key}
           />
         );
@@ -379,9 +383,11 @@ export default function Dashboard(props) {
       }
     });
   };
+
   const sidebarMinimize = () => {
     setMiniActive(!miniActive);
   };
+
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {
       setMobileOpen(false);

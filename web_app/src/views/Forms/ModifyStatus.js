@@ -40,6 +40,13 @@ export default function ModifyStatus(props) {
   window.sentPacket = null
 
   const classes = useStyles();
+
+  React.useEffect(() => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  },[])
   
   if(assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"

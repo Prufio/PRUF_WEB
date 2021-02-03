@@ -40,7 +40,7 @@ export default function ModifyDescription(props) {
   const [assetInfo,] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
   const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
   const [idxHash,] = React.useState(window.sentPacket.idxHash);
-  
+
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [advancedInput, setAdvancedInput] = React.useState(false);
   const [showHelp, setShowHelp] = React.useState(false);
@@ -82,6 +82,13 @@ export default function ModifyDescription(props) {
       setHasMounted(true)
     }
   })
+
+  React.useEffect(() => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  },[])
 
   let fileInput = React.createRef();
   let fileInputJSON = React.createRef();

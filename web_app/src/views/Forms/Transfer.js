@@ -34,6 +34,13 @@ export default function Transfer(props) {
 
   window.sentPacket = null
 
+  React.useEffect(() => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  },[])
+
   const clearForms = () => {
     setAddress("");
     setloginAddressState("");

@@ -17,7 +17,7 @@ import { GroupAdd } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function ModifyRGT() {
+export default function ModifyRGT(props) {
   const [transactionActive, setTransactionActive] = React.useState(false);
 
   const [error, setError] = React.useState("");
@@ -48,6 +48,13 @@ export default function ModifyRGT() {
   window.sentPacket = null
 
   const classes = useStyles();
+
+  React.useEffect(() => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  },[])
   
   if(assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"

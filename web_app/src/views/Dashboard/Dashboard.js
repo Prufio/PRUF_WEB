@@ -42,13 +42,11 @@ const useStyles = makeStyles(styles);
 export default function Dashboard(props) {
 
   React.useEffect(() => {
-    //if(assetObj !== props.assetObj) {setAssetObj(props.assetObj)}
-    // returned function will be called on component unmount 
-    return () => {
-
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-
-  })
+  },[])
 
   const [viewAsset, setViewAsset] = React.useState(false)
   const [simpleSelect, setSimpleSelect] = React.useState("");
@@ -59,6 +57,12 @@ export default function Dashboard(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   const moreInfo = (e) => {
+    console.log(props.ps);
+    if(props.ps){
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
+    console.log(props.ps.element.scrollTop)
     const url = String(baseURL) + String(e.idxHash)
 
     if (e === "back") { setSelectedAssetObj({}); return setViewAsset(false); }
@@ -232,6 +236,10 @@ export default function Dashboard(props) {
   }
 
   const handleSimple = event => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0
+      console.log(props.ps.element.scrollTop)
+    }  
     window.sentPacket = selectedAssetObj;
     //console.log(window.sentPacket);
     setSimpleSelect(event.target.value);

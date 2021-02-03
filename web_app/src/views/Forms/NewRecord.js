@@ -80,6 +80,13 @@ export default function NewRecord(props) {
 
   const link = document.createElement('div')
 
+  React.useEffect(() => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  },[])
+
   const ACLogin = event => {
     setAssetClass(event.target.value);
   };

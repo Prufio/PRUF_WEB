@@ -107,11 +107,18 @@ export default function Search(props) {
     else { console.log(false) }
   })
 
-
-
-
+  React.useEffect(() => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  },[])
 
   const handleSimple = event => {
+    if(props.ps){
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }  
     window.sentPacket = Object.assign(asset, ipfsObject);
     setSimpleSelect(event.target.value);
     let e = event.target.value, href;
@@ -265,6 +272,10 @@ export default function Search(props) {
   }
 
   const retrieveRecord = async () => {
+    if(props.ps){
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }  
     if (!IDXRawInput) {
       if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
 
@@ -408,6 +419,11 @@ export default function Search(props) {
   }
 
   const retrieveRecordQR = async (query) => {
+
+    if(props.ps){
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }  
     setRetrieving(true)
     console.log("in rrqr")
     let ipfsHash;

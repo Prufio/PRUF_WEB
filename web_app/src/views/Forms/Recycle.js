@@ -31,7 +31,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 
 const useStyles = makeStyles(styles);
 
-export default function Recycle() {
+export default function Recycle(props) {
   const [checked, setChecked] = React.useState([24, 22]);
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
@@ -90,6 +90,13 @@ export default function Recycle() {
   window.sentPacket = null
 
   const classes = useStyles();
+
+  React.useEffect(() => {
+    if(props.ps){
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  },[])
   
   if(assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
