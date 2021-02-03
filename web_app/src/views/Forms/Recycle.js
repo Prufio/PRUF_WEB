@@ -376,7 +376,7 @@ export default function Recycle(props) {
               </FormControl>
             </form>
           </CardBody>
-          <br/>
+          <br />
         </Card>
       )}
       {assetClass !== "" && (
@@ -883,7 +883,9 @@ export default function Recycle(props) {
                     )}
                   </>
                   {!recycling && (
-                    <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                    <div className="MLBGradientSubmit">
+                      <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                    </div>
                   )}
                   {/* <Button color="info" className="MLBGradient" onClick={() => swal({
                 title: "Match Confirmed!",

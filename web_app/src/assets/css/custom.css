@@ -66,7 +66,12 @@ body {
 
 .MLBGradient {
     background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
-    object-fit: cover !important;
+    /* object-fit: cover !important; */
+}
+
+.MLBGradientSubmit {
+  display: flex !important;
+  flex-direction: row-reverse !important;
 }
 
 /* .submitChanges {
@@ -578,4 +583,14 @@ cursor:pointer;
 
 .printButton:hover {
   cursor: pointer;
+}
+
+.QRScanner {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.QRScanner:hover {
+  cursor: pointer;
+  color: rgb(141, 129, 129);
 }

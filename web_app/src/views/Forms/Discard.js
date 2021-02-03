@@ -128,7 +128,9 @@ export default function Discard(props) {
             </>
           )}
           {!transactionActive && (
-            <Button color="info" className="MLBGradient" onClick={() => discardAsset()}>Discard Asset</Button>
+            <div className="MLBGradientSubmit">
+              <Button color="info" className="MLBGradient" onClick={() => discardAsset()}>Discard Asset</Button>
+            </div>
           )}
           {transactionActive && (
             <h3>

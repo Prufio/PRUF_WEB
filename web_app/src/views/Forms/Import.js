@@ -205,7 +205,9 @@ export default function Import(props) {
                 </>
               )}
               {!transactionActive && (
-                <Button color="info" className="MLBGradient" onClick={() => importAsset()}>Import Asset</Button>
+                <div className="MLBGradientSubmit">
+                  <Button color="info" className="MLBGradient" onClick={() => importAsset()}>Import Asset</Button>
+                </div>
               )}
               {transactionActive && (
                 <h3>

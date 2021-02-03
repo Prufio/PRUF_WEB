@@ -1442,17 +1442,17 @@ function buildWindowUtils() {
     return temp
   };
 
-  const _generateCardPrint = () => {
+  const _generateCardPrint = (obj) => {
 
     var date = Date().toLocaleString();
 
     return (
       <div className="printForm">
-        {window.printObj !== undefined && (
+        {obj !== undefined && (
           <>
             <div className="printQR">
               <QRCode
-                value={"https://app.pruf.io/#/retrieve-record?" + window.printObj.idxHash}
+                value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
                 size="256"
                 fgColor="#002a40"
                 logoWidth="48.8"
@@ -1469,7 +1469,7 @@ function buildWindowUtils() {
                 alt="Pruf Print Background" />
               <div className="printQR2">
                 <QRCode
-                  value={"https://app.pruf.io/#/" + window.printObj.idxHash}
+                  value={"https://app.pruf.io/#/" + obj.idxHash}
                   size="160"
                   fgColor="#002a40"
                   logoWidth="32"
@@ -1477,9 +1477,9 @@ function buildWindowUtils() {
                   logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
                 />
               </div>
-              <p className="cardNamePrint">Name : {window.printObj.name}</p>
-              <p className="cardAcPrint">Asset Class : {window.printObj.assetClassName}</p>
-              <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
+              <p className="cardNamePrint">Name : {obj.name}</p>
+              <p className="cardAcPrint">Asset Class : {obj.assetClassName}</p>
+              <h4 className="cardIdxPrint">IDX : {obj.idxHash}</h4>
 
             </div>
           </>

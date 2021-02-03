@@ -53,7 +53,7 @@ export default function Export(props) {
     });
     return window.location.href = "/#/admin/dashboard"
   }
-  
+
   const exportAsset = async () => { //export held asset
 
     let tempTxHash;
@@ -107,32 +107,34 @@ export default function Export(props) {
   }
 
   return (
-  <Card>
-    <CardHeader color="info" icon>
-      <CardIcon color="info" className="DBGradient">
-        <FlightTakeoff />
-      </CardIcon>
-      <h4 className={classes.cardIconTitle}>Export Asset</h4>
-    </CardHeader>
-    <CardBody>
-      <form>
-        {!transactionActive && (
-          <>
-            <h4>Asset Selected: {assetInfo.name}</h4>
-            <br />
-            <h5>You are attempting to export {assetInfo.name}.</h5>
-          </>
-        )}
-        {!transactionActive && (
-          <Button color="info" className="MLBGradient" onClick={() => exportAsset()}>Export Asset</Button>
-        )}
-        {transactionActive && (
-          <h3>
-            Exporting Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-          </h3>
-        )}
-      </form>
-    </CardBody>
-  </Card>
+    <Card>
+      <CardHeader color="info" icon>
+        <CardIcon color="info" className="DBGradient">
+          <FlightTakeoff />
+        </CardIcon>
+        <h4 className={classes.cardIconTitle}>Export Asset</h4>
+      </CardHeader>
+      <CardBody>
+        <form>
+          {!transactionActive && (
+            <>
+              <h4>Asset Selected: {assetInfo.name}</h4>
+              <br />
+              <h5>You are attempting to export {assetInfo.name}.</h5>
+            </>
+          )}
+          {!transactionActive && (
+            <div className="MLBGradientSubmit">
+              <Button color="info" className="MLBGradient" onClick={() => exportAsset()}>Export Asset</Button>
+            </div>
+          )}
+          {transactionActive && (
+            <h3>
+              Exporting Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+        </form>
+      </CardBody>
+    </Card>
   );
 }

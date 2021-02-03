@@ -747,10 +747,10 @@ export default function ModifyDescription(props) {
           </div>
         )}
         {!transactionActive && (
-          <>
+          <div className="MLBGradientSubmit">
             <hr className="medium_hr" />
             <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
-          </>
+          </div>
         )}
         {transactionActive && (
           <h3>

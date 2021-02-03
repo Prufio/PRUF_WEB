@@ -6,7 +6,7 @@ class ComponentToPrint extends React.Component {
     render() {
         return (
             <div>
-                {window.utils.generateCardPrint()}
+                {window.utils.generateCardPrint(this.props.obj)}
             </div>
         );
     }
@@ -26,7 +26,7 @@ class Printer extends React.Component {
                         )}
                     </PrintContextConsumer>
                 </ReactToPrint>
-                <div style={{ display: "none" }}><ComponentToPrint ref={el => (this.componentRef = el)} /></div>
+                <div style={{ display: "none" }}><ComponentToPrint obj={this.props.obj} ref={el => (this.componentRef = el)} /></div>
             </div>
         );
     }

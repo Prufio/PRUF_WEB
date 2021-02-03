@@ -1,6 +1,7 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import { RWebShare } from "react-web-share";
+import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -10,6 +11,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Danger from "components/Typography/Danger.js";
 import Checkbox from "@material-ui/core/Checkbox";
+import AccountBox from "@material-ui/icons/AccountBox";
 
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
@@ -17,7 +19,7 @@ import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
 import Create from "@material-ui/icons/Create";
-import { KeyboardArrowLeft } from "@material-ui/icons";
+import { KeyboardArrowLeft, Scanner } from "@material-ui/icons";
 import { isMobile } from "react-device-detect";
 
 
@@ -39,6 +41,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 import placeholder from "../../assets/img/placeholder.jpg";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
+import { QRCode } from "react-qrcode-logo";
 
 
 const useStyles = makeStyles(styles);
@@ -67,6 +70,10 @@ export default function Search(props) {
   const [transaction, setTransaction] = React.useState(false);
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
+  const [URL, setURL] = React.useState("");
+  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
+  const [isVerifying, setIsVerifying] = React.useState(false)
+  const link = document.createElement('div');
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
@@ -81,6 +88,25 @@ export default function Search(props) {
   const [loginModel, setloginModel] = React.useState("");
   const [loginSerial, setloginSerial] = React.useState("");
   const [loginIDX, setloginIDX] = React.useState("");
+
+  const [first, setFirst] = React.useState("");
+  const [middle, setMiddle] = React.useState("");
+  const [last, setLast] = React.useState("");
+  const [ID, setID] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const [loginFirst, setloginFirst] = React.useState("");
+  const [loginLast, setloginLast] = React.useState("");
+  const [loginID, setloginID] = React.useState("");
+  const [loginPassword, setloginPassword] = React.useState("");
+
+  const [loginFirstState, setloginFirstState] = React.useState("");
+  const [loginLastState, setloginLastState] = React.useState("");
+  const [loginIDState, setloginIDState] = React.useState("");
+  const [loginPasswordState, setloginPasswordState] = React.useState("");
+
+  const [txHash, setTxHash] = React.useState("");
+  const [verifyResult, setVerifyResult] = React.useState("");
 
   const [loginManufacturerState, setloginManufacturerState] = React.useState("");
   const [loginTypeState, setloginTypeState] = React.useState("");
@@ -183,6 +209,19 @@ export default function Search(props) {
     console.log("new value", !scanQR)
   };
 
+  const setIsNotVerifying = () => {
+    setIsVerifying(false)
+    setloginManufacturerState("");
+    setloginTypeState("");
+    setloginModelState("");
+    setloginSerialState("");
+    setloginIDXState("");
+    setloginFirstState("");
+    setloginLastState("");
+    setloginIDState("");
+    setloginPasswordState("");
+  }
+
   const getIPFSJSONObject = (lookup) => {
     //console.log(lookup)
     window.ipfs.cat(lookup, async (error, result) => {
@@ -267,8 +306,202 @@ export default function Search(props) {
       });
   }
 
+
   const recycleAsset = async () => {
     window.location.href = "/#/admin/recycle-asset"
+  }
+
+  const verifyAsset = async () => {
+    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+      if (loginFirst === "") {
+        setloginFirstState("error");
+      }
+      if (loginLast === "") {
+        setloginLastState("error");
+      }
+      if (loginID === "") {
+        setloginIDState("error");
+      }
+      if (loginPassword === "") {
+        setloginPasswordState("error");
+      }
+      return;
+    }
+
+    console.log("in vr")
+    let ipfsHash;
+    let tempResult;
+    let idxHash = asset.idxHash;
+    let rgtHashRaw;
+    let rgtHash
+    {
+      middle === "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+    {
+      middle !== "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(middle).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+
+    console.log("idxHash", idxHash);
+    console.log("rgtHash", rgtHash);
+    console.log("addr: ", window.addr);
+    setTransaction(true)
+    await window.contracts.STOR.methods
+      ._verifyRightsHolder(idxHash, rgtHash)
+      .call(
+        function (_error, _result) {
+          if (_error) {
+            console.log(_error)
+            setError(_error);
+            setResult("");
+            setTransaction(false)
+          }
+          else if (_result === "0") {
+            console.log("Verification not Confirmed");
+            swal({
+              title: "Match Failed!",
+              text: "Please make sure forms are filled out correctly.",
+              icon: "warning",
+              button: "Close",
+            });
+            setTransaction(false)
+            setIsVerifying(!isVerifying)
+          }
+          else {
+            console.log("Verification Confirmed");
+            swal({
+              title: "Match Confirmed!",
+              // text: "Check your TX here:" + txHash,
+              icon: "success",
+              button: "Close",
+            });
+            setError("");
+            setTransaction(false)
+            setIsVerifying(!isVerifying)
+          }
+        });
+    return;
+  }
+
+  const blockchainVerifyAsset = async () => {
+    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+
+      if (loginFirst === "") {
+        setloginFirstState("error");
+      }
+      if (loginLast === "") {
+        setloginLastState("error");
+      }
+      if (loginID === "") {
+        setloginIDState("error");
+      }
+      if (loginPassword === "") {
+        setloginPasswordState("error");
+      }
+      return;
+    }
+
+    console.log("in bvr")
+    let idxHash = asset.idxHash;
+    let rgtHash;
+    let rgtHashRaw;
+    let receiptVal;
+    let tempTxHash;
+    {
+      middle === "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+    {
+      middle !== "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(middle).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+
+    console.log("idxHash", idxHash);
+    console.log("rgtHash", rgtHash);
+    console.log("addr: ", props.addr);
+    setTransaction(true)
+
+    await window.contracts.STOR.methods
+      .blockchainVerifyRightsHolder(idxHash, rgtHash)
+      .send({ from: props.addr })
+      .on("error", function (_error) {
+        setTransaction(false);
+        setIsVerifying(!isVerifying)
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTxHash(Object.values(_error)[0].transactionHash);
+        console.log(Object.values(_error)[0].transactionHash);
+        console.log(_error)
+        setError(_error);
+      })
+      .on("receipt", (receipt) => {
+        receiptVal = receipt.events.REPORT.returnValues._msg;
+        setTransaction(false)
+        setIsVerifying(!isVerifying)
+        setTxHash(receipt.transactionHash)
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setVerifyResult(receiptVal)
+        console.log("Verification Result :", receiptVal);
+      });
+
+
+    if (receiptVal === "Match confirmed") {
+      swal({
+        title: "Match Confirmed!",
+        content: link,
+        icon: "success",
+        button: "Close",
+      });
+      console.log("Verification conf")
+    }
+
+    if (receiptVal !== "Match confirmed") {
+      swal({
+        title: "Match Failed!",
+        content: link,
+        icon: "warning",
+        button: "Close",
+      });
+      console.log("Verification not conf")
+    }
+
+    return;
   }
 
   const retrieveRecord = async () => {
@@ -379,6 +612,8 @@ export default function Search(props) {
           }
         });
 
+    setURL(String(baseURL) + String(idxHash))
+
     window.assetClass = tempResult[2]
     let assetClassName = await window.utils.getACName(tempResult[2])
 
@@ -403,6 +638,7 @@ export default function Search(props) {
       status: window.assetInfo.status,
       idxHash: idxHash,
     })
+
     if (window.assetInfo.statusNum == "60") {
       setRecycled(true)
     }
@@ -489,6 +725,8 @@ export default function Search(props) {
             }
           }
         });
+
+    setURL(String(baseURL) + String(idxHash))
 
 
     window.assetClass = tempResult[2]
@@ -829,10 +1067,16 @@ export default function Search(props) {
                 </>
               )}
               {!retrieving && (
-                <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR Code</Button>
+                <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
+                  <span class="material-icons">
+                    qr_code_scanner
+                  </span>
+                </div>
               )}
               {!retrieving && (
-                <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
+                <div className="MLBGradientSubmit">
+                  <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
+                </div>
               )}
               {retrieving && (
                 <h3>
@@ -880,13 +1124,47 @@ export default function Search(props) {
       )}
       {moreInfo && (
         <Card>
-          {!isMobile && (
-            <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
-              {ipfsObject.photo !== undefined && (
-                <>
-                  {Object.values(ipfsObject.photo).length > 0 && (
+          {!isVerifying && (
+            <>
+              {!isMobile && (
+                <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+                  {ipfsObject.photo !== undefined && (
                     <>
-                      {ipfsObject.photo.displayImage !== undefined && (
+                      {Object.values(ipfsObject.photo).length > 0 && (
+                        <>
+                          {ipfsObject.photo.displayImage !== undefined && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {ipfsObject.photo.displayImage === undefined && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                            </>
+                          )}
+                        </>
+                      )}
+                      {Object.values(ipfsObject.photo).length === 0 && (
                         <>
                           <Tooltip
                             id="tooltip-top"
@@ -898,52 +1176,52 @@ export default function Search(props) {
                               <KeyboardArrowLeft />
                             </Button>
                           </Tooltip>
-                          <img src={selectedImage} alt="..." />
-                        </>
-                      )}
-                      {ipfsObject.photo.displayImage === undefined && (
-                        <>
-                          <Tooltip
-                            id="tooltip-top"
-                            title="Back"
-                            placement="bottom"
-                            classes={{ tooltip: classes.tooltip }}
-                          >
-                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                              <KeyboardArrowLeft />
-                            </Button>
-                          </Tooltip>
-                          <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                          <Jdenticon value={asset.idxHash} />
                         </>
                       )}
                     </>
                   )}
-                  {Object.values(ipfsObject.photo).length === 0 && (
-                    <>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Back"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                          <KeyboardArrowLeft />
-                        </Button>
-                      </Tooltip>
-                      <Jdenticon value={asset.idxHash} />
-                    </>
-                  )}
-                </>
+                </CardHeader>
               )}
-            </CardHeader>
-          )}
-          {isMobile && (
-            <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
-              {ipfsObject.photo !== undefined && (
-                <>
-                  {Object.values(ipfsObject.photo).length > 0 && (
+              {isMobile && (
+                <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+                  {ipfsObject.photo !== undefined && (
                     <>
-                      {ipfsObject.photo.displayImage !== undefined && (
+                      {Object.values(ipfsObject.photo).length > 0 && (
+                        <>
+                          {ipfsObject.photo.displayImage !== undefined && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {ipfsObject.photo.displayImage === undefined && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                            </>
+                          )}
+                        </>
+                      )}
+                      {Object.values(ipfsObject.photo).length === 0 && (
                         <>
                           <Tooltip
                             id="tooltip-top"
@@ -955,109 +1233,280 @@ export default function Search(props) {
                               <KeyboardArrowLeft />
                             </Button>
                           </Tooltip>
-                          <img src={selectedImage} alt="..." />
-                        </>
-                      )}
-                      {ipfsObject.photo.displayImage === undefined && (
-                        <>
-                          <Tooltip
-                            id="tooltip-top"
-                            title="Back"
-                            placement="bottom"
-                            classes={{ tooltip: classes.tooltip }}
-                          >
-                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                              <KeyboardArrowLeft />
-                            </Button>
-                          </Tooltip>
-                          <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                          <Jdenticon value={asset.idxHash} />
                         </>
                       )}
                     </>
                   )}
-                  {Object.values(ipfsObject.photo).length === 0 && (
-                    <>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Back"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                          <KeyboardArrowLeft />
-                        </Button>
-                      </Tooltip>
-                      <Jdenticon value={asset.idxHash} />
-                    </>
-                  )}
-                </>
+                </CardHeader>
               )}
-            </CardHeader>
+            </>
           )}
           <CardBody>
-            {ipfsObject.photo !== {} && (
-              <div className="imageSelector">
-                {generateThumbs(ipfsObject)}
-              </div>
-            )}
-            <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
-            <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(NODE ID:{asset.assetClass})</h4>
-            {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
-            {currency !== "" && (
+            {!isVerifying && (
               <>
-                <h4 className={classes.cardTitle}>Status: For Sale </h4>
-                <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
-              </>
-            )}
-            {ipfsObject.text !== undefined && (
-              <>
-                <br />
-                {
-                  ipfsObject.text.Description !== undefined && (
-                    <TextField
-                      id="outlined-multiline-static"
-                      label="Description"
-                      multiline
-                      rows={4}
-                      defaultValue={ipfsObject.text.Description}
-                      variant="outlined"
-                      fullWidth
-                      disabled
-                    />
-                  )
-                }
-                {ipfsObject.text.Description === undefined && (
-                  <TextField
-                    id="outlined-multiline-static"
-                    label="Description: None"
-                    multiline
-                    rows={4}
-                    defaultValue={ipfsObject.text.Description}
-                    variant="outlined"
-                    fullWidth
-                    disabled
-                  />
+                {ipfsObject.photo !== {} && (
+                  <div className="imageSelector">
+                    {generateThumbs(ipfsObject)}
+                  </div>
                 )}
-                {/* {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
+                <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
+                <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(NODE ID:{asset.assetClass})</h4>
+                {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
+                {currency !== "" && (
+                  <>
+                    <h4 className={classes.cardTitle}>Status: For Sale </h4>
+                    <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
+                  </>
+                )}
+                {ipfsObject.text !== undefined && (
+                  <>
+                    <br />
+                    {
+                      ipfsObject.text.Description !== undefined && (
+                        <TextField
+                          id="outlined-multiline-static"
+                          label="Description"
+                          multiline
+                          rows={4}
+                          defaultValue={ipfsObject.text.Description}
+                          variant="outlined"
+                          fullWidth
+                          disabled
+                        />
+                      )
+                    }
+                    {ipfsObject.text.Description === undefined && (
+                      <TextField
+                        id="outlined-multiline-static"
+                        label="Description: None"
+                        multiline
+                        rows={4}
+                        defaultValue={ipfsObject.text.Description}
+                        variant="outlined"
+                        fullWidth
+                        disabled
+                      />
+                    )}
+                    {/* {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
                   <p className={classes.cardCategory}>
                     Text Element: {Object.values(ipfsObject.text)[0]}
                   </p>
                 )} */}
-              </>
-            )}
-            <br />
-            {/* {currency !== "" && !transaction && (
+                  </>
+                )}
+                <br />
+                {/* {currency !== "" && !transaction && (
               <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
             )}
 
             {currency !== "" && transaction && (
               <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
             )} */}
-            {recycled && !transaction && (
-              <>
-                <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
-                <Button onClick={() => { recycleAsset() }} color="info" className="MLBGradient">Recycle Asset</Button>
+                {recycled && !transaction && (
+                  <>
+                    <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
+                    <Button onClick={() => { recycleAsset() }} color="info" className="MLBGradient">Recycle Asset</Button>
+                  </>
+                )}
               </>
+            )}
+            {!ownerOf && (
+              <div>
+
+                {/* {!transaction && (
+                  <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
+                )} */}
+                {!transaction && !isVerifying &&(
+                  <Button color="info" className="MLBGradient" onClick={(e) => setIsVerifying(!isVerifying)}>Verify Rightsholder</Button>
+                )}
+                {!transaction && isVerifying &&(
+                  <Button color="info" className="MLBGradient" onClick={(e) => setIsNotVerifying()}>Back</Button>
+                )}
+                {isVerifying && (
+                  <Card>
+                    <CardHeader color="info" icon>
+                      <CardIcon color="info" className="DBGradient">
+                        <AccountBox />
+                      </CardIcon>
+                      <h4 className={classes.cardIconTitle}>Verify Owner Information</h4>
+                    </CardHeader>
+                    <CardBody>
+                      <form>
+                      <h5>Asset Selected: {ipfsObject.name}</h5>
+                        <>
+                          {!transaction && (
+                            <>
+                              <CustomInput
+                                success={loginFirstState === "success"}
+                                error={loginFirstState === "error"}
+                                labelText="First Name *"
+                                id="firstName"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setFirst(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginFirstState("success");
+                                    } else {
+                                      setloginFirstState("error");
+                                    }
+                                    setloginFirst(event.target.value);
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                labelText="Middle Name"
+                                id="middleName"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setMiddle(event.target.value.trim())
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                success={loginLastState === "success"}
+                                error={loginLastState === "error"}
+                                labelText="Last Name *"
+                                id="lastName"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setLast(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginLastState("success");
+                                    } else {
+                                      setloginLastState("error");
+                                    }
+                                    setloginLast(event.target.value);
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                success={loginIDState === "success"}
+                                error={loginIDState === "error"}
+                                labelText="ID Number *"
+                                id="idNumber"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setID(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginIDState("success");
+                                    } else {
+                                      setloginIDState("error");
+                                    }
+                                    setloginID(event.target.value);
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                success={loginPasswordState === "success"}
+                                error={loginPasswordState === "error"}
+                                labelText="Password *"
+                                id="password"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  type: "password",
+                                  onChange: event => {
+                                    setPassword(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginPasswordState("success");
+                                    } else {
+                                      setloginPasswordState("error");
+                                    }
+                                    setloginPassword(event.target.value);
+                                  },
+                                }}
+                              />
+                              <div className={classes.formCategory}>
+                                <small>*</small> Required fields
+                      </div>
+                            </>
+                          )}
+                          {transaction && (
+                            <>
+                              <CustomInput
+                                labelText={first}
+                                id="first"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={middle}
+                                id="middle"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={last}
+                                id="last"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={ID}
+                                id="ID"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={password}
+                                id="password"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  type: "password",
+                                  disabled: true
+                                }}
+                              />
+                            </>
+                          )}
+                        </>
+                        {!transaction && (
+                          <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Rightsholder Information</Button>
+                        )}
+                        {!transaction && (
+                          <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Rightsholder Information</Button>
+                        )}
+                        {transaction && (
+                          <h3>
+                            Verifying Asset<div className="lds-ellipsis"><div></div><div></div><div></div></div>
+                          </h3>
+                        )}
+                      </form>
+                    </CardBody>
+                  </Card>
+                )}
+              </div>
             )}
             {ownerOf && (
               <div>
@@ -1179,33 +1628,33 @@ export default function Search(props) {
               </div>
             )}
           </CardBody>
-            <CardFooter>
-              {!isMobile && (
-                <div className={imgClasses.stats}>
-                  IDX Hash: {asset.idxHash}
-                </div>
-              )}
-              {isMobile && (
-                <div className={imgClasses.stats}>
-                  IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
-                </div>
-              )}
+          <CardFooter>
+            {!isMobile && (
               <div className={imgClasses.stats}>
-                <RWebShare
-                  className="shareMenu"
-                  data={{
-                    text: "Check out my PRüF-verified asset!",
-                    url: URL,
-                    title: "Share Asset Link",
-                  }}
-                >
-                  <div className="printButton">
-                    <Share />
-                  </div>
-                </RWebShare>
-                <Printer />
+                IDX Hash: {asset.idxHash}
               </div>
-            </CardFooter>
+            )}
+            {isMobile && (
+              <div className={imgClasses.stats}>
+                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
+              </div>
+            )}
+            <div className={imgClasses.stats}>
+              <RWebShare
+                className="shareMenu"
+                data={{
+                  text: "Check out my PRüF-verified asset!",
+                  url: URL,
+                  title: "Share Asset Link",
+                }}
+              >
+                <div className="printButton">
+                  <Share />
+                </div>
+              </RWebShare>
+              <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
+            </div>
+          </CardFooter>
         </Card>
       )}
     </>
