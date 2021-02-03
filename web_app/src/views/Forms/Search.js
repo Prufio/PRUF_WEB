@@ -397,6 +397,7 @@ export default function Search(props) {
           icon: "success",
           button: "Close",
         });
+        window.location.href = "/#/admin/dashboard"
       });
 
     return;
