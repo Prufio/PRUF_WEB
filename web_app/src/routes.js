@@ -43,8 +43,8 @@ var dashRoutes = [
     layout: "/admin"
   },
   {
-    path: "/new-record",
-    name: "New Record",
+    path: "/new-asset",
+    name: "New Asset",
     icon: NewRecordIcon,
     component: NewRecord,
     layout: "/admin"

@@ -676,7 +676,7 @@ export default function NewRecord(props) {
                   </>
                   {!transactionActive && (
                     <div className="MLBGradientSubmit">
-                      <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Record</Button>
+                      <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Asset</Button>
                     </div>
                   )}
                   {transactionActive && (
