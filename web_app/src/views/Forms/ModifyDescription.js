@@ -16,7 +16,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
-import { AddPhotoAlternateOutlined, DeleteForever, DeleteForeverOutlined, Settings } from "@material-ui/icons";
+import { AddPhotoAlternateOutlined, DeleteForever, DeleteForeverOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import Share from "@material-ui/icons/Share";
@@ -84,11 +84,11 @@ export default function ModifyDescription(props) {
   })
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
+  }, [])
 
   let fileInput = React.createRef();
   let fileInputJSON = React.createRef();
@@ -287,7 +287,7 @@ export default function ModifyDescription(props) {
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
 
-            <Button large color="info" justIcon className="back" onClick={() => { settings() }}>
+            <Button color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
             <img src={selectedImage} alt="..." />
@@ -296,13 +296,9 @@ export default function ModifyDescription(props) {
       } else if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
-            <Tooltip
-              id="tooltip-top"
-              title="Back"
-              placement="bottom"
-              classes={{ tooltip: classes.tooltip }}
-            >
-            </Tooltip>
+            <Button color="info" justIcon className="back" onClick={() => { settings() }}>
+              <Settings />
+            </Button>
             {asset.identicon}
           </CardHeader>
         )
@@ -313,7 +309,7 @@ export default function ModifyDescription(props) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
 
-            <Button large color="info" justIcon className="back" onClick={() => { settings() }}>
+            <Button color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
             <img src={selectedImage} alt="..." />
@@ -322,13 +318,13 @@ export default function ModifyDescription(props) {
       } else if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
-            <Tooltip
+            {/* <Tooltip
               id="tooltip-top"
               title="Back"
               placement="bottom"
               classes={{ tooltip: classes.tooltip }}
             >
-            </Tooltip>
+            </Tooltip> */}
             {asset.identicon}
           </CardHeader>
         )
@@ -454,6 +450,9 @@ export default function ModifyDescription(props) {
         switch (value) {
 
           case "delete":
+            if(newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+              return swal("Cannot delete asset identicon.")
+            }
             swal("Are you sure you want to delete this image?", {
               buttons: {
                 yes: {
@@ -484,6 +483,9 @@ export default function ModifyDescription(props) {
             break;
 
           case "default":
+            if(newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+              return swal("Cannot set asset identicon as default image.")
+            }
             setDisplayImage(selectedImage, selectedKey)
             swal("Default image set!");
             break;
@@ -601,175 +603,175 @@ export default function ModifyDescription(props) {
   }
 
   return (
-    <Card>
-      <>
+    <div>
+      <Card>
         {renderImage(isMobile)}
-      </>
-      <CardBody>
+        <CardBody>
 
-        <div className="imageSelector">
-          <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
-          <input type="file" onChange={useCustomJSON} ref={fileInputJSON} className="imageInput" />
-          <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
-          {generateThumbs(newAssetInfo)}
-        </div>
-        <br />
-        {!transactionActive && (
-          <>
-            <TextField
-              onChange={(e) => { handleName(e.target.value) }}
-              id="outlined-full-width"
-              label="Name"
-              defaultValue={newAssetInfo.name}
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-            />
-            <TextField
-              onChange={(e) => { handleDescription(e.target.value) }}
-              id="outlined-multiline-static"
-              label="Description:"
-              multiline
-              rows={4}
-              defaultValue={newAssetInfo.text.Description}
-              variant="outlined"
-              fullWidth
-            />
-          </>
-        )}
-
-        {transactionActive && (
-          <>
-            <TextField
-              id="outlined-full-width"
-              label="Name"
-              defaultValue={newAssetInfo.name}
-              fullWidth
-              margin="normal"
-              disabled="true"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-            />
-            <TextField
-              disabled="true"
-              id="outlined-multiline-static"
-              label="Description:"
-              multiline
-              rows={4}
-              defaultValue={newAssetInfo.text.Description}
-              variant="outlined"
-              fullWidth
-            />
-          </>
-        )}
-        {!transactionActive && (
-          <div className={formClasses.checkboxAndRadio}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  tabIndex={-1}
-                  onClick={() => setAdvancedInput(!advancedInput)}
-                  checkedIcon={<Check className={formClasses.checkedIcon} />}
-                  icon={<Check className={formClasses.uncheckedIcon} />}
-                  classes={{
-                    checked: formClasses.checked,
-                    root: formClasses.checkRoot
-                  }}
-                />
-              }
-              classes={{
-                label: formClasses.label,
-                root: formClasses.labelRoot
-              }}
-              label="Advanced Options"
-            />
+          <div className="imageSelector">
+            <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
+            <input type="file" onChange={useCustomJSON} ref={fileInputJSON} className="imageInput" />
+            <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
+            {generateThumbs(newAssetInfo)}
           </div>
-        )}
-        {advancedInput && !transactionActive && (
-          <div>
-            <div>
-              {generateUrls(newAssetInfo)}
-              <h4 className="bold_h4"> New Url </h4><hr className="bold_hr" />
-              <CustomInput
-                success={loginURLState === "success"}
-                error={loginURLState === "error"}
-                labelText="Link Name"
-                id="urlKey"
-                inputProps={{
-                  onChange: e => {
-                    setCurrentUrlKey(e.target.value.trim())
-                    if (e.target.value !== "") {
-                      setloginURLState("success");
-                    } else {
-                      setloginURLState("error");
-                    }
-                    setloginURL(e.target.value);
-                  },
-                }}
-              />
-
+          <br />
+          {!transactionActive && (
+            <>
               <TextField
-                success={loginURLTitleState === "success"}
-                error={loginURLTitleState === "error"}
-                onChange={(e) => {
-                  setCurrentUrl(e.target.value.trim())
-                  if (urlKeyIsGood(e.target.value)) {
-                    setloginURLTitleState("success");
-                  } else {
-                    setloginURLTitleState("error");
-                  }
-                  setloginURLTitle(e.target.value);
-                }}
+                onChange={(e) => { handleName(e.target.value) }}
                 id="outlined-full-width"
-                label="Link Address"
+                label="Name"
+                defaultValue={newAssetInfo.name}
                 fullWidth
                 margin="normal"
-                placeholder="ex. 'https://foo.web/dir'"
                 InputLabelProps={{
                   shrink: true,
                 }}
                 variant="outlined"
               />
-              <Button onClick={() => { submitCurrentUrl() }} color="info" className="advancedJSONButton">Add Link</Button>
+              <TextField
+                onChange={(e) => { handleDescription(e.target.value) }}
+                id="outlined-multiline-static"
+                label="Description:"
+                multiline
+                rows={4}
+                defaultValue={newAssetInfo.text.Description}
+                variant="outlined"
+                fullWidth
+              />
+            </>
+          )}
+
+          {transactionActive && (
+            <>
+              <TextField
+                id="outlined-full-width"
+                label="Name"
+                defaultValue={newAssetInfo.name}
+                fullWidth
+                margin="normal"
+                disabled="true"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+              />
+              <TextField
+                disabled="true"
+                id="outlined-multiline-static"
+                label="Description:"
+                multiline
+                rows={4}
+                defaultValue={newAssetInfo.text.Description}
+                variant="outlined"
+                fullWidth
+              />
+            </>
+          )}
+          {!transactionActive && (
+            <div className={formClasses.checkboxAndRadio}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setAdvancedInput(!advancedInput)}
+                    checkedIcon={<Check className={formClasses.checkedIcon} />}
+                    icon={<Check className={formClasses.uncheckedIcon} />}
+                    classes={{
+                      checked: formClasses.checked,
+                      root: formClasses.checkRoot
+                    }}
+                  />
+                }
+                classes={{
+                  label: formClasses.label,
+                  root: formClasses.labelRoot
+                }}
+                label="Advanced Options"
+              />
             </div>
-            <br />
-            <h4 className="bold_h4"> Advanced JSON Options </h4><hr className="bold_hr" />
-            <div className="URL">
+          )}
+          {advancedInput && !transactionActive && (
+            <div>
+              <div>
+                {generateUrls(newAssetInfo)}
+                <h4 className="bold_h4"> New Url </h4><hr className="bold_hr" />
+                <CustomInput
+                  success={loginURLState === "success"}
+                  error={loginURLState === "error"}
+                  labelText="Link Name"
+                  id="urlKey"
+                  inputProps={{
+                    onChange: e => {
+                      setCurrentUrlKey(e.target.value.trim())
+                      if (e.target.value !== "") {
+                        setloginURLState("success");
+                      } else {
+                        setloginURLState("error");
+                      }
+                      setloginURL(e.target.value);
+                    },
+                  }}
+                />
+
+                <TextField
+                  success={loginURLTitleState === "success"}
+                  error={loginURLTitleState === "error"}
+                  onChange={(e) => {
+                    setCurrentUrl(e.target.value.trim())
+                    if (urlKeyIsGood(e.target.value)) {
+                      setloginURLTitleState("success");
+                    } else {
+                      setloginURLTitleState("error");
+                    }
+                    setloginURLTitle(e.target.value);
+                  }}
+                  id="outlined-full-width"
+                  label="Link Address"
+                  fullWidth
+                  margin="normal"
+                  placeholder="ex. 'https://foo.web/dir'"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="outlined"
+                />
+                <Button onClick={() => { submitCurrentUrl() }} color="info" className="advancedJSONButton">Add Link</Button>
+              </div>
+              <br />
+              <h4 className="bold_h4"> Advanced JSON Options </h4><hr className="bold_hr" />
+              <div className="URL">
+              </div>
+              <Button onClick={(e) => { handleJSON() }} className="advancedJSONButton">Upload Custom IPFS Data</Button>
+              <br />
+              <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
             </div>
-            <Button onClick={(e) => { handleJSON() }} className="advancedJSONButton">Upload Custom IPFS Data</Button>
-            <br />
-            <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
-          </div>
-        )}
-        {!transactionActive && (
-          <div className="MLBGradientSubmit">
-            <hr className="medium_hr" />
-            <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
-          </div>
-        )}
-        {transactionActive && (
-          <h3>
-            Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-          </h3>
-        )}
-      </CardBody>
-      <CardFooter chart>
-        {!isMobile && (
-          <div className={classes.stats}>
-            IDX Hash: {asset.idxHash}
-          </div>
-        )}
-        {isMobile && (
-          <div className={classes.stats}>
-            IDX Hash: {asset.idxHash.substring(0, 12) + "..." + assetInfo.idxHash.substring(54, 66)}
-          </div>
-        )}
-      </CardFooter>
-    </Card>
+          )}
+          {!transactionActive && (
+            <div className="MLBGradientSubmit">
+              <hr className="medium_hr" />
+              <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
+            </div>
+          )}
+          {transactionActive && (
+            <h3>
+              Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+        </CardBody>
+        <CardFooter chart>
+          {!isMobile && (
+            <div className={classes.stats}>
+              IDX Hash: {asset.idxHash}
+            </div>
+          )}
+          {isMobile && (
+            <div className={classes.stats}>
+              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + assetInfo.idxHash.substring(54, 66)}
+            </div>
+          )}
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

@@ -315,7 +315,7 @@ export default function Dashboard(props) {
           <Card>
             <>
               {!isMobile && (
-                <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHoverCustom}>
+                <CardHeader image className={classes.cardHeaderHoverCustom}>
                   {selectedAssetObj.DisplayImage.length > 1 && (
                     <>
                       <Tooltip
@@ -331,7 +331,8 @@ export default function Dashboard(props) {
                       <img src={selectedImage} alt="..." />
                     </>
                   )}
-                  {selectedAssetObj.DisplayImage.length === 0 && (<>
+                  {selectedAssetObj.DisplayImage.length === 0 && (
+                  <>
                     <Tooltip
                       id="tooltip-top"
                       title="Back"
@@ -343,7 +344,8 @@ export default function Dashboard(props) {
                       </Button>
                     </Tooltip>
                     {selectedAssetObj.identicon}
-                  </>)}
+                  </>
+                  )}
                 </CardHeader>
               )}
               {isMobile && (

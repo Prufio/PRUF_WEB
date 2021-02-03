@@ -38,13 +38,13 @@ export default function Discard(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
-  
-  if(assetInfo === undefined || assetInfo === null) {
+  }, [])
+
+  if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -133,9 +133,12 @@ export default function Discard(props) {
             </div>
           )}
           {transactionActive && (
-            <h3>
-              Discarding Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-            </h3>
+            <>
+              <h4>Asset Selected: {assetInfo.name}</h4>
+              <h3>
+                Discarding Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              </h3>
+            </>
           )}
         </form>
       </CardBody>

@@ -34,6 +34,7 @@ export default function NewRecord(props) {
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
+  const [assetClassName, setAssetClassName] = React.useState("");
   const [nameTag, setNameTag] = React.useState("");
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("")
 
@@ -89,6 +90,12 @@ export default function NewRecord(props) {
 
   const ACLogin = event => {
     setAssetClass(event.target.value);
+    if (event.target.value === "1000003") {
+      setAssetClassName("Trinkets")
+    }
+    if (event.target.value === "1000004") {
+      setAssetClassName("Personal Computers")
+    }
   };
 
   const clearForms = () => {
@@ -347,7 +354,7 @@ export default function NewRecord(props) {
               </CardHeader>
               <CardBody>
                 <form>
-                  <h4>AC Selected: {assetClass} </h4>
+                  <h4>AC Selected: {assetClassName}, ({assetClass})</h4>
                   {!transactionActive && (
                     <>
                       <CustomInput
