@@ -73,6 +73,7 @@ export default function Search(props) {
   const [URL, setURL] = React.useState("");
   const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
   const [isVerifying, setIsVerifying] = React.useState(false)
+  const [isRecycling, setIsRecycling] = React.useState(false)
   const link = document.createElement('div');
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
@@ -308,7 +309,97 @@ export default function Search(props) {
 
 
   const recycleAsset = async () => {
-    window.location.href = "/#/admin/recycle-asset"
+      if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+
+        if (loginFirst === "") {
+          setloginFirstState("error");
+        }
+        if (loginLast === "") {
+          setloginLastState("error");
+        }
+        if (loginID === "") {
+          setloginIDState("error");
+        }
+        if (loginPassword === "") {
+          setloginPasswordState("error");
+        }
+        return;
+      }
+
+    console.log("in RA")
+    let idxHash = asset.idxHash;
+    let rgtHash;
+    let rgtHashRaw;
+    let receiptVal;
+    let tempTxHash;
+
+    {
+      middle === "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+    {
+      middle !== "" && (
+        rgtHashRaw = window.web3.utils.soliditySha3(
+          String(first).replace(/\s/g, ''),
+          String(middle).replace(/\s/g, ''),
+          String(last).replace(/\s/g, ''),
+          String(ID).replace(/\s/g, ''),
+          String(password).replace(/\s/g, ''),
+        )
+      )
+    }
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+
+    console.log("idxHash", idxHash);
+    console.log("rgtHash", rgtHash);
+    console.log("addr: ", window.addr);
+    setTransaction(true)
+
+    await window.contracts.RCLR.methods
+      .recycle(idxHash, rgtHash, asset.assetClass)
+      .send({ from: window.addr })
+      .on("error", function (_error) {
+        setTransaction(false);
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        swal({
+          title: "Recycle Confirmed!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+        console.log("Verification conf")
+        setTxHash(Object.values(_error)[0].transactionHash);
+        console.log(Object.values(_error)[0].transactionHash);
+        console.log(_error)
+        setError(_error);
+      })
+      .on("receipt", (receipt) => {
+        receiptVal = receipt.events.REPORT.returnValues._msg;
+        setTransaction(false)
+        setTxHash(receipt.transactionHash)
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        swal({
+          title: "Recycle Failed!",
+          content: link,
+          icon: "success",
+          button: "Close",
+        });
+      });
+
+    return;
   }
 
   const verifyAsset = async () => {
@@ -1124,7 +1215,7 @@ export default function Search(props) {
       )}
       {moreInfo && (
         <Card>
-          {!isVerifying && (
+          {!isVerifying && !isRecycling && (
             <>
               {!isMobile && (
                 <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
@@ -1243,7 +1334,7 @@ export default function Search(props) {
             </>
           )}
           <CardBody>
-            {!isVerifying && (
+            {!isVerifying && !isRecycling &&(
               <>
                 {ipfsObject.photo !== {} && (
                   <div className="imageSelector">
@@ -1303,12 +1394,6 @@ export default function Search(props) {
             {currency !== "" && transaction && (
               <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
             )} */}
-                {recycled && !transaction && (
-                  <>
-                    <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
-                    <Button onClick={() => { recycleAsset() }} color="info" className="MLBGradient">Recycle Asset</Button>
-                  </>
-                )}
               </>
             )}
             {!ownerOf && (
@@ -1317,11 +1402,200 @@ export default function Search(props) {
                 {/* {!transaction && (
                   <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
                 )} */}
-                {!transaction && !isVerifying &&(
+                {recycled && !transaction && (
+                  <>
+                    <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
+                    <Button onClick={() => { setIsRecycling(!isRecycling) }} color="info" className="MLBGradient">Recycle Asset</Button>
+                  </>
+                )}
+                {!transaction && isRecycling &&(
+                  <Button color="info" className="MLBGradient" onClick={(e) => setIsRecycling(!isRecycling)}>Back</Button>
+                )}
+                {!transaction && !isVerifying && !recycled &&(
                   <Button color="info" className="MLBGradient" onClick={(e) => setIsVerifying(!isVerifying)}>Verify Rightsholder</Button>
                 )}
                 {!transaction && isVerifying &&(
                   <Button color="info" className="MLBGradient" onClick={(e) => setIsNotVerifying()}>Back</Button>
+                )}
+                {isRecycling && (
+                  <Card>
+                  <CardHeader color="info" icon>
+                    <CardIcon color="info" className="DBGradient">
+                      <AccountBox />
+                    </CardIcon>
+                    <h4 className={classes.cardIconTitle}>New Owner Information</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <form>
+                    <h5>Asset Selected: {ipfsObject.name}</h5>
+                      <>
+                        {!transaction && (
+                          <>
+                            <CustomInput
+                              success={loginFirstState === "success"}
+                              error={loginFirstState === "error"}
+                              labelText="First Name *"
+                              id="firstName"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                onChange: event => {
+                                  setFirst(event.target.value.trim())
+                                  if (event.target.value !== "") {
+                                    setloginFirstState("success");
+                                  } else {
+                                    setloginFirstState("error");
+                                  }
+                                  setloginFirst(event.target.value);
+                                },
+                              }}
+                            />
+                            <CustomInput
+                              labelText="Middle Name"
+                              id="middleName"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                onChange: event => {
+                                  setMiddle(event.target.value.trim())
+                                },
+                              }}
+                            />
+                            <CustomInput
+                              success={loginLastState === "success"}
+                              error={loginLastState === "error"}
+                              labelText="Last Name *"
+                              id="lastName"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                onChange: event => {
+                                  setLast(event.target.value.trim())
+                                  if (event.target.value !== "") {
+                                    setloginLastState("success");
+                                  } else {
+                                    setloginLastState("error");
+                                  }
+                                  setloginLast(event.target.value);
+                                },
+                              }}
+                            />
+                            <CustomInput
+                              success={loginIDState === "success"}
+                              error={loginIDState === "error"}
+                              labelText="ID Number *"
+                              id="idNumber"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                onChange: event => {
+                                  setID(event.target.value.trim())
+                                  if (event.target.value !== "") {
+                                    setloginIDState("success");
+                                  } else {
+                                    setloginIDState("error");
+                                  }
+                                  setloginID(event.target.value);
+                                },
+                              }}
+                            />
+                            <CustomInput
+                              success={loginPasswordState === "success"}
+                              error={loginPasswordState === "error"}
+                              labelText="Password *"
+                              id="password"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                type: "password",
+                                onChange: event => {
+                                  setPassword(event.target.value.trim())
+                                  if (event.target.value !== "") {
+                                    setloginPasswordState("success");
+                                  } else {
+                                    setloginPasswordState("error");
+                                  }
+                                  setloginPassword(event.target.value);
+                                },
+                              }}
+                            />
+                            <div className={classes.formCategory}>
+                              <small>*</small> Required fields
+                    </div>
+                          </>
+                        )}
+                        {transaction && (
+                          <>
+                            <CustomInput
+                              labelText={first}
+                              id="first"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                            <CustomInput
+                              labelText={middle}
+                              id="middle"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                            <CustomInput
+                              labelText={last}
+                              id="last"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                            <CustomInput
+                              labelText={ID}
+                              id="ID"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                            <CustomInput
+                              labelText={password}
+                              id="password"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                type: "password",
+                                disabled: true
+                              }}
+                            />
+                          </>
+                        )}
+                      </>
+                      {!transaction && (
+                        <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Verify Rightsholder Information</Button>
+                      )}
+                      {transaction && (
+                        <h3>
+                          Recycling Asset<div className="lds-ellipsis"><div></div><div></div><div></div></div>
+                        </h3>
+                      )}
+                    </form>
+                  </CardBody>
+                </Card>
                 )}
                 {isVerifying && (
                   <Card>
