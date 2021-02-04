@@ -195,6 +195,19 @@ export default function NewRecord(props) {
     _newRecord(ipfsB32, idxHash)
   }
 
+  const removeDisplayImage = () => {
+    let i = new Image();
+
+    i.onload = function(){
+        if(props.ps){
+           props.ps.element.scrollTop -= i.height
+          }
+        setDisplayImage("")
+    };
+
+    i.src = displayImage; 
+  }
+
   const checkAsset = async () => {
 
     if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
@@ -853,9 +866,10 @@ export default function NewRecord(props) {
                   {!transactionActive && displayImage === "" && (
                     <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
                   )}
-                  {!transactionActive && displayImage !== "" && (
+                  {!transactionActive && displayImage !== "" && (<>
                     <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
-                  )}
+                    <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
+                  </>)}
                   {transactionActive && description !== "" && (
                   <>
                     <CustomInput
