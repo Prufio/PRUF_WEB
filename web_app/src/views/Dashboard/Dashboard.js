@@ -230,15 +230,35 @@ export default function Dashboard(props) {
   }
 
   const showImage = (e) => {
+    var i = new Image(); 
+
+    i.onload = function(){
+      var j = new Image();
+      j.onload = function(){
+        let move = i.height-j.height
+        if(props.ps){
+          if(move < 0){
+            props.ps.element.scrollTop += move
+          } else {
+            props.ps.element.scrollTop = 0
+          }
+          console.log("Scrolled ", move)
+          //console.log(props.ps.element.scrollTop)
+        }
+        setSelectedImage(e)
+      }
+      j.src = selectedImage;
+    };
+
+    i.src = e; 
     //console.log(selectedImage)
     //console.log(e)
-    setSelectedImage(e)
   }
 
   const handleSimple = event => {
     if(props.ps){
       props.ps.element.scrollTop = 0
-      console.log(props.ps.element.scrollTop)
+      //console.log(props.ps.element.scrollTop)
     }  
     window.sentPacket = selectedAssetObj;
     //console.log(window.sentPacket);
