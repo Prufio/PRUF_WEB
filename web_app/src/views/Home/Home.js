@@ -20,28 +20,14 @@ import Patek from "../../assets/img/Patek.png";
 import Apartment from "../../assets/img/Apartment.png";
 // @material-ui/icons
 // import ContentCopy from "@material-ui/icons/ContentCopy";
-import Store from "@material-ui/icons/Store";
 // import InfoOutline from "@material-ui/icons/InfoOutline";
-import Warning from "@material-ui/icons/Warning";
 import Add from "@material-ui/icons/Add";
-import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Refresh from "@material-ui/icons/Refresh";
-import Edit from "@material-ui/icons/Edit";
-import Place from "@material-ui/icons/Place";
-import ArtTrack from "@material-ui/icons/ArtTrack";
-import Language from "@material-ui/icons/Language";
 import Category from "@material-ui/icons/Category";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
-import Table from "components/Table/Table.js";
 import Button from "components/CustomButtons/Button.js";
-import Danger from "components/Typography/Danger.js";
 import Success from "components/Typography/Success.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -49,40 +35,11 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
-} from "variables/charts";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import "../../assets/css/custom.css";
 
-import priceImage1 from "assets/img/card-2.jpeg";
-import priceImage2 from "assets/img/card-3.jpeg";
-import priceImage3 from "assets/img/card-1.jpeg";
-import { Cached, CategoryRounded } from "@material-ui/icons";
-
-const us_flag = require("assets/img/flags/US.png");
-const de_flag = require("assets/img/flags/DE.png");
-const au_flag = require("assets/img/flags/AU.png");
-const gb_flag = require("assets/img/flags/GB.png");
-const ro_flag = require("assets/img/flags/RO.png");
-const br_flag = require("assets/img/flags/BR.png");
-
-var mapData = {
-  AU: 760,
-  BR: 550,
-  CA: 120,
-  DE: 1300,
-  FR: 540,
-  GB: 690,
-  GE: 200,
-  IN: 200,
-  RO: 600,
-  RU: 300,
-  US: 2920
-};
+import { Cached } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -97,6 +54,7 @@ export default function Home(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [rootName, setRootName] = React.useState("");
   const [txHash, setTxHash] = React.useState("");
+  const [ACPrice, setACPrice] = React.useState("");
   const link = document.createElement('div')
 
   const [deposit, setDeposit] = React.useState(10000);
@@ -138,43 +96,6 @@ export default function Home(props) {
     }
   };
 
-  // const ACmenu = async () => {
-  //     let temp;
-  //     const self = this;
-  //     await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
-  //         function (_error, _result) {
-  //             if (_error) {
-  //               return (console.log("IN ERROR IN ERROR IN ERROR"))
-  //             } 
-  //             else {
-  //               self.setState({currentACPrice: window.web3.utils.fromWei(Object.values(_result)[1])})
-  //               return temp = window.web3.utils.fromWei(Object.values(_result)[1])
-  //             }
-
-  //           }
-  //     );
-
-  //     console.log(temp)
-
-  //     if (this.state.ACmenu === false) {
-  //         this.setState({ ACmenu: true })
-  //     }
-  //     else {
-  //         this.setState({ ACmenu: false })
-  //     }
-
-  //     await window.contracts.AC_TKN.methods.totalSupply().call(
-  //         function (_error, _result) {
-  //             if (_error) {
-  //               return (console.log("IN ERROR IN ERROR IN ERROR"))
-  //             } 
-  //             else {
-  //               self.setState({totalSupply: _result})
-  //             }
-
-  //           }
-  //     );
-  // }
   const clearPRuFForm = () => {
     setDeposit("");
 
@@ -400,7 +321,7 @@ export default function Home(props) {
             <CardBody>
               <form>
                 <h4>Conversion Rate: (ü100000/KETH1)</h4>
-                <h5>Minimum Purchase amount is ü10000(KETH0.1)</h5>
+                <h7>Minimum Purchase amount is ü10000(KETH0.1)</h7>
                 {!prufTransactionActive && (
                   <>
                     <CustomInput
@@ -464,7 +385,8 @@ export default function Home(props) {
               <CardIcon className="headerIconBack">
                 <Category />
               </CardIcon>
-              <h4 className={classes.cardIconTitle}>AC Node Faucet</h4>
+              <h4 className={classes.cardIconTitle}>Asset Class Node Faucet</h4>
+              <h5 className={classes.cardIconTitle}>Current AC Price: ü{props.currentACPrice}</h5>
             </CardHeader>
             <CardBody>
               <form>
