@@ -32,6 +32,7 @@ export default function ModifyStatus(props) {
   const [txHash, setTxHash] = React.useState("");
 
   const [status, setStatus] = React.useState("");
+  const [statusName, setStatusName] = React.useState("");
 
   const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
 
@@ -42,13 +43,13 @@ export default function ModifyStatus(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
-  
-  if(assetInfo === undefined || assetInfo === null) {
+  }, [])
+
+  if (assetInfo === undefined || assetInfo === null) {
     return window.location.href = "/#/admin/home"
   }
 
@@ -65,27 +66,33 @@ export default function ModifyStatus(props) {
 
   const handleSimple = event => {
     let status;
+    let statusName;
     let e = event.target.value
 
     switch (e) {
       case "transferrable": {
         status = Number(51);
+        statusName = "Transferrable";
         break
       }
       case "nontransferrable": {
         status = Number(52);
+        statusName = "Non-Transferrable";
         break
       }
       case "stolen": {
         status = Number(53);
+        statusName = "Stolen";
         break
       }
       case "lost": {
         status = Number(54);
+        statusName = "Lost";
         break
       }
       case "discardable": {
         status = Number(59);
+        statusName = "Discardable";
         break
       }
       default: {
@@ -94,7 +101,7 @@ export default function ModifyStatus(props) {
       }
     }
 
-    return setStatus(status);
+    return setStatus(status), setStatusName(statusName);
   };
 
   const modifyStatus = async () => { //export held asset
@@ -219,83 +226,105 @@ export default function ModifyStatus(props) {
         <form>
           <h4>Asset Selected: {assetInfo.name}</h4>
           <h4>Current Status: {assetInfo.status}</h4>
-          <FormControl
-            fullWidth
-            className={classes.selectFormControl}
-          >
-            <InputLabel
+          {!transactionActive && (
+            <FormControl
+              fullWidth
+              className={classes.selectFormControl}
             >
-              Please Select Status
-                        </InputLabel>
-            <Select
-              MenuProps={{
-                className: classes.selectMenu
-              }}
-              classes={{
-                select: classes.select
-              }}
-              value={simpleSelect}
-              onChange={handleSimple}
-              inputProps={{
-                name: "simpleSelect",
-                id: "simple-select"
-              }}
+              {status === "" && (
+                <InputLabel
+                >
+                  Please Select Status
+                </InputLabel>
+              )}
+              {status !== "" && (
+                <InputLabel
+                >
+                  {statusName}
+                </InputLabel>
+              )}
+              <Select
+                MenuProps={{
+                  className: classes.selectMenu
+                }}
+                classes={{
+                  select: classes.select
+                }}
+                value={simpleSelect}
+                onChange={handleSimple}
+                inputProps={{
+                  name: "simpleSelect",
+                  id: "simple-select"
+                }}
+              >
+                <MenuItem
+                  disabled
+                  classes={{
+                    root: classes.selectMenuItem
+                  }}
+                >
+                  Please Select Element
+                          </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="transferrable"
+                >
+                  Transferrable
+                          </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="nontransferrable"
+                >
+                  Non-Transferrable
+                          </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="stolen"
+                >
+                  Stolen
+                          </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="lost"
+                >
+                  Lost
+                          </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="discardable"
+                >
+                  Discardable
+                          </MenuItem>
+              </Select>
+            </FormControl>
+          )}
+          {transactionActive && (
+            <FormControl
+              fullWidth
+              className={classes.selectFormControl}
+              disabled
             >
-              <MenuItem
-                disabled
-                classes={{
-                  root: classes.selectMenuItem
-                }}
+              <InputLabel
               >
-                Please Select Element
-                          </MenuItem>
-              <MenuItem
-                classes={{
-                  root: classes.selectMenuItem,
-                  selected: classes.selectMenuItemSelected
-                }}
-                value="transferrable"
-              >
-                Transferrable
-                          </MenuItem>
-              <MenuItem
-                classes={{
-                  root: classes.selectMenuItem,
-                  selected: classes.selectMenuItemSelected
-                }}
-                value="nontransferrable"
-              >
-                Non-Transferrable
-                          </MenuItem>
-              <MenuItem
-                classes={{
-                  root: classes.selectMenuItem,
-                  selected: classes.selectMenuItemSelected
-                }}
-                value="stolen"
-              >
-                Stolen
-                          </MenuItem>
-              <MenuItem
-                classes={{
-                  root: classes.selectMenuItem,
-                  selected: classes.selectMenuItemSelected
-                }}
-                value="lost"
-              >
-                Lost
-                          </MenuItem>
-              <MenuItem
-                classes={{
-                  root: classes.selectMenuItem,
-                  selected: classes.selectMenuItemSelected
-                }}
-                value="discardable"
-              >
-                Discardable
-                          </MenuItem>
-            </Select>
-          </FormControl>
+                {statusName}
+              </InputLabel>
+            </FormControl>
+          )}
           {!transactionActive && status !== "" && (
             <div className="MLBGradientSubmit">
               <Button color="info" className="MLBGradient" onClick={() => modifyStatus()}>Modify Status</Button>
