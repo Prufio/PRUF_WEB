@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import React from "react";
 import PropTypes from "prop-types";
+import "../../assets/css/custom.css";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
@@ -28,38 +29,38 @@ var ps;
 
 const getPrufColor = (type, addr) => {
   let color;
-  switch(type){
-    case "primary" : {
-      if(isNaN(addr.charAt(8))){
+  switch (type) {
+    case "primary": {
+      if (isNaN(addr.charAt(8))) {
         color = "#005480"
       }
-      else{
+      else {
         color = "#2b00ff"
       }
       break
     }
 
-    case "secondary" : {
-      if(isNaN(addr.charAt(10))){
+    case "secondary": {
+      if (isNaN(addr.charAt(10))) {
         color = "#00a8ff"
       }
-      else{
+      else {
         color = "#017ec0"
       }
-    break
+      break
     }
 
-    case "analogous" : {
-      if(isNaN(addr.charAt(12))){
+    case "analogous": {
+      if (isNaN(addr.charAt(12))) {
         color = "#00ff55"
       }
-      else{
+      else {
         color = "#ff1500"
       }
       break
     }
 
-    default : {break}
+    default: { break }
   }
 
   return color
@@ -393,62 +394,37 @@ class Sidebar extends React.Component {
       });
     var user = (
       <div className={userWrapperClass}>
-        <div className={photo}>
-        {addr === undefined && (
-        <img src={pruftoken} alt="logo" className={classes.img} />
+        <div className="addressIcon">
+          {addr === undefined && (
+            <img src={pruftoken} alt="logo" />
           )}
           {addr === "" && (
-        <img src={pruftoken} alt="logo" className={classes.img} />
+            <img src={pruftoken} alt="logo" />
           )}
-        {addr !== undefined && addr !== "" &&(
-        <Blockies scale={4} color={getPrufColor("primary",addr)} bgColor={getPrufColor("secondary",addr)} spotColor={getPrufColor("analogous",addr)} size={15} seed={addr} className={classes.img}/>
+          {addr !== undefined && addr !== "" && (
+            <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
           )}
         </div>
-        <List className={classes.list}>
-          <ListItem className={classes.item + " " + classes.userItem}>
-            <NavLink
-              to={"#"}
-              className={classes.itemLink + " " + classes.userCollapseButton}
-              onClick={() => this.openCollapse("openAvatar")}
-            > {addr !== undefined && (
-              <ListItemText
-                primary={addr.substring(0,8) + "..." + addr.substring(34,42)}
-                secondary={
-                  <b
-                    className={
-                      caret +
-                      " " +
-                      classes.userCaret +
-                      " " +
-                      (this.state.openAvatar ? classes.caretActive : "")
-                    }
-                  />
-                }
-                disableTypography={true}
-                className={itemText + " " + classes.userItemText}
-              />
-              )}
-              {addr === undefined && (
-                <ListItemText
-                primary={"User address unavailable"}
-                secondary={
-                  <b
-                    className={
-                      caret +
-                      " " +
-                      classes.userCaret +
-                      " " +
-                      (this.state.openAvatar ? classes.caretActive : "")
-                    }
-                  />
-                }
-                disableTypography={true}
-                className={itemText + " " + classes.userItemText}
-              />
-              )}
-              
-            </NavLink>
-            <Collapse in={this.state.openAvatar} unmountOnExit>
+        {/* <List className={classes.list}>
+          <ListItem className={classes.item + " " + classes.userItem}> */}
+        <NavLink
+          to={"#"}
+          className={classes.itemLink}
+        // onClick={() => this.openCollapse("openAvatar")}
+        >
+          {addr !== undefined && (
+            <h5 className="addressText">
+              {addr.substring(0, 8) + "..." + addr.substring(34, 42)}
+            </h5>
+          )}
+          {addr === undefined && (
+            <h5 className="addressText">
+              User Address Unavailable
+            </h5>
+          )}
+
+        </NavLink>
+        {/* <Collapse in={this.state.openAvatar} unmountOnExit>
               <List className={classes.list + " " + classes.collapseList}>
                 <ListItem className={classes.collapseItem}>
                   <NavLink
@@ -468,9 +444,9 @@ class Sidebar extends React.Component {
                   </NavLink>
                 </ListItem>
               </List>
-            </Collapse>
-          </ListItem>
-        </List>
+            </Collapse> */}
+        {/* </ListItem> */}
+        {/* </List> */}
       </div>
     );
     var links = (
