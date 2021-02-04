@@ -66,6 +66,8 @@ export default function ModifyDescription(props) {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   const link = document.createElement('div');
   const image = "photo", text = "text", url = "urls";
+  const maxImageSize = 500;
+  const resizeImg = require('resize-img');
   const fs = require('fs');
 
   React.useEffect(() => {
@@ -168,10 +170,10 @@ export default function ModifyDescription(props) {
   const submitChanges = () => {
     let payload = JSON.stringify(newAssetInfo, null, 5)
     let fileSize = Buffer.byteLength(payload, 'utf8')
-    if (fileSize > 10000000) {
+    if (fileSize > 5000000) {
       return (
         swal({
-          title: "Document size exceeds 10 MB limit! (" + String(fileSize) + "Bytes)",
+          title: "Document size exceeds 5 MB limit! (" + String(fileSize) + "Bytes)",
           content: link,
           icon: "warning",
           button: "Close",
@@ -336,11 +338,12 @@ export default function ModifyDescription(props) {
     }
   }
 
-  const addImage = async (buffer, fileName, iteration) => {
+  const addImage = async (prefix, buffer, fileName, iteration) => {
     if (!buffer) return;
     if (!iteration) {
       iteration = 1;
     }
+
     let tempObj = newAssetInfo;
     if (tempObj.photo[fileName]) {
       //console.log("Already exists, adding copy")
@@ -353,14 +356,53 @@ export default function ModifyDescription(props) {
         fileName = tempFN
       }
     }
-    tempObj.photo[fileName] = buffer;
-    //console.log(tempObj);
-    setNewAssetInfo(tempObj);
-    if (selectedImage === "") {
-      setSelectedImage(tempObj.photo[fileName])
-      setSelectedKey(fileName)
+
+    let tempBuffer = buffer;
+
+    var i = new Image(); 
+
+    i.onload = function(){
+      console.log(i.height, i.width);
+      if(i.height > maxImageSize || i.width > maxImageSize){
+        let newH, newW, ar;
+        if(i.width>i.height){
+          ar = i.height/i.width;
+          newW = maxImageSize;
+          newH = ar*newW ;
+        }
+        else{
+          ar = i.width/i.height;
+          newH = maxImageSize;
+          newW = ar*newH;
+        }
+        console.log("Resizing image... ");
+        resizeImg(tempBuffer, {height: newH, width:newW, format: "jpg"}).then((e)=>{
+          console.log("Resized to ",newH,"x",newW);
+          tempObj.photo[fileName] = prefix + base64.encode(e);
+          setNewAssetInfo(tempObj);
+          if (selectedImage === "") {
+            setSelectedImage(tempObj.photo[fileName]);
+            setSelectedKey(fileName);
+          }
+          return forceUpdate();
+        })
+      }
+      else{
+        resizeImg(tempBuffer, {height: i.height, width:i.width, format: "jpg"}).then((e)=>{
+          console.log("Converted to .JPG");
+          tempObj.photo[fileName] = prefix + base64.encode(e);
+          setNewAssetInfo(tempObj);
+          if (selectedImage === "") {
+            setSelectedImage(tempObj.photo[fileName])
+            setSelectedKey(fileName)
+          }
+          return forceUpdate();
+        })
+      };
     }
-    return forceUpdate()
+
+    i.src = prefix + base64.encode(tempBuffer)
+
   }
 
   const uploadImage = (e) => {
@@ -375,8 +417,8 @@ export default function ModifyDescription(props) {
       const fileName = file.name;
       const prefix = `data:${fileType};base64,`;
       const buf = Buffer(reader.result);
-      const base64buf = prefix + base64.encode(buf);
-      addImage(base64buf, fileName)
+      //const base64buf = prefix + base64.encode(buf);
+      addImage(prefix, buf, fileName)
     }
     //const photo = document.getElementById("photo");
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
@@ -610,7 +652,7 @@ export default function ModifyDescription(props) {
         <div className="imageSelector">
           <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
           <input type="file" onChange={useCustomJSON} ref={fileInputJSON} className="imageInput" />
-          <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
+          <div className="imageSelectorPlus" onClick={() => { handleClick() }}><AddPhotoAlternateOutlined /></div>
           {generateThumbs(newAssetInfo)}
         </div>
         <br />

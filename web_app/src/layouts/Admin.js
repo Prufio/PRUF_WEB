@@ -305,7 +305,7 @@ export default function Dashboard(props) {
       });
       document.body.style.overflow = "hidden";
       setSps(ps);
-      console.log(ps);
+      //console.log(ps);
     }
     window.addEventListener("resize", resizeFunction);
 

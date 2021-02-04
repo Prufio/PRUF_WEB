@@ -1401,15 +1401,18 @@ function buildWindowUtils() {
   }
 
   const _addIPFSJSONObject = async (payload) => {
+    let temp;
     console.log("Uploading file to IPFS...");
     await window.ipfs.add(JSON.stringify(payload), (error, hash) => {
       if (error) {
         console.log("Something went wrong. Unable to upload to ipfs");
       } else {
         console.log("uploaded at hash: ", hash);
-        return window.rawIPFSHashTemp = hash;
+        return temp = hash;
       }
-    });
+    })
+    
+    return temp;
   }
 
   const _getIPFSJSONObject = async (lookup) => {
