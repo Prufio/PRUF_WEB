@@ -113,6 +113,11 @@ body {
     height: 55px;
 }
 
+.IconFaucet {
+    width: 35px;
+    height: 35px;
+}
+
 .inlineDelete {
   display: flex;
   flex-direction: row;
