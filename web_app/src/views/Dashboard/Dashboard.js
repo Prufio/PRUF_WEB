@@ -57,12 +57,12 @@ export default function Dashboard(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   const moreInfo = (e) => {
-    console.log(props.ps);
+    //console.log(props.ps);
     if(props.ps){
-      console.log(props.ps)
+      //console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
-    console.log(props.ps.element.scrollTop)
+    //console.log(props.ps.element.scrollTop)
     const url = String(baseURL) + String(e.idxHash)
 
     if (e === "back") { setSelectedAssetObj({}); return setViewAsset(false); }

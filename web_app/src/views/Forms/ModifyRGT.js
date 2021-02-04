@@ -99,7 +99,6 @@ export default function ModifyRGT(props) {
     )
 
     var rgtHash = window.web3.utils.soliditySha3(assetInfo.idxHash, rgtHashRaw);
-
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     let tempTxHash;

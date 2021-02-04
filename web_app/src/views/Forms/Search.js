@@ -356,6 +356,7 @@ export default function Search(props) {
     }
 
     rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
@@ -449,6 +450,7 @@ export default function Search(props) {
     }
 
     rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
@@ -492,6 +494,7 @@ export default function Search(props) {
   }
 
   const blockchainVerifyAsset = async () => {
+    if(!window.ethereum){return swal({title: "Connect to an ethereum provider to use this functionality!", button: "Close",})}
     if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
       if (loginFirst === "") {
@@ -538,6 +541,7 @@ export default function Search(props) {
     }
 
     rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);

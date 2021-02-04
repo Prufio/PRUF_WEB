@@ -1,5 +1,6 @@
 import React from "react";
 import swal from 'sweetalert';
+import base64 from 'base64-arraybuffer';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -15,6 +16,7 @@ import AccountBox from "@material-ui/icons/AccountBox";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -35,7 +37,6 @@ export default function NewRecord(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
   const [assetClassName, setAssetClassName] = React.useState("");
-  const [nameTag, setNameTag] = React.useState("");
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("")
 
   const [assetName, setAssetName] = React.useState("");
@@ -46,7 +47,9 @@ export default function NewRecord(props) {
 
 
   // const [descriptionName, setDescriptionName] = React.useState("");
+  const [nameTag, setNameTag] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [displayImage, setDisplayImage] = React.useState("");
 
   const [loginManufacturer, setloginManufacturer] = React.useState("");
   const [loginType, setloginType] = React.useState("");
@@ -79,7 +82,12 @@ export default function NewRecord(props) {
 
   const [txHash, setTxHash] = React.useState("");
 
-  const link = document.createElement('div')
+  const maxImageSize = 500;
+
+  const link = document.createElement('div');
+  const resizeImg = require('resize-img');
+
+  let fileInput = React.createRef();
 
   React.useEffect(() => {
     if(props.ps){
@@ -96,6 +104,10 @@ export default function NewRecord(props) {
     if (event.target.value === "1000004") {
       setAssetClassName("Personal Computers")
     }
+  };
+
+  const handleClick = () => {
+    fileInput.current.click();
   };
 
   const clearForms = () => {
@@ -121,6 +133,67 @@ export default function NewRecord(props) {
     setAssetClass("");
     console.log("clearing forms")
   };
+
+  const addImage = async (prefix, buffer) => {
+    if (!buffer) return;
+    console.log("adding image...")
+    let tempBuffer = buffer;
+    let src = prefix+base64.encode(tempBuffer);
+
+    var i = new Image(); 
+
+    i.onload = function(){
+      console.log(i.height, i.width);
+      if(i.height > maxImageSize || i.width > maxImageSize){
+        let newH, newW, ar;
+        ar = i.width/i.height;
+        newH = maxImageSize;
+        newW = ar*newH;
+        newH = newH;
+        console.log("Resizing image... ");
+        resizeImg(tempBuffer, {height: newH, width:newW, format: "jpg"}).then((e)=>{
+          console.log("Resized to ",newH,"x",newW);
+          setDisplayImage(prefix + base64.encode(e));
+        })
+      }
+      else{
+        resizeImg(tempBuffer, {height: i.height, width:i.width, format: "jpg"}).then((e)=>{
+          console.log("Converted to .JPG");
+          setDisplayImage(prefix + base64.encode(e));
+        });
+      }
+    };
+
+    i.src = src;
+  }
+
+  const uploadImage = (e) => {
+    e.preventDefault()
+    if (!e.target.files[0]) return
+    let file;
+    file = e.target.files[0]
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      console.log(file)
+      if (!file.type.includes("image")) {
+        return swal({
+        title: "Unsupported File Type",
+        button: "Close"})
+      }
+      const fileType = file.type;
+      const prefix = `data:${fileType};base64,`;
+      const buf = Buffer(reader.result);
+      //const base64buf = prefix + base64.encode(buf);
+      addImage(prefix, buf)
+    }
+    //const photo = document.getElementById("photo");
+    reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
+  }
+
+  const handleHash = (ipfsHash, idxHash) => {
+    let ipfsB32 = window.utils.getBytes32FromIPFSHash(String(ipfsHash));
+    _newRecord(ipfsB32, idxHash)
+  }
 
   const checkAsset = async () => {
 
@@ -164,15 +237,19 @@ export default function NewRecord(props) {
     setShowHelp(false);
 
     if (nameTag !== "") {
-      ipfsObj = { photo: {}, text: {}, name: String(nameTag) }
+      ipfsObj = { photo: {}, text: {}, urls:{}, name: String(nameTag) }
     }
 
     else {
-      ipfsObj = { photo: {}, text: {}, name: "" }
+      ipfsObj = { photo: {}, text: {}, urls:{}, name: "" }
     }
 
     if (description !== "") {
       ipfsObj.text.Description = description;
+    }
+
+    if (displayImage !== "") {
+      ipfsObj.photo.DisplayImage = displayImage;
     }
 
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
@@ -181,25 +258,46 @@ export default function NewRecord(props) {
       return
     }
 
-    else {
-      setSubmittedIdxHash(idxHash)
-      await window.utils.addIPFSJSONObject(ipfsObj)
-      setTimeout(_newRecord, 3000)
+    setSubmittedIdxHash(idxHash)
+
+    let payload = JSON.stringify(ipfsObj);
+    let fileSize = Buffer.byteLength(payload, 'utf8')
+    if (fileSize > 5000000) {
+      return (
+        swal({
+          title: "Document size exceeds 5 MB limit! (" + String(fileSize) + "Bytes)",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        })
+      )
     }
+
+    await window.ipfs.add(payload, (error, hash) => {
+      if (error) {
+        console.log("Something went wrong. Unable to upload to ipfs");
+      } else {
+        console.log("uploaded at hash: ", hash);
+        handleHash(hash, idxHash);
+      }
+    })
+
+    //await window.utils.addIPFSJSONObject(ipfsObj).then((e)=>{console.log(e); handleHash(e, idxHash)})
+    //setTimeout(_newRecord, 2000)
   }
 
-  const _newRecord = async () => { //create a new asset record
+  const _newRecord = async (ipfs, idx) => { //create a new asset record
     //console.log("assetClass: ", assetClass)
     let tempTxHash;
-    var ipfsHash = window.utils.getBytes32FromIPFSHash(String(window.rawIPFSHashTemp));
+    var ipfsHash = ipfs;
     var rgtHashRaw, idxHash;
 
-    idxHash = window.web3.utils.soliditySha3(
+    idxHash = idx; /* window.web3.utils.soliditySha3(
       String(type).replace(/\s/g, ''),
       String(manufacturer).replace(/\s/g, ''),
       String(model).replace(/\s/g, ''),
       String(serial).replace(/\s/g, ''),
-    )
+    ) */
 
     rgtHashRaw = window.web3.utils.soliditySha3(
       String(first).replace(/\s/g, ''),
@@ -210,7 +308,6 @@ export default function NewRecord(props) {
     )
 
     var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
-
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     setShowHelp(false);
@@ -224,7 +321,7 @@ export default function NewRecord(props) {
     console.log("New rgtHash", rgtHash);
     console.log("addr: ", props.addr);
     console.log("AC: ", assetClass);
-    console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+    //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
     console.log("IPFS bytes32: ", ipfsHash);
 
     await window.contracts.APP_NC.methods
@@ -277,6 +374,7 @@ export default function NewRecord(props) {
   const classes = useStyles();
   return (
     <GridContainer>
+      <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
       {assetClass === "" && (
         <Card>
           <CardHeader color="info" icon>
@@ -701,8 +799,15 @@ export default function NewRecord(props) {
                 <CardIcon color="info" className="DBGradient">
                   <Description />
                 </CardIcon>
-                <h4 className={classes.cardIconTitle}>Asset Description (optional)</h4>
+                <h4 className={classes.cardIconTitle}>Extended Asset Information (optional)</h4>
                 {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
+                {displayImage !== "" && (<>
+                    <br/>
+                    <br/>
+                    <CardHeader image className={classes.cardHeaderHoverCustom}>
+                      <img src={displayImage}/>
+                    </CardHeader>
+                </>)}
               </CardHeader>
               <CardBody>
                 <form>
@@ -727,33 +832,44 @@ export default function NewRecord(props) {
                       },
                     }}
                   /> */}
+
+                  {/* <CardHeader image className={classes.cardHeaderHoverCustom}>
+                  
+                  </CardHeader> */}
+
                   {!transactionActive && (
-                    <CustomInput
-                      labelText="Description"
-                      id="description"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        onChange: event => {
-                          setDescription(event.target.value.trim())
-                        },
-                      }}
-                    />
+                    <TextField
+                    onChange={(e) => { setDescription(e.target.value) }}
+                    id="outlined-multiline-static"
+                    label="Asset Description:"
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    fullWidth
+                  />
+                  )}
+                  {!transactionActive && displayImage === "" && (
+                    <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
+                  )}
+                  {!transactionActive && displayImage !== "" && (
+                    <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                   )}
                   {/* <br /> */}
                   {/* <Add /> */}
                   {transactionActive && description !== "" && (
-                    <CustomInput
-                      labelText={description}
-                      id="first"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true
-                      }}
-                    />
+                    <TextField
+                    id="outlined-multiline-static"
+                    label="Asset Description:"
+                    multiline
+                    disabled
+                    placeHolder={description}
+                    rows={4}
+                    variant="outlined"
+                    fullWidth
+                  />
+                  )}
+                  {transactionActive && displayImage !== "" && (
+                    <Button disabled> ... </Button>
                   )}
                 </form>
               </CardBody>

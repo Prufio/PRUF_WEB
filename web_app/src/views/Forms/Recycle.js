@@ -260,6 +260,7 @@ export default function Recycle(props) {
     }
 
     rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
+    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
