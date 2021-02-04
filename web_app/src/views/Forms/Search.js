@@ -1514,7 +1514,7 @@ export default function Search(props) {
                                 success={loginPasswordState === "success"}
                                 error={loginPasswordState === "error"}
                                 labelText="Password *"
-                                id="password"
+                                id="ownerpassword"
                                 formControlProps={{
                                   fullWidth: true
                                 }}
@@ -1580,7 +1580,7 @@ export default function Search(props) {
                               />
                               <CustomInput
                                 labelText={password}
-                                id="password"
+                                id="ownerpassword"
                                 formControlProps={{
                                   fullWidth: true
                                 }}
@@ -1694,7 +1694,7 @@ export default function Search(props) {
                                 success={loginPasswordState === "success"}
                                 error={loginPasswordState === "error"}
                                 labelText="Password *"
-                                id="password"
+                                id="ownerpassword"
                                 formControlProps={{
                                   fullWidth: true
                                 }}
@@ -1760,7 +1760,7 @@ export default function Search(props) {
                               />
                               <CustomInput
                                 labelText={password}
-                                id="password"
+                                id="ownerpassword"
                                 formControlProps={{
                                   fullWidth: true
                                 }}

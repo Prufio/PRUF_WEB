@@ -456,18 +456,6 @@ export default function NewRecord(props) {
                   {!transactionActive && (
                     <>
                       <CustomInput
-                        labelText="Asset Name"
-                        id="assetName"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event => {
-                            setNameTag(event.target.value.trim())
-                          },
-                        }}
-                      />
-                      <CustomInput
                         success={loginManufacturerState === "success"}
                         error={loginManufacturerState === "error"}
                         labelText="Manufacturer *"
@@ -701,7 +689,7 @@ export default function NewRecord(props) {
                           success={loginPasswordState === "success"}
                           error={loginPasswordState === "error"}
                           labelText="Password *"
-                          id="password"
+                          id="ownerpassword"
                           formControlProps={{
                             fullWidth: true
                           }}
@@ -767,7 +755,7 @@ export default function NewRecord(props) {
                         />
                         <CustomInput
                           labelText={password}
-                          id="password"
+                          id="ownerpassword"
                           formControlProps={{
                             fullWidth: true
                           }}
@@ -838,6 +826,19 @@ export default function NewRecord(props) {
                   </CardHeader> */}
 
                   {!transactionActive && (
+                  <>
+                    <CustomInput
+                    labelText="Asset Name"
+                    id="assetName"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setNameTag(event.target.value.trim())
+                      },
+                    }}
+                  />
                     <TextField
                     onChange={(e) => { setDescription(e.target.value) }}
                     id="outlined-multiline-static"
@@ -847,6 +848,7 @@ export default function NewRecord(props) {
                     variant="outlined"
                     fullWidth
                   />
+                  </>
                   )}
                   {!transactionActive && displayImage === "" && (
                     <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
@@ -854,9 +856,21 @@ export default function NewRecord(props) {
                   {!transactionActive && displayImage !== "" && (
                     <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                   )}
-                  {/* <br /> */}
-                  {/* <Add /> */}
                   {transactionActive && description !== "" && (
+                  <>
+                    <CustomInput
+                    labelText="Asset Name"
+                    id="assetName"
+                    disabled
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setNameTag(event.target.value.trim())
+                      },
+                    }}
+                  />
                     <TextField
                     id="outlined-multiline-static"
                     label="Asset Description:"
@@ -867,6 +881,7 @@ export default function NewRecord(props) {
                     variant="outlined"
                     fullWidth
                   />
+                  </>
                   )}
                   {transactionActive && displayImage !== "" && (
                     <Button disabled> ... </Button>

@@ -805,7 +805,7 @@ export default function Recycle(props) {
                           success={loginPasswordState === "success"}
                           error={loginPasswordState === "error"}
                           labelText="Password *"
-                          id="password"
+                          id="ownerpassword"
                           formControlProps={{
                             fullWidth: true
                           }}
@@ -871,7 +871,7 @@ export default function Recycle(props) {
                         />
                         <CustomInput
                           labelText={password}
-                          id="password"
+                          id="ownerpassword"
                           formControlProps={{
                             fullWidth: true
                           }}

@@ -242,7 +242,7 @@ export default function ModifyRGT(props) {
                   success={loginPasswordState === "success"}
                   error={loginPasswordState === "error"}
                   labelText="Password *"
-                  id="password"
+                  id="ownerpassword"
                   formControlProps={{
                     fullWidth: true
                   }}
@@ -308,7 +308,7 @@ export default function ModifyRGT(props) {
                 />
                 <CustomInput
                   labelText={password}
-                  id="password"
+                  id="ownerpassword"
                   formControlProps={{
                     fullWidth: true
                   }}
