@@ -15,6 +15,11 @@ const dashboardStyle = {
     marginTop: "0px",
     marginBottom: "3px"
   },
+  cardHeaderHoverCustom: {
+    transition: "all 300ms cubic-bezier(0.34, 1.61, 0.7, 1)",
+    width: "calc(40% - 30px)",
+    height: "calc(40% - 30px)",
+  },
   cardIconTitle: {
     ...cardTitle,
     marginTop: "15px",
