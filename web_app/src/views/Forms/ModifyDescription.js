@@ -640,8 +640,28 @@ export default function ModifyDescription(props) {
     //console.log(img, key)
     //console.log(selectedImage)
     //console.log(img)
-    setSelectedImage(img)
-    setSelectedKey(key)
+    var i = new Image(); 
+
+    i.onload = function(){
+      var j = new Image();
+      j.onload = function(){
+        let move = i.height-j.height
+        if(props.ps){
+          if(move < 0){
+            props.ps.element.scrollTop += move
+          } else {
+            props.ps.element.scrollTop = 0
+          }
+          console.log("Scrolled ", move)
+          //console.log(props.ps.element.scrollTop)
+        }
+        setSelectedImage(img)
+        setSelectedKey(key)
+      }
+      j.src = selectedImage;
+    };
+
+    i.src = img; 
   }
 
   return (
