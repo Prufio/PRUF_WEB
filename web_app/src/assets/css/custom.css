@@ -599,3 +599,22 @@ cursor:pointer;
   cursor: pointer;
   color: rgb(141, 129, 129);
 }
+
+.addressText {
+  font-size: 17px;
+  top: -15px !important;
+}
+
+.addressIcon {
+  float: left;
+  width: 34px;
+  height: 34px;
+  z-index: 5;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 42%), 0 4px 25px 0px rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+  transition: all 300ms linear;
+  margin-left: 23px;
+  margin-right: 11px;
+  border-radius: 50%;
+  margin-top: 15px;
+}

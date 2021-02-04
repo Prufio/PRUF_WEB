@@ -69,6 +69,14 @@ export default function Home(props) {
   const [loginACName, setloginACName] = React.useState("");
   const [loginACNameState, setloginACNameState] = React.useState("");
 
+
+  React.useEffect(() => {
+    if (props.ps) {
+      props.ps.element.scrollTop = 0;
+      console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+  }, [])
+  
   const rootLogin = event => {
     setRoot(event.target.value)
     if (event.target.value !== "") {
