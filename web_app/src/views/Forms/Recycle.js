@@ -28,6 +28,7 @@ import CardBody from "components/Card/CardBody.js";
 import Checkbox from "@material-ui/core/Checkbox";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
+import { DashboardOutlined, DashboardRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -387,7 +388,7 @@ export default function Recycle(props) {
               <Card>
                 <CardHeader color="info" icon>
                   <CardIcon color="info" className="DBGradient">
-                    <Category />
+                    <DashboardRounded />
                   </CardIcon>
                   <h4 className={classes.cardIconTitle}>Asset Information</h4>
                 </CardHeader>
@@ -659,7 +660,7 @@ export default function Recycle(props) {
               <Card>
                 <CardHeader color="info" icon>
                   <CardIcon color="info" className="DBGradient">
-                    <Category />
+                    <DashboardRounded />
                   </CardIcon>
                   <h4 className={classes.cardIconTitle}>QR Scanner</h4>
                 </CardHeader>
@@ -696,7 +697,7 @@ export default function Recycle(props) {
               <Card>
                 <CardHeader color="info" icon>
                   <CardIcon color="info" className="DBGradient">
-                    <Category />
+                    <DashboardOutlined />
                   </CardIcon>
                   <h4 className={classes.cardIconTitle}>Asset Information</h4>
                 </CardHeader>

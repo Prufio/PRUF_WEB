@@ -24,7 +24,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { Description } from "@material-ui/icons";
+import { DashboardOutlined, Description } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -644,7 +644,7 @@ export default function NewRecord(props) {
                     <Card>
                       <CardHeader color="info" icon>
                         <CardIcon color="info" className="DBGradient">
-                          <Category />
+                          <DashboardOutlined />
                         </CardIcon>
                         <h4 className={classes.cardIconTitle}>Asset Information</h4>
                       </CardHeader>

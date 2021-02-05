@@ -20,7 +20,7 @@ import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
 import Print from "@material-ui/icons/Print";
 import Create from "@material-ui/icons/Create";
-import { KeyboardArrowLeft, Scanner } from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft, Scanner } from "@material-ui/icons";
 import { isMobile } from "react-device-detect";
 
 
@@ -962,7 +962,7 @@ export default function Search(props) {
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info" className="DBGradient">
-              <Category />
+              <DashboardOutlined />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Asset Information</h4>
           </CardHeader>
@@ -1232,7 +1232,7 @@ export default function Search(props) {
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info" className="DBGradient">
-              <Category />
+              <DashboardOutlined />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>QR Scanner</h4>
           </CardHeader>
