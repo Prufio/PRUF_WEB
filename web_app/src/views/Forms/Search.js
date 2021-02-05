@@ -1014,50 +1014,6 @@ export default function Search(props) {
                       />
                     </>
                   )}
-                  {/* {IDXRawInput === true && !retrieving && (
-                <>
-                  <CustomInput
-                    id="manufacturer"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      placeholder: "Disabled",
-                      disabled: true
-                    }}
-                  />
-                  <CustomInput
-                    id="type"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      placeholder: "Disabled",
-                      disabled: true
-                    }}
-                  />
-                  <CustomInput
-                    id="model"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      placeholder: "Disabled",
-                      disabled: true
-                    }}
-                  />
-                  <CustomInput
-                    id="serial"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      placeholder: "Disabled",
-                      disabled: true
-                    }}
-                  />
-                </>
-              )} */}
                   {!retrieving && (
                     <div className={classes.checkboxAndRadio}>
                       <FormControlLabel
