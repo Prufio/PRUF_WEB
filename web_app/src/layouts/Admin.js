@@ -229,12 +229,14 @@ export default function Dashboard(props) {
     let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length))
     console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
     if (hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66) {
-      window.idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
-      console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
-      window.location.href = String("/#/admin/search/" + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length))
+      if(!window.location.href.includes("/#/admin/search")){
+        window.idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
+        console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
+        window.location.href = String("/#/admin/search/" + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length))
+      }
     }
 
-    else if (hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home") {
+    else if (hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home" && hrefStr !== "/#/admin/search") {
       console.log("Rerouting...")
       window.location.href = "/#/admin/home";
     }
