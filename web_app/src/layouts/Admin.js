@@ -65,7 +65,7 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
 
-  console.log("pre-load log", window.location.href)
+  //console.log("pre-load log", window.location.href)
 
   const handleNoEthereum = () => {
     console.log("No ethereum object available");

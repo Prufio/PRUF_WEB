@@ -50,6 +50,7 @@ export default function Search(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
+  const [query, setQuery] = React.useState(null)
   const [scanQR, setScanQR] = React.useState(false)
   const [data, setData] = React.useState("");
   const [result, setResult] = React.useState("");
@@ -119,10 +120,15 @@ export default function Search(props) {
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     if (window.idxQuery) {
-      waitForContracts(window.idxQuery);
+      setQuery(window.idxQuery);
       window.idxQuery = null;
     }
-  })
+  },[])
+
+  React.useEffect(() => {
+    if(window.contracts !== undefined && query){retrieveRecordQR(query); setQuery(null);}
+  },[window.contracts])
+  
 
   const showImage = (e) => {
     var i = new Image();
@@ -149,13 +155,6 @@ export default function Search(props) {
 
   }
 
-  const waitForContracts = (e) => {
-    if (window.contracts) {
-      return retrieveRecordQR(e)
-    }
-
-    setTimeout(waitForContracts(e), 1000);
-  }
   const handleSimple = event => {
     if (props.ps) {
       console.log(props.ps)
