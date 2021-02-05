@@ -69,6 +69,8 @@ export default function Search(props) {
   const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
   const [isVerifying, setIsVerifying] = React.useState(false)
   const [isRecycling, setIsRecycling] = React.useState(false)
+  const [txHash, setTxHash] = React.useState("")
+  const [verifyResult, setVerifyResult] = React.useState("")
   const link = document.createElement('div');
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
