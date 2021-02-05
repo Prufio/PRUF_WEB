@@ -70,6 +70,9 @@ export default function ModifyDescription(props) {
   const resizeImg = require('resize-img');
   const fs = require('fs');
 
+  const classes = useStyles();
+  const formClasses = useFormStyles();
+
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
       setSelectedImage(assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || "")
@@ -471,9 +474,6 @@ export default function ModifyDescription(props) {
     anchorTag.click();
     document.body.removeChild(anchorTag);
   }
-
-  const classes = useStyles();
-  const formClasses = useFormStyles();
 
   const settings = () => {
     swal("What would you like to do with this image?", {
