@@ -137,6 +137,15 @@ export default function Home(props) {
       return setloginDepositState("error");
     }
 
+    if (deposit < (props.ether*10000) ) {
+      swal({
+        title: "Insufficient KΞ",
+        icon: "warning",
+        button: "Close",
+      });
+      return setloginDepositState("error");
+    }
+
     else {
       amount = window.web3.utils.toWei(String(Math.round(deposit)))
     }
@@ -319,6 +328,26 @@ export default function Home(props) {
       <br />
       {/* <GridContainer> */}
         {/* <GridItem xs={12} sm={12} md={6}> */}
+        <>
+        {window.contracts === undefined && (
+          <Card>
+          <CardHeader color="info" icon>
+            <CardIcon color="info" className="DBGradient">
+              <Category />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>PRUF Faucet</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h3>
+                Connecting to the blockchain<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              </h3>
+            </form>
+          </CardBody>
+          <br />
+        </Card>
+        )}
+        {window.contracts !== undefined && (
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
@@ -386,6 +415,8 @@ export default function Home(props) {
               </form>
             </CardBody>
           </Card>
+          )}
+          </>
         {/* </GridItem> */}
         {/* <GridItem xs={12} sm={12} md={6}>
           <Card>
