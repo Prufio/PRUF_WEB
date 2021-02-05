@@ -109,13 +109,15 @@ export default function Search(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   React.useEffect(() => {
+    if(!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66){
+      window.idxQuery = window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length);
+    }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-
     if (window.idxQuery){
-      retrieveRecordQR(window.idxQuery);
+      waitForContracts(window.idxQuery);
       window.idxQuery = null;
     }
   }, [])
@@ -145,6 +147,13 @@ export default function Search(props) {
 
   }
 
+  const waitForContracts = (e) => {
+    if(window.contracts){
+      return retrieveRecordQR(e)
+    }
+    
+    setTimeout(waitForContracts(e), 1000);
+  }
   const handleSimple = event => {
     if (props.ps) {
       console.log(props.ps)
