@@ -21,7 +21,7 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 import AdminLayout from "layouts/Admin.js";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
-
+console.log(window.location.href)
 
 ReactDOM.render(
   <HashRouter>

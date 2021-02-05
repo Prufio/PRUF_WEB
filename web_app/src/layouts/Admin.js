@@ -71,6 +71,8 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
 
+  console.log("pre-load log", window.location.href)
+
   const handleNoEthereum = () => {
     console.log("No ethereum object available");
     let web3;
@@ -78,11 +80,11 @@ export default function Dashboard(props) {
     web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
     setUpContractEnvironment(web3).then(() => {
       let refString = String(window.location.href);
-      if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
+/*       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
         return
       } else {
         window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.length);
-      }
+      } */
     });
     window.web3 = web3;
     return setIsMounted(true);
@@ -217,9 +219,8 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
-  let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length)), _idxQuery = "";
-
   window.onload = () => {
+    console.log("page loaded", window.location.href)
     window.balances = {};
     let timeOutCounter = 0;
     window.recount = false;
@@ -231,14 +232,16 @@ export default function Dashboard(props) {
       protocol: "https",
     });
 
+    let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length))
+    console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
     if (hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66) {
-      _idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
+      window.idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
       setIdxQuery(hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
       console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
-      window.location.href = '/#/admin/search/' + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66);
     }
-
+  
     else if (hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home") {
+      console.log("Rerouting...")
       window.location.href = "/#/admin/home";
     }
 
@@ -349,7 +352,7 @@ export default function Dashboard(props) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return window.location.pathname !== "/admin/full-screen-maps";
+    return !window.location.pathname.includes("/admin/");
   };
   const getActiveRoute = routes => {
     let activeRoute = "Default Brand Text";
@@ -378,7 +381,7 @@ export default function Dashboard(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={() => (<prop.component ps={sps} idxQuery={idxQuery} addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance} currentACPrice={currentACPrice} IDHolder={isIDHolder} />)}
+            render={() => (<prop.component ps={sps} addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance} currentACPrice={currentACPrice} IDHolder={isIDHolder} />)}
             key={key}
           />
         );
@@ -408,7 +411,9 @@ export default function Dashboard(props) {
     if (window.ethereum) {
       window._contracts = await buildContracts(_web3)
 
-      await window.utils.getContracts()
+      await window.utils.getContracts().then(()=>{
+        if(window.idxQuery) {window.location.href = '/#/admin/search/' + window.idxQuery}
+      })
 
       if (_addr !== undefined) {
         await window.utils.getETHBalance(_addr);
@@ -739,25 +744,15 @@ export default function Dashboard(props) {
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
         />
-        {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-        {getRoute() ? (
           <div className={classes.content}>
             <div className={classes.container}>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/admin" to="/admin/home" />
+                {!window.location.href.includes("0x") ? <Redirect from="/admin" to="/admin/home" /> : <></>}
               </Switch>
             </div>
           </div>
-        ) : (
-            <div className={classes.map}>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from="/admin" to="/admin/home" />
-              </Switch>
-            </div>
-          )}
-        {getRoute() ? <Footer fluid /> : null}
+
         <FixedPlugin
           handleImageClick={handleImageClick}
           handleColorClick={handleColorClick}

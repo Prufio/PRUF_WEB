@@ -315,7 +315,7 @@ export default function Home(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      <h3>Get PRUF (Testnet Only) </h3>
+      <h3> Get PRUF (Testnet) </h3><hr/>
       <br />
       {/* <GridContainer> */}
         {/* <GridItem xs={12} sm={12} md={6}> */}
