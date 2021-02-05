@@ -41,7 +41,7 @@ export default function ModifyRGT(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
-  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+  const [assetInfo, ] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
 

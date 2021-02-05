@@ -38,9 +38,7 @@ export default function Recycle(props) {
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [scanQR, setScanQR] = React.useState(false)
-  const [result, setResult] = React.useState("");
   const [error, setError] = React.useState("");
-  const [transaction, setTransaction] = React.useState(false);
   const [QRValue, setQRValue] = React.useState("");
   const [recycling, setRecycling] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
@@ -84,7 +82,7 @@ export default function Recycle(props) {
   const [txHash, setTxHash] = React.useState("");
   const [verifyResult, setVerifyResult] = React.useState("");
 
-  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+  const [assetInfo, ] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
 

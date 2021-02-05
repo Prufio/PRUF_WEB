@@ -16,9 +16,7 @@ import Icon from '@material-ui/core/Icon';
 
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
-import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
-import Print from "@material-ui/icons/Print";
 import Create from "@material-ui/icons/Create";
 import { DashboardOutlined, KeyboardArrowLeft, Scanner } from "@material-ui/icons";
 import { isMobile } from "react-device-detect";
@@ -42,7 +40,6 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 import placeholder from "../../assets/img/placeholder.jpg";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
-import { QRCode } from "react-qrcode-logo";
 
 
 const useStyles = makeStyles(styles);
@@ -51,14 +48,11 @@ const useImgStyles = makeStyles(imgStyles);
 export default function Search(props) {
 
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [checked, setChecked] = React.useState([24, 22]);
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [scanQR, setScanQR] = React.useState(false)
   const [data, setData] = React.useState("");
   const [result, setResult] = React.useState("");
-  const [wasSentQuery, setWasSentQuery] = React.useState(false);
-  const [gotQuery, setGotQuery] = React.useState(false);
   const [error, setError] = React.useState("");
   const [inscription, setInscription] = React.useState("");
   const [moreInfo, setMoreInfo] = React.useState(false);
@@ -107,9 +101,6 @@ export default function Search(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
-  const [txHash, setTxHash] = React.useState("");
-  const [verifyResult, setVerifyResult] = React.useState("");
-
   const [loginManufacturerState, setloginManufacturerState] = React.useState("");
   const [loginTypeState, setloginTypeState] = React.useState("");
   const [loginModelState, setloginModelState] = React.useState("");
@@ -118,34 +109,18 @@ export default function Search(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   React.useEffect(() => {
-    //let refString = String(window.location.href);
-
-    /*    if (!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66) {
-         setRetrieving(true)
-         setWasSentQuery(true)
-         setGotQuery(true)
-       }
-   
-       if (window.contracts !== undefined && wasSentQuery) {
-         let query = refString.substring(refString.indexOf('0x'), refString.length)
-         setWasSentQuery(false)
-         retrieveRecordQR(query)
-       }
-   
-       else { console.log(false) } */
-  })
-
-  React.useEffect(() => {
+    if(!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66){
+      window.idxQuery = window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length);
+    }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-
-    if (window.idxQuery) {
-      retrieveRecordQR(window.idxQuery);
+    if (window.idxQuery){
+      waitForContracts(window.idxQuery);
       window.idxQuery = null;
     }
-  }, [])
+  })
 
   const showImage = (e) => {
     var i = new Image();
@@ -172,6 +147,13 @@ export default function Search(props) {
 
   }
 
+  const waitForContracts = (e) => {
+    if(window.contracts){
+      return retrieveRecordQR(e)
+    }
+    
+    setTimeout(waitForContracts(e), 1000);
+  }
   const handleSimple = event => {
     if (props.ps) {
       console.log(props.ps)
@@ -684,32 +666,6 @@ export default function Search(props) {
     }
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
-    // await window.contracts.STOR.methods
-    //   .getPriceData(idxHash)
-    //   .call(
-    //     (_error, _result) => {
-    //       if (_error) {
-    //         console.log(_error)
-    //       }
-    //       else {
-    //         if (Object.values(_result)[1] > 0) {
-    //           setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
-    //           let currencyNum = Object.values(_result)[1]
-    //           switch (currencyNum) {
-    //             case "1": setCurrency("Ξ"); break;
-    //             case "2": setCurrency("ü"); break;
-    //             case "3": setCurrency("◈"); break;
-    //             case "4": setCurrency("Ƀ"); break;
-    //             default: setCurrency("?"); break;
-    //           }
-
-    //           setForSale(true);
-    //         }
-    //         else {
-    //           setForSale(false);
-    //         }
-    //       }
-    //     });
 
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)
@@ -795,34 +751,6 @@ export default function Search(props) {
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
 
-    // if (idxHash.substring(0, 2) !== "0x") { return this.setState({ wasSentQuery: false, queryValue: undefined }) }
-    // await window.contracts.STOR.methods
-    //   .getPriceData(idxHash)
-    //   .call(
-    //     (_error, _result) => {
-    //       if (_error) {
-    //         console.log(_error)
-    //       }
-    //       else {
-    //         if (Object.values(_result)[1] > 0) {
-    //           setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
-    //           let currencyNum = Object.values(_result)[1]
-    //           switch (currencyNum) {
-    //             case "1": setCurrency("Ξ"); break;
-    //             case "2": setCurrency("ü"); break;
-    //             case "3": setCurrency("◈"); break;
-    //             case "4": setCurrency("Ƀ"); break;
-    //             default: setCurrency("?"); break;
-    //           }
-
-    //           setForSale(true);
-    //         }
-    //         else {
-    //           setForSale(false);
-    //         }
-    //       }
-    //     });
-
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)
       .call(
@@ -896,19 +824,6 @@ export default function Search(props) {
 
 
   }
-
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
-
 
   const generateThumbs = (obj) => {
     //console.log("obj", obj)
@@ -1107,57 +1022,50 @@ export default function Search(props) {
                       fullWidth: true
                     }}
                     inputProps={{
-                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                   <CustomInput
+                    labelText={type}
                     id="type"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
-                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                   <CustomInput
+                    labelText={model}
                     id="model"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
-                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                   <CustomInput
+                    labelText={serial}
                     id="serial"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
-                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                 </>
-              )} */}
-                  {!retrieving && (
-                    <div className={classes.checkboxAndRadio}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            tabIndex={-1}
-                            onClick={() => setIDXRawInput(!IDXRawInput)}
-                            checkedIcon={<Check className={classes.checkedIcon} />}
-                            icon={<Check className={classes.uncheckedIcon} />}
-                            classes={{
-                              checked: classes.checked,
-                              root: classes.checkRoot
-                            }}
-                          />
-                        }
+              )}
+              {!retrieving && (
+                <div className={classes.checkboxAndRadio}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        tabIndex={-1}
+                        onClick={() => setIDXRawInput(!IDXRawInput)}
+                        checkedIcon={<Check className={classes.checkedIcon} />}
+                        icon={<Check className={classes.uncheckedIcon} />}
                         classes={{
                           label: classes.label,
                           root: classes.labelRoot
