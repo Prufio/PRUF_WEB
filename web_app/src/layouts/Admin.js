@@ -231,6 +231,7 @@ export default function Dashboard(props) {
     if (hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66) {
       window.idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
       console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
+      window.location.href = String("/#/admin/search/" + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length))
     }
 
     else if (hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home") {

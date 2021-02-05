@@ -113,21 +113,21 @@ export default function Search(props) {
 
   React.useEffect(() => {
     if (!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66) {
-      window.idxQuery = window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length);
+      setQuery(window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length));
+    }
+    else if (window.idxQuery) {
+      setQuery(window.idxQuery);
+      window.idxQuery = null;
     }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-    if (window.idxQuery) {
-      setQuery(window.idxQuery);
-      window.idxQuery = null;
-    }
   },[])
 
   React.useEffect(() => {
     if(window.contracts !== undefined && query){retrieveRecordQR(query); setQuery(null);}
-  },[window.contracts])
+  },[window.contracts, query])
   
 
   const showImage = (e) => {
@@ -812,7 +812,7 @@ export default function Search(props) {
     if (tempResult[0] === "60") {
       setRecycled(true)
     }
-    if (tempResult[0] !== "60") {
+    else if (tempResult[0] !== "60") {
       await window.utils.checkHoldsToken("asset", idxHash, props.addr)
         .then((e) => {
           console.log("is Owner Of? ", e)

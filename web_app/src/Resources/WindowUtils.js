@@ -714,6 +714,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
+            console.log(_result, addr);
             if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               tempBool = true
             }
@@ -729,6 +730,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
+            console.log(_result, addr);
             if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               tempBool = true
             }
