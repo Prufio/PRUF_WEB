@@ -32,6 +32,9 @@ export default function EscrowManager(props) {
   const [escrowOwner, setEscrowOwner] = React.useState("")
   const [escrowTime, setEscrowTime] = React.useState("")
 
+  const [loginEscrowOwner, setloginEscrowOwner] = React.useState("")
+  const [loginEscrowTime, setloginEscrowTime] = React.useState("")
+
   const [loginEscrowOwnerState, setloginEscrowOwnerState] = React.useState("")
   const [loginEscrowTimeState, setloginEscrowTimeState] = React.useState("")
 
