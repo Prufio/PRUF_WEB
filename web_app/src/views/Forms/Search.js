@@ -12,6 +12,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Danger from "components/Typography/Danger.js";
 import Checkbox from "@material-ui/core/Checkbox";
 import AccountBox from "@material-ui/icons/AccountBox";
+import Icon from '@material-ui/core/Icon';
 
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
@@ -1166,9 +1167,9 @@ export default function Search(props) {
               )}
               {!retrieving && (
                 <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
-                  <span class="material-icons">
+                  <Icon fontSize="large">
                     qr_code_scanner
-                  </span>
+                  </Icon>
                 </div>
               )}
               {!retrieving && (

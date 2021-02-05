@@ -263,7 +263,7 @@ export default function Home(props) {
                 <Success>
                   <Add />
                 </Success>
-                <a href="/#/admin/new-record">
+                <a href="/#/admin/new-asset">
                   Create New Record
                 </a>
               </div>
@@ -315,10 +315,10 @@ export default function Home(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      <h3>Faucet (Testnet Only) </h3>
+      <h3>Get PRUF (Testnet Only) </h3>
       <br />
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
+      {/* <GridContainer> */}
+        {/* <GridItem xs={12} sm={12} md={6}> */}
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
@@ -386,8 +386,8 @@ export default function Home(props) {
               </form>
             </CardBody>
           </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={6}>
+        {/* </GridItem> */}
+        {/* <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
@@ -568,7 +568,7 @@ export default function Home(props) {
               </form>
             </CardBody>
           </Card>
-        </GridItem>
+        </GridItem> */}
         {/* <GridItem xs={12} sm={12} md={4}>
           <Card product>
             <CardHeader image className={classes.cardHeaderHover}>
@@ -753,7 +753,7 @@ export default function Home(props) {
             </CardFooter>
           </Card>
         </GridItem> */}
-      </GridContainer>
+      {/* </GridContainer> */}
     </div>
   );
 }
