@@ -109,14 +109,14 @@ export default function Search(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   React.useEffect(() => {
-    if(!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66){
+    if (!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66) {
       window.idxQuery = window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length);
     }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-    if (window.idxQuery){
+    if (window.idxQuery) {
       waitForContracts(window.idxQuery);
       window.idxQuery = null;
     }
@@ -148,10 +148,10 @@ export default function Search(props) {
   }
 
   const waitForContracts = (e) => {
-    if(window.contracts){
+    if (window.contracts) {
       return retrieveRecordQR(e)
     }
-    
+
     setTimeout(waitForContracts(e), 1000);
   }
   const handleSimple = event => {
@@ -1022,50 +1022,57 @@ export default function Search(props) {
                       fullWidth: true
                     }}
                     inputProps={{
+                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                   <CustomInput
-                    labelText={type}
                     id="type"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
+                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                   <CustomInput
-                    labelText={model}
                     id="model"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
+                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                   <CustomInput
-                    labelText={serial}
                     id="serial"
                     formControlProps={{
                       fullWidth: true
                     }}
                     inputProps={{
+                      placeholder: "Disabled",
                       disabled: true
                     }}
                   />
                 </>
-              )}
-              {!retrieving && (
-                <div className={classes.checkboxAndRadio}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        tabIndex={-1}
-                        onClick={() => setIDXRawInput(!IDXRawInput)}
-                        checkedIcon={<Check className={classes.checkedIcon} />}
-                        icon={<Check className={classes.uncheckedIcon} />}
+              )} */}
+                  {!retrieving && (
+                    <div className={classes.checkboxAndRadio}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            tabIndex={-1}
+                            onClick={() => setIDXRawInput(!IDXRawInput)}
+                            checkedIcon={<Check className={classes.checkedIcon} />}
+                            icon={<Check className={classes.uncheckedIcon} />}
+                            classes={{
+                              checked: classes.checked,
+                              root: classes.checkRoot
+                            }}
+                          />
+                        }
                         classes={{
                           label: classes.label,
                           root: classes.labelRoot
