@@ -141,6 +141,31 @@ export default function Search(props) {
     }
   }, [])
 
+  const showImage = (e) => {
+    var i = new Image(); 
+
+    i.onload = function(){
+      var j = new Image();
+      j.onload = function(){
+        let move = i.height-j.height
+        if(props.ps){
+          if(move < 0){
+            props.ps.element.scrollTop += move
+          } else {
+            props.ps.element.scrollTop = 0
+          }
+          console.log("Scrolled ", move)
+          //console.log(props.ps.element.scrollTop)
+        }
+        setSelectedImage(e)
+      }
+      j.src = selectedImage;
+    };
+
+    i.src = e; 
+
+  }
+
   const handleSimple = event => {
     if (props.ps) {
       console.log(props.ps)
@@ -230,10 +255,11 @@ export default function Search(props) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         return setIpfsObject({})
       } else {
-        console.log(lookup, "Here's what we found for asset description: ", result);
+        //console.log(lookup, "Here's what we found for asset description: ", result);
         let tempObj = JSON.parse(result)
         setSelectedImage(tempObj.photo.displayImage || Object.values(tempObj.photo)[0] || "")
         setIpfsObject(tempObj)
+        setMoreInfo(true);
       }
     });
   };
@@ -747,7 +773,6 @@ export default function Search(props) {
           }
         })
     }
-    return setMoreInfo(true);
   }
 
   const retrieveRecordQR = async (query) => {
@@ -865,7 +890,6 @@ export default function Search(props) {
 
 
 
-    return setMoreInfo(true);
   }
 
   const handleToggle = value => {
@@ -882,7 +906,7 @@ export default function Search(props) {
 
 
   const generateThumbs = (obj) => {
-    console.log("obj", obj)
+    //console.log("obj", obj)
     if (!obj.photo) {
       return []
     }
@@ -894,7 +918,7 @@ export default function Search(props) {
       )
     }
     let component = [], photos = Object.values(obj.photo);
-    console.log("photos", photos)
+    //console.log("photos", photos)
     for (let i = 0; i < photos.length; i++) {
       component.push(
         <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
@@ -903,12 +927,6 @@ export default function Search(props) {
       )
     }
     return component
-  }
-
-  const showImage = (e) => {
-    console.log(selectedImage)
-    console.log(e)
-    setSelectedImage(e)
   }
 
   const classes = useStyles();
@@ -1257,7 +1275,7 @@ export default function Search(props) {
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
-                              <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                              <img src={selectedImage} alt="..." />
                             </>
                           )}
                         </>
@@ -1314,7 +1332,7 @@ export default function Search(props) {
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
-                              <img src={Object.values(ipfsObject.photo)[0]} alt="..." />
+                              <img src={selectedImage} alt="..." />
                             </>
                           )}
                         </>
