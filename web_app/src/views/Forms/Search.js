@@ -677,8 +677,38 @@ export default function Search(props) {
             setError(_error);
             setResult("");
             setRetrieving(false);
+            setIDXRaw("")
+            setIDXRawInput(!IDXRawInput)
+            setManufacturer("")
+            setloginManufacturer("")
+            setloginManufacturerState("")
+            setType("")
+            setloginType("")
+            setloginTypeState("")
+            setModel("")
+            setloginModel("")
+            setloginModelState("")
+            setSerial("")
+            setloginSerial("")
+            setloginSerialState("")
           }
           else {
+            setRetrieving(false)
+            setIDXRaw("")
+            setIDXRawInput(!IDXRawInput)
+            setloginIDXState("")
+            setManufacturer("")
+            setloginManufacturer("")
+            setloginManufacturerState("")
+            setType("")
+            setloginType("")
+            setloginTypeState("")
+            setModel("")
+            setloginModel("")
+            setloginModelState("")
+            setSerial("")
+            setloginSerial("")
+            setloginSerialState("")
             console.log("rr conf");
             setResult(Object.values(_result));
             setError("");
@@ -761,8 +791,11 @@ export default function Search(props) {
             setError(_error);
             setResult("");
             setRetrieving(false);
+            setScanQR(false)
           }
           else {
+            setRetrieving(false)
+            setScanQR(false)
             console.log("rrqr conf");
             setResult(Object.values(_result));
             setError("");
@@ -828,7 +861,8 @@ export default function Search(props) {
 
   const back = () => {
     window.location.href="/#/admin/search";
-    window.location.reload();
+    setMoreInfo(false)
+
   }
 
   const generateThumbs = (obj) => {
@@ -1056,7 +1090,7 @@ export default function Search(props) {
                         inputProps={{
                           onChange: event => {
                             setIDXRaw(event.target.value.trim())
-                            if (event.target.value !== "") {
+                            if (event.target.value !== "" && event.target.value.trim().substring(0,2) === "0x" && event.target.value.trim().length === 66) {
                               setloginIDXState("success");
                             } else {
                               setloginIDXState("error");
