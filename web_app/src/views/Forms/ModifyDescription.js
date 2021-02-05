@@ -35,6 +35,7 @@ const useFormStyles = makeStyles(formStyles);
 export default function ModifyDescription(props) {
 
   if (window.contracts === undefined) { window.location.href = "/#/admin/home" }
+  
   const [asset,] = React.useState(window.sentPacket);
   const [assetInfo,] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
   const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
