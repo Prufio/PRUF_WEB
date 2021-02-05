@@ -32,7 +32,6 @@ import Danger from "components/Typography/Danger";
 const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
 
-
 export default function ModifyDescription(props) {
 
   if (window.contracts === undefined) { window.location.href = "/#/admin/home" }
