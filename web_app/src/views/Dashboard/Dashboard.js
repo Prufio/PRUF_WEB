@@ -14,9 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 // import ContentCopy from "@material-ui/icons/ContentCopy";
 // import InfoOutline from "@material-ui/icons/InfoOutline";
 import Refresh from "@material-ui/icons/Refresh";
-import Category from "@material-ui/icons/Category";
 import Share from "@material-ui/icons/Share";
-import Print from "@material-ui/icons/Print";
 import Create from "@material-ui/icons/Create";
 import Edit from "@material-ui/icons/Edit";
 

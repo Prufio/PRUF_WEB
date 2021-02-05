@@ -25,7 +25,7 @@ export default function Export(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+  const [assetInfo, ] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
 

@@ -34,7 +34,7 @@ export default function ModifyStatus(props) {
   const [status, setStatus] = React.useState("");
   const [statusName, setStatusName] = React.useState("");
 
-  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+  const [assetInfo, ] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
 

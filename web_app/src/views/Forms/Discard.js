@@ -3,15 +3,12 @@ import "../../assets/css/custom.css";
 import swal from 'sweetalert';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import Warning from "components/Typography/Warning.js";
-import Danger from "components/Typography/Danger.js";
 
 
 // core components
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardText from "components/Card/CardText.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
@@ -21,7 +18,6 @@ import { DeleteOutline } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Discard(props) {
-  const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
 
   const [error, setError] = React.useState("");
@@ -29,7 +25,7 @@ export default function Discard(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket)
+  const [assetInfo, ] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
 

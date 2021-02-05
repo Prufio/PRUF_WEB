@@ -4,9 +4,7 @@ import Jdenticon from 'react-jdenticon';
 import Web3 from "web3";
 import buildContracts from "./../Resources/Contracts";
 import buildWindowUtils from "./../Resources/WindowUtils";
-import { isMobile, browserName, engineVersion, getUA } from "react-device-detect";
 import { Switch, Route, Redirect } from "react-router-dom";
-import detectEthereumProvider from '@metamask/detect-provider'
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -24,7 +22,6 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/adminStyle.js";
-import { SettingsPowerRounded } from "@material-ui/icons";
 
 var ps;
 
@@ -44,7 +41,6 @@ export default function Dashboard(props) {
   const [buildReady, setBuildReady] = React.useState(false);
   const [ETHBalance, setETHBalance] = React.useState("~");
   const [addr, setAddr] = React.useState("");
-  const [idxQuery, setIdxQuery] = React.useState("");
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState(false);
@@ -62,8 +58,6 @@ export default function Dashboard(props) {
   const [WD, setWD] = React.useState(false);
   const [hasSetUp, setHasSetUp] = React.useState(false);
   const [assets, setAssets] = React.useState({})
-  const [hasClearedBalance, setHasClearedBalance] = React.useState(false)
-  const [ethereum, setEthereum] = React.useState({})
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");

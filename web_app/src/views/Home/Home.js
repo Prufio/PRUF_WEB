@@ -1,28 +1,14 @@
 import React from "react";
-// react plugin for creating charts
-import ChartistGraph from "react-chartist";
-// react plugin for creating vector maps
-import { VectorMap } from "react-jvectormap";
 import "../../assets/css/custom.css";
 import swal from 'sweetalert';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 
 import Eth from "../../assets/img/eth-logo.png";
 import Pruf from "../../assets/img/pruftoken.png";
-import Patek from "../../assets/img/Patek.png";
-import Apartment from "../../assets/img/Apartment.png";
-// @material-ui/icons
-// import ContentCopy from "@material-ui/icons/ContentCopy";
-// import InfoOutline from "@material-ui/icons/InfoOutline";
 import Add from "@material-ui/icons/Add";
-import Category from "@material-ui/icons/Category";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
