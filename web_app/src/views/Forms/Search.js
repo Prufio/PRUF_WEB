@@ -120,19 +120,19 @@ export default function Search(props) {
   React.useEffect(() => {
     //let refString = String(window.location.href);
 
- /*    if (!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66) {
-      setRetrieving(true)
-      setWasSentQuery(true)
-      setGotQuery(true)
-    }
-
-    if (window.contracts !== undefined && wasSentQuery) {
-      let query = refString.substring(refString.indexOf('0x'), refString.length)
-      setWasSentQuery(false)
-      retrieveRecordQR(query)
-    }
-
-    else { console.log(false) } */
+    /*    if (!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66) {
+         setRetrieving(true)
+         setWasSentQuery(true)
+         setGotQuery(true)
+       }
+   
+       if (window.contracts !== undefined && wasSentQuery) {
+         let query = refString.substring(refString.indexOf('0x'), refString.length)
+         setWasSentQuery(false)
+         retrieveRecordQR(query)
+       }
+   
+       else { console.log(false) } */
   })
 
   React.useEffect(() => {
@@ -141,21 +141,21 @@ export default function Search(props) {
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
 
-    if (window.idxQuery){
+    if (window.idxQuery) {
       retrieveRecordQR(window.idxQuery);
       window.idxQuery = null;
     }
   }, [])
 
   const showImage = (e) => {
-    var i = new Image(); 
+    var i = new Image();
 
-    i.onload = function(){
+    i.onload = function () {
       var j = new Image();
-      j.onload = function(){
-        let move = i.height-j.height
-        if(props.ps){
-          if(move < 0){
+      j.onload = function () {
+        let move = i.height - j.height
+        if (props.ps) {
+          if (move < 0) {
             props.ps.element.scrollTop += move
           } else {
             props.ps.element.scrollTop = 0
@@ -168,7 +168,7 @@ export default function Search(props) {
       j.src = selectedImage;
     };
 
-    i.src = e; 
+    i.src = e;
 
   }
 
@@ -525,7 +525,7 @@ export default function Search(props) {
   }
 
   const blockchainVerifyAsset = async () => {
-    if(!window.ethereum){return swal({title: "Connect to an ethereum provider to use this functionality!", button: "Close",})}
+    if (!window.ethereum) { return swal({ title: "Connect to an ethereum provider to use this functionality!", button: "Close", }) }
     if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
       if (loginFirst === "") {
@@ -938,10 +938,10 @@ export default function Search(props) {
   const imgClasses = useImgStyles();
   return (
     <>
-    {window.contracts === undefined && (
+      {window.contracts === undefined && (
         <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
               <DashboardOutlined />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Asset Information</h4>
@@ -955,151 +955,151 @@ export default function Search(props) {
           </CardBody>
           <br />
         </Card>
-    )}
-    {window.contracts !== undefined && (
-    <>
-      {scanQR === false && !moreInfo && (
-        <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
-              <DashboardOutlined />
-            </CardIcon>
-            <h4 className={classes.cardIconTitle}>Asset Information</h4>
-          </CardHeader>
-          <CardBody>
-            <form>
-              {IDXRawInput === false && !retrieving && (
-                <>
-                  <CustomInput
-                    success={loginManufacturerState === "success"}
-                    error={loginManufacturerState === "error"}
-                    labelText="Manufacturer *"
-                    id="manufacturer"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setManufacturer(event.target.value.trim())
-                        if (event.target.value !== "") {
-                          setloginManufacturerState("success");
-                        } else {
-                          setloginManufacturerState("error");
-                        }
-                        setloginManufacturer(event.target.value);
-                      },
-                    }}
-                  />
-                  <CustomInput
-                    success={loginTypeState === "success"}
-                    error={loginTypeState === "error"}
-                    labelText="Type *"
-                    id="type"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setType(event.target.value.trim())
-                        if (event.target.value !== "") {
-                          setloginTypeState("success");
-                        } else {
-                          setloginTypeState("error");
-                        }
-                        setloginType(event.target.value);
-                      },
-                    }}
-                  />
-                  <CustomInput
-                    success={loginModelState === "success"}
-                    error={loginModelState === "error"}
-                    labelText="Model *"
-                    id="model"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setModel(event.target.value.trim())
-                        if (event.target.value !== "") {
-                          setloginModelState("success");
-                        } else {
-                          setloginModelState("error");
-                        }
-                        setloginModel(event.target.value);
-                      },
-                    }}
-                  />
-                  <CustomInput
-                    success={loginSerialState === "success"}
-                    error={loginSerialState === "error"}
-                    labelText="Serial *"
-                    id="serial"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setSerial(event.target.value.trim())
-                        if (event.target.value !== "") {
-                          setloginSerialState("success");
-                        } else {
-                          setloginSerialState("error");
-                        }
-                        setloginSerial(event.target.value);
-                      },
-                    }}
-                  />
-                  <div className={classes.formCategory}>
-                    <small>*</small> Required fields
+      )}
+      {window.contracts !== undefined && (
+        <>
+          {scanQR === false && !moreInfo && (
+            <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  <DashboardOutlined />
+                </CardIcon>
+                <h4 className={classes.cardIconTitle}>Asset Information</h4>
+              </CardHeader>
+              <CardBody>
+                <form>
+                  {IDXRawInput === false && !retrieving && (
+                    <>
+                      <CustomInput
+                        success={loginManufacturerState === "success"}
+                        error={loginManufacturerState === "error"}
+                        labelText="Manufacturer *"
+                        id="manufacturer"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event => {
+                            setManufacturer(event.target.value.trim())
+                            if (event.target.value !== "") {
+                              setloginManufacturerState("success");
+                            } else {
+                              setloginManufacturerState("error");
+                            }
+                            setloginManufacturer(event.target.value);
+                          },
+                        }}
+                      />
+                      <CustomInput
+                        success={loginTypeState === "success"}
+                        error={loginTypeState === "error"}
+                        labelText="Type *"
+                        id="type"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event => {
+                            setType(event.target.value.trim())
+                            if (event.target.value !== "") {
+                              setloginTypeState("success");
+                            } else {
+                              setloginTypeState("error");
+                            }
+                            setloginType(event.target.value);
+                          },
+                        }}
+                      />
+                      <CustomInput
+                        success={loginModelState === "success"}
+                        error={loginModelState === "error"}
+                        labelText="Model *"
+                        id="model"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event => {
+                            setModel(event.target.value.trim())
+                            if (event.target.value !== "") {
+                              setloginModelState("success");
+                            } else {
+                              setloginModelState("error");
+                            }
+                            setloginModel(event.target.value);
+                          },
+                        }}
+                      />
+                      <CustomInput
+                        success={loginSerialState === "success"}
+                        error={loginSerialState === "error"}
+                        labelText="Serial *"
+                        id="serial"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event => {
+                            setSerial(event.target.value.trim())
+                            if (event.target.value !== "") {
+                              setloginSerialState("success");
+                            } else {
+                              setloginSerialState("error");
+                            }
+                            setloginSerial(event.target.value);
+                          },
+                        }}
+                      />
+                      <div className={classes.formCategory}>
+                        <small>*</small> Required fields
               </div>
-                </>
-              )}
-              {IDXRawInput === false && retrieving && (
-                <>
-                  <CustomInput
-                    labelText={manufacturer}
-                    id="manufacturer"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true
-                    }}
-                  />
-                  <CustomInput
-                    labelText={type}
-                    id="type"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true
-                    }}
-                  />
-                  <CustomInput
-                    labelText={model}
-                    id="model"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true
-                    }}
-                  />
-                  <CustomInput
-                    labelText={serial}
-                    id="serial"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true
-                    }}
-                  />
-                </>
-              )}
-              {/* {IDXRawInput === true && !retrieving && (
+                    </>
+                  )}
+                  {IDXRawInput === false && retrieving && (
+                    <>
+                      <CustomInput
+                        labelText={manufacturer}
+                        id="manufacturer"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                      <CustomInput
+                        labelText={type}
+                        id="type"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                      <CustomInput
+                        labelText={model}
+                        id="model"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                      <CustomInput
+                        labelText={serial}
+                        id="serial"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
+                      />
+                    </>
+                  )}
+                  {/* {IDXRawInput === true && !retrieving && (
                 <>
                   <CustomInput
                     id="manufacturer"
@@ -1143,739 +1143,739 @@ export default function Search(props) {
                   />
                 </>
               )} */}
-              {!retrieving && (
-                <div className={classes.checkboxAndRadio}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        tabIndex={-1}
-                        onClick={() => setIDXRawInput(!IDXRawInput)}
-                        checkedIcon={<Check className={classes.checkedIcon} />}
-                        icon={<Check className={classes.uncheckedIcon} />}
+                  {!retrieving && (
+                    <div className={classes.checkboxAndRadio}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            tabIndex={-1}
+                            onClick={() => setIDXRawInput(!IDXRawInput)}
+                            checkedIcon={<Check className={classes.checkedIcon} />}
+                            icon={<Check className={classes.uncheckedIcon} />}
+                            classes={{
+                              checked: classes.checked,
+                              root: classes.checkRoot
+                            }}
+                          />
+                        }
                         classes={{
-                          checked: classes.checked,
-                          root: classes.checkRoot
+                          label: classes.label,
+                          root: classes.labelRoot
+                        }}
+                        label="Search via IDX Hash"
+                      />
+                    </div>
+                  )}
+                  {IDXRawInput === true && !retrieving && (
+                    <>
+                      <CustomInput
+                        success={loginIDXState === "success"}
+                        error={loginIDXState === "error"}
+                        labelText="IDX Hash *"
+                        id="IDX"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event => {
+                            setIDXRaw(event.target.value.trim())
+                            if (event.target.value !== "") {
+                              setloginIDXState("success");
+                            } else {
+                              setloginIDXState("error");
+                            }
+                            setloginIDX(event.target.value);
+                          },
                         }}
                       />
-                    }
-                    classes={{
-                      label: classes.label,
-                      root: classes.labelRoot
-                    }}
-                    label="Search via IDX Hash"
-                  />
-                </div>
-              )}
-              {IDXRawInput === true && !retrieving && (
-                <>
-                  <CustomInput
-                    success={loginIDXState === "success"}
-                    error={loginIDXState === "error"}
-                    labelText="IDX Hash *"
-                    id="IDX"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setIDXRaw(event.target.value.trim())
-                        if (event.target.value !== "") {
-                          setloginIDXState("success");
-                        } else {
-                          setloginIDXState("error");
-                        }
-                        setloginIDX(event.target.value);
-                      },
-                    }}
-                  />
-                  <div className={classes.formCategory}>
-                    <small>*</small> Required fields
+                      <div className={classes.formCategory}>
+                        <small>*</small> Required fields
                   </div>
-                </>
-              )}
-              {IDXRawInput === true && retrieving && (
-                <>
-                  <CustomInput
-                    labelText={IDXRaw}
-                    id="IDX"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true
-                    }}
-                  />
-                </>
-              )}
-              {!retrieving && (
-                <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
-                  <Icon fontSize="large">
-                    qr_code_scanner
-                  </Icon>
-                </div>
-              )}
-              {!retrieving && (
-                <div className="MLBGradientSubmit">
-                  <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
-                </div>
-              )}
-              {retrieving && (
-                <h3>
-                  Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                </h3>
-              )}
-            </form>
-          </CardBody>
-        </Card>
-      )}
-      {scanQR === true && !moreInfo && (
-        <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
-              <DashboardOutlined />
-            </CardIcon>
-            <h4 className={classes.cardIconTitle}>QR Scanner</h4>
-          </CardHeader>
-          <CardBody>
-            <QrReader
-              className="qrReader"
-              scanDelay={300}
-              onScan={(result) => {
-                if (result) {
-                  retrieveRecordQR(result);
-                }
-
-              }}
-              onError={(err) => {
-                if (err) {
-                  console.info(err);
-                }
-              }}
-
-              style={{ width: '100%' }}
-            />
-            {retrieving && (
-              <h3>
-                Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-              </h3>
-            )}
-            <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
-          </CardBody>
-        </Card>
-      )}
-      {moreInfo && (
-        <Card>
-          {!isVerifying && !isRecycling && (
-            <>
-              {!isMobile && (
-                <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
-                  {ipfsObject.photo !== undefined && (
-                    <>
-                      {Object.values(ipfsObject.photo).length > 0 && (
-                        <>
-                          {ipfsObject.photo.displayImage !== undefined && (
-                            <>
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Back"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                                  <KeyboardArrowLeft />
-                                </Button>
-                              </Tooltip>
-                              <img src={selectedImage} alt="..." />
-                            </>
-                          )}
-                          {ipfsObject.photo.displayImage === undefined && (
-                            <>
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Back"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                                  <KeyboardArrowLeft />
-                                </Button>
-                              </Tooltip>
-                              <img src={selectedImage} alt="..." />
-                            </>
-                          )}
-                        </>
-                      )}
-                      {Object.values(ipfsObject.photo).length === 0 && (
-                        <>
-                          <Tooltip
-                            id="tooltip-top"
-                            title="Back"
-                            placement="bottom"
-                            classes={{ tooltip: classes.tooltip }}
-                          >
-                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                              <KeyboardArrowLeft />
-                            </Button>
-                          </Tooltip>
-                          <Jdenticon value={asset.idxHash} />
-                        </>
-                      )}
                     </>
                   )}
-                </CardHeader>
-              )}
-              {isMobile && (
-                <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
-                  {ipfsObject.photo !== undefined && (
+                  {IDXRawInput === true && retrieving && (
                     <>
-                      {Object.values(ipfsObject.photo).length > 0 && (
-                        <>
-                          {ipfsObject.photo.displayImage !== undefined && (
-                            <>
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Back"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                                  <KeyboardArrowLeft />
-                                </Button>
-                              </Tooltip>
-                              <img src={selectedImage} alt="..." />
-                            </>
-                          )}
-                          {ipfsObject.photo.displayImage === undefined && (
-                            <>
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Back"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                                  <KeyboardArrowLeft />
-                                </Button>
-                              </Tooltip>
-                              <img src={selectedImage} alt="..." />
-                            </>
-                          )}
-                        </>
-                      )}
-                      {Object.values(ipfsObject.photo).length === 0 && (
-                        <>
-                          <Tooltip
-                            id="tooltip-top"
-                            title="Back"
-                            placement="bottom"
-                            classes={{ tooltip: classes.tooltip }}
-                          >
-                            <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
-                              <KeyboardArrowLeft />
-                            </Button>
-                          </Tooltip>
-                          <Jdenticon value={asset.idxHash} />
-                        </>
-                      )}
-                    </>
-                  )}
-                </CardHeader>
-              )}
-            </>
-          )}
-          <CardBody>
-            {!isVerifying && !isRecycling && (
-              <>
-                {ipfsObject.photo !== {} && (
-                  <div className="imageSelector">
-                    {generateThumbs(ipfsObject)}
-                  </div>
-                )}
-                <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
-                <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(NODE ID:{asset.assetClass})</h4>
-                {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
-                {currency !== "" && (
-                  <>
-                    <h4 className={classes.cardTitle}>Status: For Sale </h4>
-                    <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
-                  </>
-                )}
-                {ipfsObject.text !== undefined && (
-                  <>
-                    <br />
-                    {
-                      ipfsObject.text.Description !== undefined && (
-                        <TextField
-                          id="outlined-multiline-static"
-                          label="Description"
-                          multiline
-                          rows={4}
-                          defaultValue={ipfsObject.text.Description}
-                          variant="outlined"
-                          fullWidth
-                          disabled
-                        />
-                      )
-                    }
-                    {ipfsObject.text.Description === undefined && (
-                      <TextField
-                        id="outlined-multiline-static"
-                        label="Description: None"
-                        multiline
-                        rows={4}
-                        defaultValue={ipfsObject.text.Description}
-                        variant="outlined"
-                        fullWidth
-                        disabled
+                      <CustomInput
+                        labelText={IDXRaw}
+                        id="IDX"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true
+                        }}
                       />
+                    </>
+                  )}
+                  {!retrieving && (
+                    <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
+                      <Icon fontSize="large">
+                        qr_code_scanner
+                  </Icon>
+                    </div>
+                  )}
+                  {!retrieving && (
+                    <div className="MLBGradientSubmit">
+                      <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
+                    </div>
+                  )}
+                  {retrieving && (
+                    <h3>
+                      Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                    </h3>
+                  )}
+                </form>
+              </CardBody>
+            </Card>
+          )}
+          {scanQR === true && !moreInfo && (
+            <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  <DashboardOutlined />
+                </CardIcon>
+                <h4 className={classes.cardIconTitle}>QR Scanner</h4>
+              </CardHeader>
+              <CardBody>
+                <QrReader
+                  className="qrReader"
+                  scanDelay={300}
+                  onScan={(result) => {
+                    if (result) {
+                      retrieveRecordQR(result);
+                    }
+
+                  }}
+                  onError={(err) => {
+                    if (err) {
+                      console.info(err);
+                    }
+                  }}
+
+                  style={{ width: '100%' }}
+                />
+                {retrieving && (
+                  <h3>
+                    Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                  </h3>
+                )}
+                <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
+              </CardBody>
+            </Card>
+          )}
+          {moreInfo && (
+            <Card>
+              {!isVerifying && !isRecycling && (
+                <>
+                  {!isMobile && (
+                    <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+                      {ipfsObject.photo !== undefined && (
+                        <>
+                          {Object.values(ipfsObject.photo).length > 0 && (
+                            <>
+                              {ipfsObject.photo.displayImage !== undefined && (
+                                <>
+                                  <Tooltip
+                                    id="tooltip-top"
+                                    title="Back"
+                                    placement="bottom"
+                                    classes={{ tooltip: classes.tooltip }}
+                                  >
+                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                      <KeyboardArrowLeft />
+                                    </Button>
+                                  </Tooltip>
+                                  <img src={selectedImage} alt="..." />
+                                </>
+                              )}
+                              {ipfsObject.photo.displayImage === undefined && (
+                                <>
+                                  <Tooltip
+                                    id="tooltip-top"
+                                    title="Back"
+                                    placement="bottom"
+                                    classes={{ tooltip: classes.tooltip }}
+                                  >
+                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                      <KeyboardArrowLeft />
+                                    </Button>
+                                  </Tooltip>
+                                  <img src={selectedImage} alt="..." />
+                                </>
+                              )}
+                            </>
+                          )}
+                          {Object.values(ipfsObject.photo).length === 0 && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <Jdenticon value={asset.idxHash} />
+                            </>
+                          )}
+                        </>
+                      )}
+                    </CardHeader>
+                  )}
+                  {isMobile && (
+                    <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+                      {ipfsObject.photo !== undefined && (
+                        <>
+                          {Object.values(ipfsObject.photo).length > 0 && (
+                            <>
+                              {ipfsObject.photo.displayImage !== undefined && (
+                                <>
+                                  <Tooltip
+                                    id="tooltip-top"
+                                    title="Back"
+                                    placement="bottom"
+                                    classes={{ tooltip: classes.tooltip }}
+                                  >
+                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                      <KeyboardArrowLeft />
+                                    </Button>
+                                  </Tooltip>
+                                  <img src={selectedImage} alt="..." />
+                                </>
+                              )}
+                              {ipfsObject.photo.displayImage === undefined && (
+                                <>
+                                  <Tooltip
+                                    id="tooltip-top"
+                                    title="Back"
+                                    placement="bottom"
+                                    classes={{ tooltip: classes.tooltip }}
+                                  >
+                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                      <KeyboardArrowLeft />
+                                    </Button>
+                                  </Tooltip>
+                                  <img src={selectedImage} alt="..." />
+                                </>
+                              )}
+                            </>
+                          )}
+                          {Object.values(ipfsObject.photo).length === 0 && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <Jdenticon value={asset.idxHash} />
+                            </>
+                          )}
+                        </>
+                      )}
+                    </CardHeader>
+                  )}
+                </>
+              )}
+              <CardBody>
+                {!isVerifying && !isRecycling && (
+                  <>
+                    {ipfsObject.photo !== {} && (
+                      <div className="imageSelector">
+                        {generateThumbs(ipfsObject)}
+                      </div>
                     )}
-                    {/* {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
+                    <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
+                    <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(NODE ID:{asset.assetClass})</h4>
+                    {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
+                    {currency !== "" && (
+                      <>
+                        <h4 className={classes.cardTitle}>Status: For Sale </h4>
+                        <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
+                      </>
+                    )}
+                    {ipfsObject.text !== undefined && (
+                      <>
+                        <br />
+                        {
+                          ipfsObject.text.Description !== undefined && (
+                            <TextField
+                              id="outlined-multiline-static"
+                              label="Description"
+                              multiline
+                              rows={4}
+                              defaultValue={ipfsObject.text.Description}
+                              variant="outlined"
+                              fullWidth
+                              disabled
+                            />
+                          )
+                        }
+                        {ipfsObject.text.Description === undefined && (
+                          <TextField
+                            id="outlined-multiline-static"
+                            label="Description: None"
+                            multiline
+                            rows={4}
+                            defaultValue={ipfsObject.text.Description}
+                            variant="outlined"
+                            fullWidth
+                            disabled
+                          />
+                        )}
+                        {/* {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
                   <p className={classes.cardCategory}>
                     Text Element: {Object.values(ipfsObject.text)[0]}
                   </p>
                 )} */}
-                  </>
-                )}
-                <br />
-                {/* {currency !== "" && !transaction && (
+                      </>
+                    )}
+                    <br />
+                    {/* {currency !== "" && !transaction && (
               <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
             )}
 
             {currency !== "" && transaction && (
               <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
             )} */}
-              </>
-            )}
-            {!ownerOf && (
-              <div>
-
-                {/* {!transaction && (
-                  <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
-                )} */}
-                {recycled && !transaction && !isRecycling && (
-                  <>
-                    <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
-                    <Button onClick={() => { setIsRecycling(!isRecycling) }} color="info" className="MLBGradient">Recycle Asset</Button>
                   </>
                 )}
-                {!transaction && isRecycling && (
-                  <Button color="info" className="MLBGradient" onClick={(e) => setIsRecycling(!isRecycling)}>Back</Button>
-                )}
-                {!transaction && !isVerifying && !recycled && (
-                  <Button color="info" className="MLBGradient" onClick={(e) => setIsVerifying(!isVerifying)}>Verify Rightsholder</Button>
-                )}
-                {!transaction && isVerifying && (
-                  <Button color="info" className="MLBGradient" onClick={(e) => setIsNotVerifying()}>Back</Button>
-                )}
-                {isRecycling && (
-                  <Card>
-                    <CardHeader color="info" icon>
-                      <CardIcon color="info" className="DBGradient">
-                        <AccountBox />
-                      </CardIcon>
-                      <h4 className={classes.cardIconTitle}>New Owner Information</h4>
-                    </CardHeader>
-                    <CardBody>
-                      <form>
-                        <h5>Asset Selected: {ipfsObject.name}</h5>
-                        <>
-                          {!transaction && (
+                {!ownerOf && (
+                  <div>
+
+                    {/* {!transaction && (
+                  <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
+                )} */}
+                    {recycled && !transaction && !isRecycling && (
+                      <>
+                        <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
+                        <Button onClick={() => { setIsRecycling(!isRecycling) }} color="info" className="MLBGradient">Recycle Asset</Button>
+                      </>
+                    )}
+                    {!transaction && isRecycling && (
+                      <Button color="info" className="MLBGradient" onClick={(e) => setIsRecycling(!isRecycling)}>Back</Button>
+                    )}
+                    {!transaction && !isVerifying && !recycled && (
+                      <Button color="info" className="MLBGradient" onClick={(e) => setIsVerifying(!isVerifying)}>Verify Rightsholder</Button>
+                    )}
+                    {!transaction && isVerifying && (
+                      <Button color="info" className="MLBGradient" onClick={(e) => setIsNotVerifying()}>Back</Button>
+                    )}
+                    {isRecycling && (
+                      <Card>
+                        <CardHeader icon>
+                          <CardIcon className="headerIconBack">
+                            <AccountBox />
+                          </CardIcon>
+                          <h4 className={classes.cardIconTitle}>New Owner Information</h4>
+                        </CardHeader>
+                        <CardBody>
+                          <form>
+                            <h5>Asset Selected: {ipfsObject.name}</h5>
                             <>
-                              <CustomInput
-                                success={loginFirstState === "success"}
-                                error={loginFirstState === "error"}
-                                labelText="First Name *"
-                                id="firstName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setFirst(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginFirstState("success");
-                                    } else {
-                                      setloginFirstState("error");
-                                    }
-                                    setloginFirst(event.target.value);
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                labelText="Middle Name"
-                                id="middleName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setMiddle(event.target.value.trim())
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                success={loginLastState === "success"}
-                                error={loginLastState === "error"}
-                                labelText="Last Name *"
-                                id="lastName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setLast(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginLastState("success");
-                                    } else {
-                                      setloginLastState("error");
-                                    }
-                                    setloginLast(event.target.value);
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                success={loginIDState === "success"}
-                                error={loginIDState === "error"}
-                                labelText="ID Number *"
-                                id="idNumber"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setID(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginIDState("success");
-                                    } else {
-                                      setloginIDState("error");
-                                    }
-                                    setloginID(event.target.value);
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                success={loginPasswordState === "success"}
-                                error={loginPasswordState === "error"}
-                                labelText="Password *"
-                                id="ownerpassword"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  type: "password",
-                                  onChange: event => {
-                                    setPassword(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginPasswordState("success");
-                                    } else {
-                                      setloginPasswordState("error");
-                                    }
-                                    setloginPassword(event.target.value);
-                                  },
-                                }}
-                              />
-                              <div className={classes.formCategory}>
-                                <small>*</small> Required fields
+                              {!transaction && (
+                                <>
+                                  <CustomInput
+                                    success={loginFirstState === "success"}
+                                    error={loginFirstState === "error"}
+                                    labelText="First Name *"
+                                    id="firstName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setFirst(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginFirstState("success");
+                                        } else {
+                                          setloginFirstState("error");
+                                        }
+                                        setloginFirst(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText="Middle Name"
+                                    id="middleName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setMiddle(event.target.value.trim())
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginLastState === "success"}
+                                    error={loginLastState === "error"}
+                                    labelText="Last Name *"
+                                    id="lastName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setLast(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginLastState("success");
+                                        } else {
+                                          setloginLastState("error");
+                                        }
+                                        setloginLast(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginIDState === "success"}
+                                    error={loginIDState === "error"}
+                                    labelText="ID Number *"
+                                    id="idNumber"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setID(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginIDState("success");
+                                        } else {
+                                          setloginIDState("error");
+                                        }
+                                        setloginID(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginPasswordState === "success"}
+                                    error={loginPasswordState === "error"}
+                                    labelText="Password *"
+                                    id="ownerpassword"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      type: "password",
+                                      onChange: event => {
+                                        setPassword(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginPasswordState("success");
+                                        } else {
+                                          setloginPasswordState("error");
+                                        }
+                                        setloginPassword(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <div className={classes.formCategory}>
+                                    <small>*</small> Required fields
                     </div>
+                                </>
+                              )}
+                              {transaction && (
+                                <>
+                                  <CustomInput
+                                    labelText={first}
+                                    id="first"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={middle}
+                                    id="middle"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={last}
+                                    id="last"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={ID}
+                                    id="ID"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={password}
+                                    id="ownerpassword"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      type: "password",
+                                      disabled: true
+                                    }}
+                                  />
+                                </>
+                              )}
                             </>
-                          )}
-                          {transaction && (
+                            {!transaction && (
+                              <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                            )}
+                            {transaction && (
+                              <h3>
+                                Recycling Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                              </h3>
+                            )}
+                          </form>
+                        </CardBody>
+                      </Card>
+                    )}
+                    {isVerifying && (
+                      <Card>
+                        <CardHeader icon>
+                          <CardIcon className="headerIconBack">
+                            <AccountBox />
+                          </CardIcon>
+                          <h4 className={classes.cardIconTitle}>Verify Owner Information</h4>
+                        </CardHeader>
+                        <CardBody>
+                          <form>
+                            <h5>Asset Selected: {ipfsObject.name}</h5>
                             <>
-                              <CustomInput
-                                labelText={first}
-                                id="first"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={middle}
-                                id="middle"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={last}
-                                id="last"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={ID}
-                                id="ID"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={password}
-                                id="ownerpassword"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  type: "password",
-                                  disabled: true
-                                }}
-                              />
-                            </>
-                          )}
-                        </>
-                        {!transaction && (
-                          <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
-                        )}
-                        {transaction && (
-                          <h3>
-                            Recycling Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                          </h3>
-                        )}
-                      </form>
-                    </CardBody>
-                  </Card>
-                )}
-                {isVerifying && (
-                  <Card>
-                    <CardHeader color="info" icon>
-                      <CardIcon color="info" className="DBGradient">
-                        <AccountBox />
-                      </CardIcon>
-                      <h4 className={classes.cardIconTitle}>Verify Owner Information</h4>
-                    </CardHeader>
-                    <CardBody>
-                      <form>
-                        <h5>Asset Selected: {ipfsObject.name}</h5>
-                        <>
-                          {!transaction && (
-                            <>
-                              <CustomInput
-                                success={loginFirstState === "success"}
-                                error={loginFirstState === "error"}
-                                labelText="First Name *"
-                                id="firstName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setFirst(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginFirstState("success");
-                                    } else {
-                                      setloginFirstState("error");
-                                    }
-                                    setloginFirst(event.target.value);
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                labelText="Middle Name"
-                                id="middleName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setMiddle(event.target.value.trim())
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                success={loginLastState === "success"}
-                                error={loginLastState === "error"}
-                                labelText="Last Name *"
-                                id="lastName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setLast(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginLastState("success");
-                                    } else {
-                                      setloginLastState("error");
-                                    }
-                                    setloginLast(event.target.value);
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                success={loginIDState === "success"}
-                                error={loginIDState === "error"}
-                                labelText="ID Number *"
-                                id="idNumber"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setID(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginIDState("success");
-                                    } else {
-                                      setloginIDState("error");
-                                    }
-                                    setloginID(event.target.value);
-                                  },
-                                }}
-                              />
-                              <CustomInput
-                                success={loginPasswordState === "success"}
-                                error={loginPasswordState === "error"}
-                                labelText="Password *"
-                                id="ownerpassword"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  type: "password",
-                                  onChange: event => {
-                                    setPassword(event.target.value.trim())
-                                    if (event.target.value !== "") {
-                                      setloginPasswordState("success");
-                                    } else {
-                                      setloginPasswordState("error");
-                                    }
-                                    setloginPassword(event.target.value);
-                                  },
-                                }}
-                              />
-                              <div className={classes.formCategory}>
-                                <small>*</small> Required fields
+                              {!transaction && (
+                                <>
+                                  <CustomInput
+                                    success={loginFirstState === "success"}
+                                    error={loginFirstState === "error"}
+                                    labelText="First Name *"
+                                    id="firstName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setFirst(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginFirstState("success");
+                                        } else {
+                                          setloginFirstState("error");
+                                        }
+                                        setloginFirst(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText="Middle Name"
+                                    id="middleName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setMiddle(event.target.value.trim())
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginLastState === "success"}
+                                    error={loginLastState === "error"}
+                                    labelText="Last Name *"
+                                    id="lastName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setLast(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginLastState("success");
+                                        } else {
+                                          setloginLastState("error");
+                                        }
+                                        setloginLast(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginIDState === "success"}
+                                    error={loginIDState === "error"}
+                                    labelText="ID Number *"
+                                    id="idNumber"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setID(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginIDState("success");
+                                        } else {
+                                          setloginIDState("error");
+                                        }
+                                        setloginID(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginPasswordState === "success"}
+                                    error={loginPasswordState === "error"}
+                                    labelText="Password *"
+                                    id="ownerpassword"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      type: "password",
+                                      onChange: event => {
+                                        setPassword(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginPasswordState("success");
+                                        } else {
+                                          setloginPasswordState("error");
+                                        }
+                                        setloginPassword(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <div className={classes.formCategory}>
+                                    <small>*</small> Required fields
                       </div>
+                                </>
+                              )}
+                              {transaction && (
+                                <>
+                                  <CustomInput
+                                    labelText={first}
+                                    id="first"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={middle}
+                                    id="middle"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={last}
+                                    id="last"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={ID}
+                                    id="ID"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={password}
+                                    id="ownerpassword"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      type: "password",
+                                      disabled: true
+                                    }}
+                                  />
+                                </>
+                              )}
                             </>
-                          )}
-                          {transaction && (
-                            <>
-                              <CustomInput
-                                labelText={first}
-                                id="first"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={middle}
-                                id="middle"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={last}
-                                id="last"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={ID}
-                                id="ID"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  disabled: true
-                                }}
-                              />
-                              <CustomInput
-                                labelText={password}
-                                id="ownerpassword"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  type: "password",
-                                  disabled: true
-                                }}
-                              />
-                            </>
-                          )}
-                        </>
-                        {!transaction && (
-                          <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Rightsholder Information</Button>
-                        )}
-                        {!transaction && (
-                          <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Rightsholder Information</Button>
-                        )}
-                        {transaction && (
-                          <h3>
-                            Verifying Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                          </h3>
-                        )}
-                      </form>
-                    </CardBody>
-                  </Card>
+                            {!transaction && (
+                              <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Rightsholder Information</Button>
+                            )}
+                            {!transaction && (
+                              <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Rightsholder Information</Button>
+                            )}
+                            {transaction && (
+                              <h3>
+                                Verifying Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                              </h3>
+                            )}
+                          </form>
+                        </CardBody>
+                      </Card>
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
-            {ownerOf && (
-              <div>
-                <FormControl
-                  fullWidth
-                  className={classes.selectFormControl}
-                >
-                  <InputLabel className="functionSelectorText">
-                    <Danger>
-                      <Create className="functionSelectorIcon" />
-                    </Danger>
+                {ownerOf && (
+                  <div>
+                    <FormControl
+                      fullWidth
+                      className={classes.selectFormControl}
+                    >
+                      <InputLabel className="functionSelectorText">
+                        <Danger>
+                          <Create className="functionSelectorIcon" />
+                        </Danger>
                     Modify Asset
                         </InputLabel>
-                  <Select
-                    MenuProps={{
-                      className: classes.selectMenu
-                    }}
-                    classes={{
-                      select: classes.select
-                    }}
-                    value={simpleSelect}
-                    onChange={handleSimple}
-                    inputProps={{
-                      name: "simpleSelect",
-                      id: "simple-select"
-                    }}
-                  >
-                    <MenuItem
-                      disabled
-                      classes={{
-                        root: classes.selectMenuItem
-                      }}
-                    >
-                      Select Function
+                      <Select
+                        MenuProps={{
+                          className: classes.selectMenu
+                        }}
+                        classes={{
+                          select: classes.select
+                        }}
+                        value={simpleSelect}
+                        onChange={handleSimple}
+                        inputProps={{
+                          name: "simpleSelect",
+                          id: "simple-select"
+                        }}
+                      >
+                        <MenuItem
+                          disabled
+                          classes={{
+                            root: classes.selectMenuItem
+                          }}
+                        >
+                          Select Function
                           </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="transfer"
-                    >
-                      Transfer
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="transfer"
+                        >
+                          Transfer
                           </MenuItem>
-                    {/* <MenuItem
+                        {/* <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
@@ -1884,43 +1884,43 @@ export default function Search(props) {
                     >
                       Escrow
                           </MenuItem> */}
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="import"
-                    >
-                      Import
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="import"
+                        >
+                          Import
                           </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="export"
-                    >
-                      Export
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="export"
+                        >
+                          Export
                           </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="discard"
-                    >
-                      Discard
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="discard"
+                        >
+                          Discard
                           </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="modify-status"
-                    >
-                      Modify Status
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="modify-status"
+                        >
+                          Modify Status
                           </MenuItem>
-                    {/* <MenuItem
+                        {/* <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
@@ -1929,60 +1929,60 @@ export default function Search(props) {
                     >
                       Decrement Counter
                           </MenuItem> */}
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-information"
-                    >
-                      Change Asset Information
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="edit-information"
+                        >
+                          Change Asset Information
                           </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-rightsholder"
-                    >
-                      Change Owner Information
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="edit-rightsholder"
+                        >
+                          Change Owner Information
                           </MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-            )}
-          </CardBody>
-          <CardFooter>
-            {!isMobile && (
-              <div className={imgClasses.stats}>
-                IDX Hash: {asset.idxHash}
-              </div>
-            )}
-            {isMobile && (
-              <div className={imgClasses.stats}>
-                IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
-              </div>
-            )}
-            <div className={imgClasses.stats}>
-              <RWebShare
-                className="shareMenu"
-                data={{
-                  text: "Check out my PRüF-verified asset!",
-                  url: URL,
-                  title: "Share Asset Link",
-                }}
-              >
-                <div className="printButton">
-                  <Share />
+                      </Select>
+                    </FormControl>
+                  </div>
+                )}
+              </CardBody>
+              <CardFooter>
+                {!isMobile && (
+                  <div className={imgClasses.stats}>
+                    IDX Hash: {asset.idxHash}
+                  </div>
+                )}
+                {isMobile && (
+                  <div className={imgClasses.stats}>
+                    IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
+                  </div>
+                )}
+                <div className={imgClasses.stats}>
+                  <RWebShare
+                    className="shareMenu"
+                    data={{
+                      text: "Check out my PRüF-verified asset!",
+                      url: URL,
+                      title: "Share Asset Link",
+                    }}
+                  >
+                    <div className="printButton">
+                      <Share />
+                    </div>
+                  </RWebShare>
+                  <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
                 </div>
-              </RWebShare>
-              <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
-            </div>
-          </CardFooter>
-        </Card>
+              </CardFooter>
+            </Card>
+          )}
+        </>
       )}
-    </>
-    )}
     </>
   );
 }

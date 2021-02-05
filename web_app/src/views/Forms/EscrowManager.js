@@ -45,13 +45,13 @@ export default function EscrowManager(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
+  }, [])
 
-  if(assetInfo === undefined || assetInfo === null) {
+  if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
     return window.location.href = "/#/admin/home"
   }
@@ -117,7 +117,7 @@ export default function EscrowManager(props) {
 
   }
 
-  
+
   const endEscrow = async () => { //transfer held asset
 
     if (loginAddress === "") {
@@ -185,92 +185,92 @@ export default function EscrowManager(props) {
   };
 
   return (
-        <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
-              <TransferWithinAStation />
-            </CardIcon>
-            <h4 className={classes.cardIconTitle}>Escrow Manager</h4>
-          </CardHeader>
-          <CardBody>
-            <form>
-              <h4>Asset Selected: {assetInfo.name}</h4>
-              {!isSettingEscrow && (
-              <h4>Current Status: {assetInfo.status}</h4>
-              )}
-        {isSettingEscrow && (
-          <>
-          <CustomInput
-            success={loginEscrowOwnerState === "success"}
-            error={loginEscrowOwnerState === "error"}
-            labelText="Escrow Agent Address *"
-            id="address"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              onChange: event => {
-                setEscrowOwner(event.target.value.trim())
-                if (event.target.value !== "") {
-                  setloginEscrowOwnerState("success");
-                } else {
-                  setloginEscrowOwnerState("error");
-                }
-                setloginEscrowOwner(event.target.value);
-              },
-            }}
-          />
-          <CustomInput
-            success={loginEscrowTimeState === "success"}
-            error={loginEscrowTimeState === "error"}
-            labelText="Escrow Period *"
-            id="time"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              type: "number",
-              onChange: event => {
-                setEscrowTime(event.target.value.trim())
-                if (event.target.value !== "") {
-                  setloginEscrowTimeState("success");
-                } else {
-                  setloginEscrowTimeState("error");
-                }
-                setloginEscrowTime(event.target.value);
-              },
-            }}
-          />
-          <CustomInput
-            success={loginAddressState === "success"}
-            error={loginAddressState === "error"}
-            labelText="Recieving Address *"
-            id="address"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              onChange: event => {
-                setAddress(event.target.value.trim())
-                if (event.target.value !== "") {
-                  setloginAddressState("success");
-                } else {
-                  setloginAddressState("error");
-                }
-                setloginAddress(event.target.value);
-              },
-            }}
-          />
-          </>
-        )}
+    <Card>
+      <CardHeader icon>
+        <CardIcon className="headerIconBack">
+          <TransferWithinAStation />
+        </CardIcon>
+        <h4 className={classes.cardIconTitle}>Escrow Manager</h4>
+      </CardHeader>
+      <CardBody>
+        <form>
+          <h4>Asset Selected: {assetInfo.name}</h4>
+          {!isSettingEscrow && (
+            <h4>Current Status: {assetInfo.status}</h4>
+          )}
+          {isSettingEscrow && (
+            <>
+              <CustomInput
+                success={loginEscrowOwnerState === "success"}
+                error={loginEscrowOwnerState === "error"}
+                labelText="Escrow Agent Address *"
+                id="address"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  onChange: event => {
+                    setEscrowOwner(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginEscrowOwnerState("success");
+                    } else {
+                      setloginEscrowOwnerState("error");
+                    }
+                    setloginEscrowOwner(event.target.value);
+                  },
+                }}
+              />
+              <CustomInput
+                success={loginEscrowTimeState === "success"}
+                error={loginEscrowTimeState === "error"}
+                labelText="Escrow Period *"
+                id="time"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  type: "number",
+                  onChange: event => {
+                    setEscrowTime(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginEscrowTimeState("success");
+                    } else {
+                      setloginEscrowTimeState("error");
+                    }
+                    setloginEscrowTime(event.target.value);
+                  },
+                }}
+              />
+              <CustomInput
+                success={loginAddressState === "success"}
+                error={loginAddressState === "error"}
+                labelText="Recieving Address *"
+                id="address"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  onChange: event => {
+                    setAddress(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginAddressState("success");
+                    } else {
+                      setloginAddressState("error");
+                    }
+                    setloginAddress(event.target.value);
+                  },
+                }}
+              />
+            </>
+          )}
           {(!transactionActive && assetInfo.statusNum == "50") || assetInfo.statusNum == "56" && (
-            <Button color="info" className="MLBGradient"onClick={() => setIsSettingEscrow(false)}>End Escrow</Button>
+            <Button color="info" className="MLBGradient" onClick={() => setIsSettingEscrow(false)}>End Escrow</Button>
           )}
           {(!transactionActive && assetInfo.statusNum !== "50") || assetInfo.statusNum !== "56" && (
-            <Button color="info" className="MLBGradient"onClick={() => setIsSettingEscrow(true)}>Set Escrow</Button>
+            <Button color="info" className="MLBGradient" onClick={() => setIsSettingEscrow(true)}>Set Escrow</Button>
           )}
-            </form>
-          </CardBody>
-        </Card>
+        </form>
+      </CardBody>
+    </Card>
   );
 }

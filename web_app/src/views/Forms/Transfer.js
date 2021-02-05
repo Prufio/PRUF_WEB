@@ -35,11 +35,11 @@ export default function Transfer(props) {
   window.sentPacket = null
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
+  }, [])
 
   const clearForms = () => {
     setAddress("");
@@ -126,8 +126,8 @@ export default function Transfer(props) {
 
   return (
     <Card>
-      <CardHeader color="info" icon>
-        <CardIcon color="info" className="DBGradient">
+      <CardHeader icon>
+        <CardIcon className="headerIconBack">
           <SwapHoriz />
         </CardIcon>
         <h4 className={classes.cardIconTitle}>Transfer Asset</h4>

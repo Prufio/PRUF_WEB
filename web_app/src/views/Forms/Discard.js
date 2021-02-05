@@ -113,8 +113,8 @@ export default function Discard(props) {
 
   return (
     <Card>
-      <CardHeader color="info" icon>
-        <CardIcon color="info" className="DBGradient">
+      <CardHeader icon>
+        <CardIcon className="headerIconBack">
           <DeleteOutline />
         </CardIcon>
         <h4 className={classes.cardIconTitle}>Discard Asset</h4>

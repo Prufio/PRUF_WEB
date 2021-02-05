@@ -50,13 +50,13 @@ export default function ModifyRGT(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
-  
-  if(assetInfo === undefined || assetInfo === null) {
+  }, [])
+
+  if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
     return window.location.href = "/#/admin/home"
   }
@@ -155,8 +155,8 @@ export default function ModifyRGT(props) {
 
   return (
     <Card>
-      <CardHeader color="info" icon>
-        <CardIcon color="info" className="DBGradient">
+      <CardHeader icon>
+        <CardIcon className="headerIconBack">
           <GroupAdd />
         </CardIcon>
         <h4 className={classes.cardIconTitle}>Change Owner Information</h4>

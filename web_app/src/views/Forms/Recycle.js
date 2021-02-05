@@ -93,13 +93,13 @@ export default function Recycle(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
-  
-  if(assetInfo === undefined || assetInfo === null) {
+  }, [])
+
+  if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
     return window.location.href = "/#/admin/home"
   }
@@ -319,8 +319,8 @@ export default function Recycle(props) {
     <GridContainer>
       {assetClass === "" && (
         <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
@@ -387,8 +387,8 @@ export default function Recycle(props) {
           <GridItem xs={12} sm={12} md={6}>
             {!scanQR && QRValue === "" && (
               <Card>
-                <CardHeader color="info" icon>
-                  <CardIcon color="info" className="DBGradient">
+                <CardHeader icon>
+                  <CardIcon className="headerIconBack">
                     <DashboardRounded />
                   </CardIcon>
                   <h4 className={classes.cardIconTitle}>Asset Information</h4>
@@ -659,8 +659,8 @@ export default function Recycle(props) {
 
             {scanQR === true && QRValue === "" && (
               <Card>
-                <CardHeader color="info" icon>
-                  <CardIcon color="info" className="DBGradient">
+                <CardHeader icon>
+                  <CardIcon className="headerIconBack">
                     <DashboardRounded />
                   </CardIcon>
                   <h4 className={classes.cardIconTitle}>QR Scanner</h4>
@@ -696,8 +696,8 @@ export default function Recycle(props) {
 
             {QRValue !== "" && (
               <Card>
-                <CardHeader color="info" icon>
-                  <CardIcon color="info" className="DBGradient">
+                <CardHeader icon>
+                  <CardIcon className="headerIconBack">
                     <DashboardOutlined />
                   </CardIcon>
                   <h4 className={classes.cardIconTitle}>Asset Information</h4>
@@ -720,8 +720,8 @@ export default function Recycle(props) {
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
-              <CardHeader color="info" icon>
-                <CardIcon color="info" className="DBGradient">
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
                   <AccountBox />
                 </CardIcon>
                 <h4 className={classes.cardIconTitle}>Owner Information</h4>

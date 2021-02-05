@@ -464,8 +464,8 @@ export default function NewRecord(props) {
     <>
       {window.contracts === undefined && (
         <Card>
-          <CardHeader color="info" icon>
-            <CardIcon color="info" className="DBGradient">
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
@@ -486,8 +486,8 @@ export default function NewRecord(props) {
             <>
               {assetClass === "" && transactionActive && (
                 <Card>
-                  <CardHeader color="info" icon>
-                    <CardIcon color="info" className="DBGradient">
+                  <CardHeader icon>
+                    <CardIcon className="headerIconBack">
                       <Category />
                     </CardIcon>
                     <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
@@ -504,8 +504,8 @@ export default function NewRecord(props) {
               )}
               {assetClass === "" && !transactionActive && (
                 <Card>
-                  <CardHeader color="info" icon>
-                    <CardIcon color="info" className="DBGradient">
+                  <CardHeader icon>
+                    <CardIcon className="headerIconBack">
                       <Category />
                     </CardIcon>
                     <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
@@ -574,8 +574,8 @@ export default function NewRecord(props) {
               <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
               {assetClass === "" && (
                 <Card>
-                  <CardHeader color="info" icon>
-                    <CardIcon color="info" className="DBGradient">
+                  <CardHeader icon>
+                    <CardIcon className="headerIconBack">
                       <Category />
                     </CardIcon>
                     <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
@@ -641,8 +641,8 @@ export default function NewRecord(props) {
                 <>
                   <GridItem xs={12} sm={12} md={6}>
                     <Card>
-                      <CardHeader color="info" icon>
-                        <CardIcon color="info" className="DBGradient">
+                      <CardHeader icon>
+                        <CardIcon className="headerIconBack">
                           <DashboardOutlined />
                         </CardIcon>
                         <h4 className={classes.cardIconTitle}>Asset Information</h4>
@@ -811,8 +811,8 @@ export default function NewRecord(props) {
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
                     <Card>
-                      <CardHeader color="info" icon>
-                        <CardIcon color="info" className="DBGradient">
+                      <CardHeader icon>
+                        <CardIcon className="headerIconBack">
                           <AccountBox />
                         </CardIcon>
                         <h4 className={classes.cardIconTitle}>Owner Information</h4>
@@ -992,8 +992,8 @@ export default function NewRecord(props) {
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
                     <Card>
-                      <CardHeader color="info" icon>
-                        <CardIcon color="info" className="DBGradient">
+                      <CardHeader icon>
+                        <CardIcon className="headerIconBack">
                           <Description />
                         </CardIcon>
                         <h4 className={classes.cardIconTitle}>Extended Asset Information (optional)</h4>

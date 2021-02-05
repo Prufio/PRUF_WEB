@@ -217,8 +217,8 @@ export default function ModifyStatus(props) {
 
   return (
     <Card>
-      <CardHeader color="info" icon>
-        <CardIcon color="info" className="DBGradient">
+      <CardHeader icon>
+        <CardIcon className="headerIconBack">
           <ScatterPlot />
         </CardIcon>
         <h4 className={classes.cardIconTitle}>Modify Status</h4>
