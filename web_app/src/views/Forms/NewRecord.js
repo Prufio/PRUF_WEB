@@ -90,21 +90,96 @@ export default function NewRecord(props) {
   let fileInput = React.createRef();
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
+  }, [])
 
   const ACLogin = event => {
-    setAssetClass(event.target.value);
-    if (event.target.value === "1000003") {
-      setAssetClassName("Trinkets")
+    if (!props.IDHolder) {
+      IDHolderPrompt()
     }
-    if (event.target.value === "1000004") {
-      setAssetClassName("Personal Computers")
+    else {
+      setAssetClass(event.target.value);
+      if (event.target.value === "1000003") {
+        setAssetClassName("Trinkets")
+      }
+      if (event.target.value === "1000004") {
+        setAssetClassName("Personal Computers")
+      }
     }
   };
+
+  const IDHolderPrompt = () => {
+    let tempTxHash;
+
+    swal({
+      title: "In order to mint asset tokens, you must first have an ID token.",
+      icon: "warning",
+      text: "If you would like to mint asset tokens, please select Yes, it will mint you an ID token",
+      buttons: {
+        yes: {
+          text: "Yes",
+          value: "yes"
+        },
+        no: {
+          text: "No",
+          value: "no"
+        }
+      },
+    })
+      .then((value) => {
+        switch (value) {
+
+          case "yes":
+            setTransactionActive(true)
+            window.contracts.PARTY.methods
+              .GET_ID()
+              .send({ from: props.addr })
+              .on("error", function (_error) {
+                setTransactionActive(false);
+                setTxStatus(false);
+                setTxHash(Object.values(_error)[0].transactionHash);
+                tempTxHash = Object.values(_error)[0].transactionHash;
+                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+                let str2 = "' target='_blank'>here</a>";
+                link.innerHTML = String(str1 + tempTxHash + str2);
+                swal({
+                  title: "Something went wrong!",
+                  content: link,
+                  icon: "warning",
+                  button: "Close",
+                });
+              })
+              .on("receipt", (receipt) => {
+                setTransactionActive(false);
+                setTxStatus(receipt.status);
+                tempTxHash = receipt.transactionHash;
+                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+                let str2 = "' target='_blank'>here</a>";
+                link.innerHTML = String(str1 + tempTxHash + str2);
+                swal({
+                  title: "ID Token Minted!",
+                  content: link,
+                  icon: "warning",
+                  button: "Close"
+                });
+                window.resetInfo = true;
+                window.recount = true;
+              })
+            break;
+
+          case "no":
+            break;
+
+          default:
+            break;
+        }
+      });
+
+
+  }
 
   const handleClick = () => {
     fileInput.current.click();
@@ -138,26 +213,26 @@ export default function NewRecord(props) {
     if (!buffer) return;
     console.log("adding image...")
     let tempBuffer = buffer;
-    let src = prefix+base64.encode(tempBuffer);
+    let src = prefix + base64.encode(tempBuffer);
 
-    var i = new Image(); 
+    var i = new Image();
 
-    i.onload = function(){
+    i.onload = function () {
       console.log(i.height, i.width);
-      if(i.height > maxImageSize || i.width > maxImageSize){
+      if (i.height > maxImageSize || i.width > maxImageSize) {
         let newH, newW, ar;
-        ar = i.width/i.height;
+        ar = i.width / i.height;
         newH = maxImageSize;
-        newW = ar*newH;
+        newW = ar * newH;
         newH = newH;
         console.log("Resizing image... ");
-        resizeImg(tempBuffer, {height: newH, width:newW, format: "jpg"}).then((e)=>{
-          console.log("Resized to ",newH,"x",newW);
+        resizeImg(tempBuffer, { height: newH, width: newW, format: "jpg" }).then((e) => {
+          console.log("Resized to ", newH, "x", newW);
           setDisplayImage(prefix + base64.encode(e));
         })
       }
-      else{
-        resizeImg(tempBuffer, {height: i.height, width:i.width, format: "jpg"}).then((e)=>{
+      else {
+        resizeImg(tempBuffer, { height: i.height, width: i.width, format: "jpg" }).then((e) => {
           console.log("Converted to .JPG");
           setDisplayImage(prefix + base64.encode(e));
         });
@@ -177,8 +252,9 @@ export default function NewRecord(props) {
       console.log(file)
       if (!file.type.includes("image")) {
         return swal({
-        title: "Unsupported File Type",
-        button: "Close"})
+          title: "Unsupported File Type",
+          button: "Close"
+        })
       }
       const fileType = file.type;
       const prefix = `data:${fileType};base64,`;
@@ -198,14 +274,14 @@ export default function NewRecord(props) {
   const removeDisplayImage = () => {
     let i = new Image();
 
-    i.onload = function(){
-        if(props.ps){
-           props.ps.element.scrollTop -= i.height
-          }
-        setDisplayImage("")
+    i.onload = function () {
+      if (props.ps) {
+        props.ps.element.scrollTop -= i.height
+      }
+      setDisplayImage("")
     };
 
-    i.src = displayImage; 
+    i.src = displayImage;
   }
 
   const checkAsset = async () => {
@@ -250,11 +326,11 @@ export default function NewRecord(props) {
     setShowHelp(false);
 
     if (nameTag !== "") {
-      ipfsObj = { photo: {}, text: {}, urls:{}, name: String(nameTag) }
+      ipfsObj = { photo: {}, text: {}, urls: {}, name: String(nameTag) }
     }
 
     else {
-      ipfsObj = { photo: {}, text: {}, urls:{}, name: "" }
+      ipfsObj = { photo: {}, text: {}, urls: {}, name: "" }
     }
 
     if (description !== "") {
@@ -386,9 +462,8 @@ export default function NewRecord(props) {
 
   const classes = useStyles();
   return (
-    <GridContainer>
-      <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
-      {assetClass === "" && (
+    <>
+      {window.contracts === undefined && (
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info" className="DBGradient">
@@ -398,422 +473,544 @@ export default function NewRecord(props) {
           </CardHeader>
           <CardBody>
             <form>
-              <FormControl
-                fullWidth
-                className={classes.selectFormControl}
-              >
-                <InputLabel
-                >
-                  Select Asset Class
-                        </InputLabel>
-                <Select
-                  MenuProps={{
-                    className: classes.selectMenu
-                  }}
-                  classes={{
-                    select: classes.select
-                  }}
-                  value={simpleSelect}
-                  onChange={(e) => { ACLogin(e) }}
-                  inputProps={{
-                    name: "simpleSelect",
-                    id: "simple-select"
-                  }}
-                >
-                  <MenuItem
-                    disabled
-                    classes={{
-                      root: classes.selectMenuItem
-                    }}
-                  >
-                    Select Asset Class
-                          </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value="1000003"
-                  >
-                    Trinkets
-                          </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value="1000004"
-                  >
-                    Personal Computers
-                          </MenuItem>
-                </Select>
-              </FormControl>
+              <h3>
+                Connecting to the blockchain<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              </h3>
             </form>
           </CardBody>
           <br />
         </Card>
       )}
-      {assetClass !== "" && (
-        <>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card>
-              <CardHeader color="info" icon>
-                <CardIcon color="info" className="DBGradient">
-                  <Category />
-                </CardIcon>
-                <h4 className={classes.cardIconTitle}>Asset Information</h4>
-              </CardHeader>
-              <CardBody>
-                <form>
-                  <h4>AC Selected: {assetClassName}, ({assetClass})</h4>
-                  {!transactionActive && (
-                    <>
-                      <CustomInput
-                        success={loginManufacturerState === "success"}
-                        error={loginManufacturerState === "error"}
-                        labelText="Manufacturer *"
-                        id="manufacturer"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event => {
-                            setManufacturer(event.target.value.trim())
-                            if (event.target.value !== "") {
-                              setloginManufacturerState("success");
-                            } else {
-                              setloginManufacturerState("error");
-                            }
-                            setloginManufacturer(event.target.value);
-                          },
-                        }}
-                      />
-                      <CustomInput
-                        success={loginTypeState === "success"}
-                        error={loginTypeState === "error"}
-                        labelText="Type *"
-                        id="type"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event => {
-                            setType(event.target.value.trim())
-                            if (event.target.value !== "") {
-                              setloginTypeState("success");
-                            } else {
-                              setloginTypeState("error");
-                            }
-                            setloginType(event.target.value);
-                          },
-                        }}
-                      />
-                      <CustomInput
-                        success={loginModelState === "success"}
-                        error={loginModelState === "error"}
-                        labelText="Model *"
-                        id="model"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event => {
-                            setModel(event.target.value.trim())
-                            if (event.target.value !== "") {
-                              setloginModelState("success");
-                            } else {
-                              setloginModelState("error");
-                            }
-                            setloginModel(event.target.value);
-                          },
-                        }}
-                      />
-                      <CustomInput
-                        success={loginSerialState === "success"}
-                        error={loginSerialState === "error"}
-                        labelText="Serial *"
-                        id="serial"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          onChange: event => {
-                            setSerial(event.target.value.trim())
-                            if (event.target.value !== "") {
-                              setloginSerialState("success");
-                            } else {
-                              setloginSerialState("error");
-                            }
-                            setloginSerial(event.target.value);
-                          },
-                        }}
-                      />
-                      <div className={classes.formCategory}>
-                        <small>*</small> Required fields
+      {window.contracts !== undefined && (
+        <GridContainer>
+          {props.IDHolder === false && (
+            <>
+              {assetClass === "" && transactionActive && (
+                <Card>
+                  <CardHeader color="info" icon>
+                    <CardIcon color="info" className="DBGradient">
+                      <Category />
+                    </CardIcon>
+                    <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <form>
+                      <h3>
+                        Creating ID<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                      </h3>
+                    </form>
+                  </CardBody>
+                  <br />
+                </Card>
+              )}
+              {assetClass === "" && !transactionActive && (
+                <Card>
+                  <CardHeader color="info" icon>
+                    <CardIcon color="info" className="DBGradient">
+                      <Category />
+                    </CardIcon>
+                    <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <form>
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}
+                      >
+                        <InputLabel
+                        >
+                          Select Asset Class
+                        </InputLabel>
+                        <Select
+                          MenuProps={{
+                            className: classes.selectMenu
+                          }}
+                          classes={{
+                            select: classes.select
+                          }}
+                          value={simpleSelect}
+                          onChange={(e) => { ACLogin(e) }}
+                          inputProps={{
+                            name: "simpleSelect",
+                            id: "simple-select"
+                          }}
+                        >
+                          <MenuItem
+                            disabled
+                            classes={{
+                              root: classes.selectMenuItem
+                            }}
+                          >
+                            Select Asset Class
+                          </MenuItem>
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
+                            }}
+                            value="1000003"
+                          >
+                            Trinkets
+                          </MenuItem>
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
+                            }}
+                            value="1000004"
+                          >
+                            Personal Computers
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </form>
+                  </CardBody>
+                  <br />
+                </Card>
+              )}
+            </>
+          )}
+          {props.IDHolder && (
+            <>
+              <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
+              {assetClass === "" && (
+                <Card>
+                  <CardHeader color="info" icon>
+                    <CardIcon color="info" className="DBGradient">
+                      <Category />
+                    </CardIcon>
+                    <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <form>
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}
+                      >
+                        <InputLabel
+                        >
+                          Select Asset Class
+                      </InputLabel>
+                        <Select
+                          MenuProps={{
+                            className: classes.selectMenu
+                          }}
+                          classes={{
+                            select: classes.select
+                          }}
+                          value={simpleSelect}
+                          onChange={(e) => { ACLogin(e) }}
+                          inputProps={{
+                            name: "simpleSelect",
+                            id: "simple-select"
+                          }}
+                        >
+                          <MenuItem
+                            disabled
+                            classes={{
+                              root: classes.selectMenuItem
+                            }}
+                          >
+                            Select Asset Class
+                        </MenuItem>
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
+                            }}
+                            value="1000003"
+                          >
+                            Trinkets
+                        </MenuItem>
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
+                            }}
+                            value="1000004"
+                          >
+                            Personal Computers
+                        </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </form>
+                  </CardBody>
+                  <br />
+                </Card>
+              )}
+              {assetClass !== "" && (
+                <>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <Card>
+                      <CardHeader color="info" icon>
+                        <CardIcon color="info" className="DBGradient">
+                          <Category />
+                        </CardIcon>
+                        <h4 className={classes.cardIconTitle}>Asset Information</h4>
+                      </CardHeader>
+                      <CardBody>
+                        <form>
+                          <h4>AC Selected: {assetClassName}, ({assetClass})</h4>
+                          {!transactionActive && (
+                            <>
+                              <CustomInput
+                                labelText="Asset Name"
+                                id="assetName"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setNameTag(event.target.value.trim())
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                success={loginManufacturerState === "success"}
+                                error={loginManufacturerState === "error"}
+                                labelText="Manufacturer *"
+                                id="manufacturer"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setManufacturer(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginManufacturerState("success");
+                                    } else {
+                                      setloginManufacturerState("error");
+                                    }
+                                    setloginManufacturer(event.target.value);
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                success={loginTypeState === "success"}
+                                error={loginTypeState === "error"}
+                                labelText="Type *"
+                                id="type"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setType(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginTypeState("success");
+                                    } else {
+                                      setloginTypeState("error");
+                                    }
+                                    setloginType(event.target.value);
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                success={loginModelState === "success"}
+                                error={loginModelState === "error"}
+                                labelText="Model *"
+                                id="model"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setModel(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginModelState("success");
+                                    } else {
+                                      setloginModelState("error");
+                                    }
+                                    setloginModel(event.target.value);
+                                  },
+                                }}
+                              />
+                              <CustomInput
+                                success={loginSerialState === "success"}
+                                error={loginSerialState === "error"}
+                                labelText="Serial *"
+                                id="serial"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setSerial(event.target.value.trim())
+                                    if (event.target.value !== "") {
+                                      setloginSerialState("success");
+                                    } else {
+                                      setloginSerialState("error");
+                                    }
+                                    setloginSerial(event.target.value);
+                                  },
+                                }}
+                              />
+                              <div className={classes.formCategory}>
+                                <small>*</small> Required fields
               </div>
-                    </>
-                  )}
-                  {transactionActive && (
-                    <>
-                      {assetName !== "" && (
-                        <CustomInput
-                          labelText={assetName}
-                          id="assetName"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true
-                          }}
-                        />
-                      )}
-                      <CustomInput
-                        labelText={manufacturer}
-                        id="manufacturer"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          disabled: true
-                        }}
-                      />
-                      <CustomInput
-                        labelText={type}
-                        id="type"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          disabled: true
-                        }}
-                      />
-                      <CustomInput
-                        labelText={model}
-                        id="model"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          disabled: true
-                        }}
-                      />
-                      <CustomInput
-                        labelText={serial}
-                        id="serial"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          disabled: true
-                        }}
-                      />
-                    </>
-                  )}
-                </form>
-              </CardBody>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card>
-              <CardHeader color="info" icon>
-                <CardIcon color="info" className="DBGradient">
-                  <AccountBox />
-                </CardIcon>
-                <h4 className={classes.cardIconTitle}>Owner Information</h4>
-              </CardHeader>
-              <CardBody>
-                <form>
-                  <>
-                    {!transactionActive && (
-                      <>
-                        <CustomInput
-                          success={loginFirstState === "success"}
-                          error={loginFirstState === "error"}
-                          labelText="First Name *"
-                          id="firstName"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            onChange: event => {
-                              setFirst(event.target.value.trim())
-                              if (event.target.value !== "") {
-                                setloginFirstState("success");
-                              } else {
-                                setloginFirstState("error");
-                              }
-                              setloginFirst(event.target.value);
-                            },
-                          }}
-                        />
-                        <CustomInput
-                          labelText="Middle Name"
-                          id="middleName"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            onChange: event => {
-                              setMiddle(event.target.value.trim())
-                            },
-                          }}
-                        />
-                        <CustomInput
-                          success={loginLastState === "success"}
-                          error={loginLastState === "error"}
-                          labelText="Last Name *"
-                          id="lastName"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            onChange: event => {
-                              setLast(event.target.value.trim())
-                              if (event.target.value !== "") {
-                                setloginLastState("success");
-                              } else {
-                                setloginLastState("error");
-                              }
-                              setloginLast(event.target.value);
-                            },
-                          }}
-                        />
-                        <CustomInput
-                          success={loginIDState === "success"}
-                          error={loginIDState === "error"}
-                          labelText="ID Number *"
-                          id="idNumber"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            onChange: event => {
-                              setID(event.target.value.trim())
-                              if (event.target.value !== "") {
-                                setloginIDState("success");
-                              } else {
-                                setloginIDState("error");
-                              }
-                              setloginID(event.target.value);
-                            },
-                          }}
-                        />
-                        <CustomInput
-                          success={loginPasswordState === "success"}
-                          error={loginPasswordState === "error"}
-                          labelText="Password *"
-                          id="ownerpassword"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            type: "password",
-                            onChange: event => {
-                              setPassword(event.target.value.trim())
-                              if (event.target.value !== "") {
-                                setloginPasswordState("success");
-                              } else {
-                                setloginPasswordState("error");
-                              }
-                              setloginPassword(event.target.value);
-                            },
-                          }}
-                        />
-                        <div className={classes.formCategory}>
-                          <small>*</small> Required fields
+                            </>
+                          )}
+                          {transactionActive && (
+                            <>
+                              {assetName !== "" && (
+                                <CustomInput
+                                  labelText={assetName}
+                                  id="assetName"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    disabled: true
+                                  }}
+                                />
+                              )}
+                              <CustomInput
+                                labelText={manufacturer}
+                                id="manufacturer"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={type}
+                                id="type"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={model}
+                                id="model"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={serial}
+                                id="serial"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                            </>
+                          )}
+                        </form>
+                      </CardBody>
+                    </Card>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <Card>
+                      <CardHeader color="info" icon>
+                        <CardIcon color="info" className="DBGradient">
+                          <AccountBox />
+                        </CardIcon>
+                        <h4 className={classes.cardIconTitle}>Owner Information</h4>
+                      </CardHeader>
+                      <CardBody>
+                        <form>
+                          <>
+                            {!transactionActive && (
+                              <>
+                                <CustomInput
+                                  success={loginFirstState === "success"}
+                                  error={loginFirstState === "error"}
+                                  labelText="First Name *"
+                                  id="firstName"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    onChange: event => {
+                                      setFirst(event.target.value.trim())
+                                      if (event.target.value !== "") {
+                                        setloginFirstState("success");
+                                      } else {
+                                        setloginFirstState("error");
+                                      }
+                                      setloginFirst(event.target.value);
+                                    },
+                                  }}
+                                />
+                                <CustomInput
+                                  labelText="Middle Name"
+                                  id="middleName"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    onChange: event => {
+                                      setMiddle(event.target.value.trim())
+                                    },
+                                  }}
+                                />
+                                <CustomInput
+                                  success={loginLastState === "success"}
+                                  error={loginLastState === "error"}
+                                  labelText="Last Name *"
+                                  id="lastName"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    onChange: event => {
+                                      setLast(event.target.value.trim())
+                                      if (event.target.value !== "") {
+                                        setloginLastState("success");
+                                      } else {
+                                        setloginLastState("error");
+                                      }
+                                      setloginLast(event.target.value);
+                                    },
+                                  }}
+                                />
+                                <CustomInput
+                                  success={loginIDState === "success"}
+                                  error={loginIDState === "error"}
+                                  labelText="ID Number *"
+                                  id="idNumber"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    onChange: event => {
+                                      setID(event.target.value.trim())
+                                      if (event.target.value !== "") {
+                                        setloginIDState("success");
+                                      } else {
+                                        setloginIDState("error");
+                                      }
+                                      setloginID(event.target.value);
+                                    },
+                                  }}
+                                />
+                                <CustomInput
+                                  success={loginPasswordState === "success"}
+                                  error={loginPasswordState === "error"}
+                                  labelText="Password *"
+                                  id="password"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    type: "password",
+                                    onChange: event => {
+                                      setPassword(event.target.value.trim())
+                                      if (event.target.value !== "") {
+                                        setloginPasswordState("success");
+                                      } else {
+                                        setloginPasswordState("error");
+                                      }
+                                      setloginPassword(event.target.value);
+                                    },
+                                  }}
+                                />
+                                <div className={classes.formCategory}>
+                                  <small>*</small> Required fields
                     </div>
-                      </>
-                    )}
-                    {transactionActive && (
-                      <>
-                        <CustomInput
-                          labelText={first}
-                          id="first"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true
-                          }}
-                        />
-                        <CustomInput
-                          labelText={middle}
-                          id="middle"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true
-                          }}
-                        />
-                        <CustomInput
-                          labelText={last}
-                          id="last"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true
-                          }}
-                        />
-                        <CustomInput
-                          labelText={ID}
-                          id="ID"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true
-                          }}
-                        />
-                        <CustomInput
-                          labelText={password}
-                          id="ownerpassword"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            type: "password",
-                            disabled: true
-                          }}
-                        />
-                      </>
-                    )}
-                  </>
-                  {!transactionActive && (
-                    <div className="MLBGradientSubmit">
-                      <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Asset</Button>
-                    </div>
-                  )}
-                  {transactionActive && (
-                    <h3>
-                      Creating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                    </h3>
-                  )}
-                </form>
-              </CardBody>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card>
-              <CardHeader color="info" icon>
-                <CardIcon color="info" className="DBGradient">
-                  <Description />
-                </CardIcon>
-                <h4 className={classes.cardIconTitle}>Extended Asset Information (optional)</h4>
-                {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
-                {displayImage !== "" && (<>
-                    <br/>
-                    <br/>
-                    <CardHeader image className={classes.cardHeaderHoverCustom}>
-                      <img src={displayImage}/>
-                    </CardHeader>
-                </>)}
-              </CardHeader>
-              <CardBody>
-                <form>
+                              </>
+                            )}
+                            {transactionActive && (
+                              <>
+                                <CustomInput
+                                  labelText={first}
+                                  id="first"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    disabled: true
+                                  }}
+                                />
+                                <CustomInput
+                                  labelText={middle}
+                                  id="middle"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    disabled: true
+                                  }}
+                                />
+                                <CustomInput
+                                  labelText={last}
+                                  id="last"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    disabled: true
+                                  }}
+                                />
+                                <CustomInput
+                                  labelText={ID}
+                                  id="ID"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    disabled: true
+                                  }}
+                                />
+                                <CustomInput
+                                  labelText={password}
+                                  id="password"
+                                  formControlProps={{
+                                    fullWidth: true
+                                  }}
+                                  inputProps={{
+                                    type: "password",
+                                    disabled: true
+                                  }}
+                                />
+                              </>
+                            )}
+                          </>
+                          {!transactionActive && (
+                            <div className="MLBGradientSubmit">
+                              <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Asset</Button>
+                            </div>
+                          )}
+                          {transactionActive && (
+                            <h3>
+                              Creating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                            </h3>
+                          )}
+                        </form>
+                      </CardBody>
+                    </Card>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <Card>
+                      <CardHeader color="info" icon>
+                        <CardIcon color="info" className="DBGradient">
+                          <Description />
+                        </CardIcon>
+                        <h4 className={classes.cardIconTitle}>Extended Asset Information (optional)</h4>
+                        {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
+                        {displayImage !== "" && (<>
+                          <br />
+                          <br />
+                          <CardHeader image className={classes.cardHeaderHoverCustom}>
+                            <img src={displayImage} />
+                          </CardHeader>
+                        </>)}
+                      </CardHeader>
+                      <CardBody>
+                        <form>
 
-                  {/* <CustomInput
+                          {/* <CustomInput
                     success={loginDescriptionNameState === "success"}
                     error={loginDescriptionNameState === "error"}
                     labelText="Description Name"
@@ -834,77 +1031,77 @@ export default function NewRecord(props) {
                     }}
                   /> */}
 
-                  {/* <CardHeader image className={classes.cardHeaderHoverCustom}>
+                          {/* <CardHeader image className={classes.cardHeaderHoverCustom}>
                   
                   </CardHeader> */}
 
-                  {!transactionActive && (
-                  <>
-                    <CustomInput
-                    labelText="Asset Name"
-                    id="assetName"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setNameTag(event.target.value.trim())
-                      },
-                    }}
-                  />
-                    <TextField
-                    onChange={(e) => { setDescription(e.target.value) }}
-                    id="outlined-multiline-static"
-                    label="Asset Description:"
-                    multiline
-                    rows={4}
-                    variant="outlined"
-                    fullWidth
-                  />
-                  </>
-                  )}
-                  {!transactionActive && displayImage === "" && (
-                    <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
-                  )}
-                  {!transactionActive && displayImage !== "" && (<>
-                    <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
-                    <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
-                  </>)}
-                  {transactionActive && description !== "" && (
-                  <>
-                    <CustomInput
-                    labelText="Asset Name"
-                    id="assetName"
-                    disabled
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setNameTag(event.target.value.trim())
-                      },
-                    }}
-                  />
-                    <TextField
-                    id="outlined-multiline-static"
-                    label="Asset Description:"
-                    multiline
-                    disabled
-                    placeHolder={description}
-                    rows={4}
-                    variant="outlined"
-                    fullWidth
-                  />
-                  </>
-                  )}
-                  {transactionActive && displayImage !== "" && (
-                    <Button disabled> ... </Button>
-                  )}
-                </form>
-              </CardBody>
-            </Card>
-          </GridItem>
-          {/* <GridItem xs={12} sm={12} md={6}>
+                          {!transactionActive && (
+                            <>
+                              <CustomInput
+                                labelText="Asset Name"
+                                id="assetName"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setNameTag(event.target.value.trim())
+                                  },
+                                }}
+                              />
+                              <TextField
+                                onChange={(e) => { setDescription(e.target.value) }}
+                                id="outlined-multiline-static"
+                                label="Asset Description:"
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                fullWidth
+                              />
+                            </>
+                          )}
+                          {!transactionActive && displayImage === "" && (
+                            <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
+                          )}
+                          {!transactionActive && displayImage !== "" && (<>
+                            <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
+                            <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
+                          </>)}
+                          {transactionActive && description !== "" && (
+                            <>
+                              <CustomInput
+                                labelText="Asset Name"
+                                id="assetName"
+                                disabled
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setNameTag(event.target.value.trim())
+                                  },
+                                }}
+                              />
+                              <TextField
+                                id="outlined-multiline-static"
+                                label="Asset Description:"
+                                multiline
+                                disabled
+                                placeHolder={description}
+                                rows={4}
+                                variant="outlined"
+                                fullWidth
+                              />
+                            </>
+                          )}
+                          {transactionActive && displayImage !== "" && (
+                            <Button disabled> ... </Button>
+                          )}
+                        </form>
+                      </CardBody>
+                    </Card>
+                  </GridItem>
+                  {/* <GridItem xs={12} sm={12} md={6}>
             <Card>
               <CardHeader color="info" icon>
                 <CardIcon color="info" className="DBGradient">
@@ -933,8 +1130,12 @@ export default function NewRecord(props) {
               </CardBody>
             </Card>
           </GridItem> */}
-        </>
+                </>
+              )}
+            </>
+          )}
+        </GridContainer>
       )}
-    </GridContainer>
+    </>
   );
 }

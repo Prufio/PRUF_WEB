@@ -378,7 +378,7 @@ export default function Dashboard(props) {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={() => (<prop.component ps={sps} idxQuery={idxQuery} addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance} currentACPrice={currentACPrice} />)}
+            render={() => (<prop.component ps={sps} idxQuery={idxQuery} addr={addr} assetObj={assets} pruf={prufBalance} ether={ETHBalance} assets={assetBalance} currentACPrice={currentACPrice} IDHolder={isIDHolder} />)}
             key={key}
           />
         );
