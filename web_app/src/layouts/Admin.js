@@ -80,11 +80,11 @@ export default function Dashboard(props) {
     web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
     setUpContractEnvironment(web3).then(() => {
       let refString = String(window.location.href);
-/*       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
-        return
-      } else {
-        window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.length);
-      } */
+      /*       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
+              return
+            } else {
+              window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.length);
+            } */
     });
     window.web3 = web3;
     return setIsMounted(true);
@@ -239,7 +239,7 @@ export default function Dashboard(props) {
       setIdxQuery(hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
       console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
     }
-  
+
     else if (hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home") {
       console.log("Rerouting...")
       window.location.href = "/#/admin/home";
@@ -411,8 +411,8 @@ export default function Dashboard(props) {
     if (window.ethereum) {
       window._contracts = await buildContracts(_web3)
 
-      await window.utils.getContracts().then(()=>{
-        if(window.idxQuery) {window.location.href = '/#/admin/search/' + window.idxQuery}
+      await window.utils.getContracts().then(() => {
+        if (window.idxQuery) { window.location.href = '/#/admin/search/' + window.idxQuery }
       })
 
       if (_addr !== undefined) {
@@ -620,7 +620,7 @@ export default function Dashboard(props) {
       setETHBalance(window.ETHBalance)
     })
 
-  
+
     let temp;
     let temp2;
 
@@ -744,15 +744,25 @@ export default function Dashboard(props) {
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
         />
+        {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+        {getRoute() ? (
           <div className={classes.content}>
             <div className={classes.container}>
               <Switch>
                 {getRoutes(routes)}
-                {!window.location.href.includes("0x") ? <Redirect from="/admin" to="/admin/home" /> : <></>}
+                <Redirect from="/admin" to="/admin/home" />
               </Switch>
             </div>
           </div>
-
+        ) : (
+            <div className={classes.map}>
+              <Switch>
+                {getRoutes(routes)}
+                <Redirect from="/admin" to="/admin/home" />
+              </Switch>
+            </div>
+          )}
+        {getRoute() ? <Footer fluid /> : null}
         <FixedPlugin
           handleImageClick={handleImageClick}
           handleColorClick={handleColorClick}

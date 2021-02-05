@@ -33,7 +33,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { KeyboardArrowLeft } from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 
@@ -315,7 +315,7 @@ export default function Dashboard(props) {
           <Card>
             <CardHeader icon>
               <CardIcon className="headerIconBack">
-                <Category />
+                <DashboardOutlined />
               </CardIcon>
               <h4 className={classes.cardIconTitle}>
                 Asset Dashboard

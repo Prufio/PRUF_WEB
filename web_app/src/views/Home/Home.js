@@ -39,7 +39,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import "../../assets/css/custom.css";
 
-import { Cached } from "@material-ui/icons";
+import { Cached, DashboardOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -76,7 +76,7 @@ export default function Home(props) {
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
   }, [])
-  
+
   const rootLogin = event => {
     setRoot(event.target.value)
     if (event.target.value !== "") {
@@ -104,7 +104,7 @@ export default function Home(props) {
     }
   };
 
-  const clearPRuFForm = () => {
+  const clearPRUFForm = () => {
     setDeposit("");
 
     setloginDepositState("");
@@ -119,7 +119,7 @@ export default function Home(props) {
     setloginACNameState("");
   };
 
-  const purchasePRuF = async () => {
+  const purchasePRUF = async () => {
     let tempTxHash;
 
     if (loginDeposit === "" || loginDeposit < 10000) {
@@ -128,9 +128,18 @@ export default function Home(props) {
     }
     let amount;
 
-    if (deposit < 10000 ) {
+    if (deposit < 10000) {
       swal({
         title: "PRUF Amount must be > 10000",
+        icon: "warning",
+        button: "Close",
+      });
+      return setloginDepositState("error");
+    }
+
+    if (deposit < (props.ether * 10000)) {
+      swal({
+        title: "Insufficient KΞ",
         icon: "warning",
         button: "Close",
       });
@@ -160,7 +169,7 @@ export default function Home(props) {
           icon: "warning",
           button: "Close",
         });
-        clearPRuFForm();
+        clearPRUFForm();
       })
       .on("receipt", (receipt) => {
         setPrufTransactionActive(false);
@@ -179,7 +188,7 @@ export default function Home(props) {
         window.resetInfo = true;
         window.recount = true;
       });
-    return clearPRuFForm();
+    return clearPRUFForm();
   }
 
   const purchaseNode = async () => {//create a new asset class record
@@ -251,7 +260,7 @@ export default function Home(props) {
           <Card>
             <CardHeader color="info" stats icon>
               <CardIcon className="headerIconBack">
-                <Category />
+                <DashboardOutlined />
               </CardIcon>
               <p className={classes.cardCategory}>Assets Held</p>
               <h3 className={classes.cardTitle}>
@@ -315,10 +324,30 @@ export default function Home(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      <h3> Get PRUF (Testnet) </h3><hr/>
+      <h3> Get PRUF (Testnet) </h3><hr />
       <br />
       {/* <GridContainer> */}
-        {/* <GridItem xs={12} sm={12} md={6}> */}
+      {/* <GridItem xs={12} sm={12} md={6}> */}
+      <>
+        {window.contracts === undefined && (
+          <Card>
+            <CardHeader color="info" icon>
+              <CardIcon className="headerIconBack">
+                <img className="IconFaucet" src={Pruf}></img>
+              </CardIcon>
+              <h4 className={classes.cardIconTitle}>PRUF Faucet</h4>
+            </CardHeader>
+            <CardBody>
+              <form>
+                <h3>
+                  Connecting to the blockchain<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                </h3>
+              </form>
+            </CardBody>
+            <br />
+          </Card>
+        )}
+        {window.contracts !== undefined && (
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
@@ -375,7 +404,7 @@ export default function Home(props) {
                 )}
                 {!prufTransactionActive && (
                   <div className="MLBGradientSubmit">
-                    <Button color="info" className="MLBGradient" onClick={() => purchasePRuF()}>Purchase PRUF</Button>
+                    <Button color="info" className="MLBGradient" onClick={() => purchasePRUF()}>Purchase PRUF</Button>
                   </div>
                 )}
                 {prufTransactionActive && (
@@ -386,8 +415,10 @@ export default function Home(props) {
               </form>
             </CardBody>
           </Card>
-        {/* </GridItem> */}
-        {/* <GridItem xs={12} sm={12} md={6}>
+        )}
+      </>
+      {/* </GridItem> */}
+      {/* <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
@@ -569,7 +600,7 @@ export default function Home(props) {
             </CardBody>
           </Card>
         </GridItem> */}
-        {/* <GridItem xs={12} sm={12} md={4}>
+      {/* <GridItem xs={12} sm={12} md={4}>
           <Card product>
             <CardHeader image className={classes.cardHeaderHover}>
               <a href="#pablo" onClick={e => e.preventDefault()}>
