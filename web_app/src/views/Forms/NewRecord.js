@@ -224,7 +224,6 @@ export default function NewRecord(props) {
         ar = i.width / i.height;
         newH = maxImageSize;
         newW = ar * newH;
-        newH = newH;
         console.log("Resizing image... ");
         resizeImg(tempBuffer, { height: newH, width: newW, format: "jpg" }).then((e) => {
           console.log("Resized to ", newH, "x", newW);
