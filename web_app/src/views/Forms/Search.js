@@ -67,7 +67,7 @@ export default function Search(props) {
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [URL, setURL] = React.useState("");
-  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/");
+  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/search/");
   const [isVerifying, setIsVerifying] = React.useState(false)
   const [isRecycling, setIsRecycling] = React.useState(false)
   const [txHash, setTxHash] = React.useState("")
@@ -826,6 +826,11 @@ export default function Search(props) {
 
   }
 
+  const back = () => {
+    window.location.href="/#/admin/search";
+    window.location.reload();
+  }
+
   const generateThumbs = (obj) => {
     //console.log("obj", obj)
     if (!obj.photo) {
@@ -1153,7 +1158,7 @@ export default function Search(props) {
                                     placement="bottom"
                                     classes={{ tooltip: classes.tooltip }}
                                   >
-                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                    <Button onClick={() => back()} large color="info" justIcon className="back">
                                       <KeyboardArrowLeft />
                                     </Button>
                                   </Tooltip>
@@ -1168,7 +1173,7 @@ export default function Search(props) {
                                     placement="bottom"
                                     classes={{ tooltip: classes.tooltip }}
                                   >
-                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                    <Button onClick={() => back()} large color="info" justIcon className="back">
                                       <KeyboardArrowLeft />
                                     </Button>
                                   </Tooltip>
@@ -1185,7 +1190,7 @@ export default function Search(props) {
                                 placement="bottom"
                                 classes={{ tooltip: classes.tooltip }}
                               >
-                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
@@ -1210,7 +1215,7 @@ export default function Search(props) {
                                     placement="bottom"
                                     classes={{ tooltip: classes.tooltip }}
                                   >
-                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                    <Button onClick={() => back()} large color="info" justIcon className="back">
                                       <KeyboardArrowLeft />
                                     </Button>
                                   </Tooltip>
@@ -1225,7 +1230,7 @@ export default function Search(props) {
                                     placement="bottom"
                                     classes={{ tooltip: classes.tooltip }}
                                   >
-                                    <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                    <Button onClick={() => back()} large color="info" justIcon className="back">
                                       <KeyboardArrowLeft />
                                     </Button>
                                   </Tooltip>
@@ -1242,7 +1247,7 @@ export default function Search(props) {
                                 placement="bottom"
                                 classes={{ tooltip: classes.tooltip }}
                               >
-                                <Button onClick={() => window.location.reload()} large color="info" justIcon className="back">
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
