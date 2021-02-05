@@ -120,7 +120,7 @@ export default function Search(props) {
       waitForContracts(window.idxQuery);
       window.idxQuery = null;
     }
-  }, [])
+  })
 
   const showImage = (e) => {
     var i = new Image(); 
