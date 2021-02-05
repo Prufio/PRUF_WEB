@@ -118,9 +118,9 @@ export default function Search(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   React.useEffect(() => {
-    let refString = String(window.location.href);
+    //let refString = String(window.location.href);
 
-    if (!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66) {
+ /*    if (!gotQuery && refString.includes("0x") && refString.substring(refString.indexOf('0x'), refString.length).length === 66) {
       setRetrieving(true)
       setWasSentQuery(true)
       setGotQuery(true)
@@ -132,13 +132,18 @@ export default function Search(props) {
       retrieveRecordQR(query)
     }
 
-    else { console.log(false) }
+    else { console.log(false) } */
   })
 
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+
+    if (window.idxQuery){
+      retrieveRecordQR(window.idxQuery);
+      window.idxQuery = null;
     }
   }, [])
 
@@ -282,7 +287,6 @@ export default function Search(props) {
               else { return 0 }
             }
           });
-
       }
 
       else if (ref === "id") { tempAC = ac; }
