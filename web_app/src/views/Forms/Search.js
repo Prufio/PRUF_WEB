@@ -942,9 +942,9 @@ export default function Search(props) {
         <Card>
           <CardHeader color="info" icon>
             <CardIcon color="info" className="DBGradient">
-              <Category />
+              <DashboardOutlined />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+            <h4 className={classes.cardIconTitle}>Asset Information</h4>
           </CardHeader>
           <CardBody>
             <form>
