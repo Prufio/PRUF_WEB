@@ -271,6 +271,19 @@ export default function NewRecord(props) {
     _newRecord(ipfsB32, idxHash)
   }
 
+  const removeDisplayImage = () => {
+    let i = new Image();
+
+    i.onload = function(){
+        if(props.ps){
+           props.ps.element.scrollTop -= i.height
+          }
+        setDisplayImage("")
+    };
+
+    i.src = displayImage; 
+  }
+
   const checkAsset = async () => {
 
     if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
@@ -1002,45 +1015,73 @@ export default function NewRecord(props) {
                   
                   </CardHeader> */}
 
-                      {!transactionActive && (
-                        <TextField
-                          onChange={(e) => { setDescription(e.target.value) }}
-                          id="outlined-multiline-static"
-                          label="Asset Description:"
-                          multiline
-                          rows={4}
-                          variant="outlined"
-                          fullWidth
-                        />
-                      )}
-                      {!transactionActive && displayImage === "" && (
-                        <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
-                      )}
-                      {!transactionActive && displayImage !== "" && (
-                        <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
-                      )}
-                      {/* <br /> */}
-                      {/* <Add /> */}
-                      {transactionActive && description !== "" && (
-                        <TextField
-                          id="outlined-multiline-static"
-                          label="Asset Description:"
-                          multiline
-                          disabled
-                          placeHolder={description}
-                          rows={4}
-                          variant="outlined"
-                          fullWidth
-                        />
-                      )}
-                      {transactionActive && displayImage !== "" && (
-                        <Button disabled> ... </Button>
-                      )}
-                    </form>
-                  </CardBody>
-                </Card>
-              </GridItem>
-              {/* <GridItem xs={12} sm={12} md={6}>
+                  {!transactionActive && (
+                  <>
+                    <CustomInput
+                    labelText="Asset Name"
+                    id="assetName"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setNameTag(event.target.value.trim())
+                      },
+                    }}
+                  />
+                    <TextField
+                    onChange={(e) => { setDescription(e.target.value) }}
+                    id="outlined-multiline-static"
+                    label="Asset Description:"
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    fullWidth
+                  />
+                  </>
+                  )}
+                  {!transactionActive && displayImage === "" && (
+                    <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
+                  )}
+                  {!transactionActive && displayImage !== "" && (<>
+                    <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
+                    <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
+                  </>)}
+                  {transactionActive && description !== "" && (
+                  <>
+                    <CustomInput
+                    labelText="Asset Name"
+                    id="assetName"
+                    disabled
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setNameTag(event.target.value.trim())
+                      },
+                    }}
+                  />
+                    <TextField
+                    id="outlined-multiline-static"
+                    label="Asset Description:"
+                    multiline
+                    disabled
+                    placeHolder={description}
+                    rows={4}
+                    variant="outlined"
+                    fullWidth
+                  />
+                  </>
+                  )}
+                  {transactionActive && displayImage !== "" && (
+                    <Button disabled> ... </Button>
+                  )}
+                </form>
+              </CardBody>
+            </Card>
+          </GridItem>
+          {/* <GridItem xs={12} sm={12} md={6}>
             <Card>
               <CardHeader color="info" icon>
                 <CardIcon color="info" className="DBGradient">

@@ -329,7 +329,7 @@ export default function Home(props) {
             <CardBody>
               <form>
                 <h4>Conversion Rate: (ü100000/KΞ1)</h4>
-                <h7>Minimum Purchase amount is ü10000(KΞ0.1)</h7>
+                <h5>Minimum Purchase amount is ü10000(KΞ0.1)</h5>
                 {!prufTransactionActive && (
                   <>
                     <CustomInput
