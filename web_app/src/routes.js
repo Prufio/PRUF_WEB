@@ -17,7 +17,6 @@ import Search from "views/Forms/Search.js";
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import HomeIcon from "@material-ui/icons/HomeOutlined";
 import SearchIcon from "@material-ui/icons/Search";
-import HowToReg from "@material-ui/icons/HowToReg";
 import NewRecordIcon from "@material-ui/icons/LibraryAddOutlined";
 
 var dashRoutes = [

@@ -57,6 +57,7 @@ export default function ModifyRGT(props) {
   },[])
   
   if(assetInfo === undefined || assetInfo === null) {
+    console.log("No asset found. Rerouting...")
     return window.location.href = "/#/admin/home"
   }
 
