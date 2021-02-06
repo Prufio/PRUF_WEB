@@ -2,8 +2,8 @@ import React from "react";
 import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
 import Web3 from "web3";
-import buildContracts from "./../Resources/Contracts";
-import buildWindowUtils from "./../Resources/WindowUtils";
+import buildContracts from "../Resources/Contracts";
+import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 // creates a beautiful scrollbar

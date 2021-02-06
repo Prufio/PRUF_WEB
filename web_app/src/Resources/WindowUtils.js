@@ -1458,11 +1458,13 @@ function buildWindowUtils() {
             <div className="printQR">
               <QRCode
                 value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
-                size="256"
+                size="160"
                 fgColor="#002a40"
-                logoWidth="48.8"
-                logoHeight="64"
+                logoWidth="24.4"
+                logoHeight="32"
                 logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                quietZone="2"
+                ecLevel="M"
               />
             </div>
             <div className="cardHref">https://app.pruf.io</div>
@@ -1475,11 +1477,10 @@ function buildWindowUtils() {
               <div className="printQR2">
                 <QRCode
                   value={"https://app.pruf.io/#/" + obj.idxHash}
-                  size="160"
+                  size="100"
                   fgColor="#002a40"
-                  logoWidth="32"
-                  logoHeight="41.6"
-                  logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                  quietZone="2"
+                  ecLevel="L"
                 />
               </div>
               <p className="cardNamePrint">Name : {obj.name}</p>
