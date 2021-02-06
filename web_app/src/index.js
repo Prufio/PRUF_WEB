@@ -21,14 +21,20 @@ import AdminLayout from "layouts/Admin.js";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 
-const query = (window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.indexOf('0x')+66) || "");
+let query;
+if(window.location.href.includes('0x')){
+  query = (window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.indexOf('0x')+66) || "");
+} else {
+  query = "";
+}
+console.log(query);
 const fullUrl = "/admin/home/" + query
 
 ReactDOM.render(
   <HashRouter>
     <Switch>
       <Route path="/admin" component={AdminLayout} />
-      <Redirect from="/" to={fullUrl} />
+      { fullUrl ? <Redirect from="/" to={fullUrl} /> :  <Redirect from="/" to="/admin/home/" />}
     </Switch>
  </HashRouter>,
   document.getElementById("root")

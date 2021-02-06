@@ -126,7 +126,7 @@ export default function Search(props) {
   },[])
 
   React.useEffect(() => {
-    if(window.contracts !== undefined && query){retrieveRecordQR(query); setQuery(null);}
+    if(window.contracts !== undefined && query){retrieveRecordQR(query); setRetrieving(true); setQuery(null);}
   },[window.contracts, query])
   
 
