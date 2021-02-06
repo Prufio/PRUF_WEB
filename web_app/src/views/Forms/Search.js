@@ -847,7 +847,7 @@ export default function Search(props) {
     if (tempResult[0] === "60") {
       setRecycled(true)
     }
-    if (tempResult[0] !== "60") {
+    else if (tempResult[0] !== "60") {
       await window.utils.checkHoldsToken("asset", idxHash, props.addr)
         .then((e) => {
           console.log("is Owner Of? ", e)
