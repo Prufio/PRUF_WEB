@@ -480,58 +480,58 @@ cursor:pointer;
 
 .printForm {
   display: flex;
-  width: 1300px ;
-  height: 333px;
+  width: 800px ;
+  height: 190px;
   background-color: #002a40;
-  border-radius: 15px;
-  margin-top: 150px;
-  margin-left: 170px;
+  border-radius: 7.5px;
+  margin-top: 15px;
+  margin-left: 7.5px;
 }
 
 .printFormContent {
   display: flex;
-  width: 930px;
-  height: 280px;
+  width: 595px;
+  height: 160px;
   background-color: #028ed4;
-  border-radius: 20px;
-  margin-top: 30px;
-  margin-left: 30px;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-left: 15px;
   opacity: 0.9;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 40px;
+  padding: 20px;
 }
     
 .printQR{
   display: flex;
-  margin-left: 30px;
-  margin-top: 30px;
+  margin-left: 12.5px;
+  margin-top: 12.5px;
 }
     
 .printQR2{
   display: flex;
-  margin-left: 680px;
-  margin-top: -20px;
+  margin-left: 460px;
+  margin-top: -10px;
   position: absolute;
   z-index: 999;
 }
 
-.printImageForm {
+/* .printImageForm {
   justify-content: flex-start;
   display: flex;
   width: 23px;
   height: 23px;
   object-fit: cover;
   z-index: 5;
-}
+} */
 
 .printImageBackgroundForm {
-  /* margin-top: 10px; */
-  margin-left: 20px;
+  margin-top: -10px;
+  margin-left: 10px;
   justify-content: flex-start;
   display: flex;
-  width: 650px;
-  height: 220px;
+  width: 430px;
+  height: 150px;
   object-fit: cover;
   z-index: 1;
   position: absolute;
@@ -540,43 +540,43 @@ cursor:pointer;
 }
 
 .cardIdxPrint {
-  font-size: 20px;
+  font-size: 10px;
   font-weight: bold;
-  /* margin-top: 130px; */
+  margin-top: -5px;
   color: white;
   z-index: 999;
 }
       
 .cardNamePrint {
   font-weight: bold;
-  font-size: 40px;
+  font-size: 20px;
   color: white;
   z-index: 999;
 }
 
 .cardAcPrint {
-  font-size: 40px;
+  font-size: 20px;
   font-weight: bold;
-  margin-top: 130px;
+  margin-top: 65px;
   color: white;
   z-index: 999;
 }
 
 .cardDate {
-  font-size: 20px;
+  font-size: 10px;
   font-weight: bold;
-  margin-top: 310px;
-  margin-left: 750px;
+  margin-top: 172px;
+  margin-left: 500px;
   color: white;
   z-index: 999;
   position: absolute;
 }
 
 .cardHref {
-  font-size: 20px;
+  font-size: 8px;
   font-weight: bold;
-  margin-top: 310px;
-  margin-left: 80px;
+  margin-top: 172px;
+  margin-left: 60px;
   color: white;
   z-index: 999;
   position: absolute;
