@@ -601,9 +601,7 @@ export default function Dashboard(props) {
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
   const setUpTokenVals = async (willSetup, who, _addr) => {
     console.log("STV: Setting up balances, called from ", who)
-
     await window.utils.determineTokenBalance(_addr).then((e) => {
-      //console.log(e);
       if (e === undefined) return console.log("Account Locked")
       setAssetBalance(e.assetBalance);
       setAssetClassBalance(e.assetClassBalance);
@@ -619,26 +617,28 @@ export default function Dashboard(props) {
 
     let temp;
     let temp2;
-
-    await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
-      function (_error, _result) {
-        if (_error) {
-          return (console.log("IN ERROR IN ERROR IN ERROR"))
+    if(window.contracts){
+      await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
+        function (_error, _result) {
+          if (_error) {
+            return (console.log("IN ERROR IN ERROR IN ERROR"))
+          }
+          else {
+            temp = window.web3.utils.fromWei(Object.values(_result)[0])
+            return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
+          }
+  
         }
-        else {
-          temp = window.web3.utils.fromWei(Object.values(_result)[0])
-          return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
-        }
-
-      }
-    );
+      );
+    }
 
     if (temp !== undefined) {
       setCurrentACIndex(temp)
       setCurrentACPrice(temp2)
     }
 
-    await console.log(window.balances)
+    await console.log(window.balances);
+
     if (willSetup) {
       return setUpAssets("setUpTokenVals", _addr)
     }
