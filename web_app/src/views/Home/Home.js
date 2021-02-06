@@ -258,7 +258,7 @@ export default function Home(props) {
                 <Success>
                   <Add />
                 </Success>
-                <a href="/#/admin/new-asset">
+                <a href="/#/user/new-asset">
                   Create New Record
                 </a>
               </div>

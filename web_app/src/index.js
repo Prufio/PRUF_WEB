@@ -17,7 +17,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
-import AdminLayout from "layouts/Admin.js";
+import AdminLayout from "layouts/user.js";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 
@@ -28,13 +28,13 @@ if(window.location.href.includes('0x')){
   query = "";
 }
 console.log(query);
-const fullUrl = "/admin/home/" + query
+const fullUrl = "/user/home/" + query
 
 ReactDOM.render(
   <HashRouter>
     <Switch>
-      <Route path="/admin" component={AdminLayout} />
-      { fullUrl ? <Redirect from="/" to={fullUrl} /> :  <Redirect from="/" to="/admin/home/" />}
+      <Route path="/user" component={AdminLayout} />
+      { fullUrl ? <Redirect from="/" to={fullUrl} /> :  <Redirect from="/" to="/user/home/" />}
     </Switch>
  </HashRouter>,
   document.getElementById("root")

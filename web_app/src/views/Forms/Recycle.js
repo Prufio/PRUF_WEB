@@ -99,7 +99,7 @@ export default function Recycle(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/admin/home"
+    return window.location.href = "/#/user/home"
   }
 
   if (assetInfo.statusNum !== "60") {
@@ -109,7 +109,7 @@ export default function Recycle(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/admin/dashboard"
+    return window.location.href = "/#/user/dashboard"
   }
 
   const handleChange = event => {

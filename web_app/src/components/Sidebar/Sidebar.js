@@ -20,7 +20,7 @@ import Collapse from "@material-ui/core/Collapse";
 import Icon from "@material-ui/core/Icon";
 
 // core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
+import AdminNavbarLinks from "components/Navbars/userNavbarLinks.js";
 
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.js";
 import pruftoken from "assets/img/pruftoken.png";
@@ -126,7 +126,7 @@ class Sidebar extends React.Component {
   };
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
-  // while on the src/views/forms/RegularForms.jsx - route /admin/regular-forms
+  // while on the src/views/forms/RegularForms.jsx - route /user/regular-forms
   getCollapseInitialState(routes) {
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse && this.getCollapseInitialState(routes[i].views)) {
@@ -478,13 +478,13 @@ class Sidebar extends React.Component {
     var brand = (
       <div className={logoClasses}>
         <a
-          href="/#/admin/home"
+          href="/#/user/home"
           className={logoMini}
         >
           <img src={pruftoken} alt="logo" className={classes.img} />
         </a>
         <a
-          href="/#/admin/home"
+          href="/#/user/home"
           className={logoNormal}
         >
           PRüF DASHBOARD

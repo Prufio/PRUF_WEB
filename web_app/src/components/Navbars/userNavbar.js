@@ -15,10 +15,10 @@ import MoreVert from "@material-ui/icons/MoreVert";
 import ViewList from "@material-ui/icons/ViewList";
 
 // core components
-import AdminNavbarLinks from "./AdminNavbarLinks";
+import AdminNavbarLinks from "./userNavbarLinks";
 import Button from "components/CustomButtons/Button.js";
 
-import styles from "assets/jss/material-dashboard-pro-react/components/adminNavbarStyle.js";
+import styles from "assets/jss/material-dashboard-pro-react/components/userNavbarStyle.js";
 
 const useStyles = makeStyles(styles);
 

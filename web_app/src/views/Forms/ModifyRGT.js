@@ -58,7 +58,7 @@ export default function ModifyRGT(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/admin/home"
+    return window.location.href = "/#/user/home"
   }
 
   if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
@@ -68,7 +68,7 @@ export default function ModifyRGT(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/admin/dashboard"
+    return window.location.href = "/#/user/dashboard"
   }
 
   const modifyRGT = async (props) => { //import held asset
@@ -148,7 +148,7 @@ export default function ModifyRGT(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/admin/dashboard"
+        window.location.href = "/#/user/dashboard"
       });
 
   }

@@ -14,14 +14,14 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { makeStyles } from "@material-ui/core/styles";
 
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
+import AdminNavbar from "components/Navbars/userNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
-import styles from "assets/jss/material-dashboard-pro-react/layouts/adminStyle.js";
+import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 
 var ps;
 
@@ -77,7 +77,7 @@ export default function Dashboard(props) {
       /*       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
               return
             } else {
-              window.location.href = '/#/admin/search/' + refString.substring(refString.indexOf('0x'), refString.length);
+              window.location.href = '/#/user/search/' + refString.substring(refString.indexOf('0x'), refString.length);
             } */
     });
     window.web3 = web3;
@@ -229,16 +229,16 @@ export default function Dashboard(props) {
     let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length))
     console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
     if (hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66) {
-      if(!window.location.href.includes("/#/admin/search")){
+      if(!window.location.href.includes("/#/user/search")){
         window.idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
         console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
-        window.location.href = String("/#/admin/search/" + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length))
+        window.location.href = String("/#/user/search/" + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length))
       }
     }
 
-    else if (hrefStr !== "/#/admin/dashboard" && hrefStr !== "/#/admin/home" && hrefStr !== "/#/admin/search") {
+    else if (hrefStr !== "/#/user/dashboard" && hrefStr !== "/#/user/home" && hrefStr !== "/#/user/search") {
       console.log("Rerouting...")
-      window.location.href = "/#/admin/home";
+      window.location.href = "/#/user/home";
     }
 
     window.ipfs = _ipfs;
@@ -348,7 +348,7 @@ export default function Dashboard(props) {
     setMobileOpen(!mobileOpen);
   };
   const getRoute = () => {
-    return !window.location.pathname.includes("/admin/");
+    return !window.location.pathname.includes("/user/");
   };
   const getActiveRoute = routes => {
     let activeRoute = "Default Brand Text";
@@ -373,7 +373,7 @@ export default function Dashboard(props) {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/admin") {
+      if (prop.layout === "/user") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -408,7 +408,7 @@ export default function Dashboard(props) {
       window._contracts = await buildContracts(_web3)
 
       await window.utils.getContracts().then(() => {
-        if (window.idxQuery) { window.location.href = '/#/admin/search/' + window.idxQuery }
+        if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
       })
 
       if (_addr) {
@@ -746,7 +746,7 @@ export default function Dashboard(props) {
             <div className={classes.container}>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/admin" to="/admin/home" />
+                <Redirect from="/user" to="/user/home" />
               </Switch>
             </div>
           </div>
@@ -754,7 +754,7 @@ export default function Dashboard(props) {
             <div className={classes.map}>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/admin" to="/admin/home" />
+                <Redirect from="/user" to="/user/home" />
               </Switch>
             </div>
           )}

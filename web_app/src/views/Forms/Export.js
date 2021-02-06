@@ -42,7 +42,7 @@ export default function Export(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/admin/home"
+    return window.location.href = "/#/user/home"
   }
 
   if (assetInfo.statusNum !== "51") {
@@ -52,7 +52,7 @@ export default function Export(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/admin/dashboard"
+    return window.location.href = "/#/user/dashboard"
   }
 
   const exportAsset = async () => { //export held asset
@@ -102,7 +102,7 @@ export default function Export(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/admin/dashboard"
+        window.location.href = "/#/user/dashboard"
       });
 
   }

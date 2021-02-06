@@ -51,7 +51,7 @@ export default function Transfer(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/admin/home"
+    return window.location.href = "/#/user/home"
   }
 
   if (assetInfo.statusNum !== "51") {
@@ -61,7 +61,7 @@ export default function Transfer(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/admin/dashboard"
+    return window.location.href = "/#/user/dashboard"
   }
 
   const transferAsset = async () => { //transfer held asset
@@ -119,7 +119,7 @@ export default function Transfer(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/admin/dashboard"
+        window.location.href = "/#/user/dashboard"
       });
 
   }

@@ -50,7 +50,7 @@ export default function Import(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/admin/home"
+    return window.location.href = "/#/user/home"
   }
 
   if (assetInfo.statusNum !== "70") {
@@ -60,7 +60,7 @@ export default function Import(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/admin/dashboard"
+    return window.location.href = "/#/user/dashboard"
   }
 
   const ACLogin = event => {
@@ -115,7 +115,7 @@ export default function Import(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/admin/dashboard"
+        window.location.href = "/#/user/dashboard"
       });
 
   }

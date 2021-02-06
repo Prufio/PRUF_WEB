@@ -25,7 +25,7 @@ import Search from "@material-ui/icons/Search";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 
-import styles from "assets/jss/material-dashboard-pro-react/components/adminNavbarLinksStyle.js";
+import styles from "assets/jss/material-dashboard-pro-react/components/userNavbarLinksStyle.js";
 
 const useStyles = makeStyles(styles);
 

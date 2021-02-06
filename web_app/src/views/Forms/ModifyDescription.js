@@ -34,7 +34,7 @@ const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription(props) {
 
-  if (window.contracts === undefined) { window.location.href = "/#/admin/home" }
+  if (window.contracts === undefined) { window.location.href = "/#/user/home" }
   
   const [asset,] = React.useState(window.sentPacket);
   const [assetInfo,] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
@@ -97,7 +97,7 @@ export default function ModifyDescription(props) {
 
   if(assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/admin/home"
+    return window.location.href = "/#/user/home"
   }
 
   let fileInput = React.createRef();
@@ -250,7 +250,7 @@ export default function ModifyDescription(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/admin/dashboard"
+        window.location.href = "/#/user/dashboard"
       });
   }
 

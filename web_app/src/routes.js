@@ -25,74 +25,74 @@ var dashRoutes = [
     name: "Home",
     icon: HomeIcon,
     component: Home,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/dashboard",
     name: "Asset Dashboard",
     icon: DashboardIcon,
     component: Dashboard,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/search",
     name: "Search",
     icon: SearchIcon,
     component: Search,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/new-asset",
     name: "New Asset",
     icon: NewRecordIcon,
     component: NewRecord,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/recycle-asset",
     component: Recycle,
-    layout: "/admin"
+    layout: "/user"
   },
 
   {
     path: "/discard-asset",
     component: Discard,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/escrow-manager",
     component: EscrowManager,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/export-asset",
     component: Export,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/import-asset",
     component: Import,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/modify-description",
     component: ModifyDescription,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/modify-status",
     component: ModifyStatus,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/modify-rightsholder",
     component: ModifyRGT,
-    layout: "/admin"
+    layout: "/user"
   },
   {
     path: "/transfer-asset",
     component: Transfer,
-    layout: "/admin"
+    layout: "/user"
   },
 ];
 export default dashRoutes;

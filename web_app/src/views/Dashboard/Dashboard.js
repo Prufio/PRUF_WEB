@@ -50,7 +50,7 @@ export default function Dashboard(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
   const [identicon, setIdenticon] = React.useState(<></>);
-  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/search/");
+  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/user/search/");
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
 
@@ -200,7 +200,7 @@ export default function Dashboard(props) {
       return component
     }
 
-    else if (props.assets === "0") { return <h1>No assets held by user. <a href="/#/admin/new-asset">Create One</a>.</h1> }
+    else if (props.assets === "0") { return <h1>No assets held by user. <a href="/#/user/new-asset">Create One</a>.</h1> }
 
     else { return <><h3>Loading held assets</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
 
@@ -265,35 +265,35 @@ export default function Dashboard(props) {
 
     switch (e) {
       case "transfer": {
-        href = "/#/admin/transfer-asset";
+        href = "/#/user/transfer-asset";
         break
       }
       case "escrow": {
-        href = "/#/admin/escrow-manager";
+        href = "/#/user/escrow-manager";
         break
       }
       case "import": {
-        href = "/#/admin/import-asset";
+        href = "/#/user/import-asset";
         break
       }
       case "export": {
-        href = "/#/admin/export-asset";
+        href = "/#/user/export-asset";
         break
       }
       case "discard": {
-        href = "/#/admin/discard-asset";
+        href = "/#/user/discard-asset";
         break
       }
       case "modify-status": {
-        href = "/#/admin/modify-status";
+        href = "/#/user/modify-status";
         break
       }
       case "edit-information": {
-        href = "/#/admin/modify-description";
+        href = "/#/user/modify-description";
         break
       }
       case "edit-rightsholder": {
-        href = "/#/admin/modify-rightsholder";
+        href = "/#/user/modify-rightsholder";
         break
       }
       default: {

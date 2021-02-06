@@ -68,7 +68,7 @@ export default function Search(props) {
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [URL, setURL] = React.useState("");
-  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/admin/search/");
+  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/user/search/");
   const [isVerifying, setIsVerifying] = React.useState(false)
   const [isRecycling, setIsRecycling] = React.useState(false)
   const [txHash, setTxHash] = React.useState("")
@@ -257,39 +257,39 @@ export default function Search(props) {
 
     switch (e) {
       case "transfer": {
-        href = "/#/admin/transfer-asset";
+        href = "/#/user/transfer-asset";
         break
       }
       case "escrow": {
-        href = "/#/admin/escrow-manager";
+        href = "/#/user/escrow-manager";
         break
       }
       case "import": {
-        href = "/#/admin/import-asset";
+        href = "/#/user/import-asset";
         break
       }
       case "export": {
-        href = "/#/admin/export-asset";
+        href = "/#/user/export-asset";
         break
       }
       case "discard": {
-        href = "/#/admin/discard-asset";
+        href = "/#/user/discard-asset";
         break
       }
       case "modify-status": {
-        href = "/#/admin/modify-status";
+        href = "/#/user/modify-status";
         break
       }
       // case "decrement-counter": {
-      //   href = "/#/admin/counter";
+      //   href = "/#/user/counter";
       //   break
       // }
       case "edit-information": {
-        href = "/#/admin/modify-description";
+        href = "/#/user/modify-description";
         break
       }
       case "edit-rightsholder": {
-        href = "/#/admin/modify-rightsholder";
+        href = "/#/user/modify-rightsholder";
         break
       }
       default: {
@@ -409,7 +409,7 @@ export default function Search(props) {
       })
       .on("receipt", (receipt) => {
         setTransaction(false);
-        window.location.href = "/#/admin/dashboard"
+        window.location.href = "/#/user/dashboard"
         console.log(receipt.events.REPORT.returnValues._msg);
       });
   }
@@ -505,7 +505,7 @@ export default function Search(props) {
           icon: "success",
           button: "Close",
         });
-        window.location.href = "/#/admin/dashboard"
+        window.location.href = "/#/user/dashboard"
       });
 
     return;
@@ -947,7 +947,7 @@ export default function Search(props) {
   }
 
   const back = () => {
-    window.location.href = "/#/admin/search";
+    window.location.href = "/#/user/search";
     setMoreInfo(false)
 
   }
