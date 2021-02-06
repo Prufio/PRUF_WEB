@@ -1383,7 +1383,7 @@ export default function Search(props) {
               <CardBody>
                 {!isVerifying && !isRecycling && (
                   <>
-                    {ipfsObject.photo !== {} && (
+                    {Object.values(ipfsObject.photo).length > 1 && (
                       <div className="imageSelector">
                         {generateThumbs(ipfsObject)}
                       </div>
@@ -1451,7 +1451,7 @@ export default function Search(props) {
                 )} */}
                     {recycled && !transaction && !isRecycling && (
                       <>
-                        <h3>This asset has been discarded, if you want you can claim it as your own!</h3>
+                        <h3>This asset has been discarded, to claim it, press "Recycle Asset" below!</h3>
                         <Button onClick={() => { setIsRecycling(!isRecycling) }} color="info" className="MLBGradient">Recycle Asset</Button>
                       </>
                     )}

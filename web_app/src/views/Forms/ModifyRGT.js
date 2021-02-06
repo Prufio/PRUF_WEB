@@ -71,7 +71,7 @@ export default function ModifyRGT(props) {
     return window.location.href = "/#/user/dashboard"
   }
 
-  const modifyRGT = async (props) => { //import held asset
+  const modifyRGT = async () => { //import held asset
 
     if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
       if (loginFirst === "") {

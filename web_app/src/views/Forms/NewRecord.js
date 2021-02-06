@@ -1036,7 +1036,7 @@ export default function NewRecord(props) {
 
                           {!transactionActive && (
                             <>
-                              <CustomInput
+                              {/* <CustomInput
                                 labelText="Asset Name"
                                 id="assetName"
                                 formControlProps={{
@@ -1047,7 +1047,7 @@ export default function NewRecord(props) {
                                     setNameTag(event.target.value.trim())
                                   },
                                 }}
-                              />
+                              /> */}
                               <TextField
                                 onChange={(e) => { setDescription(e.target.value) }}
                                 id="outlined-multiline-static"

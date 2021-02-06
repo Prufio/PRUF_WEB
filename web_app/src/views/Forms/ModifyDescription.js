@@ -34,7 +34,7 @@ const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription(props) {
 
-  if (window.contracts === undefined) { window.location.href = "/#/user/home" }
+  if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home" }
   
   const [asset,] = React.useState(window.sentPacket);
   const [assetInfo,] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
@@ -104,10 +104,12 @@ export default function ModifyDescription(props) {
   let fileInputJSON = React.createRef();
 
   const handleClick = () => {
+    fileInput.current.value = "";
     fileInput.current.click();
   }
 
   const handleJSON = () => {
+    fileInputJSON.current.value = "";
     fileInputJSON.current.click();
   }
 
@@ -347,6 +349,7 @@ export default function ModifyDescription(props) {
     if (!iteration) {
       iteration = 1;
     }
+    console.log(fileName);
 
     let tempObj = newAssetInfo;
     if (tempObj.photo[fileName]) {
@@ -834,7 +837,7 @@ export default function ModifyDescription(props) {
           )}
           {isMobile && (
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + assetInfo.idxHash.substring(54, 66)}
+              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
             </div>
           )}
         </CardFooter>
