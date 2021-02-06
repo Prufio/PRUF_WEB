@@ -162,7 +162,7 @@ export default function NewRecord(props) {
                 swal({
                   title: "ID Token Minted!",
                   content: link,
-                  icon: "warning",
+                  icon: "success",
                   button: "Close"
                 });
                 window.resetInfo = true;
