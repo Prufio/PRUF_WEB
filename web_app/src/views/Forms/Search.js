@@ -440,27 +440,26 @@ export default function Search(props) {
     let receiptVal;
     let tempTxHash;
 
-    {
-      middle === "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
+    if (middle === "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, '')
       )
     }
-    {
-      middle !== "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(middle).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
+
+
+    else if (middle !== "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
       )
     }
+
 
     rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
@@ -534,27 +533,27 @@ export default function Search(props) {
     let idxHash = asset.idxHash;
     let rgtHashRaw;
     let rgtHash
-    {
-      middle === "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
+
+    if (middle === "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
       )
     }
-    {
-      middle !== "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(middle).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
+
+
+    else if (middle !== "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
       )
     }
+
 
     rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
@@ -625,27 +624,27 @@ export default function Search(props) {
     let rgtHashRaw;
     let receiptVal;
     let tempTxHash;
-    {
-      middle === "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
+
+    if (middle === "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
       )
     }
-    {
-      middle !== "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(middle).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
+
+
+    else if (middle !== "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
       )
     }
+
 
     rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
@@ -743,21 +742,21 @@ export default function Search(props) {
     let ipfsHash;
     let tempResult;
     let idxHash;
-    {
-      IDXRawInput === true && (
-        idxHash = IDXRaw
+
+    if (IDXRawInput === true) {
+      idxHash = IDXRaw
+    }
+
+
+    else if (IDXRawInput === false) {
+      idxHash = window.web3.utils.soliditySha3(
+        String(type).replace(/\s/g, ''),
+        String(manufacturer).replace(/\s/g, ''),
+        String(model).replace(/\s/g, ''),
+        String(serial).replace(/\s/g, ''),
       )
     }
-    {
-      IDXRawInput === false && (
-        idxHash = window.web3.utils.soliditySha3(
-          String(type).replace(/\s/g, ''),
-          String(manufacturer).replace(/\s/g, ''),
-          String(model).replace(/\s/g, ''),
-          String(serial).replace(/\s/g, ''),
-        )
-      )
-    }
+
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
 
