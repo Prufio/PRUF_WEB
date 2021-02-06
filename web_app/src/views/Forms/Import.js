@@ -78,7 +78,7 @@ export default function Import(props) {
     setTransactionActive(true);
 
     await window.contracts.APP_NC.methods
-      .importAsset(
+      .$importAsset(
         assetInfo.idxHash,
         assetClass,
       )
