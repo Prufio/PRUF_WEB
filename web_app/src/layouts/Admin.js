@@ -411,7 +411,7 @@ export default function Dashboard(props) {
         if (window.idxQuery) { window.location.href = '/#/admin/search/' + window.idxQuery }
       })
 
-      if (_addr !== undefined) {
+      if (_addr) {
         await window.utils.getETHBalance(_addr);
         await setUpTokenVals(true, "SetupContractEnvironment", _addr)
       }
