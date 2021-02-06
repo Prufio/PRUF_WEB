@@ -333,6 +333,7 @@ export default function Search(props) {
     window.ipfs.cat(lookup, async (error, result) => {
       if (error) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
+        setRetrieving(false);
         return setIpfsObject({})
       } else {
         //console.log(lookup, "Here's what we found for asset description: ", result);
@@ -340,6 +341,7 @@ export default function Search(props) {
         setSelectedImage(tempObj.photo.displayImage || Object.values(tempObj.photo)[0] || "")
         setIpfsObject(tempObj)
         setMoreInfo(true);
+        return setRetrieving(false);
       }
     });
   };
@@ -854,7 +856,6 @@ export default function Search(props) {
           }
         })
     }
-    setRetrieving(false)
   }
 
   const retrieveRecordQR = async (query) => {
@@ -880,11 +881,9 @@ export default function Search(props) {
             console.log(_error)
             setError(_error);
             setResult("");
-            setRetrieving(false);
             setScanQR(false)
           }
           else {
-            setRetrieving(false)
             setScanQR(false)
             console.log("rrqr conf");
             setResult(Object.values(_result));
@@ -943,7 +942,6 @@ export default function Search(props) {
           }
         })
     }
-
 
 
   }
