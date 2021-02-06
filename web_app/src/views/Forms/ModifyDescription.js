@@ -812,9 +812,13 @@ export default function ModifyDescription(props) {
               <h4 className="bold_h4"> Advanced JSON Options </h4><hr className="bold_hr" />
               <div className="URL">
               </div>
+              {!isMobile && (
+              <>
               <Button onClick={(e) => { handleJSON() }} className="advancedJSONButton">Upload Custom IPFS Data</Button>
               <br />
               <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
+              </>
+              )}
             </div>
           )}
           {!transactionActive && (
