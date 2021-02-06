@@ -202,7 +202,7 @@ export default function Search(props) {
                 swal({
                   title: "ID Token Minted!",
                   content: link,
-                  icon: "warning",
+                  icon: "success",
                   button: "Close"
                 });
                 window.resetInfo = true;
@@ -491,19 +491,20 @@ export default function Search(props) {
         setError(_error);
       })
       .on("receipt", (receipt) => {
-        receiptVal = receipt.events.REPORT.returnValues._msg;
-        setTransaction(false)
-        setTxHash(receipt.transactionHash)
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         swal({
-          title: "Recycle Confirmed!",
+          title: "Recycle Success!",
           content: link,
           icon: "success",
-          button: "Close",
+          button: "Close"
         });
+        window.resetInfo = true;
+        window.recount = true;
         window.location.href = "/#/user/dashboard"
       });
 
@@ -769,7 +770,7 @@ export default function Search(props) {
             setError(_error);
             setResult("");
             setIDXRaw("")
-            setIDXRawInput(!IDXRawInput)
+            setIDXRawInput(false)
             setManufacturer("")
             setloginManufacturer("")
             setloginManufacturerState("")
@@ -785,7 +786,7 @@ export default function Search(props) {
           }
           else {
             setIDXRaw("")
-            setIDXRawInput(!IDXRawInput)
+            setIDXRawInput(false)
             setloginIDXState("")
             setManufacturer("")
             setloginManufacturer("")

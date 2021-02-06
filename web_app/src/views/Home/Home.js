@@ -91,7 +91,7 @@ export default function Home(props) {
   };
 
   const clearPRUFForm = () => {
-    setDeposit("");
+    setDeposit(10000);
 
     setloginDepositState("");
   };
@@ -366,7 +366,7 @@ export default function Home(props) {
                           setloginDeposit(event.target.value);
                         },
                         type: "number",
-                        defaultValue: 10000
+                        defaultValue: deposit
                       }}
                     />
                     <div className={classes.formCategory}>

@@ -1,26 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.d8c56820.chunk.css",
-    "main.js": "/static/js/main.a4334c4f.chunk.js",
-    "main.js.map": "/static/js/main.a4334c4f.chunk.js.map",
+    "main.css": "/static/css/main.a0486084.chunk.css",
+    "main.js": "/static/js/main.4170ee72.chunk.js",
+    "main.js.map": "/static/js/main.4170ee72.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.e6710eac.js",
     "runtime-main.js.map": "/static/js/runtime-main.e6710eac.js.map",
     "static/css/2.d0176e96.chunk.css": "/static/css/2.d0176e96.chunk.css",
-    "static/js/2.d97d7081.chunk.js": "/static/js/2.d97d7081.chunk.js",
-    "static/js/2.d97d7081.chunk.js.map": "/static/js/2.d97d7081.chunk.js.map",
+    "static/js/2.0bd35aab.chunk.js": "/static/js/2.0bd35aab.chunk.js",
+    "static/js/2.0bd35aab.chunk.js.map": "/static/js/2.0bd35aab.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.b3f1c663c302e55180c3898af2ddfbee.js": "/precache-manifest.b3f1c663c302e55180c3898af2ddfbee.js",
+    "precache-manifest.d6dc4fb0610a10a840b7a3cab86ec41f.js": "/precache-manifest.d6dc4fb0610a10a840b7a3cab86ec41f.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.d0176e96.chunk.css.map": "/static/css/2.d0176e96.chunk.css.map",
-    "static/css/main.d8c56820.chunk.css.map": "/static/css/main.d8c56820.chunk.css.map",
-    "static/js/2.d97d7081.chunk.js.LICENSE.txt": "/static/js/2.d97d7081.chunk.js.LICENSE.txt",
-    "static/js/main.a4334c4f.chunk.js.LICENSE.txt": "/static/js/main.a4334c4f.chunk.js.LICENSE.txt",
-    "static/media/Apartment.png": "/static/media/Apartment.27b3438d.png",
-    "static/media/Patek.png": "/static/media/Patek.cefb5fbb.png",
+    "static/css/main.a0486084.chunk.css.map": "/static/css/main.a0486084.chunk.css.map",
+    "static/js/2.0bd35aab.chunk.js.LICENSE.txt": "/static/js/2.0bd35aab.chunk.js.LICENSE.txt",
+    "static/js/main.4170ee72.chunk.js.LICENSE.txt": "/static/js/main.4170ee72.chunk.js.LICENSE.txt",
     "static/media/PrufPrintBackground.png": "/static/media/PrufPrintBackground.b2768b44.png",
-    "static/media/card-1.jpeg": "/static/media/card-1.6ee66b2c.jpeg",
-    "static/media/card-2.jpeg": "/static/media/card-2.ae10829f.jpeg",
-    "static/media/card-3.jpeg": "/static/media/card-3.4ae4eeff.jpeg",
     "static/media/eth-logo.png": "/static/media/eth-logo.86b356aa.png",
     "static/media/logo-white.svg": "/static/media/logo-white.eec7c7f6.svg",
     "static/media/logo.svg": "/static/media/logo.5d5d9eef.svg",
@@ -33,8 +28,8 @@
   "entrypoints": [
     "static/js/runtime-main.e6710eac.js",
     "static/css/2.d0176e96.chunk.css",
-    "static/js/2.d97d7081.chunk.js",
-    "static/css/main.d8c56820.chunk.css",
-    "static/js/main.a4334c4f.chunk.js"
+    "static/js/2.0bd35aab.chunk.js",
+    "static/css/main.a0486084.chunk.css",
+    "static/js/main.4170ee72.chunk.js"
   ]
 }
