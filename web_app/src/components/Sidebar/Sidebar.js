@@ -24,6 +24,7 @@ import AdminNavbarLinks from "components/Navbars/userNavbarLinks.js";
 
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.js";
 import pruftoken from "assets/img/pruftoken.png";
+import pruftokeblk from "assets/img/pruftokenblk.jpg";
 
 var ps;
 
@@ -474,7 +475,12 @@ class Sidebar extends React.Component {
           href="/#/user/home"
           className={logoMini}
         >
+          {bgColor !== "white" && (
           <img src={pruftoken} alt="logo" className={classes.img} />
+          )}
+          {bgColor === "white" && (
+          <img src={pruftokeblk} alt="logo" className={classes.img} />
+          )}
         </a>
         <a
           href="/#/user/home"
