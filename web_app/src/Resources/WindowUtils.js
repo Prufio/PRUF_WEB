@@ -714,7 +714,7 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            console.log("res",_result, "prop", addr);
+            console.log("res", _result, "prop", addr);
             if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               tempBool = true
             }
@@ -1413,7 +1413,7 @@ function buildWindowUtils() {
         return temp = hash;
       }
     })
-    
+
     return temp;
   }
 
@@ -1460,9 +1460,9 @@ function buildWindowUtils() {
                 value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
                 size="160"
                 fgColor="#002a40"
-                logoWidth="24.4"
-                logoHeight="32"
-                logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                // logoWidth="24.4"
+                // logoHeight="32"
+                // logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
                 quietZone="2"
                 ecLevel="M"
               />
@@ -1476,7 +1476,7 @@ function buildWindowUtils() {
                 alt="Pruf Print Background" />
               <div className="printQR2">
                 <QRCode
-                  value={"https://app.pruf.io/#/" + obj.idxHash}
+                  value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
                   size="100"
                   fgColor="#002a40"
                   quietZone="2"
