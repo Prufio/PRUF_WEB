@@ -775,6 +775,17 @@ export default function Search(props) {
       )
     }
 
+    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+
+    if (!doesExist) {
+      return swal({
+        title: "Asset already exists!",
+        icon: "warning",
+        button: "Close",
+      })
+      
+    }
+
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
 
@@ -882,6 +893,17 @@ export default function Search(props) {
   }
 
   const retrieveRecordQR = async (query) => {
+
+    let doesExist = await window.utils.checkAssetExistsBare(query);
+
+    if (!doesExist) {
+      return swal({
+        title: "Asset already exists!",
+        icon: "warning",
+        button: "Close",
+      })
+      
+    }
 
     if (props.ps) {
       console.log(props.ps)
