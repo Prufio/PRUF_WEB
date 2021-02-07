@@ -316,7 +316,23 @@ export default function Home(props) {
       {/* <GridContainer> */}
       {/* <GridItem xs={12} sm={12} md={6}> */}
       <>
-        {window.contracts === undefined && (
+        {/* {!props.addr && (
+          <Card>
+            <CardHeader color="info" icon>
+              <CardIcon className="headerIconBack">
+                <img className="IconFaucet" src={Pruf}></img>
+              </CardIcon>
+              <h4 className={classes.cardIconTitle}>PRUF Faucet</h4>
+            </CardHeader>
+            <CardBody>
+              <form>
+              <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
+              </form>
+            </CardBody>
+            <br />
+          </Card>
+        )}
+        {window.contracts === undefined &&(
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
@@ -333,15 +349,31 @@ export default function Home(props) {
             </CardBody>
             <br />
           </Card>
-        )}
-        {window.contracts !== undefined && (
-          <Card>
-            <CardHeader color="info" icon>
-              <CardIcon className="headerIconBack">
-                <img className="IconFaucet" src={Pruf}></img>
-              </CardIcon>
-              <h4 className={classes.cardIconTitle}>PRUF Faucet</h4>
-            </CardHeader>
+        )} */}
+        <Card>
+          <CardHeader color="info" icon>
+            <CardIcon className="headerIconBack">
+              <img className="IconFaucet" src={Pruf}></img>
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>PRUF Faucet</h4>
+          </CardHeader>
+          {!props.addr && (
+            <CardBody>
+              <form>
+              <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
+              </form>
+            </CardBody>
+          )}
+          {window.contracts === undefined && props.addr && (
+            <CardBody>
+              <form>
+                <h3>
+                  Connecting to the blockchain<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                </h3>
+              </form>
+            </CardBody>
+          )}
+          {window.contracts !== undefined && (
             <CardBody>
               <form>
                 <h4>Conversion Rate: (ü100000/KΞ1)</h4>
@@ -401,8 +433,8 @@ export default function Home(props) {
                 )}
               </form>
             </CardBody>
-          </Card>
-        )}
+          )}
+        </Card>
       </>
       {/* </GridItem> */}
       {/* <GridItem xs={12} sm={12} md={6}>

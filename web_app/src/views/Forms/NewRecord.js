@@ -358,7 +358,12 @@ export default function NewRecord(props) {
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
     if (doesExist) {
-      return
+      return swal({
+        title: "Asset already exists!",
+        icon: "warning",
+        button: "Close",
+      })
+      
     }
 
     setSubmittedIdxHash(idxHash)
@@ -469,6 +474,7 @@ export default function NewRecord(props) {
         });
         window.resetInfo = true;
         window.recount = true;
+        window.location.href="/#/user/new-asset"
       });
 
     setAssetClass("");
