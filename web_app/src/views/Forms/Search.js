@@ -118,6 +118,7 @@ export default function Search(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   const link = document.createElement('div');
+  
   React.useEffect(() => {
     if (!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66) {
       setQuery(window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length));
@@ -130,7 +131,7 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  }, [])
+  },[]) 
 
   React.useEffect(() => {
     if (window.contracts !== undefined && query) { retrieveRecordQR(query); setQuery(null); }

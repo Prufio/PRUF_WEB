@@ -34,13 +34,15 @@ export default function HeaderLinks(props) {
   const [searchBarVal, setSearchBarVal] = React.useState("");
 
   const handleSearchBar = (e) => {
-    if(e.trim().length <= 66){
-      setSearchBarVal(e)
-    }
+      console.log(e.target.value)
+      setSearchBarVal(e.target.value)
   }
   const handleSearch = () => {
-    if(searchBarVal.includes("0x") && searchBarVal.substring(searchBarVal.indexOf("0x"), searchBarVal.trim().length).length === 66){
-      return window.location.href = "/#/user/search/" + searchBarVal.substring(searchBarVal.indexOf("0x"), searchBarVal.trim().length)
+    console.log(searchBarVal.includes("0x"))
+    console.log(searchBarVal.substring(searchBarVal.trim().indexOf("0x"), searchBarVal.trim().length).length === 66)
+    if(searchBarVal.includes("0x") && searchBarVal.substring(searchBarVal.trim().indexOf("0x"), searchBarVal.trim().length).length === 66){
+      window.location.href = "/#/user/search/" + searchBarVal.substring(searchBarVal.indexOf("0x"), searchBarVal.trim().length)
+      return window.location.reload();
     }
     else {
       return swal({
@@ -96,11 +98,11 @@ export default function HeaderLinks(props) {
     <div className={wrapper}>
       <CustomInput
         rtlActive={rtlActive}
-        onChange={(e)=>handleSearchBar(e.target.value)}
         formControlProps={{
           className: classes.top + " " + classes.search
         }}
         inputProps={{
+          onChange: (e)=>setSearchBarVal(e.target.value),
           placeholder: rtlActive ? "بحث" : "Search",
           inputProps: {
             "aria-label": rtlActive ? "بحث" : "Search",
@@ -110,7 +112,7 @@ export default function HeaderLinks(props) {
       />
       <Button
         color="white"
-        onCLick={()=>handleSearch}
+        onClick={()=>handleSearch()}
         aria-label="edit"
         justIcon
         round
