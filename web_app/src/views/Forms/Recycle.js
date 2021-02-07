@@ -698,7 +698,7 @@ export default function Recycle(props) {
                   <CardIcon className="headerIconBack">
                     <DashboardOutlined />
                   </CardIcon>
-                  <h4 className={classes.cardIconTitle}>Asset Information</h4>
+                  <h4 className={classes.cardIconTitle}>Asset</h4>
                 </CardHeader>
                 <CardBody>
                   <CustomInput

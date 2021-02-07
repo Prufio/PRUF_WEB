@@ -707,6 +707,7 @@ function buildWindowUtils() {
 
   const _checkHoldsToken = async (req, id, addr) => {
     let tempBool;
+    if(!addr) return false
     if (req === "asset") {
       await window.contracts.A_TKN.methods
         .ownerOf(id)

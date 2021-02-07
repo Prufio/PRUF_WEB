@@ -766,7 +766,7 @@ export default function Search(props) {
       .call(
         function (_error, _result) {
           if (_error) {
-            console.log(_error)
+            setRetrieving(false);
             setError(_error);
             setResult("");
             setIDXRaw("")
@@ -783,6 +783,12 @@ export default function Search(props) {
             setSerial("")
             setloginSerial("")
             setloginSerialState("")
+            swal({
+              title: "Asset not found!",
+              // text: "Check your TX here:" + txHash,
+              icon: "warning",
+              button: "Close",
+            });
           }
           else {
             setIDXRaw("")
@@ -882,6 +888,13 @@ export default function Search(props) {
             setError(_error);
             setResult("");
             setScanQR(false)
+            setRetrieving(false);
+            swal({
+              title: "Asset not found!",
+              // text: "Check your TX here:" + txHash,
+              icon: "warning",
+              button: "Close",
+            });
           }
           else {
             setScanQR(false)
@@ -986,7 +999,7 @@ export default function Search(props) {
             <CardIcon className="headerIconBack">
               <DashboardOutlined />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Asset Information</h4>
+            <h4 className={classes.cardIconTitle}>Asset</h4>
           </CardHeader>
           <CardBody>
             <form>
@@ -1006,7 +1019,7 @@ export default function Search(props) {
                 <CardIcon className="headerIconBack">
                   <DashboardOutlined />
                 </CardIcon>
-                <h4 className={classes.cardIconTitle}>Asset Information</h4>
+                <h4 className={classes.cardIconTitle}>Asset</h4>
               </CardHeader>
               <CardBody>
                 <form>
@@ -2007,7 +2020,7 @@ export default function Search(props) {
                           }}
                           value="modify-status"
                         >
-                          Modify Status
+                          Update Status
                           </MenuItem>
                         {/* <MenuItem
                       classes={{
@@ -2025,7 +2038,7 @@ export default function Search(props) {
                           }}
                           value="edit-information"
                         >
-                          Change Asset Information
+                          Update Extended Data
                           </MenuItem>
                         <MenuItem
                           classes={{
@@ -2034,7 +2047,7 @@ export default function Search(props) {
                           }}
                           value="edit-rightsholder"
                         >
-                          Change Owner Information
+                          Update Owner Information
                           </MenuItem>
                       </Select>
                     </FormControl>
