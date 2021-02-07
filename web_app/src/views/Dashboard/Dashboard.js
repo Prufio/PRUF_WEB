@@ -2,6 +2,8 @@ import React from "react";
 import "../../assets/css/custom.css";
 import { isMobile } from "react-device-detect";
 import { RWebShare } from "react-web-share";
+import swalReact from '@sweetalert/with-react';
+import { QRCode } from 'react-qrcode-logo';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -9,6 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Icon from '@material-ui/core/Icon';
 
 // @material-ui/icons
 // import ContentCopy from "@material-ui/icons/ContentCopy";
@@ -40,11 +43,11 @@ const useStyles = makeStyles(styles);
 export default function Dashboard(props) {
 
   React.useEffect(() => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[])
+  }, [])
 
   const [viewAsset, setViewAsset] = React.useState(false)
   const [simpleSelect, setSimpleSelect] = React.useState("");
@@ -56,7 +59,7 @@ export default function Dashboard(props) {
 
   const moreInfo = (e) => {
     //console.log(props.ps);
-    if(props.ps){
+    if (props.ps) {
       //console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
@@ -228,14 +231,14 @@ export default function Dashboard(props) {
   }
 
   const showImage = (e) => {
-    var i = new Image(); 
+    var i = new Image();
 
-    i.onload = function(){
+    i.onload = function () {
       var j = new Image();
-      j.onload = function(){
-        let move = i.height-j.height
-        if(props.ps){
-          if(move < 0){
+      j.onload = function () {
+        let move = i.height - j.height
+        if (props.ps) {
+          if (move < 0) {
             props.ps.element.scrollTop += move
           } else {
             props.ps.element.scrollTop = 0
@@ -248,16 +251,16 @@ export default function Dashboard(props) {
       j.src = selectedImage;
     };
 
-    i.src = e; 
+    i.src = e;
     //console.log(selectedImage)
     //console.log(e)
   }
 
   const handleSimple = event => {
-    if(props.ps){
+    if (props.ps) {
       props.ps.element.scrollTop = 0
       //console.log(props.ps.element.scrollTop)
-    }  
+    }
     window.sentPacket = selectedAssetObj;
     //console.log(window.sentPacket);
     setSimpleSelect(event.target.value);
@@ -320,10 +323,13 @@ export default function Dashboard(props) {
               </h4>
               <br />
             </CardHeader>
+            {!props.addr && (
+              <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
+            )}
           </Card>
         </GridItem>
       </GridContainer>
-      {!viewAsset && (
+      {!viewAsset && props.addr && (
         <GridContainer>
           {generateAssetDash(props.assetObj)}
         </GridContainer>
@@ -350,19 +356,19 @@ export default function Dashboard(props) {
                     </>
                   )}
                   {selectedAssetObj.DisplayImage.length === 0 && (
-                  <>
-                    <Tooltip
-                      id="tooltip-top"
-                      title="Back"
-                      placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
-                        <KeyboardArrowLeft />
-                      </Button>
-                    </Tooltip>
-                    {selectedAssetObj.identicon}
-                  </>
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      {selectedAssetObj.identicon}
+                    </>
                   )}
                 </CardHeader>
               )}
@@ -551,7 +557,7 @@ export default function Dashboard(props) {
                   IDX Hash: {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}
                 </div>
               )}
-              <div className={classes.stats}>
+              <div className="icons">
                 <RWebShare
                   className="shareMenu"
                   data={{
@@ -560,11 +566,27 @@ export default function Dashboard(props) {
                     title: "Share Asset Link",
                   }}
                 >
-                  <div className="printButton">
+                  <Icon className="footerIcon">
                     <Share />
-                  </div>
+                  </Icon>
                 </RWebShare>
-                <Printer />
+              <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
+                <Icon
+                  className="footerIcon"
+                  onClick={() => {
+                    swalReact({
+                      content: <QRCode
+                        value={URL}
+                        size="160"
+                        fgColor="#002a40"
+                        quietZone="2"
+                        ecLevel="M"
+                      />,
+                      buttons: "close"
+                    })
+                  }}>
+                  qr_code
+                </Icon>
               </div>
             </CardFooter>
           </Card>

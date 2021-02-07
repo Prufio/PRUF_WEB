@@ -1,6 +1,8 @@
 import { Print } from '@material-ui/icons';
 import React from 'react';
 import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
+import Icon from '@material-ui/core/Icon';
+import "../assets/css/custom.css";
 
 class ComponentToPrint extends React.Component {
     render() {
@@ -20,9 +22,9 @@ class Printer extends React.Component {
                 <ReactToPrint content={() => this.componentRef}>
                     <PrintContextConsumer>
                         {({ handlePrint }) => (
-                            <div onClick={handlePrint} className="printButton">
+                            <Icon onClick={handlePrint} className="footerIcon">
                             <Print />
-                            </div>
+                            </Icon>
                         )}
                     </PrintContextConsumer>
                 </ReactToPrint>

@@ -2,7 +2,9 @@ import React from "react";
 import "../../assets/css/custom.css";
 import { RWebShare } from "react-web-share";
 import swal from 'sweetalert';
+import swalReact from '@sweetalert/with-react';
 import { isMobile } from "react-device-detect";
+import { QRCode } from 'react-qrcode-logo';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -244,6 +246,21 @@ export default function Search(props) {
 
     i.src = e;
 
+  }
+
+  const createQRLink = () => {
+    swal(
+      <QRCode
+        value={URL}
+        size="160"
+        fgColor="#002a40"
+        logoWidth="24.4"
+        logoHeight="32"
+        logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+        quietZone="2"
+        ecLevel="M"
+      />
+    )
   }
 
   const handleSimple = event => {
@@ -2065,7 +2082,7 @@ export default function Search(props) {
                     IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
                   </div>
                 )}
-                <div className={imgClasses.stats}>
+                <div className="icons">
                   <RWebShare
                     className="shareMenu"
                     data={{
@@ -2074,11 +2091,27 @@ export default function Search(props) {
                       title: "Share Asset Link",
                     }}
                   >
-                    <div className="printButton">
+                    <Icon className="footerIcon">
                       <Share />
-                    </div>
+                    </Icon>
                   </RWebShare>
                   <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
+                  <Icon
+                  className="footerIcon"
+                  onClick={() => {
+                    swalReact({
+                      content:<QRCode
+                      value={URL}
+                      size="160"
+                      fgColor="#002a40"
+                      quietZone="2"
+                      ecLevel="M"
+                    />,
+                    buttons: "close"
+                    })
+                  }}>
+                    qr_code
+                  </Icon>
                 </div>
               </CardFooter>
             </Card>

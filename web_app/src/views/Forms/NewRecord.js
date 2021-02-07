@@ -664,6 +664,27 @@ export default function NewRecord(props) {
                       <CardBody>
                         <form>
                           <h4>AC Selected: {assetClassName}, ({assetClass})</h4>
+                          <h4 className={classes.cardIconTitle}>Asset Information (optional)</h4>
+                          {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
+                          {displayImage !== "" && (<>
+                            <br />
+                            <br />
+                            <CardHeader image className={classes.cardHeaderHoverCustom}>
+                              <img src={displayImage} />
+                            </CardHeader>
+                          </>)}
+                          <CustomInput
+                            labelText="Asset Name"
+                            id="assetName"
+                            formControlProps={{
+                              fullWidth: true
+                            }}
+                            inputProps={{
+                              onChange: event => {
+                                setNameTag(event.target.value.trim())
+                              },
+                            }}
+                          />
                           {!transactionActive && (
                             <>
                               <CustomInput
@@ -678,6 +699,57 @@ export default function NewRecord(props) {
                                   },
                                 }}
                               />
+                              <TextField
+                                onChange={(e) => { setDescription(e.target.value) }}
+                                id="outlined-multiline-static"
+                                label="Asset Description:"
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                fullWidth
+                              />
+                            </>
+                          )}
+                          {!transactionActive && displayImage === "" && (
+                            <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
+                          )}
+                          {!transactionActive && displayImage !== "" && (<>
+                            <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
+                            <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
+                          </>)}
+                          {transactionActive && description !== "" && (
+                            <>
+                              <CustomInput
+                                labelText="Asset Name"
+                                id="assetName"
+                                disabled
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setNameTag(event.target.value.trim())
+                                  },
+                                }}
+                              />
+                              <TextField
+                                id="outlined-multiline-static"
+                                label="Asset Description:"
+                                multiline
+                                disabled
+                                placeHolder={description}
+                                rows={4}
+                                variant="outlined"
+                                fullWidth
+                              />
+                            </>
+                          )}
+                          {transactionActive && displayImage !== "" && (
+                            <Button disabled> ... </Button>
+                          )}
+                          {!transactionActive && (
+                            <>
+                          <h4 className={classes.cardIconTitle}>Asset Information</h4>
                               <CustomInput
                                 success={loginManufacturerState === "success"}
                                 error={loginManufacturerState === "error"}
@@ -1004,145 +1076,6 @@ export default function NewRecord(props) {
                       </CardBody>
                     </Card>
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={6}>
-                    <Card>
-                      <CardHeader icon>
-                        <CardIcon className="headerIconBack">
-                          <Description />
-                        </CardIcon>
-                        <h4 className={classes.cardIconTitle}>Extended Asset Data (optional)</h4>
-                        {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
-                        {displayImage !== "" && (<>
-                          <br />
-                          <br />
-                          <CardHeader image className={classes.cardHeaderHoverCustom}>
-                            <img src={displayImage} />
-                          </CardHeader>
-                        </>)}
-                      </CardHeader>
-                      <CardBody>
-                        <form>
-
-                          {/* <CustomInput
-                    success={loginDescriptionNameState === "success"}
-                    error={loginDescriptionNameState === "error"}
-                    labelText="Description Name"
-                    id="descriptionName"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      onChange: event => {
-                        setDescriptionName(event.target.value.trim())
-                        if (event.target.value !== "") {
-                          setloginDescriptionNameState("success");
-                        } else {
-                          setloginDescriptionNameState("error");
-                        }
-                        setloginDescriptionName(event.target.value);
-                      },
-                    }}
-                  /> */}
-
-                          {/* <CardHeader image className={classes.cardHeaderHoverCustom}>
-                  
-                  </CardHeader> */}
-
-                          {!transactionActive && (
-                            <>
-                              {/* <CustomInput
-                                labelText="Asset Name"
-                                id="assetName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setNameTag(event.target.value.trim())
-                                  },
-                                }}
-                              /> */}
-                              <TextField
-                                onChange={(e) => { setDescription(e.target.value) }}
-                                id="outlined-multiline-static"
-                                label="Asset Description:"
-                                multiline
-                                rows={4}
-                                variant="outlined"
-                                fullWidth
-                              />
-                            </>
-                          )}
-                          {!transactionActive && displayImage === "" && (
-                            <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
-                          )}
-                          {!transactionActive && displayImage !== "" && (<>
-                            <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
-                            <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
-                          </>)}
-                          {transactionActive && description !== "" && (
-                            <>
-                              <CustomInput
-                                labelText="Asset Name"
-                                id="assetName"
-                                disabled
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setNameTag(event.target.value.trim())
-                                  },
-                                }}
-                              />
-                              <TextField
-                                id="outlined-multiline-static"
-                                label="Asset Description:"
-                                multiline
-                                disabled
-                                placeHolder={description}
-                                rows={4}
-                                variant="outlined"
-                                fullWidth
-                              />
-                            </>
-                          )}
-                          {transactionActive && displayImage !== "" && (
-                            <Button disabled> ... </Button>
-                          )}
-                        </form>
-                      </CardBody>
-                    </Card>
-                  </GridItem>
-                  {/* <GridItem xs={12} sm={12} md={6}>
-            <Card>
-              <CardHeader color="info" icon>
-                <CardIcon color="info" className="DBGradient">
-                  <AddPhotoAlternate />
-                </CardIcon>
-                <h4 className={classes.cardIconTitle}>Upload Asset Image(s)</h4>
-                <h4 className={classes.cardIconTitle}>(optional)</h4>
-              </CardHeader>
-              <CardBody>
-                <form>
-                  <CustomInput
-                    labelText="Image Title"
-                    id="manufacturer"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                  <CustomInput
-                    labelText="Input Image URL"
-                    id="manufacturer"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </form>
-              </CardBody>
-            </Card>
-          </GridItem> */}
                 </>
               )}
             </>
