@@ -182,8 +182,9 @@ export default function NewRecord(props) {
   }
 
   const handleClick = () => {
+    fileInput.current.value = "";
     fileInput.current.click();
-  };
+  }
 
   const clearForms = () => {
     setManufacturer("");
@@ -649,8 +650,6 @@ export default function NewRecord(props) {
                       </CardHeader>
                       <CardBody>
                         <form>
-                          <h4>AC Selected: {assetClassName}, ({assetClass})</h4>
-                          <h4 className={classes.cardIconTitle}>Asset Information (optional)</h4>
                           {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
                           {displayImage !== "" && (<>
                             <br />
@@ -659,18 +658,13 @@ export default function NewRecord(props) {
                               <img src={displayImage} />
                             </CardHeader>
                           </>)}
-                          <CustomInput
-                            labelText="Asset Name"
-                            id="assetName"
-                            formControlProps={{
-                              fullWidth: true
-                            }}
-                            inputProps={{
-                              onChange: event => {
-                                setNameTag(event.target.value.trim())
-                              },
-                            }}
-                          />
+                          {!transactionActive && displayImage === "" && (
+                            <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
+                          )}
+                          {!transactionActive && displayImage !== "" && (<>
+                            <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
+                            <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
+                          </>)}
                           {!transactionActive && (
                             <>
                               <CustomInput
@@ -696,13 +690,6 @@ export default function NewRecord(props) {
                               />
                             </>
                           )}
-                          {!transactionActive && displayImage === "" && (
-                            <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
-                          )}
-                          {!transactionActive && displayImage !== "" && (<>
-                            <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
-                            <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
-                          </>)}
                           {transactionActive && description !== "" && (
                             <>
                               <CustomInput
@@ -735,7 +722,6 @@ export default function NewRecord(props) {
                           )}
                           {!transactionActive && (
                             <>
-                          <h4 className={classes.cardIconTitle}>Asset Information</h4>
                               <CustomInput
                                 success={loginManufacturerState === "success"}
                                 error={loginManufacturerState === "error"}
@@ -877,6 +863,7 @@ export default function NewRecord(props) {
                               />
                             </>
                           )}
+                          <h4>AC Selected: {assetClassName}, ({assetClass})</h4>
                         </form>
                       </CardBody>
                     </Card>
