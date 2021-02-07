@@ -42,6 +42,7 @@ export default function ModifyDescription(props) {
   const [idxHash,] = React.useState(window.sentPacket.idxHash);
 
   const [transactionActive, setTransactionActive] = React.useState(false);
+  const [ipfsActive, setIpfsActive] = React.useState(false);
   const [advancedInput, setAdvancedInput] = React.useState(false);
   const [showHelp, setShowHelp] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
@@ -191,6 +192,8 @@ export default function ModifyDescription(props) {
       )
     }
 
+    setIpfsActive(true);
+
     window.ipfs.add(payload, (err, hash) => { // Upload buffer to IPFS
       if (err) {
         console.error(err)
@@ -200,6 +203,7 @@ export default function ModifyDescription(props) {
       let url = `https://ipfs.io/ipfs/${hash}`
       console.log(`Url --> ${url}`)
       let b32hash = window.utils.getBytes32FromIPFSHash(hash)
+      setIpfsActive(false);
       updateAssetInfo(b32hash)
     })
   }
@@ -829,7 +833,12 @@ export default function ModifyDescription(props) {
           )}
           {transactionActive && (
             <h3>
-              Changing Asset Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Updating Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {ipfsActive && (
+            <h3>
+              Updating Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </CardBody>

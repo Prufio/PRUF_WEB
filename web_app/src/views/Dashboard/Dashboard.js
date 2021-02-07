@@ -437,7 +437,7 @@ export default function Dashboard(props) {
                     <Danger>
                       <Create className="functionSelectorIcon" />
                     </Danger>
-                    Modify Asset
+                    Actions
                         </InputLabel>
                   <Select
                     MenuProps={{
@@ -459,7 +459,7 @@ export default function Dashboard(props) {
                         root: classes.selectMenuItem
                       }}
                     >
-                      Select Function
+                      Select Action
                           </MenuItem>
                     <MenuItem
                       classes={{
@@ -513,7 +513,7 @@ export default function Dashboard(props) {
                       }}
                       value="modify-status"
                     >
-                      Modify Status
+                      Update Status
                           </MenuItem>
                     {/* <MenuItem
                       classes={{
@@ -531,7 +531,7 @@ export default function Dashboard(props) {
                       }}
                       value="edit-information"
                     >
-                      Change Asset Information
+                      Update Extended Data
                           </MenuItem>
                     <MenuItem
                       classes={{
@@ -540,7 +540,7 @@ export default function Dashboard(props) {
                       }}
                       value="edit-rightsholder"
                     >
-                      Change Owner Information
+                      Update Owner Information
                           </MenuItem>
                   </Select>
                 </FormControl>

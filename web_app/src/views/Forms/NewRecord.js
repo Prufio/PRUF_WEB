@@ -112,12 +112,26 @@ export default function NewRecord(props) {
   };
 
   const IDHolderPrompt = () => {
+
+    if (!props.addr) {
+      return swal({
+        title: "Could not get user address",
+        icon: "warning",
+        text: "Please connect to an Ethereum provider and try again.",
+        buttons: {
+          close: {
+            text: "close",
+            value: "close"
+          }
+        },
+      })
+    }
     let tempTxHash;
 
     swal({
       title: "In order to mint asset tokens, you must first have an ID token.",
       icon: "warning",
-      text: "If you would like to mint asset tokens, please select Yes, it will mint you an ID token",
+      text: "If you would like to mint an ID token, please select Yes",
       buttons: {
         yes: {
           text: "Yes",

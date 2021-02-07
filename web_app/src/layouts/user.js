@@ -71,16 +71,11 @@ export default function Dashboard(props) {
     console.log("No ethereum object available");
     let web3;
     web3 = require("web3");
-    web3 = new Web3("https://api.infura.io/v1/jsonrpc/kovan");
+    web3 = new Web3("https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959");
     setUpContractEnvironment(web3).then(() => {
-      let refString = String(window.location.href);
-      /*       if (!refString.includes("0x") || refString.substring(refString.indexOf('0x'), refString.length).length < 66) {
-              return
-            } else {
-              window.location.href = '/#/user/search/' + refString.substring(refString.indexOf('0x'), refString.length);
-            } */
     });
     window.web3 = web3;
+    window.isKovan = true;
     return setIsMounted(true);
   }
 
@@ -111,12 +106,14 @@ export default function Dashboard(props) {
           }).then((accounts) => {
             if (accounts[0] !== undefined) {
               setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+              window.addr = window.web3.utils.toChecksumAddress(accounts[0])
               setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
             }
             else {
               ethereum.send('eth_requestAccounts').then((accounts) => {
                 if (accounts[0] !== undefined) {
                   setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+                  window.addr = window.web3.utils.toChecksumAddress(accounts[0])
                   setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
                 }
               });
@@ -163,9 +160,11 @@ export default function Dashboard(props) {
   const acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
       //console.log("new: ",e[0] ?? "No new address fetched", "old: ", addr ?? "No address currently stored")
+      if (window.addr === undefined || window.addr === null || window.addr === "") return window.location.reload()
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
-        console.log("Here");
+        window.location.reload()
+        /* console.log("Here");
         window.ETHBalance = "0";
         window.ipfsCounter = 0;
         window.balances = ["0", "0", "0", "0"];
@@ -180,6 +179,7 @@ export default function Dashboard(props) {
         setPrufBalance("~");
         setAssets({});
         setAddr("");
+        window.addr = "" */
       }
 
       window.assetClass = undefined;
@@ -187,6 +187,7 @@ export default function Dashboard(props) {
       window.isACAdmin = false;
       window.ipfsCounter = 0;
       setAddr(window.web3.utils.toChecksumAddress(e[0]))
+      window.addr = window.web3.utils.toChecksumAddress(e[0])
       setAssets({});
       setAssetClassBalance("~");
       setAssetBalance("~");
@@ -214,7 +215,7 @@ export default function Dashboard(props) {
   const mainPanel = React.createRef();
 
   window.onload = () => {
-    console.log("page loaded", window.location.href)
+    //console.log("page loaded", window.location.href)
     window.balances = {};
     let timeOutCounter = 0;
     window.recount = false;
@@ -402,12 +403,12 @@ export default function Dashboard(props) {
     //console.log("IN SUCE, addr:", _addr)
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
-    _web3.eth.net.getNetworkType().then((e) => { if (e === "kovan") { setIsKovan(true) } else { setIsKovan(false) } })
-    //console.log("Setting up contracts")
     if (window.ethereum) {
       window._contracts = await buildContracts(_web3)
 
       await window.utils.getContracts().then(() => {
+        window.isSettingUpContracts = false;
+        setWD(true)
         if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
       })
 
@@ -415,19 +416,15 @@ export default function Dashboard(props) {
         await window.utils.getETHBalance(_addr);
         await setUpTokenVals(true, "SetupContractEnvironment", _addr)
       }
-
-
-      //console.log("bools...", window.assetHolderBool, window.assetClassHolderBool, window.IDHolderBool)
-      window.isSettingUpContracts = false;
-      setWD(true)
     }
 
     else {
       window.isSettingUpContracts = true;
       window._contracts = await buildContracts(_web3)
-      await window.utils.getContracts()
-      window.isSettingUpContracts = false;
-      setWD(true)
+      await window.utils.getContracts().then(()=>{
+        window.isSettingUpContracts = false;
+        setWD(true)
+      })
     }
 
     //window.addEventListener("navigator", navTypeListener);
