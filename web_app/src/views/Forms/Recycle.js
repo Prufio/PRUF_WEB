@@ -587,7 +587,7 @@ export default function Recycle(props) {
                             label: classes.label,
                             root: classes.labelRoot
                           }}
-                          label="Input IDX Hash"
+                          label="Input Asset ID"
                         />
                       </div>
                     )}
@@ -596,7 +596,7 @@ export default function Recycle(props) {
                         <CustomInput
                           success={loginIDXState === "success"}
                           error={loginIDXState === "error"}
-                          labelText="IDX Hash *"
+                          labelText="Asset ID *"
                           id="IDX"
                           formControlProps={{
                             fullWidth: true

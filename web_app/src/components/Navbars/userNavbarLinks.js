@@ -19,6 +19,7 @@ import Divider from "@material-ui/core/Divider";
 import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 import Dashboard from "@material-ui/icons/Dashboard";
+import swal from 'sweetalert';
 import Search from "@material-ui/icons/Search";
 
 // core components
@@ -30,6 +31,28 @@ import styles from "assets/jss/material-dashboard-pro-react/components/userNavba
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const [searchBarVal, setSearchBarVal] = React.useState("");
+
+  const handleSearchBar = (e) => {
+      console.log(e.target.value)
+      setSearchBarVal(e.target.value)
+  }
+  const handleSearch = () => {
+    console.log(searchBarVal.includes("0x"))
+    console.log(searchBarVal.substring(searchBarVal.trim().indexOf("0x"), searchBarVal.trim().length).length === 66)
+    if(searchBarVal.includes("0x") && searchBarVal.substring(searchBarVal.trim().indexOf("0x"), searchBarVal.trim().length).length === 66){
+      window.location.href = "/#/user/search/" + searchBarVal.substring(searchBarVal.indexOf("0x"), searchBarVal.trim().length)
+      return window.location.reload();
+    }
+    else {
+      return swal({
+        title: "Not a valid asset ID!",
+        text: "Please submit a valid asset ID.",
+        icon: "warning",
+        button: "Close",
+      });
+    }
+  }
   const [openNotification, setOpenNotification] = React.useState(null);
   const handleClickNotification = event => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -79,6 +102,7 @@ export default function HeaderLinks(props) {
           className: classes.top + " " + classes.search
         }}
         inputProps={{
+          onChange: (e)=>setSearchBarVal(e.target.value),
           placeholder: rtlActive ? "بحث" : "Search",
           inputProps: {
             "aria-label": rtlActive ? "بحث" : "Search",
@@ -88,6 +112,7 @@ export default function HeaderLinks(props) {
       />
       <Button
         color="white"
+        onClick={()=>handleSearch()}
         aria-label="edit"
         justIcon
         round

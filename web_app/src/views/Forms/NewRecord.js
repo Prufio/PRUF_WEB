@@ -34,6 +34,7 @@ export default function NewRecord(props) {
   const [showHelp, setShowHelp] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
+  const [ipfsActive, setIpfsActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
   const [assetClassName, setAssetClassName] = React.useState("");
@@ -201,6 +202,7 @@ export default function NewRecord(props) {
   }
 
   const clearForms = () => {
+    setDisplayImage("")
     setManufacturer("");
     setType("");
     setModel("");
@@ -381,12 +383,16 @@ export default function NewRecord(props) {
       )
     }
 
+    setIpfsActive(true);
+
     await window.ipfs.add(payload, (error, hash) => {
       if (error) {
         console.log("Something went wrong. Unable to upload to ipfs");
+        setIpfsActive(false);
       } else {
         console.log("uploaded at hash: ", hash);
         handleHash(hash, idxHash);
+        setIpfsActive(false);
       }
     })
 
@@ -1060,7 +1066,12 @@ export default function NewRecord(props) {
                               <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Asset</Button>
                             </div>
                           )}
-                          {transactionActive && (
+                          {!transactionActive && ipfsActive && (
+                            <h3>
+                              Uploading Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                            </h3>
+                          )}
+                          {!ipfsActive && transactionActive && (
                             <h3>
                               Creating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                             </h3>

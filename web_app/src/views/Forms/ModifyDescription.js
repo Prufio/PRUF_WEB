@@ -199,7 +199,7 @@ export default function ModifyDescription(props) {
     window.ipfs.add(payload, (err, hash) => { // Upload buffer to IPFS
       if (err) {
         console.error(err)
-        return
+        return setIpfsActive(false);
       }
 
       let url = `https://ipfs.io/ipfs/${hash}`
@@ -846,26 +846,26 @@ export default function ModifyDescription(props) {
               <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
             </div>
           )}
-          {transactionActive && (
+          {!transactionActive && ipfsActive && (
             <h3>
-              Updating Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Uploading Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
-          {ipfsActive && (
+          {!ipfsActive && transactionActive && (
             <h3>
-              Updating Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Updating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </CardBody>
         <CardFooter chart>
           {!isMobile && (
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash}
+              Asset ID: {asset.idxHash}
             </div>
           )}
           {isMobile && (
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
+              Asset ID: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
             </div>
           )}
         </CardFooter>
