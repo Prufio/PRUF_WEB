@@ -373,7 +373,7 @@ export default function Home(props) {
               </form>
             </CardBody>
           )}
-          {window.contracts !== undefined && (
+          {window.contracts !== undefined && props.addr &&(
             <CardBody>
               <form>
                 <h4>Conversion Rate: (ü100000/KΞ1)</h4>

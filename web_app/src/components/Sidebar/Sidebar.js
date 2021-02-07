@@ -394,59 +394,52 @@ class Sidebar extends React.Component {
       });
     var user = (
       <div className={userWrapperClass}>
-        <div className="addressIcon">
-          {addr === undefined && (
-            <img src={pruftoken} alt="logo" />
-          )}
-          {addr === "" && (
-            <img src={pruftoken} alt="logo" />
-          )}
-          {addr !== undefined && addr !== "" && (
-            <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
-          )}
-        </div>
+        {!this.props.miniActive && (
+          <div className="addressIcon">
+            {addr === undefined && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr === "" && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr !== undefined && addr !== "" && (
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+            )}
+          </div>
+        )}
+        {this.props.miniActive && (
+          <div className="addressIconUp">
+            {(addr === undefined || addr === "") &&(
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr !== undefined && addr !== "" && (
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+            )}
+          </div>
+        )}
         {/* <List className={classes.list}>
           <ListItem className={classes.item + " " + classes.userItem}> */}
-        <NavLink
-          to={"#"}
-          className={classes.itemLink}
-        // onClick={() => this.openCollapse("openAvatar")}
-        >
-          {addr !== undefined && (
-            <h5 className="addressText">
-              {addr.substring(0, 8) + "..." + addr.substring(34, 42)}
-            </h5>
-          )}
-          {addr === undefined && (
-            <h5 className="addressText">
-              User Address Unavailable
-            </h5>
-          )}
-
-        </NavLink>
-        {/* <Collapse in={this.state.openAvatar} unmountOnExit>
-              <List className={classes.list + " " + classes.collapseList}>
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="#"
-                    className={
-                      classes.itemLink + " " + classes.userCollapseLinks
-                    }
-                  >
-                    <span className={collapseItemMini}>
-                      {rtlActive ? "مع" : "MB"}
-                    </span>
-                    <ListItemText
-                      primary={rtlActive ? "ملفي" : "My Balances"}
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-              </List>
-            </Collapse> */}
-        {/* </ListItem> */}
-        {/* </List> */}
+        { !this.props.miniActive && (
+          <NavLink
+            to={"#"}
+            className={classes.itemLink}
+          // onClick={() => this.openCollapse("openAvatar")}
+          >
+            {addr !== undefined && (
+              <h5 className="addressText">
+                {addr.substring(0, 8) + "..." + addr.substring(34, 42)}
+              </h5>
+            )}
+            {addr === undefined && (
+              <h5 className="addressText">
+                User Address Unavailable
+              </h5>
+            )}
+          </NavLink>
+        )}
+        {this.props.miniActive && (
+          <br/>
+        )}
       </div>
     );
     var links = (

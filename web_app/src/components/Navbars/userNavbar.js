@@ -62,7 +62,7 @@ export default function AdminNavbar(props) {
         </Hidden>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button href="#" className={classes.title} color="transparent">
+          <Button className={classes.title} color="transparent">
             {brandText}
           </Button>
         </div>
