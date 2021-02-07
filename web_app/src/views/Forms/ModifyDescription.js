@@ -3,6 +3,7 @@ import "../../assets/css/custom.css";
 import { isMobile } from "react-device-detect";
 import swal from 'sweetalert';
 import base64 from 'base64-arraybuffer';
+import validator from 'validator'
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -16,7 +17,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
-import { AddPhotoAlternateOutlined, DeleteForever, DeleteForeverOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
+import { AddPhotoAlternateOutlined, DeleteForever, DeleteForeverOutlined, KeyboardArrowLeft, Settings, SettingsCellSharp } from "@material-ui/icons";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import Share from "@material-ui/icons/Share";
@@ -41,6 +42,7 @@ export default function ModifyDescription(props) {
   const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
   const [idxHash,] = React.useState(window.sentPacket.idxHash);
 
+
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
   const [advancedInput, setAdvancedInput] = React.useState(false);
@@ -54,8 +56,8 @@ export default function ModifyDescription(props) {
   const [selectedImage, setSelectedImage] = React.useState("");
   const [selectedKey, setSelectedKey] = React.useState("");
   const [error, setError] = React.useState("");
-  const [currentUrl, setCurrentUrl] = React.useState("");
-  const [currentUrlKey, setCurrentUrlKey] = React.useState("");
+  const [URL, setURL] = React.useState("");
+  const [URLTitle, setURLTitle] = React.useState("");
   const [loginURL, setloginURL] = React.useState("");
   const [loginURLState, setloginURLState] = React.useState("");
   const [loginURLTitle, setloginURLTitle] = React.useState("");
@@ -270,8 +272,15 @@ export default function ModifyDescription(props) {
   }
 
   const submitCurrentUrl = () => {
-    let url = currentUrl, key = currentUrlKey, tempObj = newAssetInfo;
-    if (!key || key === "") { return }
+    let url = URL, key = URLTitle, tempObj = newAssetInfo;
+    if ((url === "" && key !== "") || (url !=="" && key === "")) {
+      if (url === "") {
+        return setloginURLState("error")
+      }
+      if (key === "") {
+        return setloginURLTitleState("error")
+      }
+    }
     if (!tempObj.urls) { tempObj.urls = {} }
     if (!url.includes("http")) {
       url = "http://" + url
@@ -279,6 +288,10 @@ export default function ModifyDescription(props) {
     tempObj.urls[key] = url;
     console.log(tempObj)
     setNewAssetInfo(tempObj);
+    setURL("")
+    setURLTitle("")
+    setloginURLState("")
+    setloginURLTitleState("")
     return forceUpdate()
   }
 
@@ -769,39 +782,41 @@ export default function ModifyDescription(props) {
             <div>
               <div>
                 {generateUrls(newAssetInfo)}
-                <h4 className="bold_h4"> New Url </h4><hr className="bold_hr" />
+                <h4 className="bold_h4"> New Link </h4><hr className="bold_hr" />
                 <CustomInput
-                  success={loginURLState === "success"}
-                  error={loginURLState === "error"}
+                  success={loginURLTitleState === "success"}
+                  error={loginURLTitleState === "error"}
                   labelText="Link Name"
                   id="urlKey"
                   inputProps={{
+                    value:URLTitle,
                     onChange: e => {
-                      setCurrentUrlKey(e.target.value.trim())
-                      if (e.target.value !== "") {
-                        setloginURLState("success");
+                      setURLTitle(e.target.value.trim())
+                      if (urlKeyIsGood(e.target.value)) {
+                        setloginURLTitleState("success");
                       } else {
-                        setloginURLState("error");
+                        setloginURLTitleState("error");
                       }
-                      setloginURL(e.target.value);
+                      setloginURLTitle(e.target.value);
                     },
                   }}
                 />
 
                 <TextField
-                  success={loginURLTitleState === "success"}
-                  error={loginURLTitleState === "error"}
+                  success={loginURLState === "success"}
+                  error={loginURLState === "error"}
                   onChange={(e) => {
-                    setCurrentUrl(e.target.value.trim())
-                    if (urlKeyIsGood(e.target.value)) {
-                      setloginURLTitleState("success");
+                    setURL(e.target.value.trim())
+                    if (validator.isURL(e.target.value)) {
+                      setloginURLState("success");
                     } else {
-                      setloginURLTitleState("error");
+                      setloginURLState("error");
                     }
-                    setloginURLTitle(e.target.value);
+                    setloginURL(e.target.value);
                   }}
+                  value={URL}
                   id="outlined-full-width"
-                  label="Link Address"
+                  labelText="Link Address"
                   fullWidth
                   margin="normal"
                   placeholder="ex. 'https://foo.web/dir'"
