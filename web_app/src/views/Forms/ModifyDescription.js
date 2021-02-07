@@ -860,12 +860,12 @@ export default function ModifyDescription(props) {
         <CardFooter chart>
           {!isMobile && (
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash}
+              Asset ID: {asset.idxHash}
             </div>
           )}
           {isMobile && (
             <div className={classes.stats}>
-              IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
+              Asset ID: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
             </div>
           )}
         </CardFooter>

@@ -549,12 +549,12 @@ export default function Dashboard(props) {
             <CardFooter>
               {!isMobile && (
                 <div className={classes.stats}>
-                  IDX Hash: {selectedAssetObj.idxHash}
+                  Asset ID: {selectedAssetObj.idxHash}
                 </div>
               )}
               {isMobile && (
                 <div className={classes.stats}>
-                  IDX Hash: {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}
+                  Asset ID: {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}
                 </div>
               )}
               <div className="icons">

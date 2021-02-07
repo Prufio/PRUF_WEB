@@ -19,6 +19,7 @@ import Divider from "@material-ui/core/Divider";
 import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 import Dashboard from "@material-ui/icons/Dashboard";
+import swal from 'sweetalert';
 import Search from "@material-ui/icons/Search";
 
 // core components
@@ -30,6 +31,26 @@ import styles from "assets/jss/material-dashboard-pro-react/components/userNavba
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const [searchBarVal, setSearchBarVal] = React.useState("");
+
+  const handleSearchBar = (e) => {
+    if(e.trim().length <= 66){
+      setSearchBarVal(e)
+    }
+  }
+  const handleSearch = () => {
+    if(searchBarVal.includes("0x") && searchBarVal.substring(searchBarVal.indexOf("0x"), searchBarVal.trim().length).length === 66){
+      return window.location.href = "/#/user/search/" + searchBarVal.substring(searchBarVal.indexOf("0x"), searchBarVal.trim().length)
+    }
+    else {
+      return swal({
+        title: "Not a valid asset ID!",
+        text: "Please submit a valid asset ID.",
+        icon: "warning",
+        button: "Close",
+      });
+    }
+  }
   const [openNotification, setOpenNotification] = React.useState(null);
   const handleClickNotification = event => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -75,6 +96,7 @@ export default function HeaderLinks(props) {
     <div className={wrapper}>
       <CustomInput
         rtlActive={rtlActive}
+        onChange={(e)=>handleSearchBar(e.target.value)}
         formControlProps={{
           className: classes.top + " " + classes.search
         }}
@@ -88,6 +110,7 @@ export default function HeaderLinks(props) {
       />
       <Button
         color="white"
+        onCLick={()=>handleSearch}
         aria-label="edit"
         justIcon
         round

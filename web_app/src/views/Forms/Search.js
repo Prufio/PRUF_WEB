@@ -625,7 +625,7 @@ export default function Search(props) {
     }
     else {
       return swal({
-        title: "QR code does not contain an index hash.",
+        title: "QR code does not contain a valid asset ID.",
         icon: "warning",
         button: "Close",
       });
@@ -1241,7 +1241,7 @@ export default function Search(props) {
                           label: classes.label,
                           root: classes.labelRoot
                         }}
-                        label="Search via IDX Hash"
+                        label="Search via asset ID"
                       />
                     </div>
                   )}
@@ -1250,7 +1250,7 @@ export default function Search(props) {
                       <CustomInput
                         success={loginIDXState === "success"}
                         error={loginIDXState === "error"}
-                        labelText="IDX Hash *"
+                        labelText="Asset ID *"
                         id="IDX"
                         formControlProps={{
                           fullWidth: true
@@ -2120,12 +2120,12 @@ export default function Search(props) {
               <CardFooter>
                 {!isMobile && (
                   <div className={imgClasses.stats}>
-                    IDX Hash: {asset.idxHash}
+                    Asset ID: {asset.idxHash}
                   </div>
                 )}
                 {isMobile && (
                   <div className={imgClasses.stats}>
-                    IDX Hash: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
+                    Asset ID: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
                   </div>
                 )}
                 <div className="icons">

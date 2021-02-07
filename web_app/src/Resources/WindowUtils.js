@@ -1486,7 +1486,7 @@ function buildWindowUtils() {
               </div>
               <p className="cardNamePrint">Name : {obj.name}</p>
               <p className="cardAcPrint">Asset Class : {obj.assetClassName}</p>
-              <h4 className="cardIdxPrint">IDX : {obj.idxHash}</h4>
+              <h4 className="cardIdxPrint">Asset ID : {obj.idxHash}</h4>
 
             </div>
           </>
