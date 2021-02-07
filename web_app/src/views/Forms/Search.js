@@ -2101,7 +2101,7 @@ export default function Search(props) {
                           }}
                           value="edit-information"
                         >
-                          Update Extended Data
+                          Change Asset Info
                           </MenuItem>
                         <MenuItem
                           classes={{

@@ -531,7 +531,7 @@ export default function Dashboard(props) {
                       }}
                       value="edit-information"
                     >
-                      Update Extended Data
+                      Change Asset Info
                           </MenuItem>
                     <MenuItem
                       classes={{
