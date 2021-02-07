@@ -248,21 +248,6 @@ export default function Search(props) {
 
   }
 
-  const createQRLink = () => {
-    swal(
-      <QRCode
-        value={URL}
-        size="160"
-        fgColor="#002a40"
-        logoWidth="24.4"
-        logoHeight="32"
-        logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-        quietZone="2"
-        ecLevel="M"
-      />
-    )
-  }
-
   const handleSimple = event => {
     if (props.ps) {
       console.log(props.ps)
@@ -297,16 +282,16 @@ export default function Search(props) {
         href = "/#/user/modify-status";
         break
       }
-      // case "decrement-counter": {
-      //   href = "/#/user/counter";
-      //   break
-      // }
       case "edit-information": {
         href = "/#/user/modify-description";
         break
       }
       case "edit-rightsholder": {
         href = "/#/user/modify-rightsholder";
+        break
+      }
+      case "verify": {
+        setIsVerifying(!isVerifying)
         break
       }
       default: {
@@ -330,6 +315,22 @@ export default function Search(props) {
     setScanQR(!scanQR);
     setData()
     console.log("new value", !scanQR)
+  };
+
+  const veryify = event => {
+    setIsVerifying(!isVerifying)
+    if (props.ps) {
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
+  };
+
+  const recycle = event => {
+    setIsRecycling(!isRecycling);
+    if (props.ps) {
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
   };
 
   const setIsNotVerifying = () => {
@@ -778,11 +779,26 @@ export default function Search(props) {
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
     if (!doesExist) {
-      return swal({
-        title: "Asset already exists!",
+      swal({
+        title: "Asset does not exist!",
         icon: "warning",
         button: "Close",
       })
+      setRetrieving(false);
+      setIDXRaw("")
+      setIDXRawInput(false)
+      setManufacturer("")
+      setloginManufacturer("")
+      setloginManufacturerState("")
+      setType("")
+      setloginType("")
+      setloginTypeState("")
+      setModel("")
+      setloginModel("")
+      setloginModelState("")
+      setSerial("")
+      setloginSerial("")
+      setloginSerialState("")
       
     }
 
@@ -897,12 +913,12 @@ export default function Search(props) {
     let doesExist = await window.utils.checkAssetExistsBare(query);
 
     if (!doesExist) {
-      return swal({
-        title: "Asset already exists!",
+      swal({
+        title: "Asset Asset does not exist!",
         icon: "warning",
         button: "Close",
       })
-      
+      setScanQR(false)
     }
 
     if (props.ps) {
@@ -1375,7 +1391,7 @@ export default function Search(props) {
                     </CardHeader>
                   )}
                   {isMobile && (
-                    <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+                    <CardHeader image className={imgClasses.cardHeaderHover}>
                       {ipfsObject.photo !== undefined && (
                         <>
                           {Object.values(ipfsObject.photo).length > 0 && (
@@ -1509,13 +1525,13 @@ export default function Search(props) {
                       </>
                     )}
                     {!transaction && isRecycling && (
-                      <Button color="info" className="MLBGradient" onClick={(e) => setIsRecycling(!isRecycling)}>Back</Button>
+                      <Button color="info" className="MLBGradient" onClick={() => setIsRecycling(!isRecycling)}>Back</Button>
                     )}
                     {!transaction && !isVerifying && !recycled && (
-                      <Button color="info" className="MLBGradient" onClick={(e) => setIsVerifying(!isVerifying)}>Verify Rightsholder</Button>
+                      <Button color="info" className="MLBGradient" onClick={() => setIsVerifying(!isVerifying)}>Verify Rightsholder</Button>
                     )}
                     {!transaction && isVerifying && (
-                      <Button color="info" className="MLBGradient" onClick={(e) => setIsNotVerifying()}>Back</Button>
+                      <Button color="info" className="MLBGradient" onClick={() => setIsNotVerifying()}>Back</Button>
                     )}
                     {isRecycling && (
                       <>
@@ -1983,7 +1999,7 @@ export default function Search(props) {
                         <Danger>
                           <Create className="functionSelectorIcon" />
                         </Danger>
-                    Modify Asset
+                    Asset Options
                         </InputLabel>
                       <Select
                         MenuProps={{
@@ -2016,15 +2032,15 @@ export default function Search(props) {
                         >
                           Transfer
                           </MenuItem>
-                        {/* <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="escrow"
-                    >
-                      Escrow
-                          </MenuItem> */}
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value="verify"
+                        >
+                          Verify
+                          </MenuItem>
                         <MenuItem
                           classes={{
                             root: classes.selectMenuItem,

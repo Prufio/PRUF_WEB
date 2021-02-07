@@ -96,10 +96,10 @@ export default function Dashboard(props) {
         component.push(
           <GridItem key={"asset" + i} xs={12} sm={12} md={4}>
             <Card chart className={classes.cardHover}>
-              <CardHeader image className={classes.cardHeaderHover}>
-                <>
-                  {!isMobile && (
-                    <a onClick={() => moreInfo({
+              <>
+                {!isMobile && (
+                  <CardHeader image className={classes.cardHeaderHoverDashboard}>
+                    <a className="dashboardAssetImage" onClick={() => moreInfo({
                       countPair: obj.countPairs[i],
                       idxHash: obj.ids[i],
                       descriptionObj: obj.descriptions[i],
@@ -127,8 +127,10 @@ export default function Dashboard(props) {
                         </>
                       )}
                     </a>
-                  )}
-                  {isMobile && (
+                  </CardHeader>
+                )}
+                {isMobile && (
+                  <CardHeader image className={classes.cardHeaderHover}>
                     <a>
 
                       {obj.displayImages[i] !== "" && (
@@ -141,25 +143,15 @@ export default function Dashboard(props) {
                         </>
                       )}
                     </a>
-                  )}
-                </>
-              </CardHeader>
+                  </CardHeader>
+                )}
+              </>
               {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
             <img src={macbook} alt="logo" className="assetImage" />
             </CardHeader> */}
               <CardBody>
-                <div className={classes.cardHoverUnder}>
-                  <Tooltip
-                    id="tooltip-top"
-                    title="Refresh"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Button simple color="info" justIcon onClick={() => { window.resetInfo = true; window.recount = true; }}>
-                      <Refresh className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
+                <div className={classes.cardHover}>
+                  {/* <Tooltip
                     id="tooltip-top"
                     title="View/Edit"
                     placement="bottom"
@@ -184,7 +176,7 @@ export default function Dashboard(props) {
                     })}>
                       <Edit className={classes.underChartIcons} />
                     </Button>
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
                 <h4 className={classes.cardTitle}>{obj.names[i]}</h4>
                 <h5 className={classes.cardTitle}>Status: {obj.statuses[i]}</h5>
@@ -299,6 +291,10 @@ export default function Dashboard(props) {
         href = "/#/user/modify-rightsholder";
         break
       }
+      case "verify": {
+        href = "/#/user/verify-asset";
+        break
+      }
       default: {
         console.log("Invalid menu selection: '", e, "'");
         break
@@ -318,9 +314,13 @@ export default function Dashboard(props) {
               <CardIcon className="headerIconBack">
                 <DashboardOutlined />
               </CardIcon>
-              <h4 className={classes.cardIconTitle}>
-                Asset Dashboard
+              <div className="dashboardHeader">
+                <h4 className={classes.cardIconTitle}>
+                  Asset Dashboard
               </h4>
+                <Icon className="MLBGradientRefresh" onClick={() => { window.resetInfo = true; window.recount = true; }}>
+                  <Refresh />
+                </Icon></div>
               <br />
             </CardHeader>
             {!props.addr && (
@@ -437,7 +437,7 @@ export default function Dashboard(props) {
                     <Danger>
                       <Create className="functionSelectorIcon" />
                     </Danger>
-                    Actions
+                    Asset Options
                         </InputLabel>
                   <Select
                     MenuProps={{
@@ -470,15 +470,15 @@ export default function Dashboard(props) {
                     >
                       Transfer
                           </MenuItem>
-                    {/* <MenuItem
+                    <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
                         selected: classes.selectMenuItemSelected
                       }}
-                      value="escrow"
+                      value="verify"
                     >
-                      Escrow
-                          </MenuItem> */}
+                      Verify
+                          </MenuItem>
                     <MenuItem
                       classes={{
                         root: classes.selectMenuItem,
@@ -570,7 +570,7 @@ export default function Dashboard(props) {
                     <Share />
                   </Icon>
                 </RWebShare>
-              <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
+                <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
                 <Icon
                   className="footerIcon"
                   onClick={() => {

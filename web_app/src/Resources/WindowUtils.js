@@ -1478,7 +1478,7 @@ function buildWindowUtils() {
               <div className="printQR2">
                 <QRCode
                   value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
-                  size="100"
+                  size="120"
                   fgColor="#002a40"
                   quietZone="2"
                   ecLevel="L"

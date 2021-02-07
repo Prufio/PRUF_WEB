@@ -74,6 +74,24 @@ body {
   flex-direction: row-reverse !important;
 }
 
+.MLBGradientRefresh {
+  color: #017ec0;
+  cursor: pointer;
+  margin-top: 10px;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.MLBGradientRefresh:hover {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.dashboardHeader {
+  display: flex;
+  flex-direction: row;
+}
+
 /* .submitChanges {
     background: linear-gradient(0deg, #01b13c, #01e04c) !important;
     object-fit: cover !important;
@@ -523,7 +541,7 @@ cursor:pointer;
     
 .printQR2{
   display: flex;
-  margin-left: 460px;
+  margin-left: 440px;
   margin-top: -10px;
   position: absolute;
   z-index: 999;
@@ -539,8 +557,8 @@ cursor:pointer;
 } */
 
 .printImageBackgroundForm {
-  margin-top: -10px;
-  margin-left: 10px;
+  margin-top: -15px;
+  margin-left: 5px;
   justify-content: flex-start;
   display: flex;
   width: 430px;
@@ -635,4 +653,8 @@ cursor:pointer;
 .bump {
   margin-left: 15px;
   margin-top: -20px;
+}
+
+.dashboardAssetImage {
+  cursor: pointer;
 }

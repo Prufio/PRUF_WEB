@@ -243,7 +243,7 @@ export default function Home(props) {
     <div>
       <GridContainer>
         <GridItem xs={12} sm={6} md={6} lg={3}>
-          <Card>
+          <Card onClick={() => window.location.href="/#/user/dashboard"}>
             <CardHeader color="info" stats icon>
               <CardIcon className="headerIconBack">
                 <DashboardOutlined />

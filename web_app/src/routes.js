@@ -12,6 +12,7 @@ import ModifyStatus from "views/Forms/ModifyStatus.js";
 import ModifyRGT from "views/Forms/ModifyRGT.js";
 import Transfer from "views/Forms/Transfer.js";
 import Search from "views/Forms/Search.js";
+import Verify from "views/Forms/Verify.js";
 
 // @material-ui/icons
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
@@ -92,6 +93,11 @@ var dashRoutes = [
   {
     path: "/transfer-asset",
     component: Transfer,
+    layout: "/user"
+  },
+  {
+    path: "/verify-asset",
+    component: Verify,
     layout: "/user"
   },
 ];
