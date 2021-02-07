@@ -618,6 +618,20 @@ export default function Search(props) {
     return;
   }
 
+  const handleOnScan = (e) => {
+    if (e.includes("0x") && e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)) {
+      let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
+      retrieveRecordQR(scanQuery);
+    }
+    else {
+      return swal({
+        title: "QR code does not contain an index hash.",
+        icon: "warning",
+        button: "Close",
+      });
+    } 
+  }
+
   const blockchainVerifyAsset = async () => {
     if (!window.ethereum) { return swal({ title: "Connect to an ethereum provider to use this functionality!", button: "Close", }) }
     if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
@@ -918,7 +932,7 @@ export default function Search(props) {
         icon: "warning",
         button: "Close",
       })
-      setScanQR(false)
+      return setScanQR(false)
     }
 
     if (props.ps) {
@@ -939,34 +953,33 @@ export default function Search(props) {
       .call(
         function (_error, _result) {
           if (_error) {
-            console.log(_error)
+            console.log(_error);
             setError(_error);
             setResult("");
-            setScanQR(false)
+            setScanQR(false);
             setRetrieving(false);
             swal({
               title: "Asset not found!",
-              // text: "Check your TX here:" + txHash,
               icon: "warning",
               button: "Close",
             });
           }
           else {
-            setScanQR(false)
+            setScanQR(false);
             console.log("rrqr conf");
             setResult(Object.values(_result));
             setError("");
             tempResult = Object.values(_result);
-            window.printObj = Object.values(_result)
+            window.printObj = Object.values(_result);
             if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-            console.log("ipfs data in promise", ipfsHash)
-            if (Object.values(_result)[6] > 0) {
-              console.log("Getting ipfs2 set up...")
+            console.log("ipfs data in promise", ipfsHash);
+            if (Object.values(_result)[6] > 0); {
+              console.log("Getting ipfs2 set up...");
               let knownUrl = "https://ipfs.io/ipfs/";
               let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
               let fullUrl = knownUrl + hash;
               console.log(fullUrl);
-              setInscription(fullUrl)
+              setInscription(fullUrl);
             }
           }
         });
@@ -1306,12 +1319,7 @@ export default function Search(props) {
                 <QrReader
                   className="qrReader"
                   scanDelay={300}
-                  onScan={(result) => {
-                    if (result) {
-                      retrieveRecordQR(result);
-                    }
-
-                  }}
+                  onScan={(result) => handleOnScan(result)}
                   onError={(err) => {
                     if (err) {
                       console.info(err);
