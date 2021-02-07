@@ -123,7 +123,8 @@ export default function Home(props) {
       return setloginDepositState("error");
     }
 
-    if (deposit < (props.ether * 10000)) {
+    if (deposit > (props.ether * 100000)) {
+      //console.log(props.ether)
       swal({
         title: "Insufficient KΞ",
         icon: "warning",
