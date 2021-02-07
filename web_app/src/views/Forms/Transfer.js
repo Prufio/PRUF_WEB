@@ -28,30 +28,30 @@ export default function Transfer(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo, ] = React.useState(window.sentPacket)
+  const [assetInfo, ] = React.useState(window.sentPacket);
 
-  const link = document.createElement('div')
+  const link = document.createElement('div');
 
-  window.sentPacket = null
+  window.sentPacket = null;
 
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop)
+      console.log("Scrolled to ", props.ps.element.scrollTop);
     }
   }, [])
 
   const clearForms = () => {
     setAddress("");
     setloginAddressState("");
-    console.log("clearing forms")
+    console.log("clearing forms");
   };
 
   const classes = useStyles();
 
   if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/user/home"
+    console.log("No asset found. Rerouting...");
+    return window.location.href = "/#/user/home";
   }
 
   if (assetInfo.statusNum !== "51") {
@@ -61,7 +61,7 @@ export default function Transfer(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard"
+    return window.location.href = "/#/user/dashboard";
   }
 
   if(!window.web3.utils.isAddress(address)) {
@@ -99,10 +99,10 @@ export default function Transfer(props) {
         setTransactionActive(false);
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         swal({
           title: "Transfer Failed!",
@@ -115,10 +115,10 @@ export default function Transfer(props) {
       .on("receipt", (receipt) => {
         setTransactionActive(false);
         setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
         swal({
           title: "Transfer Successful!",
@@ -128,7 +128,7 @@ export default function Transfer(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/user/dashboard"
+        window.location.href = "/#/user/dashboard";
       });
 
   }
