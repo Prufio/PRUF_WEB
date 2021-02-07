@@ -64,6 +64,15 @@ export default function Transfer(props) {
     return window.location.href = "/#/user/dashboard"
   }
 
+  if(!window.web3.utils.isAddress(address)) {
+    return swal({
+      title: "Submitted address is not valid!",
+      text: "Please check form and input a valid ethereum address.",
+      icon: "warning",
+      button: "Close",
+    });   
+  }
+
   const transferAsset = async () => { //transfer held asset
 
     if (loginAddress === "") {
