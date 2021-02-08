@@ -437,7 +437,7 @@ class Sidebar extends React.Component {
           >
             {addr !== undefined && (
               <>
-                {!this.state.copyText && (
+                {!this.state.copyText && bgColor !== "white" && (
                   <Tooltip
                     title="Copy to Clipboard"
                   >
@@ -446,7 +446,7 @@ class Sidebar extends React.Component {
                     </h5>
                   </Tooltip>
                 )}
-                {this.state.copyText && (
+                {this.state.copyText && bgColor !== "white" && (
                   <Tooltip
                     title="Copied to Clipboard"
                   >
@@ -455,10 +455,33 @@ class Sidebar extends React.Component {
                     </h5>
                   </Tooltip>
                 )}
+                {!this.state.copyText && bgColor === "white" && (
+                  <Tooltip
+                    title="Copy to Clipboard"
+                  >
+                    <h5>
+                      <a className="addressTextBlack"onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                    </h5>
+                  </Tooltip>
+                )}
+                {this.state.copyText && bgColor === "white" &&(
+                  <Tooltip
+                    title="Copied to Clipboard"
+                  >
+                    <h5>
+                      <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                    </h5>
+                  </Tooltip>
+                )}
               </>
             )}
-            {addr === undefined && (
+            {addr === undefined && bgColor !== "white" && (
               <h5 className="addressText">
+                User Address Unavailable
+              </h5>
+            )}
+            {addr === undefined && bgColor === "white" &&(
+              <h5 className="addressTextBlack">
                 User Address Unavailable
               </h5>
             )}

@@ -642,6 +642,17 @@ cursor:pointer;
   color: white;
 }
 
+.addressTextBlack {
+  font-size: 17px;
+  top: -15px !important;
+  color: rgb(0, 0, 0);
+}
+
+.addressTextBlack:hover {
+  cursor:pointer;
+  color: rgb(0, 0, 0);
+}
+
 .IDText {
   color: black;
 }

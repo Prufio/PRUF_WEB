@@ -2096,7 +2096,7 @@ export default function Search(props) {
                           }}
                           value="modify-status"
                         >
-                          Update Status
+                          Change Status
                           </MenuItem>
                         {/* <MenuItem
                       classes={{
