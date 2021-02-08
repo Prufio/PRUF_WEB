@@ -296,7 +296,7 @@ export default function Search(props) {
         break
       }
       case "verify": {
-        verify()
+        verify();
         break
       }
       default: {
@@ -304,8 +304,9 @@ export default function Search(props) {
         break
       }
     }
-
-    return window.location.href = href;
+    if (href !== "") {
+      return window.location.href = href;
+    }
   };
 
   const handleChange = event => {
@@ -357,7 +358,7 @@ export default function Search(props) {
       if (error) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         setRetrieving(false);
-        return setIpfsObject({text:{}, photo:{}, urls:{}, name: "", displayImage: ""})
+        return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
       } else {
         //console.log(lookup, "Here's what we found for asset description: ", result);
         let tempObj = JSON.parse(result)
@@ -387,18 +388,18 @@ export default function Search(props) {
               }
               else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
                 tempObj.photo[keys[i]] = vals[i];
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image")
-                    tempObj.DisplayImage = (tempObj.photo[keys[i]])
-                  }
-                  else if (i === keys.length - 1) {
-                    console.log("Setting Display Image")
-                    tempObj.DisplayImage = (tempObj.photo[keys[0]])
-                  }
-                  forceUpdate();
+                if (keys[i] === "DisplayImage") {
+                  console.log("Setting Display Image")
+                  tempObj.DisplayImage = (tempObj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  console.log("Setting Display Image")
+                  tempObj.DisplayImage = (tempObj.photo[keys[0]])
+                }
+                forceUpdate();
               }
 
-              if(i+1 === keys.length){
+              if (i + 1 === keys.length) {
                 setIpfsObject(tempObj)
                 setSelectedImage(tempObj.DisplayImage)
                 setMoreInfo(true);
@@ -410,27 +411,27 @@ export default function Search(props) {
 
             req.onerror = function (e) {
               console.log("http request error")
-              if(vals[i].includes("http")){
-              tempObj.photo[keys[i]] = vals[i];
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image")
-                    tempObj.DisplayImage = (tempObj.photo[keys[i]])
-                  }
-                  else if (i === keys.length - 1) {
-                    console.log("Setting Display Image")
-                    tempObj.DisplayImage = (tempObj.photo[keys[0]])
-                  }
-                  forceUpdate();
+              if (vals[i].includes("http")) {
+                tempObj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  console.log("Setting Display Image")
+                  tempObj.DisplayImage = (tempObj.photo[keys[i]])
                 }
+                else if (i === keys.length - 1) {
+                  console.log("Setting Display Image")
+                  tempObj.DisplayImage = (tempObj.photo[keys[0]])
+                }
+                forceUpdate();
+              }
 
-                if(i+1 === keys.length){
-                  setIpfsObject(tempObj)
-                  setSelectedImage(tempObj.DisplayImage)
-                  setMoreInfo(true);
-                  setRetrieving(false);
-                  console.log(tempObj);
-                  console.log(tempObj.DisplayImage);
-                }
+              if (i + 1 === keys.length) {
+                setIpfsObject(tempObj)
+                setSelectedImage(tempObj.DisplayImage)
+                setMoreInfo(true);
+                setRetrieving(false);
+                console.log(tempObj);
+                console.log(tempObj.DisplayImage);
+              }
             }
 
             req.open('GET', vals[i], true);
@@ -438,9 +439,9 @@ export default function Search(props) {
           }
           await get()
         }
-        
+
         //return forceUpdate();
-        
+
       }
     });
   };
@@ -623,13 +624,13 @@ export default function Search(props) {
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
-    if(isMobile) {
+    if (isMobile) {
       swal("Asset ID Copied to Clipboard!")
     }
-    if(!isMobile) {
-    setCopyText(true)
-    setTimeout(() => { setCopyText(false) }, 1000);
-  }
+    if (!isMobile) {
+      setCopyText(true)
+      setTimeout(() => { setCopyText(false) }, 1000);
+    }
   }
 
   const verifyAsset = async () => {
@@ -2115,7 +2116,7 @@ export default function Search(props) {
                     )}
                   </div>
                 )}
-                {ownerOf && (
+                {ownerOf && !isVerifying && (
                   <div>
                     <FormControl
                       fullWidth
@@ -2234,6 +2235,189 @@ export default function Search(props) {
                     </FormControl>
                   </div>
                 )}
+                {isVerifying && (
+                      <Card>
+                        <CardHeader icon>
+                          <CardIcon className="headerIconBack">
+                            <AccountBox />
+                          </CardIcon>
+                          <h4 className={classes.cardIconTitle}>Verify Owner Information</h4>
+                        </CardHeader>
+                        <CardBody>
+                          <form>
+                            <h5>Asset Selected: {ipfsObject.name}</h5>
+                            <>
+                              {!transaction && (
+                                <>
+                                  <CustomInput
+                                    success={loginFirstState === "success"}
+                                    error={loginFirstState === "error"}
+                                    labelText="First Name *"
+                                    id="firstName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setFirst(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginFirstState("success");
+                                        } else {
+                                          setloginFirstState("error");
+                                        }
+                                        setloginFirst(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText="Middle Name"
+                                    id="middleName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setMiddle(event.target.value.trim())
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginLastState === "success"}
+                                    error={loginLastState === "error"}
+                                    labelText="Last Name *"
+                                    id="lastName"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setLast(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginLastState("success");
+                                        } else {
+                                          setloginLastState("error");
+                                        }
+                                        setloginLast(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginIDState === "success"}
+                                    error={loginIDState === "error"}
+                                    labelText="ID Number *"
+                                    id="idNumber"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      onChange: event => {
+                                        setID(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginIDState("success");
+                                        } else {
+                                          setloginIDState("error");
+                                        }
+                                        setloginID(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <CustomInput
+                                    success={loginPasswordState === "success"}
+                                    error={loginPasswordState === "error"}
+                                    labelText="Password *"
+                                    id="ownerpassword"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      type: "password",
+                                      onChange: event => {
+                                        setPassword(event.target.value.trim())
+                                        if (event.target.value !== "") {
+                                          setloginPasswordState("success");
+                                        } else {
+                                          setloginPasswordState("error");
+                                        }
+                                        setloginPassword(event.target.value);
+                                      },
+                                    }}
+                                  />
+                                  <div className={classes.formCategory}>
+                                    <small>*</small> Required fields
+                      </div>
+                                </>
+                              )}
+                              {transaction && (
+                                <>
+                                  <CustomInput
+                                    labelText={first}
+                                    id="first"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={middle}
+                                    id="middle"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={last}
+                                    id="last"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={ID}
+                                    id="ID"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      disabled: true
+                                    }}
+                                  />
+                                  <CustomInput
+                                    labelText={password}
+                                    id="ownerpassword"
+                                    formControlProps={{
+                                      fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      type: "password",
+                                      disabled: true
+                                    }}
+                                  />
+                                </>
+                              )}
+                            </>
+                            {!transaction && (
+                              <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Owner</Button>
+                            )}
+                            {!transaction && (
+                              <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Owner</Button>
+                            )}
+                            {transaction && (
+                              <h3>
+                                Verifying Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                              </h3>
+                            )}
+                          </form>
+                        </CardBody>
+                      </Card>
+                    )}
               </CardBody>
               <CardFooter>
                 {!isMobile && (

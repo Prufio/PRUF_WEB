@@ -316,6 +316,7 @@ export default function Verify(props) {
             link.innerHTML = String(str1 + tempTxHash + str2)
             setVerifyResult(receiptVal)
             console.log("Verification Result :", receiptVal);
+            window.location.href="/#/user/dashboard"
           });
     
     
