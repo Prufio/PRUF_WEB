@@ -513,7 +513,7 @@ export default function Dashboard(props) {
                       }}
                       value="modify-status"
                     >
-                      Update Status
+                      Change Status
                           </MenuItem>
                     {/* <MenuItem
                       classes={{
