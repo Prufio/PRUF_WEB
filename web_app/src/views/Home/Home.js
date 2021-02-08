@@ -264,7 +264,7 @@ export default function Home(props) {
                 <Success>
                   <Add />
                 </Success>
-                <a href="/#/user/new-asset">
+                <a className="homeCardText" href="/#/user/new-asset">
                   Create New Record
                 </a>
               </div>
@@ -285,7 +285,7 @@ export default function Home(props) {
             <CardFooter stats>
               <div className={classes.stats}>
                 <Cached />
-                <a href="">
+                <a className="homeCardText" href="">
                   Refresh
                 </a>
               </div>
@@ -308,7 +308,7 @@ export default function Home(props) {
             <CardFooter stats>
               <div className={classes.stats}>
                 <Cached />
-                <a href="">
+                <a className="homeCardText" href="">
                   Refresh
                 </a>
               </div>
