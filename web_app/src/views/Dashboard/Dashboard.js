@@ -54,7 +54,7 @@ export default function Dashboard(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
   const [identicon, setIdenticon] = React.useState(<></>);
-  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/user/search/");
+  const [baseURL, setBaseURL] = React.useState("https://app.pruf.io/#/user/search/");
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
   const [copyText, setCopyText] = React.useState(false)

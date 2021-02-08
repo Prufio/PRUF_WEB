@@ -70,7 +70,7 @@ export default function Search(props) {
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [URL, setURL] = React.useState("");
-  const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/user/search/");
+  const [baseURL, setBaseURL] = React.useState("https://app.pruf.io/#/user/search/");
   const [isVerifying, setIsVerifying] = React.useState(false)
   const [isRecycling, setIsRecycling] = React.useState(false)
   const [txHash, setTxHash] = React.useState("")
@@ -738,6 +738,7 @@ export default function Search(props) {
     }
     //console.log(e)
     if (e.includes("0x") && e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)) {
+      setScanQR(!scanQR);
       let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
       console.log("Here is what we got in the scanner: ", scanQuery)
       retrieveRecordQR(scanQuery);
@@ -1402,7 +1403,6 @@ export default function Search(props) {
                   )}
                   {IDXRawInput === true && retrieving && (
                     <>
-                    {!isMobile && (
                       <CustomInput
                         labelText={IDXRaw}
                         id="IDX"
@@ -1413,19 +1413,6 @@ export default function Search(props) {
                           disabled: true
                         }}
                       />
-                      )}
-                      {isMobile && (
-                        <CustomInput
-                          labelText={IDXRaw.substring(0, 8) + "..." + IDXRaw.substring(58, 66)}
-                          id="IDX"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            disabled: true
-                          }}
-                        />
-                        )}
                     </>
                   )}
                   {!retrieving && (
@@ -1462,21 +1449,7 @@ export default function Search(props) {
                 <h4 className={classes.cardIconTitle}>QR Scanner</h4>
               </CardHeader>
               <CardBody>
-                {!retrieving && !isMobile &&(
-                  <QrReader
-                    className="qrReader"
-                    scanDelay={300}
-                    onScan={(result) => handleOnScan(result)}
-                    facingMode="user"
-                    onError={(err) => {
-                      if (err) {
-                        console.info(err);
-                      }
-                    }}
-                    style={{ width: '100%' }}
-                  />
-                )}
-                {!retrieving && isMobile && (
+                {!retrieving && (
                   <QrReader
                     className="qrReader"
                     scanDelay={500}
@@ -1689,7 +1662,7 @@ export default function Search(props) {
                 )} */}
                     {recycled && !transaction && !isRecycling && (
                       <>
-                        <h4>This asset has been discarded, to claim it, press "Recycle Asset" below!</h4>
+                        <h3>This asset has been discarded, to claim it, press "Recycle Asset" below!</h3>
                         <Button onClick={() => { recycle() }} color="info" className="MLBGradient">Recycle Asset</Button>
                       </>
                     )}
@@ -2265,7 +2238,7 @@ export default function Search(props) {
                           }}
                           value="edit-information"
                         >
-                          Update Asset Info
+                          Change Asset Info
                           </MenuItem>
                         <MenuItem
                           classes={{
@@ -2494,7 +2467,7 @@ export default function Search(props) {
                         title="Copy to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 8) + "..." + asset.idxHash.substring(58, 66)}</a>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</a>
                         </div>
                       </Tooltip>
                     )}
@@ -2503,7 +2476,7 @@ export default function Search(props) {
                         title="Copied to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 8) + "..." + asset.idxHash.substring(58, 66)}</a>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</a>
                         </div>
                       </Tooltip>
                     )}
@@ -2527,9 +2500,7 @@ export default function Search(props) {
                       </Icon>
                     </Tooltip>
                   </RWebShare>
-                  {!isMobile && (
                   <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
-                  )}
                   <Tooltip
                     title="View QR"
                   >
