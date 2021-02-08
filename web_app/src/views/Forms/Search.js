@@ -81,6 +81,7 @@ export default function Search(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [copyText, setCopyText] = React.useState(false)
 
+
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
   const [manufacturer, setManufacturer] = React.useState("");
@@ -117,6 +118,8 @@ export default function Search(props) {
   const [loginSerialState, setloginSerialState] = React.useState("");
   const [loginIDXState, setloginIDXState] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
+
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   const link = document.createElement('div');
 
@@ -354,14 +357,63 @@ export default function Search(props) {
       if (error) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         setRetrieving(false);
-        return setIpfsObject({})
+        return setIpfsObject({text:{}, photo:{}, urls:{}, name: "", displayImage: ""})
       } else {
         //console.log(lookup, "Here's what we found for asset description: ", result);
         let tempObj = JSON.parse(result)
-        setSelectedImage(tempObj.photo.displayImage || Object.values(tempObj.photo)[0] || "")
-        setIpfsObject(tempObj)
-        setMoreInfo(true);
-        return setRetrieving(false);
+        tempObj.photoUrls = JSON.parse(result).photo;
+        let vals = Object.values(tempObj.photo), keys = Object.keys(tempObj.photo);
+        for (let i = 0; i < keys.length; i++) {
+          const get = () => {
+            const req = new XMLHttpRequest();
+            req.responseType = "text";
+
+            req.onload = function (e) {
+              console.log("in onload")
+              if (this.response.includes("base64")) {
+                tempObj.photo[keys[i]] = this.response;
+                console.log(tempObj.photo[keys[i]]);
+
+                if (keys[i] === "DisplayImage") {
+                  console.log(tempObj.photo[keys[i]])
+                  tempObj.DisplayImage = tempObj.photo[keys[i]]
+                }
+
+                else if (i === keys.length - 1) {
+                  console.log(tempObj.photo[keys[i]])
+                  tempObj.DisplayImage = tempObj.photo[keys[i]]
+                }
+                forceUpdate();
+              }
+              else {
+                console.log("Set DisplayImage to ''")
+                tempObj.DisplayImage = ""
+                forceUpdate();
+              }
+
+              if(i+1 === keys.length){
+                setIpfsObject(tempObj)
+                setSelectedImage(tempObj.DisplayImage)
+                setMoreInfo(true);
+                setRetrieving(false);
+                console.log(tempObj);
+                console.log(tempObj.DisplayImage);
+              }
+            }
+
+            req.onerror = function (e) {
+              tempObj.DisplayImage = ""
+              forceUpdate();
+            }
+
+            req.open('GET', vals[i], true);
+            req.send();
+          }
+          await get()
+        }
+        
+        //return forceUpdate();
+        
       }
     });
   };
@@ -430,6 +482,7 @@ export default function Search(props) {
       .on("receipt", (receipt) => {
         setTransaction(false);
         window.location.href = "/#/user/dashboard"
+        window.location.reload()
         console.log(receipt.events.REPORT.returnValues._msg);
       });
   }
@@ -525,7 +578,8 @@ export default function Search(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/user/dashboard"
+        window.location.href = "/#/user/dashboard";
+        window.location.reload();
       });
 
     return;
@@ -1042,7 +1096,7 @@ export default function Search(props) {
   }
 
   const generateThumbs = (obj) => {
-    //console.log("obj", obj)
+    console.log("obj", obj)
     if (!obj.photo) {
       return []
     }
@@ -1360,7 +1414,7 @@ export default function Search(props) {
                         <>
                           {Object.values(ipfsObject.photo).length > 0 && (
                             <>
-                              {ipfsObject.photo.displayImage !== undefined && (
+                              {ipfsObject.DisplayImage !== "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"
@@ -1375,7 +1429,7 @@ export default function Search(props) {
                                   <img src={selectedImage} alt="..." />
                                 </>
                               )}
-                              {ipfsObject.photo.displayImage === undefined && (
+                              {ipfsObject.DisplayImage === "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"
@@ -1417,7 +1471,7 @@ export default function Search(props) {
                         <>
                           {Object.values(ipfsObject.photo).length > 0 && (
                             <>
-                              {ipfsObject.photo.displayImage !== undefined && (
+                              {ipfsObject.DisplayImage !== "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"
@@ -1432,7 +1486,7 @@ export default function Search(props) {
                                   <img src={selectedImage} alt="..." />
                                 </>
                               )}
-                              {ipfsObject.photo.displayImage === undefined && (
+                              {ipfsObject.DisplayImage === "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"

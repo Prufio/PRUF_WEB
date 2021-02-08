@@ -24,6 +24,9 @@ import { FlightLand } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Import(props) {
+
+  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+
   const [assetClass, setAssetClass] = React.useState("");
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
@@ -116,6 +119,7 @@ export default function Import(props) {
         window.resetInfo = true;
         window.recount = true;
         window.location.href = "/#/user/dashboard"
+        window.location.reload()
       });
 
   }

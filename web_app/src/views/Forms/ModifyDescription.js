@@ -35,11 +35,11 @@ const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription(props) {
 
-  if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home" }
+  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
   
   const [asset,] = React.useState(window.sentPacket);
-  const [assetInfo,] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
-  const [newAssetInfo, setNewAssetInfo] = React.useState({ photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} });
+  const [assetInfo,] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
+  const [newAssetInfo, setNewAssetInfo] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
   const [idxHash,] = React.useState(window.sentPacket.idxHash);
 
 
@@ -69,7 +69,7 @@ export default function ModifyDescription(props) {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   const link = document.createElement('div');
   const image = "photo", text = "text", url = "urls";
-  const maxImageSize = 500;
+  const maxImageSize = 1000;
   const resizeImg = require('resize-img');
   const fs = require('fs');
 
@@ -100,7 +100,8 @@ export default function ModifyDescription(props) {
 
   if(assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/user/home"
+    window.location.href = "/#/user/home"
+    window.location.reload()
   }
 
   let fileInput = React.createRef();
@@ -133,7 +134,7 @@ export default function ModifyDescription(props) {
   }
 
   const removeElement = (type, rem) => {
-    let tempObj = newAssetInfo;
+    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     delete tempObj[type][rem];
     //console.log(tempObj)
     setNewAssetInfo(tempObj);
@@ -160,14 +161,17 @@ export default function ModifyDescription(props) {
 
   const setDisplayImage = (img, key) => {
     console.log("Deleting: ", key)
-    let tempObj = newAssetInfo;
+    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     if (key === "DisplayImage") { return console.log("Nothing was done. Already set.") }
     let newKey = generateNewKey(tempObj)
     if (tempObj.photo.DisplayImage) {
       tempObj.photo[newKey] = tempObj.photo.DisplayImage
+      tempObj.photoUrls[newKey] = tempObj.photoUrls.DisplayImage
     }
     tempObj.photo.DisplayImage = img;
+    tempObj.photoUrls.DisplayImage = tempObj.photoUrls[key]
     delete tempObj.photo[key];
+    delete tempObj.photoUrls[key]
     //console.log(tempObj);
     setNewAssetInfo(tempObj);
     setSelectedImage(tempObj.photo.DisplayImage);
@@ -181,12 +185,16 @@ export default function ModifyDescription(props) {
   }
 
   const submitChanges = () => {
-    let payload = JSON.stringify(newAssetInfo, null, 5)
+    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    tempObj.photo = tempObj.photoUrls
+    delete tempObj.photoUrls;
+
+    let payload = JSON.stringify(tempObj, null, 5)
     let fileSize = Buffer.byteLength(payload, 'utf8')
-    if (fileSize > 5000000) {
+    if (fileSize > 1000000) {
       return (
         swal({
-          title: "Document size exceeds 5 MB limit! (" + String(fileSize) + "Bytes)",
+          title: "Document size exceeds 1 MB limit! (" + String(fileSize) + "Bytes)",
           content: link,
           icon: "warning",
           button: "Close",
@@ -195,7 +203,7 @@ export default function ModifyDescription(props) {
     }
 
     setIpfsActive(true);
-
+    console.log("Submitting changes. Parsed Payload: ", tempObj)
     window.ipfs.add(payload, (err, hash) => { // Upload buffer to IPFS
       if (err) {
         console.error(err)
@@ -259,6 +267,7 @@ export default function ModifyDescription(props) {
         window.resetInfo = true;
         window.recount = true;
         window.location.href = "/#/user/dashboard"
+        window.location.reload()
       });
   }
 
@@ -272,7 +281,7 @@ export default function ModifyDescription(props) {
   }
 
   const submitCurrentUrl = () => {
-    let url = URL, key = URLTitle, tempObj = newAssetInfo;
+    let url = URL, key = URLTitle, tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     if ((url === "" && key !== "") || (url !=="" && key === "")) {
       if (url === "") {
         return setloginURLState("error")
@@ -296,14 +305,14 @@ export default function ModifyDescription(props) {
   }
 
   const handleName = (e) => {
-    let tempObj = newAssetInfo;
+    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     tempObj.name = e;
     setNewAssetInfo(tempObj);
   }
 
 
   const handleDescription = (e) => {
-    let tempObj = newAssetInfo;
+    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     tempObj.text.Description = e;
     setNewAssetInfo(tempObj);
   }
@@ -368,7 +377,7 @@ export default function ModifyDescription(props) {
     }
     console.log(fileName);
 
-    let tempObj = newAssetInfo;
+    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     if (tempObj.photo[fileName]) {
       //console.log("Already exists, adding copy")
       let tempFN = fileName
@@ -403,24 +412,44 @@ export default function ModifyDescription(props) {
         resizeImg(tempBuffer, {height: newH, width:newW, format: "jpg"}).then((e)=>{
           console.log("Resized to ",newH,"x",newW);
           tempObj.photo[fileName] = prefix + base64.encode(e);
-          setNewAssetInfo(tempObj);
-          if (selectedImage === "") {
-            setSelectedImage(tempObj.photo[fileName]);
-            setSelectedKey(fileName);
-          }
-          return forceUpdate();
+          window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
+            if (err) {
+              console.error(err)
+              return setIpfsActive(false);
+            }
+      
+            let url = `https://ipfs.io/ipfs/${hash}`
+            console.log(`Url --> ${url}`)
+            tempObj.photoUrls[fileName] = url;
+            setNewAssetInfo(tempObj);
+            if (selectedImage === "") {
+              setSelectedImage(tempObj.photo[fileName]);
+              setSelectedKey(fileName);
+            }
+            return forceUpdate();
+          })
         })
       }
       else{
         resizeImg(tempBuffer, {height: i.height, width:i.width, format: "jpg"}).then((e)=>{
           console.log("Converted to .JPG");
           tempObj.photo[fileName] = prefix + base64.encode(e);
-          setNewAssetInfo(tempObj);
-          if (selectedImage === "") {
-            setSelectedImage(tempObj.photo[fileName])
-            setSelectedKey(fileName)
-          }
-          return forceUpdate();
+          window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
+            if (err) {
+              console.error(err)
+              return setIpfsActive(false);
+            }
+      
+            let url = `https://ipfs.io/ipfs/${hash}`
+            console.log(`Url --> ${url}`)
+            tempObj.photoUrls[fileName] = url;
+            setNewAssetInfo(tempObj);
+            if (selectedImage === "") {
+              setSelectedImage(tempObj.photo[fileName])
+              setSelectedKey(fileName)
+            }
+            return forceUpdate();
+          })
         })
       };
     }
@@ -461,11 +490,14 @@ export default function ModifyDescription(props) {
       }
 
       if (newObj) {
+        newObj.photoUrls = newAssetInfo.photoUrls;
         console.log(newObj);
         if (newObj.name && newObj.text && newObj.photo && newObj.urls) {
           console.log("Setting new JSON config into state")
           setNewAssetInfo(newObj);
+          forceUpdate();
         }
+
         else {
           return console.log("Does not contain the requisite keys")
         }
@@ -485,7 +517,12 @@ export default function ModifyDescription(props) {
     } else {
       filename = 'unnamed_asset_backup.json';
     }
-    const data = new Blob([JSON.stringify(newAssetInfo, null, 5)], { type: 'application/json' })
+
+    let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    tempObj.photo = tempObj.photoUrls;
+    delete tempObj.photoUrls;
+
+    const data = new Blob([JSON.stringify(tempObj, null, 5)], { type: 'application/json' })
     const fileURL = URL.createObjectURL(data);
     const anchorTag = document.createElement('a');
     anchorTag.href = fileURL; anchorTag.target = '_blank'; anchorTag.className = 'imageInput';

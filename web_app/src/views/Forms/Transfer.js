@@ -19,6 +19,8 @@ const useStyles = makeStyles(styles);
 
 export default function Transfer(props) {
 
+  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+
   const [address, setAddress] = React.useState("");
   const [loginAddress, setloginAddress] = React.useState("");
   const [loginAddressState, setloginAddressState] = React.useState("");
@@ -51,7 +53,8 @@ export default function Transfer(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...");
-    return window.location.href = "/#/user/home";
+    window.location.href = "/#/user/home";
+    window.location.reload()
   }
 
   if (assetInfo.statusNum !== "51") {
@@ -64,16 +67,16 @@ export default function Transfer(props) {
     return window.location.href = "/#/user/dashboard";
   }
 
-  if(!window.web3.utils.isAddress(address)) {
-    return swal({
-      title: "Submitted address is not valid!",
-      text: "Please check form and input a valid ethereum address.",
-      icon: "warning",
-      button: "Close",
-    });   
-  }
-
   const transferAsset = async () => { //transfer held asset
+
+    if(!window.web3.utils.isAddress(address)) {
+      return swal({
+        title: "Submitted address is not valid!",
+        text: "Please check form and input a valid ethereum address.",
+        icon: "warning",
+        button: "Close",
+      });   
+    }
 
     if (loginAddress === "") {
       setloginAddressState("error");
@@ -129,6 +132,7 @@ export default function Transfer(props) {
         window.resetInfo = true;
         window.recount = true;
         window.location.href = "/#/user/dashboard";
+        window.location.reload()
       });
 
   }

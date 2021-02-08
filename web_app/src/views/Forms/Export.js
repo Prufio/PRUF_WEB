@@ -18,8 +18,10 @@ import { FlightTakeoff } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Export(props) {
-  const [transactionActive, setTransactionActive] = React.useState(false);
 
+  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+
+  const [transactionActive, setTransactionActive] = React.useState(false);
   const [error, setError] = React.useState("");
   const [showHelp, setShowHelp] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
@@ -42,7 +44,8 @@ export default function Export(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/user/home"
+    window.location.href = "/#/user/home"
+    window.location.reload()
   }
 
   if (assetInfo.statusNum !== "51") {
@@ -103,6 +106,7 @@ export default function Export(props) {
         window.resetInfo = true;
         window.recount = true;
         window.location.href = "/#/user/dashboard"
+        window.location.reload()
       });
 
   }

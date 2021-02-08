@@ -30,6 +30,8 @@ const useStyles = makeStyles(styles);
 
 export default function NewRecord(props) {
 
+  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+
   const [error, setError] = React.useState("");
   const [showHelp, setShowHelp] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
@@ -51,6 +53,8 @@ export default function NewRecord(props) {
   const [nameTag, setNameTag] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [displayImage, setDisplayImage] = React.useState("");
+  const [displayImageUrl, setDisplayImageUrl] = React.useState("");
+
 
   const [loginManufacturer, setloginManufacturer] = React.useState("");
   const [loginType, setloginType] = React.useState("");
@@ -83,7 +87,9 @@ export default function NewRecord(props) {
 
   const [txHash, setTxHash] = React.useState("");
 
-  const maxImageSize = 500;
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  const maxImageSize = 1000;
 
   const link = document.createElement('div');
   const resizeImg = require('resize-img');
@@ -180,8 +186,7 @@ export default function NewRecord(props) {
                   icon: "success",
                   button: "Close"
                 });
-                window.resetInfo = true;
-                window.recount = true;
+                window.location.reload()
               })
             break;
 
@@ -202,7 +207,8 @@ export default function NewRecord(props) {
   }
 
   const clearForms = () => {
-    setDisplayImage("")
+    setDisplayImage("");
+    setDisplayImageUrl("");
     setManufacturer("");
     setType("");
     setModel("");
@@ -234,26 +240,55 @@ export default function NewRecord(props) {
 
     var i = new Image();
 
-    i.onload = function () {
+    i.onload = function(){
       console.log(i.height, i.width);
-      if (i.height > maxImageSize || i.width > maxImageSize) {
+      if(i.height > maxImageSize || i.width > maxImageSize){
         let newH, newW, ar;
-        ar = i.width / i.height;
-        newH = maxImageSize;
-        newW = ar * newH;
+        if(i.width>i.height){
+          ar = i.height/i.width;
+          newW = maxImageSize;
+          newH = ar*newW ;
+        }
+        else{
+          ar = i.width/i.height;
+          newH = maxImageSize;
+          newW = ar*newH;
+        }
         console.log("Resizing image... ");
-        resizeImg(tempBuffer, { height: newH, width: newW, format: "jpg" }).then((e) => {
-          console.log("Resized to ", newH, "x", newW);
-          setDisplayImage(prefix + base64.encode(e));
+        resizeImg(tempBuffer, {height: newH, width:newW, format: "jpg"}).then((e)=>{
+          console.log("Resized to ",newH,"x",newW);
+          window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
+            if (err) {
+              console.error(err)
+              return setIpfsActive(false);
+            }
+      
+            let url = `https://ipfs.io/ipfs/${hash}`
+            console.log(`Url --> ${url}`)
+            setDisplayImageUrl(url);
+            setDisplayImage(prefix + base64.encode(e));
+            return forceUpdate();
+          })
         })
       }
-      else {
-        resizeImg(tempBuffer, { height: i.height, width: i.width, format: "jpg" }).then((e) => {
+      else{
+        resizeImg(tempBuffer, {height: i.height, width:i.width, format: "jpg"}).then((e)=>{
           console.log("Converted to .JPG");
-          setDisplayImage(prefix + base64.encode(e));
-        });
-      }
-    };
+          window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
+            if (err) {
+              console.error(err)
+              return setIpfsActive(false);
+            }
+      
+            let url = `https://ipfs.io/ipfs/${hash}`
+            console.log(`Url --> ${url}`)
+            setDisplayImageUrl(url);
+            setDisplayImage(prefix + base64.encode(e));
+            return forceUpdate();
+          })
+        })
+      };
+    }
 
     i.src = src;
   }
@@ -288,16 +323,17 @@ export default function NewRecord(props) {
   }
 
   const removeDisplayImage = () => {
-    let i = new Image();
+/*     let i = new Image();
 
     i.onload = function () {
       if (props.ps) {
         props.ps.element.scrollTop -= i.height
-      }
+      } */
+      setDisplayImageUrl("")
       setDisplayImage("")
-    };
+/*     };
 
-    i.src = displayImage;
+    i.src = displayImage; */
   }
 
   const checkAsset = async () => {
@@ -354,7 +390,7 @@ export default function NewRecord(props) {
     }
 
     if (displayImage !== "") {
-      ipfsObj.photo.DisplayImage = displayImage;
+      ipfsObj.photo.DisplayImage = displayImageUrl;
     }
 
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
@@ -372,10 +408,10 @@ export default function NewRecord(props) {
 
     let payload = JSON.stringify(ipfsObj);
     let fileSize = Buffer.byteLength(payload, 'utf8')
-    if (fileSize > 5000000) {
+    if (fileSize > 1000000) {
       return (
         swal({
-          title: "Document size exceeds 5 MB limit! (" + String(fileSize) + "Bytes)",
+          title: "Document size exceeds 1 MB limit! (" + String(fileSize) + "Bytes)",
           content: link,
           icon: "warning",
           button: "Close",
@@ -478,9 +514,8 @@ export default function NewRecord(props) {
           icon: "success",
           button: "Close",
         });
-        window.resetInfo = true;
-        window.recount = true;
-        window.location.href="/#/user/new-asset"
+        window.location.href="/#/user/dashboard"
+        window.location.reload()
       });
 
     setAssetClass("");

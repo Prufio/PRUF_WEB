@@ -23,6 +23,9 @@ import { ScatterPlot } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function ModifyStatus(props) {
+
+  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
 
@@ -51,7 +54,8 @@ export default function ModifyStatus(props) {
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/user/home"
+    window.location.href = "/#/user/home"
+    window.location.reload()
   }
 
   if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56") {
@@ -158,6 +162,7 @@ export default function ModifyStatus(props) {
         window.resetInfo = true;
         window.recount = true;
         window.location.href = "/#/user/dashboard"
+        window.location.reload()
       });
 
   }
@@ -211,6 +216,7 @@ export default function ModifyStatus(props) {
         window.resetInfo = true;
         window.recount = true;
         window.location.href = "/#/user/dashboard"
+        window.location.reload()
       });
 
   }

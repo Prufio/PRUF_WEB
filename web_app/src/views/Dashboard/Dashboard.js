@@ -92,13 +92,12 @@ export default function Dashboard(props) {
     setTimeout(() => { setCopyText(false) }, 1000);
   }
 
-
-  const generateAssetDash = (obj) => {
-    if (Object.values(obj).length > 0 && obj.names.length > 0) {
+  const generateAssetDash = (arr) => {
+    if (arr.length > 0) {
       let component = [];
       //console.log(obj)
 
-      for (let i = 0; i < obj.ids.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
         component.push(
           <GridItem key={"asset" + i} xs={12} sm={12} md={4}>
@@ -107,30 +106,36 @@ export default function Dashboard(props) {
                 {!isMobile && (
                   <CardHeader image className={classes.cardHeaderHoverDashboard}>
                     <a className="dashboardAssetImage" onClick={() => moreInfo({
-                      countPair: obj.countPairs[i],
-                      idxHash: obj.ids[i],
-                      descriptionObj: obj.descriptions[i],
-                      DisplayImage: obj.displayImages[i],
-                      name: obj.names[i],
-                      assetClass: obj.assetClasses[i],
-                      assetClassName: obj.assetClassNames[i],
-                      status: obj.statuses[i],
-                      statusNum: obj.statusNums[i],
-                      Description: obj.descriptions[i].text.Description,
-                      note: obj.notes[i],
-                      text: obj.descriptions[i].text,
-                      urls: obj.descriptions[i].urls,
-                      photo: obj.descriptions[i].photo,
-                      identicon: obj.identiconsLG[i]
+                      countPair: arr[i].countPair,
+                      idxHash: arr[i].id,
+                      descriptionObj: {text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name},
+                      DisplayImage: arr[i].DisplayImage,
+                      name: arr[i].name,
+                      assetClass: arr[i].assetClass,
+                      assetClassName: arr[i].assetClassName,
+                      status: arr[i].status,
+                      statusNum: arr[i].statusNum,
+                      Description: arr[i].text.Description,
+                      note: arr[i].note,
+                      text: arr[i].text,
+                      urls: arr[i].urls,
+                      photo: arr[i].photo,
+                      photoUrls: arr[i].photoUrls,
+                      identicon: arr[i].identicon
                     })}>
 
-                      {obj.displayImages[i] !== "" && (
-                        <img title="View Asset" src={obj.displayImages[i]} alt="" />
+                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
+                        <img title="View Asset" src={arr[i].DisplayImage} alt="" />
                       )}
 
-                      {obj.displayImages[i] === "" && (
+                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
                         <>
-                          {obj.identicons[i]}
+                          {arr[i].identicon}
+                        </>
+                      )}
+                      {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
+                        <>
+                          {arr[i].identicon}
                         </>
                       )}
                     </a>
@@ -140,13 +145,18 @@ export default function Dashboard(props) {
                   <CardHeader image className={classes.cardHeaderHover}>
                     <a>
 
-                      {obj.displayImages[i] !== "" && (
-                        <img title="View Asset" src={obj.displayImages[i]} alt="" />
+                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
+                        <img title="View Asset" src={arr[i].DisplayImage} alt="" />
                       )}
 
-                      {obj.displayImages[i] === "" && (
+                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
                         <>
-                          {obj.identicons[i]}
+                          {arr[i].identicon}
+                        </>
+                      )}
+                      {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
+                        <>
+                          {arr[i].identicon}
                         </>
                       )}
                     </a>
@@ -158,35 +168,9 @@ export default function Dashboard(props) {
             </CardHeader> */}
               <CardBody>
                 <div className={classes.cardHover}>
-                  {/* <Tooltip
-                    id="tooltip-top"
-                    title="View/Edit"
-                    placement="bottom"
-                    classes={{ tooltip: classes.tooltip }}
-                  >
-                    <Button color="success" simple justIcon onClick={() => moreInfo({
-                      countPair: obj.countPairs[i],
-                      idxHash: obj.ids[i],
-                      descriptionObj: obj.descriptions[i],
-                      DisplayImage: obj.displayImages[i],
-                      name: obj.names[i],
-                      assetClass: obj.assetClasses[i],
-                      assetClassName: obj.assetClassNames[i],
-                      status: obj.statuses[i],
-                      statusNum: obj.statusNums[i],
-                      Description: obj.descriptions[i].text.Description,
-                      note: obj.notes[i],
-                      text: obj.descriptions[i].text,
-                      urls: obj.descriptions[i].urls,
-                      photo: obj.descriptions[i].photo,
-                      identicon: obj.identiconsLG[i]
-                    })}>
-                      <Edit className={classes.underChartIcons} />
-                    </Button>
-                  </Tooltip> */}
                 </div>
-                <h4 className={classes.cardTitle}>{obj.names[i]}</h4>
-                <h5 className={classes.cardTitle}>Status: {obj.statuses[i]}</h5>
+                <h4 className={classes.cardTitle}>{arr[i].name}</h4>
+                <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
 
               </CardBody>
               {/* <CardFooter chart>
@@ -198,7 +182,6 @@ export default function Dashboard(props) {
           </GridItem>
         );
       }
-
       return component
     }
 
@@ -328,22 +311,27 @@ export default function Dashboard(props) {
                 <Tooltip
                   title="Refresh"
                 >
-                  <Icon className="MLBGradientRefresh" onClick={() => { window.resetInfo = true; window.recount = true; }}>
+                  <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
                     <Refresh />
                   </Icon>
                 </Tooltip>
               </div>
               <br />
             </CardHeader>
-            {!props.addr && (
+            {!props.addr && props.isMounted && (
               <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
             )}
           </Card>
         </GridItem>
       </GridContainer>
+      {!props.addr && !props.isMounted && (
+        <GridContainer>
+        <><h3>Getting User Address</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
+        </GridContainer>
+      )}
       {!viewAsset && props.addr && (
         <GridContainer>
-          {generateAssetDash(props.assetObj)}
+          {generateAssetDash(props.assetArr || [])}
         </GridContainer>
       )}
       {viewAsset && (
@@ -352,7 +340,7 @@ export default function Dashboard(props) {
             <>
               {!isMobile && (
                 <CardHeader image className={classes.cardHeaderHoverCustom}>
-                  {selectedAssetObj.DisplayImage.length > 1 && (
+                  {selectedAssetObj.DisplayImage !== "" && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -367,7 +355,7 @@ export default function Dashboard(props) {
                       <img src={selectedImage} alt="..." />
                     </>
                   )}
-                  {selectedAssetObj.DisplayImage.length === 0 && (
+                  {selectedAssetObj.DisplayImage === "" && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -386,7 +374,7 @@ export default function Dashboard(props) {
               )}
               {isMobile && (
                 <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
-                  {selectedAssetObj.DisplayImage.length > 1 && (
+                  {selectedAssetObj.DisplayImage !== "" && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -401,7 +389,7 @@ export default function Dashboard(props) {
                       <img src={selectedImage} alt="..." />
                     </>
                   )}
-                  {selectedAssetObj.DisplayImage.length === 0 && (<>
+                  {selectedAssetObj.DisplayImage.length === "" && (<>
                     <Tooltip
                       id="tooltip-top"
                       title="Back"
