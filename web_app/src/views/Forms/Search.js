@@ -1402,6 +1402,7 @@ export default function Search(props) {
                   )}
                   {IDXRawInput === true && retrieving && (
                     <>
+                    {!isMobile && (
                       <CustomInput
                         labelText={IDXRaw}
                         id="IDX"
@@ -1412,6 +1413,19 @@ export default function Search(props) {
                           disabled: true
                         }}
                       />
+                      )}
+                      {isMobile && (
+                        <CustomInput
+                          labelText={IDXRaw.substring(0, 8) + "..." + IDXRaw.substring(58, 66)}
+                          id="IDX"
+                          formControlProps={{
+                            fullWidth: true
+                          }}
+                          inputProps={{
+                            disabled: true
+                          }}
+                        />
+                        )}
                     </>
                   )}
                   {!retrieving && (
