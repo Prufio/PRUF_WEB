@@ -180,21 +180,22 @@ export default function Dashboard(props) {
                     classes={{ tooltip: classes.tooltip }}
                   >
                     <Button color="success" simple justIcon onClick={() => moreInfo({
-                      countPair: obj.countPairs[i],
-                      idxHash: obj.ids[i],
-                      descriptionObj: obj.descriptions[i],
-                      DisplayImage: obj.displayImages[i],
-                      name: obj.names[i],
-                      assetClass: obj.assetClasses[i],
-                      assetClassName: obj.assetClassNames[i],
-                      status: obj.statuses[i],
-                      statusNum: obj.statusNums[i],
-                      Description: obj.descriptions[i].text.Description,
-                      note: obj.notes[i],
-                      text: obj.descriptions[i].text,
-                      urls: obj.descriptions[i].urls,
-                      photo: obj.descriptions[i].photo,
-                      identicon: obj.identiconsLG[i]
+                      countPair: arr[i].countPair,
+                      idxHash: arr[i].id,
+                      descriptionObj: {text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name},
+                      DisplayImage: arr[i].DisplayImage,
+                      name: arr[i].name,
+                      assetClass: arr[i].assetClass,
+                      assetClassName: arr[i].assetClassName,
+                      status: arr[i].status,
+                      statusNum: arr[i].statusNum,
+                      Description: arr[i].text.Description,
+                      note: arr[i].note,
+                      text: arr[i].text,
+                      urls: arr[i].urls,
+                      photo: arr[i].photo,
+                      photoUrls: arr[i].photoUrls,
+                      identicon: arr[i].identicon
                     })}>
                       <Edit className={classes.underChartIcons} />
                     </Button>
