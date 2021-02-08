@@ -296,7 +296,7 @@ export default function Search(props) {
         break
       }
       case "verify": {
-        setIsVerifying(!isVerifying)
+        verify()
         break
       }
       default: {
@@ -322,16 +322,16 @@ export default function Search(props) {
     console.log("new value", !scanQR)
   };
 
-  const veryify = event => {
-    setIsVerifying(!isVerifying)
+  const verify = () => {
+    setIsVerifying(true)
     if (props.ps) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
   };
 
-  const recycle = event => {
-    setIsRecycling(!isRecycling);
+  const recycle = () => {
+    setIsRecycling(true);
     if (props.ps) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
@@ -623,8 +623,13 @@ export default function Search(props) {
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
+    if(isMobile) {
+      swal("Asset ID Copied to Clipboard!")
+    }
+    if(!isMobile) {
     setCopyText(true)
     setTimeout(() => { setCopyText(false) }, 1000);
+  }
   }
 
   const verifyAsset = async () => {
@@ -698,7 +703,7 @@ export default function Search(props) {
               button: "Close",
             });
             setTransaction(false)
-            setIsVerifying(!isVerifying)
+            setIsVerifying(false)
           }
           else {
             console.log("Verification Confirmed");
@@ -710,7 +715,7 @@ export default function Search(props) {
             });
             setError("");
             setTransaction(false)
-            setIsVerifying(!isVerifying)
+            setIsVerifying(false)
           }
         });
     return;
@@ -791,7 +796,7 @@ export default function Search(props) {
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
-        setIsVerifying(!isVerifying)
+        setIsVerifying(false)
         tempTxHash = Object.values(_error)[0].transactionHash;
         let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
         let str2 = "' target='_blank'>here</a>"
@@ -804,7 +809,7 @@ export default function Search(props) {
       .on("receipt", (receipt) => {
         receiptVal = receipt.events.REPORT.returnValues._msg;
         setTransaction(false)
-        setIsVerifying(!isVerifying)
+        setIsVerifying(false)
         setTxHash(receipt.transactionHash)
         tempTxHash = receipt.transactionHash
         let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
@@ -1642,14 +1647,14 @@ export default function Search(props) {
                     {recycled && !transaction && !isRecycling && (
                       <>
                         <h3>This asset has been discarded, to claim it, press "Recycle Asset" below!</h3>
-                        <Button onClick={() => { setIsRecycling(!isRecycling) }} color="info" className="MLBGradient">Recycle Asset</Button>
+                        <Button onClick={() => { recycle() }} color="info" className="MLBGradient">Recycle Asset</Button>
                       </>
                     )}
                     {!transaction && isRecycling && (
-                      <Button color="info" className="MLBGradient" onClick={() => setIsRecycling(!isRecycling)}>Back</Button>
+                      <Button color="info" className="MLBGradient" onClick={() => setIsRecycling(false)}>Back</Button>
                     )}
                     {!transaction && !isVerifying && !recycled && (
-                      <Button color="info" className="MLBGradient" onClick={() => setIsVerifying(!isVerifying)}>Verify Rightsholder</Button>
+                      <Button color="info" className="MLBGradient" onClick={() => verify()}>Verify Rightsholder</Button>
                     )}
                     {!transaction && isVerifying && (
                       <Button color="info" className="MLBGradient" onClick={() => setIsNotVerifying()}>Back</Button>

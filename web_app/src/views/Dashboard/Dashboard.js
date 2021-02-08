@@ -37,6 +37,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
+import swal from "sweetalert";
 
 const useStyles = makeStyles(styles);
 
@@ -88,8 +89,13 @@ export default function Dashboard(props) {
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
+    if(isMobile) {
+      swal("Asset ID Copied to Clipboard!")
+    }
+    if(!isMobile) {
     setCopyText(true)
     setTimeout(() => { setCopyText(false) }, 1000);
+  }
   }
 
   const generateAssetDash = (arr) => {
@@ -108,7 +114,7 @@ export default function Dashboard(props) {
                     <a className="dashboardAssetImage" onClick={() => moreInfo({
                       countPair: arr[i].countPair,
                       idxHash: arr[i].id,
-                      descriptionObj: {text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name},
+                      descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
                       DisplayImage: arr[i].DisplayImage,
                       name: arr[i].name,
                       assetClass: arr[i].assetClass,
@@ -167,8 +173,41 @@ export default function Dashboard(props) {
             <img src={macbook} alt="logo" className="assetImage" />
             </CardHeader> */}
               <CardBody>
-                <div className={classes.cardHover}>
-                </div>
+                {!isMobile && (
+                  <div className={classes.cardHover}>
+                  </div>
+                )}
+                {isMobile && (
+                  <div className={classes.cardHoverUnder}>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="View/Edit"
+                      placement="bottom"
+                      classes={{ tooltip: classes.tooltip }}
+                    >
+                      <Button color="success" simple justIcon onClick={() => moreInfo({
+                        countPair: arr[i].countPair,
+                        idxHash: arr[i].id,
+                        descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
+                        DisplayImage: arr[i].DisplayImage,
+                        name: arr[i].name,
+                        assetClass: arr[i].assetClass,
+                        assetClassName: arr[i].assetClassName,
+                        status: arr[i].status,
+                        statusNum: arr[i].statusNum,
+                        Description: arr[i].text.Description,
+                        note: arr[i].note,
+                        text: arr[i].text,
+                        urls: arr[i].urls,
+                        photo: arr[i].photo,
+                        photoUrls: arr[i].photoUrls,
+                        identicon: arr[i].identicon
+                      })}>
+                        <Edit className={classes.underChartIcons} />
+                      </Button>
+                    </Tooltip>
+                  </div>
+                )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
                 <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
 
@@ -324,14 +363,14 @@ export default function Dashboard(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      {props.addr && props.isMounted && props.assets ==="~" && (
+      {props.addr && props.isMounted && props.assets === "~" && (
         <GridContainer>
-        <><h3>Getting Token Balances (Step 2 of 3)</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
+          <><h3>Getting Token Balances (Step 2 of 3)</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
         </GridContainer>
       )}
-      {!props.addr && !props.isMounted && props.assets ==="~" && (
+      {!props.addr && !props.isMounted && props.assets === "~" && (
         <GridContainer>
-        <><h3>Getting User Address (Step 1 of 3)</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
+          <><h3>Getting User Address (Step 1 of 3)</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
         </GridContainer>
       )}
       {!viewAsset && props.addr && props.assets !== "~" && (
@@ -581,7 +620,7 @@ export default function Dashboard(props) {
                       title="Copy to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</a>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 8) + "..." + selectedAssetObj.idxHash.substring(58, 66)}</a>
                       </div>
                     </Tooltip>
                   )}
@@ -590,7 +629,7 @@ export default function Dashboard(props) {
                       title="Copied to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</a>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 8) + "..." + selectedAssetObj.idxHash.substring(58, 66)}</a>
                       </div>
                     </Tooltip>
                   )}
@@ -614,7 +653,9 @@ export default function Dashboard(props) {
                     </Icon>
                   </Tooltip>
                 </RWebShare>
+                {!isMobile && (
                   <Printer obj={{ name: selectedAssetObj.name, idxHash: selectedAssetObj.idxHash, assetClassName: selectedAssetObj.assetClassName }} />
+                )}
                 <Tooltip
                   title="View QR"
                 >
