@@ -129,12 +129,21 @@ export default function ModifyRGT(props) {
         let str2 = "' target='_blank'>here</a>"
         link.innerHTML = String(str1 + tempTxHash + str2)
         setError(Object.values(_error)[0]);
-        swal({
-          title: "Owner Change Failed!",
-          content: link,
-          icon: "warning",
-          button: "Close",
-        });
+        if (tempTxHash !== undefined) {
+          swal({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swal({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
       })
       .on("receipt", (receipt) => {
         setTransactionActive(false);

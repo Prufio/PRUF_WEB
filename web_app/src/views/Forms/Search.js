@@ -551,12 +551,21 @@ export default function Search(props) {
         let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
         let str2 = "' target='_blank'>here</a>"
         link.innerHTML = String(str1 + tempTxHash + str2)
-        swal({
-          title: "Recycle Failed!",
-          content: link,
-          icon: "warning",
-          button: "Close",
-        });
+        if (tempTxHash !== undefined) {
+          swal({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swal({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
         console.log("Verification conf")
         setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
@@ -789,12 +798,21 @@ export default function Search(props) {
     }
 
     if (receiptVal !== "Match confirmed") {
-      swal({
-        title: "Match Failed!",
-        content: link,
-        icon: "warning",
-        button: "Close",
-      });
+      if (tempTxHash !== undefined) {
+        swal({
+          title: "Match Failed!",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      }
+      if (tempTxHash === undefined) {
+        swal({
+          title: "Match Failed!",
+          icon: "warning",
+          button: "Close",
+        });
+      }
       console.log("Verification not conf")
     }
 

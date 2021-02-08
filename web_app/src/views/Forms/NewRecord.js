@@ -166,12 +166,21 @@ export default function NewRecord(props) {
                 let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
                 let str2 = "' target='_blank'>here</a>";
                 link.innerHTML = String(str1 + tempTxHash + str2);
-                swal({
-                  title: "Something went wrong!",
-                  content: link,
-                  icon: "warning",
-                  button: "Close",
-                });
+                if (tempTxHash !== undefined) {
+                  swal({
+                    title: "Something went wrong!",
+                    content: link,
+                    icon: "warning",
+                    button: "Close",
+                  });
+                }
+                if (tempTxHash === undefined) {
+                  swal({
+                    title: "Something went wrong!",
+                    icon: "warning",
+                    button: "Close",
+                  });
+                }
               })
               .on("receipt", (receipt) => {
                 setTransactionActive(false);
@@ -188,6 +197,7 @@ export default function NewRecord(props) {
                 });
                 window.location.reload()
               })
+
             break;
 
           case "no":
@@ -240,29 +250,29 @@ export default function NewRecord(props) {
 
     var i = new Image();
 
-    i.onload = function(){
+    i.onload = function () {
       console.log(i.height, i.width);
-      if(i.height > maxImageSize || i.width > maxImageSize){
+      if (i.height > maxImageSize || i.width > maxImageSize) {
         let newH, newW, ar;
-        if(i.width>i.height){
-          ar = i.height/i.width;
+        if (i.width > i.height) {
+          ar = i.height / i.width;
           newW = maxImageSize;
-          newH = ar*newW ;
+          newH = ar * newW;
         }
-        else{
-          ar = i.width/i.height;
+        else {
+          ar = i.width / i.height;
           newH = maxImageSize;
-          newW = ar*newH;
+          newW = ar * newH;
         }
         console.log("Resizing image... ");
-        resizeImg(tempBuffer, {height: newH, width:newW, format: "jpg"}).then((e)=>{
-          console.log("Resized to ",newH,"x",newW);
+        resizeImg(tempBuffer, { height: newH, width: newW, format: "jpg" }).then((e) => {
+          console.log("Resized to ", newH, "x", newW);
           window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
             if (err) {
               console.error(err)
               return setIpfsActive(false);
             }
-      
+
             let url = `https://ipfs.io/ipfs/${hash}`
             console.log(`Url --> ${url}`)
             setDisplayImageUrl(url);
@@ -271,15 +281,15 @@ export default function NewRecord(props) {
           })
         })
       }
-      else{
-        resizeImg(tempBuffer, {height: i.height, width:i.width, format: "jpg"}).then((e)=>{
+      else {
+        resizeImg(tempBuffer, { height: i.height, width: i.width, format: "jpg" }).then((e) => {
           console.log("Converted to .JPG");
           window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
             if (err) {
               console.error(err)
               return setIpfsActive(false);
             }
-      
+
             let url = `https://ipfs.io/ipfs/${hash}`
             console.log(`Url --> ${url}`)
             setDisplayImageUrl(url);
@@ -323,17 +333,17 @@ export default function NewRecord(props) {
   }
 
   const removeDisplayImage = () => {
-/*     let i = new Image();
-
-    i.onload = function () {
-      if (props.ps) {
-        props.ps.element.scrollTop -= i.height
-      } */
-      setDisplayImageUrl("")
-      setDisplayImage("")
-/*     };
-
-    i.src = displayImage; */
+    /*     let i = new Image();
+    
+        i.onload = function () {
+          if (props.ps) {
+            props.ps.element.scrollTop -= i.height
+          } */
+    setDisplayImageUrl("")
+    setDisplayImage("")
+    /*     };
+    
+        i.src = displayImage; */
   }
 
   const checkAsset = async () => {
@@ -401,7 +411,7 @@ export default function NewRecord(props) {
         icon: "warning",
         button: "Close",
       })
-      
+
     }
 
     setSubmittedIdxHash(idxHash)
@@ -492,12 +502,21 @@ export default function NewRecord(props) {
         let str2 = "' target='_blank'>here</a>"
         link.innerHTML = String(str1 + tempTxHash + str2)
         setError(Object.values(_error)[0]);
-        swal({
-          title: "Asset Creation Failed!",
-          content: link,
-          icon: "warning",
-          button: "Close",
-        });
+        if (tempTxHash !== undefined) {
+          swal({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swal({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
         clearForms();
       })
       .on("receipt", (receipt) => {
@@ -514,7 +533,7 @@ export default function NewRecord(props) {
           icon: "success",
           button: "Close",
         });
-        window.location.href="/#/user/dashboard"
+        window.location.href = "/#/user/dashboard"
         window.location.reload()
       });
 

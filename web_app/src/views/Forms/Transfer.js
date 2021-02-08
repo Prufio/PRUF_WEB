@@ -107,12 +107,21 @@ export default function Transfer(props) {
         let str2 = "' target='_blank'>here</a>";
         link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
-        swal({
-          title: "Transfer Failed!",
-          content: link,
-          icon: "warning",
-          button: "Close",
-        });
+        if (tempTxHash !== undefined) {
+          swal({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swal({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
         clearForms();
       })
       .on("receipt", (receipt) => {
