@@ -614,7 +614,7 @@ export default function Dashboard(props) {
                     </Icon>
                   </Tooltip>
                 </RWebShare>
-                  <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
+                  <Printer obj={{ name: selectedAssetObj.name, idxHash: selectedAssetObj.idxHash, assetClassName: selectedAssetObj.assetClassName }} />
                 <Tooltip
                   title="View QR"
                 >

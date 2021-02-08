@@ -2247,7 +2247,7 @@ export default function Search(props) {
                       </Icon>
                     </Tooltip>
                   </RWebShare>
-                  <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
+                  <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
                   <Tooltip
                     title="View QR"
                   >
