@@ -36,7 +36,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 
 const useStyles = makeStyles(styles);
 
-export default function Verify() {
+export default function Verify(props) {
     const [checked, setChecked] = React.useState([24, 22]);
     const [selectedEnabled, setSelectedEnabled] = React.useState("b");
     const [selectedValue, setSelectedValue] = React.useState(null);
@@ -45,8 +45,6 @@ export default function Verify() {
     const [error, setError] = React.useState("");
     const [transaction, setTransaction] = React.useState(false);
     const [QRValue, setQRValue] = React.useState("");
-    const [verifying, setVerifying] = React.useState(false);
-
     const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
     const [manufacturer, setManufacturer] = React.useState("");
@@ -86,7 +84,16 @@ export default function Verify() {
     const [txHash, setTxHash] = React.useState("");
     const [verifyResult, setVerifyResult] = React.useState("");
 
+    const [assetInfo, ] = React.useState(window.sentPacket)
+
     const link = document.createElement('div');
+
+    React.useEffect(() => {
+      if (props.ps) {
+        props.ps.element.scrollTop = 0;
+        console.log("Scrolled to ", props.ps.element.scrollTop)
+      }
+    }, [])
 
     const handleChange = event => {
         setSelectedValue(event.target.value);
@@ -114,7 +121,7 @@ export default function Verify() {
         console.log("new value", !scanQR)
     };
 
-    const clearForms = event => {
+    const clearForms = () => {
         setManufacturer("");
         setType("");
         setModel("");
@@ -144,281 +151,205 @@ export default function Verify() {
     };
 
     const verifyAsset = async () => {
-        if (!IDXRawInput && QRValue === "") {
-            if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
-
-                if (loginType === "") {
-                    setloginTypeState("error");
-                }
-                if (loginManufacturer === "") {
-                    setloginManufacturerState("error");
-                }
-                if (loginModel === "") {
-                    setloginModelState("error");
-                }
-                if (loginSerial === "") {
-                    setloginSerialState("error");
-                }
-                if (loginFirst === "") {
-                    setloginFirstState("error");
-                }
-                if (loginLast === "") {
-                    setloginLastState("error");
-                }
-                if (loginID === "") {
-                    setloginIDState("error");
-                }
-                if (loginPassword === "") {
-                    setloginPasswordState("error");
-                }
-                return;
-            }
+        if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+          if (loginFirst === "") {
+            setloginFirstState("error");
+          }
+          if (loginLast === "") {
+            setloginLastState("error");
+          }
+          if (loginID === "") {
+            setloginIDState("error");
+          }
+          if (loginPassword === "") {
+            setloginPasswordState("error");
+          }
+          return;
         }
-
-        if (IDXRawInput) {
-            if (loginIDXState === "") {
-                setloginIDXState("error");
-                console.log("in here")
-                return;
-            }
-        }
-
+    
         console.log("in vr")
         let ipfsHash;
         let tempResult;
-        let idxHash;
+        let idxHash = assetInfo.idxHash;
         let rgtHashRaw;
         let rgtHash
-        {
-            IDXRawInput === true && (
-                idxHash = IDXRaw
-            )
+    
+        if (middle === "") {
+          rgtHashRaw = window.web3.utils.soliditySha3(
+            String(first).replace(/\s/g, ''),
+            String(last).replace(/\s/g, ''),
+            String(ID).replace(/\s/g, ''),
+            String(password).replace(/\s/g, ''),
+          )
         }
-
-        {
-            QRValue !== "" && (
-                idxHash = QRValue
-            )
+    
+    
+        else if (middle !== "") {
+          rgtHashRaw = window.web3.utils.soliditySha3(
+            String(first).replace(/\s/g, ''),
+            String(middle).replace(/\s/g, ''),
+            String(last).replace(/\s/g, ''),
+            String(ID).replace(/\s/g, ''),
+            String(password).replace(/\s/g, ''),
+          )
         }
-
-        {
-            IDXRawInput === false && QRValue === "" && (
-                idxHash = window.web3.utils.soliditySha3(
-                    String(type).replace(/\s/g, ''),
-                    String(manufacturer).replace(/\s/g, ''),
-                    String(model).replace(/\s/g, ''),
-                    String(serial).replace(/\s/g, ''),
-                )
-            )
-        }
-        {
-            middle === "" && (
-                rgtHashRaw = window.web3.utils.soliditySha3(
-                    String(first).replace(/\s/g, ''),
-                    String(last).replace(/\s/g, ''),
-                    String(ID).replace(/\s/g, ''),
-                    String(password).replace(/\s/g, ''),
-                )
-            )
-        }
-        {
-            middle !== "" && (
-                rgtHashRaw = window.web3.utils.soliditySha3(
-                    String(first).replace(/\s/g, ''),
-                    String(middle).replace(/\s/g, ''),
-                    String(last).replace(/\s/g, ''),
-                    String(ID).replace(/\s/g, ''),
-                    String(password).replace(/\s/g, ''),
-                )
-            )
-        }
-
+    
+    
         rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
-
+        rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    
         console.log("idxHash", idxHash);
         console.log("rgtHash", rgtHash);
         console.log("addr: ", window.addr);
-        setVerifying(true)
+        setTransaction(true)
         await window.contracts.STOR.methods
-            ._verifyRightsHolder(idxHash, rgtHash)
-            .call(
-                function (_error, _result) {
-                    if (_error) {
-                        console.log(_error)
-                        setError(_error);
-                        setResult("");
-                        setVerifying(false)
-                    }
-                    else if (_result === "0") {
-                        console.log("verify not confirmed");
-                        swal({
-                            title: "Match Failed!",
-                            text: "Please make sure forms are filled out correctly.",
-                            icon: "warning",
-                            button: "Close",
-                        });
-                        setVerifying(false)
-                    }
-                    else {
-                        console.log("verify confirmed");
-                        swal({
-                            title: "Match Confirmed!",
-                            icon: "success",
-                            button: "Close",
-                        });
-                        setError("");
-                        setVerifying(false)
-                    }
+          ._verifyRightsHolder(idxHash, rgtHash)
+          .call(
+            function (_error, _result) {
+              if (_error) {
+                console.log(_error)
+                setError(_error);
+                setResult("");
+                setTransaction(false)
+              }
+              else if (_result === "0") {
+                console.log("Verification not Confirmed");
+                swal({
+                  title: "Match Failed!",
+                  text: "Please make sure forms are filled out correctly.",
+                  icon: "warning",
+                  button: "Close",
                 });
-        return clearForms()
-    }
+                setTransaction(false)
+              }
+              else {
+                console.log("Verification Confirmed");
+                swal({
+                  title: "Match Confirmed!",
+                  // text: "Check your TX here:" + txHash,
+                  icon: "success",
+                  button: "Close",
+                });
+                setError("");
+                setTransaction(false)
+              }
+            });
+        return clearForms();
+      }
 
-    const blockchainVerifyAsset = async () => {
-        if (!IDXRawInput) {
-            if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
-
-                if (loginType === "") {
-                    setloginTypeState("error");
-                }
-                if (loginManufacturer === "") {
-                    setloginManufacturerState("error");
-                }
-                if (loginModel === "") {
-                    setloginModelState("error");
-                }
-                if (loginSerial === "") {
-                    setloginSerialState("error");
-                }
-                if (loginFirst === "") {
-                    setloginFirstState("error");
-                }
-                if (loginLast === "") {
-                    setloginLastState("error");
-                }
-                if (loginID === "") {
-                    setloginIDState("error");
-                }
-                if (loginPassword === "") {
-                    setloginPasswordState("error");
-                }
-                return;
-            }
+      const blockchainVerifyAsset = async () => {
+        if (!window.ethereum) { return swal({ title: "Connect to an ethereum provider to use this functionality!", button: "Close", }) }
+        if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+    
+          if (loginFirst === "") {
+            setloginFirstState("error");
+          }
+          if (loginLast === "") {
+            setloginLastState("error");
+          }
+          if (loginID === "") {
+            setloginIDState("error");
+          }
+          if (loginPassword === "") {
+            setloginPasswordState("error");
+          }
+          return;
         }
-
-        if (IDXRawInput) {
-            if (loginIDXState === "") {
-                setloginIDXState("error");
-                return;
-            }
-        }
-
+    
         console.log("in bvr")
-        let idxHash;
+        let idxHash = assetInfo.idxHash;
         let rgtHash;
         let rgtHashRaw;
         let receiptVal;
         let tempTxHash;
-
-        {
-            IDXRawInput === true && (
-                idxHash = IDXRaw
-            )
+    
+        if (middle === "") {
+          rgtHashRaw = window.web3.utils.soliditySha3(
+            String(first).replace(/\s/g, ''),
+            String(last).replace(/\s/g, ''),
+            String(ID).replace(/\s/g, ''),
+            String(password).replace(/\s/g, ''),
+          )
         }
-        {
-            QRValue !== "" && (
-                idxHash = QRValue
-            )
+    
+    
+        else if (middle !== "") {
+          rgtHashRaw = window.web3.utils.soliditySha3(
+            String(first).replace(/\s/g, ''),
+            String(middle).replace(/\s/g, ''),
+            String(last).replace(/\s/g, ''),
+            String(ID).replace(/\s/g, ''),
+            String(password).replace(/\s/g, ''),
+          )
         }
-
-        {
-            IDXRawInput === false && QRValue === "" && (
-                idxHash = window.web3.utils.soliditySha3(
-                    String(type).replace(/\s/g, ''),
-                    String(manufacturer).replace(/\s/g, ''),
-                    String(model).replace(/\s/g, ''),
-                    String(serial).replace(/\s/g, ''),
-                )
-            )
-        }
-        {
-            middle === "" && (
-                rgtHashRaw = window.web3.utils.soliditySha3(
-                    String(first).replace(/\s/g, ''),
-                    String(last).replace(/\s/g, ''),
-                    String(ID).replace(/\s/g, ''),
-                    String(password).replace(/\s/g, ''),
-                )
-            )
-        }
-        {
-            middle !== "" && (
-                rgtHashRaw = window.web3.utils.soliditySha3(
-                    String(first).replace(/\s/g, ''),
-                    String(middle).replace(/\s/g, ''),
-                    String(last).replace(/\s/g, ''),
-                    String(ID).replace(/\s/g, ''),
-                    String(password).replace(/\s/g, ''),
-                )
-            )
-        }
-
+    
+    
         rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
-
+        rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    
         console.log("idxHash", idxHash);
         console.log("rgtHash", rgtHash);
-        console.log("addr: ", window.addr);
-        setVerifying(true)
-
+        console.log("addr: ", props.addr);
+        setTransaction(true)
+    
         await window.contracts.STOR.methods
-            .blockchainVerifyRightsHolder(idxHash, rgtHash)
-            .send({ from: window.addr })
-            .on("error", function (_error) {
-                setVerifying(false);
-                tempTxHash = Object.values(_error)[0].transactionHash;
-                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                let str2 = "' target='_blank'>here</a>"
-                link.innerHTML = String(str1 + tempTxHash + str2)
-                setTxHash(Object.values(_error)[0].transactionHash);
-                console.log(Object.values(_error)[0].transactionHash);
-                console.log(_error)
-                setError(_error);
-                clearForms()
-            })
-            .on("receipt", (receipt) => {
-                receiptVal = receipt.events.REPORT.returnValues._msg;
-                setVerifying(false)
-                setTxHash(receipt.transactionHash)
-                tempTxHash = receipt.transactionHash
-                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                let str2 = "' target='_blank'>here</a>"
-                link.innerHTML = String(str1 + tempTxHash + str2)
-                setVerifyResult(receiptVal)
-                console.log("verify Result :", receiptVal);
-            });
-
-
+          .blockchainVerifyRightsHolder(idxHash, rgtHash)
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransaction(false);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(Object.values(_error)[0].transactionHash);
+            console.log(Object.values(_error)[0].transactionHash);
+            console.log(_error)
+            setError(_error);
+          })
+          .on("receipt", (receipt) => {
+            receiptVal = receipt.events.REPORT.returnValues._msg;
+            setTransaction(false)
+            setTxHash(receipt.transactionHash)
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setVerifyResult(receiptVal)
+            console.log("Verification Result :", receiptVal);
+          });
+    
+    
         if (receiptVal === "Match confirmed") {
-            swal({
-                title: "Match Confirmed!",
-                content: link,
-                icon: "success",
-                button: "Close",
-            });
-            console.log("Verification conf")
+          swal({
+            title: "Match Confirmed!",
+            content: link,
+            icon: "success",
+            button: "Close",
+          });
+          console.log("Verification conf")
         }
-
+    
         if (receiptVal !== "Match confirmed") {
+          if (tempTxHash !== undefined) {
             swal({
-                title: "Match Failed!",
-                content: link,
-                icon: "warning",
-                button: "Close",
+              title: "Match Failed!",
+              content: link,
+              icon: "warning",
+              button: "Close",
             });
-            console.log("Verification not conf")
+          }
+          if (tempTxHash === undefined) {
+            swal({
+              title: "Something Went Wrong!",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          console.log("Verification not conf")
         }
-
-        return clearForms()
-    }
+    
+        return clearForms();
+      }
 
     const classes = useStyles();
 
@@ -433,7 +364,7 @@ export default function Verify() {
             <CardBody>
                 <form>
                     <>
-                        {!verifying && (
+                        {!transaction && (
                             <>
                                 <CustomInput
                                     success={loginFirstState === "success"}
@@ -533,7 +464,7 @@ export default function Verify() {
               </div>
                             </>
                         )}
-                        {verifying && (
+                        {transaction && (
                             <>
                                 <CustomInput
                                     labelText={first}
@@ -589,13 +520,13 @@ export default function Verify() {
                             </>
                         )}
                     </>
-                    {!verifying && (
-                        <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
+                    {!transaction && (
+                        <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Owner</Button>
                     )}
-                    {!verifying && (
-                        <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify</Button>
+                    {!transaction && (
+                        <Button color="info" className="MLBGradient" onClick={() => verifyAsset()}>Verify Owner</Button>
                     )}
-                    {verifying && (
+                    {transaction && (
                         <h3>
                             Verifying Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                         </h3>
