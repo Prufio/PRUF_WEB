@@ -596,8 +596,13 @@ export default function Search(props) {
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
+    if(isMobile) {
+      swal("Asset ID Copied to Clipboard!")
+    }
+    if(!isMobile) {
     setCopyText(true)
     setTimeout(() => { setCopyText(false) }, 1000);
+  }
   }
 
   const verifyAsset = async () => {

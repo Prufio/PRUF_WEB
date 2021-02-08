@@ -37,6 +37,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
+import swal from "sweetalert";
 
 const useStyles = makeStyles(styles);
 
@@ -88,8 +89,13 @@ export default function Dashboard(props) {
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
+    if(isMobile) {
+      swal("Asset ID Copied to Clipboard!")
+    }
+    if(!isMobile) {
     setCopyText(true)
     setTimeout(() => { setCopyText(false) }, 1000);
+  }
   }
 
   const generateAssetDash = (arr) => {

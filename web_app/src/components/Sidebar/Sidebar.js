@@ -396,11 +396,16 @@ class Sidebar extends React.Component {
       cx({
         [classes.photoRTL]: rtlActive
       });
-      
+
       const copyTextSnippet = (temp) => {
         navigator.clipboard.writeText(temp)
-        this.setState({ copyText: true })
-        setTimeout(() => { this.setState({ copyText: false }) }, 1000);
+        if(isMobile) {
+          swal("Asset ID Copied to Clipboard!")
+        }
+        if(!isMobile) {
+        setCopyText(true)
+        setTimeout(() => { setCopyText(false) }, 1000);
+      }
       }
     var user = (
       <div className={userWrapperClass}>
