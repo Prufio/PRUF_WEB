@@ -385,10 +385,17 @@ export default function Search(props) {
                 }
                 forceUpdate();
               }
-              else {
-                console.log("Set DisplayImage to ''")
-                tempObj.DisplayImage = ""
-                forceUpdate();
+              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                tempObj.photo[keys[i]] = vals[i];
+                  if (keys[i] === "DisplayImage") {
+                    console.log("Setting Display Image")
+                    tempObj.DisplayImage = (tempObj.photo[keys[i]])
+                  }
+                  else if (i === keys.length - 1) {
+                    console.log("Setting Display Image")
+                    tempObj.DisplayImage = (tempObj.photo[keys[0]])
+                  }
+                  forceUpdate();
               }
 
               if(i+1 === keys.length){
@@ -402,8 +409,28 @@ export default function Search(props) {
             }
 
             req.onerror = function (e) {
-              tempObj.DisplayImage = ""
-              forceUpdate();
+              console.log("http request error")
+              if(vals[i].includes("http")){
+              tempObj.photo[keys[i]] = vals[i];
+                  if (keys[i] === "DisplayImage") {
+                    console.log("Setting Display Image")
+                    tempObj.DisplayImage = (tempObj.photo[keys[i]])
+                  }
+                  else if (i === keys.length - 1) {
+                    console.log("Setting Display Image")
+                    tempObj.DisplayImage = (tempObj.photo[keys[0]])
+                  }
+                  forceUpdate();
+                }
+
+                if(i+1 === keys.length){
+                  setIpfsObject(tempObj)
+                  setSelectedImage(tempObj.DisplayImage)
+                  setMoreInfo(true);
+                  setRetrieving(false);
+                  console.log(tempObj);
+                  console.log(tempObj.DisplayImage);
+                }
             }
 
             req.open('GET', vals[i], true);
@@ -697,6 +724,7 @@ export default function Search(props) {
   const handleOnScan = (e) => {
     if (e.includes("0x") && e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)) {
       let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
+      console.log("Here is what we got in the scanner: ", scanQuery)
       retrieveRecordQR(scanQuery);
     }
     else {

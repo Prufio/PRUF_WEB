@@ -619,18 +619,34 @@ export default function Dashboard(props) {
                   }
                   forceUpdate();
                 }
-                else if (i === keys.length - 1 && assetObj.DisplayImage === undefined) {
-                  assetObj.DisplayImage = ""
+                else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                  assetObj.photo[keys[i]] = vals[i];
+                  if (keys[i] === "DisplayImage") {
+                    console.log("Setting Display Image")
+                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                  }
+                  else if (i === keys.length - 1) {
+                    console.log("Setting Display Image")
+                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                  }
                   forceUpdate();
                 }
               }
 
               req.onerror = function (e) {
                 console.log("http request error")
-                /* if (i === keys.length - 1 && !assetObj.DisplayImage) {
-                  assetObj.DisplayImage = "";
+                if(vals[i].includes("http")){
+                  assetObj.photo[keys[i]] = vals[i];
+                  if (keys[i] === "DisplayImage") {
+                    console.log("Setting Display Image")
+                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                  }
+                  else if (i === keys.length - 1) {
+                    console.log("Setting Display Image")
+                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                  }
+                  forceUpdate();
                 }
-                forceUpdate(); */
               }
 
               req.open('GET', vals[i], true);

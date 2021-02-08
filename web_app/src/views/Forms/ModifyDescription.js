@@ -56,7 +56,7 @@ export default function ModifyDescription(props) {
   const [selectedImage, setSelectedImage] = React.useState("");
   const [selectedKey, setSelectedKey] = React.useState("");
   const [error, setError] = React.useState("");
-  const [URL, setURL] = React.useState("");
+  const [assetURL, setAssetURL] = React.useState("");
   const [URLTitle, setURLTitle] = React.useState("");
   const [loginURL, setloginURL] = React.useState("");
   const [loginURLState, setloginURLState] = React.useState("");
@@ -290,7 +290,7 @@ export default function ModifyDescription(props) {
   }
 
   const submitCurrentUrl = () => {
-    let url = URL, key = URLTitle, tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let url = assetURL, key = URLTitle, tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     if ((url === "" && key !== "") || (url !=="" && key === "")) {
       if (url === "") {
         return setloginURLState("error")
@@ -306,7 +306,7 @@ export default function ModifyDescription(props) {
     tempObj.urls[key] = url;
     console.log(tempObj)
     setNewAssetInfo(tempObj);
-    setURL("")
+    setAssetURL("")
     setURLTitle("")
     setloginURLState("")
     setloginURLTitleState("")
@@ -852,7 +852,7 @@ export default function ModifyDescription(props) {
                   success={loginURLState === "success"}
                   error={loginURLState === "error"}
                   onChange={(e) => {
-                    setURL(e.target.value.trim())
+                    setAssetURL(e.target.value.trim())
                     if (validator.isURL(e.target.value)) {
                       setloginURLState("success");
                     } else {
@@ -860,7 +860,7 @@ export default function ModifyDescription(props) {
                     }
                     setloginURL(e.target.value);
                   }}
-                  value={URL}
+                  value={assetURL}
                   id="outlined-full-width"
                   labelText="Link Address"
                   fullWidth
