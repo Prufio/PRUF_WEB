@@ -1470,10 +1470,10 @@ function buildWindowUtils() {
             <div className="cardHref">https://app.pruf.io</div>
             <div className="cardDate">{date}</div>
             <div className="printFormContent">
-              <img
+              {/* <img
                 className="printImageBackgroundForm"
                 src={require("../Resources/Images/PrufPrintBackground.png")}
-                alt="Pruf Print Background" />
+                alt="Pruf Print Background" /> */}
               <div className="printQR2">
                 <QRCode
                   value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}

@@ -726,6 +726,9 @@ export default function NewRecord(props) {
                             <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                             <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
                           </>)}
+                          {transactionActive && displayImage !== "" && (
+                            <Button disabled> ... </Button>
+                          )}
                           {!transactionActive && (
                             <>
                               <CustomInput
@@ -777,9 +780,6 @@ export default function NewRecord(props) {
                                 fullWidth
                               />
                             </>
-                          )}
-                          {transactionActive && displayImage !== "" && (
-                            <Button disabled> ... </Button>
                           )}
                           {!transactionActive && (
                             <>
