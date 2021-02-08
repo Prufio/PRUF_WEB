@@ -80,6 +80,7 @@ export default function Search(props) {
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
 
+
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
   const [manufacturer, setManufacturer] = React.useState("");
@@ -117,8 +118,10 @@ export default function Search(props) {
   const [loginIDXState, setloginIDXState] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
 
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
   const link = document.createElement('div');
-  
+
   React.useEffect(() => {
     if (!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66) {
       setQuery(window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length));
@@ -131,7 +134,7 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[]) 
+  }, [])
 
   React.useEffect(() => {
     if (window.contracts !== undefined && query) { retrieveRecordQR(query); setQuery(null); }
@@ -353,14 +356,63 @@ export default function Search(props) {
       if (error) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         setRetrieving(false);
-        return setIpfsObject({})
+        return setIpfsObject({text:{}, photo:{}, urls:{}, name: "", displayImage: ""})
       } else {
         //console.log(lookup, "Here's what we found for asset description: ", result);
         let tempObj = JSON.parse(result)
-        setSelectedImage(tempObj.photo.displayImage || Object.values(tempObj.photo)[0] || "")
-        setIpfsObject(tempObj)
-        setMoreInfo(true);
-        return setRetrieving(false);
+        tempObj.photoUrls = JSON.parse(result).photo;
+        let vals = Object.values(tempObj.photo), keys = Object.keys(tempObj.photo);
+        for (let i = 0; i < keys.length; i++) {
+          const get = () => {
+            const req = new XMLHttpRequest();
+            req.responseType = "text";
+
+            req.onload = function (e) {
+              console.log("in onload")
+              if (this.response.includes("base64")) {
+                tempObj.photo[keys[i]] = this.response;
+                console.log(tempObj.photo[keys[i]]);
+
+                if (keys[i] === "DisplayImage") {
+                  console.log(tempObj.photo[keys[i]])
+                  tempObj.DisplayImage = tempObj.photo[keys[i]]
+                }
+
+                else if (i === keys.length - 1) {
+                  console.log(tempObj.photo[keys[i]])
+                  tempObj.DisplayImage = tempObj.photo[keys[i]]
+                }
+                forceUpdate();
+              }
+              else {
+                console.log("Set DisplayImage to ''")
+                tempObj.DisplayImage = ""
+                forceUpdate();
+              }
+
+              if(i+1 === keys.length){
+                setIpfsObject(tempObj)
+                setSelectedImage(tempObj.DisplayImage)
+                setMoreInfo(true);
+                setRetrieving(false);
+                console.log(tempObj);
+                console.log(tempObj.DisplayImage);
+              }
+            }
+
+            req.onerror = function (e) {
+              tempObj.DisplayImage = ""
+              forceUpdate();
+            }
+
+            req.open('GET', vals[i], true);
+            req.send();
+          }
+          await get()
+        }
+        
+        //return forceUpdate();
+        
       }
     });
   };
@@ -429,6 +481,7 @@ export default function Search(props) {
       .on("receipt", (receipt) => {
         setTransaction(false);
         window.location.href = "/#/user/dashboard"
+        window.location.reload()
         console.log(receipt.events.REPORT.returnValues._msg);
       });
   }
@@ -524,7 +577,8 @@ export default function Search(props) {
         });
         window.resetInfo = true;
         window.recount = true;
-        window.location.href = "/#/user/dashboard"
+        window.location.href = "/#/user/dashboard";
+        window.location.reload();
       });
 
     return;
@@ -630,7 +684,7 @@ export default function Search(props) {
         icon: "warning",
         button: "Close",
       });
-    } 
+    }
   }
 
   const blockchainVerifyAsset = async () => {
@@ -814,7 +868,7 @@ export default function Search(props) {
       setSerial("")
       setloginSerial("")
       setloginSerialState("")
-      
+
     }
 
     console.log("idxHash", idxHash);
@@ -1035,7 +1089,7 @@ export default function Search(props) {
   }
 
   const generateThumbs = (obj) => {
-    //console.log("obj", obj)
+    console.log("obj", obj)
     if (!obj.photo) {
       return []
     }
@@ -1348,7 +1402,7 @@ export default function Search(props) {
                         <>
                           {Object.values(ipfsObject.photo).length > 0 && (
                             <>
-                              {ipfsObject.photo.displayImage !== undefined && (
+                              {ipfsObject.DisplayImage !== "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"
@@ -1363,7 +1417,7 @@ export default function Search(props) {
                                   <img src={selectedImage} alt="..." />
                                 </>
                               )}
-                              {ipfsObject.photo.displayImage === undefined && (
+                              {ipfsObject.DisplayImage === "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"
@@ -1405,7 +1459,7 @@ export default function Search(props) {
                         <>
                           {Object.values(ipfsObject.photo).length > 0 && (
                             <>
-                              {ipfsObject.photo.displayImage !== undefined && (
+                              {ipfsObject.DisplayImage !== "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"
@@ -1420,7 +1474,7 @@ export default function Search(props) {
                                   <img src={selectedImage} alt="..." />
                                 </>
                               )}
-                              {ipfsObject.photo.displayImage === undefined && (
+                              {ipfsObject.DisplayImage === "" && (
                                 <>
                                   <Tooltip
                                     id="tooltip-top"
@@ -2144,19 +2198,19 @@ export default function Search(props) {
                   </RWebShare>
                   <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
                   <Icon
-                  className="footerIcon"
-                  onClick={() => {
-                    swalReact({
-                      content:<QRCode
-                      value={URL}
-                      size="160"
-                      fgColor="#002a40"
-                      quietZone="2"
-                      ecLevel="M"
-                    />,
-                    buttons: "close"
-                    })
-                  }}>
+                    className="footerIcon"
+                    onClick={() => {
+                      swalReact({
+                        content: <QRCode
+                          value={URL}
+                          size="160"
+                          fgColor="#002a40"
+                          quietZone="2"
+                          ecLevel="M"
+                        />,
+                        buttons: "close"
+                      })
+                    }}>
                     qr_code
                   </Icon>
                 </div>

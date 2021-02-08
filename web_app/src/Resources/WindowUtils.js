@@ -707,7 +707,7 @@ function buildWindowUtils() {
 
   const _checkHoldsToken = async (req, id, addr) => {
     let tempBool;
-    if(!addr) return false
+    if (!addr) return false
     if (req === "asset") {
       await window.contracts.A_TKN.methods
         .ownerOf(id)
@@ -839,7 +839,7 @@ function buildWindowUtils() {
           });
       }
 
-      return window.assets.assetClassNames = tempArr;
+      return tempArr;
     }
 
 
@@ -1295,6 +1295,7 @@ function buildWindowUtils() {
   }
 
   const _getAssetTokenInfo = async (addr) => {
+    let obj = {};
 
     if (window.balances === undefined) { return }
 
@@ -1302,7 +1303,8 @@ function buildWindowUtils() {
     //alert("IN GATI")
 
     if (Number(window.balances.assetBalance) > 0) {
-      let tknIDArray = [],
+      let
+        tknIDArray = [],
         ipfsHashArray = [],
         noteArray = [],
         statuses = [],
@@ -1370,25 +1372,22 @@ function buildWindowUtils() {
           })
         //console.log(x)
       }
+      obj.ids = tknIDArray;
+      obj.ipfs = ipfsHashArray;
+      obj.countPairs = countPairs;
+      obj.assetClasses = assetClasses;
+      obj.statuses = statuses;
+      obj.statusNums = statusNums;
+      obj.notes = noteArray;
+      
+      await window.utils.getACNames(assetClasses).then((e) => {
+        obj.assetClassNames = e;
+      })
 
-      await window.utils.getACNames(assetClasses)
-
-      //console.log(ipfsHashArray)
-      window.aTknIDs = tknIDArray;
-      //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
-      window.ipfsHashArray = ipfsHashArray;
-
-      window.assets.countPairs = countPairs;
-
-      window.assets.assetClasses = assetClasses;
-      window.assets.statuses = statuses;
-      window.assets.statusNums = statusNums;
-      window.assets.notes = noteArray;
-      //alert(Object.values(window.assets))
-      return true
+      return obj
     }
 
-    else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
+    else { console.log("No assets held by user"); return obj }
   }
 
   const _getAssetTokenName = async (ipfs) => {
