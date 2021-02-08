@@ -1445,7 +1445,21 @@ export default function Search(props) {
                 <h4 className={classes.cardIconTitle}>QR Scanner</h4>
               </CardHeader>
               <CardBody>
-                {!retrieving && (
+                {!retrieving && !isMobile &&(
+                  <QrReader
+                    className="qrReader"
+                    scanDelay={300}
+                    onScan={(result) => handleOnScan(result)}
+                    facingMode="user"
+                    onError={(err) => {
+                      if (err) {
+                        console.info(err);
+                      }
+                    }}
+                    style={{ width: '100%' }}
+                  />
+                )}
+                {!retrieving && isMobile && (
                   <QrReader
                     className="qrReader"
                     scanDelay={300}
