@@ -43,7 +43,7 @@ export default function Dashboard(props) {
   const [addr, setAddr] = React.useState("");
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
-  const [simpleAssetView, setSimpleAssetView] = React.useState(true);
+  const [simpleAssetView, setSimpleAssetView] = React.useState(false);
   const [resetInfo, setResetInfo] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState(false);
   const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
@@ -610,22 +610,27 @@ export default function Dashboard(props) {
                   console.log(assetObj.photo[keys[i]]);
                   console.log(x);
                   if (keys[i] === "DisplayImage") {
+                    console.log("Setting Display Image")
                     assetObj.DisplayImage = (assetObj.photo[keys[i]])
                   }
                   else if (i === keys.length - 1) {
+                    console.log("Setting Display Image")
                     assetObj.DisplayImage = (assetObj.photo[keys[0]])
                   }
                   forceUpdate();
                 }
-                else {
+                else if (i === keys.length - 1 && assetObj.DisplayImage === undefined) {
                   assetObj.DisplayImage = ""
                   forceUpdate();
                 }
               }
 
               req.onerror = function (e) {
-                assetObj.DisplayImage = ""
-                forceUpdate();
+                console.log("http request error")
+                /* if (i === keys.length - 1 && !assetObj.DisplayImage) {
+                  assetObj.DisplayImage = "";
+                }
+                forceUpdate(); */
               }
 
               req.open('GET', vals[i], true);

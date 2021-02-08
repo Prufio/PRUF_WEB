@@ -129,8 +129,6 @@ export default function Transfer(props) {
           icon: "success",
           button: "Close",
         });
-        window.resetInfo = true;
-        window.recount = true;
         window.location.href = "/#/user/dashboard";
         window.location.reload()
       });
