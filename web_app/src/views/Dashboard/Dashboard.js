@@ -167,8 +167,40 @@ export default function Dashboard(props) {
             <img src={macbook} alt="logo" className="assetImage" />
             </CardHeader> */}
               <CardBody>
+                {!isMobile && (
                 <div className={classes.cardHover}>
                 </div>
+                )}
+                {isMobile && (
+                <div className={classes.cardHoverUnder}>
+                <Tooltip
+                    id="tooltip-top"
+                    title="View/Edit"
+                    placement="bottom"
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <Button color="success" simple justIcon onClick={() => moreInfo({
+                      countPair: obj.countPairs[i],
+                      idxHash: obj.ids[i],
+                      descriptionObj: obj.descriptions[i],
+                      DisplayImage: obj.displayImages[i],
+                      name: obj.names[i],
+                      assetClass: obj.assetClasses[i],
+                      assetClassName: obj.assetClassNames[i],
+                      status: obj.statuses[i],
+                      statusNum: obj.statusNums[i],
+                      Description: obj.descriptions[i].text.Description,
+                      note: obj.notes[i],
+                      text: obj.descriptions[i].text,
+                      urls: obj.descriptions[i].urls,
+                      photo: obj.descriptions[i].photo,
+                      identicon: obj.identiconsLG[i]
+                    })}>
+                      <Edit className={classes.underChartIcons} />
+                    </Button>
+                  </Tooltip>
+                </div>
+                )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
                 <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
 
