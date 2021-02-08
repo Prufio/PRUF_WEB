@@ -1654,7 +1654,7 @@ export default function Search(props) {
                       <Button color="info" className="MLBGradient" onClick={() => setIsRecycling(false)}>Back</Button>
                     )}
                     {!transaction && !isVerifying && !recycled && (
-                      <Button color="info" className="MLBGradient" onClick={() => verify()}>Verify Rightsholder</Button>
+                      <Button color="info" className="MLBGradient" onClick={() => verify()}>Verify Owner</Button>
                     )}
                     {!transaction && isVerifying && (
                       <Button color="info" className="MLBGradient" onClick={() => setIsNotVerifying()}>Back</Button>
@@ -2099,10 +2099,10 @@ export default function Search(props) {
                               )}
                             </>
                             {!transaction && (
-                              <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Rightsholder Information</Button>
+                              <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Owner</Button>
                             )}
                             {!transaction && (
-                              <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Rightsholder Information</Button>
+                              <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Owner</Button>
                             )}
                             {transaction && (
                               <h3>

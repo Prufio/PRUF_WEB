@@ -89,13 +89,13 @@ export default function Dashboard(props) {
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
-    if(isMobile) {
+    if (isMobile) {
       swal("Asset ID Copied to Clipboard!")
     }
-    if(!isMobile) {
-    setCopyText(true)
-    setTimeout(() => { setCopyText(false) }, 1000);
-  }
+    if (!isMobile) {
+      setCopyText(true)
+      setTimeout(() => { setCopyText(false) }, 1000);
+    }
   }
 
   const generateAssetDash = (arr) => {
@@ -203,7 +203,9 @@ export default function Dashboard(props) {
                         photoUrls: arr[i].photoUrls,
                         identicon: arr[i].identicon
                       })}>
-                        <Edit className={classes.underChartIcons} />
+                        <Icon>
+                          login
+</Icon>
                       </Button>
                     </Tooltip>
                   </div>
