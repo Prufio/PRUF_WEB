@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.f5872a82.chunk.css",
-    "main.js": "/static/js/main.31727070.chunk.js",
-    "main.js.map": "/static/js/main.31727070.chunk.js.map",
+    "main.css": "/static/css/main.1947d551.chunk.css",
+    "main.js": "/static/js/main.2e7e43be.chunk.js",
+    "main.js.map": "/static/js/main.2e7e43be.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.e6710eac.js",
     "runtime-main.js.map": "/static/js/runtime-main.e6710eac.js.map",
     "static/css/2.d0176e96.chunk.css": "/static/css/2.d0176e96.chunk.css",
-    "static/js/2.fad52c9b.chunk.js": "/static/js/2.fad52c9b.chunk.js",
-    "static/js/2.fad52c9b.chunk.js.map": "/static/js/2.fad52c9b.chunk.js.map",
+    "static/js/2.27f59577.chunk.js": "/static/js/2.27f59577.chunk.js",
+    "static/js/2.27f59577.chunk.js.map": "/static/js/2.27f59577.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.5ab725e3d295ec1f90ed3949086a7399.js": "/precache-manifest.5ab725e3d295ec1f90ed3949086a7399.js",
+    "precache-manifest.45d8e5ee7459166a8ffb3fc6ff597a73.js": "/precache-manifest.45d8e5ee7459166a8ffb3fc6ff597a73.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.d0176e96.chunk.css.map": "/static/css/2.d0176e96.chunk.css.map",
-    "static/css/main.f5872a82.chunk.css.map": "/static/css/main.f5872a82.chunk.css.map",
-    "static/js/2.fad52c9b.chunk.js.LICENSE.txt": "/static/js/2.fad52c9b.chunk.js.LICENSE.txt",
-    "static/js/main.31727070.chunk.js.LICENSE.txt": "/static/js/main.31727070.chunk.js.LICENSE.txt",
+    "static/css/main.1947d551.chunk.css.map": "/static/css/main.1947d551.chunk.css.map",
+    "static/js/2.27f59577.chunk.js.LICENSE.txt": "/static/js/2.27f59577.chunk.js.LICENSE.txt",
+    "static/js/main.2e7e43be.chunk.js.LICENSE.txt": "/static/js/main.2e7e43be.chunk.js.LICENSE.txt",
     "static/media/BloomBW.jpg": "/static/media/BloomBW.1eb1a903.jpg",
     "static/media/BloomWB.jpg": "/static/media/BloomWB.d1f91663.jpg",
     "static/media/Nature.jpg": "/static/media/Nature.d30c9e30.jpg",
@@ -22,16 +22,16 @@
     "static/media/TracesBW.jpg": "/static/media/TracesBW.e2666880.jpg",
     "static/media/TracesWB.jpg": "/static/media/TracesWB.509356cb.jpg",
     "static/media/eth-logo.png": "/static/media/eth-logo.86b356aa.png",
-    "static/media/logo-white.svg": "/static/media/logo-white.a80cd7a7.svg",
-    "static/media/logo.svg": "/static/media/logo.ee7cd8ed.svg",
+    "static/media/logo-white.svg": "/static/media/logo-white.eec7c7f6.svg",
+    "static/media/logo.svg": "/static/media/logo.5d5d9eef.svg",
     "static/media/placeholder.jpg": "/static/media/placeholder.1eb7fff2.jpg",
     "static/media/pruftokenblk.jpg": "/static/media/pruftokenblk.fe172a23.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.e6710eac.js",
     "static/css/2.d0176e96.chunk.css",
-    "static/js/2.fad52c9b.chunk.js",
-    "static/css/main.f5872a82.chunk.css",
-    "static/js/main.31727070.chunk.js"
+    "static/js/2.27f59577.chunk.js",
+    "static/css/main.1947d551.chunk.css",
+    "static/js/main.2e7e43be.chunk.js"
   ]
 }
