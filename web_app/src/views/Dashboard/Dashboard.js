@@ -187,7 +187,7 @@ export default function Dashboard(props) {
 
     else if (props.assets === "0") { return <h1>No assets held by user. <a href="/#/user/new-asset">Create One</a>.</h1> }
 
-    else { return <><h3>Loading held assets</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
+    else { return <><h3>Getting Asset Data (Step 3 of 3)</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
 
   }
 
@@ -324,12 +324,17 @@ export default function Dashboard(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      {!props.addr && !props.isMounted && (
+      {props.addr && props.isMounted && props.assets ==="~" && (
         <GridContainer>
-        <><h3>Getting User Address</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
+        <><h3>Getting Token Balances (Step 2 of 3)</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
         </GridContainer>
       )}
-      {!viewAsset && props.addr && (
+      {!props.addr && !props.isMounted && props.assets ==="~" && (
+        <GridContainer>
+        <><h3>Getting User Address (Step 1 of 3)</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
+        </GridContainer>
+      )}
+      {!viewAsset && props.addr && props.assets !== "~" && (
         <GridContainer>
           {generateAssetDash(props.assetArr || [])}
         </GridContainer>
