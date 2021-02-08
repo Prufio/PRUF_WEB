@@ -534,7 +534,7 @@ export default function Search(props) {
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
     setCopyText(true)
-    setTimeout(() => { setCopyText(false) }, 2000);
+    setTimeout(() => { setCopyText(false) }, 1000);
   }
 
   const verifyAsset = async () => {

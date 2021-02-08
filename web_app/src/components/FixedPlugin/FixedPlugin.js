@@ -9,10 +9,12 @@ import Switch from "@material-ui/core/Switch";
 
 import styles from "assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.js";
 
-import imagine1 from "assets/img/sidebar-1.jpg";
-import imagine2 from "assets/img/sidebar-2.jpg";
-import imagine3 from "assets/img/sidebar-3.jpg";
-import imagine4 from "assets/img/sidebar-4.jpg";
+import BloomWB from "assets/img/Sidebar Backgrounds/BloomWB.jpg";
+import BloomBW from "assets/img/Sidebar Backgrounds/BloomBW.jpg";
+import TracesWB from "assets/img/Sidebar Backgrounds/TracesWB.jpg";
+import TracesBW from "assets/img/Sidebar Backgrounds/TracesBW.jpg";
+import PRUFMatrix from "assets/img/Sidebar Backgrounds/PRUFMatrix.jpg";
+import Nature from "assets/img/Sidebar Backgrounds/Nature.jpg";
 
 import Button from "components/CustomButtons/Button.js";
 import { Icon } from "@material-ui/core";
@@ -53,7 +55,7 @@ export default function FixedPlugin(props) {
         <div onClick={handleClick}>
           {/* <i className="fa fa-cog fa-2x" /> */}
           <Icon className="fixedPlugin">
-          {/* <span class="material-icons"> */}
+            {/* <span class="material-icons"> */}
             tune
             {/* </span> */}
           </Icon>
@@ -63,39 +65,135 @@ export default function FixedPlugin(props) {
           <li className="adjustments-line">
             <a className="switch-trigger active-color">
               <div className="badge-colors text-center">
-                <span
-                  className={
-                    props.bgColor === "black"
-                      ? "badge filter badge-black active"
-                      : "badge filter badge-black"
-                  }
-                  data-color="orange"
-                  onClick={() => {
-                    props.handleBgColorClick("black");
-                  }}
-                />
-                <span
-                  className={
-                    props.bgColor === "white"
-                      ? "badge filter badge-white active"
-                      : "badge filter badge-white"
-                  }
-                  data-color="orange"
-                  onClick={() => {
-                    props.handleBgColorClick("white");
-                  }}
-                />
-                <span
-                  className={
-                    props.bgColor === "darkBlue"
-                      ? "badge filter badge-darkBlue active"
-                      : "badge filter badge-darkBlue"
-                  }
-                  data-color="orange"
-                  onClick={() => {
-                    props.handleBgColorClick("darkBlue");
-                  }}
-                />
+                {bgImage === TracesBW && (
+                  <span
+                    className={
+                      props.bgColor === "black"
+                        ? "badge filter badge-black active"
+                        : "badge filter badge-black"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("black");
+                      props.handleImageClick(TracesWB);
+                      setBgImage(TracesWB);
+                    }}
+                  />
+                )}
+                {bgImage === BloomBW && (
+                  <span
+                    className={
+                      props.bgColor === "black"
+                        ? "badge filter badge-black active"
+                        : "badge filter badge-black"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("black");
+                      props.handleImageClick(BloomWB);
+                      setBgImage(BloomWB);
+                    }}
+                  />
+                )}
+                {bgImage !== BloomBW && bgImage !== TracesBW && (
+                  <span
+                    className={
+                      props.bgColor === "black"
+                        ? "badge filter badge-black active"
+                        : "badge filter badge-black"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("black");
+                    }}
+                  />
+                )}
+                {bgImage === BloomWB && (
+                  <span
+                    className={
+                      props.bgColor === "white"
+                        ? "badge filter badge-white active"
+                        : "badge filter badge-white"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("white");
+                      props.handleImageClick(BloomBW);
+                      setBgImage(BloomBW);
+                    }}
+                  />
+                )}
+                {bgImage === TracesWB && (
+                  <span
+                    className={
+                      props.bgColor === "white"
+                        ? "badge filter badge-white active"
+                        : "badge filter badge-white"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("white");
+                      props.handleImageClick(TracesBW);
+                      setBgImage(TracesBW);
+                    }}
+                  />
+                )}
+                {bgImage !== TracesWB && bgImage !== BloomWB && (
+                  <span
+                    className={
+                      props.bgColor === "white"
+                        ? "badge filter badge-white active"
+                        : "badge filter badge-white"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("white");
+                    }}
+                  />
+                )}
+                {bgImage === TracesBW && (
+                  <span
+                    className={
+                      props.bgColor === "darkBlue"
+                        ? "badge filter badge-darkBlue active"
+                        : "badge filter badge-darkBlue"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("darkBlue");
+                      props.handleImageClick(TracesWB);
+                      setBgImage(TracesWB);
+                    }}
+                  />
+                )}
+                {bgImage === BloomBW && (
+                  <span
+                    className={
+                      props.bgColor === "darkBlue"
+                        ? "badge filter badge-darkBlue active"
+                        : "badge filter badge-darkBlue"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("darkBlue");
+                      props.handleImageClick(BloomWB);
+                      setBgImage(BloomWB);
+                    }}
+                  />
+                )}
+                {bgImage !== BloomBW && bgImage !== TracesBW && (
+                  <span
+                    className={
+                      props.bgColor === "darkBlue"
+                        ? "badge filter badge-darkBlue active"
+                        : "badge filter badge-darkBlue"
+                    }
+                    data-color="orange"
+                    onClick={() => {
+                      props.handleBgColorClick("darkBlue");
+                    }}
+                  />
+                )}
               </div>
               <div className="clearfix" />
             </a>
@@ -118,52 +216,80 @@ export default function FixedPlugin(props) {
             </a>
           </li>
           <li className="header-title">Sidebar Backgrounds</li>
-          <li className={bgImage === imagine1 ? "active" : ""}>
+          <li className={bgImage === BloomWB ? "active" : ""}>
+            {props.bgColor !== "white" && (
+              <a
+                className="img-holder switch-trigger"
+                onClick={() => {
+                  setShowImage(true);
+                  setBgImage(BloomWB);
+                  props.handleImageClick(BloomWB);
+                }}
+              >
+                <img src={BloomWB} alt="..." />
+              </a>
+            )}
+            {props.bgColor === "white" && (
+              <a
+                className="img-holder switch-trigger"
+                onClick={() => {
+                  setShowImage(true);
+                  setBgImage(BloomBW);
+                  props.handleImageClick(BloomBW);
+                }}
+              >
+                <img src={BloomBW} alt="..." />
+              </a>
+            )}
+          </li>
+          <li className={bgImage === TracesWB ? "active" : ""}>
+            {props.bgColor !== "white" && (
+              <a
+                className="img-holder switch-trigger"
+                onClick={() => {
+                  setShowImage(true);
+                  setBgImage(TracesWB);
+                  props.handleImageClick(TracesWB);
+                }}
+              >
+                <img src={TracesWB} alt="..." />
+              </a>
+            )}
+            {props.bgColor === "white" && (
+              <a
+                className="img-holder switch-trigger"
+                onClick={() => {
+                  setShowImage(true);
+                  setBgImage(TracesBW);
+                  props.handleImageClick(TracesBW);
+                }}
+              >
+                <img src={TracesBW} alt="..." />
+              </a>
+            )}
+          </li>
+          <li className={bgImage === PRUFMatrix ? "active" : ""}>
             <a
               className="img-holder switch-trigger"
               onClick={() => {
                 setShowImage(true);
-                setBgImage(imagine1);
-                props.handleImageClick(imagine1);
+                setBgImage(PRUFMatrix);
+                props.handleImageClick(PRUFMatrix);
               }}
             >
-              <img src={imagine1} alt="..." />
+              <img src={PRUFMatrix} alt="..." />
             </a>
           </li>
-          <li className={bgImage === imagine2 ? "active" : ""}>
+          <li className={bgImage === Nature ? "active" : ""}>
             <a
               className="img-holder switch-trigger"
               onClick={() => {
                 setShowImage(true);
-                setBgImage(imagine2);
-                props.handleImageClick(imagine2);
+                setBgImage(Nature);
+                props.handleImageClick(Nature);
               }}
             >
-              <img src={imagine2} alt="..." />
-            </a>
-          </li>
-          <li className={bgImage === imagine3 ? "active" : ""}>
-            <a
-              className="img-holder switch-trigger"
-              onClick={() => {
-                setShowImage(true);
-                setBgImage(imagine3);
-                props.handleImageClick(imagine3);
-              }}
-            >
-              <img src={imagine3} alt="..." />
-            </a>
-          </li>
-          <li className={bgImage === imagine4 ? "active" : ""}>
-            <a
-              className="img-holder switch-trigger"
-              onClick={() => {
-                setShowImage(true);
-                setBgImage(imagine4);
-                props.handleImageClick(imagine4);
-              }}
-            >
-              <img src={imagine4} alt="..." />
+              <img src={Nature} alt="..." />
             </a>
           </li>
         </ul>

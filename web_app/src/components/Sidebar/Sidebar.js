@@ -400,7 +400,7 @@ class Sidebar extends React.Component {
       const copyTextSnippet = (temp) => {
         navigator.clipboard.writeText(temp)
         this.setState({ copyText: true })
-        setTimeout(() => { this.setState({ copyText: false }) }, 2000);
+        setTimeout(() => { this.setState({ copyText: false }) }, 1000);
       }
     var user = (
       <div className={userWrapperClass}>

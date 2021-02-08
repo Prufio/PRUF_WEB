@@ -89,7 +89,7 @@ export default function Dashboard(props) {
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
     setCopyText(true)
-    setTimeout(() => { setCopyText(false) }, 2000);
+    setTimeout(() => { setCopyText(false) }, 1000);
   }
 
 
