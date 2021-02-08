@@ -527,13 +527,13 @@ export default function NewRecord(props) {
         let str2 = "' target='_blank'>here</a>"
         link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
+        window.location.href = "/#/user/dashboard"
         swal({
           title: "Asset Created!",
           content: link,
           icon: "success",
           button: "Close",
         });
-        window.location.href = "/#/user/dashboard"
         window.location.reload()
       });
 
@@ -730,26 +730,8 @@ export default function NewRecord(props) {
                       </CardHeader>
                       <CardBody>
                         <form>
-                          {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
-                          {displayImage !== "" && (<>
-                            <br />
-                            <br />
-                            <CardHeader image className={classes.cardHeaderHoverCustom}>
-                              <img src={displayImage} />
-                            </CardHeader>
-                          </>)}
-                          {!transactionActive && displayImage === "" && (
-                            <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
-                          )}
-                          {!transactionActive && displayImage !== "" && (<>
-                            <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
-                            <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
-                          </>)}
-                          {transactionActive && displayImage !== "" && (
-                            <Button disabled> ... </Button>
-                          )}
-                          {!transactionActive && (
-                            <>
+                          <>
+                            {!transactionActive && (
                               <CustomInput
                                 labelText="Asset Name"
                                 id="assetName"
@@ -762,19 +744,8 @@ export default function NewRecord(props) {
                                   },
                                 }}
                               />
-                              <TextField
-                                onChange={(e) => { setDescription(e.target.value) }}
-                                id="outlined-multiline-static"
-                                label="Asset Description:"
-                                multiline
-                                rows={4}
-                                variant="outlined"
-                                fullWidth
-                              />
-                            </>
-                          )}
-                          {transactionActive && description !== "" && (
-                            <>
+                            )}
+                            {transactionActive && (
                               <CustomInput
                                 labelText="Asset Name"
                                 id="assetName"
@@ -788,6 +759,66 @@ export default function NewRecord(props) {
                                   },
                                 }}
                               />
+                            )}
+                          </>
+                          {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
+                          {displayImage !== "" && (<>
+                            <br />
+                            <br />
+                            <CardHeader image className={classes.cardHeaderHoverCustom}>
+                              <img src={displayImage} />
+                            </CardHeader>
+                          </>)}
+                          {!transactionActive && displayImage === "" && (
+                              <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
+                          )}
+                          {!transactionActive && displayImage !== "" && (<>
+                            <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
+                            <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
+                          </>)}
+                          {transactionActive && displayImage !== "" && (
+                              <Button disabled> ... </Button>
+                          )}
+                          {!transactionActive && (
+                            <>
+                              {/* <CustomInput
+                                labelText="Asset Name"
+                                id="assetName"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setNameTag(event.target.value.trim())
+                                  },
+                                }}
+                              /> */}
+                              <TextField
+                                onChange={(e) => { setDescription(e.target.value) }}
+                                id="outlined-multiline-static"
+                                label="Asset Description:"
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                fullWidth
+                              />
+                            </>
+                          )}
+                          {transactionActive && description !== "" && (
+                            <>
+                              {/* <CustomInput
+                                labelText="Asset Name"
+                                id="assetName"
+                                disabled
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  onChange: event => {
+                                    setNameTag(event.target.value.trim())
+                                  },
+                                }}
+                              /> */}
                               <TextField
                                 id="outlined-multiline-static"
                                 label="Asset Description:"
