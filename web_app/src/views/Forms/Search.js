@@ -733,7 +733,10 @@ export default function Search(props) {
   }
 
   const handleOnScan = (e) => {
-    console.log(e)
+    if(!e){
+      return
+    }
+    //console.log(e)
     if (e.includes("0x") && e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)) {
       let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
       console.log("Here is what we got in the scanner: ", scanQuery)
@@ -1462,7 +1465,7 @@ export default function Search(props) {
                 {!retrieving && isMobile && (
                   <QrReader
                     className="qrReader"
-                    scanDelay={300}
+                    scanDelay={500}
                     onScan={(result) => handleOnScan(result)}
                     onError={(err) => {
                       if (err) {
