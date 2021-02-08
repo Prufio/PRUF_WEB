@@ -311,7 +311,7 @@ export default function Dashboard(props) {
                 <Tooltip
                   title="Refresh"
                 >
-                  <Icon className="MLBGradientRefresh" onClick={() => { window.resetInfo = true; window.recount = true; }}>
+                  <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
                     <Refresh />
                   </Icon>
                 </Tooltip>
