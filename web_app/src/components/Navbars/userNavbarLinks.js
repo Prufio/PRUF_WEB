@@ -53,28 +53,28 @@ export default function HeaderLinks(props) {
       });
     }
   }
-  const [openNotification, setOpenNotification] = React.useState(null);
-  const handleClickNotification = event => {
-    if (openNotification && openNotification.contains(event.target)) {
-      setOpenNotification(null);
-    } else {
-      setOpenNotification(event.currentTarget);
-    }
-  };
-  const handleCloseNotification = () => {
-    setOpenNotification(null);
-  };
-  const [openProfile, setOpenProfile] = React.useState(null);
-  const handleClickProfile = event => {
-    if (openProfile && openProfile.contains(event.target)) {
-      setOpenProfile(null);
-    } else {
-      setOpenProfile(event.currentTarget);
-    }
-  };
-  const handleCloseProfile = () => {
-    setOpenProfile(null);
-  };
+  // const [openNotification, setOpenNotification] = React.useState(null);
+  // const handleClickNotification = event => {
+  //   if (openNotification && openNotification.contains(event.target)) {
+  //     setOpenNotification(null);
+  //   } else {
+  //     setOpenNotification(event.currentTarget);
+  //   }
+  // };
+  // const handleCloseNotification = () => {
+  //   setOpenNotification(null);
+  // };
+  // const [openProfile, setOpenProfile] = React.useState(null);
+  // const handleClickProfile = event => {
+  //   if (openProfile && openProfile.contains(event.target)) {
+  //     setOpenProfile(null);
+  //   } else {
+  //     setOpenProfile(event.currentTarget);
+  //   }
+  // };
+  // const handleCloseProfile = () => {
+  //   setOpenProfile(null);
+  // };
   const classes = useStyles();
   const { rtlActive } = props;
   const searchButton =

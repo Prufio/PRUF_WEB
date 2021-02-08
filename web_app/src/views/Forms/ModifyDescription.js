@@ -64,6 +64,7 @@ export default function ModifyDescription(props) {
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
   const [downloadName, setDownloadName] = React.useState("");
   const [downloadLink, setDownloadLink] = React.useState("");
+  const [copyText, setCopyText] = React.useState(false)
 
   const [additionalImages, setAdditionalImages] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
@@ -494,6 +495,17 @@ export default function ModifyDescription(props) {
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
   }
 
+  const copyTextSnippet = (temp) => {
+    navigator.clipboard.writeText(temp)
+    if (isMobile) {
+      swal("Asset ID Copied to Clipboard!")
+    }
+    if (!isMobile) {
+      setCopyText(true)
+      setTimeout(() => { setCopyText(false) }, 1000);
+    }
+  }
+
   const useCustomJSON = (e) => {
     if (!e.target.files[0]) return
     let newObj;
@@ -724,16 +736,16 @@ export default function ModifyDescription(props) {
     i.onload = function(){
       var j = new Image();
       j.onload = function(){
-        let move = i.height-j.height
-        if(props.ps){
-          if(move < 0){
-            props.ps.element.scrollTop += move
-          } else {
-            props.ps.element.scrollTop = 0
-          }
-          console.log("Scrolled ", move)
-          //console.log(props.ps.element.scrollTop)
-        }
+        // let move = i.height-j.height
+        // if(props.ps){
+        //   if(move < 0){
+        //     props.ps.element.scrollTop += move
+        //   } else {
+        //     props.ps.element.scrollTop = 0
+        //   }
+        //   console.log("Scrolled ", move)
+        //   //console.log(props.ps.element.scrollTop)
+        // }
         setSelectedImage(img)
         setSelectedKey(key)
       }
@@ -912,16 +924,50 @@ export default function ModifyDescription(props) {
           )}
         </CardBody>
         <CardFooter chart>
-          {!isMobile && (
-            <div className={classes.stats}>
-              Asset ID: {asset.idxHash}
-            </div>
-          )}
-          {isMobile && (
-            <div className={classes.stats}>
-              Asset ID: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
-            </div>
-          )}
+              {!isMobile && (
+                <>
+                  {!copyText && (
+                    <Tooltip
+                      title="Copy to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip
+                      title="Copied to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
+              )}
+              {isMobile && (
+                <>
+                  {!copyText && (
+                    <Tooltip
+                      title="Copy to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip
+                      title="Copied to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
+              )}
         </CardFooter>
       </Card>
     </div>
