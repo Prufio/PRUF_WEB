@@ -25,7 +25,7 @@ import AdminNavbarLinks from "components/Navbars/userNavbarLinks.js";
 
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.js";
 import pruftoken from "assets/img/pruftoken.png";
-import pruftokeblk from "assets/img/pruftokenblk.jpg";
+import pruftokenblk from "assets/img/Sidebar Backgrounds/pruftokenblk.png";
 import { Tooltip } from "@material-ui/core";
 
 var ps;
@@ -534,7 +534,7 @@ class Sidebar extends React.Component {
             <img src={pruftoken} alt="logo" className={classes.img} />
           )}
           {bgColor === "white" && (
-            <img src={pruftokeblk} alt="logo" className={classes.img} />
+            <img src={pruftokenblk} alt="logo" className={classes.img} />
           )}
         </a>
         <a
