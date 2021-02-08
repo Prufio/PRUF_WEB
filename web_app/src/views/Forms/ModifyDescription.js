@@ -185,9 +185,18 @@ export default function ModifyDescription(props) {
   }
 
   const submitChanges = () => {
+    if (JSON.stringify(newAssetInfo) === JSON.stringify(assetInfo)) {
+      return (
+        swal({
+          title: "New data matches old! No changes made.",
+          icon: "warning",
+          button: "Close",
+        })
+      )
+    }
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     tempObj.photo = tempObj.photoUrls
-    delete tempObj.photoUrls;
+    delete tempObj.photoUrls;  
 
     let payload = JSON.stringify(tempObj, null, 5)
     let fileSize = Buffer.byteLength(payload, 'utf8')
@@ -195,7 +204,6 @@ export default function ModifyDescription(props) {
       return (
         swal({
           title: "Document size exceeds 1 MB limit! (" + String(fileSize) + "Bytes)",
-          content: link,
           icon: "warning",
           button: "Close",
         })
