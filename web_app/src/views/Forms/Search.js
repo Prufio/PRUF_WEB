@@ -723,13 +723,14 @@ export default function Search(props) {
   }
 
   const handleOnScan = (e) => {
+    console.log(e)
     if (e.includes("0x") && e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)) {
       let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
       console.log("Here is what we got in the scanner: ", scanQuery)
       retrieveRecordQR(scanQuery);
     }
     else {
-      return swal({
+      swal({
         title: "QR code does not contain a valid asset ID.",
         icon: "warning",
         button: "Close",
