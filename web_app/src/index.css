@@ -117,10 +117,6 @@ div {
   color: rgb(255, 255, 255);
 }
 
-.shareMenu{
-  position: absolute !important;
-}
-
 .headerFormContent a::before {
   content: "";
   position: absolute;
@@ -204,13 +200,7 @@ div {
 .alertBannerMobile {
   font-size: 1.2rem;
   height: fit-content;
-  width: 322px;
-}
-
-.alertBannerADMobile {
-  font-size: 1.5rem;
-  height: fit-content;
-  width: 340px;
+  width: 350px;
 }
 
 .msgBanner {
@@ -226,18 +216,6 @@ div {
 }
 
 .alertLink {
-  font-size: 1.2rem;
-  padding-left: 0.4rem;
-  padding-right: 0.4rem;
-}
-
-.alertFooterMobile {
-  font-size: 1.2rem;
-  width: 340px;
-  flex-direction: row;
-}
-
-.alertLinkMobile {
   font-size: 1.2rem;
   padding-left: 0.4rem;
   padding-right: 0.4rem;
@@ -304,7 +282,7 @@ div {
 }
 
 .homeDisclaimer {
-  height: 11rem;
+  height: 12rem;
   width: 70rem;
   color: rgb(2, 0, 22);
   display: flex;
@@ -599,15 +577,6 @@ div {
   font-size: x-large;
 }
 
-.formMobileBack {
-  height: 60rem;
-  width: 360px;
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-}
-
 .formMobile {
   height: flex;
   width: 360px;
@@ -671,7 +640,6 @@ div {
   margin-top: -0.2rem;
   justify-content: flex-start;
   align-items: flex-start;
-  flex-direction: column;
 }
 
 .assetSelectedContentHead {
@@ -1472,7 +1440,7 @@ div {
 
 .ACProgressBar {
   margin-left: 26.5rem;
-  color: black !important;
+  /* margin-top: 9rem; */
   width: 40rem;
   background-color: #002a40;
   font-weight: bold;

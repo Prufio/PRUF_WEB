@@ -2,7 +2,6 @@ import returnABIs from "./returnABIs";
 
 async function buildContracts(_web3) {
 
-
   const abis = returnABIs();
 
   const ID_TKN_ABI = abis.ID_TKN;

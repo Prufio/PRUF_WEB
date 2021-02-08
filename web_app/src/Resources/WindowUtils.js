@@ -1,7 +1,7 @@
 import bs58 from "bs58";
 import { QRCode } from 'react-qrcode-logo';
 import React from 'react';
-import "./../index.css";
+import "../assets/css/custom.css"
 
 function buildWindowUtils() {
 
@@ -9,7 +9,7 @@ function buildWindowUtils() {
     var tempHash = varToHash;
     for (var i = 0; i < 10000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
-      console.log(tempHash);
+      //console.log(tempHash);
     }
     return tempHash;
   }
@@ -41,13 +41,12 @@ function buildWindowUtils() {
     return (time);
   }
 
-  const _getETHBalance = async () => {
-    if (window.addr === undefined) { return 0 }
-    let addr = window.addr;
+  const _getETHBalance = async (addr) => {
+    if (addr === undefined) { return 0 }
     await window.web3.eth.getBalance(addr, (err, balance) => {
       if (err) { } else {
         window.ETHBalance = window.web3.utils.fromWei(balance, "ether")
-        console.log("UTILS: Wallet balance: ", window.ETHBalance)
+        //console.log("UTILS: Wallet balance: ", window.ETHBalance)
       }
     });
   }
@@ -86,8 +85,8 @@ function buildWindowUtils() {
 
   const _generateAssetClasses = () => {
 
-    if(window.assetClasses.names === undefined){console.log("Generating ACs");return _generateAssetClasses}
-    
+    if (window.assetClasses.names === undefined) { console.log("Generating ACs"); return _generateAssetClasses }
+
     if (window.assetClasses.names.length > 0) {
       let component = [
         <option key="noselect" value="null"> Select an asset class </option>];
@@ -141,10 +140,10 @@ function buildWindowUtils() {
             <option key="noselect" value="null"> Select an option </option>];
 
           for (let i = 0; i < keys.length; i++) {
-            component.push(<option size="lg" key={"option " + String(i)} value={i+1}>
+            component.push(<option size="lg" key={"option " + String(i)} value={i + 1}>
               {i + 1}:
               Identifier: {keys[i]} Current Cost: {window.web3.utils.fromWei(values[i])}
-              </option>);
+            </option>);
           }
 
           return component
@@ -161,7 +160,7 @@ function buildWindowUtils() {
             component.push(<option size="lg" key={"option " + String(i)} value={keys[i]}>
               {i + 1}:
               Identifier: {keys[i]}
-              </option>);
+            </option>);
           }
 
           return component
@@ -225,16 +224,16 @@ function buildWindowUtils() {
     component.push(
       <>
         <br></br>
-        <div className="assetSelectedContentHead">
+        <div className="">
           Removed Text Elements:
     </div>
       </>)
     for (let y = 0; y < text.length; y++) {
       component.push(
         <div key={"remText" + String(y)}>
-          <div className="assetSelectedContentHead">
+          <div className="">
             {"--Removed Text " + String(y) + ": "}
-            <span className="assetSelectedContent">
+            <span className="">
               {text[y]}
             </span>
           </div>
@@ -242,16 +241,16 @@ function buildWindowUtils() {
     }
     component.push(
       <>
-        <div className="assetSelectedContentHead">
+        <div className="">
           Removed Image Elements:
     </div>
       </>)
     for (let z = 0; z < images.length; z++) {
       component.push(
         <div key={"remImage" + String(z)}>
-          <div className="assetSelectedContentHead">
+          <div className="">
             {"--Removed Image " + String(z) + ": "}
-            <span className="assetSelectedContent">
+            <span className="">
               {images[z]}
             </span>
           </div>
@@ -271,7 +270,7 @@ function buildWindowUtils() {
     component.push(
       <>
         <br></br>
-        <div className="assetSelectedContentHead">
+        <div className="">
           <div>
             ------------------------------------------------------------------------------------------------------------------------------
           </div>
@@ -282,9 +281,9 @@ function buildWindowUtils() {
     for (let i = 0; i < photoVals.length; i++) {
       component.push(
         <div key={"newPhoto" + String(i)}>
-          <div className="assetSelectedContentHead">
+          <div className="">
             {"--Image " + String(i) + ": "}
-            <span className="assetSelectedContent">
+            <span className="">
               {photoVals[i]}
             </span>
           </div>
@@ -293,7 +292,7 @@ function buildWindowUtils() {
 
     component.push(
       <>
-        <div className="assetSelectedContentHead">
+        <div className="">
           <div>
             ------------------------------------------------------------------------------------------------------------------------------
           </div>
@@ -305,9 +304,9 @@ function buildWindowUtils() {
     for (let x = 0; x < textVals.length; x++) {
       component.push(
         <div key={"newText" + String(x)}>
-          <div className="assetSelectedContentHead">
+          <div className="">
             {"--Text " + String(x) + ": "}
-            <span className="assetSelectedContent">
+            <span className="">
               {textVals[x]}
             </span>
           </div>
@@ -317,7 +316,7 @@ function buildWindowUtils() {
     component.push(
       <>
         <div key={"newName"}>
-          <div className="assetSelectedContentHead">
+          <div className="">
             <div>
               ------------------------------------------------------------------------------------------------------------------------------
           </div>
@@ -400,7 +399,7 @@ function buildWindowUtils() {
 
       });
     console.log(tempBool);
-    return {obj: tempObj, exists: tempBool};
+    return { obj: tempObj, exists: tempBool };
   }
 
   const _checkAssetExportable = async (idxHash) => {
@@ -619,7 +618,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "58") {
-      tempStat = "Out of Locked Escrow"
+      tempStat = "Out of Escrow"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -656,9 +655,8 @@ function buildWindowUtils() {
       return (false)
     }
 
-    if(
-    isNaN(AC))
-    {
+    if (
+      isNaN(AC)) {
       AC = await window.utils.resolveAC(AC)
     }
 
@@ -667,21 +665,20 @@ function buildWindowUtils() {
       .call(function (_error, _result) {
         if (_error) {
           return (console.log("IN ERROR IN ERROR IN ERROR"))
-        } else 
-         {
-          console.log(Object.values(_result)[2]) 
+        } else {
+          console.log(Object.values(_result)[2])
           temp = Object.values(_result)[2];
           window.fetchAC = Object.values(_result)[2];
         }
       });
 
 
-      await window.contracts.AC_MGR.methods
+    await window.contracts.AC_MGR.methods
       .isSameRootAC(AC, temp)
       .call(function (_error, _result) {
         if (_error) {
           return (console.log("IN ERROR IN ERROR IN ERROR"))
-        } else if (_result === "170"){
+        } else if (_result === "170") {
           tempBool = true
         } else {
           tempBool = false
@@ -708,8 +705,9 @@ function buildWindowUtils() {
     return tempBool;
   }
 
-  const _checkHoldsToken = async (req, id) => {
+  const _checkHoldsToken = async (req, id, addr) => {
     let tempBool;
+    if (!addr) return false
     if (req === "asset") {
       await window.contracts.A_TKN.methods
         .ownerOf(id)
@@ -717,7 +715,8 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result === window.addr) {
+            console.log("res", _result, "prop", addr);
+            if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               tempBool = true
             }
             else { tempBool = false }
@@ -732,7 +731,8 @@ function buildWindowUtils() {
           if (_error) {
             console.log(_error);
           } else {
-            if (_result === window.addr) {
+            console.log(_result, addr);
+            if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               tempBool = true
             }
             else { tempBool = false }
@@ -839,7 +839,7 @@ function buildWindowUtils() {
           });
       }
 
-      return window.assets.assetClassNames = tempArr;
+      return tempArr;
     }
 
 
@@ -857,14 +857,14 @@ function buildWindowUtils() {
             console.log("resolved AC name ", temp, " from AC index ", AC);
           }
         });
-        return temp
+      return temp
     }
-    else{
+    else {
       return "Unable to resolve AC name"
     }
   }
 
-  const _resolveACFromID = async (AC) => {
+  const _resolveACFromID = async (AC, addr) => {
     let temp;
     if (window.contracts !== undefined) {
       await window.contracts.AC_MGR.methods
@@ -880,7 +880,7 @@ function buildWindowUtils() {
     }
     let acData = await window.utils.getACData("id", AC)
 
-    if (window.addr !== undefined) {
+    if (addr !== undefined) {
       await window.utils.checkCreds(acData, AC);
       await window.utils.getCosts(6, AC);
     }
@@ -891,7 +891,7 @@ function buildWindowUtils() {
 
   }
 
-  const _checkCreds = async (acData, AC) => {
+  const _checkCreds = async (acData, AC, addr) => {
     window.isAuthUser = undefined;
     let custodyType = acData.custodyType
 
@@ -903,7 +903,7 @@ function buildWindowUtils() {
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
           else {
-            if (_result === window.addr) {
+            if (window.web3.utils.toChecksumAddress(_result) === window.web3.utils.toChecksumAddress(addr)) {
               window.isACAdmin = true;
             }
             else {
@@ -913,7 +913,7 @@ function buildWindowUtils() {
         });
 
       if (custodyType === "Custodial") {
-        let addrHash = await window.web3.utils.soliditySha3(window.addr)
+        let addrHash = await window.web3.utils.soliditySha3(window.web3.utils.toChecksumAddress(addr))
         await window.contracts.AC_MGR.methods
           .getUserType(addrHash, AC)
           .call((_error, _result) => {
@@ -933,7 +933,7 @@ function buildWindowUtils() {
 
       else if (custodyType === "Non-Custodial") {
         await window.contracts.ID_TKN.methods
-          .balanceOf(window.addr)
+          .balanceOf(addr)
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
@@ -1154,29 +1154,29 @@ function buildWindowUtils() {
     console.log("contracts: ", window.contracts)
   };
 
-  const _determineTokenBalance = async () => {
+  const _determineTokenBalance = async (addr) => {
 
-    if (window.contracts !== undefined && window.addr !== undefined) {
+    if (window.contracts !== undefined && addr !== undefined) {
       let _assetClassBal, _assetBal, _IDTokenBal, _prufTokenBal;
-      console.log("getting balance info from token contracts...")
-      await window.contracts.A_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      //console.log("getting balance info from token contracts...")
+      await window.contracts.A_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _assetBal = result; console.log("assetBal: ", _assetBal); }
+        else { _assetBal = result; /* console.log("assetBal: ", _assetBal); */ }
       });
 
-      await window.contracts.AC_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      await window.contracts.AC_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _assetClassBal = result; console.log("assetClassBal", _assetClassBal); }
+        else { _assetClassBal = result; /* console.log("assetClassBal", _assetClassBal); */ }
       });
 
-      await window.contracts.ID_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      await window.contracts.ID_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _IDTokenBal = result; console.log("IDTokenBal", _IDTokenBal); }
+        else { _IDTokenBal = result; /* console.log("IDTokenBal", _IDTokenBal); */ }
       });
 
-      await window.contracts.UTIL_TKN.methods.balanceOf(window.addr).call((error, result) => {
+      await window.contracts.UTIL_TKN.methods.balanceOf(addr).call((error, result) => {
         if (error) { console.log(error) }
-        else { _prufTokenBal = window.web3.utils.fromWei(result, 'ether'); console.log("prufTokenBal", _prufTokenBal); }
+        else { _prufTokenBal = window.web3.utils.fromWei(result, 'ether'); /* console.log("prufTokenBal", _prufTokenBal); */ }
       });
 
       if (Number(_assetBal) > 0) {
@@ -1213,27 +1213,27 @@ function buildWindowUtils() {
     }
   }
 
-  const _getAssetClassTokenInfo = async () => {
+  const _getAssetClassTokenInfo = async (addr) => {
     if (window.balances === undefined) { return 0 }
     let tknIDArray = [], roots = [], discounts = [], custodyTypes = [], exData = [], names = [];
-    console.log("GACTI: In _getAssetClassTokenInfo")
+    //console.log("GACTI: In _getAssetClassTokenInfo")
 
     if (Number(window.balances.assetClassBalance) > 0) {
 
       for (let i = 0; i < window.balances.assetClassBalance; i++) {
-        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
+        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(addr, i)
           .call((_error, _result) => {
             if (_error) {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
             } else {
               let resStr;
-              resStr = _result; 
+              resStr = _result;
               tknIDArray.push(resStr)
             }
           });
       }
-      
-      console.log("AC IDs: ", tknIDArray);
+
+      //console.log("AC IDs: ", tknIDArray);
 
       for (let i = 0; i < tknIDArray.length; i++) {
         await window.contracts.AC_MGR.methods
@@ -1259,7 +1259,7 @@ function buildWindowUtils() {
             }
           });
 
-          await window.contracts.AC_MGR.methods
+        await window.contracts.AC_MGR.methods
           .prufPerShare()
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
@@ -1268,7 +1268,7 @@ function buildWindowUtils() {
             }
           });
 
-          await window.contracts.AC_MGR.methods
+        await window.contracts.AC_MGR.methods
           .upperLimit()
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
@@ -1282,27 +1282,29 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
+              //console.log("resolved AC name ", _result, " from AC index ", tknIDArray[i]);
               names.push(_result)
             }
           });
       }
     }
 
-    else { console.log("No asset classes held by user"); window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] } ; return window.hasNoAssetClasses = true }
+    else { console.log("No asset classes held by user"); window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }; return window.hasNoAssetClasses = true }
 
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }
 
-  const _getAssetTokenInfo = async () => {
+  const _getAssetTokenInfo = async (addr) => {
+    let obj = {};
 
     if (window.balances === undefined) { return }
 
-    console.log("GATI: In _getAssetTokenInfo")
+    //console.log("GATI: In _getAssetTokenInfo")
     //alert("IN GATI")
 
     if (Number(window.balances.assetBalance) > 0) {
-      let tknIDArray = [],
+      let
+        tknIDArray = [],
         ipfsHashArray = [],
         noteArray = [],
         statuses = [],
@@ -1313,13 +1315,12 @@ function buildWindowUtils() {
 
 
       for (let i = 0; i < window.balances.assetBalance; i++) {
-        await window.contracts.A_TKN.methods.tokenOfOwnerByIndex(window.addr, i)
+        await window.contracts.A_TKN.methods.tokenOfOwnerByIndex(addr, i)
           .call((_error, _result) => {
             if (_error) {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
             } else {
               let resStr;
-              //console.log(window.web3.utils.numberToHex(_result))
               resStr = window.web3.utils.numberToHex(_result);
               while (resStr.length < 66) {
                 resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
@@ -1358,7 +1359,7 @@ function buildWindowUtils() {
               else if (_result[0] === "55") { statuses.push("Transferred/Unclaimed") }
               else if (_result[0] === "56") { statuses.push("In Escrow") }
               else if (_result[0] === "57") { statuses.push("Out of Supervised Escrow") }
-              else if (_result[0] === "58") { statuses.push("Imported") }
+              else if (_result[0] === "58") { statuses.push("Out of Escrow") }
               else if (_result[0] === "59") { statuses.push("Discardable") }
               else if (_result[0] === "60") { statuses.push("Recyclable") }
               else if (_result[0] === "70") { statuses.push("Exported") }
@@ -1371,25 +1372,22 @@ function buildWindowUtils() {
           })
         //console.log(x)
       }
+      obj.ids = tknIDArray;
+      obj.ipfs = ipfsHashArray;
+      obj.countPairs = countPairs;
+      obj.assetClasses = assetClasses;
+      obj.statuses = statuses;
+      obj.statusNums = statusNums;
+      obj.notes = noteArray;
+      
+      await window.utils.getACNames(assetClasses).then((e) => {
+        obj.assetClassNames = e;
+      })
 
-      await window.utils.getACNames(assetClasses)
-
-      //console.log(ipfsHashArray)
-        window.aTknIDs = tknIDArray;
-        //console.log(window.aTknIDs, " tknID-> ", tknIDArray);
-        window.ipfsHashArray = ipfsHashArray;
-  
-        window.assets.countPairs = countPairs;
-  
-        window.assets.assetClasses = assetClasses;
-        window.assets.statuses = statuses;
-        window.assets.statusNums = statusNums;
-        window.assets.notes = noteArray;
-        //alert(Object.values(window.assets))
-        return true
+      return obj
     }
 
-    else { console.log("No assets held by user"); window.aTknIDs = []; return window.hasNoAssets = true }
+    else { console.log("No assets held by user"); return obj }
   }
 
   const _getAssetTokenName = async (ipfs) => {
@@ -1405,15 +1403,18 @@ function buildWindowUtils() {
   }
 
   const _addIPFSJSONObject = async (payload) => {
+    let temp;
     console.log("Uploading file to IPFS...");
     await window.ipfs.add(JSON.stringify(payload), (error, hash) => {
       if (error) {
         console.log("Something went wrong. Unable to upload to ipfs");
       } else {
         console.log("uploaded at hash: ", hash);
-        return window.rawIPFSHashTemp = hash;
+        return temp = hash;
       }
-    });
+    })
+
+    return temp;
   }
 
   const _getIPFSJSONObject = async (lookup) => {
@@ -1446,44 +1447,49 @@ function buildWindowUtils() {
     return temp
   };
 
-  const _generateCardPrint = () => {
+  const _generateCardPrint = (obj) => {
 
     var date = Date().toLocaleString();
 
     return (
       <div className="printForm">
-        <div className="printQR">
-          <QRCode
-            value={"https://app.pruf.io/#/retrieve-record?" + window.printObj.idxHash}
-            size="256"
-            fgColor="#002a40"
-            logoWidth="48.8"
-            logoHeight="64"
-            logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-          />
-        </div>
-        <div className="cardHref">https://app.pruf.io</div>
-        <div className="cardDate">{date}</div>
-        <div className="printFormContent">
-          <img
-            className="printImageBackgroundForm"
-            src={require("../Resources/Images/PrufPrintBackground.png")}
-            alt="Pruf Print Background" />
-          <div className="printQR2">
-            <QRCode
-              value={"https://app.pruf.io/#/"+window.printObj.idxHash}
-              size="160"
-              fgColor="#002a40"
-              logoWidth="32"
-              logoHeight="41.6"
-              logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
-            />
-          </div>
-          <p className="cardNamePrint">Name : {window.printObj.name}</p>
-          <p className="cardAcPrint">Asset Class : {window.printObj.assetClassName}</p>
-          <h4 className="cardIdxPrint">IDX : {window.printObj.idxHash}</h4>
-          
-        </div>
+        {obj !== undefined && (
+          <>
+            <div className="printQR">
+              <QRCode
+                value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
+                size="160"
+                fgColor="#002a40"
+                // logoWidth="24.4"
+                // logoHeight="32"
+                // logoImage="https://pruf.io/assets/images/pruf-u-logo-with-border-323x429.png"
+                quietZone="2"
+                ecLevel="M"
+              />
+            </div>
+            <div className="cardHref">https://app.pruf.io</div>
+            <div className="cardDate">{date}</div>
+            <div className="printFormContent">
+              {/* <img
+                className="printImageBackgroundForm"
+                src={require("../Resources/Images/PrufPrintBackground.png")}
+                alt="Pruf Print Background" /> */}
+              <div className="printQR2">
+                <QRCode
+                  value={"https://app.pruf.io/#/retrieve-record?" + obj.idxHash}
+                  size="120"
+                  fgColor="#002a40"
+                  quietZone="2"
+                  ecLevel="L"
+                />
+              </div>
+              <p className="cardNamePrint">Name : {obj.name}</p>
+              <p className="cardAcPrint">Asset Class : {obj.assetClassName}</p>
+              <h4 className="cardIdxPrint">Asset ID : {obj.idxHash}</h4>
+
+            </div>
+          </>
+        )}
       </div >
     )
   }
@@ -1543,8 +1549,8 @@ function buildWindowUtils() {
 
   }
 
-  console.log("Setting up window utils")
-  return console.log("Utils loaded: ", window.utils)
+  //console.log("Setting up window utils")
+  return //console.log("Utils loaded: ", window.utils)
 }
 
 export default buildWindowUtils

@@ -1,0 +1,719 @@
+
+/* html {
+  overflow-y:hidden !important;
+} */
+body {
+    background: linear-gradient(0deg, rgba(0, 83, 128, 0.212), #015f9218) !important;
+    /* overflow-x: hidden !important; */
+}
+
+/* body {
+    background: linear-gradient(0deg, rgba(0, 83, 128, 0.514), #015f923b) !important;
+} */
+
+/* body {
+    background: linear-gradient(180deg, rgba(0, 83, 128, 0.514), #015f923b) !important;
+} */
+
+/* body {
+    background: linear-gradient(0deg, rgba(0, 83, 128, 0.616), #015f923b) !important;
+} */
+
+/* body {
+    background: linear-gradient(180deg, rgba(0, 83, 128, 0.596), #015f923b) !important;
+} */
+
+
+.assetImage {
+    width: 300px !important;
+    height: 300px !important;
+    object-fit:contain !important;
+    /* transition: "all 300ms cubic-bezier(0.34, 1.61, 0.7, 1)" */
+}
+
+.bold_hr {
+  border-top: 2px solid;
+}
+
+.medium_hr {
+  border-top: 1px solid;
+}
+
+.bold_h4 {
+  font-weight: bold;
+}
+
+.assetImage2 {
+    /* max-width: 1000px;
+    max-height: 1000px; */
+    max-width: 300px !important;
+    max-height: 300px !important;
+}
+
+.editDescriptionField {
+  white-space: pre-wrap;
+}
+
+.DBGradient {
+    background: linear-gradient(0deg, #002a40, #01476d) !important;
+    object-fit: cover !important;
+}
+
+.MDBGradient {
+    background: linear-gradient(0deg, #005480, #015f92) !important;
+    object-fit: cover !important;
+}
+
+.MLBGradient {
+    background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+    /* object-fit: cover !important; */
+}
+
+.MLBGradientSubmit {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+}
+
+.MLBGradientRefresh {
+  color: #017ec0;
+  cursor: pointer;
+  margin-top: 10px;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.MLBGradientRefresh:hover {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.dashboardHeader {
+  display: flex;
+  flex-direction: row;
+}
+
+/* .submitChanges {
+    background: linear-gradient(0deg, #01b13c, #01e04c) !important;
+    object-fit: cover !important;
+    width: 10rem;
+} */
+
+.advancedJSONButton {
+  background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+  object-fit: cover !important;
+  width: 200px;
+}
+
+.LBGradient {
+    background: linear-gradient(0deg, #00a8ff, #00c3ff) !important;
+    object-fit: cover !important;
+}
+
+.functionSelectorIcon {
+  left: -25px !important;
+  bottom: -2px !important;
+    position: absolute !important;
+}
+.functionSelectorText {
+  left: 25px !important;
+  /* bottom: -2px !important; */
+    /* position: absolute !important; */
+}
+
+.functionSelectorAD {
+    top: -60px !important;
+    right: -10px !important;
+    width: 100px;
+}
+
+.Icon {
+    width: 55px;
+    height: 55px;
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+}
+
+.footerIcon {
+  cursor: pointer;
+  margin-left: 15px;
+  color: black;
+    width: 30px;
+    height: 30px;
+}
+
+.IconFaucet {
+    width: 35px;
+    height: 35px;
+}
+
+.inlineDelete {
+  display: flex;
+  flex-direction: row;
+}
+
+.headerIconBack {
+    float: left;
+    padding: 15px;
+    margin-top: -20px;
+    margin-right: 15px;
+    border-radius: 3px;
+        background: linear-gradient(60deg, #002a40, #01476d);
+        box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
+}
+
+/* .makeStyles-appBar-79 {
+    background: #002a40 !important;
+    border-radius: 0px !important;
+} */
+
+.makeStyles-title-82 {
+    color: white !important;
+}
+
+.makeStyles-underline-162:after {
+    border-color: #00a8ff !important;
+}
+
+.makeStyles-title-733 {
+    color: white !important;
+}
+
+.exitAsset {
+    rotate: 180deg !important;
+    top: -130px !important;
+}
+
+  .loading:after{
+      content: '  .' !important;
+      animation: dots 0.5s steps(5, end) infinite !important;
+    }
+
+    .qrReader {
+        max-width: 500px;
+    }
+    
+    .Sidebar-blue-50, .Sidebar-blue-50:hover, .Sidebar-blue-50:focus{
+        background: #00a8ff !important;
+    }
+
+
+    /* .lds-facebook {
+        display: inline-block;
+        position: relative;
+        width: 20px;
+        height: 20px;
+      }
+      .lds-facebook div {
+        display: inline-block;
+        position: absolute;
+        left: 8px;
+        width: 16px;
+        background: rgb(0, 0, 0);
+        animation: lds-facebook 0.8s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+      }
+      .lds-facebook div:nth-child(1) {
+        left: 8px;
+        animation-delay: -0.24s;
+      }
+      .lds-facebook div:nth-child(2) {
+        left: 32px;
+        animation-delay: -0.12s;
+      }
+      .lds-facebook div:nth-child(3) {
+        left: 56px;
+        animation-delay: 0;
+      }
+      @keyframes lds-facebook {
+        0% {
+          top: 12px;
+          height: 24px;
+        }
+        50%, 100% {
+          top: 36px;
+          height: 12px;
+        }
+      }
+
+      .lds-facebookRR {
+          display: inline-block;
+          position: relative;
+          width: 20px;
+          height: 20px;
+          top: -30px
+        }
+        .lds-facebookRR div {
+          display: inline-block;
+          position: absolute;
+          left: 8px;
+          width: 16px;
+          background: rgb(0, 0, 0);
+          animation: lds-facebook 0.8s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+        }
+        .lds-facebookRR div:nth-child(1) {
+          left: 8px;
+          animation-delay: -0.24s;
+        }
+        .lds-facebookRR div:nth-child(2) {
+          left: 32px;
+          animation-delay: -0.12s;
+        }
+        .lds-facebookRR div:nth-child(3) {
+          left: 56px;
+          animation-delay: 0;
+        }
+        @keyframes lds-facebookRR {
+          0% {
+            top: 12px;
+            height: 24px;
+          }
+          50%, 100% {
+            top: 36px;
+            height: 12px;
+          }
+        } */
+
+
+        .lds-ellipsis {
+          display: inline-block;
+          position: relative;
+          width: 55px;
+          height: 55px;
+          bottom: -5.5px;
+        }
+        .lds-ellipsis div {
+          position: absolute;
+          top: 33px;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgb(0, 0, 0);
+          animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+        .lds-ellipsis div:nth-child(1) {
+          left: 8px;
+          animation: lds-ellipsis1 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(2) {
+          left: 8px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(3) {
+          left: 32px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsis div:nth-child(4) {
+          left: 56px;
+          animation: lds-ellipsis3 0.6s infinite;
+        }
+        @keyframes lds-ellipsis1 {
+          0% {
+            transform: scale(0);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        @keyframes lds-ellipsis3 {
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(0);
+          }
+        }
+        @keyframes lds-ellipsis2 {
+          0% {
+            transform: translate(0, 0);
+          }
+          100% {
+            transform: translate(24px, 0);
+          }
+        }
+        
+
+
+        .lds-ellipsisIF {
+          display: inline-block;
+          position: relative;
+          width: 55px;
+          height: 55px;
+          bottom: -15px;
+        }
+        .lds-ellipsisIF div {
+          position: absolute;
+          top: 33px;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgb(0, 0, 0);
+          animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+        .lds-ellipsisIF div:nth-child(1) {
+          left: 8px;
+          animation: lds-ellipsis1 0.6s infinite;
+        }
+        .lds-ellipsisIF div:nth-child(2) {
+          left: 8px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsisIF div:nth-child(3) {
+          left: 32px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsisIF div:nth-child(4) {
+          left: 56px;
+          animation: lds-ellipsis3 0.6s infinite;
+        }
+        @keyframes lds-ellipsis1 {
+          0% {
+            transform: scale(0);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        @keyframes lds-ellipsis3 {
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(0);
+          }
+        }
+        @keyframes lds-ellipsis2 {
+          0% {
+            transform: translate(0, 0);
+          }
+          100% {
+            transform: translate(24px, 0);
+          }
+        }
+
+      
+
+
+      .back {
+        background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+        object-fit: cover !important;
+        bottom: -60px;
+        right: -10px;
+      }
+      .settings {
+        background: linear-gradient(0deg, #b4b3b3, #949494) !important;
+        object-fit: cover !important;
+        /* bottom: -120px; */
+        right: 33px;
+      }
+
+      .fixed-plugin .badge-darkBlue {
+        background-color: #002a40 !important;
+      }
+
+      .input {
+        /* top: 105px !important; */
+        right: -10px !important;
+        /* position: absolute !important; */
+      }
+
+      .imageInput {
+        width: 0px !important;
+        height: 0px !important;
+      }
+      .inputDescription {
+        top: 200px !important;
+        left: 100px !important;
+        position: absolute !important;
+      }
+
+
+      
+.assetImageSelectorButton {
+  border: 0px transparent; 
+  background-color: transparent; 
+  object-fit: cover !important;
+  border: #002a40;
+  border-style: solid;
+  border-width: 1px;
+  margin-left: 4px;
+}
+
+.assetImageSelectorButton:Hover {
+  background-color: rgb(0, 168, 255, 0.25) ;
+  position:relative;
+  top:-1px;
+  left:1px;
+  height:auto;
+  z-index:999;
+  /* border-style: dashed; */
+  border-width: 1px;
+}
+
+.assetImageSelectorButtonMobile {
+  border: 0px transparent; 
+  background-color: transparent; 
+  object-fit: cover;
+}
+
+.imageSelector {
+  display: flex;
+  width: flex;
+  height: flex;
+  max-width: 560px;
+  overflow-x: auto;
+  border: #002a409a;
+  border-style: solid;
+  border-radius: 5px 5px 5px 5px;
+  padding: 1.5px;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(2, 43, 82, 0.4);
+}
+
+.imageSelectorPlus {
+  display: flex;
+  width: 25px;
+  height: 80px;
+  background-color: #888888ce;
+  border-radius: 0px 6px 6px 0px;
+  z-index: 3000;
+  position: absolute;
+  margin-top: 2.5px;
+  margin-left: -2px;
+  align-items: center;
+}
+/* 
+.imagePlus {
+  margin
+} */
+
+.imageSelectorImage {
+  width: 100px;
+  height: 80px;
+  z-index: 2000;
+  object-fit: cover;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #017ec0 !important;
+}
+
+.URL {
+  display: flex;
+  flex-direction: row !important;
+}
+.deleteURL {
+margin-top: 0px;
+}
+.deleteURL:hover {
+cursor:pointer;
+}
+
+.printForm {
+  display: flex;
+  width: 800px ;
+  height: 190px;
+  background-color: #002a40;
+  border-radius: 7.5px;
+  margin-top: 15px;
+  margin-left: 7.5px;
+}
+
+.printFormContent {
+  display: flex;
+  width: 595px;
+  height: 160px;
+  background-color: #028ed4;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-left: 15px;
+  opacity: 0.9;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 20px;
+}
+    
+.printQR{
+  display: flex;
+  margin-left: 12.5px;
+  margin-top: 12.5px;
+}
+    
+.printQR2{
+  display: flex;
+  margin-left: 440px;
+  margin-top: -10px;
+  position: absolute;
+  z-index: 999;
+}
+
+/* .printImageForm {
+  justify-content: flex-start;
+  display: flex;
+  width: 23px;
+  height: 23px;
+  object-fit: cover;
+  z-index: 5;
+} */
+
+.printImageBackgroundForm {
+  margin-top: -15px;
+  margin-left: 5px;
+  justify-content: flex-start;
+  display: flex;
+  width: 430px;
+  height: 150px;
+  object-fit: cover;
+  z-index: 1;
+  position: absolute;
+  opacity: 0.2;
+
+}
+
+.cardIdxPrint {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: -5px;
+  color: white;
+  z-index: 999;
+}
+      
+.cardNamePrint {
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  z-index: 999;
+}
+
+.cardAcPrint {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 65px;
+  color: white;
+  z-index: 999;
+}
+
+.cardDate {
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 172px;
+  margin-left: 500px;
+  color: white;
+  z-index: 999;
+  position: absolute;
+}
+
+.cardHref {
+  font-size: 8px;
+  font-weight: bold;
+  margin-top: 172px;
+  margin-left: 60px;
+  color: white;
+  z-index: 999;
+  position: absolute;
+}
+
+.printButton {
+  color: black;
+}
+
+.printButton:hover {
+  cursor: pointer;
+}
+
+.QRScanner {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.QRScanner:hover {
+  cursor: pointer;
+  color: rgb(141, 129, 129);
+}
+
+.addressText {
+  font-size: 17px;
+  top: -15px !important;
+  color: white;
+}
+
+.addressText:hover {
+  cursor:pointer;
+  color: white;
+}
+
+.addressTextBlack {
+  font-size: 17px;
+  top: -15px !important;
+  color: rgb(0, 0, 0);
+}
+
+.addressTextBlack:hover {
+  cursor:pointer;
+  color: rgb(78, 78, 78);
+}
+
+.homeCardText {
+  color: rgb(0, 0, 0);
+}
+
+
+.homeCardText:hover {
+  color: rgb(78, 78, 78);
+}
+
+.IDText {
+  color: black;
+}
+
+.IDText:hover {
+  cursor:pointer;
+  color: rgb(138, 138, 138);
+}
+
+.addressIcon {
+  float: left;
+  width: 34px;
+  height: 34px;
+  z-index: 5;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 42%), 0 4px 25px 0px rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+  transition: all 300ms linear;
+  margin-left: 23px;
+  margin-right: 11px;
+  border-radius: 50%;
+  margin-top: 15px;
+}
+
+.addressIconUp {
+  float: left;
+  width: 34px;
+  height: 34px;
+  z-index: 5;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 42%), 0 4px 25px 0px rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+  transition: all 300ms linear;
+  margin-left: 23px;
+  margin-right: 11px;
+  border-radius: 50%;
+  margin-top: -5px;
+}
+
+.bump {
+  margin-left: 15px;
+  margin-top: -20px;
+}
+
+.dashboardAssetImage {
+  cursor: pointer;
+}
+
+.fixedPlugin{
+  font-size: 40px !important;
+  color: rgb(241, 241, 241);
+}
+
+.fixedPlugin:hover{
+  cursor: pointer;
+  color: rgb(233, 233, 233);
+}
