@@ -56,6 +56,7 @@ export default function Dashboard(props) {
   const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/user/search/");
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
+  const [copyText, setCopyText] = React.useState(false)
 
   const moreInfo = (e) => {
     //console.log(props.ps);
@@ -83,6 +84,12 @@ export default function Dashboard(props) {
 
     window.printObj = e;
 
+  }
+
+  const copyTextSnippet = (temp) => {
+    navigator.clipboard.writeText(temp)
+    setCopyText(true)
+    setTimeout(() => { setCopyText(false) }, 2000);
   }
 
 
@@ -318,9 +325,14 @@ export default function Dashboard(props) {
                 <h4 className={classes.cardIconTitle}>
                   Asset Dashboard
               </h4>
-                <Icon className="MLBGradientRefresh" onClick={() => { window.resetInfo = true; window.recount = true; }}>
-                  <Refresh />
-                </Icon></div>
+                <Tooltip
+                  title="Refresh"
+                >
+                  <Icon className="MLBGradientRefresh" onClick={() => { window.resetInfo = true; window.recount = true; }}>
+                    <Refresh />
+                  </Icon>
+                </Tooltip>
+              </div>
               <br />
             </CardHeader>
             {!props.addr && (
@@ -548,14 +560,48 @@ export default function Dashboard(props) {
             </CardBody>
             <CardFooter>
               {!isMobile && (
-                <div className={classes.stats}>
-                  Asset ID: {selectedAssetObj.idxHash}
-                </div>
+                <>
+                  {!copyText && (
+                    <Tooltip
+                      title="Copy to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip
+                      title="Copied to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
               )}
               {isMobile && (
-                <div className={classes.stats}>
-                  Asset ID: {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}
-                </div>
+                <>
+                  {!copyText && (
+                    <Tooltip
+                      title="Copy to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip
+                      title="Copied to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
               )}
               <div className="icons">
                 <RWebShare

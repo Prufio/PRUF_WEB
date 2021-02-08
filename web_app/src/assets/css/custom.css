@@ -634,6 +634,19 @@ cursor:pointer;
 .addressText {
   font-size: 17px;
   top: -15px !important;
+  color: white;
+}
+
+.addressText:hover {
+  color: white;
+}
+
+.IDText {
+  color: black;
+}
+
+.IDText:hover {
+  color: rgb(138, 138, 138);
 }
 
 .addressIcon {

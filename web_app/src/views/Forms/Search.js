@@ -79,6 +79,7 @@ export default function Search(props) {
   const [assetClassName, setAssetClassName] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
+  const [copyText, setCopyText] = React.useState(false)
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
@@ -118,7 +119,7 @@ export default function Search(props) {
   const [selectedImage, setSelectedImage] = React.useState("")
 
   const link = document.createElement('div');
-  
+
   React.useEffect(() => {
     if (!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66) {
       setQuery(window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length));
@@ -131,7 +132,7 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
-  },[]) 
+  }, [])
 
   React.useEffect(() => {
     if (window.contracts !== undefined && query) { retrieveRecordQR(query); setQuery(null); }
@@ -530,6 +531,12 @@ export default function Search(props) {
     return;
   }
 
+  const copyTextSnippet = (temp) => {
+    navigator.clipboard.writeText(temp)
+    setCopyText(true)
+    setTimeout(() => { setCopyText(false) }, 2000);
+  }
+
   const verifyAsset = async () => {
     if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
       if (loginFirst === "") {
@@ -630,7 +637,7 @@ export default function Search(props) {
         icon: "warning",
         button: "Close",
       });
-    } 
+    }
   }
 
   const blockchainVerifyAsset = async () => {
@@ -814,7 +821,7 @@ export default function Search(props) {
       setSerial("")
       setloginSerial("")
       setloginSerialState("")
-      
+
     }
 
     console.log("idxHash", idxHash);
@@ -2120,14 +2127,48 @@ export default function Search(props) {
               </CardBody>
               <CardFooter>
                 {!isMobile && (
-                  <div className={imgClasses.stats}>
-                    Asset ID: {asset.idxHash}
-                  </div>
+                  <>
+                    {!copyText && (
+                      <Tooltip
+                        title="Copy to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                    {copyText && (
+                      <Tooltip
+                        title="Copied to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                  </>
                 )}
                 {isMobile && (
-                  <div className={imgClasses.stats}>
-                    Asset ID: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
-                  </div>
+                  <>
+                    {!copyText && (
+                      <Tooltip
+                        title="Copy to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                    {copyText && (
+                      <Tooltip
+                        title="Copied to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                  </>
                 )}
                 <div className="icons">
                   <RWebShare
@@ -2144,19 +2185,19 @@ export default function Search(props) {
                   </RWebShare>
                   <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
                   <Icon
-                  className="footerIcon"
-                  onClick={() => {
-                    swalReact({
-                      content:<QRCode
-                      value={URL}
-                      size="160"
-                      fgColor="#002a40"
-                      quietZone="2"
-                      ecLevel="M"
-                    />,
-                    buttons: "close"
-                    })
-                  }}>
+                    className="footerIcon"
+                    onClick={() => {
+                      swalReact({
+                        content: <QRCode
+                          value={URL}
+                          size="160"
+                          fgColor="#002a40"
+                          quietZone="2"
+                          ecLevel="M"
+                        />,
+                        buttons: "close"
+                      })
+                    }}>
                     qr_code
                   </Icon>
                 </div>
