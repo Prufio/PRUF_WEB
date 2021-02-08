@@ -148,6 +148,7 @@ export default function Verify(props) {
         setScanQR(false);
         setQRValue("");
         console.log("clearing forms")
+        window.location.href="/#/user/dashboard"
     };
 
     const verifyAsset = async () => {
