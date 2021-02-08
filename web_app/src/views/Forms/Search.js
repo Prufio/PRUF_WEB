@@ -357,7 +357,6 @@ export default function Search(props) {
     setSimpleSelect("")
     setIsRecycling(false)
     setloginFirstState("");
-    setloginMiddleState("");
     setloginLastState("");
     setloginIDState("");
     setloginPasswordState("");
