@@ -650,7 +650,15 @@ cursor:pointer;
 
 .addressTextBlack:hover {
   cursor:pointer;
+  color: rgb(78, 78, 78);
+}
+
+.homeCardText {
   color: rgb(0, 0, 0);
+}
+
+.homeCardText:hover {
+  color: rgb(78, 78, 78);
 }
 
 .IDText {
