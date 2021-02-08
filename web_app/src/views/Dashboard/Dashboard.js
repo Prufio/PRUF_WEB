@@ -586,7 +586,7 @@ export default function Dashboard(props) {
                       }}
                       value="edit-rightsholder"
                     >
-                      Update Owner Information
+                      Update Owner Info
                           </MenuItem>
                   </Select>
                 </FormControl>

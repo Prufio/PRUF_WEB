@@ -2247,7 +2247,7 @@ export default function Search(props) {
                           }}
                           value="edit-rightsholder"
                         >
-                          Update Owner Information
+                          Update Owner Info
                           </MenuItem>
                       </Select>
                     </FormControl>
