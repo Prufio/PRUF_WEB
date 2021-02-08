@@ -304,7 +304,7 @@ export default function Search(props) {
         break
       }
     }
-    if (href !== "") {
+    if (href !== undefined) {
       return window.location.href = href;
     }
   };
