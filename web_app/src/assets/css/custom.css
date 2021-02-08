@@ -638,6 +638,7 @@ cursor:pointer;
 }
 
 .addressText:hover {
+  cursor:pointer;
   color: white;
 }
 
@@ -646,6 +647,7 @@ cursor:pointer;
 }
 
 .IDText:hover {
+  cursor:pointer;
   color: rgb(138, 138, 138);
 }
 
@@ -684,4 +686,14 @@ cursor:pointer;
 
 .dashboardAssetImage {
   cursor: pointer;
+}
+
+.fixedPlugin{
+  font-size: 40px !important;
+  color: rgb(241, 241, 241);
+}
+
+.fixedPlugin:hover{
+  cursor: pointer;
+  color: rgb(233, 233, 233);
 }

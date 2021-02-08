@@ -15,6 +15,7 @@ import imagine3 from "assets/img/sidebar-3.jpg";
 import imagine4 from "assets/img/sidebar-4.jpg";
 
 import Button from "components/CustomButtons/Button.js";
+import { Icon } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 
@@ -50,7 +51,12 @@ export default function FixedPlugin(props) {
     >
       <div id="fixedPluginClasses" className={props.fixedClasses}>
         <div onClick={handleClick}>
-          <i className="fa fa-cog fa-2x" />
+          {/* <i className="fa fa-cog fa-2x" /> */}
+          <Icon className="fixedPlugin">
+          {/* <span class="material-icons"> */}
+            tune
+            {/* </span> */}
+          </Icon>
         </div>
         <ul className="dropdown-menu">
           <li className="header-title">SIDEBAR BACKGROUND</li>

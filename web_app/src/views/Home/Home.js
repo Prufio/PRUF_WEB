@@ -20,6 +20,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
@@ -244,15 +245,19 @@ export default function Home(props) {
     <div>
       <GridContainer>
         <GridItem xs={12} sm={6} md={6} lg={3}>
-          <Card onClick={() => window.location.href="/#/user/dashboard"}>
+          <Card onClick={() => window.location.href = "/#/user/dashboard"}>
             <CardHeader color="info" stats icon>
               <CardIcon className="headerIconBack">
                 <DashboardOutlined />
               </CardIcon>
               <p className={classes.cardCategory}>Assets Held</p>
-              <h3 className={classes.cardTitle}>
-                {props.assets} <small>Assets</small>
-              </h3>
+              <Tooltip
+                title="View Assets"
+              >
+                <h3 className={classes.cardTitle}>
+                  {props.assets} <small>Assets</small>
+                </h3>
+              </Tooltip>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -360,7 +365,7 @@ export default function Home(props) {
           {!props.addr && (
             <CardBody>
               <form>
-              <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
+                <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
               </form>
             </CardBody>
           )}
@@ -373,7 +378,7 @@ export default function Home(props) {
               </form>
             </CardBody>
           )}
-          {window.contracts !== undefined && props.addr &&(
+          {window.contracts !== undefined && props.addr && (
             <CardBody>
               <form>
                 <h4>Conversion Rate: (ü100000/KΞ1)</h4>

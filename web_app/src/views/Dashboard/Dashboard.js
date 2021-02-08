@@ -34,7 +34,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { DashboardOutlined, KeyboardArrowLeft } from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 
@@ -235,16 +235,16 @@ export default function Dashboard(props) {
     i.onload = function () {
       var j = new Image();
       j.onload = function () {
-        let move = i.height - j.height
-        if (props.ps) {
-          if (move < 0) {
-            props.ps.element.scrollTop += move
-          } else {
-            props.ps.element.scrollTop = 0
-          }
-          console.log("Scrolled ", move)
-          //console.log(props.ps.element.scrollTop)
-        }
+        // let move = i.height - j.height
+        // if (props.ps) {
+        //   if (move < 0) {
+        //     props.ps.element.scrollTop += move
+        //   } else {
+        //     props.ps.element.scrollTop = 0
+        //   }
+        //   console.log("Scrolled ", move)
+        //   //console.log(props.ps.element.scrollTop)
+        // }
         setSelectedImage(e)
       }
       j.src = selectedImage;
@@ -447,9 +447,9 @@ export default function Dashboard(props) {
                 >
                   <InputLabel className="functionSelectorText">
                     <Danger>
-                      <Create className="functionSelectorIcon" />
+                      <Settings className="functionSelectorIcon" />
                     </Danger>
-                    Asset Options
+                    Options
                         </InputLabel>
                   <Select
                     MenuProps={{
@@ -612,27 +612,36 @@ export default function Dashboard(props) {
                     title: "Share Asset Link",
                   }}
                 >
-                  <Icon className="footerIcon">
-                    <Share />
-                  </Icon>
+
+                  <Tooltip
+                    title="Share Asset URL"
+                  >
+                    <Icon className="footerIcon">
+                      <Share />
+                    </Icon>
+                  </Tooltip>
                 </RWebShare>
-                <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
-                <Icon
-                  className="footerIcon"
-                  onClick={() => {
-                    swalReact({
-                      content: <QRCode
-                        value={URL}
-                        size="160"
-                        fgColor="#002a40"
-                        quietZone="2"
-                        ecLevel="M"
-                      />,
-                      buttons: "close"
-                    })
-                  }}>
-                  qr_code
+                  <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
+                <Tooltip
+                  title="View QR"
+                >
+                  <Icon
+                    className="footerIcon"
+                    onClick={() => {
+                      swalReact({
+                        content: <QRCode
+                          value={URL}
+                          size="160"
+                          fgColor="#002a40"
+                          quietZone="2"
+                          ecLevel="M"
+                        />,
+                        buttons: "close"
+                      })
+                    }}>
+                    qr_code
                 </Icon>
+                </Tooltip>
               </div>
             </CardFooter>
           </Card>
