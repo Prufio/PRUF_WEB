@@ -20,7 +20,7 @@ import Icon from '@material-ui/core/Icon';
 import Check from "@material-ui/icons/Check";
 import Share from "@material-ui/icons/Share";
 import Create from "@material-ui/icons/Create";
-import { DashboardOutlined, KeyboardArrowLeft, Scanner } from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft, Scanner, Settings } from "@material-ui/icons";
 import Category from "@material-ui/icons/Category";
 import AccountBox from "@material-ui/icons/AccountBox";
 
@@ -79,6 +79,7 @@ export default function Search(props) {
   const [assetClassName, setAssetClassName] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
+  const [copyText, setCopyText] = React.useState(false)
 
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
@@ -233,16 +234,16 @@ export default function Search(props) {
     i.onload = function () {
       var j = new Image();
       j.onload = function () {
-        let move = i.height - j.height
-        if (props.ps) {
-          if (move < 0) {
-            props.ps.element.scrollTop += move
-          } else {
-            props.ps.element.scrollTop = 0
-          }
-          console.log("Scrolled ", move)
-          //console.log(props.ps.element.scrollTop)
-        }
+        // let move = i.height - j.height
+        // if (props.ps) {
+        //   if (move < 0) {
+        //     props.ps.element.scrollTop += move
+        //   } else {
+        //     props.ps.element.scrollTop = 0
+        //   }
+        //   console.log("Scrolled ", move)
+        //   //console.log(props.ps.element.scrollTop)
+        // }
         setSelectedImage(e)
       }
       j.src = selectedImage;
@@ -582,6 +583,12 @@ export default function Search(props) {
       });
 
     return;
+  }
+
+  const copyTextSnippet = (temp) => {
+    navigator.clipboard.writeText(temp)
+    setCopyText(true)
+    setTimeout(() => { setCopyText(false) }, 1000);
   }
 
   const verifyAsset = async () => {
@@ -1343,9 +1350,13 @@ export default function Search(props) {
                   )}
                   {!retrieving && (
                     <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
-                      <Icon fontSize="large">
-                        qr_code_scanner
+                      <Tooltip
+                        title="Scan QR"
+                      >
+                        <Icon fontSize="large">
+                          qr_code_scanner
                   </Icon>
+                      </Tooltip>
                     </div>
                   )}
                   {!retrieving && (
@@ -1371,18 +1382,19 @@ export default function Search(props) {
                 <h4 className={classes.cardIconTitle}>QR Scanner</h4>
               </CardHeader>
               <CardBody>
-                <QrReader
-                  className="qrReader"
-                  scanDelay={300}
-                  onScan={(result) => handleOnScan(result)}
-                  onError={(err) => {
-                    if (err) {
-                      console.info(err);
-                    }
-                  }}
-
-                  style={{ width: '100%' }}
-                />
+                {!retrieving && (
+                  <QrReader
+                    className="qrReader"
+                    scanDelay={300}
+                    onScan={(result) => handleOnScan(result)}
+                    onError={(err) => {
+                      if (err) {
+                        console.info(err);
+                      }
+                    }}
+                    style={{ width: '100%' }}
+                  />
+                )}
                 {retrieving && (
                   <h3>
                     Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
@@ -2060,9 +2072,9 @@ export default function Search(props) {
                     >
                       <InputLabel className="functionSelectorText">
                         <Danger>
-                          <Create className="functionSelectorIcon" />
+                          <Settings className="functionSelectorIcon" />
                         </Danger>
-                    Asset Options
+                    Options
                         </InputLabel>
                       <Select
                         MenuProps={{
@@ -2174,14 +2186,48 @@ export default function Search(props) {
               </CardBody>
               <CardFooter>
                 {!isMobile && (
-                  <div className={imgClasses.stats}>
-                    Asset ID: {asset.idxHash}
-                  </div>
+                  <>
+                    {!copyText && (
+                      <Tooltip
+                        title="Copy to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                    {copyText && (
+                      <Tooltip
+                        title="Copied to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                  </>
                 )}
                 {isMobile && (
-                  <div className={imgClasses.stats}>
-                    Asset ID: {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}
-                  </div>
+                  <>
+                    {!copyText && (
+                      <Tooltip
+                        title="Copy to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                    {copyText && (
+                      <Tooltip
+                        title="Copied to Clipboard"
+                      >
+                        <div className={classes.stats}>
+                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</a>
+                        </div>
+                      </Tooltip>
+                    )}
+                  </>
                 )}
                 <div className="icons">
                   <RWebShare
@@ -2192,27 +2238,36 @@ export default function Search(props) {
                       title: "Share Asset Link",
                     }}
                   >
-                    <Icon className="footerIcon">
-                      <Share />
-                    </Icon>
+
+                    <Tooltip
+                      title="Share Asset URL"
+                    >
+                      <Icon className="footerIcon">
+                        <Share />
+                      </Icon>
+                    </Tooltip>
                   </RWebShare>
-                  <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
-                  <Icon
-                    className="footerIcon"
-                    onClick={() => {
-                      swalReact({
-                        content: <QRCode
-                          value={URL}
-                          size="160"
-                          fgColor="#002a40"
-                          quietZone="2"
-                          ecLevel="M"
-                        />,
-                        buttons: "close"
-                      })
-                    }}>
-                    qr_code
+                  <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
+                  <Tooltip
+                    title="View QR"
+                  >
+                    <Icon
+                      className="footerIcon"
+                      onClick={() => {
+                        swalReact({
+                          content: <QRCode
+                            value={URL}
+                            size="160"
+                            fgColor="#002a40"
+                            quietZone="2"
+                            ecLevel="M"
+                          />,
+                          buttons: "close"
+                        })
+                      }}>
+                      qr_code
                   </Icon>
+                  </Tooltip>
                 </div>
               </CardFooter>
             </Card>

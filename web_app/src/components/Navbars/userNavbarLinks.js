@@ -103,9 +103,9 @@ export default function HeaderLinks(props) {
         }}
         inputProps={{
           onChange: (e)=>setSearchBarVal(e.target.value),
-          placeholder: rtlActive ? "بحث" : "Search",
+          placeholder: "Search Asset ID",
           inputProps: {
-            "aria-label": rtlActive ? "بحث" : "Search",
+            "aria-label": "Search Asset ID",
             className: classes.searchInput
           }
         }}

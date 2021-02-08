@@ -2,6 +2,7 @@ import { Print } from '@material-ui/icons';
 import React from 'react';
 import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
 import Icon from '@material-ui/core/Icon';
+import Tooltip from "@material-ui/core/Tooltip";
 import "../assets/css/custom.css";
 
 class ComponentToPrint extends React.Component {
@@ -22,9 +23,13 @@ class Printer extends React.Component {
                 <ReactToPrint content={() => this.componentRef}>
                     <PrintContextConsumer>
                         {({ handlePrint }) => (
-                            <Icon onClick={handlePrint} className="footerIcon">
-                            <Print />
-                            </Icon>
+                            <Tooltip
+                                title="Print Asset"
+                            >
+                                <Icon onClick={handlePrint} className="footerIcon">
+                                    <Print />
+                                </Icon>
+                            </Tooltip>
                         )}
                     </PrintContextConsumer>
                 </ReactToPrint>

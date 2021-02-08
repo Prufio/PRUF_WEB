@@ -34,7 +34,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { DashboardOutlined, KeyboardArrowLeft } from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 
@@ -56,6 +56,7 @@ export default function Dashboard(props) {
   const [baseURL, setBaseURL] = React.useState("https://indevapp.pruf.io/#/user/search/");
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("")
+  const [copyText, setCopyText] = React.useState(false)
 
   const moreInfo = (e) => {
     //console.log(props.ps);
@@ -85,6 +86,11 @@ export default function Dashboard(props) {
 
   }
 
+  const copyTextSnippet = (temp) => {
+    navigator.clipboard.writeText(temp)
+    setCopyText(true)
+    setTimeout(() => { setCopyText(false) }, 1000);
+  }
 
   const generateAssetDash = (arr) => {
     if (arr.length > 0) {
@@ -212,16 +218,16 @@ export default function Dashboard(props) {
     i.onload = function () {
       var j = new Image();
       j.onload = function () {
-        let move = i.height - j.height
-        if (props.ps) {
-          if (move < 0) {
-            props.ps.element.scrollTop += move
-          } else {
-            props.ps.element.scrollTop = 0
-          }
-          console.log("Scrolled ", move)
-          //console.log(props.ps.element.scrollTop)
-        }
+        // let move = i.height - j.height
+        // if (props.ps) {
+        //   if (move < 0) {
+        //     props.ps.element.scrollTop += move
+        //   } else {
+        //     props.ps.element.scrollTop = 0
+        //   }
+        //   console.log("Scrolled ", move)
+        //   //console.log(props.ps.element.scrollTop)
+        // }
         setSelectedImage(e)
       }
       j.src = selectedImage;
@@ -302,9 +308,14 @@ export default function Dashboard(props) {
                 <h4 className={classes.cardIconTitle}>
                   Asset Dashboard
               </h4>
-                <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload() }}>
-                  <Refresh />
-                </Icon></div>
+                <Tooltip
+                  title="Refresh"
+                >
+                  <Icon className="MLBGradientRefresh" onClick={() => { window.resetInfo = true; window.recount = true; }}>
+                    <Refresh />
+                  </Icon>
+                </Tooltip>
+              </div>
               <br />
             </CardHeader>
             {!props.addr && props.isMounted && (
@@ -424,9 +435,9 @@ export default function Dashboard(props) {
                 >
                   <InputLabel className="functionSelectorText">
                     <Danger>
-                      <Create className="functionSelectorIcon" />
+                      <Settings className="functionSelectorIcon" />
                     </Danger>
-                    Asset Options
+                    Options
                         </InputLabel>
                   <Select
                     MenuProps={{
@@ -537,14 +548,48 @@ export default function Dashboard(props) {
             </CardBody>
             <CardFooter>
               {!isMobile && (
-                <div className={classes.stats}>
-                  Asset ID: {selectedAssetObj.idxHash}
-                </div>
+                <>
+                  {!copyText && (
+                    <Tooltip
+                      title="Copy to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip
+                      title="Copied to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
               )}
               {isMobile && (
-                <div className={classes.stats}>
-                  Asset ID: {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}
-                </div>
+                <>
+                  {!copyText && (
+                    <Tooltip
+                      title="Copy to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                  {copyText && (
+                    <Tooltip
+                      title="Copied to Clipboard"
+                    >
+                      <div className={classes.stats}>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</a>
+                      </div>
+                    </Tooltip>
+                  )}
+                </>
               )}
               <div className="icons">
                 <RWebShare
@@ -555,27 +600,36 @@ export default function Dashboard(props) {
                     title: "Share Asset Link",
                   }}
                 >
-                  <Icon className="footerIcon">
-                    <Share />
-                  </Icon>
+
+                  <Tooltip
+                    title="Share Asset URL"
+                  >
+                    <Icon className="footerIcon">
+                      <Share />
+                    </Icon>
+                  </Tooltip>
                 </RWebShare>
-                <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
-                <Icon
-                  className="footerIcon"
-                  onClick={() => {
-                    swalReact({
-                      content: <QRCode
-                        value={URL}
-                        size="160"
-                        fgColor="#002a40"
-                        quietZone="2"
-                        ecLevel="M"
-                      />,
-                      buttons: "close"
-                    })
-                  }}>
-                  qr_code
+                  <Printer obj={{ name: window.printObj.name, idxHash: window.printObj.idxHash, assetClassName: window.printObj.assetClassName }} />
+                <Tooltip
+                  title="View QR"
+                >
+                  <Icon
+                    className="footerIcon"
+                    onClick={() => {
+                      swalReact({
+                        content: <QRCode
+                          value={URL}
+                          size="160"
+                          fgColor="#002a40"
+                          quietZone="2"
+                          ecLevel="M"
+                        />,
+                        buttons: "close"
+                      })
+                    }}>
+                    qr_code
                 </Icon>
+                </Tooltip>
               </div>
             </CardFooter>
           </Card>

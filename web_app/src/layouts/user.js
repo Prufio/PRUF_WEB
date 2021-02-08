@@ -34,7 +34,7 @@ export default function Dashboard(props) {
   const IPFS = require("ipfs-mini")
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [miniActive, setMiniActive] = React.useState(false);
-  const [image, setImage] = React.useState(require("assets/img/sidebar-2.jpg"));
+  const [image, setImage] = React.useState(require("assets/img/Sidebar Backgrounds/TracesWB.jpg"));
   const [color, setColor] = React.useState("blue");
   const [bgColor, setBgColor] = React.useState("darkBlue");
   const [isKovan, setIsKovan] = React.useState(true);

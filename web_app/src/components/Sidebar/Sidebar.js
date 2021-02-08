@@ -24,6 +24,8 @@ import AdminNavbarLinks from "components/Navbars/userNavbarLinks.js";
 
 import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sidebarStyle.js";
 import pruftoken from "assets/img/pruftoken.png";
+import pruftokeblk from "assets/img/pruftokenblk.jpg";
+import { Tooltip } from "@material-ui/core";
 
 var ps;
 
@@ -102,6 +104,7 @@ class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      copyText: false,
       openAvatar: false,
       miniActive: true,
       ...this.getCollapseStates(props.routes)
@@ -124,6 +127,7 @@ class Sidebar extends React.Component {
     });
     return initialState;
   };
+
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
   // while on the src/views/forms/RegularForms.jsx - route /user/regular-forms
@@ -392,61 +396,77 @@ class Sidebar extends React.Component {
       cx({
         [classes.photoRTL]: rtlActive
       });
+      
+      const copyTextSnippet = (temp) => {
+        navigator.clipboard.writeText(temp)
+        this.setState({ copyText: true })
+        setTimeout(() => { this.setState({ copyText: false }) }, 1000);
+      }
     var user = (
       <div className={userWrapperClass}>
-        <div className="addressIcon">
-          {addr === undefined && (
-            <img src={pruftoken} alt="logo" />
-          )}
-          {addr === "" && (
-            <img src={pruftoken} alt="logo" />
-          )}
-          {addr !== undefined && addr !== "" && (
-            <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
-          )}
-        </div>
+        {!this.props.miniActive && (
+          <div className="addressIcon">
+            {addr === undefined && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr === "" && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr !== undefined && addr !== "" && (
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+            )}
+          </div>
+        )}
+        {this.props.miniActive && (
+          <div className="addressIconUp">
+            {(addr === undefined || addr === "") && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr !== undefined && addr !== "" && (
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+            )}
+          </div>
+        )}
         {/* <List className={classes.list}>
           <ListItem className={classes.item + " " + classes.userItem}> */}
-        <NavLink
-          to={"#"}
-          className={classes.itemLink}
-        // onClick={() => this.openCollapse("openAvatar")}
-        >
-          {addr !== undefined && (
-            <h5 className="addressText">
-              {addr.substring(0, 8) + "..." + addr.substring(34, 42)}
-            </h5>
-          )}
-          {addr === undefined && (
-            <h5 className="addressText">
-              User Address Unavailable
-            </h5>
-          )}
-
-        </NavLink>
-        {/* <Collapse in={this.state.openAvatar} unmountOnExit>
-              <List className={classes.list + " " + classes.collapseList}>
-                <ListItem className={classes.collapseItem}>
-                  <NavLink
-                    to="#"
-                    className={
-                      classes.itemLink + " " + classes.userCollapseLinks
-                    }
+        { !this.props.miniActive && (
+          <NavLink
+            to={"#"}
+            className={classes.itemLink}
+          // onClick={() => this.openCollapse("openAvatar")}
+          >
+            {addr !== undefined && (
+              <>
+                {!this.state.copyText && (
+                  <Tooltip
+                    title="Copy to Clipboard"
                   >
-                    <span className={collapseItemMini}>
-                      {rtlActive ? "مع" : "MB"}
-                    </span>
-                    <ListItemText
-                      primary={rtlActive ? "ملفي" : "My Balances"}
-                      disableTypography={true}
-                      className={collapseItemText}
-                    />
-                  </NavLink>
-                </ListItem>
-              </List>
-            </Collapse> */}
-        {/* </ListItem> */}
-        {/* </List> */}
+                    <h5>
+                      <a className="addressText"onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                    </h5>
+                  </Tooltip>
+                )}
+                {this.state.copyText && (
+                  <Tooltip
+                    title="Copied to Clipboard"
+                  >
+                    <h5>
+                      <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                    </h5>
+                  </Tooltip>
+                )}
+              </>
+            )}
+            {addr === undefined && (
+              <h5 className="addressText">
+                User Address Unavailable
+              </h5>
+            )}
+          </NavLink>
+        )}
+        {this.props.miniActive && (
+          <br />
+        )}
       </div>
     );
     var links = (
@@ -481,7 +501,12 @@ class Sidebar extends React.Component {
           href="/#/user/home"
           className={logoMini}
         >
-          <img src={pruftoken} alt="logo" className={classes.img} />
+          {bgColor !== "white" && (
+            <img src={pruftoken} alt="logo" className={classes.img} />
+          )}
+          {bgColor === "white" && (
+            <img src={pruftokeblk} alt="logo" className={classes.img} />
+          )}
         </a>
         <a
           href="/#/user/home"
