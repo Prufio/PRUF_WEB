@@ -1675,7 +1675,7 @@ export default function Search(props) {
                 )} */}
                     {recycled && !transaction && !isRecycling && (
                       <>
-                        <h3>This asset has been discarded, to claim it, press "Recycle Asset" below!</h3>
+                        <h4>This asset has been discarded, to claim it, press "Recycle Asset" below!</h4>
                         <Button onClick={() => { recycle() }} color="info" className="MLBGradient">Recycle Asset</Button>
                       </>
                     )}
@@ -2251,7 +2251,7 @@ export default function Search(props) {
                           }}
                           value="edit-information"
                         >
-                          Change Asset Info
+                          Update Asset Info
                           </MenuItem>
                         <MenuItem
                           classes={{

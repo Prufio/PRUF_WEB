@@ -618,7 +618,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "58") {
-      tempStat = "Out of Locked Escrow"
+      tempStat = "Out of Escrow"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -1359,7 +1359,7 @@ function buildWindowUtils() {
               else if (_result[0] === "55") { statuses.push("Transferred/Unclaimed") }
               else if (_result[0] === "56") { statuses.push("In Escrow") }
               else if (_result[0] === "57") { statuses.push("Out of Supervised Escrow") }
-              else if (_result[0] === "58") { statuses.push("Imported") }
+              else if (_result[0] === "58") { statuses.push("Out of Escrow") }
               else if (_result[0] === "59") { statuses.push("Discardable") }
               else if (_result[0] === "60") { statuses.push("Recyclable") }
               else if (_result[0] === "70") { statuses.push("Exported") }
