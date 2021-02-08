@@ -15,7 +15,7 @@ import BloomBW from "assets/img/Sidebar Backgrounds/BloomBW.jpg";
 import TracesWB from "assets/img/Sidebar Backgrounds/TracesWB.jpg";
 import TracesBW from "assets/img/Sidebar Backgrounds/TracesBW.jpg";
 import PRUFMatrix from "assets/img/Sidebar Backgrounds/PRUFMatrix.jpg";
-import Nature from "assets/img/Sidebar Backgrounds/Nature.jpg";
+import Space from "assets/img/Sidebar Backgrounds/PrufSpace.jpg";
 
 import Button from "components/CustomButtons/Button.js";
 import { Icon } from "@material-ui/core";
@@ -290,16 +290,16 @@ export default function FixedPlugin(props) {
                   <img src={PRUFMatrix} alt="..." />
                 </a>
               </li>
-              <li className={bgImage === Nature ? "active" : ""}>
+              <li className={bgImage === Space ? "active" : ""}>
                 <a
                   className="img-holder switch-trigger"
                   onClick={() => {
                     setShowImage(true);
-                    setBgImage(Nature);
-                    props.handleImageClick(Nature);
+                    setBgImage(Space);
+                    props.handleImageClick(Space);
                   }}
                 >
-                  <img src={Nature} alt="..." />
+                  <img src={Space} alt="..." />
                 </a>
               </li>
             </ul>

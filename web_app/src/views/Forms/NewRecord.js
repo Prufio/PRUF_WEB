@@ -1153,7 +1153,7 @@ export default function NewRecord(props) {
                           )}
                           {!transactionActive && ipfsActive && (
                             <h3>
-                              Uploading Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                              Uploading IPFS Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                             </h3>
                           )}
                           {!ipfsActive && transactionActive && (
