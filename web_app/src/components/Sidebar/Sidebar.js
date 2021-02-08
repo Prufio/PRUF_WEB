@@ -2,6 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../../assets/css/custom.css";
+import { isMobile } from "react-device-detect";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
@@ -403,8 +404,8 @@ class Sidebar extends React.Component {
           swal("Asset ID Copied to Clipboard!")
         }
         if(!isMobile) {
-        setCopyText(true)
-        setTimeout(() => { setCopyText(false) }, 1000);
+        this.setState({copyText: true})
+        setTimeout(() => { this.setState({copyText: false}) }, 1000);
       }
       }
     var user = (
@@ -451,7 +452,7 @@ class Sidebar extends React.Component {
                     </h5>
                   </Tooltip>
                 )}
-                {this.state.copyText && bgColor !== "white" && (
+                {this.state.copyText && (bgColor !== "white" || bgColor === undefined) && (
                   <Tooltip
                     title="Copied to Clipboard"
                   >
