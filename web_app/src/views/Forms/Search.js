@@ -524,6 +524,8 @@ export default function Search(props) {
             }
 
           }
+          
+          }
           await get()
         }
 
