@@ -163,7 +163,10 @@ export default function Dashboard(props) {
       if (window.addr === undefined || window.addr === null || window.addr === "") return window.location.reload()
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
-        window.location.reload()
+        if(e[0]!==window.addr){
+          window.location.reload()
+        }
+        
         /* console.log("Here");
         window.ETHBalance = "0";
         window.ipfsCounter = 0;
@@ -181,7 +184,11 @@ export default function Dashboard(props) {
         setAddr("");
         window.addr = "" */
       }
-      window.location.reload()
+
+      else if (e[0] !== window.addr){
+        window.location.reload()
+      }
+
       /*       window.assetClass = undefined;
             window.isAuthUser = false;
             window.isACAdmin = false;
@@ -200,6 +207,7 @@ export default function Dashboard(props) {
             setPrufBalance("~");
             window.recount = true;
             window.resetInfo = true;*/
+
     });
   }
 
@@ -600,13 +608,8 @@ export default function Dashboard(props) {
 
           for (let i = 0; i < keys.length; i++) {
             const get = () => {
-              const req = new XMLHttpRequest();
-              req.responseType = "text";
-
-              req.onload = function (e) {
-                console.log("in onload")
-                if (this.response.includes("base64")) {
-                  assetObj.photo[keys[i]] = this.response;
+              if(vals[i].includes("data") && vals[i].includes("base64")){
+                assetObj.photo[keys[i]] = vals[i];
                   console.log(assetObj.photo[keys[i]]);
                   console.log(x);
                   if (keys[i] === "DisplayImage") {
@@ -618,39 +621,62 @@ export default function Dashboard(props) {
                     assetObj.DisplayImage = (assetObj.photo[keys[0]])
                   }
                   forceUpdate();
-                }
-                else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                  assetObj.photo[keys[i]] = vals[i];
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                  }
-                  else if (i === keys.length - 1) {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                  }
-                  forceUpdate();
-                }
               }
 
-              req.onerror = function (e) {
-                console.log("http request error")
-                if(vals[i].includes("http")){
-                  assetObj.photo[keys[i]] = vals[i];
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                  }
-                  else if (i === keys.length - 1) {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                  }
-                  forceUpdate();
+              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                assetObj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
                 }
+                else if (i === keys.length - 1) {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                }
+                forceUpdate();
               }
 
-              req.open('GET', vals[i], true);
-              req.send();
+              else{
+                const req = new XMLHttpRequest();
+                req.responseType = "text";
+  
+                req.onload = function (e) {
+                  console.log("in onload")
+                  if (this.response.includes("base64")) {
+                    assetObj.photo[keys[i]] = this.response;
+                    console.log(assetObj.photo[keys[i]]);
+                    //console.log(x);
+                    if (keys[i] === "DisplayImage") {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                    }
+                    else if (i === keys.length - 1) {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                    }
+                    forceUpdate();
+                  }
+                }
+  
+                req.onerror = function (e) {
+                  console.log("http request error")
+                  if(vals[i].includes("http")){
+                    assetObj.photo[keys[i]] = vals[i];
+                    if (keys[i] === "DisplayImage") {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                    }
+                    else if (i === keys.length - 1) {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                    }
+                    forceUpdate();
+                  }
+                }
+  
+                req.open('GET', vals[i], true);
+                req.send();
+              }
             }
             await get()
           }

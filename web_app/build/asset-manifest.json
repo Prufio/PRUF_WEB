@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.5f92dbc5.chunk.css",
-    "main.js": "/static/js/main.75fbc6e9.chunk.js",
-    "main.js.map": "/static/js/main.75fbc6e9.chunk.js.map",
+    "main.css": "/static/css/main.b1a25e8f.chunk.css",
+    "main.js": "/static/js/main.e01358d0.chunk.js",
+    "main.js.map": "/static/js/main.e01358d0.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.e6710eac.js",
     "runtime-main.js.map": "/static/js/runtime-main.e6710eac.js.map",
     "static/css/2.d0176e96.chunk.css": "/static/css/2.d0176e96.chunk.css",
-    "static/js/2.f09921b7.chunk.js": "/static/js/2.f09921b7.chunk.js",
-    "static/js/2.f09921b7.chunk.js.map": "/static/js/2.f09921b7.chunk.js.map",
+    "static/js/2.fad52c9b.chunk.js": "/static/js/2.fad52c9b.chunk.js",
+    "static/js/2.fad52c9b.chunk.js.map": "/static/js/2.fad52c9b.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.11cfc6ee053d3ccf6e75cb1e1c202c38.js": "/precache-manifest.11cfc6ee053d3ccf6e75cb1e1c202c38.js",
+    "precache-manifest.6be2cc898da32abd192c9ff9b7b4caa8.js": "/precache-manifest.6be2cc898da32abd192c9ff9b7b4caa8.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.d0176e96.chunk.css.map": "/static/css/2.d0176e96.chunk.css.map",
-    "static/css/main.5f92dbc5.chunk.css.map": "/static/css/main.5f92dbc5.chunk.css.map",
-    "static/js/2.f09921b7.chunk.js.LICENSE.txt": "/static/js/2.f09921b7.chunk.js.LICENSE.txt",
-    "static/js/main.75fbc6e9.chunk.js.LICENSE.txt": "/static/js/main.75fbc6e9.chunk.js.LICENSE.txt",
+    "static/css/main.b1a25e8f.chunk.css.map": "/static/css/main.b1a25e8f.chunk.css.map",
+    "static/js/2.fad52c9b.chunk.js.LICENSE.txt": "/static/js/2.fad52c9b.chunk.js.LICENSE.txt",
+    "static/js/main.e01358d0.chunk.js.LICENSE.txt": "/static/js/main.e01358d0.chunk.js.LICENSE.txt",
     "static/media/BloomBW.jpg": "/static/media/BloomBW.1eb1a903.jpg",
     "static/media/BloomWB.jpg": "/static/media/BloomWB.d1f91663.jpg",
     "static/media/PRUFMatrix.jpg": "/static/media/PRUFMatrix.2fb18e3e.jpg",
@@ -22,16 +22,16 @@
     "static/media/TracesBW.jpg": "/static/media/TracesBW.e2666880.jpg",
     "static/media/TracesWB.jpg": "/static/media/TracesWB.509356cb.jpg",
     "static/media/eth-logo.png": "/static/media/eth-logo.86b356aa.png",
-    "static/media/logo-white.svg": "/static/media/logo-white.eec7c7f6.svg",
-    "static/media/logo.svg": "/static/media/logo.5d5d9eef.svg",
+    "static/media/logo-white.svg": "/static/media/logo-white.a80cd7a7.svg",
+    "static/media/logo.svg": "/static/media/logo.ee7cd8ed.svg",
     "static/media/placeholder.jpg": "/static/media/placeholder.1eb7fff2.jpg",
     "static/media/pruftokenblk.jpg": "/static/media/pruftokenblk.fe172a23.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.e6710eac.js",
     "static/css/2.d0176e96.chunk.css",
-    "static/js/2.f09921b7.chunk.js",
-    "static/css/main.5f92dbc5.chunk.css",
-    "static/js/main.75fbc6e9.chunk.js"
+    "static/js/2.fad52c9b.chunk.js",
+    "static/css/main.b1a25e8f.chunk.css",
+    "static/js/main.e01358d0.chunk.js"
   ]
 }

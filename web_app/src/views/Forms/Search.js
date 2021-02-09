@@ -369,83 +369,132 @@ export default function Search(props) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         setRetrieving(false);
         return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
-      } else {
+      } 
+      
+      else {
         //console.log(lookup, "Here's what we found for asset description: ", result);
-        let tempObj = JSON.parse(result)
-        tempObj.photoUrls = JSON.parse(result).photo;
-        let vals = Object.values(tempObj.photo), keys = Object.keys(tempObj.photo);
+        let assetObj = JSON.parse(result)
+        assetObj.photoUrls = JSON.parse(result).photo;
+        let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
+
+        if(keys.length < 1){
+          setIpfsObject(assetObj)
+          setSelectedImage("")
+          setMoreInfo(true);
+          setRetrieving(false);
+          return console.log(assetObj);
+        }
+
         for (let i = 0; i < keys.length; i++) {
           const get = () => {
+            if(vals[i].includes("data") && vals[i].includes("base64")){
+              assetObj.photo[keys[i]] = vals[i];
+                console.log(assetObj.photo[keys[i]]);
+                if (keys[i] === "DisplayImage") {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                }
+
+                if (i + 1 === keys.length) {
+                  setIpfsObject(assetObj)
+                  setSelectedImage(assetObj.DisplayImage)
+                  setMoreInfo(true);
+                  setRetrieving(false);
+                  console.log(assetObj);
+                  console.log(assetObj.DisplayImage);
+                }
+
+                forceUpdate();
+            }
+
+            else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+              assetObj.photo[keys[i]] = vals[i];
+              if (keys[i] === "DisplayImage") {
+                console.log("Setting Display Image")
+                assetObj.DisplayImage = (assetObj.photo[keys[i]])
+              }
+              else if (i === keys.length - 1) {
+                console.log("Setting Display Image")
+                assetObj.DisplayImage = (assetObj.photo[keys[0]])
+              }
+
+              if (i + 1 === keys.length) {
+                setIpfsObject(assetObj)
+                setSelectedImage(assetObj.DisplayImage)
+                setMoreInfo(true);
+                setRetrieving(false);
+                console.log(assetObj);
+                console.log(assetObj.DisplayImage);
+              }
+              
+              forceUpdate();
+            }
+
+            else{
             const req = new XMLHttpRequest();
             req.responseType = "text";
 
             req.onload = function (e) {
               console.log("in onload")
               if (this.response.includes("base64")) {
-                tempObj.photo[keys[i]] = this.response;
-                console.log(tempObj.photo[keys[i]]);
+                assetObj.photo[keys[i]] = this.response;
+                console.log(assetObj.photo[keys[i]]);
 
                 if (keys[i] === "DisplayImage") {
-                  console.log(tempObj.photo[keys[i]])
-                  tempObj.DisplayImage = tempObj.photo[keys[i]]
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = assetObj.photo[keys[i]]
                 }
 
                 else if (i === keys.length - 1) {
-                  console.log(tempObj.photo[keys[i]])
-                  tempObj.DisplayImage = tempObj.photo[keys[i]]
-                }
-                forceUpdate();
-              }
-              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                tempObj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
                   console.log("Setting Display Image")
-                  tempObj.DisplayImage = (tempObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  console.log("Setting Display Image")
-                  tempObj.DisplayImage = (tempObj.photo[keys[0]])
+                  assetObj.DisplayImage = assetObj.photo[keys[0]]
                 }
                 forceUpdate();
               }
 
               if (i + 1 === keys.length) {
-                setIpfsObject(tempObj)
-                setSelectedImage(tempObj.DisplayImage)
+                setIpfsObject(assetObj)
+                setSelectedImage(assetObj.DisplayImage)
                 setMoreInfo(true);
                 setRetrieving(false);
-                console.log(tempObj);
-                console.log(tempObj.DisplayImage);
+                console.log(assetObj);
+                console.log(assetObj.DisplayImage);
               }
             }
 
             req.onerror = function (e) {
               console.log("http request error")
               if (vals[i].includes("http")) {
-                tempObj.photo[keys[i]] = vals[i];
+                assetObj.photo[keys[i]] = vals[i];
                 if (keys[i] === "DisplayImage") {
                   console.log("Setting Display Image")
-                  tempObj.DisplayImage = (tempObj.photo[keys[i]])
+                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
                 }
                 else if (i === keys.length - 1) {
                   console.log("Setting Display Image")
-                  tempObj.DisplayImage = (tempObj.photo[keys[0]])
+                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
                 }
                 forceUpdate();
               }
 
               if (i + 1 === keys.length) {
-                setIpfsObject(tempObj)
-                setSelectedImage(tempObj.DisplayImage)
+                setIpfsObject(assetObj)
+                setSelectedImage(assetObj.DisplayImage)
                 setMoreInfo(true);
                 setRetrieving(false);
-                console.log(tempObj);
-                console.log(tempObj.DisplayImage);
+                console.log(assetObj);
+                console.log(assetObj.DisplayImage);
               }
             }
 
             req.open('GET', vals[i], true);
             req.send();
+          }
+          
           }
           await get()
         }
