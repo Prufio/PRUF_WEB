@@ -620,6 +620,7 @@ export default function Dashboard(props) {
                     console.log("Setting Display Image")
                     assetObj.DisplayImage = (assetObj.photo[keys[0]])
                   }
+                  //setAssetArr(assetArray)
                   forceUpdate();
               }
 
@@ -633,6 +634,7 @@ export default function Dashboard(props) {
                   console.log("Setting Display Image")
                   assetObj.DisplayImage = (assetObj.photo[keys[0]])
                 }
+                //setAssetArr(assetArray)
                 forceUpdate();
               }
 
@@ -654,6 +656,7 @@ export default function Dashboard(props) {
                       console.log("Setting Display Image")
                       assetObj.DisplayImage = (assetObj.photo[keys[0]])
                     }
+                    //setAssetArr(assetArray)
                     forceUpdate();
                   }
                 }
@@ -670,6 +673,7 @@ export default function Dashboard(props) {
                       console.log("Setting Display Image")
                       assetObj.DisplayImage = (assetObj.photo[keys[0]])
                     }
+                    //setAssetArr(assetArray)
                     forceUpdate();
                   }
                 }
@@ -704,6 +708,7 @@ export default function Dashboard(props) {
 
           console.log(assetObj)
           assetArray.push(assetObj)
+          setAssetArr(assetArray)
         }
 
       }
