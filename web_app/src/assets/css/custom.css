@@ -632,7 +632,7 @@ cursor:pointer;
 }
 
 .addressText {
-  font-size: 17px;
+  font-size: 15px;
   top: -15px !important;
   color: white;
 }
@@ -643,7 +643,7 @@ cursor:pointer;
 }
 
 .addressTextBlack {
-  font-size: 17px;
+  font-size: 15px;
   top: -15px !important;
   color: rgb(0, 0, 0);
 }

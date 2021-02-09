@@ -401,7 +401,7 @@ class Sidebar extends React.Component {
       const copyTextSnippet = (temp) => {
         navigator.clipboard.writeText(temp)
         if(isMobile) {
-          swal("Asset ID Copied to Clipboard!")
+          swal("Address Copied to Clipboard!")
         }
         if(!isMobile) {
         this.setState({copyText: true})
