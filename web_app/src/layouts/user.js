@@ -160,7 +160,7 @@ export default function Dashboard(props) {
   const acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
       //console.log("new: ",e[0] ?? "No new address fetched", "old: ", addr ?? "No address currently stored")
-      if (window.addr === undefined || window.addr === null || window.addr === "") return window.location.reload()
+      //if (window.addr === undefined || window.addr === null || window.addr === "") window.location.reload()
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
         if(e[0]!==window.addr){
