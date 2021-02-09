@@ -158,10 +158,10 @@ export default function ModifyRGT(props) {
           content: link,
           icon: "success",
           button: "Close",
-        });
-        window.resetInfo = true;
-        window.recount = true;
-        window.location.href = "/#/user/dashboard"
+        }).then(()=>{
+          window.location.href = "/#/user/dashboard"
+          window.location.reload()
+        })
       });
 
   }

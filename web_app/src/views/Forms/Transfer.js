@@ -137,9 +137,10 @@ export default function Transfer(props) {
           content: link,
           icon: "success",
           button: "Close",
-        });
-        window.location.href = "/#/user/dashboard";
-        window.location.reload()
+        }).then(()=>{
+          window.location.href = "/#/user/dashboard"
+          window.location.reload()
+        })
       });
 
   }

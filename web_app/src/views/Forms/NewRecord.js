@@ -194,8 +194,9 @@ export default function NewRecord(props) {
                   content: link,
                   icon: "success",
                   button: "Close"
-                });
-                window.location.reload()
+                }).then(()=>{
+                  window.location.reload()
+                })
               })
 
             break;
@@ -527,14 +528,15 @@ export default function NewRecord(props) {
         let str2 = "' target='_blank'>here</a>"
         link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
-        window.location.href = "/#/user/dashboard"
         swal({
           title: "Asset Created!",
           content: link,
           icon: "success",
           button: "Close",
-        });
-        window.location.reload()
+        }).then(()=>{
+          window.location.href = "/#/user/dashboard"
+          window.location.reload()
+        })
       });
 
     setAssetClass("");

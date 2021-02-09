@@ -138,8 +138,10 @@ export default function ModifyDescription(props) {
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     delete tempObj[type][rem];
     //console.log(tempObj)
-    setNewAssetInfo(tempObj);
-    if (type = image) {
+    if (type === image) {
+      delete tempObj.photoUrls[rem];
+      //console.log(rem)
+      //console.log(tempObj)
       if (rem === "DisplayImage" && Object.values(tempObj.photo)[0]) {
         setSelectedImage(Object.values(tempObj.photo)[0])
         setSelectedKey(Object.keys(tempObj.photo)[0])
@@ -157,6 +159,7 @@ export default function ModifyDescription(props) {
         setSelectedKey("")
       }
     }
+    setNewAssetInfo(tempObj);
     return forceUpdate()
   }
 
@@ -281,11 +284,10 @@ export default function ModifyDescription(props) {
           content: link,
           icon: "success",
           button: "Close",
-        });
-        window.resetInfo = true;
-        window.recount = true;
-        window.location.href = "/#/user/dashboard"
-        window.location.reload()
+        }).then(()=>{
+          window.location.href = "/#/user/dashboard"
+          window.location.reload()
+        })
       });
   }
 

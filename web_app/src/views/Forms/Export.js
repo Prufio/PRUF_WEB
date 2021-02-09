@@ -111,11 +111,10 @@ export default function Export(props) {
           content: link,
           icon: "success",
           button: "Close",
-        });
-        window.resetInfo = true;
-        window.recount = true;
-        window.location.href = "/#/user/dashboard"
-        window.location.reload()
+        }).then(()=>{
+          window.location.href = "/#/user/dashboard"
+          window.location.reload()
+        })
       });
 
   }
