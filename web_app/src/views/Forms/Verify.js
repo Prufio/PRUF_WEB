@@ -91,7 +91,7 @@ export default function Verify(props) {
     React.useEffect(() => {
       if (props.ps) {
         props.ps.element.scrollTop = 0;
-        console.log("Scrolled to ", props.ps.element.scrollTop)
+        //console.log("Scrolled to ", props.ps.element.scrollTop)
       }
     }, [])
 

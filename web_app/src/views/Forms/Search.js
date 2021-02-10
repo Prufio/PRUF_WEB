@@ -134,7 +134,7 @@ export default function Search(props) {
     }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop)
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
   }, [])
 

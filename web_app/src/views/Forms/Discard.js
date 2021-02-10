@@ -39,7 +39,7 @@ export default function Discard(props) {
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop)
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
   }, [])
 
@@ -74,7 +74,7 @@ export default function Discard(props) {
   }
 
   const discardAsset = async () => { //export held asset
-    
+
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     let tempTxHash;
