@@ -549,12 +549,12 @@ function buildWindowUtils() {
     }
 
     else if (status === "3") {
-      tempStat = "Stolen"
+      tempStat = "MARKED STOLEN"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "4") {
-      tempStat = "Lost"
+      tempStat = "MARKED LOST"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -589,12 +589,12 @@ function buildWindowUtils() {
     }
 
     else if (status === "53") {
-      tempStat = "Stolen"
+      tempStat = "MARKED STOLEN"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "54") {
-      tempStat = "Lost"
+      tempStat = "MARKED LOST"
       console.log("Asset in :", tempStat, "status.")
     }
 

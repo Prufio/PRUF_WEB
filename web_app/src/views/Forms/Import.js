@@ -75,6 +75,7 @@ export default function Import(props) {
   }
 
   const thousandHashesOf = (varToHash) => {
+    if(!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -82,10 +83,10 @@ export default function Import(props) {
     }
     return tempHash;
   }
-  
-  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
   const importAsset = async () => { //import held asset
+
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     let tempTxHash;
     setShowHelp(false);

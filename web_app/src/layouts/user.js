@@ -349,12 +349,13 @@ export default function Dashboard(props) {
 
         if (newAsset && dBIndex) {
           newAsset.id = newAsset.idxHash;
+          //newAsset.lastRef = "/#/user/dashboard"
           newAsset.identicon = <Jdenticon vlaue={newAsset.id}/>
           console.log("Replacing asset at index: ", dBIndex)
           let tempArr = JSON.parse(JSON.stringify(assetArr))
-          console.log("Old Array", tempArr)
+          console.log("Old Assets", tempArr)
           tempArr.splice(dBIndex, 1, newAsset)
-          console.log("New Array", tempArr)
+          console.log("New Assets", tempArr)
           setAssetArr(tempArr)
           window.replaceAssetData = {}
           reloadAssetAt(dBIndex, newAsset.idxHash)
@@ -363,21 +364,22 @@ export default function Dashboard(props) {
         else if (dBIndex && !newAsset) {
           console.log("Deleting asset at index: ", dBIndex)
           let tempArr = JSON.parse(JSON.stringify(assetArr))
-          console.log("Old Array", tempArr)
+          console.log("Old Assets", tempArr)
           tempArr.splice(dBIndex, 1)
-          console.log("New Array", tempArr)
+          console.log("New Assets", tempArr)
           setAssetArr(tempArr)
           window.replaceAssetData = {}
         }
 
         else if (newAsset && !dBIndex) {
           newAsset.id = newAsset.idxHash;
+          //newAsset.lastRef = "/#/user/dashboard";
           newAsset.identicon = <Jdenticon vlaue={newAsset.id}/>
           console.log("Adding asset: ", newAsset);
           let tempArr = JSON.parse(JSON.stringify(assetArr));
-          console.log("Old Array", tempArr);
+          console.log("Old Assets", tempArr);
           tempArr.push(newAsset)
-          console.log("New Array", tempArr);
+          console.log("New Assets", tempArr);
           setAssetArr(tempArr)
           window.replaceAssetData = {}
           reloadAssetAt(tempArr.length - 1, newAsset.idxHash);
@@ -545,9 +547,10 @@ export default function Dashboard(props) {
             const finalize = (obj) => {
               let tempArr = JSON.parse(JSON.stringify(assetArr));
               obj.dBIndex = index;
-              console.log("Old Array", tempArr);
+              //obj.lastRef = "/#/user/dashboard";
+              console.log("Old Assets", tempArr);
               tempArr.splice(index, 1, obj);
-              console.log("New Array", tempArr);
+              console.log("New Assets", tempArr);
               setAssetArr(tempArr);
             }
 

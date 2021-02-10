@@ -232,6 +232,7 @@ export default function ModifyDescription(props) {
   }
 
   const thousandHashesOf = (varToHash) => {
+    if(!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -239,12 +240,13 @@ export default function ModifyDescription(props) {
     }
     return tempHash;
   }
-  
-  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
   const updateAssetInfo = async (hash, newAsset) => {
+    
     setHelp(false)
     if (!hash || !idxHash) { return }
+
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
@@ -297,8 +299,8 @@ export default function ModifyDescription(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          window.location.href = assetInfo.lastRef;
-          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
+          window.location.href = asset.lastRef;
+          window.replaceAssetData = {key: pageKey, dBIndex: asset.dBIndex, newAsset: newAsset}
         })
       });
   }
