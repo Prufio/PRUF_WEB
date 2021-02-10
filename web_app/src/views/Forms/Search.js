@@ -213,8 +213,6 @@ export default function Search(props) {
                   icon: "success",
                   button: "Close"
                 });
-                window.resetInfo = true;
-                window.recount = true;
               })
             break;
 
