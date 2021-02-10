@@ -42,6 +42,8 @@ export default function NewRecord(props) {
   const [assetClass, setAssetClass] = React.useState("");
   const [assetClassName, setAssetClassName] = React.useState("");
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("");
+  const [isUploading, setIsUploading] = React.useState(false);
+
   //const [ipfsObj, setIpfsObj] = React.useState("");
 
   const [assetName, setAssetName] = React.useState("");
@@ -273,13 +275,14 @@ export default function NewRecord(props) {
           window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
             if (err) {
               console.error(err)
-              return setIpfsActive(false);
+              return setIsUploading(false);
             }
 
             let url = `https://ipfs.io/ipfs/${hash}`
             console.log(`Url --> ${url}`)
             setDisplayImageUrl(url);
             setDisplayImage(prefix + base64.encode(e));
+            setIsUploading(false)
             return forceUpdate();
           })
         })
@@ -290,13 +293,14 @@ export default function NewRecord(props) {
           window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
             if (err) {
               console.error(err)
-              return setIpfsActive(false);
+              return setIsUploading(false);
             }
 
             let url = `https://ipfs.io/ipfs/${hash}`
             console.log(`Url --> ${url}`)
             setDisplayImageUrl(url);
             setDisplayImage(prefix + base64.encode(e));
+            setIsUploading(false)
             return forceUpdate();
           })
         })
@@ -313,6 +317,7 @@ export default function NewRecord(props) {
     file = e.target.files[0]
     const reader = new FileReader();
     reader.onloadend = (e) => {
+      setIsUploading(true)
       console.log(file)
       if (!file.type.includes("image")) {
         return swal({
@@ -592,7 +597,6 @@ export default function NewRecord(props) {
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
-            <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
             <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
           </CardHeader>
           <CardBody>
@@ -806,17 +810,26 @@ export default function NewRecord(props) {
                             )}
                           </>
                           {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
-                          {displayImage !== "" && (<>
+                          {displayImage === "" && isUploading &&(<>
+                            <br />
+                            <br />
+                            <CardHeader image className={classes.cardHeaderHoverCustom}>
+                              <div className="loadingImage">
+                            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                            </div>
+                            </CardHeader>
+                          </>)}
+                          {displayImage !== "" && !isUploading &&(<>
                             <br />
                             <br />
                             <CardHeader image className={classes.cardHeaderHoverCustom}>
                               <img src={displayImage} />
                             </CardHeader>
                           </>)}
-                          {!transactionActive && displayImage === "" && (
+                          {!transactionActive && displayImage === "" && !isUploading &&(
                               <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
                           )}
-                          {!transactionActive && displayImage !== "" && (<>
+                          {!transactionActive && displayImage !== "" && !isUploading && (<>
                             <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                             <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
                           </>)}
@@ -1190,7 +1203,7 @@ export default function NewRecord(props) {
                               </>
                             )}
                           </>
-                          {!transactionActive && (
+                          {!transactionActive && !isUploading &&(
                             <div className="MLBGradientSubmit">
                               <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Asset</Button>
                             </div>

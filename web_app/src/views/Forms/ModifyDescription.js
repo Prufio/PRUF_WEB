@@ -37,12 +37,11 @@ const useFormStyles = makeStyles(formStyles);
 export default function ModifyDescription(props) {
 
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
-  
+
   const [asset,] = React.useState(window.sentPacket);
   const [assetInfo,] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
   const [newAssetInfo, setNewAssetInfo] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
   const [idxHash,] = React.useState(window.sentPacket.idxHash);
-
 
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
@@ -50,6 +49,7 @@ export default function ModifyDescription(props) {
   const [showHelp, setShowHelp] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [help, setHelp] = React.useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
   const [hasMounted, setHasMounted] = React.useState(false);
 
   const [txHash, setTxHash] = React.useState("");
@@ -100,7 +100,7 @@ export default function ModifyDescription(props) {
     }
   }, [])
 
-  if(assetInfo === undefined || assetInfo === null) {
+  if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
     window.location.href = "/#/user/home"
     window.location.reload()
@@ -201,7 +201,7 @@ export default function ModifyDescription(props) {
     }
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     tempObj.photo = tempObj.photoUrls
-    delete tempObj.photoUrls;  
+    delete tempObj.photoUrls;
 
     let payload = JSON.stringify(tempObj, null, 5)
     let fileSize = Buffer.byteLength(payload, 'utf8')
@@ -239,7 +239,7 @@ export default function ModifyDescription(props) {
     }
     return tempHash;
   }
-  
+
   const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
   const updateAssetInfo = async (hash, newAsset) => {
@@ -296,9 +296,9 @@ export default function ModifyDescription(props) {
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
+        }).then(() => {
           window.location.href = assetInfo.lastRef;
-          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
+          window.replaceAssetData = { key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset }
         })
       });
   }
@@ -314,7 +314,7 @@ export default function ModifyDescription(props) {
 
   const submitCurrentUrl = () => {
     let url = assetURL, key = URLTitle, tempObj = JSON.parse(JSON.stringify(newAssetInfo));
-    if ((url === "" && key !== "") || (url !=="" && key === "")) {
+    if ((url === "" && key !== "") || (url !== "" && key === "")) {
       if (url === "") {
         return setloginURLState("error")
       }
@@ -369,7 +369,7 @@ export default function ModifyDescription(props) {
             <Button color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
-            <Jdenticon value={asset.idxHash}/>
+            <Jdenticon value={asset.idxHash} />
           </CardHeader>
         )
       }
@@ -424,32 +424,31 @@ export default function ModifyDescription(props) {
 
     let tempBuffer = buffer;
 
-    var i = new Image(); 
+    var i = new Image();
 
-    i.onload = function(){
+    i.onload = function () {
       console.log(i.height, i.width);
-      if(i.height > maxImageSize || i.width > maxImageSize){
+      if (i.height > maxImageSize || i.width > maxImageSize) {
         let newH, newW, ar;
-        if(i.width>i.height){
-          ar = i.height/i.width;
+        if (i.width > i.height) {
+          ar = i.height / i.width;
           newW = maxImageSize;
-          newH = ar*newW ;
+          newH = ar * newW;
         }
-        else{
-          ar = i.width/i.height;
+        else {
+          ar = i.width / i.height;
           newH = maxImageSize;
-          newW = ar*newH;
+          newW = ar * newH;
         }
         console.log("Resizing image... ");
-        resizeImg(tempBuffer, {height: newH, width:newW, format: "jpg"}).then((e)=>{
-          console.log("Resized to ",newH,"x",newW);
+        resizeImg(tempBuffer, { height: newH, width: newW, format: "jpg" }).then((e) => {
+          console.log("Resized to ", newH, "x", newW);
           tempObj.photo[fileName] = prefix + base64.encode(e);
           window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
             if (err) {
               console.error(err)
-              return setIpfsActive(false);
+              return setIsUploading(false);
             }
-      
             let url = `https://ipfs.io/ipfs/${hash}`
             console.log(`Url --> ${url}`)
             tempObj.photoUrls[fileName] = url;
@@ -458,20 +457,21 @@ export default function ModifyDescription(props) {
               setSelectedImage(tempObj.photo[fileName]);
               setSelectedKey(fileName);
             }
+            setIsUploading(false)
             return forceUpdate();
           })
         })
       }
-      else{
-        resizeImg(tempBuffer, {height: i.height, width:i.width, format: "jpg"}).then((e)=>{
+      else {
+        resizeImg(tempBuffer, { height: i.height, width: i.width, format: "jpg" }).then((e) => {
           console.log("Converted to .JPG");
           tempObj.photo[fileName] = prefix + base64.encode(e);
           window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
             if (err) {
               console.error(err)
-              return setIpfsActive(false);
+              return setIsUploading(false);
             }
-      
+
             let url = `https://ipfs.io/ipfs/${hash}`
             console.log(`Url --> ${url}`)
             tempObj.photoUrls[fileName] = url;
@@ -480,6 +480,7 @@ export default function ModifyDescription(props) {
               setSelectedImage(tempObj.photo[fileName])
               setSelectedKey(fileName)
             }
+            setIsUploading(false)
             return forceUpdate();
           })
         })
@@ -498,6 +499,7 @@ export default function ModifyDescription(props) {
     file = e.target.files[0]
     const reader = new FileReader();
     reader.onloadend = (e) => {
+      setIsUploading(true)
       const fileType = file.type;
       const fileName = file.name;
       const prefix = `data:${fileType};base64,`;
@@ -597,7 +599,7 @@ export default function ModifyDescription(props) {
         switch (value) {
 
           case "delete":
-            if(newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+            if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
               return swal("Cannot delete asset identicon.")
             }
             swal("Are you sure you want to delete this image?", {
@@ -630,7 +632,7 @@ export default function ModifyDescription(props) {
             break;
 
           case "default":
-            if(newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+            if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
               return swal("Cannot set asset identicon as default image.")
             }
             setDisplayImage(selectedImage, selectedKey)
@@ -724,11 +726,20 @@ export default function ModifyDescription(props) {
     let component = [], photos = Object.values(obj.photo), keys = Object.keys(obj.photo);
     //console.log("photos", photos)
 
-    if (photos.length === 0) {
+    if (photos.length === 0 && !isUploading) {
       return (
         <div className="assetImageSelectorButton">
           <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
         </div>
+      )
+    }
+    if (photos.length === 0 && isUploading) {
+      return (
+        <>
+          <div className="assetImageSelectorButton">
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          </div>
+        </>
       )
     }
     for (let i = 0; i < photos.length; i++) {
@@ -738,11 +749,18 @@ export default function ModifyDescription(props) {
         </div>
       )
     }
+    if (isUploading === true) {
+      component.push (
+        <div className="assetImageSelectorButton">
+          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      )
+    }
     return component
   }
 
   const goBack = () => {
-    window.location.href=asset.lastRef;
+    window.location.href = asset.lastRef;
   }
 
   const showImage = (img, key) => {
@@ -755,11 +773,16 @@ export default function ModifyDescription(props) {
       <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
       <Card>
         {renderImage(isMobile)}
-        <CardBody>   
+        <CardBody>
           <div className="imageSelector">
             <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
             <input type="file" onChange={useCustomJSON} ref={fileInputJSON} className="imageInput" />
+            {!isUploading && (
             <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
+            )}
+            {isUploading && (
+            <div className="imageSelectorPlus"><AddPhotoAlternateOutlined /></div>
+            )}
             {generateThumbs(newAssetInfo)}
           </div>
           <br />
@@ -850,7 +873,7 @@ export default function ModifyDescription(props) {
                   labelText="Link Name"
                   id="urlKey"
                   inputProps={{
-                    value:URLTitle,
+                    value: URLTitle,
                     onChange: e => {
                       setURLTitle(e.target.value.trim())
                       if (urlKeyIsGood(e.target.value)) {
@@ -893,18 +916,24 @@ export default function ModifyDescription(props) {
               <div className="URL">
               </div>
               {!isMobile && (
-              <>
-              <Button onClick={(e) => { handleJSON() }} className="advancedJSONButton">Upload Custom IPFS Data</Button>
-              <br />
-              <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
-              </>
+                <>
+                  <Button onClick={(e) => { handleJSON() }} className="advancedJSONButton">Upload Custom IPFS Data</Button>
+                  <br />
+                  <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
+                </>
               )}
             </div>
           )}
-          {!transactionActive && (
+          {!transactionActive && !isUploading &&(
             <div className="MLBGradientSubmit">
               <hr className="medium_hr" />
               <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
+            </div>
+          )}
+          {!transactionActive && isUploading &&(
+            <div className="MLBGradientSubmit">
+              <hr className="medium_hr" />
+              <Button disabled color="info" className="MLBGradient">Submit Changes</Button>
             </div>
           )}
           {!transactionActive && ipfsActive && (
@@ -919,50 +948,50 @@ export default function ModifyDescription(props) {
           )}
         </CardBody>
         <CardFooter chart>
-              {!isMobile && (
-                <>
-                  {!copyText && (
-                    <Tooltip
-                      title="Copy to Clipboard"
-                    >
-                      <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
-                      </div>
-                    </Tooltip>
-                  )}
-                  {copyText && (
-                    <Tooltip
-                      title="Copied to Clipboard"
-                    >
-                      <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
-                      </div>
-                    </Tooltip>
-                  )}
-                </>
+          {!isMobile && (
+            <>
+              {!copyText && (
+                <Tooltip
+                  title="Copy to Clipboard"
+                >
+                  <div className={classes.stats}>
+                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
+                  </div>
+                </Tooltip>
               )}
-              {isMobile && (
-                <>
-                  {!copyText && (
-                    <Tooltip
-                      title="Copy to Clipboard"
-                    >
-                      <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
-                      </div>
-                    </Tooltip>
-                  )}
-                  {copyText && (
-                    <Tooltip
-                      title="Copied to Clipboard"
-                    >
-                      <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
-                      </div>
-                    </Tooltip>
-                  )}
-                </>
+              {copyText && (
+                <Tooltip
+                  title="Copied to Clipboard"
+                >
+                  <div className={classes.stats}>
+                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
+                  </div>
+                </Tooltip>
               )}
+            </>
+          )}
+          {isMobile && (
+            <>
+              {!copyText && (
+                <Tooltip
+                  title="Copy to Clipboard"
+                >
+                  <div className={classes.stats}>
+                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
+                  </div>
+                </Tooltip>
+              )}
+              {copyText && (
+                <Tooltip
+                  title="Copied to Clipboard"
+                >
+                  <div className={classes.stats}>
+                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
+                  </div>
+                </Tooltip>
+              )}
+            </>
+          )}
         </CardFooter>
       </Card>
     </div>

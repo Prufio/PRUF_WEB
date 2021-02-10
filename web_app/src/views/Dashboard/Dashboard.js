@@ -405,7 +405,7 @@ export default function Dashboard(props) {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
+                        <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
@@ -420,7 +420,7 @@ export default function Dashboard(props) {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
+                        <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
@@ -439,7 +439,7 @@ export default function Dashboard(props) {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
+                        <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
@@ -453,7 +453,7 @@ export default function Dashboard(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button onClick={(e) => moreInfo("back")} large color="info" justIcon className="back">
+                      <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
                         <KeyboardArrowLeft />
                       </Button>
                     </Tooltip>
