@@ -528,8 +528,15 @@ export default function NewRecord(props) {
     console.log("New rgtHash", rgtHash);
     console.log("addr: ", props.addr);
     console.log("AC: ", assetClass);
+
     //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
     console.log("IPFS bytes32: ", ipfsHash);
+
+    swal({
+      title: "You are about to create asset: "+idxHash,
+      text:  "Address: "+props.addr+"\nipfs: "+ipfsHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+      button: "Okay",
+    })
 
     await window.contracts.APP_NC.methods
       .$newRecordWithDescription(
