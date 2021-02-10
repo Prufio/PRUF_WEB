@@ -39,7 +39,7 @@ export default function Transfer(props) {
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop);
+      //console.log("Scrolled to ", props.ps.element.scrollTop);
     }
   }, [])
 
@@ -72,6 +72,7 @@ export default function Transfer(props) {
   }
 
   const thousandHashesOf = (varToHash) => {
+    if(!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -80,9 +81,8 @@ export default function Transfer(props) {
     return tempHash;
   }
 
-  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-
   const transferAsset = async () => { //transfer held asset
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     if(!window.web3.utils.isAddress(address)) {
       return swal({

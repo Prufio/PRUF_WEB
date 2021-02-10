@@ -47,7 +47,7 @@ export default function Dashboard(props) {
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop)
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
   }, [])
 
@@ -290,7 +290,7 @@ export default function Dashboard(props) {
 
     let tempObj = JSON.parse(JSON.stringify(selectedAssetObj))
 
-    tempObj.lastRef = "/#/user/dashboard"
+    tempObj.lastRef = "/#/user/dashboard";
 
     window.sentPacket = JSON.parse(JSON.stringify(tempObj));
 

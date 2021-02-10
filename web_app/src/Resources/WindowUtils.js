@@ -549,12 +549,12 @@ function buildWindowUtils() {
     }
 
     else if (status === "3") {
-      tempStat = "Stolen"
+      tempStat = "MARKED STOLEN"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "4") {
-      tempStat = "Lost"
+      tempStat = "MARKED LOST"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -589,12 +589,12 @@ function buildWindowUtils() {
     }
 
     else if (status === "53") {
-      tempStat = "Stolen"
+      tempStat = "MARKED STOLEN"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "54") {
-      tempStat = "Lost"
+      tempStat = "MARKED LOST"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -629,7 +629,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "70") {
-      tempStat = "Ready For Import"
+      tempStat = "Ready for Import"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -1358,7 +1358,7 @@ function buildWindowUtils() {
               else if (_result[0] === "58") { statuses.push("Out of Escrow") }
               else if (_result[0] === "59") { statuses.push("Discardable") }
               else if (_result[0] === "60") { statuses.push("Recyclable") }
-              else if (_result[0] === "70") { statuses.push("Exported") }
+              else if (_result[0] === "70") { statuses.push("Ready for Import") }
               else if (_result[0] === "0") { statuses.push("Status Not Set") }
               statusNums.push(_result[0])
               assetClasses.push(Object.values(_result)[2]);

@@ -36,8 +36,8 @@ const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription(props) {
 
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
-
+  if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+  
   const [asset,] = React.useState(window.sentPacket);
   const [assetInfo,] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
   const [newAssetInfo, setNewAssetInfo] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
@@ -96,7 +96,7 @@ export default function ModifyDescription(props) {
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop)
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
   }, [])
 
@@ -232,6 +232,7 @@ export default function ModifyDescription(props) {
   }
 
   const thousandHashesOf = (varToHash) => {
+    if(!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -240,11 +241,12 @@ export default function ModifyDescription(props) {
     return tempHash;
   }
 
-  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-
   const updateAssetInfo = async (hash, newAsset) => {
+    
     setHelp(false)
     if (!hash || !idxHash) { return }
+
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     console.log("idxHash", idxHash);
     console.log("addr: ", props.addr);
@@ -296,9 +298,9 @@ export default function ModifyDescription(props) {
           content: link,
           icon: "success",
           button: "Close",
-        }).then(() => {
-          window.location.href = assetInfo.lastRef;
-          window.replaceAssetData = { key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset }
+        }).then(()=>{
+          window.location.href = asset.lastRef;
+          window.replaceAssetData = {key: pageKey, dBIndex: asset.dBIndex, newAsset: newAsset}
         })
       });
   }

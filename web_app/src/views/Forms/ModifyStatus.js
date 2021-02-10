@@ -48,7 +48,7 @@ export default function ModifyStatus(props) {
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop)
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
   }, [])
 
@@ -109,11 +109,13 @@ export default function ModifyStatus(props) {
     return setStatus(status), setStatusName(statusName);
   };
 
-  const modifyStatus = async () => { 
+  const modifyStatus = async () => {
 
     if (status === 53 || status === 54) {
       return modifyStatusLS()
     }
+
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     let tempTxHash;
     setShowHelp(false);
@@ -189,6 +191,7 @@ export default function ModifyStatus(props) {
   }
 
   const thousandHashesOf = (varToHash) => {
+    if(!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -197,9 +200,8 @@ export default function ModifyStatus(props) {
     return tempHash;
   }
 
-  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-
   const modifyStatusLS = async () => { //export held asset
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     let tempTxHash;
     setShowHelp(false);
