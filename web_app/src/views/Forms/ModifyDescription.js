@@ -36,7 +36,7 @@ const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription(props) {
 
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+  if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
   
   const [asset,] = React.useState(window.sentPacket);
   const [assetInfo,] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
