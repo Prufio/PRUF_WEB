@@ -238,6 +238,10 @@ export default function Verify(props) {
         return clearForms();
       }
 
+      const goBack = () => {
+        window.location.href=assetInfo.lastRef;
+      }
+
       const blockchainVerifyAsset = async () => {
         if (!window.ethereum) { return swal({ title: "Connect to an ethereum provider to use this functionality!", button: "Close", }) }
         if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
@@ -361,7 +365,8 @@ export default function Verify(props) {
                 <CardIcon color="info" className="DBGradient">
                     <AccountBox />
                 </CardIcon>
-                <h4 className={classes.cardIconTitle}>Owner Information</h4>
+                <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+                <h4 className={classes.cardIconTitle}>Owner Info</h4>
             </CardHeader>
             <CardBody>
                 <form>

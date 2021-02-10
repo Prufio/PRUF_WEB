@@ -75,6 +75,10 @@ export default function ModifyRGT(props) {
     return window.location.href = "/#/user/dashboard"
   }
 
+  const goBack = () => {
+    window.location.href=assetInfo.lastRef;
+  }
+
   const modifyRGT = async () => { //import held asset
 
     if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
@@ -159,8 +163,7 @@ export default function ModifyRGT(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          window.location.href = "/#/user/dashboard"
-          window.location.reload()
+          window.location.href = assetInfo.lastRef;
         })
       });
 
@@ -172,6 +175,7 @@ export default function ModifyRGT(props) {
         <CardIcon className="headerIconBack">
           <GroupAdd />
         </CardIcon>
+        <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
         <h4 className={classes.cardIconTitle}>Change Owner Information</h4>
       </CardHeader>
       <CardBody>

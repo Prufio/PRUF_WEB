@@ -19,14 +19,9 @@ function buildWindowUtils() {
   };
 
   const _getIpfsHashFromBytes32 = (bytes32Hex) => {
-
-    // Add our default ipfs values for first 2 bytes:
-    // function:0x12=sha2, size:0x20=256 bits
-    // and cut off leading "0x"
     const hashHex = "1220" + bytes32Hex.slice(2);
     const hashBytes = Buffer.from(hashHex, "hex");
     const hashStr = bs58.encode(hashBytes);
-    //console.log("got: ", hashStr, "from: ", bytes32Hex)
     return hashStr;
   };
 
@@ -534,8 +529,9 @@ function buildWindowUtils() {
     return tempBool;
   }
 
-  const _getStatusString = async (status) => {
+  const _getStatusString = async (_status) => {
     let tempStat;
+    let status = String(_status)
     console.log(status)
     if (status === "0") {
       tempStat = "No Status"
@@ -633,7 +629,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "70") {
-      tempStat = "importable"
+      tempStat = "Ready For Import"
       console.log("Asset in :", tempStat, "status.")
     }
 

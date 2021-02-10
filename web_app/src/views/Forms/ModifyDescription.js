@@ -7,6 +7,7 @@ import validator from 'validator'
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import Jdenticon from 'react-jdenticon';
 
 // @material-ui/icons
 
@@ -226,11 +227,22 @@ export default function ModifyDescription(props) {
       console.log(`Url --> ${url}`)
       let b32hash = window.utils.getBytes32FromIPFSHash(hash)
       setIpfsActive(false);
-      updateAssetInfo(b32hash)
+      updateAssetInfo(b32hash, tempObj)
     })
   }
 
-  const updateAssetInfo = async (hash) => {
+  const thousandHashesOf = (varToHash) => {
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
+  }
+  
+  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+
+  const updateAssetInfo = async (hash, newAsset) => {
     setHelp(false)
     if (!hash || !idxHash) { return }
 
@@ -285,8 +297,8 @@ export default function ModifyDescription(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          window.location.href = "/#/user/dashboard"
-          window.location.reload()
+          window.location.href = assetInfo.lastRef;
+          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })
       });
   }
@@ -357,7 +369,7 @@ export default function ModifyDescription(props) {
             <Button color="info" justIcon className="back" onClick={() => { settings() }}>
               <Settings />
             </Button>
-            {asset.identicon}
+            <Jdenticon value={asset.idxHash}/>
           </CardHeader>
         )
       }
@@ -729,40 +741,21 @@ export default function ModifyDescription(props) {
     return component
   }
 
+  const goBack = () => {
+    window.location.href=asset.lastRef;
+  }
+
   const showImage = (img, key) => {
-    //console.log(img, key)
-    //console.log(selectedImage)
-    //console.log(img)
-    var i = new Image(); 
-
-    i.onload = function(){
-      var j = new Image();
-      j.onload = function(){
-        // let move = i.height-j.height
-        // if(props.ps){
-        //   if(move < 0){
-        //     props.ps.element.scrollTop += move
-        //   } else {
-        //     props.ps.element.scrollTop = 0
-        //   }
-        //   console.log("Scrolled ", move)
-        //   //console.log(props.ps.element.scrollTop)
-        // }
-        setSelectedImage(img)
-        setSelectedKey(key)
-      }
-      j.src = selectedImage;
-    };
-
-    i.src = img; 
+    setSelectedImage(img)
+    setSelectedKey(key)
   }
 
   return (
     <div>
+      <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
       <Card>
         {renderImage(isMobile)}
-        <CardBody>
-
+        <CardBody>   
           <div className="imageSelector">
             <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
             <input type="file" onChange={useCustomJSON} ref={fileInputJSON} className="imageInput" />

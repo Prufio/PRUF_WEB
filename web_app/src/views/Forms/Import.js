@@ -70,6 +70,21 @@ export default function Import(props) {
     setAssetClass(event.target.value);
   };
 
+  const goBack = () => {
+    window.location.href=assetInfo.lastRef;
+  }
+
+  const thousandHashesOf = (varToHash) => {
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
+  }
+  
+  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+
   const importAsset = async () => { //import held asset
 
     let tempTxHash;
@@ -125,8 +140,11 @@ export default function Import(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          window.location.href = "/#/user/dashboard"
-          window.location.reload()
+          let newAsset = JSON.parse(JSON.stringify(assetInfo));
+          newAsset.status = "Out of Escrow"
+          newAsset.statusNum = "58"
+          window.location.href = assetInfo.lastRef;
+          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })
       });
 
@@ -140,6 +158,7 @@ export default function Import(props) {
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
+            <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
             <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
           </CardHeader>
           <CardBody>

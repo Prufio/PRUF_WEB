@@ -7,6 +7,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Jdenticon from 'react-jdenticon';
 
 // @material-ui/icons
 import Category from "@material-ui/icons/Category";
@@ -40,7 +41,8 @@ export default function NewRecord(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
   const [assetClassName, setAssetClassName] = React.useState("");
-  const [submittedIdxHash, setSubmittedIdxHash] = React.useState("")
+  const [submittedIdxHash, setSubmittedIdxHash] = React.useState("");
+  //const [ipfsObj, setIpfsObj] = React.useState("");
 
   const [assetName, setAssetName] = React.useState("");
   const [manufacturer, setManufacturer] = React.useState("");
@@ -328,9 +330,9 @@ export default function NewRecord(props) {
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
   }
 
-  const handleHash = (ipfsHash, idxHash) => {
+  const handleHash = (ipfsHash, idxHash, ipfsObj) => {
     let ipfsB32 = window.utils.getBytes32FromIPFSHash(String(ipfsHash));
-    _newRecord(ipfsB32, idxHash)
+    _newRecord(ipfsB32, idxHash, ipfsObj)
   }
 
   const removeDisplayImage = () => {
@@ -417,6 +419,8 @@ export default function NewRecord(props) {
 
     setSubmittedIdxHash(idxHash)
 
+    //setIpfsObj(ipfsObj)
+
     let payload = JSON.stringify(ipfsObj);
     let fileSize = Buffer.byteLength(payload, 'utf8')
     if (fileSize > 1000000) {
@@ -438,7 +442,7 @@ export default function NewRecord(props) {
         setIpfsActive(false);
       } else {
         console.log("uploaded at hash: ", hash);
-        handleHash(hash, idxHash);
+        handleHash(hash, idxHash, ipfsObj);
         setIpfsActive(false);
       }
     })
@@ -447,11 +451,44 @@ export default function NewRecord(props) {
     //setTimeout(_newRecord, 2000)
   }
 
-  const _newRecord = async (ipfs, idx) => { //create a new asset record
+  const thousandHashesOf = (varToHash) => {
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
+  }
+  
+  const pageKey = thousandHashesOf(props.addr, props.winKey)
+
+  const _newRecord = async (ipfs, idx, ipfsObj) => { //create a new asset record
     //console.log("assetClass: ", assetClass)
     let tempTxHash;
     var ipfsHash = ipfs;
     var rgtHashRaw, idxHash;
+
+    let newAsset = {
+      idxHash: idx,
+      id: idx,
+      ipfs: ipfs,
+      photo: {DisplayImage: displayImage},
+      photoUrls: {DisplayImage: displayImageUrl},
+      text: ipfsObj.text,
+      urls: ipfsObj.urls,
+      name: ipfsObj.name,
+      DisplayImage: displayImage,
+      assetClass: assetClass,
+      assetClassName: assetClassName,
+      dBIndex: props.assetArr.length,
+      countPair: [100000,100000],
+      status: "Transferrable",
+      statusNum: 51,
+      Description: ipfsObj.text.Description,
+      note: "",
+      identicon: [<Jdenticon value={idx} />],
+      identiconLG: [<Jdenticon value={idx} />]
+    }
 
     idxHash = idx; /* window.web3.utils.soliditySha3(
       String(type).replace(/\s/g, ''),
@@ -535,11 +572,15 @@ export default function NewRecord(props) {
           button: "Close",
         }).then(()=>{
           window.location.href = "/#/user/dashboard"
-          window.location.reload()
+          window.replaceAssetData = {key: pageKey, newAsset: newAsset}
         })
       });
 
     setAssetClass("");
+  }
+
+  const goBack = () => {
+    window.location.href="/#/user/dashboard";
   }
 
   const classes = useStyles();
@@ -551,6 +592,7 @@ export default function NewRecord(props) {
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
+            <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
             <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
           </CardHeader>
           <CardBody>
@@ -976,7 +1018,7 @@ export default function NewRecord(props) {
                               />
                             </>
                           )}
-                          <h4>AC Selected: {assetClassName}, ({assetClass})</h4>
+                          <h4>AC Selected: {assetClassName}, (ID: {assetClass})</h4>
                         </form>
                       </CardBody>
                     </Card>

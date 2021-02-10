@@ -58,6 +58,21 @@ export default function Export(props) {
     return window.location.href = "/#/user/dashboard"
   }
 
+  const goBack = () => {
+    window.location.href=assetInfo.lastRef;
+  }
+
+  const thousandHashesOf = (varToHash) => {
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
+  }
+
+  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+
   const exportAsset = async () => { //export held asset
 
     let tempTxHash;
@@ -107,13 +122,16 @@ export default function Export(props) {
         link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
         swal({
-          title: "Import Successful!",
+          title: "Export Successful!",
           content: link,
           icon: "success",
           button: "Close",
         }).then(()=>{
-          window.location.href = "/#/user/dashboard"
-          window.location.reload()
+          let newAsset = JSON.parse(JSON.stringify(assetInfo));
+          newAsset.status = "Ready For Import"
+          newAsset.statusNum = "70"
+          window.location.href = assetInfo.lastRef;
+          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })
       });
 
@@ -125,6 +143,7 @@ export default function Export(props) {
         <CardIcon className="headerIconBack">
           <FlightTakeoff />
         </CardIcon>
+        <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
         <h4 className={classes.cardIconTitle}>Export Asset</h4>
       </CardHeader>
       <CardBody>

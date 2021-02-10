@@ -63,13 +63,14 @@ export default function Search(props) {
   const [authLevel, setAuthLevel] = React.useState("");
   const [ipfsObject, setIpfsObject] = React.useState({});
   const [asset, setAsset] = React.useState({});
+  const [dBIndex, setDBIndex] = React.useState(null);
   const [price, setPrice] = React.useState("");
   const [currency, setCurrency] = React.useState("");
   const [recycled, setRecycled] = React.useState(false);
   const [transaction, setTransaction] = React.useState(false);
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
-  const [URL, setURL] = React.useState("");
+  const [assetURL, setURL] = React.useState("");
   const [baseURL, setBaseURL] = React.useState("https://app.pruf.io/#/user/search/");
   const [isVerifying, setIsVerifying] = React.useState(false)
   const [isRecycling, setIsRecycling] = React.useState(false)
@@ -229,28 +230,22 @@ export default function Search(props) {
   }
 
   const showImage = (e) => {
-    var i = new Image();
-
-    i.onload = function () {
-      var j = new Image();
-      j.onload = function () {
-        // let move = i.height - j.height
-        // if (props.ps) {
-        //   if (move < 0) {
-        //     props.ps.element.scrollTop += move
-        //   } else {
-        //     props.ps.element.scrollTop = 0
-        //   }
-        //   console.log("Scrolled ", move)
-        //   //console.log(props.ps.element.scrollTop)
-        // }
         setSelectedImage(e)
+  }
+
+  const getDBIndexOf = (e) => {
+
+    if(!e){return console.log("No ID given!")}
+    let temp;
+    for(let i = 0; i < props.assetArr.length; i++){
+      if(props.assetArr[1].idxHash.toLowerCase() === e.toLowerCase()){
+        temp = i
       }
-      j.src = selectedImage;
-    };
+    }
 
-    i.src = e;
+    if(temp) return temp;
 
+    return console.log("Could not locate ID in dash!")
   }
 
   const handleSimple = event => {
@@ -258,7 +253,15 @@ export default function Search(props) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
-    window.sentPacket = Object.assign(asset, ipfsObject);
+    let temp = Object.assign(asset, ipfsObject)
+    let tempObj = JSON.parse(JSON.stringify(temp))
+
+    tempObj.dBIndex = dBIndex
+    tempObj.lastRef = "/#/user/search"
+
+    console.log(tempObj)
+
+    window.sentPacket = tempObj;
     setSimpleSelect(event.target.value);
     let e = event.target.value, href;
 
@@ -499,8 +502,6 @@ export default function Search(props) {
           await get()
         }
 
-        //return forceUpdate();
-
       }
     });
   };
@@ -554,7 +555,7 @@ export default function Search(props) {
     }
   }
 
-  const purchaseAsset = async () => {
+  /* const purchaseAsset = async () => {
     console.log("Purchasing Asset")
     if (window.balances.prufTokenBalance < window.web3.utils.fromWei(price)) { console.log("insufficient balance"); return console.log(window.web3.utils.fromWei(price)) }
     setTransaction(true)
@@ -572,7 +573,7 @@ export default function Search(props) {
         window.location.reload()
         console.log(receipt.events.REPORT.returnValues._msg);
       });
-  }
+  } */
 
 
   const recycleAsset = async () => {
@@ -599,6 +600,11 @@ export default function Search(props) {
     let rgtHashRaw;
     let receiptVal;
     let tempTxHash;
+
+    let temp = Object.assign(asset, ipfsObject)
+    let newAsset = JSON.parse(JSON.stringify(temp))
+    newAsset.status = "Out of Escrow"
+    newAsset.statusNum = "58"
 
     if (middle === "") {
       rgtHashRaw = window.web3.utils.soliditySha3(
@@ -672,13 +678,24 @@ export default function Search(props) {
           icon: "success",
           button: "Close"
         }).then(()=>{
-          window.location.href = "/#/user/dashboard"
-          window.location.reload()
+          window.location.href = "/#/user/dashboard";
+          window.replaceAssetData = {key: pageKey, newAsset: newAsset}
         })
       });
 
     return;
   }
+
+  const thousandHashesOf = (varToHash) => {
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
+  }
+
+  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
@@ -1067,6 +1084,7 @@ export default function Search(props) {
       assetClassName: assetClassName,
       assetClass: tempResult[2],
       status: await window.utils.getStatusString(String(tempResult[0])),
+      statusNum: String(tempResult[0]),
       idx: idxHash
     }
 
@@ -1082,6 +1100,7 @@ export default function Search(props) {
       assetClassName: window.assetClassName,
       assetClass: tempResult[2],
       status: window.assetInfo.status,
+      statusNum: String(tempResult[0]),
       idxHash: idxHash,
     })
 
@@ -1093,6 +1112,7 @@ export default function Search(props) {
         .then((e) => {
           console.log("is Owner Of? ", e)
           if (e) {
+            setDBIndex(getDBIndexOf(idxHash))
             setOwnerOf(true)
           }
         })
@@ -1171,6 +1191,7 @@ export default function Search(props) {
       assetClassName: assetClassName,
       assetClass: tempResult[2],
       status: await window.utils.getStatusString(String(tempResult[0])),
+      statusNum: String(tempResult[0]),
       idx: idxHash
     }
 
@@ -1185,6 +1206,7 @@ export default function Search(props) {
       assetClassName: window.assetClassName,
       assetClass: tempResult[2],
       status: window.assetInfo.status,
+      statusNum: String(tempResult[0]),
       idxHash: idxHash,
     })
 
@@ -1996,9 +2018,6 @@ export default function Search(props) {
                     )}
                     {isVerifying && (
                       <Card>
-                        {!transaction && isVerifying && (
-                          <Button color="info" className="MLBGradient" onClick={() => setIsNotVerifying()}>Back</Button>
-                        )}
                         <CardHeader icon>
                           <CardIcon className="headerIconBack">
                             <AccountBox />
@@ -2535,7 +2554,7 @@ export default function Search(props) {
                     className="shareMenu"
                     data={{
                       text: "Check out my PRüF-verified asset!",
-                      url: URL,
+                      url: assetURL,
                       title: "Share Asset Link",
                     }}
                   >
@@ -2557,7 +2576,7 @@ export default function Search(props) {
                       onClick={() => {
                         swalReact({
                           content: <QRCode
-                            value={URL}
+                            value={assetURL}
                             size="160"
                             fgColor="#002a40"
                             quietZone="2"

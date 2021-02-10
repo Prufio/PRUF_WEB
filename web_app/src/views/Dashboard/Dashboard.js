@@ -3,6 +3,7 @@ import "../../assets/css/custom.css";
 import { isMobile } from "react-device-detect";
 import { RWebShare } from "react-web-share";
 import swalReact from '@sweetalert/with-react';
+import Jdenticon from 'react-jdenticon';
 import { QRCode } from 'react-qrcode-logo';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -80,7 +81,7 @@ export default function Dashboard(props) {
 
     setViewAsset(true);
     setSelectedAssetObj(e);
-    setIdenticon(e.identicon);
+    setIdenticon(<Jdenticon value={e.idxHash}/>);
     setURL(url)
 
     window.printObj = e;
@@ -112,6 +113,7 @@ export default function Dashboard(props) {
                 {!isMobile && (
                   <CardHeader image className={classes.cardHeaderHoverDashboard}>
                     <a className="dashboardAssetImage" onClick={() => moreInfo({
+                      dBIndex: i,
                       countPair: arr[i].countPair,
                       idxHash: arr[i].id,
                       descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
@@ -136,12 +138,12 @@ export default function Dashboard(props) {
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
                         <>
-                          {arr[i].identicon}
+                          <Jdenticon value={arr[i].id}/>
                         </>
                       )}
                       {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
                         <>
-                          {arr[i].identicon}
+                          <Jdenticon value={arr[i].id}/>
                         </>
                       )}
                     </a>
@@ -157,12 +159,12 @@ export default function Dashboard(props) {
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
                         <>
-                          {arr[i].identicon}
+                          <Jdenticon value={arr[i].idxHash}/>
                         </>
                       )}
                       {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
                         <>
-                          {arr[i].identicon}
+                          <Jdenticon value={arr[i].idxHash}/>
                         </>
                       )}
                     </a>
@@ -186,6 +188,7 @@ export default function Dashboard(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button color="success" simple justIcon onClick={() => moreInfo({
+                        dBIndex: i,
                         countPair: arr[i].countPair,
                         idxHash: arr[i].id,
                         descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
@@ -205,7 +208,7 @@ export default function Dashboard(props) {
                       })}>
                         <Icon>
                           login
-</Icon>
+                        </Icon>
                       </Button>
                     </Tooltip>
                   </div>
@@ -284,7 +287,15 @@ export default function Dashboard(props) {
       props.ps.element.scrollTop = 0
       //console.log(props.ps.element.scrollTop)
     }
-    window.sentPacket = selectedAssetObj;
+
+    let tempObj = JSON.parse(JSON.stringify(selectedAssetObj))
+
+    tempObj.lastRef = "/#/user/dashboard"
+
+    window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+
+    console.log(tempObj)
+    console.log(window.sentPacket)
     //console.log(window.sentPacket);
     setSimpleSelect(event.target.value);
     let e = event.target.value, href;
@@ -341,7 +352,7 @@ export default function Dashboard(props) {
       <GridContainer>
         <GridItem xs={12}>
           <Card>
-            <CardHeader icon>
+            <CardHeader icon onClick={()=>{moreInfo("back")}}>
               <CardIcon className="headerIconBack">
                 <DashboardOutlined />
               </CardIcon>
@@ -413,7 +424,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      {selectedAssetObj.identicon}
+                      <Jdenticon value={selectedAssetObj.idxHash}/>
                     </>
                   )}
                 </CardHeader>
@@ -446,7 +457,7 @@ export default function Dashboard(props) {
                         <KeyboardArrowLeft />
                       </Button>
                     </Tooltip>
-                    {selectedAssetObj.identicon}
+                    <Jdenticon value={selectedAssetObj.idxHash}/>
                   </>)}
                 </CardHeader>
               )}

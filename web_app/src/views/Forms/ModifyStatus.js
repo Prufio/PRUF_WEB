@@ -109,7 +109,7 @@ export default function ModifyStatus(props) {
     return setStatus(status), setStatusName(statusName);
   };
 
-  const modifyStatus = async () => { //export held asset
+  const modifyStatus = async () => { 
 
     if (status === 53 || status === 54) {
       return modifyStatusLS()
@@ -123,10 +123,18 @@ export default function ModifyStatus(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.NP_NC.methods
+    let newAsset = await JSON.parse(JSON.stringify(assetInfo));
+    window.utils.getStatusString(String(status)).then((e)=>{
+      newAsset.status = e;
+    newAsset.statusNum = String(status)
+
+    console.log("Got past the json stuff")
+    console.log(assetInfo.idxHash)
+
+    window.contracts.NP_NC.methods
       ._modStatus(
         assetInfo.idxHash,
-        status
+        String(status)
       )
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -168,12 +176,28 @@ export default function ModifyStatus(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          window.location.href = "/#/user/dashboard"
-          window.location.reload()
+          window.location.href = assetInfo.lastRef;
+          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })
       });
+    })
 
   }
+
+  const goBack = () => {
+    window.location.href=assetInfo.lastRef;
+  }
+
+  const thousandHashesOf = (varToHash) => {
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
+  }
+
+  const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
   const modifyStatusLS = async () => { //export held asset
 
@@ -185,10 +209,15 @@ export default function ModifyStatus(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.NP_NC.methods
+    let newAsset = await JSON.parse(JSON.stringify(assetInfo));
+    window.utils.getStatusString(String(status)).then((e)=>{
+    newAsset.status = e;
+    newAsset.statusNum = status
+
+    window.contracts.NP_NC.methods
       ._setLostOrStolen(
         assetInfo.idxHash,
-        status
+        String(status)
       )
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -229,13 +258,12 @@ export default function ModifyStatus(props) {
           content: link,
           icon: "success",
           button: "Close",
-        });
-        window.resetInfo = true;
-        window.recount = true;
-        window.location.href = "/#/user/dashboard"
-        window.location.reload()
+        }).then(()=>{
+          window.location.href = assetInfo.lastRef;
+          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
+        })
       });
-
+    })
   }
 
   return (
@@ -244,6 +272,7 @@ export default function ModifyStatus(props) {
         <CardIcon className="headerIconBack">
           <ScatterPlot />
         </CardIcon>
+      <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
         <h4 className={classes.cardIconTitle}>Modify Status</h4>
       </CardHeader>
       <CardBody>
