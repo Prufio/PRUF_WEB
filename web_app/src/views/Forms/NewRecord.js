@@ -317,14 +317,16 @@ export default function NewRecord(props) {
     file = e.target.files[0]
     const reader = new FileReader();
     reader.onloadend = (e) => {
-      setIsUploading(true)
+      
       console.log(file)
       if (!file.type.includes("image")) {
+        //setIsUploading(false)
         return swal({
           title: "Unsupported File Type",
           button: "Close"
         })
       }
+      setIsUploading(true)
       const fileType = file.type;
       const prefix = `data:${fileType};base64,`;
       const buf = Buffer(reader.result);
@@ -528,8 +530,15 @@ export default function NewRecord(props) {
     console.log("New rgtHash", rgtHash);
     console.log("addr: ", props.addr);
     console.log("AC: ", assetClass);
+
     //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
     console.log("IPFS bytes32: ", ipfsHash);
+
+    /* swal({
+      title: "You are about to create asset: "+idxHash,
+      text:  "Address: "+props.addr+"\nipfs: "+ipfsHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+      button: "Okay",
+    }) */
 
     await window.contracts.APP_NC.methods
       .$newRecordWithDescription(

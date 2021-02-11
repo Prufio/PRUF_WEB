@@ -501,6 +501,13 @@ export default function ModifyDescription(props) {
     file = e.target.files[0]
     const reader = new FileReader();
     reader.onloadend = (e) => {
+      if (!file.type.includes("image")) {
+        //setIsUploading(false)
+        return swal({
+          title: "Unsupported File Type",
+          button: "Close"
+        })
+      }
       setIsUploading(true)
       const fileType = file.type;
       const fileName = file.name;
