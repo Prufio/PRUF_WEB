@@ -137,6 +137,9 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    }
   }, [])
 
   React.useEffect(() => {
@@ -254,6 +257,9 @@ export default function Search(props) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    }
     let temp = Object.assign(asset, ipfsObject)
     let tempObj = JSON.parse(JSON.stringify(temp))
 
@@ -333,6 +339,9 @@ export default function Search(props) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    }
   };
 
   const recycle = () => {
@@ -340,6 +349,9 @@ export default function Search(props) {
     if (props.ps) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
+    }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
     }
   };
 
@@ -943,6 +955,9 @@ export default function Search(props) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    }
     if (!IDXRawInput) {
       if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
 
@@ -1127,6 +1142,9 @@ export default function Search(props) {
     if (props.ps) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
+    }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
     }
     setRetrieving(true)
     console.log("in rrqr")

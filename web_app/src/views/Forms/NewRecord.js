@@ -105,6 +105,9 @@ export default function NewRecord(props) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    }
   }, [])
 
   const ACLogin = event => {

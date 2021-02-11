@@ -50,6 +50,9 @@ export default function Dashboard(props) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    }
   }, [])
 
   const [viewAsset, setViewAsset] = React.useState(false);
@@ -66,6 +69,9 @@ export default function Dashboard(props) {
     if (props.ps) {
       //console.log(props.ps)
       props.ps.element.scrollTop = 0
+    }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
     }
     //console.log(props.ps.element.scrollTop)
     const url = String(baseURL) + String(e.idxHash)

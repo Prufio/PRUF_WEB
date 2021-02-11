@@ -99,6 +99,9 @@ export default function ModifyDescription(props) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    }
   }, [])
 
   if (assetInfo === undefined || assetInfo === null) {
