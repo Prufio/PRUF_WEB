@@ -52,14 +52,14 @@ export default function Dashboard(props) {
     }
   }, [])
 
-  const [viewAsset, setViewAsset] = React.useState(false)
+  const [viewAsset, setViewAsset] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
   const [identicon, setIdenticon] = React.useState(<></>);
   const [baseURL, setBaseURL] = React.useState("https://app.pruf.io/#/user/search/");
   const [URL, setURL] = React.useState("");
-  const [selectedImage, setSelectedImage] = React.useState("")
-  const [copyText, setCopyText] = React.useState(false)
+  const [selectedImage, setSelectedImage] = React.useState("");
+  const [copyText, setCopyText] = React.useState(false);
 
   const moreInfo = (e) => {
     //console.log(props.ps);

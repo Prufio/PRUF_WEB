@@ -399,16 +399,16 @@ class Sidebar extends React.Component {
         [classes.photoRTL]: rtlActive
       });
 
-      const copyTextSnippet = (temp) => {
-        navigator.clipboard.writeText(temp)
-        if(isMobile) {
-          swal("Address Copied to Clipboard!")
-        }
-        if(!isMobile) {
-        this.setState({copyText: true})
-        setTimeout(() => { this.setState({copyText: false}) }, 1000);
+    const copyTextSnippet = (temp) => {
+      navigator.clipboard.writeText(temp)
+      if (isMobile) {
+        swal("Address Copied to Clipboard!")
       }
+      if (!isMobile) {
+        this.setState({ copyText: true })
+        setTimeout(() => { this.setState({ copyText: false }) }, 1000);
       }
+    }
     var user = (
       <div className={userWrapperClass}>
         {!this.props.miniActive && (
@@ -444,15 +444,17 @@ class Sidebar extends React.Component {
           >
             {addr !== undefined && !isAndroid && (
               <>
+              
                 {!this.state.copyText && bgColor !== "white" && (
                   <Tooltip
                     title="Copy to Clipboard"
                   >
                     <h5>
-                      <a className="addressText"onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                      <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
                     </h5>
                   </Tooltip>
                 )}
+
                 {this.state.copyText && (bgColor !== "white" || bgColor === undefined) && (
                   <Tooltip
                     title="Copied to Clipboard"
@@ -462,16 +464,18 @@ class Sidebar extends React.Component {
                     </h5>
                   </Tooltip>
                 )}
+
                 {!this.state.copyText && bgColor === "white" && (
                   <Tooltip
                     title="Copy to Clipboard"
                   >
                     <h5>
-                      <a className="addressTextBlack"onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                      <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
                     </h5>
                   </Tooltip>
                 )}
-                {this.state.copyText && bgColor === "white" &&(
+
+                {this.state.copyText && bgColor === "white" && (
                   <Tooltip
                     title="Copied to Clipboard"
                   >
@@ -482,26 +486,28 @@ class Sidebar extends React.Component {
                 )}
               </>
             )}
+
             {addr !== undefined && isAndroid && (
-              <Tooltip
-                  title="Copy to Clipboard"
-                >
-                  <CopyToClipboard text={addr}
-                    onCopy={() => { swal("Address Copied to Clipboard!") }}>
-                    <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
-                  </CopyToClipboard>
-                </Tooltip>
+              <Tooltip title="Copy to Clipboard">
+                <CopyToClipboard text={addr}
+                  onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                  <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                </CopyToClipboard>
+              </Tooltip>
             )}
+
             {addr === undefined && bgColor !== "white" && (
               <h5 className="addressText">
                 User Address Unavailable
               </h5>
             )}
-            {addr === undefined && bgColor === "white" &&(
+
+            {addr === undefined && bgColor === "white" && (
               <h5 className="addressTextBlack">
                 User Address Unavailable
               </h5>
             )}
+
           </NavLink>
         )}
         {this.props.miniActive && (
