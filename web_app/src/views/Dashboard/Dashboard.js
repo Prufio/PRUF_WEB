@@ -160,12 +160,12 @@ export default function Dashboard(props) {
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
                         <>
-                          <Jdenticon value={arr[i].idxHash} />
+                          <Jdenticon value={arr[i].id} />
                         </>
                       )}
                       {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
                         <>
-                          <Jdenticon value={arr[i].idxHash} />
+                          <Jdenticon value={arr[i].id} />
                         </>
                       )}
                     </a>
