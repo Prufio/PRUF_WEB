@@ -449,7 +449,7 @@ export default function Dashboard(props) {
                       <img src={selectedImage} alt="..." />
                     </>
                   )}
-                  {selectedAssetObj.DisplayImage.length === "" && (<>
+                  {selectedAssetObj.DisplayImage === "" && (<>
                     <Tooltip
                       id="tooltip-top"
                       title="Back"
