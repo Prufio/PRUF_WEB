@@ -1,6 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import { isMobile } from "react-device-detect";
+import { isMobile, isAndroid } from "react-device-detect";
 import { RWebShare } from "react-web-share";
 import swalReact from '@sweetalert/with-react';
 import Jdenticon from 'react-jdenticon';
@@ -8,6 +8,7 @@ import { QRCode } from 'react-qrcode-logo';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -81,7 +82,7 @@ export default function Dashboard(props) {
 
     setViewAsset(true);
     setSelectedAssetObj(e);
-    setIdenticon(<Jdenticon value={e.idxHash}/>);
+    setIdenticon(<Jdenticon value={e.idxHash} />);
     setURL(url)
 
     window.printObj = e;
@@ -138,12 +139,12 @@ export default function Dashboard(props) {
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
                         <>
-                          <Jdenticon value={arr[i].id}/>
+                          <Jdenticon value={arr[i].id} />
                         </>
                       )}
                       {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
                         <>
-                          <Jdenticon value={arr[i].id}/>
+                          <Jdenticon value={arr[i].id} />
                         </>
                       )}
                     </a>
@@ -159,12 +160,12 @@ export default function Dashboard(props) {
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
                         <>
-                          <Jdenticon value={arr[i].idxHash}/>
+                          <Jdenticon value={arr[i].idxHash} />
                         </>
                       )}
                       {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
                         <>
-                          <Jdenticon value={arr[i].idxHash}/>
+                          <Jdenticon value={arr[i].idxHash} />
                         </>
                       )}
                     </a>
@@ -352,7 +353,7 @@ export default function Dashboard(props) {
       <GridContainer>
         <GridItem xs={12}>
           <Card>
-            <CardHeader icon onClick={()=>{moreInfo("back")}}>
+            <CardHeader icon onClick={() => { moreInfo("back") }}>
               <CardIcon className="headerIconBack">
                 <DashboardOutlined />
               </CardIcon>
@@ -424,7 +425,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <Jdenticon value={selectedAssetObj.idxHash}/>
+                      <Jdenticon value={selectedAssetObj.idxHash} />
                     </>
                   )}
                 </CardHeader>
@@ -457,7 +458,7 @@ export default function Dashboard(props) {
                         <KeyboardArrowLeft />
                       </Button>
                     </Tooltip>
-                    <Jdenticon value={selectedAssetObj.idxHash}/>
+                    <Jdenticon value={selectedAssetObj.idxHash} />
                   </>)}
                 </CardHeader>
               )}
@@ -626,7 +627,7 @@ export default function Dashboard(props) {
                   )}
                 </>
               )}
-              {isMobile && (
+              {isMobile && !isAndroid && (
                 <>
                   {!copyText && (
                     <Tooltip
@@ -647,6 +648,16 @@ export default function Dashboard(props) {
                     </Tooltip>
                   )}
                 </>
+              )}
+              {isMobile && isAndroid && (
+                <Tooltip
+                  title="Copy to Clipboard"
+                >
+                  <CopyToClipboard text={selectedAssetObj.idxHash}
+                    onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
+                    <span>Asset ID: &nbsp; {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</span>
+                  </CopyToClipboard>
+                </Tooltip>
               )}
               <div className="icons">
                 <RWebShare

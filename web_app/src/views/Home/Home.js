@@ -188,6 +188,24 @@ export default function Home(props) {
     return clearPRUFForm();
   }
 
+  const refreshEtherBalance = () => {
+    if(!window.web3.eth) return
+    console.log("Refreshing ether bal")
+    window.web3.eth.getBalance(props.addr, (err, result) => {
+      if (err) { console.log(err) } 
+      else { window.replaceAssetData = {ether: window.web3.utils.fromWei(result, 'ether')} }
+    });
+  }
+
+  const refreshPrufBalance = () => {
+    if(!window.contracts) return
+    console.log("Refreshing pruf bal")
+    window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
+      if (err) { console.log(err) }
+      else { window.replaceAssetData = {pruf: window.web3.utils.fromWei(result, 'ether')} }
+    });
+  }
+
   const purchaseNode = async () => {//create a new asset class record
     let tempTxHash;
 
@@ -302,10 +320,7 @@ export default function Home(props) {
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Cached />
-                <a className="homeCardText" href="">
-                  Refresh
-                </a>
+                <Cached onClick={()=>refreshEtherBalance()}/>
               </div>
             </CardFooter>
           </Card>
@@ -325,10 +340,7 @@ export default function Home(props) {
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Cached />
-                <a className="homeCardText" href="">
-                  Refresh
-                </a>
+                <Cached onClick={()=>refreshPrufBalance()} />
               </div>
             </CardFooter>
           </Card>

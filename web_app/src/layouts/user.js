@@ -335,7 +335,15 @@ export default function Dashboard(props) {
     if (isMounted) {
       //console.log("Heard call for replace.")
       if (!window.replaceAssetData || JSON.stringify(window.replaceAssetData) === "{}") {
-        window.replaceAssetData = {}
+        window.replaceAssetData = {};
+      }
+      else if (window.replaceAssetData.ether) {
+        setETHBalance(window.replaceAssetData.ether);
+        window.replaceAssetData = {};
+      }
+      else if (window.replaceAssetData.pruf) {
+        setPrufBalance(window.replaceAssetData.pruf);
+        window.replaceAssetData = {};
       }
       else if (window.replaceAssetData.key !== thousandHashesOf(addr, winKey)) {
         window.replaceAssetData = {}

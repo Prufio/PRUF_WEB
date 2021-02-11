@@ -1,12 +1,13 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import { isMobile } from "react-device-detect";
+import { isMobile, isAndroid } from "react-device-detect";
 import swal from 'sweetalert';
 import base64 from 'base64-arraybuffer';
 import validator from 'validator'
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import Jdenticon from 'react-jdenticon';
 
 // @material-ui/icons
@@ -522,10 +523,10 @@ export default function ModifyDescription(props) {
 
   const copyTextSnippet = (temp) => {
     navigator.clipboard.writeText(temp)
-    if (isMobile) {
+    if (isMobile && !isAndroid) {
       swal("Asset ID Copied to Clipboard!")
     }
-    if (!isMobile) {
+    else if (!isMobile) {
       setCopyText(true)
       setTimeout(() => { setCopyText(false) }, 1000);
     }
@@ -979,7 +980,7 @@ export default function ModifyDescription(props) {
               )}
             </>
           )}
-          {isMobile && (
+          {isMobile && !isAndroid && (
             <>
               {!copyText && (
                 <Tooltip
@@ -1000,6 +1001,16 @@ export default function ModifyDescription(props) {
                 </Tooltip>
               )}
             </>
+          )}
+          {isMobile && isAndroid && (
+            <Tooltip
+            title="Copy to Clipboard"
+          >
+            <CopyToClipboard text={asset.idxHash}
+              onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
+              <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</span>
+            </CopyToClipboard>
+          </Tooltip>
           )}
         </CardFooter>
       </Card>

@@ -3,7 +3,7 @@ import "../../assets/css/custom.css";
 import { RWebShare } from "react-web-share";
 import swal from 'sweetalert';
 import swalReact from '@sweetalert/with-react';
-import { isMobile } from "react-device-detect";
+import { isAndroid, isMobile } from "react-device-detect";
 import { QRCode } from 'react-qrcode-logo';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -19,6 +19,7 @@ import Icon from '@material-ui/core/Icon';
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
 import Share from "@material-ui/icons/Share";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import Create from "@material-ui/icons/Create";
 import { DashboardOutlined, KeyboardArrowLeft, Scanner, Settings } from "@material-ui/icons";
 import Category from "@material-ui/icons/Category";
@@ -689,7 +690,7 @@ export default function Search(props) {
   }
 
   const thousandHashesOf = (varToHash) => {
-    if(!window.web3) return window.location.href = "/#/user/home"
+    if (!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -699,14 +700,17 @@ export default function Search(props) {
   }
 
   const copyTextSnippet = (temp) => {
-    navigator.clipboard.writeText(temp)
+
     if (isMobile) {
+      navigator.clipboard.writeText(temp)
       swal("Asset ID Copied to Clipboard!")
     }
+
     if (!isMobile) {
       setCopyText(true)
       setTimeout(() => { setCopyText(false) }, 1000);
     }
+
   }
 
   const verifyAsset = async () => {
@@ -2515,7 +2519,7 @@ export default function Search(props) {
                     )}
                   </>
                 )}
-                {isMobile && (
+                {isMobile && !isAndroid && (
                   <>
                     {!copyText && (
                       <Tooltip
@@ -2537,6 +2541,16 @@ export default function Search(props) {
                     )}
                   </>
                 )}
+                {isMobile && isAndroid && (
+                  <Tooltip
+                    title="Copy to Clipboard"
+                  >
+                    <CopyToClipboard text={asset.idxHash}
+                      onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
+                      <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</span>
+                    </CopyToClipboard>
+                  </Tooltip>
+                )}
                 <div className="icons">
                   <RWebShare
                     className="shareMenu"
@@ -2555,7 +2569,9 @@ export default function Search(props) {
                       </Icon>
                     </Tooltip>
                   </RWebShare>
-                  <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
+                  {!isMobile && (
+                    <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
+                  )}
                   <Tooltip
                     title="View QR"
                   >
