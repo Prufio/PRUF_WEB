@@ -987,7 +987,7 @@ export default function ModifyDescription(props) {
                   title="Copy to Clipboard"
                 >
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
+                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 14) + "..." + idxHash.substring(52, 66)}</a>
                   </div>
                 </Tooltip>
               )}
@@ -996,7 +996,7 @@ export default function ModifyDescription(props) {
                   title="Copied to Clipboard"
                 >
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 8) + "..." + idxHash.substring(58, 66)}</a>
+                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 14) + "..." + idxHash.substring(52, 66)}</a>
                   </div>
                 </Tooltip>
               )}
@@ -1008,7 +1008,7 @@ export default function ModifyDescription(props) {
           >
             <CopyToClipboard text={asset.idxHash}
               onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
-              <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 12) + "..." + asset.idxHash.substring(54, 66)}</span>
+              <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 14) + "..." + asset.idxHash.substring(52, 66)}</span>
             </CopyToClipboard>
           </Tooltip>
           )}

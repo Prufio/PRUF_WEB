@@ -82,7 +82,7 @@ export default function Dashboard(props) {
 
     setViewAsset(true);
     setSelectedAssetObj(e);
-    setIdenticon(<Jdenticon value={e.idxHash} />);
+    setIdenticon(<Jdenticon value={e.id} />);
     setURL(url)
 
     window.printObj = e;
@@ -634,7 +634,7 @@ export default function Dashboard(props) {
                       title="Copy to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 8) + "..." + selectedAssetObj.idxHash.substring(58, 66)}</a>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 14) + "..." + selectedAssetObj.idxHash.substring(52, 66)}</a>
                       </div>
                     </Tooltip>
                   )}
@@ -643,7 +643,7 @@ export default function Dashboard(props) {
                       title="Copied to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 8) + "..." + selectedAssetObj.idxHash.substring(58, 66)}</a>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 14) + "..." + selectedAssetObj.idxHash.substring(52, 66)}</a>
                       </div>
                     </Tooltip>
                   )}
@@ -655,7 +655,7 @@ export default function Dashboard(props) {
                 >
                   <CopyToClipboard text={selectedAssetObj.idxHash}
                     onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
-                    <span>Asset ID: &nbsp; {selectedAssetObj.idxHash.substring(0, 12) + "..." + selectedAssetObj.idxHash.substring(54, 66)}</span>
+                    <span>Asset ID: &nbsp; {selectedAssetObj.idxHash.substring(0, 14) + "..." + selectedAssetObj.idxHash.substring(52, 66)}</span>
                   </CopyToClipboard>
                 </Tooltip>
               )}
