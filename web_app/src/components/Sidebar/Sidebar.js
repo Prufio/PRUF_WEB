@@ -411,7 +411,30 @@ class Sidebar extends React.Component {
     }
     var user = (
       <div className={userWrapperClass}>
-        {!this.props.miniActive && (
+        {!this.props.miniActive && isAndroid &&(
+          <div className="addressIconAndroid">
+            {addr === undefined && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr === "" && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr !== undefined && addr !== "" && (
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+            )}
+          </div>
+        )}
+        {this.props.miniActive && isAndroid &&(
+          <div className="addressIconUpAndroid">
+            {(addr === undefined || addr === "") && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr !== undefined && addr !== "" && (
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+            )}
+          </div>
+        )}
+        {!this.props.miniActive && !isAndroid &&(
           <div className="addressIcon">
             {addr === undefined && (
               <img src={pruftoken} alt="logo" />
@@ -424,7 +447,7 @@ class Sidebar extends React.Component {
             )}
           </div>
         )}
-        {this.props.miniActive && (
+        {this.props.miniActive && !isAndroid &&(
           <div className="addressIconUp">
             {(addr === undefined || addr === "") && (
               <img src={pruftoken} alt="logo" />
@@ -444,7 +467,7 @@ class Sidebar extends React.Component {
           >
             {addr !== undefined && !isAndroid && (
               <>
-              
+
                 {!this.state.copyText && bgColor !== "white" && (
                   <Tooltip
                     title="Copy to Clipboard"
@@ -487,12 +510,25 @@ class Sidebar extends React.Component {
               </>
             )}
 
-            {addr !== undefined && isAndroid && (
+            {addr !== undefined && isAndroid && bgColor !== "white" && (
               <Tooltip title="Copy to Clipboard">
+                <div className="addressText">
                 <CopyToClipboard text={addr}
                   onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
                   <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
                 </CopyToClipboard>
+                </div>
+              </Tooltip>
+            )}
+            
+            {addr !== undefined && isAndroid && bgColor === "white" && (
+              <Tooltip title="Copy to Clipboard">
+                <div className="addressTextBlack">
+                <CopyToClipboard text={addr}
+                  onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                  <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                </CopyToClipboard>
+                </div>
               </Tooltip>
             )}
 
@@ -515,6 +551,7 @@ class Sidebar extends React.Component {
         )}
       </div>
     );
+
     var links = (
       <List className={classes.list}>{this.createLinks(routes)}</List>
     );
