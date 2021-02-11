@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../../assets/css/custom.css";
-import { isMobile } from "react-device-detect";
+import { isMobile, isAndroid } from "react-device-detect";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
@@ -27,6 +27,7 @@ import sidebarStyle from "assets/jss/material-dashboard-pro-react/components/sid
 import pruftoken from "assets/img/pruftoken.png";
 import pruftokenblk from "assets/img/Sidebar Backgrounds/pruftokenblk.png";
 import { Tooltip } from "@material-ui/core";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 var ps;
 
@@ -441,7 +442,7 @@ class Sidebar extends React.Component {
             className={classes.itemLink}
           // onClick={() => this.openCollapse("openAvatar")}
           >
-            {addr !== undefined && (
+            {addr !== undefined && !isAndroid && (
               <>
                 {!this.state.copyText && bgColor !== "white" && (
                   <Tooltip
@@ -480,6 +481,16 @@ class Sidebar extends React.Component {
                   </Tooltip>
                 )}
               </>
+            )}
+            {addr !== undefined && isAndroid && (
+              <Tooltip
+                  title="Copy to Clipboard"
+                >
+                  <CopyToClipboard text={addr}
+                    onCopy={() => { swal("Address Copied to Clipboard!") }}>
+                    <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                  </CopyToClipboard>
+                </Tooltip>
             )}
             {addr === undefined && bgColor !== "white" && (
               <h5 className="addressText">
