@@ -337,14 +337,13 @@ export default function Dashboard(props) {
       if (!window.replaceAssetData || JSON.stringify(window.replaceAssetData) === "{}") {
         window.replaceAssetData = {};
       }
-      else if (window.replaceAssetData.ether) {
-        setETHBalance(window.replaceAssetData.ether);
+      if (window.replaceAssetData.ether || window.replaceAssetData.pruf || window.replaceAssetData.assets){
+        if (window.replaceAssetData.ether) setETHBalance(window.replaceAssetData.ether);
+        if (window.replaceAssetData.pruf) setPrufBalance(window.replaceAssetData.pruf);
+        if (window.replaceAssetData.assets) setAssetBalance(window.replaceAssetData.assets);
         window.replaceAssetData = {};
       }
-      else if (window.replaceAssetData.pruf) {
-        setPrufBalance(window.replaceAssetData.pruf);
-        window.replaceAssetData = {};
-      }
+      
       else if (window.replaceAssetData.key !== thousandHashesOf(addr, winKey)) {
         window.replaceAssetData = {}
         console.log("Invalid key passed. Aborted call.")

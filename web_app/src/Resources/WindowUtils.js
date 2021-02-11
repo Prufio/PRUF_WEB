@@ -624,7 +624,7 @@ function buildWindowUtils() {
     }
 
     else if (status === "60") {
-      tempStat = "Discarded"
+      tempStat = "Recyclable"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -1105,7 +1105,7 @@ function buildWindowUtils() {
 
       //window.utils.checkCreds()
 
-      console.log("window costs object: ", window.costs);
+      //console.log("window costs object: ", window.costs);
       return window.costs
       //console.log("this should come last");
     }

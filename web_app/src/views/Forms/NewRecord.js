@@ -1,6 +1,7 @@
 import React from "react";
 import swal from 'sweetalert';
 import base64 from 'base64-arraybuffer';
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -26,6 +27,7 @@ import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import { DashboardOutlined, Description } from "@material-ui/icons";
+import { setConstantValue } from "typescript";
 
 const useStyles = makeStyles(styles);
 
@@ -43,6 +45,7 @@ export default function NewRecord(props) {
   const [assetClassName, setAssetClassName] = React.useState("");
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("");
   const [isUploading, setIsUploading] = React.useState(false);
+  const [NRCost, setNRCost] = React.useState("~")
 
   //const [ipfsObj, setIpfsObj] = React.useState("");
 
@@ -107,6 +110,9 @@ export default function NewRecord(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
   }, [])
 
@@ -122,8 +128,32 @@ export default function NewRecord(props) {
       if (event.target.value === "1000004") {
         setAssetClassName("Personal Computers")
       }
+      window.utils.getCosts(6, event.target.value).then((e)=>{
+        setNRCost(window.web3.utils.fromWei(e.newAsset))
+      })
     }
   };
+
+  const refreshBalances = async () => {
+    if(!window.web3.eth) return
+
+    let pruf, ether;
+    
+    console.log("Refreshing ether bal")
+    await window.web3.eth.getBalance(props.addr, (err, result) => {
+      if (err) { console.log(err) } 
+      else { ether = window.web3.utils.fromWei(result, 'ether') }
+      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
+        if (err) { console.log(err) }
+        else { pruf = window.web3.utils.fromWei(result, 'ether') }
+        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
+          if (err) { console.log(err) }
+          else { window.replaceAssetData = {assets: result, ether, pruf} }
+        });
+      });
+    });
+  }
+
 
   const IDHolderPrompt = () => {
 
@@ -592,6 +622,7 @@ export default function NewRecord(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
+          refreshBalances()
           window.location.href = "/#/user/dashboard"
           window.replaceAssetData = {key: pageKey, newAsset: newAsset}
         })
@@ -625,7 +656,25 @@ export default function NewRecord(props) {
           <br />
         </Card>
       )}
-      {window.contracts !== undefined && (
+      {props.IDHolder === undefined && (
+        <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              <Category />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h3>
+                Getting Token Balances<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              </h3>
+            </form>
+          </CardBody>
+          <br />
+        </Card>
+      )}
+      {window.contracts !== undefined && props.IDHolder !== undefined && (
         <GridContainer>
           {props.IDHolder === false && (
             <>
@@ -854,18 +903,6 @@ export default function NewRecord(props) {
                           )}
                           {!transactionActive && (
                             <>
-                              {/* <CustomInput
-                                labelText="Asset Name"
-                                id="assetName"
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setNameTag(event.target.value.trim())
-                                  },
-                                }}
-                              /> */}
                               <TextField
                                 onChange={(e) => { setDescription(e.target.value) }}
                                 id="outlined-multiline-static"
@@ -879,19 +916,6 @@ export default function NewRecord(props) {
                           )}
                           {transactionActive && description !== "" && (
                             <>
-                              {/* <CustomInput
-                                labelText="Asset Name"
-                                id="assetName"
-                                disabled
-                                formControlProps={{
-                                  fullWidth: true
-                                }}
-                                inputProps={{
-                                  onChange: event => {
-                                    setNameTag(event.target.value.trim())
-                                  },
-                                }}
-                              /> */}
                               <TextField
                                 id="outlined-multiline-static"
                                 label="Asset Description:"
@@ -1047,7 +1071,7 @@ export default function NewRecord(props) {
                               />
                             </>
                           )}
-                          <h4>AC Selected: {assetClassName}, (ID: {assetClass})</h4>
+                          <h4>AC Selected: {assetClassName} (ID: {assetClass})</h4>
                         </form>
                       </CardBody>
                     </Card>
@@ -1220,9 +1244,12 @@ export default function NewRecord(props) {
                             )}
                           </>
                           {!transactionActive && !isUploading &&(
+                            <>
+                            <h4>Cost to create asset in AC: ü{NRCost}</h4>
                             <div className="MLBGradientSubmit">
                               <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Asset</Button>
                             </div>
+                            </>
                           )}
                           {!transactionActive && ipfsActive && (
                             <h3>

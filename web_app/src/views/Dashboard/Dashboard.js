@@ -52,6 +52,9 @@ export default function Dashboard(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
   }, [])
 
@@ -72,6 +75,9 @@ export default function Dashboard(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
     //console.log(props.ps.element.scrollTop)
     const url = String(baseURL) + String(e.idxHash)

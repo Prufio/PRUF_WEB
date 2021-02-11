@@ -139,6 +139,9 @@ export default function Search(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
   }, [])
 
@@ -259,6 +262,9 @@ export default function Search(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
     let temp = Object.assign(asset, ipfsObject)
     let tempObj = JSON.parse(JSON.stringify(temp))
@@ -341,6 +347,9 @@ export default function Search(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
   };
 
@@ -352,6 +361,9 @@ export default function Search(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
   };
 
@@ -957,6 +969,9 @@ export default function Search(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
     if (!IDXRawInput) {
       if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
@@ -1145,6 +1160,9 @@ export default function Search(props) {
     }
     else {
       window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
     }
     setRetrieving(true)
     console.log("in rrqr")
@@ -1740,9 +1758,9 @@ export default function Search(props) {
                     {/* {!transaction && (
                   <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
                 )} */}
-                    {recycled && !transaction && !isRecycling && (
+                    {recycled && !transaction && !isRecycling && props.addr && (
                       <>
-                        <h3>This asset has been discarded, to claim it, press "Recycle Asset" below!</h3>
+                        {/* <h3>This asset has been discarded, to claim it, press "Recycle Asset" below!</h3> */}
                         <Button onClick={() => { recycle() }} color="info" className="MLBGradient">Recycle Asset</Button>
                       </>
                     )}
@@ -2194,7 +2212,7 @@ export default function Search(props) {
                                 </>
                               )}
                             </>
-                            {!transaction && (
+                            {!transaction && props.addr && (
                               <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Owner</Button>
                             )}
                             {!transaction && (
@@ -2498,7 +2516,7 @@ export default function Search(props) {
                             </>
                           )}
                         </>
-                        {!transaction && (
+                        {!transaction && props.addr && (
                           <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Owner</Button>
                         )}
                         {!transaction && (
