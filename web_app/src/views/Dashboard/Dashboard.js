@@ -115,6 +115,7 @@ export default function Dashboard(props) {
                   <CardHeader image className={classes.cardHeaderHoverDashboard}>
                     <a className="dashboardAssetImage" onClick={() => moreInfo({
                       dBIndex: i,
+                      id: arr[i].id,
                       countPair: arr[i].countPair,
                       idxHash: arr[i].id,
                       descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
@@ -190,6 +191,7 @@ export default function Dashboard(props) {
                     >
                       <Button color="success" simple justIcon onClick={() => moreInfo({
                         dBIndex: i,
+                        id: arr[i].id,
                         countPair: arr[i].countPair,
                         idxHash: arr[i].id,
                         descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
@@ -425,7 +427,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <Jdenticon value={selectedAssetObj.idxHash} />
+                      <Jdenticon value={selectedAssetObj.id} />
                     </>
                   )}
                 </CardHeader>
@@ -458,7 +460,7 @@ export default function Dashboard(props) {
                         <KeyboardArrowLeft />
                       </Button>
                     </Tooltip>
-                    <Jdenticon value={selectedAssetObj.idxHash} />
+                    <Jdenticon value={selectedAssetObj.id} />
                   </>)}
                 </CardHeader>
               )}
