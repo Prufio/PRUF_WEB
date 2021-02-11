@@ -802,12 +802,6 @@ cursor:pointer;
   }
 }
 
-.loadingText {
-  /* color: black; */
-  margin-top: 80px;
-  margin-right: -20px !important;
-}
-
 .loadingImage {
   display: flex;
   width: 180px;
