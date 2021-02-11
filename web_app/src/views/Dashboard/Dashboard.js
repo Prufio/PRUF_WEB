@@ -634,7 +634,7 @@ export default function Dashboard(props) {
                       title="Copy to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 14) + "..." + selectedAssetObj.idxHash.substring(52, 66)}</a>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</a>
                       </div>
                     </Tooltip>
                   )}
@@ -643,7 +643,7 @@ export default function Dashboard(props) {
                       title="Copied to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 14) + "..." + selectedAssetObj.idxHash.substring(52, 66)}</a>
+                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</a>
                       </div>
                     </Tooltip>
                   )}
