@@ -78,14 +78,14 @@ export default function ModifyStatus(props) {
     let e = event.target.value
 
     switch (e) {
-      case "transferrable": {
+      case "transferable": {
         status = Number(51);
-        statusName = "Transferrable";
+        statusName = "Transferable";
         break
       }
-      case "nontransferrable": {
+      case "nontransferable": {
         status = Number(52);
-        statusName = "Non-Transferrable";
+        statusName = "Non-Transferable";
         break
       }
       case "stolen": {
@@ -328,18 +328,18 @@ export default function ModifyStatus(props) {
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected
                   }}
-                  value="transferrable"
+                  value="transferable"
                 >
-                  Transferrable
+                  Transferable
                           </MenuItem>
                 <MenuItem
                   classes={{
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected
                   }}
-                  value="nontransferrable"
+                  value="nontransferable"
                 >
-                  Non-Transferrable
+                  Non-Transferable
                           </MenuItem>
                 <MenuItem
                   classes={{

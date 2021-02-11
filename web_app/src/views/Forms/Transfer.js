@@ -63,7 +63,7 @@ export default function Transfer(props) {
   if (assetInfo.statusNum !== "51") {
     swal({
       title: "Asset not in correct status!",
-      text: "This asset is not in a transferrable status, please set asset into transferrable status before attempting to transfer.",
+      text: "This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.",
       icon: "warning",
       button: "Close",
     });

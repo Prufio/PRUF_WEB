@@ -539,12 +539,12 @@ function buildWindowUtils() {
     }
 
     else if (status === "1") {
-      tempStat = "Transferrable"
+      tempStat = "Transferable"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "2") {
-      tempStat = "Non-Transferrable"
+      tempStat = "Non-Transferable"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -579,12 +579,12 @@ function buildWindowUtils() {
     }
 
     else if (status === "51") {
-      tempStat = "Transferrable"
+      tempStat = "Transferable"
       console.log("Asset in :", tempStat, "status.")
     }
 
     else if (status === "52") {
-      tempStat = "Non-Transferrable"
+      tempStat = "Non-Transferable"
       console.log("Asset in :", tempStat, "status.")
     }
 
@@ -1348,8 +1348,8 @@ function buildWindowUtils() {
               }
 
               if (_result[0] === "50") { statuses.push("In Locked Escrow") }
-              else if (_result[0] === "51") { statuses.push("Transferrable") }
-              else if (_result[0] === "52") { statuses.push("Non-Transferrable") }
+              else if (_result[0] === "51") { statuses.push("Transferable") }
+              else if (_result[0] === "52") { statuses.push("Non-Transferable") }
               else if (_result[0] === "53") { statuses.push("MARKED STOLEN") }
               else if (_result[0] === "54") { statuses.push("MARKED LOST") }
               else if (_result[0] === "55") { statuses.push("Transferred/Unclaimed") }

@@ -496,7 +496,7 @@ export default function NewRecord(props) {
       assetClassName: assetClassName,
       dBIndex: props.assetArr.length,
       countPair: [100000,100000],
-      status: "Transferrable",
+      status: "Transferable",
       statusNum: 51,
       Description: ipfsObj.text.Description,
       note: "",
