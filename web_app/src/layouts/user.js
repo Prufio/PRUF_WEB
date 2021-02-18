@@ -911,6 +911,9 @@ export default function Dashboard(props) {
                   assetArray.push(assetObj)
                   forceUpdate()
                 }
+  
+                req.open('GET', vals[i], true);
+                req.send();
               }
               else {
                 for (let x = 0; x < assetData.length; x++) {
