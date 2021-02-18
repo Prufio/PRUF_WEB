@@ -64,10 +64,10 @@ export default function ModifyStatus(props) {
     window.location.reload()
   }
 
-  if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56") {
+  if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56" || assetInfo.statusNum === "70") {
     swal({
       title: "Asset not in correct status!",
-      text: "This asset is not in a modifyable status, please set asset into a non-escrow status before attempting to modify.",
+      text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
       icon: "warning",
       button: "Close",
     });
@@ -184,7 +184,9 @@ export default function ModifyStatus(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
+          //refreshBalances()
           window.location.href = assetInfo.lastRef;
+          window.backIndex = assetInfo.dBIndex
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })
       });
@@ -193,7 +195,28 @@ export default function ModifyStatus(props) {
   }
 
   const goBack = () => {
+    window.backIndex = assetInfo.dBIndex
     window.location.href=assetInfo.lastRef;
+  }
+
+  const refreshBalances = async () => {
+    if(!window.web3.eth) return
+
+    let pruf, ether;
+    
+    console.log("Refreshing ether bal")
+    await window.web3.eth.getBalance(props.addr, (err, result) => {
+      if (err) { console.log(err) } 
+      else { ether = window.web3.utils.fromWei(result, 'ether') }
+      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
+        if (err) { console.log(err) }
+        else { pruf = window.web3.utils.fromWei(result, 'ether') }
+        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
+          if (err) { console.log(err) }
+          else { window.replaceAssetData = {assets: result, ether, pruf} }
+        });
+      });
+    });
   }
 
   const thousandHashesOf = (varToHash) => {
@@ -267,6 +290,8 @@ export default function ModifyStatus(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
+          //refreshBalances()
+          window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })

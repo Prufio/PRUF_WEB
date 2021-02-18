@@ -31,7 +31,8 @@ const useStyles = makeStyles(styles);
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
-  const IPFS = require("ipfs-mini")
+  const IPFS = require('ipfs-http-client') //require("ipfs-mini")
+  const [ODB, setODB] = React.useState(null)
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [miniActive, setMiniActive] = React.useState(false);
   const [image, setImage] = React.useState(require("assets/img/Sidebar Backgrounds/TracesWB.jpg"));
@@ -45,7 +46,7 @@ export default function Dashboard(props) {
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
   const [resetInfo, setResetInfo] = React.useState(false);
-  const [isIDHolder, setIsIDHolder] = React.useState(false);
+  const [isIDHolder, setIsIDHolder] = React.useState();
   const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
   const [sps, setSps] = React.useState(undefined)
   const [assetObjectArr, setAssetObjectArr] = React.useState([])
@@ -64,6 +65,7 @@ export default function Dashboard(props) {
   const [reserveAD, setReserveAD] = React.useState({})
   const [assetArr, setAssetArr] = React.useState({})
   const [winKey, setWinKey] = React.useState(String(Math.round(Math.random() * 100000)))
+
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
@@ -231,11 +233,17 @@ export default function Dashboard(props) {
     window.recount = false;
     let _ipfs;
 
-    _ipfs = new IPFS({
+    const OrbitDB = require('orbit-db')
+
+    /* _ipfs = new IPFS({
       host: "ipfs.infura.io",
       port: 5001,
       protocol: "https",
-    });
+    }); */
+
+    _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"))
+
+    //console.log(_ipfs)
 
     let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length))
     //console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
@@ -253,6 +261,14 @@ export default function Dashboard(props) {
     }
 
     window.ipfs = _ipfs;
+
+    /* OrbitDB.createInstance(_ipfs).then((e)=>{
+      if(e){
+        console.log(e)
+        setODB(e)
+      }
+    })  */
+
 
     buildWindowUtils(); // get the utils object and make it globally accessible
 
@@ -278,13 +294,13 @@ export default function Dashboard(props) {
 
     window.ipfsCounter = 0;
 
-    _ipfs = new IPFS({
+    /* _ipfs = new IPFS({
       host: "ipfs.infura.io",
       port: 5001,
       protocol: "https",
-    });
+    }); */
 
-    window.ipfs = _ipfs;
+    //window.ipfs = _ipfs;
     //Give me the desktop version
     if (window.ethereum) {
       handleEthereum()
@@ -334,32 +350,42 @@ export default function Dashboard(props) {
   React.useEffect(() => {
     if (isMounted) {
       //console.log("Heard call for replace.")
-      if (!window.replaceAssetData || JSON.stringify(window.replaceAssetData) === "{}") {
+      if (!window.replaceAssetData || Object.values(window.replaceAssetData).length === 0) {
         window.replaceAssetData = {};
       }
-      if (window.replaceAssetData.ether || window.replaceAssetData.pruf || window.replaceAssetData.assets){
+      if (window.replaceAssetData.ether || window.replaceAssetData.pruf || window.replaceAssetData.assets || window.replaceAssetData.IDHolder) {
+        console.log("Resetting token value")
         if (window.replaceAssetData.ether) setETHBalance(window.replaceAssetData.ether);
         if (window.replaceAssetData.pruf) setPrufBalance(window.replaceAssetData.pruf);
         if (window.replaceAssetData.assets) setAssetBalance(window.replaceAssetData.assets);
+        if (window.replaceAssetData.IDHolder) setIsIDHolder(true);
         window.replaceAssetData = {};
       }
-      
+
       else if (window.replaceAssetData.key !== thousandHashesOf(addr, winKey)) {
-        window.replaceAssetData = {}
-        console.log("Invalid key passed. Aborted call.")
+        window.replaceAssetData = {};
+        console.log("Invalid key passed. Aborted call to replace.")
       }
+
       else {
         setWinKey(String(Math.round(Math.random() * 100000)));
         console.log("Object is defined. index: ", window.replaceAssetData.dBIndex, " new asset: ", window.replaceAssetData.newAsset)
         let newAsset = window.replaceAssetData.newAsset;
         let dBIndex = window.replaceAssetData.dBIndex;
+        let tempArr;
+        if(!assetArr || assetArr.length < 1){
+          tempArr = [];
+        }
 
-        if (newAsset && dBIndex) {
+        else {
+          tempArr = JSON.parse(JSON.stringify(assetArr))
+        } 
+
+        if (newAsset && dBIndex > -1) {
           newAsset.id = newAsset.idxHash;
           //newAsset.lastRef = "/#/user/dashboard"
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id}/>
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
           console.log("Replacing asset at index: ", dBIndex)
-          let tempArr = JSON.parse(JSON.stringify(assetArr))
           console.log("Old Assets", tempArr)
           tempArr.splice(dBIndex, 1, newAsset)
           console.log("New Assets", tempArr)
@@ -368,9 +394,8 @@ export default function Dashboard(props) {
           reloadAssetAt(dBIndex, newAsset.idxHash)
         }
 
-        else if (dBIndex && !newAsset) {
+        else if (dBIndex > -1 && !newAsset) {
           console.log("Deleting asset at index: ", dBIndex)
-          let tempArr = JSON.parse(JSON.stringify(assetArr))
           console.log("Old Assets", tempArr)
           tempArr.splice(dBIndex, 1)
           console.log("New Assets", tempArr)
@@ -381,9 +406,8 @@ export default function Dashboard(props) {
         else if (newAsset && !dBIndex) {
           newAsset.id = newAsset.idxHash;
           //newAsset.lastRef = "/#/user/dashboard";
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id}/>
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
           console.log("Adding asset: ", newAsset);
-          let tempArr = JSON.parse(JSON.stringify(assetArr));
           console.log("Old Assets", tempArr);
           tempArr.push(newAsset)
           console.log("New Assets", tempArr);
@@ -391,13 +415,10 @@ export default function Dashboard(props) {
           window.replaceAssetData = {}
           reloadAssetAt(tempArr.length - 1, newAsset.idxHash);
         }
-
         forceUpdate()
       }
     }
   }, [window.replaceAssetData]);
-
-  // React.useEffect(() => { if (window.resetInfo !== resetInfo) { setResetInfo(window.resetInfo) } }, [window.resetInfo])
 
   React.useEffect(() => {
     if (resetInfo) {
@@ -421,8 +442,6 @@ export default function Dashboard(props) {
       window.resetInfo = false;
     }
   }, [resetInfo])
-
-  // functions for changeing the states from components
 
   const handleImageClick = image => {
     setImage(image);
@@ -564,7 +583,7 @@ export default function Dashboard(props) {
             let newAsset = {}
 
             window.utils.getACName(tempResult[2]).then((e) => {
-              newAsset = Object.assign(newAsset,{
+              newAsset = Object.assign(newAsset, {
                 id: idxHash,
                 idxHash: idxHash,
                 statusNum: String(tempResult[0]),
@@ -575,13 +594,15 @@ export default function Dashboard(props) {
                 ipfs: ipfsHash,
                 countPair: [tempResult[4], tempResult[3]]
               })
-              window.utils.getStatusString(String(tempResult[0])).then((e) => {
+
+              window.utils.getStatusString(String(tempResult[0])).then(async(e) => {
                 newAsset.status = e;
 
                 let assetObj;
+                for await (const chunk of window.ipfs.cat(ipfsHash)) {
+                  let str = new TextDecoder("utf-8").decode(chunk);
 
-                window.ipfs.cat(ipfsHash, async (error, result) => {
-                  if (error) {
+                  if (!str) {
                     assetObj = { text: {}, photo: {}, urls: {}, name: "" }
                     newAsset.text = assetObj.text;
                     newAsset.Description = "";
@@ -590,23 +611,25 @@ export default function Dashboard(props) {
                     newAsset.photo = assetObj.photo;
                     newAsset.DisplayImage = ""
                     finalize(newAsset)
-                  } else {
+                  }
+
+                  else {
                     console.log("Got updated asset ipfs")
-                    assetObj = JSON.parse(result)
-                    newAsset.photoUrls = JSON.parse(result).photo;
+                    assetObj = JSON.parse(str)
+                    newAsset.photoUrls = JSON.parse(str).photo;
                     let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-    
+
                     newAsset.text = assetObj.text;
                     newAsset.Description = assetObj.text.Description;
                     newAsset.urls = assetObj.urls;
                     newAsset.name = assetObj.name;
-    
+
                     if (keys.length < 1) {
                       newAsset.photo = assetObj.photo;
                       newAsset.DisplayImage = ""
                       finalize(newAsset)
                     }
-    
+                    //console.log(chunk)
                     for (let i = 0; i < keys.length; i++) {
                       const get = () => {
                         if (vals[i].includes("data") && vals[i].includes("base64")) {
@@ -620,16 +643,16 @@ export default function Dashboard(props) {
                             //console.log("Setting Display Image")
                             assetObj.DisplayImage = (assetObj.photo[keys[0]])
                           }
-    
+
                           if (i + 1 === keys.length) {
                             newAsset.photo = assetObj.photo;
                             newAsset.DisplayImage = assetObj.DisplayImage;
                             finalize(newAsset)
                           }
-    
+
                           forceUpdate();
                         }
-    
+
                         else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
                           assetObj.photo[keys[i]] = vals[i];
                           if (keys[i] === "DisplayImage") {
@@ -640,45 +663,45 @@ export default function Dashboard(props) {
                             //console.log("Setting Display Image")
                             assetObj.DisplayImage = (assetObj.photo[keys[0]])
                           }
-    
+
                           if (i + 1 === keys.length) {
                             newAsset.photo = assetObj.photo;
                             newAsset.DisplayImage = assetObj.DisplayImage;
                             finalize(newAsset)
                           }
-    
+
                           forceUpdate();
                         }
-    
+
                         else {
                           const req = new XMLHttpRequest();
                           req.responseType = "text";
-    
+
                           req.onload = function (e) {
                             //console.log("in onload")
                             if (this.response.includes("base64")) {
                               assetObj.photo[keys[i]] = this.response;
                               //console.log(assetObj.photo[keys[i]]);
-    
+
                               if (keys[i] === "DisplayImage") {
                                 //console.log("Setting Display Image")
                                 assetObj.DisplayImage = assetObj.photo[keys[i]]
                               }
-    
+
                               else if (i === keys.length - 1) {
                                 //console.log("Setting Display Image")
                                 assetObj.DisplayImage = assetObj.photo[keys[0]]
                               }
                               forceUpdate();
                             }
-    
+
                             if (i + 1 === keys.length) {
                               newAsset.photo = assetObj.photo;
                               newAsset.DisplayImage = assetObj.DisplayImage;
                               finalize(newAsset)
                             }
                           }
-    
+
                           req.onerror = function (e) {
                             //console.log("http request error")
                             if (vals[i].includes("http")) {
@@ -693,7 +716,7 @@ export default function Dashboard(props) {
                               }
                               forceUpdate();
                             }
-    
+
                             if (i + 1 === keys.length) {
                               newAsset.photo = assetObj.photo;
                               newAsset.DisplayImage = assetObj.DisplayImage;
@@ -705,424 +728,436 @@ export default function Dashboard(props) {
                         }
                       }
                       await get()
-                    }
                   }
-                });
-              })
-            })
-          }
-        });
-
-  }
-
-  const sidebarMinimize = () => {
-    setMiniActive(!miniActive);
-  };
-
-  const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
-    }
-  };
-
-  const thousandHashesOf = (varToHash) => {
-    if (!window.web3) return
-    let tempHash = varToHash;
-    for (let i = 0; i < 1000; i++) {
-      tempHash = window.web3.utils.soliditySha3(tempHash);
-      //console.log(tempHash);
-    }
-    return tempHash;
-  }
-
-  const setUpContractEnvironment = async (_web3, _addr) => {
-    if (window.isKovan === false) { return }
-    //console.log("IN SUCE, addr:", _addr)
-    if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
-    window.isSettingUpContracts = true;
-    if (window.ethereum) {
-      window._contracts = await buildContracts(_web3)
-
-      await window.utils.getContracts().then(() => {
-        window.isSettingUpContracts = false;
-        setWD(true)
-        if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
-      })
-
-      if (_addr) {
-        await window.utils.getETHBalance(_addr);
-        await setUpTokenVals(true, "SetupContractEnvironment", _addr)
-      }
-    }
-
-    else {
-      window.isSettingUpContracts = true;
-      window._contracts = await buildContracts(_web3)
-      await window.utils.getContracts().then(() => {
-        window.isSettingUpContracts = false;
-        setWD(true)
-      })
-    }
-
-    //window.addEventListener("navigator", navTypeListener);
-
-  }
-
-  const setUpAssets = async (who, _addr, recount, which) => {
-    console.log("SUA, called from ", who)
-
-    let tempObj = {};
-
-    window.hasNoAssets = false;
-    window.hasNoAssetClasses = false;
-    window.ipfsCounter = 0;
-    window.ipfsHashArray = [];
-    window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-    window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
-    window.hasLoadedAssetClasses = false;
-    window.assetTokenInfo = {
-      assetClass: undefined,
-      idxHash: undefined,
-      name: undefined,
-      photos: undefined,
-      text: undefined,
-      status: undefined,
-    }
-
-    if (which) {
-      // Add pick/replace asset by index
-    }
-
-    //Case of recount
-    if (window.recount === true) {
-      window.aTknIDs = [];
-      window.acTknIDs = [];
-      if (window.balances !== undefined) window.balances.assetBalance = 0;
-      window.recount = false
-      await window.utils.getETHBalance(_addr);
-      return setUpTokenVals(true, "SUA recount", _addr)
-    }
-    console.log("SA: In setUpAssets")
-
-    window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
-      if (simpleAssets.ipfs) {
-        if (!simpleAssetView) { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }
-        else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
-      }
-    })
-
-  }
-
-  const getIpfsData = async (simpleAssets, array, jobs, iteration, assetData) => {
-    let _assetData
-    if (!array) return
-    if (!iteration) {
-      iteration = 1
-    }
-    if (!jobs) {
-      jobs = array.length
-    }
-    if (assetData) {
-      _assetData = assetData
-    } else {
-      _assetData = [];
-    }
-    if (jobs < iteration) {
-      //console.log(_assetData);
-      console.log("Finished getting extended data.");
-      return buildAssets(simpleAssets, _assetData);
-    }
-
-    let lookup = array[iteration - 1]
-
-    await window.ipfs.cat(lookup, async (error, result) => {
-      if (error) {
-        _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-        console.log(error)
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-      } else {
-        console.log("got job #", iteration)
-        _assetData.push(JSON.parse(result))
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-      }
-    });
-  }
-
-  const buildAssets = async (simpleAssets, assetData, noIpfs) => {
-    let ids = simpleAssets.ids;
-    setReserveAD(assetData)
-    console.log("BA: In buildAssets.")
-    let tempObj = simpleAssets;
-    let assetArray = [];
-
-    if (ids.length > 0) {
-      if (noIpfs) {
-        for (let x = 0; x < ids.length; x++) {
-          let assetObj = { text: {}, photo: {}, urls: {}, name: "Name Unavailable" }
-
-          assetObj.DisplayImage = "";
-          assetObj.identicon = <Jdenticon value={ids[x]} />;
-          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-          assetObj.note = "";
-          assetObj.photoUrls = {}
-          assetObj.id = simpleAssets.ids[x];
-          assetObj.ipfs = simpleAssets.ipfs[x];
-          assetObj.countPair = simpleAssets.countPairs[x];
-          assetObj.assetClass = simpleAssets.assetClasses[x];
-          assetObj.status = simpleAssets.statuses[x];
-          assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x];
-
-          console.log(assetObj)
-          assetArray.push(assetObj)
-          forceUpdate()
-        }
-      }
-      else {
-        for (let x = 0; x < assetData.length; x++) {
-          let vals = Object.values(assetData[x].photo), keys = Object.keys(assetData[x].photo);
-          let assetObj = { text: {}, photo: {}, urls: {}, name: "" }
-
-          if (assetData[x].name === "" || assetData[x].name === undefined) {
-            assetObj.name = "Name Unavailable";
-          }
-
-          else {
-            assetObj.name = assetData[x].name
-          }
-
-          for (let i = 0; i < keys.length; i++) {
-            const get = () => {
-              if (vals[i].includes("data") && vals[i].includes("base64")) {
-                assetObj.photo[keys[i]] = vals[i];
-                //console.log(assetObj.photo[keys[i]]);
-                //console.log(x);
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
                 }
-                else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-                //setAssetArr(assetArray)
-                forceUpdate();
               }
+            });
+          })
+        }
+      })
+    }
 
-              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                assetObj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-                //setAssetArr(assetArray)
-                forceUpdate();
+          const sidebarMinimize = () => {
+            setMiniActive(!miniActive);
+          };
+
+          const resizeFunction = () => {
+            if (window.innerWidth >= 960) {
+              setMobileOpen(false);
+            }
+          };
+
+          const thousandHashesOf = (varToHash) => {
+            if (!window.web3) return
+            let tempHash = varToHash;
+            for (let i = 0; i < 1000; i++) {
+              tempHash = window.web3.utils.soliditySha3(tempHash);
+              //console.log(tempHash);
+            }
+            return tempHash;
+          }
+
+          const setUpContractEnvironment = async (_web3, _addr) => {
+            if (window.isKovan === false) { return }
+            //console.log("IN SUCE, addr:", _addr)
+            if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
+            window.isSettingUpContracts = true;
+            if (window.ethereum) {
+              window._contracts = await buildContracts(_web3)
+
+              await window.utils.getContracts().then(() => {
+                window.isSettingUpContracts = false;
+                setWD(true)
+                if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
+              })
+
+              if (_addr) {
+                await window.utils.getETHBalance(_addr);
+                await setUpTokenVals(true, "SetupContractEnvironment", _addr)
+              }
+            }
+
+            else {
+              window.isSettingUpContracts = true;
+              window._contracts = await buildContracts(_web3)
+              await window.utils.getContracts().then(() => {
+                window.isSettingUpContracts = false;
+                setWD(true)
+              })
+            }
+
+            //window.addEventListener("navigator", navTypeListener);
+
+          }
+
+          const setUpAssets = async (who, _addr, recount, which) => {
+            console.log("SUA, called from ", who)
+
+            let tempObj = {};
+
+            window.hasNoAssets = false;
+            window.hasNoAssetClasses = false;
+            window.ipfsCounter = 0;
+            window.ipfsHashArray = [];
+            window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+            window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
+            window.hasLoadedAssetClasses = false;
+            window.assetTokenInfo = {
+              assetClass: undefined,
+              idxHash: undefined,
+              name: undefined,
+              photos: undefined,
+              text: undefined,
+              status: undefined,
+            }
+
+            if (which) {
+              // Add pick/replace asset by index
+            }
+
+            //Case of recount
+            if (window.recount === true) {
+              window.aTknIDs = [];
+              window.acTknIDs = [];
+              if (window.balances !== undefined) window.balances.assetBalance = 0;
+              window.recount = false
+              await window.utils.getETHBalance(_addr);
+              return setUpTokenVals(true, "SUA recount", _addr)
+            }
+            console.log("SUA: In setUpAssets")
+
+            window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
+              if (simpleAssets.ipfs) {
+                if (!simpleAssetView) { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }
+                else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
+              }
+            })
+
+          }
+
+          const getIpfsData = async (simpleAssets, array, jobs, iteration, assetData) => {
+            let _assetData
+            if (!array) return
+            //console.log(array)
+            if (!iteration) {
+              iteration = 1
+            }
+            if (!jobs) {
+              jobs = array.length
+            }
+            if (assetData) {
+              _assetData = assetData
+            } else {
+              _assetData = [];
+            }
+            if (jobs < iteration) {
+              //console.log(_assetData);
+              console.log("Finished getting extended data.");
+              return buildAssets(simpleAssets, _assetData);
+            }
+
+            let lookup = array[iteration - 1]
+
+            for await (const chunk of window.ipfs.cat(lookup)) {
+              let str = new TextDecoder("utf-8").decode(chunk);
+              //console.log(str)
+              if (!str) {
+                _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+                console.log("error")
+                return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
               }
 
               else {
-                const req = new XMLHttpRequest();
-                req.responseType = "text";
+                //console.log(str)
+                console.log("got job #", iteration)
+                try{
+                  _assetData.push(JSON.parse(str))
+                }
+                catch{
+                  _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+                }
+                return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+              }
+              //console.log(chunk)
+            }
+          }
 
-                req.onload = function (e) {
-                  //console.log("in onload")
-                  if (this.response.includes("base64")) {
-                    assetObj.photo[keys[i]] = this.response;
-                    //console.log(assetObj.photo[keys[i]]);
-                    //console.log(x);
-                    if (keys[i] === "DisplayImage") {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                    }
-                    else if (i === keys.length - 1) {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                    }
-                    //setAssetArr(assetArray)
-                    forceUpdate();
+          const buildAssets = async (simpleAssets, assetData, noIpfs) => {
+            let ids = simpleAssets.ids;
+            setReserveAD(assetData)
+            console.log("BA: In buildAssets.")
+            let tempObj = simpleAssets;
+            let assetArray = [];
+
+            if (ids.length > 0) {
+              if (noIpfs) {
+                for (let x = 0; x < ids.length; x++) {
+                  let assetObj = { text: {}, photo: {}, urls: {}, name: "Name Unavailable" }
+
+                  assetObj.DisplayImage = "";
+                  assetObj.identicon = <Jdenticon value={ids[x]} />;
+                  assetObj.identiconLG = <Jdenticon value={ids[x]} />;
+                  assetObj.note = "";
+                  assetObj.photoUrls = {}
+                  assetObj.id = simpleAssets.ids[x];
+                  assetObj.ipfs = simpleAssets.ipfs[x];
+                  assetObj.countPair = simpleAssets.countPairs[x];
+                  assetObj.assetClass = simpleAssets.assetClasses[x];
+                  assetObj.status = simpleAssets.statuses[x];
+                  assetObj.statusNum = simpleAssets.statusNums[x];
+                  assetObj.assetClassName = simpleAssets.assetClassNames[x];
+
+                  console.log(assetObj)
+                  assetArray.push(assetObj)
+                  forceUpdate()
+                }
+              }
+              else {
+                for (let x = 0; x < assetData.length; x++) {
+                  let vals = Object.values(assetData[x].photo), keys = Object.keys(assetData[x].photo);
+                  let assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+
+                  if (assetData[x].name === "" || assetData[x].name === undefined) {
+                    assetObj.name = "Name Unavailable";
                   }
+
+                  else {
+                    assetObj.name = assetData[x].name
+                  }
+
+                  for (let i = 0; i < keys.length; i++) {
+                    const get = () => {
+                      if (vals[i].includes("data") && vals[i].includes("base64")) {
+                        assetObj.photo[keys[i]] = vals[i];
+                        //console.log(assetObj.photo[keys[i]]);
+                        //console.log(x);
+                        if (keys[i] === "DisplayImage") {
+                          //console.log("Setting Display Image")
+                          assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                        }
+                        else if (i === keys.length - 1) {
+                          //console.log("Setting Display Image")
+                          assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                        }
+                        //setAssetArr(assetArray)
+                        forceUpdate();
+                      }
+
+                      else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                        assetObj.photo[keys[i]] = vals[i];
+                        if (keys[i] === "DisplayImage") {
+                          //console.log("Setting Display Image")
+                          assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                        }
+                        else if (i === keys.length - 1) {
+                          //console.log("Setting Display Image")
+                          assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                        }
+                        //setAssetArr(assetArray)
+                        forceUpdate();
+                      }
+
+                      else {
+                        const req = new XMLHttpRequest();
+                        req.responseType = "text";
+
+                        req.onload = function (e) {
+                          //console.log("in onload")
+                          if (this.response.includes("base64")) {
+                            assetObj.photo[keys[i]] = this.response;
+                            //console.log(assetObj.photo[keys[i]]);
+                            //console.log(x);
+                            if (keys[i] === "DisplayImage") {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                            }
+                            else if (i === keys.length - 1) {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                            }
+                            //setAssetArr(assetArray)
+                            forceUpdate();
+                          }
+                        }
+
+                        req.onerror = function (e) {
+                          //console.log("http request error")
+                          if (vals[i].includes("http")) {
+                            assetObj.photo[keys[i]] = vals[i];
+                            if (keys[i] === "DisplayImage") {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                            }
+                            else if (i === keys.length - 1) {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                            }
+                            //setAssetArr(assetArray)
+                            forceUpdate();
+                          }
+                        }
+
+                        req.open('GET', vals[i], true);
+                        req.send();
+                      }
+                    }
+                    await get()
+                  }
+
+
+                  if (keys.length === 0) {
+                    assetObj.DisplayImage = "";
+                  }
+
+                  assetObj.note = simpleAssets.notes[x];
+                  assetObj.photoUrls = assetData[x].photo
+                  assetObj.text = assetData[x].text
+                  assetObj.urls = assetData[x].urls
+
+                  assetObj.identicon = <Jdenticon value={ids[x]} />;
+                  assetObj.identiconLG = <Jdenticon value={ids[x]} />;
+
+                  assetObj.id = simpleAssets.ids[x];
+                  assetObj.ipfs = simpleAssets.ipfs[x];
+                  assetObj.countPair = simpleAssets.countPairs[x];
+                  assetObj.assetClass = simpleAssets.assetClasses[x];
+                  assetObj.status = simpleAssets.statuses[x];
+                  assetObj.statusNum = simpleAssets.statusNums[x];
+                  assetObj.assetClassName = simpleAssets.assetClassNames[x];
+
+                  //console.log(assetObj)
+                  assetArray.push(assetObj)
+                  //setAssetArr(assetArray)
+                  //forceUpdate()
                 }
 
-                req.onerror = function (e) {
-                  //console.log("http request error")
-                  if (vals[i].includes("http")) {
-                    assetObj.photo[keys[i]] = vals[i];
-                    if (keys[i] === "DisplayImage") {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                    }
-                    else if (i === keys.length - 1) {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                    }
-                    //setAssetArr(assetArray)
-                    forceUpdate();
-                  }
-                }
-
-                req.open('GET', vals[i], true);
-                req.send();
               }
             }
-            await get()
+
+            if (window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance) {
+              setAssetBalance(window.balances.assetBalance);
+              setAssetClassBalance(window.balances.assetClassBalance);
+              setPrufBalance(window.balances.prufTokenBalance);
+              setIDBalance(window.balances.IDTokenBalance);
+              setIsAssetHolder(window.window.assetHolderBool);
+              setIsAssetClassHolder(window.assetClassHolderBool);
+              setIsIDHolder(window.IDHolderBool);
+              setHasFetchedBalances(window.hasFetchedBalances);
+            }
+
+            //setAssets(tempObj);
+            setAssetArr(assetArray)
+            //console.log(assetArray)
+            console.log("BA: Assets after rebuild: ", assetArray);
+            forceUpdate();
           }
 
+          //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
+          const setUpTokenVals = async (willSetup, who, _addr) => {
+            console.log("STV: Setting up balances, called from ", who)
 
-          if (keys.length === 0) {
-            assetObj.DisplayImage = "";
+            await window.utils.determineTokenBalance(_addr).then((e) => {
+              if (e === undefined) return console.log("Account Locked")
+              setAssetBalance(e.assetBalance);
+              setAssetClassBalance(e.assetClassBalance);
+              setPrufBalance(e.prufTokenBalance);
+              setIDBalance(e.IDTokenBalance);
+              setIsAssetHolder(window.assetHolderBool);
+              setIsAssetClassHolder(window.assetClassHolderBool);
+              setIsIDHolder(window.IDHolderBool);
+              setHasFetchedBalances(window.hasFetchedBalances);
+              setETHBalance(window.ETHBalance)
+            })
+
+
+            let temp;
+            let temp2;
+
+            if (window.contracts) {
+              await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
+                function (_error, _result) {
+                  if (_error) {
+                    return (console.log("IN ERROR IN ERROR IN ERROR"))
+                  }
+                  else {
+                    temp = window.web3.utils.fromWei(Object.values(_result)[0])
+                    return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
+                  }
+
+                }
+              );
+            }
+
+            if (temp !== undefined) {
+              setCurrentACIndex(temp)
+              setCurrentACPrice(temp2)
+            }
+
+            await console.log(window.balances);
+
+            if (willSetup) {
+              forceUpdate();
+              return setUpAssets("setUpTokenVals", _addr)
+            }
+
+            return forceUpdate();
           }
 
-          assetObj.note = simpleAssets.notes[x];
-          assetObj.photoUrls = assetData[x].photo
-          assetObj.text = assetData[x].text
-          assetObj.urls = assetData[x].urls
-
-          assetObj.identicon = <Jdenticon value={ids[x]} />;
-          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-
-          assetObj.id = simpleAssets.ids[x];
-          assetObj.ipfs = simpleAssets.ipfs[x];
-          assetObj.countPair = simpleAssets.countPairs[x];
-          assetObj.assetClass = simpleAssets.assetClasses[x];
-          assetObj.status = simpleAssets.statuses[x];
-          assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x];
-
-          //console.log(assetObj)
-          assetArray.push(assetObj)
-          setAssetArr(assetArray)
-        }
-
-      }
-    }
-
-    if (window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance) {
-      setAssetBalance(window.balances.assetBalance);
-      setAssetClassBalance(window.balances.assetClassBalance);
-      setPrufBalance(window.balances.prufTokenBalance);
-      setIDBalance(window.balances.IDTokenBalance);
-      setIsAssetHolder(window.window.assetHolderBool);
-      setIsAssetClassHolder(window.assetClassHolderBool);
-      setIsIDHolder(window.IDHolderBool);
-      setHasFetchedBalances(window.hasFetchedBalances);
-    }
-
-    //setAssets(tempObj);
-    setAssetArr(assetArray)
-    //console.log(assetArray)
-    console.log("BA: Assets after rebuild: ", assetArray);
-    forceUpdate();
-  }
-
-  //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-  const setUpTokenVals = async (willSetup, who, _addr) => {
-    console.log("STV: Setting up balances, called from ", who)
-
-    await window.utils.determineTokenBalance(_addr).then((e) => {
-      if (e === undefined) return console.log("Account Locked")
-      setAssetBalance(e.assetBalance);
-      setAssetClassBalance(e.assetClassBalance);
-      setPrufBalance(e.prufTokenBalance);
-      setIDBalance(e.IDTokenBalance);
-      setIsAssetHolder(window.assetHolderBool);
-      setIsAssetClassHolder(window.assetClassHolderBool);
-      setIsIDHolder(window.IDHolderBool);
-      setHasFetchedBalances(window.hasFetchedBalances);
-      setETHBalance(window.ETHBalance)
-    })
-
-
-    let temp;
-    let temp2;
-
-    if (window.contracts) {
-      await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
-        function (_error, _result) {
-          if (_error) {
-            return (console.log("IN ERROR IN ERROR IN ERROR"))
-          }
-          else {
-            temp = window.web3.utils.fromWei(Object.values(_result)[0])
-            return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
-          }
-
-        }
-      );
-    }
-
-    if (temp !== undefined) {
-      setCurrentACIndex(temp)
-      setCurrentACPrice(temp2)
-    }
-
-    await console.log(window.balances);
-
-    if (willSetup) {
-      forceUpdate();
-      return setUpAssets("setUpTokenVals", _addr)
-    }
-
-    return forceUpdate();
-  }
-
-  return (
-    <div className={classes.wrapper}>
-      <Sidebar
-        routes={sidebarRoutes}
-        addr={addr}
-        logoText={"Creative Tim"}
-        logo={logo}
-        image={image}
-        handleDrawerToggle={handleDrawerToggle}
-        open={mobileOpen}
-        color={color}
-        bgColor={bgColor}
-        miniActive={miniActive}
-        {...rest}
-      />
-      <div className={mainPanelClasses} ref={mainPanel}>
-        <AdminNavbar
-          sidebarMinimize={sidebarMinimize.bind(this)}
-          miniActive={miniActive}
-          brandText={getActiveRoute(routes)}
-          handleDrawerToggle={handleDrawerToggle}
-          {...rest}
-        />
-        {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-        {getRoute() ? (
-          <div className={classes.content}>
-            <div className={classes.container}>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
-              </Switch>
+          return (
+            <div className={classes.wrapper}>
+              <Sidebar
+                routes={sidebarRoutes}
+                addr={addr}
+                logoText={"Creative Tim"}
+                logo={logo}
+                image={image}
+                handleDrawerToggle={handleDrawerToggle}
+                open={mobileOpen}
+                color={color}
+                bgColor={bgColor}
+                miniActive={miniActive}
+                {...rest}
+              />
+              <div className={mainPanelClasses} ref={mainPanel}>
+                <AdminNavbar
+                  sidebarMinimize={sidebarMinimize.bind(this)}
+                  miniActive={miniActive}
+                  brandText={getActiveRoute(routes)}
+                  handleDrawerToggle={handleDrawerToggle}
+                  {...rest}
+                />
+                {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+                {getRoute() ? (
+                  <div className={classes.content}>
+                    <div className={classes.container}>
+                      <Switch>
+                        {getRoutes(routes)}
+                        <Redirect from="/user" to="/user/home" />
+                      </Switch>
+                    </div>
+                  </div>
+                ) : (
+                    <div className={classes.map}>
+                      <Switch>
+                        {getRoutes(routes)}
+                        <Redirect from="/user" to="/user/home" />
+                      </Switch>
+                    </div>
+                  )}
+                {getRoute() ? <Footer fluid /> : null}
+                <FixedPlugin
+                  handleImageClick={handleImageClick}
+                  handleColorClick={handleColorClick}
+                  handleBgColorClick={handleBgColorClick}
+                  color={color}
+                  bgColor={bgColor}
+                  bgImage={image}
+                  handleFixedClick={handleFixedClick}
+                  fixedClasses={fixedClasses}
+                  sidebarMinimize={sidebarMinimize.bind(this)}
+                  miniActive={miniActive}
+                />
+              </div>
             </div>
-          </div>
-        ) : (
-            <div className={classes.map}>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
-              </Switch>
-            </div>
-          )}
-        {getRoute() ? <Footer fluid /> : null}
-        <FixedPlugin
-          handleImageClick={handleImageClick}
-          handleColorClick={handleColorClick}
-          handleBgColorClick={handleBgColorClick}
-          color={color}
-          bgColor={bgColor}
-          bgImage={image}
-          handleFixedClick={handleFixedClick}
-          fixedClasses={fixedClasses}
-          sidebarMinimize={sidebarMinimize.bind(this)}
-          miniActive={miniActive}
-        />
-      </div>
-    </div>
-  );
-}
+          );
+        }
