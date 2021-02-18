@@ -14,6 +14,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Icon from '@material-ui/core/Icon';
+import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 
 // @material-ui/icons
 // import ContentCopy from "@material-ui/icons/ContentCopy";
@@ -51,10 +52,13 @@ export default function Dashboard(props) {
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
+    }
+    if(window.assetsPerPage){
+      setAssetsPerPage(window.assetsPerPage);
     }
   }, [])
 
@@ -66,6 +70,11 @@ export default function Dashboard(props) {
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
   const [copyText, setCopyText] = React.useState(false);
+  const [pageNum, setPageNum] = React.useState(1);
+  const [assetsPerPage, setAssetsPerPage] = React.useState(6);
+
+  const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage)
+
 
   const moreInfo = (e) => {
     //console.log(props.ps);
@@ -74,16 +83,31 @@ export default function Dashboard(props) {
       props.ps.element.scrollTop = 0
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
     }
     //console.log(props.ps.element.scrollTop)
     const url = String(baseURL) + String(e.idxHash)
 
-    if (e === "back") { setSelectedAssetObj({}); return setViewAsset(false); }
+    if (e === "back") {
+      let _pageNum = pageNum;
 
+      const getRightPage = () => {
+        if(assetsPerPage*_pageNum < selectedAssetObj.dBIndex){
+          _pageNum++
+          getRightPage()
+        }
+      } 
+
+      getRightPage();
+
+      setPageNum(_pageNum);
+      setSelectedAssetObj({}); 
+      return setViewAsset(false);
+    }
+    
     if (e.DisplayImage !== undefined && e.DisplayImage !== "") {
       setSelectedImage(e.DisplayImage);
     }
@@ -113,12 +137,49 @@ export default function Dashboard(props) {
   }
 
   const generateAssetDash = (arr) => {
+
+    
+
+    if (!arr) return <></>;
+
+    if(window.backIndex){
+      let backIndex = window.backIndex;
+      moreInfo({dBIndex: backIndex,
+        id: arr[backIndex].id,
+        countPair: arr[backIndex].countPair,
+        idxHash: arr[backIndex].id,
+        descriptionObj: { text: arr[backIndex].text, photo: arr[backIndex].photo, urls: arr[backIndex].urls, name: arr[backIndex].name },
+        DisplayImage: arr[backIndex].DisplayImage,
+        name: arr[backIndex].name,
+        assetClass: arr[backIndex].assetClass,
+        assetClassName: arr[backIndex].assetClassName,
+        status: arr[backIndex].status,
+        statusNum: arr[backIndex].statusNum,
+        Description: arr[backIndex].text.Description,
+        note: arr[backIndex].note,
+        text: arr[backIndex].text,
+        urls: arr[backIndex].urls,
+        photo: arr[backIndex].photo,
+        photoUrls: arr[backIndex].photoUrls,
+        identicon: arr[backIndex].identicon});
+        window.backIndex = undefined
+    }
+
     if (arr.length > 0) {
       let component = [];
+      let numOfPages = Math.ceil(arr.length / assetsPerPage)
+      let start = (pageNum * assetsPerPage) - assetsPerPage;
+      let end = start + assetsPerPage;
+
+      if (pageNum === numOfPages) {
+        end -= (pageNum * assetsPerPage) - arr.length;
+      }
       //console.log(obj)
 
-      for (let i = 0; i < arr.length; i++) {
+      for (let i = start; i < end; i++) {
         //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
+        //console.log(i, arr.length - start)
+        //if(i < arr.length - start){
         component.push(
           <GridItem key={"asset" + i} xs={12} sm={12} md={4}>
             <Card chart className={classes.cardHover}>
@@ -186,8 +247,8 @@ export default function Dashboard(props) {
                 )}
               </>
               {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
-            <img src={macbook} alt="logo" className="assetImage" />
-            </CardHeader> */}
+              <img src={macbook} alt="logo" className="assetImage" />
+              </CardHeader> */}
               <CardBody>
                 {!isMobile && (
                   <div className={classes.cardHover}>
@@ -223,7 +284,7 @@ export default function Dashboard(props) {
                       })}>
                         <Icon>
                           login
-                        </Icon>
+                          </Icon>
                       </Button>
                     </Tooltip>
                   </div>
@@ -233,14 +294,16 @@ export default function Dashboard(props) {
 
               </CardBody>
               {/* <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter> */}
+                <div className={classes.stats}>
+                  <AccessTime /> updated 4 minutes ago
+                </div>
+              </CardFooter> */}
             </Card>
           </GridItem>
         );
+        //}
       }
+
       return component
     }
 
@@ -297,6 +360,37 @@ export default function Dashboard(props) {
     //console.log(e)
   }
 
+  const newPageNum = (e) => {
+    /* if (props.ps) {
+      //console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+
+    } */
+    setPageNum(e)
+  }
+
+  const handleShowNum = (e) => {
+    let _pageNum = pageNum;
+
+    const getNewNum = () => {
+      if (_pageNum * e > props.assetArr.length && _pageNum !== 1) {
+        _pageNum--
+        return getNewNum()
+      }
+    }
+
+    getNewNum();
+
+    setPageNum(_pageNum);
+    setAssetsPerPage(e);
+
+  }
+
   const handleSimple = event => {
     if (props.ps) {
       props.ps.element.scrollTop = 0
@@ -308,6 +402,7 @@ export default function Dashboard(props) {
     tempObj.lastRef = "/#/user/dashboard";
 
     window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+    window.assetsPerPage = assetsPerPage;
 
     console.log(tempObj)
     console.log(window.sentPacket)
@@ -367,14 +462,91 @@ export default function Dashboard(props) {
       <GridContainer>
         <GridItem xs={12}>
           <Card>
-            <CardHeader icon onClick={() => { moreInfo("back") }}>
-              <CardIcon className="headerIconBack">
+            <CardHeader icon >
+              <CardIcon className="headerIconBack" onClick={() => { moreInfo("back") }}>
                 <DashboardOutlined />
               </CardIcon>
               <div className="dashboardHeader">
                 <h4 className={classes.cardIconTitle}>
                   Asset Dashboard
               </h4>
+                <Select
+                  MenuProps={{
+                    className: classes.selectMenu
+                  }}
+                  classes={{
+                    select: classes.select
+                  }}
+                  value={simpleSelect}
+                  onChange={(e) => { handleShowNum(e.target.value) }}
+                  inputProps={{
+                    name: "simpleSelect",
+                    id: "simple-select"
+                  }}
+                >
+                  <MenuItem
+                    disabled
+                    classes={{
+                      root: classes.selectMenuItem
+                    }}
+                  >
+                    Select Amount to Show
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value={3}
+                  >
+                    3
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value={6}
+                  >
+                    6
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value={9}
+                  >
+                    9
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value={12}
+                  >
+                    12
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value={15}
+                  >
+                    15
+                        </MenuItem>
+                  <MenuItem
+                    classes={{
+                      root: classes.selectMenuItem,
+                      selected: classes.selectMenuItemSelected
+                    }}
+                    value={60}
+                  >
+                    60
+                        </MenuItem>
+                </Select>
                 <Tooltip
                   title="Refresh"
                 >
@@ -382,6 +554,7 @@ export default function Dashboard(props) {
                     <Refresh />
                   </Icon>
                 </Tooltip>
+
               </div>
               <br />
             </CardHeader>
@@ -402,9 +575,30 @@ export default function Dashboard(props) {
         </GridContainer>
       )}
       {!viewAsset && props.addr && props.assets !== "~" && (
-        <GridContainer>
-          {generateAssetDash(props.assetArr || [])}
-        </GridContainer>
+        <>
+          <GridContainer>
+            {generateAssetDash(props.assetArr || [])}
+          </GridContainer>
+          <div className="flexRow">
+            {numOfPages > 0 && pageNum > 1 && (
+              <><Button onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
+            )}
+            {numOfPages > 0 && pageNum === 1 && (
+              <><Button disabled onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
+            )}
+
+            {numOfPages > 0 && (
+              <h4>Page {pageNum} out of {numOfPages}</h4>
+            )}
+
+            {numOfPages > 0 && pageNum !== numOfPages && (
+              <><Button onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
+            )}
+            {numOfPages > 0 && pageNum === numOfPages && (
+              <><Button disabled onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
+            )}
+          </div>
+        </>
       )}
       {viewAsset && (
         <div>

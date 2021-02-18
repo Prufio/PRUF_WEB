@@ -69,6 +69,13 @@ body {
     /* object-fit: cover !important; */
 }
 
+.flexRow {
+  display: inline-flex;
+  gap: 5px;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .MLBGradientSubmit {
   display: flex !important;
   flex-direction: row-reverse !important;
@@ -155,6 +162,7 @@ body {
 }
 
 .headerIconBack {
+    cursor: pointer;
     float: left;
     padding: 15px;
     margin-top: -20px;
@@ -275,6 +283,38 @@ body {
           }
         } */
 
+        .lds-ellipsisCard {
+          display: inline-block;
+          position: relative;
+          width: 55px;
+          height: 16px;
+          bottom: 27px;
+        }
+        .lds-ellipsisCard div {
+          position: absolute;
+          top: 33px;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgb(0, 0, 0);
+          animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+        .lds-ellipsisCard div:nth-child(1) {
+          left: 8px;
+          animation: lds-ellipsis1 0.6s infinite;
+        }
+        .lds-ellipsisCard div:nth-child(2) {
+          left: 8px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsisCard div:nth-child(3) {
+          left: 32px;
+          animation: lds-ellipsis2 0.6s infinite;
+        }
+        .lds-ellipsisCard div:nth-child(4) {
+          left: 56px;
+          animation: lds-ellipsis3 0.6s infinite;
+        }
 
         .lds-ellipsis {
           display: inline-block;

@@ -15,7 +15,8 @@ function buildWindowUtils() {
   }
 
   const _getBytes32FromIPFSHash = (hash) => {
-    return "0x" + bs58.decode(hash).slice(2).toString("hex");
+    let str = "0x" + bs58.decode(hash).slice(2).toString("hex");
+    return str;
   };
 
   const _getIpfsHashFromBytes32 = (bytes32Hex) => {
@@ -1113,6 +1114,7 @@ function buildWindowUtils() {
       console.log("Window.contracts object is undefined.")
     }
   }
+
   const _getDescriptionHash = async (idxHash) => {
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)
@@ -1363,7 +1365,6 @@ function buildWindowUtils() {
               statusNums.push(_result[0])
               assetClasses.push(Object.values(_result)[2]);
               countPairs.push([Object.values(_result)[3], Object.values(_result)[4]]);
-
             }
           })
         //console.log(x)
@@ -1409,7 +1410,6 @@ function buildWindowUtils() {
         return temp = hash;
       }
     })
-
     return temp;
   }
 
@@ -1538,15 +1538,13 @@ function buildWindowUtils() {
     generateRemoveElements: _generateRemoveElements,
     generateRemElementsPreview: _generateRemElementsPreview,
     getETHBalance: _getETHBalance,
-    // generateAssetDash: _generateAssetDash,
     addIPFSJSONObject: _addIPFSJSONObject,
     generateCardPrint: _generateCardPrint,
     generateOptionsFromObject: _generateOptionsFromObject,
 
   }
 
-  //console.log("Setting up window utils")
-  return //console.log("Utils loaded: ", window.utils)
+  return
 }
 
 export default buildWindowUtils
