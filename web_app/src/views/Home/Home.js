@@ -9,8 +9,6 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Eth from "../../assets/img/eth-logo.png";
 import Pruf from "../../assets/img/pruftoken.png";
 import Add from "@material-ui/icons/Add";
-import CheckShield from "@material-ui/icons/VerifiedUser";
-import NoAccount from "@material-ui/icons/PersonAdd";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
@@ -28,7 +26,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import "../../assets/css/custom.css";
 
-import { Cached, DashboardOutlined, Close } from "@material-ui/icons";
+import { Cached, DashboardOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -44,12 +42,12 @@ export default function Home(props) {
   const [rootName, setRootName] = React.useState("");
   const [txHash, setTxHash] = React.useState("");
   const [ACPrice, setACPrice] = React.useState("");
-  const [isMinting, setIsMinting] = React.useState(false)
   const link = document.createElement('div')
 
   const [deposit, setDeposit] = React.useState(10000);
   const [loginDeposit, setloginDeposit] = React.useState(10000);
   const [loginDepositState, setloginDepositState] = React.useState("");
+
   const [root, setRoot] = React.useState("");
   const [loginRoot, setloginRoot] = React.useState("");
   const [loginRootState, setloginRootState] = React.useState("");
@@ -58,7 +56,6 @@ export default function Home(props) {
   const [loginACName, setloginACName] = React.useState("");
   const [loginACNameState, setloginACNameState] = React.useState("");
 
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   React.useEffect(() => {
     if (props.ps) {
@@ -66,10 +63,10 @@ export default function Home(props) {
       console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({top: 0, behavior: 'smooth'})
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-
+      
     }
   }, [])
 
@@ -191,117 +188,27 @@ export default function Home(props) {
           icon: "success",
           button: "Close",
         });
-        window.replaceAssetData = { pruf: props.pruf + deposit }
-        forceUpdate()
-        //refreshBalances()
+        window.resetInfo = true;
+        window.recount = true;
       });
     return clearPRUFForm();
   }
 
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return
-
-    let pruf, ether;
-
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) }
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = { assets: result, ether, pruf } }
-          forceUpdate()
-        });
-      });
-    });
-  }
-
-  const mintID = () => {
-    if (!window.contracts) return
-
-    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-    let tempTxHash;
-    setIsMinting(true)
-
-    window.contracts.PARTY.methods
-      .GET_ID()
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setIsMinting(false)
-        //setTransactionActive(false);
-        //setTxStatus(false);
-        //setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        if (tempTxHash !== undefined) {
-          swal({
-            title: "Something went wrong!",
-            content: link,
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Something went wrong!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-      })
-      .on("receipt", (receipt) => {
-        setIsMinting(false)
-        //setTransactionActive(false);
-        //setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        swal({
-          title: "ID Token Minted!",
-          content: link,
-          icon: "success",
-          button: "Close"
-        }).then(() => {
-          //refreshBalances()
-          window.replaceAssetData = { IDHolder: true }
-          forceUpdate()
-        })
-      })
-  }
-
-  const thousandHashesOf = (varToHash) => {
-    if (!window.web3) return window.location.href = "/#/user/home"
-    let tempHash = varToHash;
-    for (let i = 0; i < 1000; i++) {
-      tempHash = window.web3.utils.soliditySha3(tempHash);
-      //console.log(tempHash);
-    }
-    return tempHash;
-  }
-
   const refreshEtherBalance = () => {
-    if (!window.web3.eth) return
+    if(!window.web3.eth) return
     console.log("Refreshing ether bal")
     window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) }
-      else { window.replaceAssetData = { ether: window.web3.utils.fromWei(result, 'ether') } }
-      forceUpdate()
+      if (err) { console.log(err) } 
+      else { window.replaceAssetData = {ether: window.web3.utils.fromWei(result, 'ether')} }
     });
   }
 
   const refreshPrufBalance = () => {
-    if (!window.contracts) return
+    if(!window.contracts) return
     console.log("Refreshing pruf bal")
     window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
       if (err) { console.log(err) }
-      else { window.replaceAssetData = { pruf: window.web3.utils.fromWei(result, 'ether') } }
-      forceUpdate()
+      else { window.replaceAssetData = {pruf: window.web3.utils.fromWei(result, 'ether')} }
     });
   }
 
@@ -369,7 +276,8 @@ export default function Home(props) {
           icon: "success",
           button: "Close",
         });
-        //refreshBalances()
+        window.resetInfo = true;
+        window.recount = true;
       });
 
     return clearACFrom()
@@ -407,77 +315,8 @@ export default function Home(props) {
         </GridItem>
         <GridItem xs={12} sm={6} md={6} lg={3}>
           <Card>
-            <CardHeader color="danger" stats icon>
-              {props.IDHolder === true
-                ?
-                <>
-                  <CardIcon className="headerIconBack" onClick={() => {
-                    swal({
-                      title: "User address is already verified.",
-                      button: "Okay",
-                    });
-                  }}>
-                    <CheckShield />
-                  </CardIcon>
-                  <p className={classes.cardCategory}>User Status</p>
-                  <Tooltip title="User already holds an ID token.">
-                    <h3 className={classes.cardTitle}>
-                      Verified
-                  </h3>
-                  </Tooltip>
-                </>
-                :
-                props.IDHolder === false ?
-                  <>
-                    <CardIcon className="headerIconBack" onClick={() => mintID()}>
-                      <NoAccount />
-                    </CardIcon>
-                    <p className={classes.cardCategory}>User Status</p>
-                    <h3 className={classes.cardTitle}>
-                      Not Verified
-                    </h3>
-                  </>
-                  :
-                  <>
-                    <CardIcon className="headerIconBack">
-                      <NoAccount />
-                    </CardIcon>
-                    <p className={classes.cardCategory}>User Status</p>
-                  </>}
-            </CardHeader>
-            <CardFooter stats>
-              {props.IDHolder === true
-                ?
-                <>
-                  <div className={classes.stats}>
-                    User Holds ID
-                  </div>
-                </>
-                :
-                props.IDHolder === false ?
-                  !isMinting ?
-                    <>
-                      <a className="homeCardText" onClick={() => mintID}>
-                        No ID held by user
-                    </a>
-                    </>
-                    :
-                    <>
-                      <a className="homeCardText" onClick={() => mintID}>
-                        <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
-                      </a>
-                    </>
-                  :
-                  <>
-                    <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
-                  </>}
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={6} lg={3}>
-          <Card>
             <CardHeader stats icon>
-              <CardIcon className="headerIconBack" onClick={() => window.open("https://ethereum.org/en/")}>
+              <CardIcon className="headerIconBack">
                 <img className="Icon" src={Eth}></img>
               </CardIcon>
               <p className={classes.cardCategory}>ETH Balance</p>
@@ -487,7 +326,7 @@ export default function Home(props) {
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Cached onClick={() => refreshEtherBalance()} />
+                <Cached onClick={()=>refreshEtherBalance()}/>
               </div>
             </CardFooter>
           </Card>
@@ -495,7 +334,7 @@ export default function Home(props) {
         <GridItem xs={12} sm={6} md={6} lg={3}>
           <Card>
             <CardHeader color="danger" stats icon>
-              <CardIcon className="headerIconBack" onClick={() => window.open("https://pruf.io/")}>
+              <CardIcon className="headerIconBack">
                 <img className="Icon" src={Pruf}></img>
               </CardIcon>
               <p className={classes.cardCategory}>PRüF Balance</p>
@@ -507,7 +346,7 @@ export default function Home(props) {
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Cached onClick={() => refreshPrufBalance()} />
+                <Cached onClick={()=>refreshPrufBalance()} />
               </div>
             </CardFooter>
           </Card>

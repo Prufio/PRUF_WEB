@@ -81,15 +81,6 @@ export default function ModifyDescription(props) {
 
   React.useEffect(() => {
     if (!hasMounted && assetInfo !== undefined) {
-      if (asset.statusNum === "50" || asset.statusNum === "56" || asset.statusNum === "70") {
-        swal({
-          title: "Asset not in correct status!",
-          text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
-          icon: "warning",
-          button: "Close",
-        });
-        window.location.href = "/#/user/dashboard"
-      }
       setSelectedImage(assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || "")
       if (assetInfo.photo.DisplayImage) {
         setSelectedKey("DisplayImage");
@@ -205,7 +196,7 @@ export default function ModifyDescription(props) {
     return forceUpdate()
   }
 
-  const submitChanges = async () => {
+  const submitChanges = () => {
     if (JSON.stringify(newAssetInfo) === JSON.stringify(assetInfo)) {
       return (
         swal({
@@ -221,7 +212,6 @@ export default function ModifyDescription(props) {
 
     let payload = JSON.stringify(tempObj, null, 5)
     let fileSize = Buffer.byteLength(payload, 'utf8')
-
     if (fileSize > 1000000) {
       return (
         swal({
@@ -234,19 +224,17 @@ export default function ModifyDescription(props) {
 
     setIpfsActive(true);
     console.log("Submitting changes. Parsed Payload: ", tempObj)
-
-    window.ipfs.add(payload).then((hash)=>{
-      if (!hash) {
-        console.error("error sending to ipfs")
+    window.ipfs.add(payload, (err, hash) => { // Upload buffer to IPFS
+      if (err) {
+        console.error(err)
         return setIpfsActive(false);
       }
-      else{
-        let url = `https://ipfs.io/ipfs/${hash.cid}`
-        console.log(`Url --> ${url}`)
-        let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid))
-        setIpfsActive(false);
-        updateAssetInfo(b32Hash, tempObj);
-      } 
+
+      let url = `https://ipfs.io/ipfs/${hash}`
+      console.log(`Url --> ${url}`)
+      let b32hash = window.utils.getBytes32FromIPFSHash(hash)
+      setIpfsActive(false);
+      updateAssetInfo(b32hash, tempObj)
     })
   }
 
@@ -318,8 +306,6 @@ export default function ModifyDescription(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          //refreshBalances()
-          window.backIndex = asset.dBIndex;
           window.location.href = asset.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: asset.dBIndex, newAsset: newAsset}
         })
@@ -467,50 +453,44 @@ export default function ModifyDescription(props) {
         resizeImg(tempBuffer, { height: newH, width: newW, format: "jpg" }).then((e) => {
           console.log("Resized to ", newH, "x", newW);
           tempObj.photo[fileName] = prefix + base64.encode(e);
-
-          window.ipfs.add(prefix + base64.encode(e)).then((hash)=>{
-            if (!hash) {
-              //console.error(err)
+          window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
+            if (err) {
+              console.error(err)
               return setIsUploading(false);
             }
-            else{
-              let url = `https://ipfs.io/ipfs/${hash.cid}`
-              console.log(`Url --> ${url}`)
-              tempObj.photoUrls[fileName] = url;
-              setNewAssetInfo(tempObj);
-              if (selectedImage === "") {
-                setSelectedImage(tempObj.photo[fileName])
-                setSelectedKey(fileName)
-              }
-              setIsUploading(false)
-              return forceUpdate();
-            } 
+            let url = `https://ipfs.io/ipfs/${hash}`
+            console.log(`Url --> ${url}`)
+            tempObj.photoUrls[fileName] = url;
+            setNewAssetInfo(tempObj);
+            if (selectedImage === "") {
+              setSelectedImage(tempObj.photo[fileName]);
+              setSelectedKey(fileName);
+            }
+            setIsUploading(false)
+            return forceUpdate();
           })
         })
       }
-
       else {
         resizeImg(tempBuffer, { height: i.height, width: i.width, format: "jpg" }).then((e) => {
           console.log("Converted to .JPG");
           tempObj.photo[fileName] = prefix + base64.encode(e);
-
-          window.ipfs.add(prefix + base64.encode(e)).then((hash)=>{
-            if (!hash) {
-              //console.error(err)
+          window.ipfs.add(prefix + base64.encode(e), (err, hash) => { // Upload image to IPFS
+            if (err) {
+              console.error(err)
               return setIsUploading(false);
             }
-            else{
-              let url = `https://ipfs.io/ipfs/${hash.cid}`
-              console.log(`Url --> ${url}`)
-              tempObj.photoUrls[fileName] = url;
-              setNewAssetInfo(tempObj);
-              if (selectedImage === "") {
-                setSelectedImage(tempObj.photo[fileName])
-                setSelectedKey(fileName)
-              }
-              setIsUploading(false)
-              return forceUpdate();
-            } 
+
+            let url = `https://ipfs.io/ipfs/${hash}`
+            console.log(`Url --> ${url}`)
+            tempObj.photoUrls[fileName] = url;
+            setNewAssetInfo(tempObj);
+            if (selectedImage === "") {
+              setSelectedImage(tempObj.photo[fileName])
+              setSelectedKey(fileName)
+            }
+            setIsUploading(false)
+            return forceUpdate();
           })
         })
       };
@@ -757,26 +737,6 @@ export default function ModifyDescription(props) {
     return component
   }
 
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
-
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
-  }
-
   const generateThumbs = (obj) => {
     //console.log(obj);
     let component = [], photos = Object.values(obj.photo), keys = Object.keys(obj.photo);
@@ -793,7 +753,7 @@ export default function ModifyDescription(props) {
       return (
         <>
           <div className="assetImageSelectorButton">
-            <div className="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
           </div>
         </>
       )
@@ -808,7 +768,7 @@ export default function ModifyDescription(props) {
     if (isUploading === true) {
       component.push (
         <div className="assetImageSelectorButton">
-          <div className="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
       )
     }
@@ -816,7 +776,6 @@ export default function ModifyDescription(props) {
   }
 
   const goBack = () => {
-    window.backIndex = asset.dBIndex;
     window.location.href = asset.lastRef;
   }
 

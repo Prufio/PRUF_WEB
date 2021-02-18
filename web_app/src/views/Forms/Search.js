@@ -150,25 +150,6 @@ export default function Search(props) {
   }, [window.contracts, query])
 
 
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
-
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
-  }
 
   const ACLogin = event => {
     if (!props.IDHolder) {
@@ -239,7 +220,6 @@ export default function Search(props) {
                   icon: "success",
                   button: "Close"
                 });
-                window.replaceAssetData = {IDHolder: true}
               })
             break;
 
@@ -410,11 +390,10 @@ export default function Search(props) {
     setloginPasswordState("");
   }
 
-  const getIPFSJSONObject = async (lookup) => {
+  const getIPFSJSONObject = (lookup) => {
     //console.log(lookup)
-    for await (const chunk of window.ipfs.cat(lookup)) {
-      let result = new TextDecoder("utf-8").decode(chunk);
-      if (!result) {
+    window.ipfs.cat(lookup, async (error, result) => {
+      if (error) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         setRetrieving(false);
         return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
@@ -545,13 +524,13 @@ export default function Search(props) {
             }
 
           }
-          await get()
-          }
           
+          }
+          await get()
         }
 
-      };
-    
+      }
+    });
   };
 
   const getACData = async (ref, ac) => {
@@ -1721,7 +1700,7 @@ export default function Search(props) {
                       </div>
                     )}
                     <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
-                    <h4 className={classes.cardTitle}>Class: {asset.assetClassName} (NODE ID:{asset.assetClass})</h4>
+                    <h4 className={classes.cardTitle}>Class: {asset.assetClassName}(NODE ID:{asset.assetClass})</h4>
                     {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
                     {currency !== "" && (
                       <>

@@ -65,28 +65,7 @@ export default function Export(props) {
   }
 
   const goBack = () => {
-    window.backIndex = assetInfo.dBIndex;
     window.location.href=assetInfo.lastRef;
-  }
-
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
-
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
   }
 
   const thousandHashesOf = (varToHash) => {
@@ -102,12 +81,6 @@ export default function Export(props) {
   const exportAsset = async () => { //export held asset
 
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-
-    let newAsset = JSON.parse(JSON.stringify(assetInfo));
-    newAsset.status = "Ready For Import"
-    newAsset.statusNum = "70"
-
-    console.log(newAsset.dBIndex)
 
     let tempTxHash;
     setShowHelp(false);
@@ -161,10 +134,11 @@ export default function Export(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
+          let newAsset = JSON.parse(JSON.stringify(assetInfo));
+          newAsset.status = "Ready For Import"
+          newAsset.statusNum = "70"
           window.location.href = assetInfo.lastRef;
-          window.replaceAssetData = {key: pageKey, dBIndex: newAsset.dBIndex, newAsset: newAsset}
+          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })
       });
 

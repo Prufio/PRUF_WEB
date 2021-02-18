@@ -45,6 +45,7 @@ export default function Transfer(props) {
       window.scrollTo({top: 0, behavior: 'smooth'})
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
+      
     }
   }, [])
 
@@ -73,7 +74,6 @@ export default function Transfer(props) {
   }
 
   const goBack = () => {
-    window.backIndex = assetInfo.dBIndex;
     window.location.href=assetInfo.lastRef;
   }
 
@@ -85,26 +85,6 @@ export default function Transfer(props) {
       //console.log(tempHash);
     }
     return tempHash;
-  }
-
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
-
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
   }
 
   const transferAsset = async () => { //transfer held asset
@@ -179,8 +159,6 @@ export default function Transfer(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex}
         })

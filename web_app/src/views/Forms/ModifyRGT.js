@@ -61,26 +61,8 @@ export default function ModifyRGT(props) {
       window.scrollTo({top: 0, behavior: 'smooth'})
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
+      
     }
-    if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56" || assetInfo.statusNum === "70") {
-      swal({
-        title: "Asset not in correct status!",
-        text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
-        icon: "warning",
-        button: "Close",
-      });
-      window.location.href = "/#/user/dashboard"
-    }
-    else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
-      swal({
-        title: "Asset not in correct status!",
-        text: "This asset is not in a lost or stolen status, please set asset into a non lost or stolen status before attempting to modify.",
-        icon: "warning",
-        button: "Close",
-      });
-      window.location.href = "/#/user/dashboard"
-    }
-  
   }, [])
 
   if (assetInfo === undefined || assetInfo === null) {
@@ -89,29 +71,18 @@ export default function ModifyRGT(props) {
     window.location.reload()
   }
 
-  const goBack = () => {
-    window.backIndex = assetInfo.dBIndex;
-    window.location.href=assetInfo.lastRef;
+  if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
+    swal({
+      title: "Asset not in correct status!",
+      text: "This asset is not in a lost or stolen status, please set asset into a non lost or stolen status before attempting to modify.",
+      icon: "warning",
+      button: "Close",
+    });
+    return window.location.href = "/#/user/dashboard"
   }
 
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
-
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
+  const goBack = () => {
+    window.location.href=assetInfo.lastRef;
   }
 
   const modifyRGT = async () => { //import held asset
@@ -198,8 +169,6 @@ export default function ModifyRGT(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
         })
       });

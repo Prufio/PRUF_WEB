@@ -154,7 +154,7 @@ export default function Verify(props) {
         setScanQR(false);
         setQRValue("");
         console.log("clearing forms")
-        //window.location.href="/#/user/dashboard"
+        window.location.href="/#/user/dashboard"
     };
 
     const verifyAsset = async () => {
@@ -236,10 +236,7 @@ export default function Verify(props) {
                   // text: "Check your TX here:" + txHash,
                   icon: "success",
                   button: "Close",
-                }).then(()=>{
-                  window.backIndex=assetInfo.dBIndex;
-                  window.location.href=assetInfo.lastRef;
-                })
+                });
                 setError("");
                 setTransaction(false)
               }
@@ -248,7 +245,6 @@ export default function Verify(props) {
       }
 
       const goBack = () => {
-        window.backIndex=assetInfo.dBIndex
         window.location.href=assetInfo.lastRef;
       }
 
@@ -331,39 +327,38 @@ export default function Verify(props) {
             link.innerHTML = String(str1 + tempTxHash + str2)
             setVerifyResult(receiptVal)
             console.log("Verification Result :", receiptVal);
-
-            if (receiptVal === "Match confirmed") {
-              swal({
-                title: "Match Confirmed!",
-                content: link,
-                icon: "success",
-                button: "Close",
-              }).then(()=>{
-                window.backIndex=assetInfo.dBIndex;
-                window.location.href=assetInfo.lastRef;
-              })
-              console.log("Verification conf")
-            }
-        
-            if (receiptVal !== "Match confirmed") {
-              if (tempTxHash !== undefined) {
-                swal({
-                  title: "Match Failed!",
-                  content: link,
-                  icon: "warning",
-                  button: "Close",
-                });
-              }
-              if (tempTxHash === undefined) {
-                swal({
-                  title: "Something Went Wrong!",
-                  icon: "warning",
-                  button: "Close",
-                });
-              }
-              console.log("Verification not conf")
-            }
+            window.location.href="/#/user/dashboard"
           });
+    
+    
+        if (receiptVal === "Match confirmed") {
+          swal({
+            title: "Match Confirmed!",
+            content: link,
+            icon: "success",
+            button: "Close",
+          });
+          console.log("Verification conf")
+        }
+    
+        if (receiptVal !== "Match confirmed") {
+          if (tempTxHash !== undefined) {
+            swal({
+              title: "Match Failed!",
+              content: link,
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          if (tempTxHash === undefined) {
+            swal({
+              title: "Something Went Wrong!",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          console.log("Verification not conf")
+        }
     
         return clearForms();
       }

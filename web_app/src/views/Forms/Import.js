@@ -77,28 +77,7 @@ export default function Import(props) {
   };
 
   const goBack = () => {
-    window.backIndex = assetInfo.dBIndex;
     window.location.href=assetInfo.lastRef;
-  }
-
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
-
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
   }
 
   const thousandHashesOf = (varToHash) => {
@@ -168,11 +147,9 @@ export default function Import(props) {
           icon: "success",
           button: "Close",
         }).then(()=>{
-          //refreshBalances()
           let newAsset = JSON.parse(JSON.stringify(assetInfo));
           newAsset.status = "Out of Escrow"
           newAsset.statusNum = "58"
-          window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
         })
