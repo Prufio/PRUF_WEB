@@ -233,7 +233,7 @@ export default function Dashboard(props) {
     window.recount = false;
     let _ipfs;
 
-    const OrbitDB = require('orbit-db')
+    // const OrbitDB = require('orbit-db')
 
     /* _ipfs = new IPFS({
       host: "ipfs.infura.io",
