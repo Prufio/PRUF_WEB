@@ -57,7 +57,7 @@ export default function Dashboard(props) {
       document.scrollingElement.scrollTop = 0;
 
     }
-    if(window.assetsPerPage){
+    if (window.assetsPerPage) {
       setAssetsPerPage(window.assetsPerPage);
     }
   }, [])
@@ -95,19 +95,19 @@ export default function Dashboard(props) {
       let _pageNum = pageNum;
 
       const getRightPage = () => {
-        if(assetsPerPage*_pageNum < selectedAssetObj.dBIndex){
+        if (assetsPerPage * _pageNum <= selectedAssetObj.dBIndex) {
           _pageNum++
           getRightPage()
         }
-      } 
+      }
 
       getRightPage();
 
       setPageNum(_pageNum);
-      setSelectedAssetObj({}); 
+      setSelectedAssetObj({});
       return setViewAsset(false);
     }
-    
+
     if (e.DisplayImage !== undefined && e.DisplayImage !== "") {
       setSelectedImage(e.DisplayImage);
     }
@@ -138,31 +138,55 @@ export default function Dashboard(props) {
 
   const generateAssetDash = (arr) => {
 
-    
+
 
     if (!arr) return <></>;
 
-    if(window.backIndex){
-      let backIndex = window.backIndex;
-      moreInfo({dBIndex: backIndex,
+    if (window.backIndex) {
+      let backIndex = window.backIndex, newObj, newStat, newStatNum;
+
+      if(window.newDescObj) {
+        newObj = window.newDescObj
+      } 
+
+      else {
+        newObj = { text: arr[backIndex].text, photo: arr[backIndex].photo, urls: arr[backIndex].urls, name: arr[backIndex].name }
+      }
+
+      if(window.newStat){
+        newStatNum = window.newStat.num;
+        newStat = window.newStat.str;
+      }
+      
+      else {
+        newStatNum = arr[backIndex].statusNum;
+        newStat = arr[backIndex].status;
+      }
+
+      window.newStat = null;
+      window.newDescObj = null;
+
+      moreInfo({
+        dBIndex: backIndex,
         id: arr[backIndex].id,
         countPair: arr[backIndex].countPair,
         idxHash: arr[backIndex].id,
-        descriptionObj: { text: arr[backIndex].text, photo: arr[backIndex].photo, urls: arr[backIndex].urls, name: arr[backIndex].name },
+        descriptionObj: newObj,
         DisplayImage: arr[backIndex].DisplayImage,
         name: arr[backIndex].name,
         assetClass: arr[backIndex].assetClass,
         assetClassName: arr[backIndex].assetClassName,
-        status: arr[backIndex].status,
-        statusNum: arr[backIndex].statusNum,
-        Description: arr[backIndex].text.Description,
+        status: newStat,
+        statusNum: newStatNum,
+        Description: newObj.text.Description,
         note: arr[backIndex].note,
-        text: arr[backIndex].text,
-        urls: arr[backIndex].urls,
-        photo: arr[backIndex].photo,
-        photoUrls: arr[backIndex].photoUrls,
-        identicon: arr[backIndex].identicon});
-        window.backIndex = undefined
+        text: newObj.text,
+        urls: newObj.urls,
+        photo: newObj.photo,
+        photoUrls: newObj.photoUrls,
+        identicon: arr[backIndex].identicon
+      });
+      window.backIndex = undefined
     }
 
     if (arr.length > 0) {
@@ -391,6 +415,476 @@ export default function Dashboard(props) {
 
   }
 
+  const renderOptions = (status) => {
+    let component = [];
+    if (!selectedAssetObj.statusNum) return
+
+    switch (status) {
+      case ("51"): {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer
+              </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export
+             </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("50"): {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("52"): {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("53"): {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("54"): {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("59"): {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard
+             </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export
+             </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("70"): {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      default: {
+        console.log("Error in option switch")
+      }
+    }
+
+    return component
+  }
+
   const handleSimple = event => {
     if (props.ps) {
       props.ps.element.scrollTop = 0
@@ -467,94 +961,95 @@ export default function Dashboard(props) {
                 <DashboardOutlined />
               </CardIcon>
               <div className="dashboardHeader">
-                <h4 className={classes.cardIconTitle}>
-                  Asset Dashboard
+                <div className="flexRowWithGap">
+                  <h4 className={classes.cardIconTitle}>
+                    Asset Dashboard
               </h4>
-                <Select
-                  MenuProps={{
-                    className: classes.selectMenu
-                  }}
-                  classes={{
-                    select: classes.select
-                  }}
-                  value={simpleSelect}
-                  onChange={(e) => { handleShowNum(e.target.value) }}
-                  inputProps={{
-                    name: "simpleSelect",
-                    id: "simple-select"
-                  }}
-                >
-                  <MenuItem
-                    disabled
+                  <Select
+                    MenuProps={{
+                      className: classes.selectMenu
+                    }}
                     classes={{
-                      root: classes.selectMenuItem
+                      select: classes.select
+                    }}
+                    value={assetsPerPage}
+                    onChange={(e) => { handleShowNum(e.target.value) }}
+                    inputProps={{
+                      name: "simpleSelect",
+                      id: "simple-select"
                     }}
                   >
-                    Select Amount to Show
+                    <MenuItem
+                      disabled
+                      classes={{
+                        root: classes.selectMenuItem
+                      }}
+                    >
+                      Assets per page
                         </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value={3}
-                  >
-                    3
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value={3}
+                    >
+                      3
                         </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value={6}
-                  >
-                    6
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value={6}
+                    >
+                      6
                         </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value={9}
-                  >
-                    9
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value={9}
+                    >
+                      9
                         </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value={12}
-                  >
-                    12
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value={12}
+                    >
+                      12
                         </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value={15}
-                  >
-                    15
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value={15}
+                    >
+                      15
                         </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value={60}
-                  >
-                    60
+                    <MenuItem
+                      classes={{
+                        root: classes.selectMenuItem,
+                        selected: classes.selectMenuItemSelected
+                      }}
+                      value={60}
+                    >
+                      60
                         </MenuItem>
-                </Select>
-                <Tooltip
+                  </Select>
+                  {/* <Tooltip
                   title="Refresh"
                 >
                   <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
                     <Refresh />
                   </Icon>
-                </Tooltip>
-
+                </Tooltip> */}
+                </div>
               </div>
               <br />
             </CardHeader>
@@ -705,110 +1200,7 @@ export default function Dashboard(props) {
                     </Danger>
                     Options
                         </InputLabel>
-                  <Select
-                    MenuProps={{
-                      className: classes.selectMenu
-                    }}
-                    classes={{
-                      select: classes.select
-                    }}
-                    value={simpleSelect}
-                    onChange={handleSimple}
-                    inputProps={{
-                      name: "simpleSelect",
-                      id: "simple-select"
-                    }}
-                  >
-                    <MenuItem
-                      disabled
-                      classes={{
-                        root: classes.selectMenuItem
-                      }}
-                    >
-                      Select Action
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="transfer"
-                    >
-                      Transfer
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="verify"
-                    >
-                      Verify
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="import"
-                    >
-                      Import
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="export"
-                    >
-                      Export
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="discard"
-                    >
-                      Discard
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="modify-status"
-                    >
-                      Change Status
-                          </MenuItem>
-                    {/* <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="decrement-counter"
-                    >
-                      Decrement Counter
-                          </MenuItem> */}
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-information"
-                    >
-                      Update Asset Info
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-rightsholder"
-                    >
-                      Update Owner Info
-                          </MenuItem>
-                  </Select>
+                  {renderOptions(selectedAssetObj.statusNum)}
                 </FormControl>
               </div>
             </CardBody>

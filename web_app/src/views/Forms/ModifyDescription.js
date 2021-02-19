@@ -88,7 +88,8 @@ export default function ModifyDescription(props) {
           icon: "warning",
           button: "Close",
         });
-        window.location.href = "/#/user/dashboard"
+        window.backIndex = asset.dBIndex;
+        window.location.href = asset.lastRef
       }
       setSelectedImage(assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || "")
       if (assetInfo.photo.DisplayImage) {
@@ -319,6 +320,7 @@ export default function ModifyDescription(props) {
           button: "Close",
         }).then(()=>{
           //refreshBalances()
+          window.newDescObj = JSON.parse(JSON.stringify(newAssetInfo))
           window.backIndex = asset.dBIndex;
           window.location.href = asset.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: asset.dBIndex, newAsset: newAsset}

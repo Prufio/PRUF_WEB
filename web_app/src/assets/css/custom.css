@@ -76,6 +76,13 @@ body {
   justify-content: center;
 }
 
+.flexRowWithGap {
+  display: inline-flex;
+  gap: 20px;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .MLBGradientSubmit {
   display: flex !important;
   flex-direction: row-reverse !important;

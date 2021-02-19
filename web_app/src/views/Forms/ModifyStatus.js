@@ -71,7 +71,8 @@ export default function ModifyStatus(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard"
+    window.backIndex = assetInfo.dBIndex;
+    window.location.href = assetInfo.lastRef;
   }
 
 
@@ -185,6 +186,7 @@ export default function ModifyStatus(props) {
           button: "Close",
         }).then(()=>{
           //refreshBalances()
+          window.newStat = {num:String(status), str:e}
           window.location.href = assetInfo.lastRef;
           window.backIndex = assetInfo.dBIndex
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
@@ -291,6 +293,7 @@ export default function ModifyStatus(props) {
           button: "Close",
         }).then(()=>{
           //refreshBalances()
+          window.newStat = {num:String(status), str:e}
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}

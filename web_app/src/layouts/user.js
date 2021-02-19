@@ -113,12 +113,14 @@ export default function Dashboard(props) {
             method: 'eth_accounts',
             params: {},
           }).then((accounts) => {
+
             if (accounts[0] !== undefined) {
               setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
               window.addr = window.web3.utils.toChecksumAddress(accounts[0])
               setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
               setIsMounted(true);
             }
+            
             else {
               ethereum.send('eth_requestAccounts').then((accounts) => {
                 if (accounts[0] !== undefined) {
@@ -130,6 +132,7 @@ export default function Dashboard(props) {
               });
             }
           });
+          
           return setIsKovan(true);
         }
         else { window.isKovan = false; return setIsKovan(false); }

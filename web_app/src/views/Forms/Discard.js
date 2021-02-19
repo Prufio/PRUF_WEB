@@ -62,7 +62,8 @@ export default function Discard(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard"
+    window.backIndex = assetInfo.dBIndex;
+    window.location.href = assetInfo.lastRef;
   }
 
   const goBack = () => {
@@ -157,7 +158,7 @@ export default function Discard(props) {
           button: "Close",
         }).then(()=>{
           //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
+          //window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex}
           //window.location.reload()

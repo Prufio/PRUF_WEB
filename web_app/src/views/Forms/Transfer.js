@@ -69,7 +69,11 @@ export default function Transfer(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard";
+    if (assetInfo === undefined || assetInfo === null) {
+      console.log("No asset found. Rerouting...")
+      window.location.href = "/#/user/home"
+      window.location.reload()
+    }
   }
 
   const goBack = () => {
@@ -180,7 +184,7 @@ export default function Transfer(props) {
           button: "Close",
         }).then(()=>{
           //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
+          //window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex}
         })

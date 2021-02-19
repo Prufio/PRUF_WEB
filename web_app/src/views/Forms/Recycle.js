@@ -110,7 +110,7 @@ export default function Recycle(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard"
+    return window.location.href = "/#/user/search"
   }
 
   const handleChange = event => {

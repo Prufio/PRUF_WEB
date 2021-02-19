@@ -61,7 +61,8 @@ export default function Export(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard"
+    window.backIndex = assetInfo.dBIndex;
+    window.location.href = assetInfo.lastRef;
   }
 
   const goBack = () => {
@@ -162,6 +163,7 @@ export default function Export(props) {
           button: "Close",
         }).then(()=>{
           //refreshBalances()
+          window.newStat = {num:"70", str:"Ready for Import"}
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: newAsset.dBIndex, newAsset: newAsset}

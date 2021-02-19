@@ -143,6 +143,9 @@ export default function Search(props) {
       document.scrollingElement.scrollTop = 0;
       
     }
+    if(window.backIndex){
+      window.backIndex = undefined;
+    }
   }, [])
 
   React.useEffect(() => {
@@ -728,11 +731,11 @@ export default function Search(props) {
           icon: "success",
           button: "Close"
         }).then(() => {
+          window.newStat = {num:"58", str:"Out of Escrow"};
           window.location.href = "/#/user/dashboard";
           window.replaceAssetData = { key: pageKey, newAsset: newAsset }
         })
       });
-
     return;
   }
 

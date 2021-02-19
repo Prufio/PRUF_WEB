@@ -62,6 +62,11 @@ export default function ModifyRGT(props) {
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
+    if (assetInfo === undefined || assetInfo === null) {
+      console.log("No asset found. Rerouting...")
+      window.location.href = "/#/user/home"
+      window.location.reload()
+    }
     if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56" || assetInfo.statusNum === "70") {
       swal({
         title: "Asset not in correct status!",
@@ -69,7 +74,8 @@ export default function ModifyRGT(props) {
         icon: "warning",
         button: "Close",
       });
-      window.location.href = "/#/user/dashboard"
+      window.backIndex = assetInfo.dBIndex;
+      window.location.href = assetInfo.lastRef;
     }
     else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
       swal({
@@ -78,16 +84,11 @@ export default function ModifyRGT(props) {
         icon: "warning",
         button: "Close",
       });
-      window.location.href = "/#/user/dashboard"
+      window.backIndex = assetInfo.dBIndex;
+      window.location.href = assetInfo.lastRef;
     }
   
   }, [])
-
-  if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...")
-    window.location.href = "/#/user/home"
-    window.location.reload()
-  }
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;

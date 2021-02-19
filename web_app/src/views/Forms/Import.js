@@ -69,7 +69,8 @@ export default function Import(props) {
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard"
+    window.backIndex = assetInfo.dBIndex;
+    window.location.href = assetInfo.lastRef;
   }
 
   const ACLogin = event => {
@@ -153,6 +154,7 @@ export default function Import(props) {
             button: "Close",
           });
         }
+        setAssetClass("")
       })
       .on("receipt", (receipt) => {
         setTransactionActive(false);
@@ -170,8 +172,9 @@ export default function Import(props) {
         }).then(()=>{
           //refreshBalances()
           let newAsset = JSON.parse(JSON.stringify(assetInfo));
-          newAsset.status = "Out of Escrow"
+          newAsset.status = "Non-Transferable"
           newAsset.statusNum = "58"
+          window.newStat = {num:"58", str:"Non-Transferable"}
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
           window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
