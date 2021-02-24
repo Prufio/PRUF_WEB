@@ -779,6 +779,146 @@ export default function Dashboard(props) {
         )
         break
       }
+      case ("57"): {
+        component.push(
+          <Select
+          key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("58"): {
+        component.push(
+          <Select
+          key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
       case ("59"): {
         component.push(
           <Select
