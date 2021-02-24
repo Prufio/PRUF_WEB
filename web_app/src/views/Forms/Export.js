@@ -60,9 +60,10 @@ export default function Export(props) {
       text: "This asset is not in a transferable status, please set asset into transferable status before attempting to export.",
       icon: "warning",
       button: "Close",
+    }).then(()=>{
+      window.backIndex = assetInfo.dBIndex;
+      window.location.href = assetInfo.lastRef;
     });
-    window.backIndex = assetInfo.dBIndex;
-    window.location.href = assetInfo.lastRef;
   }
 
   const goBack = () => {

@@ -87,9 +87,10 @@ export default function ModifyDescription(props) {
           text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
           icon: "warning",
           button: "Close",
-        });
-        window.backIndex = asset.dBIndex;
-        window.location.href = asset.lastRef
+        }).then(()=>{
+          window.backIndex = asset.dBIndex;
+          window.location.href = asset.lastRef
+        })
       }
       setSelectedImage(assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || "")
       if (assetInfo.photo.DisplayImage) {

@@ -61,9 +61,10 @@ export default function Discard(props) {
       text: "This asset is not in discardable status, please set asset into discardable status before attempting to discard.",
       icon: "warning",
       button: "Close",
+    }).then(()=>{
+      window.backIndex = assetInfo.dBIndex;
+      window.location.href = assetInfo.lastRef;
     });
-    window.backIndex = assetInfo.dBIndex;
-    window.location.href = assetInfo.lastRef;
   }
 
   const goBack = () => {

@@ -73,20 +73,23 @@ export default function ModifyRGT(props) {
         text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
         icon: "warning",
         button: "Close",
+      }).then(()=>{
+        window.backIndex = assetInfo.dBIndex;
+        window.location.href = assetInfo.lastRef;
       });
-      window.backIndex = assetInfo.dBIndex;
-      window.location.href = assetInfo.lastRef;
     }
-    else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
+    
+    /* else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
       swal({
         title: "Asset not in correct status!",
-        text: "This asset is not in a lost or stolen status, please set asset into a non lost or stolen status before attempting to modify.",
+        text: "This asset is in a lost or stolen status, please set asset to a non lost or stolen status before attempting to modify.",
         icon: "warning",
         button: "Close",
+      }).then(()=>{
+        window.backIndex = assetInfo.dBIndex;
+        window.location.href = assetInfo.lastRef;
       });
-      window.backIndex = assetInfo.dBIndex;
-      window.location.href = assetInfo.lastRef;
-    }
+    } */
   
   }, [])
 

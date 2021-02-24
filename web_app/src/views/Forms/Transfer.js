@@ -68,7 +68,7 @@ export default function Transfer(props) {
       text: "This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.",
       icon: "warning",
       button: "Close",
-    });
+    }).then(()=>{goBack()});
     if (assetInfo === undefined || assetInfo === null) {
       console.log("No asset found. Rerouting...")
       window.location.href = "/#/user/home"

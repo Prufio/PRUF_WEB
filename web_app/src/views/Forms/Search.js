@@ -840,7 +840,6 @@ export default function Search(props) {
             console.log("Verification Confirmed");
             swal({
               title: "Match Confirmed!",
-              // text: "Check your TX here:" + txHash,
               icon: "success",
               button: "Close",
             });

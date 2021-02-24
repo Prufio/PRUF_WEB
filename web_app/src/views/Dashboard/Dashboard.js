@@ -145,19 +145,19 @@ export default function Dashboard(props) {
     if (window.backIndex) {
       let backIndex = window.backIndex, newObj, newStat, newStatNum;
 
-      if(window.newDescObj) {
+      if (window.newDescObj) {
         newObj = window.newDescObj
-      } 
+      }
 
       else {
         newObj = { text: arr[backIndex].text, photo: arr[backIndex].photo, urls: arr[backIndex].urls, name: arr[backIndex].name }
       }
 
-      if(window.newStat){
+      if (window.newStat) {
         newStatNum = window.newStat.num;
         newStat = window.newStat.str;
       }
-      
+
       else {
         newStatNum = arr[backIndex].statusNum;
         newStat = arr[backIndex].status;
@@ -415,7 +415,7 @@ export default function Dashboard(props) {
 
   }
 
-  const renderOptions = (status) => {
+  const renderOptions = (status) => { // @dev add new status cases as they arise
     let component = [];
     if (!selectedAssetObj.statusNum) return
 
@@ -423,6 +423,7 @@ export default function Dashboard(props) {
       case ("51"): {
         component.push(
           <Select
+          key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -438,6 +439,7 @@ export default function Dashboard(props) {
           >
             <MenuItem
               disabled
+              key="SelItem1"
               classes={{
                 root: classes.selectMenuItem
               }}
@@ -445,6 +447,7 @@ export default function Dashboard(props) {
               Select Action
               </MenuItem>
             <MenuItem
+              key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -454,6 +457,7 @@ export default function Dashboard(props) {
               Transfer
               </MenuItem>
             <MenuItem
+              key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -463,6 +467,7 @@ export default function Dashboard(props) {
               Verify
              </MenuItem>
             <MenuItem
+              key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -472,6 +477,7 @@ export default function Dashboard(props) {
               Export
              </MenuItem>
             <MenuItem
+              key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -481,6 +487,7 @@ export default function Dashboard(props) {
               Change Status
             </MenuItem>
             <MenuItem
+              key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -490,6 +497,7 @@ export default function Dashboard(props) {
               Update Asset Info
             </MenuItem>
             <MenuItem
+              key="SelItem7"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -520,6 +528,7 @@ export default function Dashboard(props) {
           >
             <MenuItem
               disabled
+              key="SelItem1"
               classes={{
                 root: classes.selectMenuItem
               }}
@@ -527,6 +536,7 @@ export default function Dashboard(props) {
               Select Action
                           </MenuItem>
             <MenuItem
+              key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -536,6 +546,7 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
+              key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -545,6 +556,7 @@ export default function Dashboard(props) {
               Update Asset Info
                           </MenuItem>
             <MenuItem
+              key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -560,6 +572,7 @@ export default function Dashboard(props) {
       case ("52"): {
         component.push(
           <Select
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -574,6 +587,7 @@ export default function Dashboard(props) {
             }}
           >
             <MenuItem
+              key="SelItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem
@@ -582,6 +596,7 @@ export default function Dashboard(props) {
               Select Action
                           </MenuItem>
             <MenuItem
+              key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -591,6 +606,7 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
+              key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -600,6 +616,7 @@ export default function Dashboard(props) {
               Change Status
                           </MenuItem>
             <MenuItem
+              key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -609,6 +626,7 @@ export default function Dashboard(props) {
               Update Asset Info
                           </MenuItem>
             <MenuItem
+              key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -624,6 +642,7 @@ export default function Dashboard(props) {
       case ("53"): {
         component.push(
           <Select
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -638,6 +657,7 @@ export default function Dashboard(props) {
             }}
           >
             <MenuItem
+              key="SelItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem
@@ -646,6 +666,7 @@ export default function Dashboard(props) {
               Select Action
                           </MenuItem>
             <MenuItem
+              key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -655,6 +676,7 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
+              key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -664,6 +686,7 @@ export default function Dashboard(props) {
               Change Status
                           </MenuItem>
             <MenuItem
+              key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -673,6 +696,7 @@ export default function Dashboard(props) {
               Update Asset Info
                           </MenuItem>
             <MenuItem
+              key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -688,6 +712,7 @@ export default function Dashboard(props) {
       case ("54"): {
         component.push(
           <Select
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -702,6 +727,7 @@ export default function Dashboard(props) {
             }}
           >
             <MenuItem
+              key="SelItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem
@@ -710,6 +736,7 @@ export default function Dashboard(props) {
               Select Action
                           </MenuItem>
             <MenuItem
+              key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -719,6 +746,7 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
+              key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -728,6 +756,7 @@ export default function Dashboard(props) {
               Change Status
                           </MenuItem>
             <MenuItem
+              key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -737,6 +766,7 @@ export default function Dashboard(props) {
               Update Asset Info
                           </MenuItem>
             <MenuItem
+              key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -752,6 +782,7 @@ export default function Dashboard(props) {
       case ("59"): {
         component.push(
           <Select
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -766,6 +797,7 @@ export default function Dashboard(props) {
             }}
           >
             <MenuItem
+              key="SelItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem
@@ -774,6 +806,7 @@ export default function Dashboard(props) {
               Select Action
               </MenuItem>
             <MenuItem
+              key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -783,6 +816,7 @@ export default function Dashboard(props) {
               Discard
              </MenuItem>
             <MenuItem
+              key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -792,6 +826,7 @@ export default function Dashboard(props) {
               Verify
              </MenuItem>
             <MenuItem
+              key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -801,6 +836,7 @@ export default function Dashboard(props) {
               Export
              </MenuItem>
             <MenuItem
+              key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -810,6 +846,7 @@ export default function Dashboard(props) {
               Change Status
             </MenuItem>
             <MenuItem
+              key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -819,6 +856,7 @@ export default function Dashboard(props) {
               Update Asset Info
             </MenuItem>
             <MenuItem
+              key="SelItem7"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -834,6 +872,7 @@ export default function Dashboard(props) {
       case ("70"): {
         component.push(
           <Select
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -848,6 +887,7 @@ export default function Dashboard(props) {
             }}
           >
             <MenuItem
+              key="SelItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem
@@ -856,6 +896,7 @@ export default function Dashboard(props) {
               Select Action
                           </MenuItem>
             <MenuItem
+              key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -865,6 +906,7 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
+              key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected

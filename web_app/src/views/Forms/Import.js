@@ -68,9 +68,10 @@ export default function Import(props) {
       text: "This asset is not in exported status, please export asset before attempting to import it.",
       icon: "warning",
       button: "Close",
+    }).then(()=>{
+      window.backIndex = assetInfo.dBIndex;
+      window.location.href = assetInfo.lastRef;
     });
-    window.backIndex = assetInfo.dBIndex;
-    window.location.href = assetInfo.lastRef;
   }
 
   const ACLogin = event => {
