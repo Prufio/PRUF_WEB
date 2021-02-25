@@ -74,6 +74,7 @@ function buildWindowUtils() {
   const _getStatusString = async (_status) => {
     let tempStat;
     let status = String(_status)
+    
     console.log(status)
     if (status === "0") {
       tempStat = "No Status"

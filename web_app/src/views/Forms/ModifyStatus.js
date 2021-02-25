@@ -77,8 +77,8 @@ export default function ModifyStatus(props) {
 
 
   const handleSimple = event => {
-    let status;
-    let statusName;
+    let status = "";
+    let statusName = "";
     let e = event.target.value
 
     switch (e) {
