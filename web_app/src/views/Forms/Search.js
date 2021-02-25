@@ -3215,7 +3215,7 @@ export default function Search(props) {
                   >
                     <CopyToClipboard text={asset.idxHash}
                       onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
-                      <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 14) + "..." + asset.idxHash.substring(52, 66)}</span>
+                      <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</span>
                     </CopyToClipboard>
                   </Tooltip>
                 )}

@@ -1464,7 +1464,7 @@ export default function Dashboard(props) {
                 >
                   <CopyToClipboard text={selectedAssetObj.idxHash}
                     onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
-                    <span>Asset ID: &nbsp; {selectedAssetObj.idxHash.substring(0, 14) + "..." + selectedAssetObj.idxHash.substring(52, 66)}</span>
+                    <span>Asset ID: &nbsp; {selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</span>
                   </CopyToClipboard>
                 </Tooltip>
               )}
