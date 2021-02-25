@@ -1009,7 +1009,7 @@ export default function Dashboard(props) {
               setCurrentACPrice(temp2)
             }
 
-            await console.log(window.balances);
+            //await console.log(window.balances);
 
             if (willSetup) {
               forceUpdate();

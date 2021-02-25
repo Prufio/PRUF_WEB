@@ -288,7 +288,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -348,7 +348,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -438,7 +438,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -508,7 +508,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -578,7 +578,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -647,7 +647,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -707,7 +707,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem3"
@@ -777,7 +777,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem3"
@@ -847,7 +847,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -868,16 +868,6 @@ export default function Search(props) {
               value="verify"
             >
               Verify
-             </MenuItem>
-            <MenuItem
-              key="SelItem4"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="export"
-            >
-              Export
              </MenuItem>
             <MenuItem
               key="SelItem5"
@@ -937,7 +927,7 @@ export default function Search(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -2464,19 +2454,15 @@ export default function Search(props) {
                             label="Description: None"
                             multiline
                             rows={4}
-                            defaultValue={ipfsObject.text.Description}
+                            defaultValue="No description set for this asset"
                             variant="outlined"
                             fullWidth
                             disabled
                           />
                         )}
-                        {/* {ipfsObject.text.Description === undefined && Object.values(ipfsObject.text).length > 0 && (
-                  <p className={classes.cardCategory}>
-                    Text Element: {Object.values(ipfsObject.text)[0]}
-                  </p>
-                )} */}
                       </>
                     )}
+                    {/*@dev URLs go here*/}
                     <br />
                     {/* {currency !== "" && !transaction && (
               <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>

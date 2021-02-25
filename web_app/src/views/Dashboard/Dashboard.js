@@ -268,9 +268,7 @@ export default function Dashboard(props) {
                   </CardHeader>
                 )}
               </>
-              {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
-              <img src={macbook} alt="logo" className="assetImage" />
-              </CardHeader> */}
+
               <CardBody>
                 {!isMobile && (
                   <div className={classes.cardHover}>
@@ -411,7 +409,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -471,7 +469,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -561,7 +559,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -631,7 +629,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -701,7 +699,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -770,7 +768,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -830,7 +828,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem3"
@@ -900,7 +898,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem3"
@@ -970,7 +968,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
               </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -991,16 +989,6 @@ export default function Dashboard(props) {
               value="verify"
             >
               Verify
-             </MenuItem>
-            <MenuItem
-              key="SelItem4"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="export"
-            >
-              Export
              </MenuItem>
             <MenuItem
               key="SelItem5"
@@ -1060,7 +1048,7 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem
               }}
             >
-              Select Action
+              Select an option from the list
                           </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -1396,7 +1384,7 @@ export default function Dashboard(props) {
                 fullWidth
                 disabled
               />
-
+              {/*@dev URLs go here*/}
               <br />
               <div>
                 <FormControl
