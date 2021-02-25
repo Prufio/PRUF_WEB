@@ -261,6 +261,716 @@ export default function Search(props) {
     setSelectedImage(e)
   }
 
+  const renderOptions = (status) => { // @dev add new status cases as they arise
+    let component = [];
+    if (!status) return
+    switch (status) {
+      case ("50") : {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("51") : {
+        component.push(
+          <Select
+          key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer
+              </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export
+             </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("52") : {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+                          </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("53") : {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+                          </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("54") : {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+                          </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("56") : {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }// @dev rework when escrow released
+      case ("57") : {
+        component.push(
+          <Select
+          key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("58") : {
+        component.push(
+          <Select
+          key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("59") : {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+              </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard
+             </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+             </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export
+             </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem>
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("70") : {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      default: {
+        console.log("Error in option switch")
+      }
+    }
+
+    return component
+  }
+
   const getDBIndexOf = (e) => {
 
     if (!e) { return console.log("No ID given!") }
@@ -494,7 +1204,7 @@ export default function Search(props) {
                 console.log("in onload")
                 if (this.response.includes("base64")) {
                   assetObj.photo[keys[i]] = this.response;
-                  console.log(assetObj.photo[keys[i]]);
+                  //console.log(assetObj.photo[keys[i]]);
 
                   if (keys[i] === "DisplayImage") {
                     console.log("Setting Display Image")
@@ -514,7 +1224,7 @@ export default function Search(props) {
                   setMoreInfo(true);
                   setRetrieving(false);
                   console.log(assetObj);
-                  console.log(assetObj.DisplayImage);
+                  //console.log(assetObj.DisplayImage);
                 }
               }
 
@@ -2266,110 +2976,7 @@ export default function Search(props) {
                         </Danger>
                     Options
                         </InputLabel>
-                      <Select
-                        MenuProps={{
-                          className: classes.selectMenu
-                        }}
-                        classes={{
-                          select: classes.select
-                        }}
-                        value={simpleSelect}
-                        onChange={handleSimple}
-                        inputProps={{
-                          name: "simpleSelect",
-                          id: "simple-select"
-                        }}
-                      >
-                        <MenuItem
-                          disabled
-                          classes={{
-                            root: classes.selectMenuItem
-                          }}
-                        >
-                          Select Function
-                          </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="transfer"
-                        >
-                          Transfer
-                          </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="verify"
-                        >
-                          Verify
-                          </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="import"
-                        >
-                          Import
-                          </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="export"
-                        >
-                          Export
-                          </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="discard"
-                        >
-                          Discard
-                          </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="modify-status"
-                        >
-                          Change Status
-                          </MenuItem>
-                        {/* <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="decrement-counter"
-                    >
-                      Decrement Counter
-                          </MenuItem> */}
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="edit-information"
-                        >
-                          Change Asset Info
-                          </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="edit-rightsholder"
-                        >
-                          Update Owner Info
-                          </MenuItem>
-                      </Select>
+                      {renderOptions(asset.statusNum)}
                     </FormControl>
                   </div>
                 )}

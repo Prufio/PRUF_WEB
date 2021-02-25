@@ -31,25 +31,37 @@ const useStyles = makeStyles(styles);
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
+
+   // @dev use to determine recycle and import eligibility
+  /* 
+    await window.contracts.AC_MGR.methods
+      .isSameRootAC(AC, temp)
+      .call(function (_error, _result) {
+        if (_error) {
+          return (console.log("IN ERROR IN ERROR IN ERROR"))
+        } else if (_result === "170") {
+          tempBool = true
+        } else {
+          tempBool = false
+        }
+      });
+  */
+
   const IPFS = require('ipfs-http-client') //require("ipfs-mini")
-  const [ODB, setODB] = React.useState(null)
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [miniActive, setMiniActive] = React.useState(false);
   const [image, setImage] = React.useState(require("assets/img/Sidebar Backgrounds/TracesWB.jpg"));
   const [color, setColor] = React.useState("blue");
   const [bgColor, setBgColor] = React.useState("darkBlue");
   const [isKovan, setIsKovan] = React.useState(true);
-  const [buildReady, setBuildReady] = React.useState(false);
   const [ETHBalance, setETHBalance] = React.useState("~");
   const [addr, setAddr] = React.useState("");
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
-  const [resetInfo, setResetInfo] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState();
-  const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
+  const [sidebarRoutes, ] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
   const [sps, setSps] = React.useState(undefined)
-  const [assetObjectArr, setAssetObjectArr] = React.useState([])
 
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
@@ -60,7 +72,6 @@ export default function Dashboard(props) {
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
   const [WD, setWD] = React.useState(false);
-  const [hasSetUp, setHasSetUp] = React.useState(false);
   const [assets, setAssets] = React.useState({})
   const [reserveAD, setReserveAD] = React.useState({})
   const [assetArr, setAssetArr] = React.useState({})
@@ -73,8 +84,20 @@ export default function Dashboard(props) {
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
+  //classes for main panel
+  const mainPanelClasses =
+    classes.mainPanel +
+    " " +
+    cx({
+      [classes.mainPanelSidebarMini]: miniActive,
+      [classes.mainPanelWithPerfectScrollbar]:
+        navigator.platform.indexOf("Win") > -1
+    });
 
-  //console.log("pre-load log", window.location.href)
+  // ref for main panel div
+  const mainPanel = React.createRef();
+
+  //console.log("pre-load href", window.location.href)
 
   const handleNoEthereum = () => {
     console.log("No ethereum object available");
@@ -165,68 +188,18 @@ export default function Dashboard(props) {
 
   const acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
-      //console.log("new: ",e[0] ?? "No new address fetched", "old: ", addr ?? "No address currently stored")
-      //if (window.addr === undefined || window.addr === null || window.addr === "") window.location.reload()
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
         if (e[0] !== window.addr) {
           window.location.reload()
         }
 
-        /* console.log("Here");
-        window.ETHBalance = "0";
-        window.ipfsCounter = 0;
-        window.balances = ["0", "0", "0", "0"];
-        setAssetClassBalance("~");
-        setAssetBalance("~");
-        setIDBalance("0");
-        setIsAssetHolder(false);
-        setIsAssetClassHolder(false);
-        setIsIDHolder(false);
-        setHasFetchedBalances(false);
-        setETHBalance("~");
-        setPrufBalance("~");
-        setAssets({});
-        setAddr("");
-        window.addr = "" */
       }
-
       else if (e[0] !== window.addr) {
         window.location.reload()
       }
-
-      /*       window.assetClass = undefined;
-            window.isAuthUser = false;
-            window.isACAdmin = false;
-            window.ipfsCounter = 0;
-            setAddr(window.web3.utils.toChecksumAddress(e[0]))
-            window.addr = window.web3.utils.toChecksumAddress(e[0])
-            setAssets({});
-            setAssetClassBalance("~");
-            setAssetBalance("~");
-            setIDBalance("0");
-            setIsAssetHolder(false);
-            setIsAssetClassHolder(false);
-            setIsIDHolder(false);
-            setHasFetchedBalances(false);
-            setETHBalance("~");
-            setPrufBalance("~");
-            window.recount = true;
-            window.resetInfo = true;*/
-
     });
   }
-
-  const mainPanelClasses =
-    classes.mainPanel +
-    " " +
-    cx({
-      [classes.mainPanelSidebarMini]: miniActive,
-      [classes.mainPanelWithPerfectScrollbar]:
-        navigator.platform.indexOf("Win") > -1
-    });
-  // ref for main panel div
-  const mainPanel = React.createRef();
 
   window.onload = () => {
     //console.log("page loaded", window.location.href)
@@ -236,17 +209,7 @@ export default function Dashboard(props) {
     window.recount = false;
     let _ipfs;
 
-    // const OrbitDB = require('orbit-db')
-
-    /* _ipfs = new IPFS({
-      host: "ipfs.infura.io",
-      port: 5001,
-      protocol: "https",
-    }); */
-
     _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"))
-
-    //console.log(_ipfs)
 
     let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length))
     //console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
@@ -258,20 +221,12 @@ export default function Dashboard(props) {
       }
     }
 
-    else if (hrefStr !== "/#/user/dashboard" && hrefStr !== "/#/user/home" && hrefStr !== "/#/user/search") {
+    else if (hrefStr !== "/#/user/dashboard" && hrefStr !== "/#/user/home" && hrefStr !== "/#/user/search" && hrefStr !== "/#/user/new-asset") {
       console.log("Rerouting...")
       window.location.href = "/#/user/home";
     }
 
     window.ipfs = _ipfs;
-
-    /* OrbitDB.createInstance(_ipfs).then((e)=>{
-      if(e){
-        console.log(e)
-        setODB(e)
-      }
-    })  */
-
 
     buildWindowUtils(); // get the utils object and make it globally accessible
 
@@ -319,8 +274,6 @@ export default function Dashboard(props) {
 
 
   }
-
-  // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
 
   React.useEffect(() => {
 
@@ -422,29 +375,6 @@ export default function Dashboard(props) {
       }
     }
   }, [window.replaceAssetData]);
-
-  React.useEffect(() => {
-    if (resetInfo) {
-      setAssets({});
-      setAssetBalance("~");
-      setIsAssetHolder(false);
-      setHasFetchedBalances(false);
-      setETHBalance("~");
-      setPrufBalance("~");
-      setBuildReady(false);
-      console.log("WD: setting up assets (Step one)")
-      window.ethereum.request({
-        method: 'eth_accounts',
-        params: {},
-      }).then((accounts) => {
-        if (accounts[0] !== undefined) {
-          console.log("got accounts");
-          setUpAssets("AssetListener", accounts[0]);
-        }
-      })
-      window.resetInfo = false;
-    }
-  }, [resetInfo])
 
   const handleImageClick = image => {
     setImage(image);
@@ -738,19 +668,19 @@ export default function Dashboard(props) {
           })
         }
       })
-    }
+  };
 
-          const sidebarMinimize = () => {
+  const sidebarMinimize = () => {
             setMiniActive(!miniActive);
-          };
+  };
 
-          const resizeFunction = () => {
+  const resizeFunction = () => {
             if (window.innerWidth >= 960) {
               setMobileOpen(false);
             }
-          };
+  };
 
-          const thousandHashesOf = (varToHash) => {
+  const thousandHashesOf = (varToHash) => {
             if (!window.web3) return
             let tempHash = varToHash;
             for (let i = 0; i < 1000; i++) {
@@ -758,17 +688,15 @@ export default function Dashboard(props) {
               //console.log(tempHash);
             }
             return tempHash;
-          }
+  };
 
-          const setUpContractEnvironment = async (_web3, _addr) => {
+  const setUpContractEnvironment = async (_web3, _addr) => {
             if (window.isKovan === false) { return }
             //console.log("IN SUCE, addr:", _addr)
             if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
             window.isSettingUpContracts = true;
             if (window.ethereum) {
-              window._contracts = await buildContracts(_web3)
-
-              await window.utils.getContracts().then(() => {
+              window._contracts = await buildContracts(_web3).then(() => {
                 window.isSettingUpContracts = false;
                 setWD(true)
                 if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
@@ -782,18 +710,15 @@ export default function Dashboard(props) {
 
             else {
               window.isSettingUpContracts = true;
-              window._contracts = await buildContracts(_web3)
-              await window.utils.getContracts().then(() => {
+              window._contracts = await buildContracts(_web3).then(() => {
                 window.isSettingUpContracts = false;
                 setWD(true)
               })
             }
 
-            //window.addEventListener("navigator", navTypeListener);
+  };
 
-          }
-
-          const setUpAssets = async (who, _addr, recount, which) => {
+  const setUpAssets = async (who, _addr, recount, which) => {
             console.log("SUA, called from ", who)
 
             let tempObj = {};
@@ -814,10 +739,6 @@ export default function Dashboard(props) {
               status: undefined,
             }
 
-            if (which) {
-              // Add pick/replace asset by index
-            }
-
             //Case of recount
             if (window.recount === true) {
               window.aTknIDs = [];
@@ -836,9 +757,9 @@ export default function Dashboard(props) {
               }
             })
 
-          }
+  };
 
-          const getIpfsData = async (simpleAssets, array, jobs, iteration, assetData) => {
+  const getIpfsData = async (simpleAssets, array, jobs, iteration, assetData) => {
             let _assetData
             if (!array) return
             //console.log(array)
@@ -883,9 +804,9 @@ export default function Dashboard(props) {
               }
               //console.log(chunk)
             }
-          }
+  };
 
-          const buildAssets = async (simpleAssets, assetData, noIpfs) => {
+  const buildAssets = async (simpleAssets, assetData, noIpfs) => {
             let ids = simpleAssets.ids;
             setReserveAD(assetData)
             console.log("BA: In buildAssets.")
@@ -942,7 +863,6 @@ export default function Dashboard(props) {
                           //console.log("Setting Display Image")
                           assetObj.DisplayImage = (assetObj.photo[keys[0]])
                         }
-                        //setAssetArr(assetArray)
                         forceUpdate();
                       }
 
@@ -956,7 +876,6 @@ export default function Dashboard(props) {
                           //console.log("Setting Display Image")
                           assetObj.DisplayImage = (assetObj.photo[keys[0]])
                         }
-                        //setAssetArr(assetArray)
                         forceUpdate();
                       }
 
@@ -978,7 +897,6 @@ export default function Dashboard(props) {
                               //console.log("Setting Display Image")
                               assetObj.DisplayImage = (assetObj.photo[keys[0]])
                             }
-                            //setAssetArr(assetArray)
                             forceUpdate();
                           }
                         }
@@ -995,7 +913,6 @@ export default function Dashboard(props) {
                               //console.log("Setting Display Image")
                               assetObj.DisplayImage = (assetObj.photo[keys[0]])
                             }
-                            //setAssetArr(assetArray)
                             forceUpdate();
                           }
                         }
@@ -1030,8 +947,6 @@ export default function Dashboard(props) {
 
                   //console.log(assetObj)
                   assetArray.push(assetObj)
-                  //setAssetArr(assetArray)
-                  //forceUpdate()
                 }
 
               }
@@ -1048,15 +963,13 @@ export default function Dashboard(props) {
               setHasFetchedBalances(window.hasFetchedBalances);
             }
 
-            //setAssets(tempObj);
             setAssetArr(assetArray)
-            //console.log(assetArray)
             console.log("BA: Assets after rebuild: ", assetArray);
             forceUpdate();
-          }
+  };
 
           //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-          const setUpTokenVals = async (willSetup, who, _addr) => {
+  const setUpTokenVals = async (willSetup, who, _addr) => {
             console.log("STV: Setting up balances, called from ", who)
 
             await window.utils.determineTokenBalance(_addr).then((e) => {
@@ -1104,10 +1017,10 @@ export default function Dashboard(props) {
             }
 
             return forceUpdate();
-          }
+  };
 
-          return (
-            <div className={classes.wrapper}>
+  return (
+    <div className={classes.wrapper}>
               <Sidebar
                 routes={sidebarRoutes}
                 addr={addr}
@@ -1129,7 +1042,6 @@ export default function Dashboard(props) {
                   handleDrawerToggle={handleDrawerToggle}
                   {...rest}
                 />
-                {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
                 {getRoute() ? (
                   <div className={classes.content}>
                     <div className={classes.container}>
@@ -1162,5 +1074,5 @@ export default function Dashboard(props) {
                 />
               </div>
             </div>
-          );
-        }
+  );
+}

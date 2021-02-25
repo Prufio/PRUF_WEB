@@ -138,8 +138,6 @@ export default function Dashboard(props) {
 
   const generateAssetDash = (arr) => {
 
-
-
     if (!arr) return <></>;
 
     if (window.backIndex) {
@@ -354,47 +352,18 @@ export default function Dashboard(props) {
         </div>
       )
     }
-
     return component
   }
 
   const showImage = (e) => {
-    var i = new Image();
 
-    i.onload = function () {
-      var j = new Image();
-      j.onload = function () {
-        // let move = i.height - j.height
-        // if (props.ps) {
-        //   if (move < 0) {
-        //     props.ps.element.scrollTop += move
-        //   } else {
-        //     props.ps.element.scrollTop = 0
-        //   }
-        //   console.log("Scrolled ", move)
-        //   //console.log(props.ps.element.scrollTop)
-        // }
-        setSelectedImage(e)
-      }
-      j.src = selectedImage;
-    };
+    setSelectedImage(e)
 
-    i.src = e;
     //console.log(selectedImage)
     //console.log(e)
   }
 
   const newPageNum = (e) => {
-    /* if (props.ps) {
-      //console.log(props.ps)
-      props.ps.element.scrollTop = 0
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-
-    } */
     setPageNum(e)
   }
 
@@ -417,10 +386,68 @@ export default function Dashboard(props) {
 
   const renderOptions = (status) => { // @dev add new status cases as they arise
     let component = [];
-    if (!selectedAssetObj.statusNum) return
-
+    if (!status || !selectedAssetObj.statusNum) return
     switch (status) {
-      case ("51"): {
+      case ("50") : {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }
+      case ("51") : {
         component.push(
           <Select
           key="Sel1"
@@ -510,66 +537,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("50"): {
-        component.push(
-          <Select
-            MenuProps={{
-              className: classes.selectMenu
-            }}
-            classes={{
-              select: classes.select
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select"
-            }}
-          >
-            <MenuItem
-              disabled
-              key="SelItem1"
-              classes={{
-                root: classes.selectMenuItem
-              }}
-            >
-              Select Action
-                          </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="verify"
-            >
-              Verify
-                          </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-                          </MenuItem>
-            <MenuItem
-              key="SelItem4"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info
-                          </MenuItem>
-          </Select>
-        )
-        break
-      }
-      case ("52"): {
+      case ("52") : {
         component.push(
           <Select
             key="Sel1"
@@ -639,7 +607,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("53"): {
+      case ("53") : {
         component.push(
           <Select
             key="Sel1"
@@ -709,7 +677,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("54"): {
+      case ("54") : {
         component.push(
           <Select
             key="Sel1"
@@ -779,7 +747,66 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("57"): {
+      case ("56") : {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            classes={{
+              select: classes.select
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Select Action
+                          </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="verify"
+            >
+              Verify
+                          </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+                          </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+                          </MenuItem>
+          </Select>
+        )
+        break
+      }// @dev rework when escrow released
+      case ("57") : {
         component.push(
           <Select
           key="Sel1"
@@ -849,7 +876,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("58"): {
+      case ("58") : {
         component.push(
           <Select
           key="Sel1"
@@ -919,7 +946,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("59"): {
+      case ("59") : {
         component.push(
           <Select
             key="Sel1"
@@ -1009,7 +1036,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("70"): {
+      case ("70") : {
         component.push(
           <Select
             key="Sel1"

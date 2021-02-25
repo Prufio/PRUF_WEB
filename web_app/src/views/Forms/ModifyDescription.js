@@ -80,6 +80,16 @@ export default function ModifyDescription(props) {
   const formClasses = useFormStyles();
 
   React.useEffect(() => {
+    if (props.ps) {
+      props.ps.element.scrollTop = 0;
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+    else {
+      window.scrollTo({top: 0, behavior: 'smooth'})
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+      
+    }
     if (!hasMounted && assetInfo !== undefined) {
       if (asset.statusNum === "50" || asset.statusNum === "56" || asset.statusNum === "70") {
         swal({
@@ -103,20 +113,7 @@ export default function ModifyDescription(props) {
       window.sentPacket = {};
       setHasMounted(true)
     }
-  })
-
-  React.useEffect(() => {
-    if (props.ps) {
-      props.ps.element.scrollTop = 0;
-      //console.log("Scrolled to ", props.ps.element.scrollTop)
-    }
-    else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-      
-    }
-  }, [])
+  },[])
 
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...")
@@ -704,7 +701,7 @@ export default function ModifyDescription(props) {
         switch (value) {
 
           case "delete":
-            swal("Are you sure you want to delete this extension?", {
+            swal("Are you sure you want to delete this URL?", {
               buttons: {
                 yes: {
                   text: "Delete",
@@ -752,7 +749,7 @@ export default function ModifyDescription(props) {
               <DeleteForever />
             </Danger>
           </div>
-          <h4 className={classes.cardTitle}> {keys[i]}: <a href={urls[i]} target='_blank'>{urls[i]}</a></h4>
+          <h4 className={classes.cardTitle}> {keys[i]}: <a href={urls[i]} rel="noopener noreferrer" target='_blank'>{urls[i]}</a></h4>
           <hr />
         </div>
       )
@@ -960,7 +957,7 @@ export default function ModifyDescription(props) {
                   }}
                   value={assetURL}
                   id="outlined-full-width"
-                  labelText="Link Address"
+                  labeltext="Link Address"
                   fullWidth
                   margin="normal"
                   placeholder="ex. 'https://foo.web/dir'"

@@ -329,7 +329,7 @@ export default function ModifyStatus(props) {
               {status !== "" && (
                 <InputLabel
                 >
-                  {statusName}
+                  Setting to status: "{statusName}"
                 </InputLabel>
               )}
               <Select
@@ -354,15 +354,18 @@ export default function ModifyStatus(props) {
                 >
                   Please Select Element
                           </MenuItem>
-                <MenuItem
+                {assetInfo.statusNum !== "51" && (
+                  <MenuItem
                   classes={{
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected
                   }}
                   value="transferable"
                 >
-                  Transferable
+                  Set Transferable
                           </MenuItem>
+                )}
+                {assetInfo.statusNum !== "52" && (
                 <MenuItem
                   classes={{
                     root: classes.selectMenuItem,
@@ -370,35 +373,42 @@ export default function ModifyStatus(props) {
                   }}
                   value="nontransferable"
                 >
-                  Non-Transferable
+                  Set Non-Transferable
                           </MenuItem>
-                <MenuItem
+                )}
+                {assetInfo.statusNum !== "53" && (
+                  <MenuItem
                   classes={{
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected
                   }}
                   value="stolen"
                 >
-                  Stolen
+                  Report Stolen
                           </MenuItem>
-                <MenuItem
+                )}
+                {assetInfo.statusNum !== "54" && (
+                  <MenuItem
                   classes={{
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected
                   }}
                   value="lost"
                 >
-                  Lost
+                  Report Lost
                           </MenuItem>
-                <MenuItem
+                )}
+                {assetInfo.statusNum !== "59" && (
+                  <MenuItem
                   classes={{
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected
                   }}
                   value="discardable"
                 >
-                  Discardable
-                          </MenuItem>
+                  Set Discardable
+                  </MenuItem>
+                )} 
               </Select>
             </FormControl>
           )}
