@@ -139,8 +139,8 @@ export default function Dashboard(props) {
   const generateAssetDash = (arr) => {
 
     if (!arr) return <></>;
-
-    if (window.backIndex) {
+    //console.log(window.backIndex);
+    if (window.backIndex > -1) {
       let backIndex = window.backIndex, newObj, newStat, newStatNum;
 
       if (window.newDescObj) {
@@ -164,26 +164,27 @@ export default function Dashboard(props) {
       window.newStat = null;
       window.newDescObj = null;
 
-      moreInfo({
-        dBIndex: backIndex,
-        id: arr[backIndex].id,
-        countPair: arr[backIndex].countPair,
-        idxHash: arr[backIndex].id,
-        descriptionObj: newObj,
-        DisplayImage: arr[backIndex].DisplayImage,
-        name: arr[backIndex].name,
-        assetClass: arr[backIndex].assetClass,
-        assetClassName: arr[backIndex].assetClassName,
-        status: newStat,
-        statusNum: newStatNum,
-        Description: newObj.text.Description,
-        note: arr[backIndex].note,
-        text: newObj.text,
-        urls: newObj.urls,
-        photo: newObj.photo,
-        photoUrls: newObj.photoUrls,
-        identicon: arr[backIndex].identicon
-      });
+        moreInfo({
+          dBIndex: backIndex,
+          id: arr[backIndex].id,
+          countPair: arr[backIndex].countPair,
+          idxHash: arr[backIndex].id,
+          descriptionObj: newObj,
+          DisplayImage: arr[backIndex].DisplayImage,
+          name: arr[backIndex].name,
+          assetClass: arr[backIndex].assetClass,
+          assetClassName: arr[backIndex].assetClassName,
+          status: newStat,
+          statusNum: newStatNum,
+          Description: newObj.text.Description,
+          note: arr[backIndex].note,
+          text: newObj.text,
+          urls: newObj.urls,
+          photo: newObj.photo,
+          photoUrls: newObj.photoUrls,
+          identicon: arr[backIndex].identicon
+        });
+      
       window.backIndex = undefined
     }
 
@@ -386,7 +387,7 @@ export default function Dashboard(props) {
     let component = [];
     if (!status || !selectedAssetObj.statusNum) return
     switch (status) {
-      case ("50") : {
+      case ("50"): {
         component.push(
           <Select
             MenuProps={{
@@ -412,6 +413,17 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -422,33 +434,79 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
-              key="SelItem3"
+              key="SelItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem3"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
-              Update Asset Info
+              Update Asset Info (Not Available in this Status)
                           </MenuItem>
             <MenuItem
-              key="SelItem4"
+              key="DisabledItem5"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
-              Update Owner Info
+              Update Owner Info (Not Available in this Status)
                           </MenuItem>
           </Select>
         )
         break
       }
-      case ("51") : {
+      case ("51"): {
         component.push(
           <Select
-          key="Sel1"
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -491,6 +549,28 @@ export default function Dashboard(props) {
             >
               Verify
              </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
             <MenuItem
               key="SelItem4"
               classes={{
@@ -535,7 +615,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("52") : {
+      case ("52"): {
         component.push(
           <Select
             key="Sel1"
@@ -562,6 +642,17 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -571,6 +662,39 @@ export default function Dashboard(props) {
             >
               Verify
                           </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
@@ -605,7 +729,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("53") : {
+      case ("53"): {
         component.push(
           <Select
             key="Sel1"
@@ -632,6 +756,17 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -641,6 +776,39 @@ export default function Dashboard(props) {
             >
               Verify
                           </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
@@ -675,7 +843,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("54") : {
+      case ("54"): {
         component.push(
           <Select
             key="Sel1"
@@ -702,6 +870,17 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -711,6 +890,39 @@ export default function Dashboard(props) {
             >
               Verify
                           </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
@@ -745,7 +957,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("56") : {
+      case ("56"): {
         component.push(
           <Select
             MenuProps={{
@@ -771,6 +983,17 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -781,33 +1004,79 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
-              key="SelItem3"
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem3"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
-              Update Asset Info
+              Update Asset Info (Not Available in this Status)
                           </MenuItem>
             <MenuItem
-              key="SelItem4"
+              key="DisabledItem5"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
-              Update Owner Info
+              Update Owner Info (Not Available in this Status)
                           </MenuItem>
           </Select>
         )
         break
       }// @dev rework when escrow released
-      case ("57") : {
+      case ("57"): {
         component.push(
           <Select
-          key="Sel1"
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -831,6 +1100,17 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -839,6 +1119,39 @@ export default function Dashboard(props) {
               value="verify"
             >
               Verify
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
              </MenuItem>
             <MenuItem
               key="SelItem5"
@@ -874,10 +1187,10 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("58") : {
+      case ("58"): {
         component.push(
           <Select
-          key="Sel1"
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -901,6 +1214,17 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -909,6 +1233,39 @@ export default function Dashboard(props) {
               value="verify"
             >
               Verify
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
              </MenuItem>
             <MenuItem
               key="SelItem5"
@@ -944,7 +1301,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("59") : {
+      case ("59"): {
         component.push(
           <Select
             key="Sel1"
@@ -969,6 +1326,17 @@ export default function Dashboard(props) {
               }}
             >
               Select an option from the list
+              </MenuItem>
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
               </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -981,6 +1349,28 @@ export default function Dashboard(props) {
               Discard
              </MenuItem>
             <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -1024,7 +1414,7 @@ export default function Dashboard(props) {
         )
         break
       }
-      case ("70") : {
+      case ("70"): {
         component.push(
           <Select
             key="Sel1"
@@ -1051,6 +1441,17 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -1061,6 +1462,17 @@ export default function Dashboard(props) {
               Verify
                           </MenuItem>
             <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -1069,6 +1481,50 @@ export default function Dashboard(props) {
               value="import"
             >
               Import
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem3"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem5"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info (Not Available in this Status)
                           </MenuItem>
           </Select>
         )

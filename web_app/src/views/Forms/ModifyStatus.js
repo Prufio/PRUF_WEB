@@ -198,7 +198,7 @@ export default function ModifyStatus(props) {
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex
-    window.location.href=assetInfo.lastRef;
+    window.location.href = assetInfo.lastRef;
   }
 
   const refreshBalances = async () => {
@@ -365,8 +365,32 @@ export default function ModifyStatus(props) {
                   Set Transferable
                           </MenuItem>
                 )}
+                {assetInfo.statusNum === "51" && (
+                  <MenuItem
+                  disabled
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="transferable"
+                >
+                  Set Transferable
+                          </MenuItem>
+                )}
                 {assetInfo.statusNum !== "52" && (
                 <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="nontransferable"
+                >
+                  Set Non-Transferable
+                          </MenuItem>
+                )}
+                {assetInfo.statusNum === "52" && (
+                <MenuItem
+                  disabled
                   classes={{
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected
@@ -387,6 +411,18 @@ export default function ModifyStatus(props) {
                   Report Stolen
                           </MenuItem>
                 )}
+                {assetInfo.statusNum === "53" && (
+                  <MenuItem
+                  disabled
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="stolen"
+                >
+                  Report Stolen
+                          </MenuItem>
+                )}
                 {assetInfo.statusNum !== "54" && (
                   <MenuItem
                   classes={{
@@ -398,8 +434,32 @@ export default function ModifyStatus(props) {
                   Report Lost
                           </MenuItem>
                 )}
+                {assetInfo.statusNum === "54" && (
+                  <MenuItem
+                  disabled
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="lost"
+                >
+                  Report Lost
+                          </MenuItem>
+                )}
                 {assetInfo.statusNum !== "59" && (
                   <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value="discardable"
+                >
+                  Set Discardable
+                  </MenuItem>
+                )} 
+                {assetInfo.statusNum === "59" && (
+                  <MenuItem
+                  disabled
                   classes={{
                     root: classes.selectMenuItem,
                     selected: classes.selectMenuItemSelected

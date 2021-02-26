@@ -138,12 +138,12 @@ export default function Search(props) {
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
     }
-    if(window.backIndex){
+    if (window.backIndex) {
       window.backIndex = undefined;
     }
   }, [])
@@ -154,20 +154,20 @@ export default function Search(props) {
 
 
   const refreshBalances = async () => {
-    if(!window.web3.eth) return
+    if (!window.web3.eth) return
 
     let pruf, ether;
-    
+
     console.log("Refreshing ether bal")
     await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
+      if (err) { console.log(err) }
       else { ether = window.web3.utils.fromWei(result, 'ether') }
       window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
         if (err) { console.log(err) }
         else { pruf = window.web3.utils.fromWei(result, 'ether') }
         window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
           if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
+          else { window.replaceAssetData = { assets: result, ether, pruf } }
         });
       });
     });
@@ -242,7 +242,7 @@ export default function Search(props) {
                   icon: "success",
                   button: "Close"
                 });
-                window.replaceAssetData = {IDHolder: true}
+                window.replaceAssetData = { IDHolder: true }
               })
             break;
 
@@ -263,9 +263,9 @@ export default function Search(props) {
 
   const renderOptions = (status) => { // @dev add new status cases as they arise
     let component = [];
-    if (!status) return
+    if (!status || !asset.statusNum) return
     switch (status) {
-      case ("50") : {
+      case ("50"): {
         component.push(
           <Select
             MenuProps={{
@@ -291,6 +291,17 @@ export default function Search(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -301,33 +312,79 @@ export default function Search(props) {
               Verify
                           </MenuItem>
             <MenuItem
-              key="SelItem3"
+              key="SelItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem3"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
-              Update Asset Info
+              Update Asset Info (Not Available in this Status)
                           </MenuItem>
             <MenuItem
-              key="SelItem4"
+              key="DisabledItem5"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
-              Update Owner Info
+              Update Owner Info (Not Available in this Status)
                           </MenuItem>
           </Select>
         )
         break
       }
-      case ("51") : {
+      case ("51"): {
         component.push(
           <Select
-          key="Sel1"
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -370,6 +427,28 @@ export default function Search(props) {
             >
               Verify
              </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
             <MenuItem
               key="SelItem4"
               classes={{
@@ -414,7 +493,7 @@ export default function Search(props) {
         )
         break
       }
-      case ("52") : {
+      case ("52"): {
         component.push(
           <Select
             key="Sel1"
@@ -441,6 +520,17 @@ export default function Search(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -450,6 +540,39 @@ export default function Search(props) {
             >
               Verify
                           </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
@@ -484,7 +607,7 @@ export default function Search(props) {
         )
         break
       }
-      case ("53") : {
+      case ("53"): {
         component.push(
           <Select
             key="Sel1"
@@ -511,6 +634,17 @@ export default function Search(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -520,6 +654,39 @@ export default function Search(props) {
             >
               Verify
                           </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
@@ -554,7 +721,7 @@ export default function Search(props) {
         )
         break
       }
-      case ("54") : {
+      case ("54"): {
         component.push(
           <Select
             key="Sel1"
@@ -581,6 +748,17 @@ export default function Search(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -590,6 +768,39 @@ export default function Search(props) {
             >
               Verify
                           </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
@@ -624,7 +835,7 @@ export default function Search(props) {
         )
         break
       }
-      case ("56") : {
+      case ("56"): {
         component.push(
           <Select
             MenuProps={{
@@ -650,6 +861,17 @@ export default function Search(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -660,33 +882,79 @@ export default function Search(props) {
               Verify
                           </MenuItem>
             <MenuItem
-              key="SelItem3"
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem3"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
-              Update Asset Info
+              Update Asset Info (Not Available in this Status)
                           </MenuItem>
             <MenuItem
-              key="SelItem4"
+              key="DisabledItem5"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
-              Update Owner Info
+              Update Owner Info (Not Available in this Status)
                           </MenuItem>
           </Select>
         )
         break
       }// @dev rework when escrow released
-      case ("57") : {
+      case ("57"): {
         component.push(
           <Select
-          key="Sel1"
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -710,6 +978,17 @@ export default function Search(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -718,6 +997,39 @@ export default function Search(props) {
               value="verify"
             >
               Verify
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
              </MenuItem>
             <MenuItem
               key="SelItem5"
@@ -753,10 +1065,10 @@ export default function Search(props) {
         )
         break
       }
-      case ("58") : {
+      case ("58"): {
         component.push(
           <Select
-          key="Sel1"
+            key="Sel1"
             MenuProps={{
               className: classes.selectMenu
             }}
@@ -780,6 +1092,17 @@ export default function Search(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -788,6 +1111,39 @@ export default function Search(props) {
               value="verify"
             >
               Verify
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
              </MenuItem>
             <MenuItem
               key="SelItem5"
@@ -823,7 +1179,7 @@ export default function Search(props) {
         )
         break
       }
-      case ("59") : {
+      case ("59"): {
         component.push(
           <Select
             key="Sel1"
@@ -848,6 +1204,17 @@ export default function Search(props) {
               }}
             >
               Select an option from the list
+              </MenuItem>
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
               </MenuItem>
             <MenuItem
               key="SelItem2"
@@ -860,6 +1227,28 @@ export default function Search(props) {
               Discard
              </MenuItem>
             <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -903,7 +1292,7 @@ export default function Search(props) {
         )
         break
       }
-      case ("70") : {
+      case ("70"): {
         component.push(
           <Select
             key="Sel1"
@@ -930,6 +1319,17 @@ export default function Search(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -940,6 +1340,17 @@ export default function Search(props) {
               Verify
                           </MenuItem>
             <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
@@ -948,6 +1359,50 @@ export default function Search(props) {
               value="import"
             >
               Import
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+             </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem3"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-information"
+            >
+              Update Asset Info (Not Available in this Status)
+                          </MenuItem>
+            <MenuItem
+              key="DisabledItem5"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info (Not Available in this Status)
                           </MenuItem>
           </Select>
         )
@@ -984,10 +1439,10 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
     }
     let temp = Object.assign(asset, ipfsObject)
     let tempObj = JSON.parse(JSON.stringify(temp))
@@ -1069,10 +1524,10 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
     }
   };
 
@@ -1083,10 +1538,10 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
     }
   };
 
@@ -1249,12 +1704,12 @@ export default function Search(props) {
 
           }
           await get()
-          }
-          
         }
 
-      };
-    
+      }
+
+    };
+
   };
 
   const getACData = async (ref, ac) => {
@@ -1431,7 +1886,7 @@ export default function Search(props) {
           icon: "success",
           button: "Close"
         }).then(() => {
-          window.newStat = {num:"58", str:"Out of Escrow"};
+          window.newStat = { num: "58", str: "Out of Escrow" };
           window.location.href = "/#/user/dashboard";
           window.replaceAssetData = { key: pageKey, newAsset: newAsset }
         })
@@ -1693,10 +2148,10 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
     }
     if (!IDXRawInput) {
       if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
@@ -1884,10 +2339,10 @@ export default function Search(props) {
       props.ps.element.scrollTop = 0
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
+
     }
     setRetrieving(true)
     console.log("in rrqr")
