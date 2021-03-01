@@ -28,6 +28,7 @@ import CardBody from "components/Card/CardBody.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import { DashboardOutlined, Description } from "@material-ui/icons";
 import { setConstantValue } from "typescript";
+import { Component } from "react";
 
 const useStyles = makeStyles(styles);
 
@@ -99,6 +100,8 @@ export default function NewRecord(props) {
 
   const maxImageSize = 1000;
 
+  const acArr = [1,11,12,13,2,21,22,23,3,31,32,33,4,41,42,43,5,51,52,53,6,61,62,63];
+
   const link = document.createElement('div');
   const resizeImg = require('resize-img');
 
@@ -123,15 +126,29 @@ export default function NewRecord(props) {
     }
     else {
       setAssetClass(event.target.value);
-      if (event.target.value === "1000003") {
-        setAssetClassName("Trinkets")
+      try {
+        window.utils.resolveACFromID(event.target.value).then((e) => {
+          let str = e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase();
+          setAssetClassName(str)
+          window.utils.getCosts(6, event.target.value).then((e) => {
+            setNRCost(window.web3.utils.fromWei(e.newAsset))
+          })
+        })
       }
-      if (event.target.value === "1000004") {
-        setAssetClassName("Personal Computers")
+      catch {
+        swal({
+          title: "Could not find asset class",
+          icon: "warning",
+          text: "Please try again.",
+          buttons: {
+            close: {
+              text: "close",
+            }
+          },
+        })
       }
-      window.utils.getCosts(6, event.target.value).then((e) => {
-        setNRCost(window.web3.utils.fromWei(e.newAsset))
-      })
+
+
     }
   };
 
@@ -508,6 +525,53 @@ export default function NewRecord(props) {
     return tempHash;
   }
 
+  const generateAssetClassList = (arr) => {
+    let component = [
+      <MenuItem
+        disabled
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select Asset Class
+      </MenuItem>
+    ];
+    for (let i = 0; i < arr.length; i++) {
+
+      window.contracts.AC_MGR.methods
+        .resolveAssetClass(arr[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            console.log(_result)
+          }
+        });
+      /* if(Number(arr[i]) < 10){
+
+      }
+
+      try{
+        window.utils.resolveACFromID(arr[i]).then((e)=>{
+          component.push(
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={String(arr[i])}
+            >
+              {e}
+            </MenuItem>
+          )
+        })
+      }
+      catch{
+        console.log("Could not get ac name")
+      } */
+    }
+    return component;
+  }
+
 
 
   const _newRecord = async (ipfs, idx, ipfsObj) => { //create a new asset record
@@ -806,32 +870,7 @@ export default function NewRecord(props) {
                           id: "simple-select"
                         }}
                       >
-                        <MenuItem
-                          disabled
-                          classes={{
-                            root: classes.selectMenuItem
-                          }}
-                        >
-                          Select Asset Class
-                        </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="1000003"
-                        >
-                          Trinkets
-                        </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="1000004"
-                        >
-                          Personal Computers
-                        </MenuItem>
+                        {generateAssetClassList(acArr)}
                       </Select>
                     </FormControl>
                   </form>

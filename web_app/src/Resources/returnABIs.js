@@ -304,6 +304,19 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "clearPrice",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "string",
 					"name": "_name",
 					"type": "string"
@@ -335,6 +348,30 @@ function returnABIs() {
 			"name": "endEscrow",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "getPriceData",
+			"outputs": [
+				{
+					"internalType": "uint120",
+					"name": "",
+					"type": "uint120"
+				},
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -611,39 +648,66 @@ function returnABIs() {
 			"name": "retrieveRecord",
 			"outputs": [
 				{
-					"internalType": "bytes32",
+					"components": [
+						{
+							"internalType": "uint8",
+							"name": "assetStatus",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "forceModCount",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "currency",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint16",
+							"name": "numberOfTransfers",
+							"type": "uint16"
+						},
+						{
+							"internalType": "uint32",
+							"name": "assetClass",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint32",
+							"name": "countDown",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint32",
+							"name": "countDownStart",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint120",
+							"name": "price",
+							"type": "uint120"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "Ipfs1",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "Ipfs2",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "rightsHolder",
+							"type": "bytes32"
+						}
+					],
+					"internalType": "struct Record",
 					"name": "",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint32",
-					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
+					"type": "tuple"
 				}
 			],
 			"stateMutability": "view",
@@ -735,6 +799,29 @@ function returnABIs() {
 				}
 			],
 			"name": "setEscrow",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint120",
+					"name": "_price",
+					"type": "uint120"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_currency",
+					"type": "uint8"
+				}
+			],
+			"name": "setPrice",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -883,145 +970,6 @@ function returnABIs() {
 			"type": "event"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_IpfsHash",
-					"type": "bytes32"
-				}
-			],
-			"name": "$addIpfs2Note",
-			"outputs": [
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				}
-			],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				}
-			],
-			"name": "$forceModRecord",
-			"outputs": [
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				}
-			],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_newRgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_newAssetClass",
-					"type": "uint32"
-				}
-			],
-			"name": "$importAsset",
-			"outputs": [
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				}
-			],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_countDownStart",
-					"type": "uint32"
-				}
-			],
-			"name": "$newRecord",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_newrgtHash",
-					"type": "bytes32"
-				}
-			],
-			"name": "$transferAsset",
-			"outputs": [
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				}
-			],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "ASSET_TXFR_ROLE",
 			"outputs": [
@@ -1122,6 +1070,59 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IpfsHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "addIpfs2Note",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "forceModRecord",
+			"outputs": [
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -1231,6 +1232,63 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_newRgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_newAssetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "importAsset",
+			"outputs": [
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_countDownStart",
+					"type": "uint32"
+				}
+			],
+			"name": "newRecord",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "address",
 					"name": "",
 					"type": "address"
@@ -1315,6 +1373,35 @@ function returnABIs() {
 			],
 			"name": "revokeRole",
 			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_newrgtHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "transferAsset",
+			"outputs": [
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				}
+			],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
@@ -2575,6 +2662,19 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
+			"name": "B320xF_",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "CONTRACT_ADMIN_ROLE",
 			"outputs": [
 				{
@@ -2960,14 +3060,9 @@ function returnABIs() {
 					"type": "uint32"
 				},
 				{
-					"internalType": "uint32",
+					"internalType": "address",
 					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
+					"type": "address"
 				}
 			],
 			"stateMutability": "view",
@@ -3006,6 +3101,111 @@ function returnABIs() {
 					"internalType": "string",
 					"name": "",
 					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "getExtAC_data",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "string",
+							"name": "name",
+							"type": "string"
+						},
+						{
+							"internalType": "uint32",
+							"name": "assetClassRoot",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint8",
+							"name": "custodyType",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint32",
+							"name": "discount",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint8",
+							"name": "byte1",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "byte2",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "byte3",
+							"type": "uint8"
+						},
+						{
+							"internalType": "address",
+							"name": "referenceAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "IPFS",
+							"type": "bytes32"
+						}
+					],
+					"internalType": "struct AC",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "getExtAC_data_nostruct",
+			"outputs": [
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				},
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
 				}
 			],
 			"stateMutability": "view",
@@ -3089,24 +3289,31 @@ function returnABIs() {
 			"name": "getServiceCosts",
 			"outputs": [
 				{
-					"internalType": "address",
+					"components": [
+						{
+							"internalType": "address",
+							"name": "rootAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "uint256",
+							"name": "rootPrice",
+							"type": "uint256"
+						},
+						{
+							"internalType": "address",
+							"name": "ACTHaddress",
+							"type": "address"
+						},
+						{
+							"internalType": "uint256",
+							"name": "ACTHprice",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct Invoice",
 					"name": "",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
+					"type": "tuple"
 				}
 			],
 			"stateMutability": "view",
@@ -3401,26 +3608,31 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "unpause",
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "_name",
+					"type": "string"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass_source",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass_dest",
+					"type": "uint32"
+				}
+			],
+			"name": "transferName",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "uint32",
-					"name": "_extData",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				}
-			],
-			"name": "updateACextendedData",
+			"inputs": [],
+			"name": "unpause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -3462,6 +3674,39 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_extData",
+					"type": "address"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_byte1",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_byte2",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_byte3",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "updateACreferenceAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "upperLimit",
 			"outputs": [
@@ -3474,7 +3719,7 @@ function returnABIs() {
 			"stateMutability": "view",
 			"type": "function"
 		}
-	];
+	]
 
 	//............................................................................................................................................
 
@@ -4572,6 +4817,32 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
+			"inputs": [],
+			"name": "TRUSTED_AGENT_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_key",
+					"type": "uint256"
+				}
+			],
+			"name": "adminKillTrustedAgent",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
 			"inputs": [
 				{
 					"internalType": "address",
@@ -4798,6 +5069,25 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "isColdWallet",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
 					"name": "_recipientAddress",
 					"type": "address"
 				},
@@ -4915,7 +5205,7 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "from",
+					"name": "_from",
 					"type": "address"
 				},
 				{
@@ -4938,7 +5228,7 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "from",
+					"name": "_from",
 					"type": "address"
 				},
 				{
@@ -4976,6 +5266,13 @@ function returnABIs() {
 				}
 			],
 			"name": "setApprovalForAll",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "setColdWallet",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -5134,7 +5431,7 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "from",
+					"name": "_from",
 					"type": "address"
 				},
 				{
@@ -5157,19 +5454,43 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "uint256",
-					"name": "number",
+					"name": "tokenId",
 					"type": "uint256"
 				}
 			],
-			"name": "uint256toString",
-			"outputs": [
+			"name": "trustedAgentBurn",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
 				{
-					"internalType": "string",
-					"name": "",
-					"type": "string"
+					"internalType": "address",
+					"name": "from",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "to",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
 				}
 			],
-			"stateMutability": "pure",
+			"name": "trustedAgentTransferFrom",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unSetColdWallet",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -5322,39 +5643,6 @@ function returnABIs() {
 			"type": "event"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "string",
-					"name": "_authCode",
-					"type": "string"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_newAssetClass",
-					"type": "uint32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_countDownStart",
-					"type": "uint32"
-				}
-			],
-			"name": "$claimPipAsset",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "ASSET_TXFR_ROLE",
 			"outputs": [
@@ -5442,6 +5730,39 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "string",
+					"name": "_authCode",
+					"type": "string"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_newAssetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_countDownStart",
+					"type": "uint32"
+				}
+			],
+			"name": "claimPipAsset",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -5693,25 +6014,6 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "number",
-					"type": "uint256"
-				}
-			],
-			"name": "uint256toString",
-			"outputs": [
-				{
-					"internalType": "string",
-					"name": "",
-					"type": "string"
-				}
-			],
-			"stateMutability": "pure",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "unpause",
 			"outputs": [],
@@ -5838,109 +6140,6 @@ function returnABIs() {
 			"type": "event"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_IpfsHash",
-					"type": "bytes32"
-				}
-			],
-			"name": "$addIpfs2Note",
-			"outputs": [
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				}
-			],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_newAssetClass",
-					"type": "uint32"
-				}
-			],
-			"name": "$importAsset",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_countDownStart",
-					"type": "uint32"
-				}
-			],
-			"name": "$newRecord",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_countDownStart",
-					"type": "uint32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_IpfsHash",
-					"type": "bytes32"
-				}
-			],
-			"name": "$newRecordWithDescription",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "ASSET_TXFR_ROLE",
 			"outputs": [
@@ -6028,6 +6227,30 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IpfsHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "addIpfs2Note",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -6132,6 +6355,85 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_newAssetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "importAsset",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_countDownStart",
+					"type": "uint32"
+				}
+			],
+			"name": "newRecord",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_countDownStart",
+					"type": "uint32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IpfsHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "newRecordWithDescription",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -6930,29 +7232,6 @@ function returnABIs() {
 			"type": "event"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				}
-			],
-			"name": "$recycle",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "ASSET_TXFR_ROLE",
 			"outputs": [
@@ -7229,6 +7508,29 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "recycle",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -8832,19 +9134,26 @@ function returnABIs() {
 			"name": "retrieveEscrowData",
 			"outputs": [
 				{
-					"internalType": "bytes32",
+					"components": [
+						{
+							"internalType": "bytes32",
+							"name": "controllingContractNameHash",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "escrowOwnerAddressHash",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "uint256",
+							"name": "timelock",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct escrowData",
 					"name": "",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
+					"type": "tuple"
 				}
 			],
 			"stateMutability": "view",
@@ -8861,44 +9170,51 @@ function returnABIs() {
 			"name": "retrieveEscrowDataHeavy",
 			"outputs": [
 				{
-					"internalType": "uint32",
+					"components": [
+						{
+							"internalType": "uint32",
+							"name": "u32_2",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint32",
+							"name": "u32_3",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint32",
+							"name": "u32_4",
+							"type": "uint32"
+						},
+						{
+							"internalType": "address",
+							"name": "addr_2",
+							"type": "address"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "b32_1",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "b32_2",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "uint256",
+							"name": "u256_1",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "u256_2",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct escrowDataExtHeavy",
 					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
+					"type": "tuple"
 				}
 			],
 			"stateMutability": "view",
@@ -8915,44 +9231,51 @@ function returnABIs() {
 			"name": "retrieveEscrowDataLight",
 			"outputs": [
 				{
-					"internalType": "uint8",
+					"components": [
+						{
+							"internalType": "uint8",
+							"name": "escrowData",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "u8_1",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "u8_2",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "u8_3",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint16",
+							"name": "u16_1",
+							"type": "uint16"
+						},
+						{
+							"internalType": "uint16",
+							"name": "u16_2",
+							"type": "uint16"
+						},
+						{
+							"internalType": "uint32",
+							"name": "u32_1",
+							"type": "uint32"
+						},
+						{
+							"internalType": "address",
+							"name": "addr_1",
+							"type": "address"
+						}
+					],
+					"internalType": "struct escrowDataExtLight",
 					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint16",
-					"name": "",
-					"type": "uint16"
-				},
-				{
-					"internalType": "uint16",
-					"name": "",
-					"type": "uint16"
-				},
-				{
-					"internalType": "uint32",
-					"name": "",
-					"type": "uint32"
-				},
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
+					"type": "tuple"
 				}
 			],
 			"stateMutability": "view",
@@ -9031,44 +9354,51 @@ function returnABIs() {
 					"type": "bytes32"
 				},
 				{
-					"internalType": "uint32",
-					"name": "_u32_2",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_u32_3",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_u32_4",
-					"type": "uint32"
-				},
-				{
-					"internalType": "address",
-					"name": "_addr_2",
-					"type": "address"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_b32_1",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_b32_2",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_u256_1",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_u256_2",
-					"type": "uint256"
+					"components": [
+						{
+							"internalType": "uint32",
+							"name": "u32_2",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint32",
+							"name": "u32_3",
+							"type": "uint32"
+						},
+						{
+							"internalType": "uint32",
+							"name": "u32_4",
+							"type": "uint32"
+						},
+						{
+							"internalType": "address",
+							"name": "addr_2",
+							"type": "address"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "b32_1",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "b32_2",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "uint256",
+							"name": "u256_1",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "u256_2",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct escrowDataExtHeavy",
+					"name": "escrowDataHeavy",
+					"type": "tuple"
 				}
 			],
 			"name": "setEscrowDataHeavy",
@@ -9084,44 +9414,51 @@ function returnABIs() {
 					"type": "bytes32"
 				},
 				{
-					"internalType": "uint8",
-					"name": "_escrowData",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "_u8_1",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "_u8_2",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "_u8_3",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint16",
-					"name": "_u16_1",
-					"type": "uint16"
-				},
-				{
-					"internalType": "uint16",
-					"name": "_u16_2",
-					"type": "uint16"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_u32_1",
-					"type": "uint32"
-				},
-				{
-					"internalType": "address",
-					"name": "_addr_1",
-					"type": "address"
+					"components": [
+						{
+							"internalType": "uint8",
+							"name": "escrowData",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "u8_1",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "u8_2",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "u8_3",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint16",
+							"name": "u16_1",
+							"type": "uint16"
+						},
+						{
+							"internalType": "uint16",
+							"name": "u16_2",
+							"type": "uint16"
+						},
+						{
+							"internalType": "uint32",
+							"name": "u32_1",
+							"type": "uint32"
+						},
+						{
+							"internalType": "address",
+							"name": "addr_1",
+							"type": "address"
+						}
+					],
+					"internalType": "struct escrowDataExtLight",
+					"name": "_escrowDataLight",
+					"type": "tuple"
 				}
 			],
 			"name": "setEscrowDataLight",
@@ -10001,6 +10338,7 @@ function returnABIs() {
 			"type": "function"
 		}
 	];
+
 	//............................................................................................................................................
 
 	const UTIL_TKN = [
@@ -10668,24 +11006,31 @@ function returnABIs() {
 					"type": "address"
 				},
 				{
-					"internalType": "address",
-					"name": "_rootAddress",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_rootPrice",
-					"type": "uint256"
-				},
-				{
-					"internalType": "address",
-					"name": "_ACTHaddress",
-					"type": "address"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_ACTHprice",
-					"type": "uint256"
+					"components": [
+						{
+							"internalType": "address",
+							"name": "rootAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "uint256",
+							"name": "rootPrice",
+							"type": "uint256"
+						},
+						{
+							"internalType": "address",
+							"name": "ACTHaddress",
+							"type": "address"
+						},
+						{
+							"internalType": "uint256",
+							"name": "ACTHprice",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct Invoice",
+					"name": "invoice",
+					"type": "tuple"
 				}
 			],
 			"name": "payForService",
@@ -10903,6 +11248,7 @@ function returnABIs() {
 			"type": "function"
 		}
 	];
+
 	//............................................................................................................................................
 
 	const PARTY = [
@@ -11477,6 +11823,1612 @@ function returnABIs() {
 		}
 	];
 
+	//............................................................................................................................................
+
+	const PURCHASE = [
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Paused",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "string",
+					"name": "_msg",
+					"type": "string"
+				}
+			],
+			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "OO_resolveContractAddresses",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_storageAddress",
+					"type": "address"
+				}
+			],
+			"name": "OO_setStorageContract",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_to",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				}
+			],
+			"name": "OO_transferACToken",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "_clearPrice",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint120",
+					"name": "_price",
+					"type": "uint120"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_currency",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_setForSale",
+					"type": "uint256"
+				}
+			],
+			"name": "_setPrice",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "bytes",
+					"name": "",
+					"type": "bytes"
+				}
+			],
+			"name": "onERC721Received",
+			"outputs": [
+				{
+					"internalType": "bytes4",
+					"name": "",
+					"type": "bytes4"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "purchaseWithPRUF",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_to",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "transferAssetToken",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	];
+
+	//............................................................................................................................................
+
+	const WRAP = [
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Paused",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "string",
+					"name": "_msg",
+					"type": "string"
+				}
+			],
+			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DISCARD_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "OO_resolveContractAddresses",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_storageAddress",
+					"type": "address"
+				}
+			],
+			"name": "OO_setStorageContract",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_to",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				}
+			],
+			"name": "OO_transferACToken",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "_sender",
+					"type": "address"
+				}
+			],
+			"name": "discard",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "bytes",
+					"name": "",
+					"type": "bytes"
+				}
+			],
+			"name": "onERC721Received",
+			"outputs": [
+				{
+					"internalType": "bytes4",
+					"name": "",
+					"type": "bytes4"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "recycle",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_to",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "transferAssetToken",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	];
+
+	//............................................................................................................................................
+
+	const DECORATE = [
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Paused",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "string",
+					"name": "_msg",
+					"type": "string"
+				}
+			],
+			"name": "REPORT",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "previousAdminRole",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "newAdminRole",
+					"type": "bytes32"
+				}
+			],
+			"name": "RoleAdminChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleGranted",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				}
+			],
+			"name": "RoleRevoked",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "Unpaused",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "ASSET_TXFR_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "CONTRACT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "DEFAULT_ADMIN_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "OO_resolveContractAddresses",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_storageAddress",
+					"type": "address"
+				}
+			],
+			"name": "OO_setStorageContract",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_to",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				}
+			],
+			"name": "OO_transferACToken",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "PAUSER_ROLE",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				}
+			],
+			"name": "_clearPrice",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_decAmount",
+					"type": "uint32"
+				}
+			],
+			"name": "_decCounter",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				}
+			],
+			"name": "_export",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_newAssetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "_import",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IpfsHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "_modIpfs1",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_newAssetStatus",
+					"type": "uint8"
+				}
+			],
+			"name": "_modStatus",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "uint120",
+					"name": "_price",
+					"type": "uint120"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_currency",
+					"type": "uint8"
+				}
+			],
+			"name": "_setPrice",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IpfsHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "addIpfs2Note",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_tokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_countDownStart",
+					"type": "uint32"
+				}
+			],
+			"name": "decorate721",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleAdmin",
+			"outputs": [
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint256",
+					"name": "index",
+					"type": "uint256"
+				}
+			],
+			"name": "getRoleMember",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				}
+			],
+			"name": "getRoleMemberCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "grantRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "hasRole",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				},
+				{
+					"internalType": "bytes",
+					"name": "",
+					"type": "bytes"
+				}
+			],
+			"name": "onERC721Received",
+			"outputs": [
+				{
+					"internalType": "bytes4",
+					"name": "",
+					"type": "bytes4"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "paused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "renounceRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "role",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "account",
+					"type": "address"
+				}
+			],
+			"name": "revokeRole",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_to",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				}
+			],
+			"name": "transferAssetToken",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	];
+	
+	//............................................................................................................................................
+
 	const abis = {
 		STOR: STOR,
 		APP: APP,
@@ -11495,6 +13447,9 @@ function returnABIs() {
 		ID_TKN: ID_TKN,
 		UTIL_TKN: UTIL_TKN,
 		PARTY: PARTY,
+		PURCHASE: PURCHASE,
+		WRAP: WRAP,
+		DECORATE: DECORATE
 	};
 
 	//............................................................................................................................................

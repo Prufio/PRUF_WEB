@@ -20,10 +20,13 @@ async function buildContracts(_web3) {
   const PIP_ABI = abis.PIP;
   const RCLR_ABI = abis.RCLR;
   const UTIL_TKN_ABI = abis.UTIL_TKN;
-  const PARTY_ABI = abis.PARTY
+  const PARTY_ABI = abis.PARTY;
+  const PURCHASE_ABI = abis.PURCHASE;
+  const WRAP_ABI = abis.WRAP;
+  const DECORATE_ABI = abis.DECORATE;
 
-  const STOR_Address = "0xaEfc4a04E1B40Ef85bDCDeA715Ec5a7d2745226A";
-  const PARTY_Address = "0xA837a86dB071c8531AFf1D301C8Fd0f30c2c1E9A";
+  const STOR_Address = "0x9d62B1839bC6543A58B2dE5bc34c669034A481a6";
+  const PARTY_Address = "0xE8bC284a7465d071e5E66884510349dF97A20c8E";
 
   const STOR = new _web3.eth.Contract(STOR_ABI, STOR_Address);
   const PARTY = new _web3.eth.Contract(PARTY_ABI, PARTY_Address);
@@ -43,6 +46,9 @@ async function buildContracts(_web3) {
   let PIP = null;
   let ID_TKN = null;
   let UTIL_TKN = null;
+  let PURCHASE = null;
+  let WRAP = null;
+  let DECORATE = null;
 
   await STOR.methods
     .resolveContractAddress("NP")
@@ -76,6 +82,42 @@ async function buildContracts(_web3) {
       } else {
         //console.log(_result);
         APP = new _web3.eth.Contract(APP_ABI, _result);
+      }
+    }
+    );
+
+    await STOR.methods
+    .resolveContractAddress("PURCHASE")
+    .call(function (_error, _result) {
+      if (_error) {
+        console.log(_error);
+      } else {
+        //console.log(_result);
+        PURCHASE = new _web3.eth.Contract(PURCHASE_ABI, _result);
+      }
+    }
+    );
+
+    await STOR.methods
+    .resolveContractAddress("WRAP")
+    .call(function (_error, _result) {
+      if (_error) {
+        console.log(_error);
+      } else {
+        //console.log(_result);
+        WRAP = new _web3.eth.Contract(WRAP_ABI, _result);
+      }
+    }
+    );
+
+    await STOR.methods
+    .resolveContractAddress("DECORATE")
+    .call(function (_error, _result) {
+      if (_error) {
+        console.log(_error);
+      } else {
+        //console.log(_result);
+        DECORATE = new _web3.eth.Contract(DECORATE_ABI, _result);
       }
     }
     );
@@ -241,7 +283,10 @@ async function buildContracts(_web3) {
     PIP: PIP,
     ID_TKN: ID_TKN,
     UTIL_TKN: UTIL_TKN,
-    PARTY: PARTY
+    PARTY: PARTY,
+    PURCHASE: PURCHASE,
+    WRAP: WRAP,
+    DECORATE: DECORATE
   }
 }
 
