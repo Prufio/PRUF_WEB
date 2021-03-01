@@ -69,13 +69,6 @@ body {
     /* object-fit: cover !important; */
 }
 
-.flexRow {
-  display: inline-flex;
-  gap: 5px;
-  flex-direction: row;
-  justify-content: center;
-}
-
 .flexRowWithGap {
   display: inline-flex;
   gap: 20px;
@@ -97,6 +90,19 @@ body {
 }
 
 .MLBGradientRefresh:hover {
+  color: #017ec0;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.refresh {
+  color: #017ec0;
+  cursor: pointer;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.refresh:hover {
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
 }
@@ -104,6 +110,13 @@ body {
 .dashboardHeader {
   display: flex;
   flex-direction: row;
+}
+
+.dashboardFooter {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  padding: 10px;
 }
 
 /* .submitChanges {
@@ -907,4 +920,8 @@ cursor:pointer;
   border-radius: 5px;
   border-width: 2px;
   padding: 50px;
+}
+
+.assetNumDropdown {
+  width: 55px;
 }

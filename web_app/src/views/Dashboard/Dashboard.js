@@ -164,27 +164,27 @@ export default function Dashboard(props) {
       window.newStat = null;
       window.newDescObj = null;
 
-        moreInfo({
-          dBIndex: backIndex,
-          id: arr[backIndex].id,
-          countPair: arr[backIndex].countPair,
-          idxHash: arr[backIndex].id,
-          descriptionObj: newObj,
-          DisplayImage: arr[backIndex].DisplayImage,
-          name: arr[backIndex].name,
-          assetClass: arr[backIndex].assetClass,
-          assetClassName: arr[backIndex].assetClassName,
-          status: newStat,
-          statusNum: newStatNum,
-          Description: newObj.text.Description,
-          note: arr[backIndex].note,
-          text: newObj.text,
-          urls: newObj.urls,
-          photo: newObj.photo,
-          photoUrls: newObj.photoUrls,
-          identicon: arr[backIndex].identicon
-        });
-      
+      moreInfo({
+        dBIndex: backIndex,
+        id: arr[backIndex].id,
+        countPair: arr[backIndex].countPair,
+        idxHash: arr[backIndex].id,
+        descriptionObj: newObj,
+        DisplayImage: arr[backIndex].DisplayImage,
+        name: arr[backIndex].name,
+        assetClass: arr[backIndex].assetClass,
+        assetClassName: arr[backIndex].assetClassName,
+        status: newStat,
+        statusNum: newStatNum,
+        Description: newObj.text.Description,
+        note: arr[backIndex].note,
+        text: newObj.text,
+        urls: newObj.urls,
+        photo: newObj.photo,
+        photoUrls: newObj.photoUrls,
+        identicon: arr[backIndex].identicon
+      });
+
       window.backIndex = undefined
     }
 
@@ -1618,90 +1618,13 @@ export default function Dashboard(props) {
                   <h4 className={classes.cardIconTitle}>
                     Asset Dashboard
               </h4>
-                  <Select
-                    MenuProps={{
-                      className: classes.selectMenu
-                    }}
-                    classes={{
-                      select: classes.select
-                    }}
-                    value={assetsPerPage}
-                    onChange={(e) => { handleShowNum(e.target.value) }}
-                    inputProps={{
-                      name: "simpleSelect",
-                      id: "simple-select"
-                    }}
-                  >
-                    <MenuItem
-                      disabled
-                      classes={{
-                        root: classes.selectMenuItem
-                      }}
-                    >
-                      Assets per page
-                        </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value={3}
-                    >
-                      3
-                        </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value={6}
-                    >
-                      6
-                        </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value={9}
-                    >
-                      9
-                        </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value={12}
-                    >
-                      12
-                        </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value={15}
-                    >
-                      15
-                        </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value={60}
-                    >
-                      60
-                        </MenuItem>
-                  </Select>
-                  {/* <Tooltip
+                  <Tooltip
                   title="Refresh"
                 >
                   <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
                     <Refresh />
                   </Icon>
-                </Tooltip> */}
+                </Tooltip>
                 </div>
               </div>
               <br />
@@ -1712,41 +1635,20 @@ export default function Dashboard(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      {props.addr && props.isMounted && props.assets === "~" && (
+      {props.addr && props.isMounted && props.assets === "~" &&(
         <GridContainer>
           <><h3>Getting Token Balances</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
         </GridContainer>
       )}
-      {!props.addr && !props.isMounted && props.assets === "~" && (
+      {!props.addr && !props.isMounted && props.assets === "~" &&(
         <GridContainer>
           <><h3>Getting User Address</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
         </GridContainer>
       )}
-      {!viewAsset && props.addr && props.assets !== "~" && (
-        <>
-          <GridContainer>
-            {generateAssetDash(props.assetArr || [])}
-          </GridContainer>
-          <div className="flexRow">
-            {numOfPages > 0 && pageNum > 1 && (
-              <><Button onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
-            )}
-            {numOfPages > 0 && pageNum === 1 && (
-              <><Button disabled onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
-            )}
-
-            {numOfPages > 0 && (
-              <h4>Page {pageNum} out of {numOfPages}</h4>
-            )}
-
-            {numOfPages > 0 && pageNum !== numOfPages && (
-              <><Button onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
-            )}
-            {numOfPages > 0 && pageNum === numOfPages && (
-              <><Button disabled onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
-            )}
-          </div>
-        </>
+      {!viewAsset && props.addr && props.assets !== "~" &&(
+        <GridContainer>
+          {generateAssetDash(props.assetArr || [])}
+        </GridContainer>
       )}
       {viewAsset && (
         <div>
@@ -1957,8 +1859,111 @@ export default function Dashboard(props) {
             </CardFooter>
           </Card>
         </div>
-      )
-      }
+      )}
+
+      {!viewAsset && props.addr && props.assets !== "0" && props.assets !== "~" && (
+        <Card >
+          <div className="dashboardFooter">
+            <div className="flexRowWithGap">
+              <Select
+                MenuProps={{
+                  className: classes.selectMenu
+                }}
+                className="assetNumDropdown"
+                value={assetsPerPage}
+                onChange={(e) => { handleShowNum(e.target.value) }}
+                inputProps={{
+                  name: "simpleSelect",
+                  id: "simple-select"
+                }}
+              >
+                <MenuItem
+                  disabled
+                  classes={{
+                    root: classes.selectMenuItem
+                  }}
+                >
+                  Assets per page
+                        </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value={3}
+                >
+                  3
+                        </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value={6}
+                >
+                  6
+                        </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value={9}
+                >
+                  9
+                        </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value={12}
+                >
+                  12
+                        </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value={15}
+                >
+                  15
+                        </MenuItem>
+                <MenuItem
+                  classes={{
+                    root: classes.selectMenuItem,
+                    selected: classes.selectMenuItemSelected
+                  }}
+                  value={60}
+                >
+                  60
+                        </MenuItem>
+              </Select>
+              <>
+                {numOfPages > 0 && pageNum > 1 && (
+                  <><Button onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
+                )}
+                {numOfPages > 0 && pageNum === 1 && (
+                  <><Button disabled onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
+                )}
+
+                {numOfPages > 0 && (
+                  <h4>Page {pageNum} out of {numOfPages}</h4>
+                )}
+
+                {numOfPages > 0 && pageNum !== numOfPages && (
+                  <><Button onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
+                )}
+                {numOfPages > 0 && pageNum === numOfPages && (
+                  <><Button disabled onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
+                )}
+              </>
+            </div>
+          </div>
+          <br />
+        </Card>
+      )}
     </div>
   );
 }
