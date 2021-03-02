@@ -3122,7 +3122,9 @@ export default function Search(props) {
                       <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
                     )}
                     {currency !== "" && transaction && (
-                      <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
+                      <h3>
+                      Purchasing Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                    </h3>
                     )}
                     {isRecycling && (
                       <>

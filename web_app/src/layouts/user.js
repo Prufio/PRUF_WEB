@@ -517,7 +517,7 @@ export default function Dashboard(props) {
               obj.dBIndex = index;
               //obj.lastRef = "/#/user/dashboard";
 
-              window.contracts.STOR.methods.getPriceData(id)
+              window.contracts.STOR.methods.getPriceData(idxHash)
                 .call((_error, _result) => {
                   if (_error) {
                     obj.price = "0"

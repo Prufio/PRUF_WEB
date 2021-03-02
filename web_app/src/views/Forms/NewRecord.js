@@ -1033,7 +1033,7 @@ export default function NewRecord(props) {
                           )}
                           {transactionActive && (
                             <CustomInput
-                              labelText="Asset Name"
+                              labelText={nameTag}
                               id="assetName"
                               disabled
                               formControlProps={{
