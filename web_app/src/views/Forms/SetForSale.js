@@ -29,6 +29,7 @@ export default function SetForSale(props) {
     const [txStatus, setTxStatus] = React.useState(false);
     const [txHash, setTxHash] = React.useState("");
     const [price, setPrice] = React.useState("");
+    const [currency, setCurrency] = React.useState("2");
     const [loginPrice, setloginPrice] = React.useState("");
     const [loginPriceState, setloginPriceState] = React.useState("");
 
@@ -106,8 +107,26 @@ export default function SetForSale(props) {
         });
     }
 
+    const thousandHashesOf = (varToHash) => {
+        if(!window.web3) return window.location.href = "/#/user/home"
+        let tempHash = varToHash;
+        for (let i = 0; i < 1000; i++) {
+          tempHash = window.web3.utils.soliditySha3(tempHash);
+          //console.log(tempHash);
+        }
+        return tempHash;
+      }
+
+    const clearAssetPrice = () => {
+        //@dev build out clear asset price
+    }
+
     const setAssetPrice = async () => { //import held asset
 
+        const pageKey = thousandHashesOf(props.addr, props.winKey);
+        let newAsset = await JSON.parse(JSON.stringify(assetInfo));
+        newAsset.currency = currency;
+        newAsset.price = price;
 
         let tempTxHash;
         setShowHelp(false);
@@ -117,17 +136,17 @@ export default function SetForSale(props) {
 
 
         if (loginPrice === "") {
-              setloginPriceState("error");
+            setloginPriceState("error");
             return;
-          }
-          
+        }
+
         setTransactionActive(true);
         if (assetInfo.statusNum !== "51") {
             await window.contracts.PURCHASE.methods
                 ._setPrice(
                     assetInfo.idxHash,
                     window.web3.utils.toWei(price),
-                    "2",
+                    currency,
                     "170"
                 )
                 .send({ from: props.addr })
@@ -170,8 +189,10 @@ export default function SetForSale(props) {
                         icon: "success",
                         button: "Close",
                     }).then(() => {
-                        window.backIndex = assetInfo.dBIndex;
+                        window.newStat = { num: String(assetInfo.statusNum), str: "For Sale" }
                         window.location.href = assetInfo.lastRef;
+                        window.backIndex = assetInfo.dBIndex
+                        window.replaceAssetData = { key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset }
                     })
                 });
         }
@@ -223,8 +244,10 @@ export default function SetForSale(props) {
                         icon: "success",
                         button: "Close",
                     }).then(() => {
-                        window.backIndex = assetInfo.dBIndex;
+                        window.newStat = { num: String(assetInfo.statusNum), str: "For Sale" }
                         window.location.href = assetInfo.lastRef;
+                        window.backIndex = assetInfo.dBIndex
+                        window.replaceAssetData = { key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset }
                     })
                 });
         }
