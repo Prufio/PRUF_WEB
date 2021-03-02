@@ -1761,25 +1761,63 @@ export default function Search(props) {
     }
   }
 
-  /* const purchaseAsset = async () => {
+  const purchaseAsset = async () => {
+    let temp = Object.assign(asset, ipfsObject)
+    let newAsset = JSON.parse(JSON.stringify(temp))
+    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+    let tempTxHash;
     console.log("Purchasing Asset")
+    
     if (window.balances.prufTokenBalance < window.web3.utils.fromWei(price)) { console.log("insufficient balance"); return console.log(window.web3.utils.fromWei(price)) }
     setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
       .send({ from: props.addr })
       .on("error", function (_error) {
-        setMoreInfo(false);
         setTransaction(false);
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        if (tempTxHash !== undefined) {
+          swal({
+            title: "Something went wrong!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swal({
+            title: "Something went wrong!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        console.log("Verification conf")
+        setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
+        console.log(_error)
+        setError(_error);
       })
       .on("receipt", (receipt) => {
-        setTransaction(false);
-        window.location.href = "/#/user/dashboard"
-        window.location.reload()
-        console.log(receipt.events.REPORT.returnValues._msg);
+        setTransactionActive(false);
+        setTxStatus(receipt.status);
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
+        swal({
+          title: "Purchase Success!",
+          content: link,
+          icon: "success",
+          button: "Close"
+        }).then(() => {
+          window.location.href = "/#/user/dashboard";
+          window.replaceAssetData = { key: pageKey, newAsset: newAsset }
+        })
       });
-  } */
+  }
 
 
   const recycleAsset = async () => {
@@ -2919,13 +2957,12 @@ export default function Search(props) {
                     )}
                     {/*@dev URLs go here*/}
                     <br />
-                    {/* {currency !== "" && !transaction && (
-              <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
-            )}
-
-            {currency !== "" && transaction && (
-              <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
-            )} */}
+                    {currency !== "" && !transaction && (
+                      <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
+                    )}
+                    {currency !== "" && transaction && (
+                      <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
+                    )}
                   </>
                 )}
                 {!ownerOf && (

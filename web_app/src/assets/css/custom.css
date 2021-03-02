@@ -69,13 +69,6 @@ body {
     /* object-fit: cover !important; */
 }
 
-.flexRow {
-  display: inline-flex;
-  gap: 5px;
-  flex-direction: row;
-  justify-content: center;
-}
-
 .flexRowWithGap {
   display: inline-flex;
   gap: 20px;
@@ -97,13 +90,53 @@ body {
 }
 
 .MLBGradientRefresh:hover {
+  color: #017ec0;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+}
+
+.refresh {
+  color: #017ec0;
+  cursor: pointer;
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+  transition:         transform .5s ease-in-out;
+}
+
+.refresh:hover {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.lightBlue {
+  color: #017ec0;
+}
+
+.lightBlue:hover {
+  color: #0168a0;
+}
+
+.links {
+  color: #1b1b1b;
+}
+
+.links:hover {
+  color: #0168a0;
+}
+.links:selected {
+  color: #0168a0;
 }
 
 .dashboardHeader {
   display: flex;
   flex-direction: row;
+}
+
+.dashboardFooter {
+  background-color: rgba(255, 255, 255, 0.397) !important;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  padding: 10px;
 }
 
 /* .submitChanges {
@@ -907,4 +940,8 @@ cursor:pointer;
   border-radius: 5px;
   border-width: 2px;
   padding: 50px;
+}
+
+.assetNumDropdown {
+  width: 55px;
 }

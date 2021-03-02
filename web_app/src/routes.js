@@ -11,7 +11,7 @@ import ModifyDescription from "views/Forms/ModifyDescription.js";
 import ModifyStatus from "views/Forms/ModifyStatus.js";
 import ModifyRGT from "views/Forms/ModifyRGT.js";
 import Transfer from "views/Forms/Transfer.js";
-import Search from "views/Forms/Search.js";
+import Search from "views/Search/Search.js";
 import Verify from "views/Forms/Verify.js";
 
 // @material-ui/icons

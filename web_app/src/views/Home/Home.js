@@ -46,6 +46,8 @@ export default function Home(props) {
   const [ACPrice, setACPrice] = React.useState("");
   const [isMinting, setIsMinting] = React.useState(false)
   const link = document.createElement('div')
+  const [isRefreshingEther, setIsRefreshingEther] = React.useState(false)
+  const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false)
 
   const [deposit, setDeposit] = React.useState(10000);
   const [loginDeposit, setloginDeposit] = React.useState(10000);
@@ -288,9 +290,14 @@ export default function Home(props) {
   const refreshEtherBalance = () => {
     if (!window.web3.eth) return
     console.log("Refreshing ether bal")
+    setIsRefreshingEther(true)
     window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) }
+      if (err) { 
+        setIsRefreshingEther(false)
+        console.log(err)
+      }
       else { window.replaceAssetData = { ether: window.web3.utils.fromWei(result, 'ether') } }
+      setIsRefreshingEther(false)
       forceUpdate()
     });
   }
@@ -298,9 +305,14 @@ export default function Home(props) {
   const refreshPrufBalance = () => {
     if (!window.contracts) return
     console.log("Refreshing pruf bal")
+    setIsRefreshingPruf(true)
     window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-      if (err) { console.log(err) }
+      if (err) { 
+        setIsRefreshingPruf(false) 
+        console.log(err)
+      }
       else { window.replaceAssetData = { pruf: window.web3.utils.fromWei(result, 'ether') } }
+      setIsRefreshingPruf(false)
       forceUpdate()
     });
   }
@@ -486,9 +498,14 @@ export default function Home(props) {
               </h3>
             </CardHeader>
             <CardFooter stats>
-              <div className={classes.stats}>
-                <Cached onClick={() => refreshEtherBalance()} />
-              </div>
+              {!isRefreshingEther && (
+                <div className="refresh">
+                  <Cached onClick={() => refreshEtherBalance()} />
+                </div>
+              )}
+              {isRefreshingEther && (
+                <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
+              )}
             </CardFooter>
           </Card>
         </GridItem>
@@ -506,99 +523,104 @@ export default function Home(props) {
               </h3>
             </CardHeader>
             <CardFooter stats>
-              <div className={classes.stats}>
-                <Cached onClick={() => refreshPrufBalance()} />
-              </div>
+              {!isRefreshingPruf && (
+                <div className="refresh">
+                  <Cached onClick={() => refreshPrufBalance()} />
+                </div>
+              )}
+              {isRefreshingPruf && (
+                <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
+              )}
             </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
       <br />
-        <Card>
-          <CardHeader color="info" icon>
-            <CardIcon className="headerIconBack">
-              <img className="IconFaucet" src={Pruf}></img>
-            </CardIcon>
-            <h4 className={classes.cardIconTitle}>PRUF Faucet (Kovan Testnet Only)</h4>
-          </CardHeader>
-          {!props.addr && (
-            <CardBody>
-              <form>
-                <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
-              </form>
-            </CardBody>
-          )}
-          {window.contracts === undefined && props.addr && (
-            <CardBody>
-              <form>
-                <h3>
-                  Connecting to the blockchain<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                </h3>
-              </form>
-            </CardBody>
-          )}
-          {window.contracts !== undefined && props.addr && (
-            <CardBody>
-              <form>
-                <h4>Conversion Rate: (ü100000/KΞ1)</h4>
-                <h5>Minimum Purchase amount is ü10000(KΞ0.1)</h5>
-                {!prufTransactionActive && (
-                  <>
-                    <CustomInput
-                      success={loginDepositState === "success"}
-                      error={loginDepositState === "error"}
-                      labelText="PRUF Amount Request *"
-                      id="pruf"
-                      formControlProps={{
-                        fullWidth: true,
-                      }}
-                      inputProps={{
-                        onChange: event => {
-                          setDeposit(event.target.value.trim())
-                          if (event.target.value !== "" && event.target.value > 9999) {
-                            setloginDepositState("success");
-                          } else {
-                            setloginDepositState("error");
-                          }
-                          setloginDeposit(event.target.value);
-                        },
-                        type: "number",
-                        defaultValue: deposit
-                      }}
-                    />
-                    <div className={classes.formCategory}>
-                      <small>*</small> Required fields
+      <Card>
+        <CardHeader color="info" icon>
+          <CardIcon className="headerIconBack">
+            <img className="IconFaucet" src={Pruf}></img>
+          </CardIcon>
+          <h4 className={classes.cardIconTitle}>PRUF Faucet (Kovan Testnet Only)</h4>
+        </CardHeader>
+        {!props.addr && (
+          <CardBody>
+            <form>
+              <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
+            </form>
+          </CardBody>
+        )}
+        {window.contracts === undefined && props.addr && (
+          <CardBody>
+            <form>
+              <h3>
+                Connecting to the blockchain<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              </h3>
+            </form>
+          </CardBody>
+        )}
+        {window.contracts !== undefined && props.addr && (
+          <CardBody>
+            <form>
+              <h4>Conversion Rate: (ü100000/KΞ1)</h4>
+              <h5>Minimum Purchase amount is ü10000(KΞ0.1)</h5>
+              {!prufTransactionActive && (
+                <>
+                  <CustomInput
+                    success={loginDepositState === "success"}
+                    error={loginDepositState === "error"}
+                    labelText="PRUF Amount Request *"
+                    id="pruf"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        setDeposit(event.target.value.trim())
+                        if (event.target.value !== "" && event.target.value > 9999) {
+                          setloginDepositState("success");
+                        } else {
+                          setloginDepositState("error");
+                        }
+                        setloginDeposit(event.target.value);
+                      },
+                      type: "number",
+                      defaultValue: deposit
+                    }}
+                  />
+                  <div className={classes.formCategory}>
+                    <small>*</small> Required fields
               </div>
-                  </>
-                )}
-                {prufTransactionActive && (
-                  <>
-                    <CustomInput
-                      labelText={deposit}
-                      id="deposit"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true
-                      }}
-                    />
-                  </>
-                )}
-                {!prufTransactionActive && (
-                  <div className="MLBGradientSubmit">
-                    <Button color="info" className="MLBGradient" onClick={() => purchasePRUF()}>Get PRUF</Button>
-                  </div>
-                )}
-                {prufTransactionActive && (
-                  <h3>
-                    Getting PRUF from the faucet<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                  </h3>
-                )}
-              </form>
-            </CardBody>
-          )}
-        </Card>
+                </>
+              )}
+              {prufTransactionActive && (
+                <>
+                  <CustomInput
+                    labelText={deposit}
+                    id="deposit"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      disabled: true
+                    }}
+                  />
+                </>
+              )}
+              {!prufTransactionActive && (
+                <div className="MLBGradientSubmit">
+                  <Button color="info" className="MLBGradient" onClick={() => purchasePRUF()}>Get PRUF</Button>
+                </div>
+              )}
+              {prufTransactionActive && (
+                <h3>
+                  Getting PRUF from the faucet<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                </h3>
+              )}
+            </form>
+          </CardBody>
+        )}
+      </Card>
     </div>
   );
 }
