@@ -22,6 +22,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
+import { AirlineSeatLegroomExtraSharp } from "@material-ui/icons";
 
 var ps;
 
@@ -64,6 +65,9 @@ export default function Dashboard(props) {
   const [sps, setSps] = React.useState(undefined)
 
   const [prufBalance, setPrufBalance] = React.useState("~");
+  const [roots, setRoots] = React.useState(undefined);
+  const [rootNames, setRootNames] = React.useState(undefined);
+  const [assetClassSets, setAssetClassSets] = React.useState(undefined);
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
@@ -78,6 +82,8 @@ export default function Dashboard(props) {
   const [winKey, setWinKey] = React.useState(String(Math.round(Math.random() * 100000)))
 
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  const acArr = [1, 11, 12, 13, 2, 21, 22, 23, 3, 31, 32, 33, 4, 41, 42, 43, 5, 51, 52, 53, 6, 61, 62, 63];
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
@@ -442,6 +448,9 @@ export default function Dashboard(props) {
             path={prop.layout + prop.path}
             render={() => (
               <prop.component
+                roots={roots}
+                rootNames={rootNames}
+                assetClassSets={assetClassSets}
                 ps={sps}
                 isMounted={isMounted}
                 addr={addr}
@@ -705,6 +714,7 @@ export default function Dashboard(props) {
               if (_addr) {
                 await window.utils.getETHBalance(_addr);
                 await setUpTokenVals(true, "SetupContractEnvironment", _addr)
+                await setUpACInformation(_addr);
               }
             }
 
@@ -717,6 +727,60 @@ export default function Dashboard(props) {
             }
 
   };
+
+  const setUpACInformation = async (addr) => {
+    let rootArray = [], rootNameArray = [], allClasses = [], allClassNames = [];
+    let _assetClassSets = {};
+
+    for (let i = 0; i < acArr.length; i++) {
+      await window.contracts.AC_MGR.methods
+        .getAC_data(acArr[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let resArr = Object.values(_result)
+            if (String(acArr[i]) === resArr[0]) {
+              window.utils.resolveACFromID(acArr[i]).then((e) => {
+                rootArray.push(acArr[i]);
+                rootNameArray.push(e);
+                _assetClassSets[String(acArr[i])]=[];
+              })
+            }
+            else{
+              window.utils.resolveACFromID(acArr[i]).then((e) => {
+                allClasses.push(acArr[i]);
+                allClassNames.push(e);
+              })
+            }
+          }
+        });
+    }
+
+    console.log(allClasses, allClassNames, rootArray)
+
+    for(let i = 0; i < allClasses.length; i++){
+      await window.contracts.AC_MGR.methods
+      .getAC_data(allClasses[i])
+      .call((_error, _result) => {
+        if (_error) { console.log("Error: ", _error) }
+        else {
+          let resArr = Object.values(_result);
+          for(let x = 0; x < rootArray.length; x++){
+            if (String(rootArray[x]) === resArr[0]){
+              _assetClassSets[String(rootArray[x])].push({id: allClasses[i], name: allClassNames[i]})
+            }
+          }
+        }
+      });
+    }
+
+    console.log("Class Sets: ", _assetClassSets)
+
+    setRoots(rootArray)
+    setRootNames(rootNameArray)
+    setAssetClassSets(_assetClassSets)
+
+  } 
 
   const setUpAssets = async (who, _addr, recount, which) => {
             console.log("SUA, called from ", who)

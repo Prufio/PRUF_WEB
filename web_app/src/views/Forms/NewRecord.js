@@ -38,16 +38,21 @@ export default function NewRecord(props) {
 
   const [error, setError] = React.useState("");
   const [showHelp, setShowHelp] = React.useState(false);
-  const [simpleSelect, setSimpleSelect] = React.useState("");
+  const [rootSelect, setRootSelect] = React.useState("");
+  const [classSelect, setClassSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [assetClass, setAssetClass] = React.useState("");
   const [assetClassName, setAssetClassName] = React.useState("");
+  const [classSelection, setClassSelection] = React.useState(null);
+  const [rootSelection, setRootSelection] = React.useState(null);
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("");
   const [isUploading, setIsUploading] = React.useState(false);
   const [NRCost, setNRCost] = React.useState("~");
   const [mintedID, setMintedID] = React.useState(false)
+  const [selectedRootID, setSelectedRootID] = React.useState("")
+
 
   //const [ipfsObj, setIpfsObj] = React.useState("");
 
@@ -100,7 +105,7 @@ export default function NewRecord(props) {
 
   const maxImageSize = 1000;
 
-  const acArr = [1,11,12,13,2,21,22,23,3,31,32,33,4,41,42,43,5,51,52,53,6,61,62,63];
+  const acArr = [1, 11, 12, 13, 2, 21, 22, 23, 3, 31, 32, 33, 4, 41, 42, 43, 5, 51, 52, 53, 6, 61, 62, 63];
 
   const link = document.createElement('div');
   const resizeImg = require('resize-img');
@@ -120,12 +125,25 @@ export default function NewRecord(props) {
     }
   }, [])
 
-  const ACLogin = event => {
+  const rootLogin = (e) => {
+
+    if (!e.target.value) return setRootSelect("")
+    if (!props.IDHolder && !mintedID) {
+      IDHolderPrompt()
+    }
+
+    else {
+      setSelectedRootID(e.target.value)
+    }
+  }
+
+  const ACLogin = (event) => {
     if (!props.IDHolder && !mintedID) {
       IDHolderPrompt()
     }
     else {
       setAssetClass(event.target.value);
+      setClassSelect(event.target.value);
       try {
         window.utils.resolveACFromID(event.target.value).then((e) => {
           let str = e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase();
@@ -525,51 +543,64 @@ export default function NewRecord(props) {
     return tempHash;
   }
 
-  const generateAssetClassList = (arr) => {
-    let component = [
+  const generateSubCatList = (arr) => {
+    let subCatSelection = [
       <MenuItem
         disabled
         classes={{
           root: classes.selectMenuItem
         }}
       >
-        Select Asset Class
+        Select Subcategory
       </MenuItem>
     ];
     for (let i = 0; i < arr.length; i++) {
-
-      window.contracts.AC_MGR.methods
-        .resolveAssetClass(arr[i])
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-            console.log(_result)
-          }
-        });
-      /* if(Number(arr[i]) < 10){
-
-      }
-
-      try{
-        window.utils.resolveACFromID(arr[i]).then((e)=>{
-          component.push(
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value={String(arr[i])}
-            >
-              {e}
-            </MenuItem>
-          )
-        })
-      }
-      catch{
-        console.log("Could not get ac name")
-      } */
+      subCatSelection.push(
+        <MenuItem
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          value={String(arr[i].id)}
+        >
+          {arr[i].name}
+        </MenuItem>
+      );
     }
-    return component;
+    console.log(arr)
+    return subCatSelection
+  }
+
+  const generateRootList = (arr) => {
+    let rootNames = props.rootNames
+    let rootSelection = [
+      <MenuItem
+        disabled
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select Category
+      </MenuItem>
+    ];
+
+    for (let i = 0; i < arr.length; i++) {
+      rootSelection.push(
+        <MenuItem
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          value={String(arr[i])}
+        >
+          {rootNames[i]}
+        </MenuItem>
+      );
+
+    }
+
+    return rootSelection;
+
   }
 
 
@@ -746,7 +777,25 @@ export default function NewRecord(props) {
           <br />
         </Card>
       )}
-      {window.contracts !== undefined && props.IDHolder !== undefined && (
+      {props.IDHolder !== undefined && window.contracts !== undefined && props.assetClassSets === undefined && (
+        <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              <Category />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h3>
+                Getting Asset Class Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              </h3>
+            </form>
+          </CardBody>
+          <br />
+        </Card>
+      )}
+      {window.contracts !== undefined && props.IDHolder !== undefined && props.assetClassSets !== undefined && (
         <GridContainer>
           {/* {props.IDHolder === false && (
             <>
@@ -854,7 +903,7 @@ export default function NewRecord(props) {
                     >
                       <InputLabel
                       >
-                        Select Asset Class
+                        Select Asset Category
                       </InputLabel>
                       <Select
                         MenuProps={{
@@ -863,15 +912,68 @@ export default function NewRecord(props) {
                         classes={{
                           select: classes.select
                         }}
-                        value={simpleSelect}
-                        onChange={(e) => { ACLogin(e) }}
+                        value={rootSelect}
+                        onChange={(e) => { rootLogin(e) }}
                         inputProps={{
-                          name: "simpleSelect",
-                          id: "simple-select"
+                          name: "rootSelect",
+                          id: "root-select"
                         }}
                       >
-                        {generateAssetClassList(acArr)}
+                        {generateRootList(props.roots)}
                       </Select>
+                    </FormControl>
+                    <br></br>
+                    <FormControl
+                      fullWidth
+                      className={classes.selectFormControl}
+                    >
+                      {selectedRootID === ""
+                        ? <>
+                          <InputLabel
+                          >
+                            Select Asset Subcategory
+                      </InputLabel>
+                          <Select
+                            disabled
+                            MenuProps={{
+                              className: classes.selectMenu
+                            }}
+                            classes={{
+                              select: classes.select
+                            }}
+                            value={classSelect}
+                            onChange={() => { }}
+                            inputProps={{
+                              name: "classSelect",
+                              id: "class-select"
+                            }}
+                          >
+                          </Select>
+                        </>
+                        :
+                        <>
+                          <InputLabel
+                          >
+                            Select Asset Subcategory
+                      </InputLabel>
+                          <Select
+                            MenuProps={{
+                              className: classes.selectMenu
+                            }}
+                            classes={{
+                              select: classes.select
+                            }}
+                            value={classSelect}
+                            onChange={(e) => { ACLogin(e) }}
+                            inputProps={{
+                              name: "classSelect",
+                              id: "class-select"
+                            }}
+                          >
+                            {generateSubCatList(props.assetClassSets[selectedRootID])}
+                          </Select>
+                        </>
+                      }
                     </FormControl>
                   </form>
                 </CardBody>

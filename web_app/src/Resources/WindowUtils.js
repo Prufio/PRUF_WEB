@@ -299,7 +299,7 @@ function buildWindowUtils() {
           if (_error) { console.log("Error: ", _error) }
           else {
             temp = _result
-            console.log("resolved AC name ", temp, " from AC index ", AC);
+            //console.log("resolved AC name ", temp, " from AC index ", AC);
 
           }
         });
@@ -311,7 +311,7 @@ function buildWindowUtils() {
       await window.utils.getCosts(6, AC);
     }
 
-    await console.log("User authLevel: ", window.authLevel);
+    //await console.log("User authLevel: ", window.authLevel);
     window.assetClassName = temp; //DEV REMOVE ALL window. REFS
     return (temp)
 
@@ -464,7 +464,7 @@ function buildWindowUtils() {
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              console.log(_result)
+              //console.log(_result)
               if (Number(_result) > 0) { tempAC = Number(_result) }
               else { return 0 }
             }
