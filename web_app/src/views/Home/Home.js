@@ -61,6 +61,7 @@ export default function Home(props) {
   const [loginACNameState, setloginACNameState] = React.useState("");
 
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [hasMinted, setHasMinted] = React.useState(false);
 
   React.useEffect(() => {
     if (props.ps) {
@@ -272,6 +273,7 @@ export default function Home(props) {
         }).then(() => {
           //refreshBalances()
           window.replaceAssetData = { IDHolder: true }
+          setHasMinted(true)
           forceUpdate()
         })
       })
@@ -420,7 +422,7 @@ export default function Home(props) {
         <GridItem xs={12} sm={6} md={6} lg={3}>
           <Card>
             <CardHeader color="danger" stats icon>
-              {props.IDHolder === true
+              {(props.IDHolder === true || hasMinted === true)
                 ?
                 <>
                   <CardIcon className="headerIconBack" onClick={() => {
@@ -458,7 +460,7 @@ export default function Home(props) {
                   </>}
             </CardHeader>
             <CardFooter stats>
-              {props.IDHolder === true
+              {(props.IDHolder === true || hasMinted === true)
                 ?
                 <>
                   <div className={classes.stats}>
