@@ -326,6 +326,16 @@ export default function Search(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
@@ -443,6 +453,16 @@ export default function Search(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -554,6 +574,16 @@ export default function Search(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -668,6 +698,16 @@ export default function Search(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -794,6 +834,16 @@ export default function Search(props) {
               Transfer (Not Available in this Status)
               </MenuItem>
             <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -895,6 +945,16 @@ export default function Search(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1005,12 +1065,22 @@ export default function Search(props) {
           >
             <MenuItem
               disabled
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem
               }}
             >
               Select an option from the list
+              </MenuItem>
+            <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
               </MenuItem>
             <MenuItem
               key="DisabledItem0"
@@ -1127,6 +1197,16 @@ export default function Search(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
@@ -1241,6 +1321,16 @@ export default function Search(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
@@ -1353,6 +1443,16 @@ export default function Search(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -2368,7 +2468,7 @@ export default function Search(props) {
               return
             }
             else {
-              setPrice(Object.values(_result)[0])
+              setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
               setCurrency("ü")
             }
           }
@@ -2380,7 +2480,7 @@ export default function Search(props) {
       let assetClassName = await window.utils.getACName(tempResult[2])
 
       window.assetInfo = {
-        assetClassName: assetClassName,
+        assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
         assetClass: tempResult[2],
         status: await window.utils.getStatusString(String(tempResult[0])),
         statusNum: String(tempResult[0]),
@@ -2396,7 +2496,7 @@ export default function Search(props) {
       setAuthLevel(window.authLevel);
       setScanQR(false);
       setAsset({
-        assetClassName: window.assetClassName,
+        assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
         assetClass: tempResult[2],
         status: window.assetInfo.status,
         statusNum: String(tempResult[0]),
@@ -2561,7 +2661,7 @@ export default function Search(props) {
           return
         }
         else {
-          setPrice(Object.values(_result)[0])
+          setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
           setCurrency("ü")
         }
       }
@@ -2572,7 +2672,7 @@ export default function Search(props) {
     let assetClassName = await window.utils.getACName(tempResult[2])
 
     window.assetInfo = {
-      assetClassName: assetClassName,
+      assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
       assetClass: tempResult[2],
       status: await window.utils.getStatusString(String(tempResult[0])),
       statusNum: String(tempResult[0]),
@@ -2587,7 +2687,7 @@ export default function Search(props) {
     await getIPFSJSONObject(ipfsHash);
     setAuthLevel(window.authLevel);
     setAsset({
-      assetClassName: window.assetClassName,
+      assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
       assetClass: tempResult[2],
       status: window.assetInfo.status,
       statusNum: String(tempResult[0]),

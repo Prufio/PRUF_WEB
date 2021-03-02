@@ -145,11 +145,21 @@ export default function Dashboard(props) {
       let backIndex = window.backIndex, newObj, newStat, newStatNum;
 
       if (window.newDescObj) {
-        newObj = window.newDescObj
+        newObj = JSON.parse(JSON.stringify(window.newDescObj))
+        if(newObj.photo.DisplayImage){
+          newObj.DisplayImage = newObj.photo.DisplayImage
+        }
+        else if(newObj.photo && Object.values(newObj.photo).length > 0){
+          newObj.DisplayImage = Object.values(newObj.photo)[0]
+        }
+        else{
+          newObj.DisplayImage = "";
+        }
       }
 
       else {
         newObj = { text: arr[backIndex].text, photo: arr[backIndex].photo, urls: arr[backIndex].urls, name: arr[backIndex].name }
+        newObj.DisplayImage = arr[backIndex].DisplayImage
       }
 
       if (window.newStat) {
@@ -171,7 +181,7 @@ export default function Dashboard(props) {
         countPair: arr[backIndex].countPair,
         idxHash: arr[backIndex].id,
         descriptionObj: newObj,
-        DisplayImage: arr[backIndex].DisplayImage,
+        DisplayImage: newObj.DisplayImage,
         name: arr[backIndex].name,
         assetClass: arr[backIndex].assetClass,
         assetClassName: arr[backIndex].assetClassName,
@@ -420,7 +430,7 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -547,7 +557,7 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -669,7 +679,7 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -793,7 +803,7 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -928,7 +938,7 @@ export default function Dashboard(props) {
               Transfer (Not Available in this Status)
               </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -1040,7 +1050,7 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -1159,7 +1169,7 @@ export default function Dashboard(props) {
           >
             <MenuItem
               disabled
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem
               }}
@@ -1291,7 +1301,7 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -1415,7 +1425,7 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
@@ -1538,7 +1548,7 @@ export default function Dashboard(props) {
               Select an option from the list
                           </MenuItem>
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected

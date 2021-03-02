@@ -120,7 +120,7 @@ export default function SetForSale(props) {
             await window.contracts.PURCHASE.methods
                 ._setPrice(
                     assetInfo.idxHash,
-                    price,
+                    window.web3.utils.toWei(price),
                     "2",
                     "170"
                 )
