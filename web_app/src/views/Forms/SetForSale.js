@@ -115,6 +115,12 @@ export default function SetForSale(props) {
         setTxHash("");
         setError(undefined);
 
+
+        if (loginPrice === "") {
+              setloginPriceState("error");
+            return;
+          }
+          
         setTransactionActive(true);
         if (assetInfo.statusNum !== "51") {
             await window.contracts.PURCHASE.methods

@@ -328,7 +328,15 @@ export default function Dashboard(props) {
                   </div>
                 )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
+                {arr[i].currency === "0" && (
                 <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
+                )}
+                {arr[i].currency === undefined && (
+                <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
+                )}
+                {arr[i].currency !== "0" && (
+                <h5 className={classes.cardTitle}>Status: For Sale</h5>
+                )}
 
               </CardBody>
               {/* <CardFooter chart>
@@ -1854,7 +1862,8 @@ export default function Dashboard(props) {
 
 
               {selectedAssetObj.currency === "0" && (<h4 className={classes.cardTitle}>Status: {selectedAssetObj.status} </h4>)}
-                    {selectedAssetObj.currency !== "0" && (
+              {selectedAssetObj.currency === undefined && (<h4 className={classes.cardTitle}>Status: {selectedAssetObj.status} </h4>)}
+                    {selectedAssetObj.currency !== "0" && selectedAssetObj.currency !== undefined && (
                       <>
                         <h4 className={classes.cardTitle}>Status: For Sale </h4>
                         <h4 className={classes.cardTitle}>Price: {currency} {selectedAssetObj.price} </h4>
