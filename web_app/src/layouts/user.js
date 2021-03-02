@@ -320,7 +320,7 @@ export default function Dashboard(props) {
         if (window.replaceAssetData.ether) setETHBalance(window.replaceAssetData.ether);
         if (window.replaceAssetData.pruf) setPrufBalance(window.replaceAssetData.pruf);
         if (window.replaceAssetData.assets) setAssetBalance(window.replaceAssetData.assets);
-        if (window.replaceAssetData.IDHolder) setIsIDHolder(true);
+        if (window.replaceAssetData.IDHolder) console.log("Setting IDHolder to true"); setIsIDHolder(true);
         window.replaceAssetData = {};
       }
 
