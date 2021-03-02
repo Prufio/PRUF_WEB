@@ -631,7 +631,7 @@ export default function NewRecord(props) {
       name: ipfsObj.name,
       DisplayImage: displayImage,
       assetClass: assetClass,
-      assetClassName: assetClassName,
+      assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
       dBIndex: props.assetArr.length,
       countPair: [100000, 100000],
       status: "Transferable",

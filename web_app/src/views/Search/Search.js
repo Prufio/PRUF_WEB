@@ -66,7 +66,7 @@ export default function Search(props) {
   const [asset, setAsset] = React.useState({});
   const [dBIndex, setDBIndex] = React.useState(null);
   const [price, setPrice] = React.useState("");
-  const [currency, setCurrency] = React.useState("");
+  const [currency, setCurrency] = React.useState("0");
   const [recycled, setRecycled] = React.useState(false);
   const [transaction, setTransaction] = React.useState(false);
   const [retrieving, setRetrieving] = React.useState(false);

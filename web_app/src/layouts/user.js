@@ -758,8 +758,8 @@ export default function Dashboard(props) {
             if (String(acArr[i]) === resArr[0]) {
               window.utils.resolveACFromID(acArr[i]).then((e) => {
                 rootArray.push(acArr[i]);
-                rootNameArray.push(e.substring(0,1).toUpperCase()+e.substring(1,e.length).toLowerCase());
-                _assetClassSets[String(acArr[i])]=[];
+                rootNameArray.push(e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase());
+                _assetClassSets[String(acArr[i])] = [];
               })
             }
             else {
@@ -776,14 +776,15 @@ export default function Dashboard(props) {
 
     for (let i = 0; i < allClasses.length; i++) {
       await window.contracts.AC_MGR.methods
-      .getAC_data(allClasses[i])
-      .call((_error, _result) => {
-        if (_error) { console.log("Error: ", _error) }
-        else {
-          let resArr = Object.values(_result);
-          for(let x = 0; x < rootArray.length; x++){
-            if (String(rootArray[x]) === resArr[0]){
-              _assetClassSets[String(rootArray[x])].push({id: allClasses[i], name: allClassNames[i].substring(0,1).toUpperCase()+allClassNames[i].substring(1,allClassNames[i].length).toLowerCase()})
+        .getAC_data(allClasses[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let resArr = Object.values(_result);
+            for (let x = 0; x < rootArray.length; x++) {
+              if (String(rootArray[x]) === resArr[0]) {
+                _assetClassSets[String(rootArray[x])].push({ id: allClasses[i], name: allClassNames[i].substring(0, 1).toUpperCase() + allClassNames[i].substring(1, allClassNames[i].length).toLowerCase() })
+              }
             }
           }
         });
@@ -897,19 +898,19 @@ export default function Dashboard(props) {
         for (let x = 0; x < ids.length; x++) {
           let assetObj = { text: {}, photo: {}, urls: {}, name: "Name Unavailable" }
 
-                  assetObj.DisplayImage = "";
-                  assetObj.identicon = <Jdenticon value={ids[x]} />;
-                  assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-                  assetObj.note = "";
-                  assetObj.photoUrls = {}
-                  assetObj.id = simpleAssets.ids[x];
-                  assetObj.ipfs = simpleAssets.ipfs[x];
-                  assetObj.countPair = simpleAssets.countPairs[x];
-                  assetObj.assetClass = simpleAssets.assetClasses[x];
-                  assetObj.status = simpleAssets.statuses[x];
-                  assetObj.statusNum = simpleAssets.statusNums[x];
-                  assetObj.assetClassName = simpleAssets.assetClassNames[x];
-                  assetObj.root = simpleAssets.roots[x];
+          assetObj.DisplayImage = "";
+          assetObj.identicon = <Jdenticon value={ids[x]} />;
+          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
+          assetObj.note = "";
+          assetObj.photoUrls = {}
+          assetObj.id = simpleAssets.ids[x];
+          assetObj.ipfs = simpleAssets.ipfs[x];
+          assetObj.countPair = simpleAssets.countPairs[x];
+          assetObj.assetClass = simpleAssets.assetClasses[x];
+          assetObj.status = simpleAssets.statuses[x];
+          assetObj.statusNum = simpleAssets.statusNums[x];
+          assetObj.assetClassName = simpleAssets.assetClassNames[x].substring(0, 1).toUpperCase() + simpleAssets.assetClassNames[x].substring(1, simpleAssets.assetClassNames[x].length).toLowerCase();
+          assetObj.root = simpleAssets.roots[x];
           assetObj.currency = simpleAssets.prices[x].currency;
           assetObj.price = simpleAssets.prices[x].price;
 
@@ -1016,14 +1017,14 @@ export default function Dashboard(props) {
           assetObj.text = assetData[x].text
           assetObj.urls = assetData[x].urls
 
-                  assetObj.root = simpleAssets.roots[x];
-                  assetObj.id = simpleAssets.ids[x];
-                  assetObj.ipfs = simpleAssets.ipfs[x];
-                  assetObj.countPair = simpleAssets.countPairs[x];
-                  assetObj.assetClass = simpleAssets.assetClasses[x];
-                  assetObj.status = simpleAssets.statuses[x];
-                  assetObj.statusNum = simpleAssets.statusNums[x];
-                  assetObj.assetClassName = simpleAssets.assetClassNames[x];
+          assetObj.root = simpleAssets.roots[x];
+          assetObj.id = simpleAssets.ids[x];
+          assetObj.ipfs = simpleAssets.ipfs[x];
+          assetObj.countPair = simpleAssets.countPairs[x];
+          assetObj.assetClass = simpleAssets.assetClasses[x];
+          assetObj.status = simpleAssets.statuses[x];
+          assetObj.statusNum = simpleAssets.statusNums[x];
+          assetObj.assetClassName = simpleAssets.assetClassNames[x];
           assetObj.identicon = <Jdenticon value={ids[x]} />;
           assetObj.identiconLG = <Jdenticon value={ids[x]} />;
 
@@ -1034,7 +1035,7 @@ export default function Dashboard(props) {
           assetObj.status = simpleAssets.statuses[x];
           assetObj.statusNum = simpleAssets.statusNums[x];
           assetObj.assetClassName = simpleAssets.assetClassNames[x];
-          
+
           assetObj.price = simpleAssets.prices[x].price;
           assetObj.currency = simpleAssets.prices[x].currency;
 
