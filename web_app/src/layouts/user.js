@@ -742,7 +742,7 @@ export default function Dashboard(props) {
             if (String(acArr[i]) === resArr[0]) {
               window.utils.resolveACFromID(acArr[i]).then((e) => {
                 rootArray.push(acArr[i]);
-                rootNameArray.push(e);
+                rootNameArray.push(e.substring(0,1).toUpperCase()+e.substring(1,e.length).toLowerCase());
                 _assetClassSets[String(acArr[i])]=[];
               })
             }
@@ -767,7 +767,7 @@ export default function Dashboard(props) {
           let resArr = Object.values(_result);
           for(let x = 0; x < rootArray.length; x++){
             if (String(rootArray[x]) === resArr[0]){
-              _assetClassSets[String(rootArray[x])].push({id: allClasses[i], name: allClassNames[i]})
+              _assetClassSets[String(rootArray[x])].push({id: allClasses[i], name: allClassNames[i].substring(0,1).toUpperCase()+allClassNames[i].substring(1,allClassNames[i].length).toLowerCase()})
             }
           }
         }
