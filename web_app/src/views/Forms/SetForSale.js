@@ -107,6 +107,10 @@ export default function SetForSale(props) {
         });
     }
 
+    const handleSetPrice = (e) => {
+        setPrice(e)
+    }
+
     const thousandHashesOf = (varToHash) => {
         if(!window.web3) return window.location.href = "/#/user/home"
         let tempHash = varToHash;
@@ -200,8 +204,8 @@ export default function SetForSale(props) {
             await window.contracts.PURCHASE.methods
                 ._setPrice(
                     assetInfo.idxHash,
-                    price,
-                    "2",
+                    window.web3.utils.toWei(price),
+                    currency,
                     "0"
                 )
                 .send({ from: props.addr })
@@ -279,7 +283,7 @@ export default function SetForSale(props) {
                                     }}
                                     inputProps={{
                                         onChange: event => {
-                                            setPrice(event.target.value.trim())
+                                            handleSetPrice(event.target.value.trim())
                                             if (event.target.value !== "") {
                                                 setloginPriceState("success");
                                             } else {
