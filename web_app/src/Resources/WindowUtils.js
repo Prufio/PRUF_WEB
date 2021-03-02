@@ -778,6 +778,8 @@ function buildWindowUtils() {
         //console.log(x)
       }
 
+      let roots = [];
+
       obj.ids = tknIDArray;
       obj.ipfs = ipfsHashArray;
       obj.countPairs = countPairs;
@@ -789,6 +791,14 @@ function buildWindowUtils() {
       await window.utils.getACNames(assetClasses).then((e) => {
         obj.assetClassNames = e;
       })
+
+      for(let i = 0; i < tknIDArray.length; i++){
+        await window.utils.getACData("id", assetClasses[i]).then((e)=>{
+          roots.push(e.root);
+        })
+      }
+
+      obj.roots = roots;
 
       return obj
     }

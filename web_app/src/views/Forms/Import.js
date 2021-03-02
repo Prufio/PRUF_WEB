@@ -30,6 +30,8 @@ export default function Import(props) {
   const [assetClass, setAssetClass] = React.useState("");
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
+  const [selectedRootID, setSelectedRootID] = React.useState("");
+  const [classSelect, setClassSelect] = React.useState("");
 
   const [error, setError] = React.useState("");
   const [showHelp, setShowHelp] = React.useState(false);
@@ -53,7 +55,6 @@ export default function Import(props) {
       window.scrollTo({top: 0, behavior: 'smooth'})
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
     }
   }, [])
 
@@ -111,6 +112,36 @@ export default function Import(props) {
       //console.log(tempHash);
     }
     return tempHash;
+  }
+
+  const generateSubCatList = (arr) => {
+    let subCatSelection = [
+      <MenuItem
+        disabled
+
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select Subclass
+      </MenuItem>
+    ];
+    for (let i = 0; i < arr.length; i++) {
+      subCatSelection.push(
+        <MenuItem
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          key={"key" + arr[i].name}
+          value={String(arr[i].id)}
+        >
+          {arr[i].name}
+        </MenuItem>
+      );
+    }
+    console.log(arr)
+    return subCatSelection
   }
 
   const importAsset = async () => { //import held asset
@@ -197,56 +228,58 @@ export default function Import(props) {
           </CardHeader>
           <CardBody>
             <form>
-              <FormControl
-                fullWidth
-                className={classes.selectFormControl}
-              >
-                <InputLabel
-                >
-                  Select Asset Class
+            <FormControl
+                      fullWidth
+                      className={classes.selectFormControl}
+                    >
+                      {selectedRootID === ""
+                        ? <>
+                          <InputLabel
+                          >
+                            Select Asset Subclass
                       </InputLabel>
-                <Select
-                  MenuProps={{
-                    className: classes.selectMenu
-                  }}
-                  classes={{
-                    select: classes.select
-                  }}
-                  value={simpleSelect}
-                  onChange={(e) => { ACLogin(e) }}
-                  inputProps={{
-                    name: "simpleSelect",
-                    id: "simple-select"
-                  }}
-                >
-                  <MenuItem
-                    disabled
-                    classes={{
-                      root: classes.selectMenuItem
-                    }}
-                  >
-                    Select Asset Class
-                        </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value="1000003"
-                  >
-                    Trinkets
-                        </MenuItem>
-                  <MenuItem
-                    classes={{
-                      root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
-                    }}
-                    value="1000004"
-                  >
-                    Personal Computers
-                        </MenuItem>
-                </Select>
-              </FormControl>
+                          <Select
+                            disabled
+                            MenuProps={{
+                              className: classes.selectMenu
+                            }}
+                            classes={{
+                              select: classes.select
+                            }}
+                            value={classSelect}
+                            onChange={() => { }}
+                            inputProps={{
+                              name: "classSelect",
+                              id: "class-select"
+                            }}
+                          >
+                          </Select>
+                        </>
+                        :
+                        <>
+                          <InputLabel
+                          >
+                            Select Asset Subclass
+                      </InputLabel>
+                          <Select
+                            MenuProps={{
+                              className: classes.selectMenu
+                            }}
+                            classes={{
+                              select: classes.select
+                            }}
+                            value={classSelect}
+                            onChange={(e) => { ACLogin(e) }}
+                            inputProps={{
+                              name: "classSelect",
+                              id: "class-select"
+                            }}
+                          >
+                            {generateSubCatList(props.assetClassSets[assetInfo.root])}
+                          </Select>
+                        </>
+                      }
+                    </FormControl>
             </form>
           </CardBody>
           <br />

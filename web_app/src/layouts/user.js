@@ -894,6 +894,7 @@ export default function Dashboard(props) {
                   assetObj.status = simpleAssets.statuses[x];
                   assetObj.statusNum = simpleAssets.statusNums[x];
                   assetObj.assetClassName = simpleAssets.assetClassNames[x];
+                  assetObj.root = simpleAssets.roots[x];
 
                   console.log(assetObj)
                   assetArray.push(assetObj)
@@ -1001,6 +1002,7 @@ export default function Dashboard(props) {
                   assetObj.identicon = <Jdenticon value={ids[x]} />;
                   assetObj.identiconLG = <Jdenticon value={ids[x]} />;
 
+                  assetObj.root = simpleAssets.roots[x];
                   assetObj.id = simpleAssets.ids[x];
                   assetObj.ipfs = simpleAssets.ipfs[x];
                   assetObj.countPair = simpleAssets.countPairs[x];

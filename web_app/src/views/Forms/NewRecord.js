@@ -547,11 +547,12 @@ export default function NewRecord(props) {
     let subCatSelection = [
       <MenuItem
         disabled
+        key={"keySelSubClass"}
         classes={{
           root: classes.selectMenuItem
         }}
       >
-        Select Subcategory
+        Select a Subclass
       </MenuItem>
     ];
     for (let i = 0; i < arr.length; i++) {
@@ -561,13 +562,14 @@ export default function NewRecord(props) {
             root: classes.selectMenuItem,
             selected: classes.selectMenuItemSelected
           }}
+          key={"key"+arr[i].name}
           value={String(arr[i].id)}
         >
           {arr[i].name}
         </MenuItem>
       );
     }
-    console.log(arr)
+    //console.log(arr)
     return subCatSelection
   }
 
@@ -576,17 +578,19 @@ export default function NewRecord(props) {
     let rootSelection = [
       <MenuItem
         disabled
+        key={"keySelClass"}
         classes={{
           root: classes.selectMenuItem
         }}
       >
-        Select Category
+        Select a Class
       </MenuItem>
     ];
 
     for (let i = 0; i < arr.length; i++) {
       rootSelection.push(
         <MenuItem
+        key={"key"+String(arr[i])}
           classes={{
             root: classes.selectMenuItem,
             selected: classes.selectMenuItemSelected
@@ -615,6 +619,7 @@ export default function NewRecord(props) {
     var rgtHashRaw, idxHash;
 
     let newAsset = {
+      root: selectedRootID,
       idxHash: idx,
       id: idx,
       ipfs: ipfs,
@@ -903,7 +908,7 @@ export default function NewRecord(props) {
                     >
                       <InputLabel
                       >
-                        Select Asset Category
+                        Select Asset Class
                       </InputLabel>
                       <Select
                         MenuProps={{
@@ -931,7 +936,7 @@ export default function NewRecord(props) {
                         ? <>
                           <InputLabel
                           >
-                            Select Asset Subcategory
+                            Select Asset Subclass
                       </InputLabel>
                           <Select
                             disabled
@@ -954,7 +959,7 @@ export default function NewRecord(props) {
                         <>
                           <InputLabel
                           >
-                            Select Asset Subcategory
+                            Select Asset Subclass
                       </InputLabel>
                           <Select
                             MenuProps={{
@@ -1047,7 +1052,7 @@ export default function NewRecord(props) {
                           <br />
                           <CardHeader image className={classes.cardHeaderHoverCustom}>
                             <div className="loadingImage">
-                              <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                              <div className="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                             </div>
                           </CardHeader>
                         </>)}
