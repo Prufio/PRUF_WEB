@@ -2,6 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
+import "../../assets/css/custom.css";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -39,37 +40,37 @@ export default function Footer(props) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="/#/user/home" className={block}>
+              <a href="/#/user/home" className="links">
                 {rtlActive ? "الصفحة الرئيسية" : "Home"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://pruf.io/" className={block}>
+              <a href="https://pruf.io/" className="links">
                 {rtlActive ? "شركة" : "Company"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://twitter.com/prufteam" className={block}>
+              <a href="https://twitter.com/prufteam" className="links">
                 {rtlActive ? "شركة" : "Twitter"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://t.me/pruftalk" className={block}>
+              <a href="https://t.me/pruftalk" className="links">
                 {rtlActive ? "شركة" : "Telegram"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://github.com/Prufio" className={block}>
+              <a href="https://github.com/Prufio" className="links">
                 {rtlActive ? "شركة" : "Github"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://www.reddit.com/r/PRuF/" className={block}>
+              <a href="https://www.reddit.com/r/PRuF/" className="links">
                 {rtlActive ? "شركة" : "Reddit"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://discord.com/invite/m4jsh6y" className={block}>
+              <a href="https://discord.com/invite/m4jsh6y" className="links">
                 {rtlActive ? "شركة" : "Discord"}
               </a>
             </ListItem>
@@ -79,14 +80,11 @@ export default function Footer(props) {
           &copy; {1900 + new Date().getYear()}{" "}
           <a
             href="https://pruf.io/"
-            className={anchor}
+            className="lightBlue"
             target="_blank"
           >
             {rtlActive ? "توقيت الإبداعية" : "PRüF"}
           </a>
-          {rtlActive
-            ? ", مصنوعة مع الحب لشبكة الإنترنت أفضل"
-            : ", made for the people"}
         </p>
       </div>
     </footer>
