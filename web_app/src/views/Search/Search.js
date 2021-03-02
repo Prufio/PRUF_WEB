@@ -82,6 +82,11 @@ export default function Search(props) {
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [copyText, setCopyText] = React.useState(false)
+  const [rootSelect, setRootSelect] = React.useState("");
+  const [classSelect, setClassSelect] = React.useState("");
+  const [selectedRootID, setSelectedRootID] = React.useState("");
+  const [recycleCost, setRecycleCost] = React.useState("");
+
 
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
@@ -173,18 +178,48 @@ export default function Search(props) {
     });
   }
 
-  const ACLogin = event => {
+  const rootLogin = (e) => {
+
+    if (!e.target.value) return setRootSelect("")
+    if (!props.IDHolder) {
+      IDHolderPrompt()
+    }
+
+    else {
+      setSelectedRootID(e.target.value)
+    }
+  }
+
+  const ACLogin = (event) => {
     if (!props.IDHolder) {
       IDHolderPrompt()
     }
     else {
       setAssetClass(event.target.value);
-      if (event.target.value === "1000003") {
-        setAssetClassName("Trinkets")
+      setClassSelect(event.target.value);
+      try {
+        window.utils.resolveACFromID(event.target.value).then((e) => {
+          let str = e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase();
+          setAssetClassName(str)
+          window.utils.getCosts(6, event.target.value).then((e) => {
+            setRecycleCost(window.web3.utils.fromWei(e.newAsset))
+          })
+        })
       }
-      if (event.target.value === "1000004") {
-        setAssetClassName("Personal Computers")
+      catch {
+        swal({
+          title: "Could not find asset class",
+          icon: "warning",
+          text: "Please try again.",
+          buttons: {
+            close: {
+              text: "close",
+            }
+          },
+        })
       }
+
+
     }
   };
 
@@ -1447,8 +1482,9 @@ export default function Search(props) {
     let temp = Object.assign(asset, ipfsObject)
     let tempObj = JSON.parse(JSON.stringify(temp))
 
-    tempObj.dBIndex = dBIndex
-    tempObj.lastRef = "/#/user/search"
+    tempObj.dBIndex = dBIndex;
+    tempObj.lastRef = "/#/user/search";
+    tempObj.root = selectedRootID;
 
     console.log(tempObj)
 
@@ -1755,6 +1791,7 @@ export default function Search(props) {
               exData: Object.values(_result)[3],
               AC: tempAC
             }
+            setSelectedRootID(Object.values(_result)[0])
           }
         });
       return tempData;
@@ -2380,6 +2417,68 @@ export default function Search(props) {
           })
       }
     }
+  }
+
+  const generateSubCatList = (arr) => {
+    let subCatSelection = [
+      <MenuItem
+        disabled
+
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select Subclass
+      </MenuItem>
+    ];
+    for (let i = 0; i < arr.length; i++) {
+      subCatSelection.push(
+        <MenuItem
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          key={"key" + arr[i].name}
+          value={String(arr[i].id)}
+        >
+          {arr[i].name}
+        </MenuItem>
+      );
+    }
+    console.log(arr)
+    return subCatSelection
+  }
+
+  const generateRootList = (arr) => {
+    let rootNames = props.rootNames
+    let rootSelection = [
+      <MenuItem
+        disabled
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select Class
+      </MenuItem>
+    ];
+
+    for (let i = 0; i < arr.length; i++) {
+      rootSelection.push(
+        <MenuItem
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          value={String(arr[i])}
+        >
+          {rootNames[i]}
+        </MenuItem>
+      );
+
+    }
+
+    return rootSelection;
+
   }
 
   const retrieveRecordQR = async (query) => {
@@ -3035,7 +3134,7 @@ export default function Search(props) {
                                   <CardIcon className="headerIconBack">
                                     <Category />
                                   </CardIcon>
-                                  <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+                                  <h4 className={classes.cardIconTitle}>Select Asset Subclass</h4>
                                 </CardHeader>
                                 <CardBody>
                                   <form>
@@ -3053,7 +3152,7 @@ export default function Search(props) {
                                   <CardIcon className="headerIconBack">
                                     <Category />
                                   </CardIcon>
-                                  <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+                                  <h4 className={classes.cardIconTitle}>Select Asset Subclass</h4>
                                 </CardHeader>
                                 <CardBody>
                                   <form>
@@ -3061,51 +3160,53 @@ export default function Search(props) {
                                       fullWidth
                                       className={classes.selectFormControl}
                                     >
-                                      <InputLabel
-                                      >
-                                        Select Asset Class
-                        </InputLabel>
-                                      <Select
-                                        MenuProps={{
-                                          className: classes.selectMenu
-                                        }}
-                                        classes={{
-                                          select: classes.select
-                                        }}
-                                        value={simpleSelect}
-                                        onChange={(e) => { ACLogin(e) }}
-                                        inputProps={{
-                                          name: "simpleSelect",
-                                          id: "simple-select"
-                                        }}
-                                      >
-                                        <MenuItem
-                                          disabled
-                                          classes={{
-                                            root: classes.selectMenuItem
-                                          }}
-                                        >
-                                          Select Asset Class
-                          </MenuItem>
-                                        <MenuItem
-                                          classes={{
-                                            root: classes.selectMenuItem,
-                                            selected: classes.selectMenuItemSelected
-                                          }}
-                                          value="1000003"
-                                        >
-                                          Trinkets
-                          </MenuItem>
-                                        <MenuItem
-                                          classes={{
-                                            root: classes.selectMenuItem,
-                                            selected: classes.selectMenuItemSelected
-                                          }}
-                                          value="1000004"
-                                        >
-                                          Personal Computers
-                          </MenuItem>
-                                      </Select>
+                                      {selectedRootID === ""
+                                        ? <>
+                                          <InputLabel
+                                          >
+                                            Select Asset Subclass
+                                          </InputLabel>
+                                          <Select
+                                            disabled
+                                            MenuProps={{
+                                              className: classes.selectMenu
+                                            }}
+                                            classes={{
+                                              select: classes.select
+                                            }}
+                                            value={classSelect}
+                                            onChange={() => { }}
+                                            inputProps={{
+                                              name: "classSelect",
+                                              id: "class-select"
+                                            }}
+                                          >
+                                          </Select>
+                                        </>
+                                        :
+                                        <>
+                                          <InputLabel
+                                          >
+                                            Select Asset Subclass
+                                          </InputLabel>
+                                          <Select
+                                            MenuProps={{
+                                              className: classes.selectMenu
+                                            }}
+                                            classes={{
+                                              select: classes.select
+                                            }}
+                                            value={classSelect}
+                                            onChange={(e) => { ACLogin(e) }}
+                                            inputProps={{
+                                              name: "classSelect",
+                                              id: "class-select"
+                                            }}
+                                          >
+                                            {generateSubCatList(props.assetClassSets[selectedRootID])}
+                                          </Select>
+                                        </>
+                                      }
                                     </FormControl>
                                   </form>
                                 </CardBody>
