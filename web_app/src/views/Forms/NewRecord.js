@@ -133,6 +133,7 @@ export default function NewRecord(props) {
     }
 
     else {
+      setRootSelect(e.target.value)
       setSelectedRootID(e.target.value)
     }
   }
@@ -676,7 +677,7 @@ export default function NewRecord(props) {
     }) */
 
     await window.contracts.APP_NC.methods
-      .$newRecordWithDescription(
+      .newRecordWithDescription(
         idxHash,
         rgtHash,
         assetClass,

@@ -74,7 +74,7 @@ function buildWindowUtils() {
   const _getStatusString = async (_status) => {
     let tempStat;
     let status = String(_status)
-    
+
     console.log(status)
     if (status === "0") {
       tempStat = "No Status"
@@ -716,7 +716,8 @@ function buildWindowUtils() {
         statuses = [],
         countPairs = [],
         assetClasses = [],
-        statusNums = [];
+        statusNums = [],
+        prices = [];
 
 
 
@@ -775,6 +776,14 @@ function buildWindowUtils() {
               countPairs.push([Object.values(_result)[3], Object.values(_result)[4]]);
             }
           })
+        await window.contracts.STOR.methods.getPriceData(tknIDArray[x])
+          .call((_error, _result) => {
+            if (_error) {
+              console.log("IN ERROR IN ERROR IN ERROR")
+            } else {
+              prices.push({ price: Object.values(_result)[0], currency: Object.values(_result)[1] });
+            }
+          })
         //console.log(x)
       }
 
@@ -785,7 +794,8 @@ function buildWindowUtils() {
       obj.statuses = statuses;
       obj.statusNums = statusNums;
       obj.notes = noteArray;
-      
+      obj.prices = prices;
+
       await window.utils.getACNames(assetClasses).then((e) => {
         obj.assetClassNames = e;
       })

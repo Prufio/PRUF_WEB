@@ -33,7 +33,7 @@ export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
 
-   // @dev use to determine recycle and import eligibility
+  // @dev use to determine recycle and import eligibility
   /* 
     await window.contracts.AC_MGR.methods
       .isSameRootAC(AC, temp)
@@ -61,7 +61,7 @@ export default function Dashboard(props) {
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState();
-  const [sidebarRoutes, ] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
+  const [sidebarRoutes,] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
   const [sps, setSps] = React.useState(undefined)
 
   const [prufBalance, setPrufBalance] = React.useState("~");
@@ -78,7 +78,7 @@ export default function Dashboard(props) {
   const [WD, setWD] = React.useState(false);
   const [assets, setAssets] = React.useState({})
   const [reserveAD, setReserveAD] = React.useState({})
-  const [assetArr, setAssetArr] = React.useState({})
+  const [assetArr, setAssetArr] = React.useState([])
   const [winKey, setWinKey] = React.useState(String(Math.round(Math.random() * 100000)))
 
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
@@ -149,7 +149,7 @@ export default function Dashboard(props) {
               setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
               setIsMounted(true);
             }
-            
+
             else {
               ethereum.send('eth_requestAccounts').then((accounts) => {
                 if (accounts[0] !== undefined) {
@@ -161,7 +161,7 @@ export default function Dashboard(props) {
               });
             }
           });
-          
+
           return setIsKovan(true);
         }
         else { window.isKovan = false; return setIsKovan(false); }
@@ -334,14 +334,14 @@ export default function Dashboard(props) {
         console.log("Object is defined. index: ", window.replaceAssetData.dBIndex, " new asset: ", window.replaceAssetData.newAsset)
         let newAsset = window.replaceAssetData.newAsset;
         let dBIndex = window.replaceAssetData.dBIndex;
-        let tempArr;
-        if(!assetArr || assetArr.length < 1){
-          tempArr = [];
-        }
+        let tempArr = JSON.parse(JSON.stringify(assetArr));
+        // if (!assetArr || assetArr.length < 1) {
+        //   tempArr = [];
+        // }
 
-        else {
-          tempArr = JSON.parse(JSON.stringify(assetArr))
-        } 
+        // else {
+        //   tempArr = JSON.parse(JSON.stringify(assetArr))
+        // }
 
         if (newAsset && dBIndex > -1) {
           newAsset.id = newAsset.idxHash;
@@ -516,10 +516,26 @@ export default function Dashboard(props) {
               let tempArr = JSON.parse(JSON.stringify(assetArr));
               obj.dBIndex = index;
               //obj.lastRef = "/#/user/dashboard";
-              console.log("Old Assets", tempArr);
-              tempArr.splice(index, 1, obj);
-              console.log("New Assets", tempArr);
-              setAssetArr(tempArr);
+
+              window.contracts.STOR.methods.getPriceData(id)
+                .call((_error, _result) => {
+                  if (_error) {
+                    obj.price = "0"
+                    obj.currency = "0"
+                    console.log("IN ERROR IN ERROR IN ERROR")
+                    console.log("Old Assets", tempArr);
+                    tempArr.splice(index, 1, obj);
+                    console.log("New Assets", tempArr);
+                    setAssetArr(tempArr);
+                  } else {
+                    obj.price = Object.values(_result)[0]
+                    obj.currency = Object.values(_result)[1]
+                    console.log("Old Assets", tempArr);
+                    tempArr.splice(index, 1, obj);
+                    console.log("New Assets", tempArr);
+                    setAssetArr(tempArr);
+                  }
+                })
             }
 
             let newAsset = {}
@@ -537,7 +553,7 @@ export default function Dashboard(props) {
                 countPair: [tempResult[4], tempResult[3]]
               })
 
-              window.utils.getStatusString(String(tempResult[0])).then(async(e) => {
+              window.utils.getStatusString(String(tempResult[0])).then(async (e) => {
                 newAsset.status = e;
 
                 let assetObj;
@@ -670,61 +686,61 @@ export default function Dashboard(props) {
                         }
                       }
                       await get()
+                    }
                   }
                 }
-              }
-            });
-          })
-        }
-      })
+              });
+            })
+          }
+        })
   };
 
   const sidebarMinimize = () => {
-            setMiniActive(!miniActive);
+    setMiniActive(!miniActive);
   };
 
   const resizeFunction = () => {
-            if (window.innerWidth >= 960) {
-              setMobileOpen(false);
-            }
+    if (window.innerWidth >= 960) {
+      setMobileOpen(false);
+    }
   };
 
   const thousandHashesOf = (varToHash) => {
-            if (!window.web3) return
-            let tempHash = varToHash;
-            for (let i = 0; i < 1000; i++) {
-              tempHash = window.web3.utils.soliditySha3(tempHash);
-              //console.log(tempHash);
-            }
-            return tempHash;
+    if (!window.web3) return
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
   };
 
   const setUpContractEnvironment = async (_web3, _addr) => {
-            if (window.isKovan === false) { return }
-            //console.log("IN SUCE, addr:", _addr)
-            if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
-            window.isSettingUpContracts = true;
-            if (window.ethereum) {
-              window._contracts = await buildContracts(_web3).then(() => {
-                window.isSettingUpContracts = false;
-                setWD(true)
-                if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
-              })
+    if (window.isKovan === false) { return }
+    //console.log("IN SUCE, addr:", _addr)
+    if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
+    window.isSettingUpContracts = true;
+    if (window.ethereum) {
+      window._contracts = await buildContracts(_web3).then(() => {
+        window.isSettingUpContracts = false;
+        setWD(true)
+        if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
+      })
 
-              if (_addr) {
-                await window.utils.getETHBalance(_addr);
-                await setUpTokenVals(true, "SetupContractEnvironment", _addr)
-                await setUpACInformation(_addr);
-              }
-            }
+      if (_addr) {
+        await window.utils.getETHBalance(_addr);
+        await setUpTokenVals(true, "SetupContractEnvironment", _addr)
+        await setUpACInformation(_addr);
+      }
+    }
 
-            else {
-              window.isSettingUpContracts = true;
-              window._contracts = await buildContracts(_web3).then(() => {
-                window.isSettingUpContracts = false;
-                setWD(true)
-              })
-            }
+    else {
+      window.isSettingUpContracts = true;
+      window._contracts = await buildContracts(_web3).then(() => {
+        window.isSettingUpContracts = false;
+        setWD(true)
+      })
+    }
 
   };
 
@@ -743,10 +759,10 @@ export default function Dashboard(props) {
               window.utils.resolveACFromID(acArr[i]).then((e) => {
                 rootArray.push(acArr[i]);
                 rootNameArray.push(e);
-                _assetClassSets[String(acArr[i])]=[];
+                _assetClassSets[String(acArr[i])] = [];
               })
             }
-            else{
+            else {
               window.utils.resolveACFromID(acArr[i]).then((e) => {
                 allClasses.push(acArr[i]);
                 allClassNames.push(e);
@@ -758,20 +774,20 @@ export default function Dashboard(props) {
 
     console.log(allClasses, allClassNames, rootArray)
 
-    for(let i = 0; i < allClasses.length; i++){
+    for (let i = 0; i < allClasses.length; i++) {
       await window.contracts.AC_MGR.methods
-      .getAC_data(allClasses[i])
-      .call((_error, _result) => {
-        if (_error) { console.log("Error: ", _error) }
-        else {
-          let resArr = Object.values(_result);
-          for(let x = 0; x < rootArray.length; x++){
-            if (String(rootArray[x]) === resArr[0]){
-              _assetClassSets[String(rootArray[x])].push({id: allClasses[i], name: allClassNames[i]})
+        .getAC_data(allClasses[i])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let resArr = Object.values(_result);
+            for (let x = 0; x < rootArray.length; x++) {
+              if (String(rootArray[x]) === resArr[0]) {
+                _assetClassSets[String(rootArray[x])].push({ id: allClasses[i], name: allClassNames[i] })
+              }
             }
           }
-        }
-      });
+        });
     }
 
     console.log("Class Sets: ", _assetClassSets)
@@ -780,363 +796,368 @@ export default function Dashboard(props) {
     setRootNames(rootNameArray)
     setAssetClassSets(_assetClassSets)
 
-  } 
+  }
 
   const setUpAssets = async (who, _addr, recount, which) => {
-            console.log("SUA, called from ", who)
+    console.log("SUA, called from ", who)
 
-            let tempObj = {};
+    let tempObj = {};
 
-            window.hasNoAssets = false;
-            window.hasNoAssetClasses = false;
-            window.ipfsCounter = 0;
-            window.ipfsHashArray = [];
-            window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-            window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
-            window.hasLoadedAssetClasses = false;
-            window.assetTokenInfo = {
-              assetClass: undefined,
-              idxHash: undefined,
-              name: undefined,
-              photos: undefined,
-              text: undefined,
-              status: undefined,
-            }
+    window.hasNoAssets = false;
+    window.hasNoAssetClasses = false;
+    window.ipfsCounter = 0;
+    window.ipfsHashArray = [];
+    window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
+    window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
+    window.hasLoadedAssetClasses = false;
+    window.assetTokenInfo = {
+      assetClass: undefined,
+      idxHash: undefined,
+      name: undefined,
+      photos: undefined,
+      text: undefined,
+      status: undefined,
+    }
 
-            //Case of recount
-            if (window.recount === true) {
-              window.aTknIDs = [];
-              window.acTknIDs = [];
-              if (window.balances !== undefined) window.balances.assetBalance = 0;
-              window.recount = false
-              await window.utils.getETHBalance(_addr);
-              return setUpTokenVals(true, "SUA recount", _addr)
-            }
-            console.log("SUA: In setUpAssets")
+    //Case of recount
+    if (window.recount === true) {
+      window.aTknIDs = [];
+      window.acTknIDs = [];
+      if (window.balances !== undefined) window.balances.assetBalance = 0;
+      window.recount = false
+      await window.utils.getETHBalance(_addr);
+      return setUpTokenVals(true, "SUA recount", _addr)
+    }
+    console.log("SUA: In setUpAssets")
 
-            window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
-              if (simpleAssets.ipfs) {
-                if (!simpleAssetView) { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }
-                else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
-              }
-            })
+    window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
+      if (simpleAssets.ipfs) {
+        if (!simpleAssetView) { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }
+        else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
+      }
+    })
 
   };
 
   const getIpfsData = async (simpleAssets, array, jobs, iteration, assetData) => {
-            let _assetData
-            if (!array) return
-            //console.log(array)
-            if (!iteration) {
-              iteration = 1
-            }
-            if (!jobs) {
-              jobs = array.length
-            }
-            if (assetData) {
-              _assetData = assetData
-            } else {
-              _assetData = [];
-            }
-            if (jobs < iteration) {
-              //console.log(_assetData);
-              console.log("Finished getting extended data.");
-              return buildAssets(simpleAssets, _assetData);
-            }
+    let _assetData
+    if (!array) return
+    //console.log(array)
+    if (!iteration) {
+      iteration = 1
+    }
+    if (!jobs) {
+      jobs = array.length
+    }
+    if (assetData) {
+      _assetData = assetData
+    } else {
+      _assetData = [];
+    }
+    if (jobs < iteration) {
+      //console.log(_assetData);
+      console.log("Finished getting extended data.");
+      return buildAssets(simpleAssets, _assetData);
+    }
 
-            let lookup = array[iteration - 1]
+    let lookup = array[iteration - 1]
 
-            for await (const chunk of window.ipfs.cat(lookup)) {
-              let str = new TextDecoder("utf-8").decode(chunk);
-              //console.log(str)
-              if (!str) {
-                _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-                console.log("error")
-                return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-              }
+    for await (const chunk of window.ipfs.cat(lookup)) {
+      let str = new TextDecoder("utf-8").decode(chunk);
+      //console.log(str)
+      if (!str) {
+        _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+        console.log("error")
+        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+      }
 
-              else {
-                //console.log(str)
-                console.log("got job #", iteration)
-                try{
-                  _assetData.push(JSON.parse(str))
-                }
-                catch{
-                  _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-                }
-                return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-              }
-              //console.log(chunk)
-            }
+      else {
+        //console.log(str)
+        console.log("got job #", iteration)
+        try {
+          _assetData.push(JSON.parse(str))
+        }
+        catch {
+          _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+        }
+        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+      }
+      //console.log(chunk)
+    }
   };
 
   const buildAssets = async (simpleAssets, assetData, noIpfs) => {
-            let ids = simpleAssets.ids;
-            setReserveAD(assetData)
-            console.log("BA: In buildAssets.")
-            let tempObj = simpleAssets;
-            let assetArray = [];
+    let ids = simpleAssets.ids;
+    setReserveAD(assetData)
+    console.log("BA: In buildAssets.")
+    let tempObj = simpleAssets;
+    let assetArray = [];
 
-            if (ids.length > 0) {
-              if (noIpfs) {
-                for (let x = 0; x < ids.length; x++) {
-                  let assetObj = { text: {}, photo: {}, urls: {}, name: "Name Unavailable" }
+    if (ids.length > 0) {
+      if (noIpfs) {
+        for (let x = 0; x < ids.length; x++) {
+          let assetObj = { text: {}, photo: {}, urls: {}, name: "Name Unavailable" }
 
-                  assetObj.DisplayImage = "";
-                  assetObj.identicon = <Jdenticon value={ids[x]} />;
-                  assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-                  assetObj.note = "";
-                  assetObj.photoUrls = {}
-                  assetObj.id = simpleAssets.ids[x];
-                  assetObj.ipfs = simpleAssets.ipfs[x];
-                  assetObj.countPair = simpleAssets.countPairs[x];
-                  assetObj.assetClass = simpleAssets.assetClasses[x];
-                  assetObj.status = simpleAssets.statuses[x];
-                  assetObj.statusNum = simpleAssets.statusNums[x];
-                  assetObj.assetClassName = simpleAssets.assetClassNames[x];
+          assetObj.DisplayImage = "";
+          assetObj.identicon = <Jdenticon value={ids[x]} />;
+          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
+          assetObj.note = "";
+          assetObj.photoUrls = {}
+          assetObj.id = simpleAssets.ids[x];
+          assetObj.ipfs = simpleAssets.ipfs[x];
+          assetObj.countPair = simpleAssets.countPairs[x];
+          assetObj.assetClass = simpleAssets.assetClasses[x];
+          assetObj.status = simpleAssets.statuses[x];
+          assetObj.statusNum = simpleAssets.statusNums[x];
+          assetObj.assetClassName = simpleAssets.assetClassNames[x];
+          assetObj.price = simpleAssets.prices[x].price;
+          assetObj.currency = simpleAssets.prices[x].currency;
 
-                  console.log(assetObj)
-                  assetArray.push(assetObj)
-                  forceUpdate()
+          console.log(assetObj)
+          assetArray.push(assetObj)
+          forceUpdate()
+        }
+      }
+      else {
+        for (let x = 0; x < assetData.length; x++) {
+          let vals = Object.values(assetData[x].photo), keys = Object.keys(assetData[x].photo);
+          let assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+
+          if (assetData[x].name === "" || assetData[x].name === undefined) {
+            assetObj.name = "Name Unavailable";
+          }
+
+          else {
+            assetObj.name = assetData[x].name
+          }
+
+          for (let i = 0; i < keys.length; i++) {
+            const get = () => {
+              if (vals[i].includes("data") && vals[i].includes("base64")) {
+                assetObj.photo[keys[i]] = vals[i];
+                //console.log(assetObj.photo[keys[i]]);
+                //console.log(x);
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
                 }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                }
+                forceUpdate();
               }
+
+              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                assetObj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                }
+                forceUpdate();
+              }
+
               else {
-                for (let x = 0; x < assetData.length; x++) {
-                  let vals = Object.values(assetData[x].photo), keys = Object.keys(assetData[x].photo);
-                  let assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+                const req = new XMLHttpRequest();
+                req.responseType = "text";
 
-                  if (assetData[x].name === "" || assetData[x].name === undefined) {
-                    assetObj.name = "Name Unavailable";
-                  }
-
-                  else {
-                    assetObj.name = assetData[x].name
-                  }
-
-                  for (let i = 0; i < keys.length; i++) {
-                    const get = () => {
-                      if (vals[i].includes("data") && vals[i].includes("base64")) {
-                        assetObj.photo[keys[i]] = vals[i];
-                        //console.log(assetObj.photo[keys[i]]);
-                        //console.log(x);
-                        if (keys[i] === "DisplayImage") {
-                          //console.log("Setting Display Image")
-                          assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                        }
-                        else if (i === keys.length - 1) {
-                          //console.log("Setting Display Image")
-                          assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                        }
-                        forceUpdate();
-                      }
-
-                      else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                        assetObj.photo[keys[i]] = vals[i];
-                        if (keys[i] === "DisplayImage") {
-                          //console.log("Setting Display Image")
-                          assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                        }
-                        else if (i === keys.length - 1) {
-                          //console.log("Setting Display Image")
-                          assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                        }
-                        forceUpdate();
-                      }
-
-                      else {
-                        const req = new XMLHttpRequest();
-                        req.responseType = "text";
-
-                        req.onload = function (e) {
-                          //console.log("in onload")
-                          if (this.response.includes("base64")) {
-                            assetObj.photo[keys[i]] = this.response;
-                            //console.log(assetObj.photo[keys[i]]);
-                            //console.log(x);
-                            if (keys[i] === "DisplayImage") {
-                              //console.log("Setting Display Image")
-                              assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                            }
-                            else if (i === keys.length - 1) {
-                              //console.log("Setting Display Image")
-                              assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                            }
-                            forceUpdate();
-                          }
-                        }
-
-                        req.onerror = function (e) {
-                          //console.log("http request error")
-                          if (vals[i].includes("http")) {
-                            assetObj.photo[keys[i]] = vals[i];
-                            if (keys[i] === "DisplayImage") {
-                              //console.log("Setting Display Image")
-                              assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                            }
-                            else if (i === keys.length - 1) {
-                              //console.log("Setting Display Image")
-                              assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                            }
-                            forceUpdate();
-                          }
-                        }
-
-                        req.open('GET', vals[i], true);
-                        req.send();
-                      }
+                req.onload = function (e) {
+                  //console.log("in onload")
+                  if (this.response.includes("base64")) {
+                    assetObj.photo[keys[i]] = this.response;
+                    //console.log(assetObj.photo[keys[i]]);
+                    //console.log(x);
+                    if (keys[i] === "DisplayImage") {
+                      //console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
                     }
-                    await get()
+                    else if (i === keys.length - 1) {
+                      //console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                    }
+                    forceUpdate();
                   }
-
-
-                  if (keys.length === 0) {
-                    assetObj.DisplayImage = "";
-                  }
-
-                  assetObj.note = simpleAssets.notes[x];
-                  assetObj.photoUrls = assetData[x].photo
-                  assetObj.text = assetData[x].text
-                  assetObj.urls = assetData[x].urls
-
-                  assetObj.identicon = <Jdenticon value={ids[x]} />;
-                  assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-
-                  assetObj.id = simpleAssets.ids[x];
-                  assetObj.ipfs = simpleAssets.ipfs[x];
-                  assetObj.countPair = simpleAssets.countPairs[x];
-                  assetObj.assetClass = simpleAssets.assetClasses[x];
-                  assetObj.status = simpleAssets.statuses[x];
-                  assetObj.statusNum = simpleAssets.statusNums[x];
-                  assetObj.assetClassName = simpleAssets.assetClassNames[x];
-
-                  //console.log(assetObj)
-                  assetArray.push(assetObj)
                 }
 
+                req.onerror = function (e) {
+                  //console.log("http request error")
+                  if (vals[i].includes("http")) {
+                    assetObj.photo[keys[i]] = vals[i];
+                    if (keys[i] === "DisplayImage") {
+                      //console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                    }
+                    else if (i === keys.length - 1) {
+                      //console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                    }
+                    forceUpdate();
+                  }
+                }
+
+                req.open('GET', vals[i], true);
+                req.send();
               }
             }
+            await get()
+          }
 
-            if (window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance) {
-              setAssetBalance(window.balances.assetBalance);
-              setAssetClassBalance(window.balances.assetClassBalance);
-              setPrufBalance(window.balances.prufTokenBalance);
-              setIDBalance(window.balances.IDTokenBalance);
-              setIsAssetHolder(window.window.assetHolderBool);
-              setIsAssetClassHolder(window.assetClassHolderBool);
-              setIsIDHolder(window.IDHolderBool);
-              setHasFetchedBalances(window.hasFetchedBalances);
-            }
 
-            setAssetArr(assetArray)
-            console.log("BA: Assets after rebuild: ", assetArray);
-            forceUpdate();
+          if (keys.length === 0) {
+            assetObj.DisplayImage = "";
+          }
+
+          assetObj.note = simpleAssets.notes[x];
+          assetObj.photoUrls = assetData[x].photo
+          assetObj.text = assetData[x].text
+          assetObj.urls = assetData[x].urls
+
+          assetObj.identicon = <Jdenticon value={ids[x]} />;
+          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
+
+          assetObj.id = simpleAssets.ids[x];
+          assetObj.ipfs = simpleAssets.ipfs[x];
+          assetObj.countPair = simpleAssets.countPairs[x];
+          assetObj.assetClass = simpleAssets.assetClasses[x];
+          assetObj.status = simpleAssets.statuses[x];
+          assetObj.statusNum = simpleAssets.statusNums[x];
+          assetObj.assetClassName = simpleAssets.assetClassNames[x];
+          
+          assetObj.price = simpleAssets.prices[x].price;
+          assetObj.currency = simpleAssets.prices[x].currency;
+
+          //console.log(assetObj)
+          assetArray.push(assetObj)
+        }
+
+      }
+    }
+
+    if (window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance) {
+      setAssetBalance(window.balances.assetBalance);
+      setAssetClassBalance(window.balances.assetClassBalance);
+      setPrufBalance(window.balances.prufTokenBalance);
+      setIDBalance(window.balances.IDTokenBalance);
+      setIsAssetHolder(window.window.assetHolderBool);
+      setIsAssetClassHolder(window.assetClassHolderBool);
+      setIsIDHolder(window.IDHolderBool);
+      setHasFetchedBalances(window.hasFetchedBalances);
+    }
+
+    setAssetArr(assetArray)
+    console.log("BA: Assets after rebuild: ", assetArray);
+    forceUpdate();
   };
 
-          //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
+  //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
   const setUpTokenVals = async (willSetup, who, _addr) => {
-            console.log("STV: Setting up balances, called from ", who)
+    console.log("STV: Setting up balances, called from ", who)
 
-            await window.utils.determineTokenBalance(_addr).then((e) => {
-              if (e === undefined) return console.log("Account Locked")
-              setAssetBalance(e.assetBalance);
-              setAssetClassBalance(e.assetClassBalance);
-              setPrufBalance(e.prufTokenBalance);
-              setIDBalance(e.IDTokenBalance);
-              setIsAssetHolder(window.assetHolderBool);
-              setIsAssetClassHolder(window.assetClassHolderBool);
-              setIsIDHolder(window.IDHolderBool);
-              setHasFetchedBalances(window.hasFetchedBalances);
-              setETHBalance(window.ETHBalance)
-            })
+    await window.utils.determineTokenBalance(_addr).then((e) => {
+      if (e === undefined) return console.log("Account Locked")
+      setAssetBalance(e.assetBalance);
+      setAssetClassBalance(e.assetClassBalance);
+      setPrufBalance(e.prufTokenBalance);
+      setIDBalance(e.IDTokenBalance);
+      setIsAssetHolder(window.assetHolderBool);
+      setIsAssetClassHolder(window.assetClassHolderBool);
+      setIsIDHolder(window.IDHolderBool);
+      setHasFetchedBalances(window.hasFetchedBalances);
+      setETHBalance(window.ETHBalance)
+    })
 
 
-            let temp;
-            let temp2;
+    let temp;
+    let temp2;
 
-            if (window.contracts) {
-              await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
-                function (_error, _result) {
-                  if (_error) {
-                    return (console.log("IN ERROR IN ERROR IN ERROR"))
-                  }
-                  else {
-                    temp = window.web3.utils.fromWei(Object.values(_result)[0])
-                    return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
-                  }
+    if (window.contracts) {
+      await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
+        function (_error, _result) {
+          if (_error) {
+            return (console.log("IN ERROR IN ERROR IN ERROR"))
+          }
+          else {
+            temp = window.web3.utils.fromWei(Object.values(_result)[0])
+            return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
+          }
 
-                }
-              );
-            }
+        }
+      );
+    }
 
-            if (temp !== undefined) {
-              setCurrentACIndex(temp)
-              setCurrentACPrice(temp2)
-            }
+    if (temp !== undefined) {
+      setCurrentACIndex(temp)
+      setCurrentACPrice(temp2)
+    }
 
-            //await console.log(window.balances);
+    //await console.log(window.balances);
 
-            if (willSetup) {
-              forceUpdate();
-              return setUpAssets("setUpTokenVals", _addr)
-            }
+    if (willSetup) {
+      forceUpdate();
+      return setUpAssets("setUpTokenVals", _addr)
+    }
 
-            return forceUpdate();
+    return forceUpdate();
   };
 
   return (
     <div className={classes.wrapper}>
-              <Sidebar
-                routes={sidebarRoutes}
-                addr={addr}
-                logoText={"Creative Tim"}
-                logo={logo}
-                image={image}
-                handleDrawerToggle={handleDrawerToggle}
-                open={mobileOpen}
-                color={color}
-                bgColor={bgColor}
-                miniActive={miniActive}
-                {...rest}
-              />
-              <div className={mainPanelClasses} ref={mainPanel}>
-                <AdminNavbar
-                  sidebarMinimize={sidebarMinimize.bind(this)}
-                  miniActive={miniActive}
-                  brandText={getActiveRoute(routes)}
-                  handleDrawerToggle={handleDrawerToggle}
-                  {...rest}
-                />
-                {getRoute() ? (
-                  <div className={classes.content}>
-                    <div className={classes.container}>
-                      <Switch>
-                        {getRoutes(routes)}
-                        <Redirect from="/user" to="/user/home" />
-                      </Switch>
-                    </div>
-                  </div>
-                ) : (
-                    <div className={classes.map}>
-                      <Switch>
-                        {getRoutes(routes)}
-                        <Redirect from="/user" to="/user/home" />
-                      </Switch>
-                    </div>
-                  )}
-                {getRoute() ? <Footer fluid /> : null}
-                <FixedPlugin
-                  handleImageClick={handleImageClick}
-                  handleColorClick={handleColorClick}
-                  handleBgColorClick={handleBgColorClick}
-                  color={color}
-                  bgColor={bgColor}
-                  bgImage={image}
-                  handleFixedClick={handleFixedClick}
-                  fixedClasses={fixedClasses}
-                  sidebarMinimize={sidebarMinimize.bind(this)}
-                  miniActive={miniActive}
-                />
-              </div>
+      <Sidebar
+        routes={sidebarRoutes}
+        addr={addr}
+        logoText={"Creative Tim"}
+        logo={logo}
+        image={image}
+        handleDrawerToggle={handleDrawerToggle}
+        open={mobileOpen}
+        color={color}
+        bgColor={bgColor}
+        miniActive={miniActive}
+        {...rest}
+      />
+      <div className={mainPanelClasses} ref={mainPanel}>
+        <AdminNavbar
+          sidebarMinimize={sidebarMinimize.bind(this)}
+          miniActive={miniActive}
+          brandText={getActiveRoute(routes)}
+          handleDrawerToggle={handleDrawerToggle}
+          {...rest}
+        />
+        {getRoute() ? (
+          <div className={classes.content}>
+            <div className={classes.container}>
+              <Switch>
+                {getRoutes(routes)}
+                <Redirect from="/user" to="/user/home" />
+              </Switch>
             </div>
+          </div>
+        ) : (
+            <div className={classes.map}>
+              <Switch>
+                {getRoutes(routes)}
+                <Redirect from="/user" to="/user/home" />
+              </Switch>
+            </div>
+          )}
+        {getRoute() ? <Footer fluid /> : null}
+        <FixedPlugin
+          handleImageClick={handleImageClick}
+          handleColorClick={handleColorClick}
+          handleBgColorClick={handleBgColorClick}
+          color={color}
+          bgColor={bgColor}
+          bgImage={image}
+          handleFixedClick={handleFixedClick}
+          fixedClasses={fixedClasses}
+          sidebarMinimize={sidebarMinimize.bind(this)}
+          miniActive={miniActive}
+        />
+      </div>
+    </div>
   );
 }

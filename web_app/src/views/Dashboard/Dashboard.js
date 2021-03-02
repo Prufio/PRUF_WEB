@@ -72,6 +72,7 @@ export default function Dashboard(props) {
   const [copyText, setCopyText] = React.useState(false);
   const [pageNum, setPageNum] = React.useState(1);
   const [assetsPerPage, setAssetsPerPage] = React.useState(6);
+  const [currency, setCurrency] = React.useState("ü");
 
   const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage)
 
@@ -182,7 +183,9 @@ export default function Dashboard(props) {
         urls: newObj.urls,
         photo: newObj.photo,
         photoUrls: newObj.photoUrls,
-        identicon: arr[backIndex].identicon
+        identicon: arr[backIndex].identicon,
+        price: newObj.price,
+        currency: newObj.currency 
       });
 
       window.backIndex = undefined
@@ -227,7 +230,9 @@ export default function Dashboard(props) {
                       urls: arr[i].urls,
                       photo: arr[i].photo,
                       photoUrls: arr[i].photoUrls,
-                      identicon: arr[i].identicon
+                      identicon: arr[i].identicon,
+                      price: arr[i].price,
+                      currency: arr[i].currency 
                     })}>
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
@@ -301,7 +306,9 @@ export default function Dashboard(props) {
                         urls: arr[i].urls,
                         photo: arr[i].photo,
                         photoUrls: arr[i].photoUrls,
-                        identicon: arr[i].identicon
+                        identicon: arr[i].identicon,
+                        price: arr[i].price,
+                        currency: arr[i].currency 
                       })}>
                         <Icon>
                           login
@@ -412,6 +419,16 @@ export default function Dashboard(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -530,6 +547,16 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -641,6 +668,16 @@ export default function Dashboard(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -755,6 +792,16 @@ export default function Dashboard(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -881,6 +928,16 @@ export default function Dashboard(props) {
               Transfer (Not Available in this Status)
               </MenuItem>
             <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
@@ -982,6 +1039,16 @@ export default function Dashboard(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1100,6 +1167,16 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
@@ -1212,6 +1289,16 @@ export default function Dashboard(props) {
               }}
             >
               Select an option from the list
+              </MenuItem>
+            <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
               </MenuItem>
             <MenuItem
               key="DisabledItem0"
@@ -1328,6 +1415,16 @@ export default function Dashboard(props) {
               Select an option from the list
               </MenuItem>
             <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
+            <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
@@ -1440,6 +1537,16 @@ export default function Dashboard(props) {
             >
               Select an option from the list
                           </MenuItem>
+            <MenuItem
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value="sell"
+            >
+              Set for sale
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1558,6 +1665,10 @@ export default function Dashboard(props) {
     let e = event.target.value, href;
 
     switch (e) {
+      case "sell": {
+        href = "/#/user/set-for-sale";
+        break
+      }
       case "transfer": {
         href = "/#/user/transfer-asset";
         break
@@ -1730,7 +1841,15 @@ export default function Dashboard(props) {
               <br />
               <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
               <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
-              <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
+
+
+              {selectedAssetObj.currency === "0" && (<h4 className={classes.cardTitle}>Status: {selectedAssetObj.status} </h4>)}
+                    {selectedAssetObj.currency !== "0" && (
+                      <>
+                        <h4 className={classes.cardTitle}>Status: For Sale </h4>
+                        <h4 className={classes.cardTitle}>Price: {currency} {selectedAssetObj.price} </h4>
+                      </>
+                    )}
               <br />
               <TextField
                 id="outlined-multiline-static"
@@ -1863,6 +1982,8 @@ export default function Dashboard(props) {
 
       {!viewAsset && props.addr && props.assets !== "0" && props.assets !== "~" && (
         <Card className="dashboardFooter" >
+          <h4>Assets Per Page: </h4>
+          <br/>
               <Select
                 MenuProps={{
                   className: classes.selectMenu
@@ -1938,7 +2059,7 @@ export default function Dashboard(props) {
                   60
                         </MenuItem>
               </Select>
-              <>
+              <div className="dashboardFooterPage">
                 {numOfPages > 0 && pageNum > 1 && (
                   <><Button onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
                 )}
@@ -1956,7 +2077,7 @@ export default function Dashboard(props) {
                 {numOfPages > 0 && pageNum === numOfPages && (
                   <><Button disabled onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
                 )}
-              </>
+              </div>
         </Card>
       )}
     </div>

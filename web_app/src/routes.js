@@ -13,6 +13,7 @@ import ModifyRGT from "views/Forms/ModifyRGT.js";
 import Transfer from "views/Forms/Transfer.js";
 import Search from "views/Search/Search.js";
 import Verify from "views/Forms/Verify.js";
+import SetForSale from "views/Forms/SetForSale.js";
 
 // @material-ui/icons
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
@@ -84,6 +85,12 @@ var dashRoutes = [
     name: "Update Asset Info",
     path: "/modify-description",
     component: ModifyDescription,
+    layout: "/user"
+  },
+  {
+    name: "Set For Sale",
+    path: "/set-for-sale",
+    component: SetForSale,
     layout: "/user"
   },
   {

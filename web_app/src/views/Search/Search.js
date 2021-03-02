@@ -1767,8 +1767,15 @@ export default function Search(props) {
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
     let tempTxHash;
     console.log("Purchasing Asset")
-    
-    if (window.balances.prufTokenBalance < window.web3.utils.fromWei(price)) { console.log("insufficient balance"); return console.log(window.web3.utils.fromWei(price)) }
+
+    if (Number(props.pruf) < Number(price)) { 
+      swal({
+        title: "Insufficient balance!",
+        icon: "warning",
+        button: "Close",
+      });
+      return console.log(price), 
+      console.log(props.pruf) }
     setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
@@ -1882,7 +1889,7 @@ export default function Search(props) {
     setTransaction(true)
 
     await window.contracts.RCLR.methods
-      .$recycle(idxHash, rgtHash, asset.assetClass)
+      .recycle(idxHash, rgtHash, asset.assetClass)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
@@ -2314,6 +2321,22 @@ export default function Search(props) {
             }
           });
 
+          
+        await window.contracts.STOR.methods.getPriceData(idxHash)
+        .call((_error, _result) => {
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR")
+          } else {
+            if(Object.values(_result)[1] !== "2") {
+              return
+            }
+            else {
+              setPrice(Object.values(_result)[0])
+              setCurrency("ü")
+            }
+          }
+        })
+
       setURL(String(baseURL) + String(idxHash))
 
       window.assetClass = tempResult[2]
@@ -2428,6 +2451,22 @@ export default function Search(props) {
         });
 
     setURL(String(baseURL) + String(idxHash))
+
+          
+    await window.contracts.STOR.methods.getPriceData(idxHash)
+    .call((_error, _result) => {
+      if (_error) {
+        console.log("IN ERROR IN ERROR IN ERROR")
+      } else {
+        if(Object.values(_result)[1] !== "2") {
+          return
+        }
+        else {
+          setPrice(Object.values(_result)[0])
+          setCurrency("ü")
+        }
+      }
+    })
 
 
     window.assetClass = tempResult[2]
@@ -2917,8 +2956,8 @@ export default function Search(props) {
                     )}
                     <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
                     <h4 className={classes.cardTitle}>Class: {asset.assetClassName} (NODE ID:{asset.assetClass})</h4>
-                    {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
-                    {currency !== "" && (
+                    {currency === "0" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
+                    {currency !== "0" && (
                       <>
                         <h4 className={classes.cardTitle}>Status: For Sale </h4>
                         <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
@@ -2957,12 +2996,6 @@ export default function Search(props) {
                     )}
                     {/*@dev URLs go here*/}
                     <br />
-                    {currency !== "" && !transaction && (
-                      <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
-                    )}
-                    {currency !== "" && transaction && (
-                      <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
-                    )}
                   </>
                 )}
                 {!ownerOf && (
@@ -2985,6 +3018,12 @@ export default function Search(props) {
                     )}
                     {!transaction && isVerifying && (
                       <Button color="info" className="MLBGradient" onClick={() => setIsNotVerifying()}>Back</Button>
+                    )}
+                    {currency !== "" && !transaction && (
+                      <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
+                    )}
+                    {currency !== "" && transaction && (
+                      <Button disabled color="info" className="MLBGradient">Transaction Pending . . .</Button>
                     )}
                     {isRecycling && (
                       <>

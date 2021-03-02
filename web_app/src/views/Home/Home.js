@@ -152,7 +152,7 @@ export default function Home(props) {
     setPrufTransactionActive(true)
 
     await window.web3.eth
-      .sendTransaction({ from: props.addr, to: "0xA837a86dB071c8531AFf1D301C8Fd0f30c2c1E9A", value: amount / 100000 })
+      .sendTransaction({ from: props.addr, to: "0xE8bC284a7465d071e5E66884510349dF97A20c8E", value: amount / 100000 })
       .on("error", function (_error) {
         setPrufTransactionActive(false);
         setTxStatus(false);
