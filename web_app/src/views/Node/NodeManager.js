@@ -41,6 +41,7 @@ import {
   pieChart
 } from "variables/charts.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
+import chartStyles from "assets/jss/material-dashboard-pro-react/views/chartsStyle.js";
 
 
 // const styles = {
@@ -52,16 +53,18 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 // };
 
 const useStyles = makeStyles(styles);
+const useChartStyles = makeStyles(chartStyles);
 
 export default function NodeManager(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [dash, setDash] = React.useState(false)
-  const [stake, setStake] = React.useState(false)
+  const [Delegation, setDelegation] = React.useState(false)
   const [analytics, setAnalytics] = React.useState(true)
   const [rewards, setRewards] = React.useState(true)
   const [totalRewards, setTotalRewards] = React.useState(false)
 
   const classes = useStyles();
+  const chartClasses = useChartStyles();
 
   const [nodeData, setNodeData] = React.useState( 
     [["Loading Nodes...", "~", "~", "~"]],
@@ -288,7 +291,7 @@ export default function NodeManager(props) {
               color="info"
               className="like"
             >
-              Stake
+              Delegation
             </Button>{" "}
           </div>
         )
@@ -298,20 +301,20 @@ export default function NodeManager(props) {
 
   const setDashButton = () => {
     setDash(true)
-    setStake(false)
+    setDelegation(false)
     setAnalytics(false)
   }
 
   const setDelegationButton = () => {
     setDash(false)
-    setStake(true)
+    setDelegation(true)
     setAnalytics(false)
 
   }
 
   const setAnalyticsButton = () => {
     setDash(false)
-    setStake(false)
+    setDelegation(false)
     setAnalytics(true)
 
   }
@@ -389,23 +392,23 @@ export default function NodeManager(props) {
               Analytics
               </Button>
             )}
-            {stake && (
+            {Delegation && (
               <Button
                 Icon
                 className="nodeButtonActive"
               >
                 <ListAltRounded />
-              Node Stake List
+              Node Delegation List
               </Button>
             )}
-            {!stake && (
+            {!Delegation && (
               <Button
                 Icon
                 className="nodeButton"
                 onClick={() => { setDelegationButton(true) }}
               >
                 <ListAltRounded />
-              Node Stake List
+              Node Delegation List
               </Button>
             )}
             {dash && (
@@ -432,7 +435,7 @@ export default function NodeManager(props) {
         </Card>
         <Card>
           <CardBody>
-            {dash && !stake && !analytics && (
+            {dash && !Delegation && !analytics && (
               <ReactTableSimple
                 columns={[
                   {
@@ -444,7 +447,7 @@ export default function NodeManager(props) {
                     accessor: "nodeId"
                   },
                   {
-                    Header: "Total Staked",
+                    Header: "Total Delegated",
                     accessor: "totalStaked"
                   },
                   {
@@ -476,7 +479,7 @@ export default function NodeManager(props) {
               
                               <form>
                                 <FormControl
-                                  className={classes.selectFormControl}
+                                  className="nodeOptions"
                                 >
                                   <InputLabel className="functionSelectorText">
                                     <Danger>
@@ -545,7 +548,7 @@ export default function NodeManager(props) {
                 }
               />
             )}
-            {!dash && stake && !analytics && (
+            {!dash && Delegation && !analytics && (
               <ReactTable
                 columns={[
                   {
@@ -557,7 +560,7 @@ export default function NodeManager(props) {
                     accessor: "nodeId"
                   },
                   {
-                    Header: "Total Staked",
+                    Header: "Total Delegated",
                     accessor: "totalStaked"
                   },
                   {
@@ -572,7 +575,7 @@ export default function NodeManager(props) {
                 data={delegationData}
               />
             )}
-            {!dash && !stake && analytics && (
+            {!dash && !Delegation && analytics && (
               <>
                 <GridContainer>
                   <GridItem xs={12} sm={6} md={6} lg={4}>
@@ -582,14 +585,14 @@ export default function NodeManager(props) {
                           <img className="Icon" src={Pruf}></img>
                         </CardIcon>
                         <p className={classes.cardCategory}>PRüF Balance</p>
-                        {/* <h3 className={classes.cardTitle}>
+                        <h3 className={classes.cardTitle}>
                       {props.pruf !== "~"
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
-                    </h3> */}
-                        <h3 className={classes.cardTitle}>
-                        <small>PRüF</small>
                     </h3>
+                        {/* <h3 className={classes.cardTitle}>
+                        <small>PRüF</small>
+                    </h3> */}
                       </CardHeader>
                       <CardFooter stats>
                         {/* {!isRefreshingPruf && (
@@ -616,7 +619,7 @@ export default function NodeManager(props) {
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                        <small>PRüF</small>
+                        <small>0 PRüF</small>
                     </h3>
                       </CardHeader>
                       <CardFooter stats>
@@ -637,14 +640,14 @@ export default function NodeManager(props) {
                         <CardIcon className="headerIconBack">
                           <VpnKey/>
                         </CardIcon>
-                        <p className={classes.cardCategory}>Total Staked</p>
+                        <p className={classes.cardCategory}>Total Delegated</p>
                         {/* <h3 className={classes.cardTitle}>
                       {props.pruf !== "~"
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                        <small>PRüF</small>
+                        <small>0 PRüF</small>
                     </h3>
                       </CardHeader>
                       <CardFooter stats>
@@ -809,7 +812,7 @@ export default function NodeManager(props) {
                   <GridItem xs={12} sm={12} md={5}>
                     <Card>
                       <CardHeader>
-                        <h4 className={classes.cardIconTitle}>Total stake Distribution</h4>
+                        <h4 className={chartClasses.cardIconTitle}>Total Delegation Distribution</h4>
                       </CardHeader>
                       <CardBody>
                         <ChartistGraph
@@ -818,12 +821,12 @@ export default function NodeManager(props) {
                           options={pieChart.options}
                         />
                       </CardBody>
-                      <CardFooter stats className={classes.cardFooter}>
-                        <h6 className={classes.legendTitle}>Legend</h6>
-                        <i className={"fas fa-circle " + classes.info} /> Apple{` `}
-                        <i className={"fas fa-circle " + classes.warning} /> Samsung
+                      <CardFooter stats className={chartClasses.cardFooter}>
+                        <h6 className={chartClasses.legendTitle}>Legend</h6>
+                        <i className={"fas fa-circle " + chartClasses.info} /> Transportation(Sporting){` `}
+                        <i className={"fas fa-circle " + chartClasses.warning} /> Collectables(Art)
               {` `}
-                        <i className={"fas fa-circle " + classes.danger} /> Windows Phone
+                        <i className={"fas fa-circle " + chartClasses.danger} /> Apparel(Shoes)
               {` `}
                       </CardFooter>
                     </Card>
