@@ -1018,9 +1018,6 @@ cursor:pointer;
   color: #002a40 !important;
 }
 
-
-.rewardsHistorySlider {
-  overflow-x: auto;
-  overflow-y: hidden;
-  height: 160px;
+.nodeOptions {
+  width: 100px;
 }
