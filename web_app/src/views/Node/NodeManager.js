@@ -40,22 +40,26 @@ import {
   colouredLinesChart,
   pieChart
 } from "variables/charts.js";
+import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 
-const styles = {
-  cardIconTitle: {
-    ...cardTitle,
-    marginTop: "15px",
-    marginBottom: "0px"
-  }
-};
+
+// const styles = {
+//   cardIconTitle: {
+//     ...cardTitle,
+//     marginTop: "15px",
+//     marginBottom: "0px"
+//   }
+// };
 
 const useStyles = makeStyles(styles);
 
 export default function NodeManager(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [dash, setDash] = React.useState(false)
-  const [delegation, setDelegation] = React.useState(false)
+  const [stake, setStake] = React.useState(false)
   const [analytics, setAnalytics] = React.useState(true)
+  const [rewards, setRewards] = React.useState(true)
+  const [totalRewards, setTotalRewards] = React.useState(false)
 
   React.useEffect(()=>{
     getNodesInWallet()
@@ -207,7 +211,7 @@ export default function NodeManager(props) {
               color="info"
               className="like"
             >
-              Delegate
+              Stake
             </Button>{" "}
           </div>
         )
@@ -218,21 +222,33 @@ export default function NodeManager(props) {
 
   const setDashButton = () => {
     setDash(true)
-    setDelegation(false)
+    setStake(false)
     setAnalytics(false)
   }
 
   const setDelegationButton = () => {
     setDash(false)
-    setDelegation(true)
+    setStake(true)
     setAnalytics(false)
 
   }
 
   const setAnalyticsButton = () => {
     setDash(false)
-    setDelegation(false)
+    setStake(false)
     setAnalytics(true)
+
+  }
+
+  const setRewardsButton = () => {
+    setRewards(true)
+    setTotalRewards(false)
+
+  }
+
+  const setTotalRewardsButton = () => {
+    setRewards(false)
+    setTotalRewards(true)
 
   }
 
@@ -282,7 +298,7 @@ export default function NodeManager(props) {
               <Button
                 color="info"
                 Icon
-                className="nodeButtons3Active"
+                className="nodeButtonActive"
               >
                 <BarChartRounded />
               Analytics
@@ -291,38 +307,38 @@ export default function NodeManager(props) {
             {!analytics && (
               <Button
                 Icon
-                className="nodeButtons3"
+                className="nodeButton"
                 onClick={() => { setAnalyticsButton(true) }}
               >
                 <BarChartRounded />
               Analytics
               </Button>
             )}
-            {delegation && (
+            {stake && (
               <Button
                 color="info"
                 Icon
-                className="nodeButtons2Active"
+                className="nodeButtonActive"
               >
                 <ListAltRounded />
-              Delegation List
+              Node Stake List
               </Button>
             )}
-            {!delegation && (
+            {!stake && (
               <Button
                 Icon
-                className="nodeButtons2"
+                className="nodeButton"
                 onClick={() => { setDelegationButton(true) }}
               >
                 <ListAltRounded />
-              Delegation List
+              Node Stake List
               </Button>
             )}
             {dash && (
               <Button
                 color="info"
                 Icon
-                className="nodeButtons1Active"
+                className="nodeButtonActive"
               >
                 <Dashboard />
               Node Dashboard
@@ -331,7 +347,7 @@ export default function NodeManager(props) {
             {!dash && (
               <Button
                 Icon
-                className="nodeButtons1"
+                className="nodeButton"
                 onClick={() => { setDashButton(true) }}
               >
                 <Dashboard />
@@ -343,7 +359,7 @@ export default function NodeManager(props) {
         </Card>
         <Card>
           <CardBody>
-            {dash && !delegation && !analytics && (
+            {dash && !stake && !analytics && (
               <ReactTableSimple
                 columns={[
                   {
@@ -370,7 +386,7 @@ export default function NodeManager(props) {
                 data={dashData}
               />
             )}
-            {!dash && delegation && !analytics && (
+            {!dash && stake && !analytics && (
               <ReactTable
                 columns={[
                   {
@@ -397,7 +413,7 @@ export default function NodeManager(props) {
                 data={delegationData}
               />
             )}
-            {!dash && !delegation && analytics && (
+            {!dash && !stake && analytics && (
               <>
                 <GridContainer>
                   <GridItem xs={12} sm={6} md={6} lg={4}>
@@ -456,7 +472,7 @@ export default function NodeManager(props) {
                         <CardIcon className="headerIconBack" onClick={() => window.open("https://pruf.io/")}>
                           <img className="Icon" src={Pruf}></img>
                         </CardIcon>
-                        <p className={classes.cardCategory}>Total Delegated</p>
+                        <p className={classes.cardCategory}>Total Staked</p>
                         {/* <h3 className={classes.cardTitle}>
                       {props.pruf !== "~"
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
@@ -568,22 +584,46 @@ export default function NodeManager(props) {
                     </GridItem>
                   </GridContainer>
                 {/* </Card> */}
+                {rewards && (
                 <Button
                   color="info"
                   Icon
-                  className="nodeButtons1Active"
+                  className="nodeButtonSmActive"
                 >
                   <ShowChart />
               Rewards
               </Button>
+              )}
+              {!rewards && (
+              <Button
+                Icon
+                className="nodeButtonSm"
+                onClick={() => { setRewardsButton(true) }}
+              >
+                <ShowChart />
+            Rewards
+            </Button>
+            )}
+            {totalRewards && (
                 <Button
                   color="info"
                   Icon
-                  className="nodeButtons1Active"
+                  className="nodeButtonSmActive"
                 >
                   <MultilineChart />
               Total Rewards
               </Button>
+              )}
+              {!totalRewards && (
+                  <Button
+                    Icon
+                    className="nodeButtonSm"
+                    onClick={() => { setTotalRewardsButton(true) }}
+                  >
+                    <MultilineChart />
+                Total Rewards
+                </Button>
+                )}
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={7}>
                     <Card chart>
@@ -597,15 +637,13 @@ export default function NodeManager(props) {
                           listener={simpleBarChart.animation}
                         />
                       </CardHeader>
+                    <br/>
                     </Card>
                   </GridItem>
                   <GridItem xs={12} sm={12} md={5}>
                     <Card>
-                      <CardHeader color="danger" icon>
-                        <CardIcon color="danger">
-                          <Timeline />
-                        </CardIcon>
-                        <h4 className={classes.cardIconTitle}>Delegation Distribution</h4>
+                      <CardHeader>
+                        <h4 className={classes.cardIconTitle}>Total stake Distribution</h4>
                       </CardHeader>
                       <CardBody>
                         <ChartistGraph

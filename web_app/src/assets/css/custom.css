@@ -966,66 +966,45 @@ cursor:pointer;
 
 }
 
-.nodeButtons1 {
+.nodeButton {
   background-color: #002a40 !important;
   font-size: 16px !important;
   height: 50px;
   width: 250px;
 }
 
-.nodeButtons1:active {
+.nodeButton:active {
   background-color: #00a8ff !important;
 }
 
-.nodeButtons2 {
-  background-color: #002a40 !important;
+.nodeButtonActive {
   font-size: 16px !important;
   height: 50px;
   width: 250px;
 }
 
-.nodeButtons2:active {
+.nodeButtonActive:active {
+  background-color: #002a40 !important;
+}
+
+.nodeButtonSm {
+  background-color: #002a40 !important;
+  font-size: 16px !important;
+  height: 50px;
+  width: 180px;
+}
+
+.nodeButtonSm:active {
   background-color: #00a8ff !important;
 }
 
-.nodeButtons3 {
-  background-color: #002a40 !important;
+.nodeButtonSmActive {
   font-size: 16px !important;
   height: 50px;
-  width: 250px;
+  width: 180px;
 }
 
-.nodeButtons3:active {
-  background-color: #00a8ff !important;
-}
-
-.nodeButtons1Active {
-  font-size: 16px !important;
-  height: 50px;
-  width: 250px;
-}
-
-.nodeButtons1Active:active {
-  background-color: #002a40 !important;
-}
-
-.nodeButtons2Active {
-  font-size: 16px !important;
-  height: 50px;
-  width: 250px;
-}
-
-.nodeButtons2Active:active {
-  background-color: #002a40 !important;
-}
-
-.nodeButtons3Active {
-  font-size: 16px !important;
-  height: 50px;
-  width: 250px;
-}
-
-.nodeButtons3Active:active {
+.nodeButtonSmActive:active {
   background-color: #002a40 !important;
 }
 
