@@ -967,45 +967,55 @@ cursor:pointer;
 }
 
 .nodeButton {
-  background-color: #002a40 !important;
+  background-color: transparent !important;
+  color: #002a40 !important;
   font-size: 16px !important;
   height: 50px;
   width: 250px;
 }
 
 .nodeButton:active {
-  background-color: #00a8ff !important;
+  background-color: transparent!important;
+  color: #00a8ff !important;
 }
 
 .nodeButtonActive {
+  background-color: transparent!important;
+  color: #00a8ff !important;
   font-size: 16px !important;
   height: 50px;
   width: 250px;
 }
 
 .nodeButtonActive:active {
-  background-color: #002a40 !important;
+  background-color: transparent !important;
+  color: #002a40 !important;
 }
 
 .nodeButtonSm {
-  background-color: #002a40 !important;
+  background-color: transparent !important;
+  color: #002a40 !important;
   font-size: 16px !important;
   height: 50px;
   width: 180px;
 }
 
 .nodeButtonSm:active {
-  background-color: #00a8ff !important;
+  background-color: transparent !important;
+  color: #00a8ff !important;
 }
 
 .nodeButtonSmActive {
+  background-color: transparent!important;
+  color: #00a8ff !important;
   font-size: 16px !important;
   height: 50px;
   width: 180px;
 }
 
 .nodeButtonSmActive:active {
-  background-color: #002a40 !important;
+  background-color: transparent !important;
+  color: #002a40 !important;
 }
 
 

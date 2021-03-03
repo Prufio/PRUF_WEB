@@ -27,7 +27,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import { dataTable } from "variables/general.js";
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.js";
-import { AccountBalance, BarChartRounded, Dashboard, ListAltRounded, MultilineChart, Settings, ShowChart, Timeline } from "@material-ui/icons";
+import { AccountBalance, AccountBalanceOutlined, AccountBalanceWallet, AccountBalanceWalletOutlined, BarChartRounded, Dashboard, ListAltRounded, MultilineChart, Settings, ShowChart, Timeline, VpnKey } from "@material-ui/icons";
 import { List } from "@material-ui/core";
 import Danger from "components/Typography/Danger";
 import Pruf from "../../assets/img/pruftoken.png";
@@ -306,7 +306,6 @@ export default function NodeManager(props) {
             <h4 className={classes.cardIconTitle}>Node Manager</h4>
             {analytics && (
               <Button
-                color="info"
                 Icon
                 className="nodeButtonActive"
               >
@@ -326,7 +325,6 @@ export default function NodeManager(props) {
             )}
             {stake && (
               <Button
-                color="info"
                 Icon
                 className="nodeButtonActive"
               >
@@ -346,7 +344,6 @@ export default function NodeManager(props) {
             )}
             {dash && (
               <Button
-                color="info"
                 Icon
                 className="nodeButtonActive"
               >
@@ -429,7 +426,7 @@ export default function NodeManager(props) {
                   <GridItem xs={12} sm={6} md={6} lg={4}>
                     <Card>
                       <CardHeader color="danger" stats icon>
-                        <CardIcon className="headerIconBack" onClick={() => window.open("https://pruf.io/")}>
+                        <CardIcon className="headerIconBack">
                           <img className="Icon" src={Pruf}></img>
                         </CardIcon>
                         <p className={classes.cardCategory}>PRüF Balance</p>
@@ -438,6 +435,9 @@ export default function NodeManager(props) {
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
+                        <h3 className={classes.cardTitle}>
+                        <small>PRüF</small>
+                    </h3>
                       </CardHeader>
                       <CardFooter stats>
                         {/* {!isRefreshingPruf && (
@@ -454,8 +454,8 @@ export default function NodeManager(props) {
                   <GridItem xs={12} sm={6} md={6} lg={4}>
                     <Card>
                       <CardHeader color="danger" stats icon>
-                        <CardIcon className="headerIconBack" onClick={() => window.open("https://pruf.io/")}>
-                          <img className="Icon" src={Pruf}></img>
+                        <CardIcon className="headerIconBack">
+                          <AccountBalanceWallet/>
                         </CardIcon>
                         <p className={classes.cardCategory}>Total Rewards</p>
                         {/* <h3 className={classes.cardTitle}>
@@ -463,6 +463,9 @@ export default function NodeManager(props) {
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
+                        <h3 className={classes.cardTitle}>
+                        <small>PRüF</small>
+                    </h3>
                       </CardHeader>
                       <CardFooter stats>
                         {/* {!isRefreshingPruf && (
@@ -479,8 +482,8 @@ export default function NodeManager(props) {
                   <GridItem xs={12} sm={6} md={6} lg={4}>
                     <Card>
                       <CardHeader color="danger" stats icon>
-                        <CardIcon className="headerIconBack" onClick={() => window.open("https://pruf.io/")}>
-                          <img className="Icon" src={Pruf}></img>
+                        <CardIcon className="headerIconBack">
+                          <VpnKey/>
                         </CardIcon>
                         <p className={classes.cardCategory}>Total Staked</p>
                         {/* <h3 className={classes.cardTitle}>
@@ -488,6 +491,9 @@ export default function NodeManager(props) {
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
+                        <h3 className={classes.cardTitle}>
+                        <small>PRüF</small>
+                    </h3>
                       </CardHeader>
                       <CardFooter stats>
                         {/* {!isRefreshingPruf && (
@@ -596,7 +602,6 @@ export default function NodeManager(props) {
                 {/* </Card> */}
                 {rewards && (
                 <Button
-                  color="info"
                   Icon
                   className="nodeButtonSmActive"
                 >
@@ -616,7 +621,6 @@ export default function NodeManager(props) {
             )}
             {totalRewards && (
                 <Button
-                  color="info"
                   Icon
                   className="nodeButtonSmActive"
                 >
