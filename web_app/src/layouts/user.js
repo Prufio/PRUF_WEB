@@ -573,8 +573,13 @@ export default function Dashboard(props) {
 
                   else {
                     console.log("Got updated asset ipfs")
-                    assetObj = JSON.parse(str)
-                    newAsset.photoUrls = JSON.parse(str).photo;
+                    try {
+                      assetObj = JSON.parse(str)
+                    }
+                    catch {
+                      assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+                    }
+                    newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
                     let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
 
                     newAsset.text = assetObj.text;
@@ -744,61 +749,88 @@ export default function Dashboard(props) {
 
   };
 
-  const setUpACInformation = async (addr) => {
+  const getACsFromDB = async () => {
+    const acArray = acArr;
+
     let rootArray = [], rootNameArray = [], allClasses = [], allClassNames = [];
     let _assetClassSets = {};
 
-    for (let i = 0; i < acArr.length; i++) {
+    for (let i = 0; i < acArray.length; i++) {
       await window.contracts.AC_MGR.methods
-        .getAC_data(acArr[i])
+        .getAC_data(String(acArray[i]))
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
+
           else {
             let resArr = Object.values(_result)
-            if (String(acArr[i]) === resArr[0]) {
-              window.utils.resolveACFromID(acArr[i]).then((e) => {
-                rootArray.push(acArr[i]);
-                rootNameArray.push(e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase());
-                _assetClassSets[String(acArr[i])] = [];
+
+            if (String(acArray[i]) === String(resArr[0])) {
+              window.utils.resolveACFromID(String(acArray[i])).then((e) => {
+                rootArray.push(acArray[i]);
+                rootNameArray.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
+                _assetClassSets[String(acArray[i])] = [];
               })
             }
+
             else {
-              window.utils.resolveACFromID(acArr[i]).then((e) => {
-                allClasses.push(acArr[i]);
+              window.utils.resolveACFromID(String(acArray[i])).then((e) => {
+                allClasses.push(String(acArray[i]));
                 allClassNames.push(e);
               })
             }
+
           }
+
         });
+
     }
 
-    console.log(allClasses, allClassNames, rootArray)
-
-    for (let i = 0; i < allClasses.length; i++) {
-      await window.contracts.AC_MGR.methods
-        .getAC_data(allClasses[i])
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-            let resArr = Object.values(_result);
-            for (let x = 0; x < rootArray.length; x++) {
-              if (String(rootArray[x]) === resArr[0]) {
-                _assetClassSets[String(rootArray[x])].push({ id: allClasses[i], name: allClassNames[i].substring(0, 1).toUpperCase() + allClassNames[i].substring(1, allClassNames[i].length).toLowerCase() })
-              }
-            }
-          }
-        });
-    }
-
-    console.log("Class Sets: ", _assetClassSets)
-
-    setRoots(rootArray)
-    setRootNames(rootNameArray)
-    setAssetClassSets(_assetClassSets)
+    return { sets: _assetClassSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
 
   }
 
-  const setUpAssets = async (who, _addr, recount, which) => {
+  const setUpACInformation = async (addr) => {
+
+    getACsFromDB().then(async (e) => {
+      let allClasses = e.allCArr, rootArray = e.rArr, _assetClassSets = e.sets, rootNameArray = e.rnArr, allClassNames = e.allCNArr;
+
+      console.log(allClasses, allClassNames, rootArray)
+
+      for (let i = 0; i < allClasses.length; i++) {
+        await window.contracts.AC_MGR.methods
+          .getAC_data(String(allClasses[i]))
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
+
+            else {
+              let resArr = Object.values(_result);
+              for (let x = 0; x < rootArray.length; x++) {
+
+                if (String(rootArray[x]) === String(resArr[0])) {
+                  _assetClassSets[String(rootArray[x])]
+                    .push({ id: allClasses[i], name: allClassNames[i].toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) })
+                }
+
+              }
+            }
+
+          });
+      }
+
+      
+
+      setTimeout(()=>{
+        console.log("Class Sets: ", _assetClassSets)
+        setRoots(rootArray)
+        setRootNames(rootNameArray)
+        setAssetClassSets(_assetClassSets)
+      },500)
+      
+    })
+
+  }
+
+  const setUpAssets = async (who, _addr) => {
     console.log("SUA, called from ", who)
 
     let tempObj = {};
@@ -909,7 +941,7 @@ export default function Dashboard(props) {
           assetObj.assetClass = simpleAssets.assetClasses[x];
           assetObj.status = simpleAssets.statuses[x];
           assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x].substring(0, 1).toUpperCase() + simpleAssets.assetClassNames[x].substring(1, simpleAssets.assetClassNames[x].length).toLowerCase();
+          assetObj.assetClassName = simpleAssets.assetClassNames[x].toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
           assetObj.root = simpleAssets.roots[x];
           assetObj.currency = simpleAssets.prices[x].currency;
           assetObj.price = simpleAssets.prices[x].price;

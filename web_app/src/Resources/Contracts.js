@@ -266,28 +266,30 @@ async function buildContracts(_web3) {
     }
     );
 
-  return window.contracts = {
-    STOR: STOR,
-    APP: APP,
-    NP: NP,
-    AC_MGR: AC_MGR,
-    AC_TKN: AC_TKN,
-    A_TKN: A_TKN,
-    ECR_MGR: ECR_MGR,
-    ECR: ECR,
-    VERIFY: VERIFY,
-    ECR_NC: ECR_NC,
-    APP_NC: APP_NC,
-    NP_NC: NP_NC,
-    RCLR: RCLR,
-    PIP: PIP,
-    ID_TKN: ID_TKN,
-    UTIL_TKN: UTIL_TKN,
-    PARTY: PARTY,
-    PURCHASE: PURCHASE,
-    WRAP: WRAP,
-    DECORATE: DECORATE
-  }
+    window.contracts = {
+      STOR: STOR,
+      APP: APP,
+      NP: NP,
+      AC_MGR: AC_MGR,
+      AC_TKN: AC_TKN,
+      A_TKN: A_TKN,
+      ECR_MGR: ECR_MGR,
+      ECR: ECR,
+      VERIFY: VERIFY,
+      ECR_NC: ECR_NC,
+      APP_NC: APP_NC,
+      NP_NC: NP_NC,
+      RCLR: RCLR,
+      PIP: PIP,
+      ID_TKN: ID_TKN,
+      UTIL_TKN: UTIL_TKN,
+      PARTY: PARTY,
+      PURCHASE: PURCHASE,
+      WRAP: WRAP,
+      DECORATE: DECORATE
+    }
+    
+  return console.log(window.contracts)
 }
 
 export default buildContracts;

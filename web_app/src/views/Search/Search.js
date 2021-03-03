@@ -199,7 +199,7 @@ export default function Search(props) {
       setClassSelect(event.target.value);
       try {
         window.utils.resolveACFromID(event.target.value).then((e) => {
-          let str = e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase();
+          let str = e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
           setAssetClassName(str)
           window.utils.getCosts(6, event.target.value).then((e) => {
             setRecycleCost(window.web3.utils.fromWei(e.newAsset))
@@ -1711,6 +1711,8 @@ export default function Search(props) {
       if (!result) {
         console.log(lookup, "Something went wrong. Unable to find file on IPFS");
         setRetrieving(false);
+        setSelectedImage("")
+        setMoreInfo(true);
         return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
       }
 
@@ -1874,6 +1876,14 @@ export default function Search(props) {
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
           else {
+
+            /* @dev
+            0 AC_data[_assetClass].assetClassRoot,
+            1 AC_data[_assetClass].custodyType,
+            2 AC_data[_assetClass].discount,
+            3 AC_data[_assetClass].referenceAddress 
+            */
+
             let _custodyType;
 
             if (Object.values(_result)[1] === "1") {
@@ -1905,14 +1915,15 @@ export default function Search(props) {
     let tempTxHash;
     console.log("Purchasing Asset")
 
-    if (Number(props.pruf) < Number(price)) { 
+    if (Number(props.pruf) < Number(price)) {
       swal({
         title: "Insufficient balance!",
         icon: "warning",
         button: "Close",
       });
-      return console.log(price), 
-      console.log(props.pruf) }
+      return console.log(price),
+        console.log(props.pruf)
+    }
     setTransaction(true)
     await window.contracts.PURCHASE.methods
       .purchaseWithPRUF(asset.idxHash)
@@ -2406,26 +2417,25 @@ export default function Search(props) {
               setResult("");
               setIDXRaw("")
               setIDXRawInput(false)
-              /*             setManufacturer("")
-                          setloginManufacturer("")
-                          setloginManufacturerState("")
-                          setType("")
-                          setloginType("")
-                          setloginTypeState("")
-                          setModel("")
-                          setloginModel("")
-                          setloginModelState("")
-                          setSerial("")
-                          setloginSerial("")
-                          setloginSerialState("") */
               swal({
                 title: "Asset not found!",
-                // text: "Check your TX here:" + txHash,
                 icon: "warning",
                 button: "Close",
               });
             }
             else {
+
+                /* @dev
+                0 rec.assetStatus,
+                1 rec.forceModCount,
+                2 rec.assetClass,
+                3 rec.countDown,
+                4 rec.countDownStart,
+                5 rec.Ipfs1,
+                6 rec.Ipfs2,
+                7 rec.numberOfTransfers 
+                */
+
               setIDXRaw("")
               setIDXRawInput(false)
               setloginIDXState("")
@@ -2458,13 +2468,13 @@ export default function Search(props) {
             }
           });
 
-          
-        await window.contracts.STOR.methods.getPriceData(idxHash)
+
+      await window.contracts.STOR.methods.getPriceData(idxHash)
         .call((_error, _result) => {
           if (_error) {
             console.log("IN ERROR IN ERROR IN ERROR")
           } else {
-            if(Object.values(_result)[1] !== "2") {
+            if (Object.values(_result)[1] !== "2") {
               return
             }
             else {
@@ -2480,7 +2490,7 @@ export default function Search(props) {
       let assetClassName = await window.utils.getACName(tempResult[2])
 
       window.assetInfo = {
-        assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
+        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
         assetClass: tempResult[2],
         status: await window.utils.getStatusString(String(tempResult[0])),
         statusNum: String(tempResult[0]),
@@ -2496,7 +2506,7 @@ export default function Search(props) {
       setAuthLevel(window.authLevel);
       setScanQR(false);
       setAsset({
-        assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
+        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
         assetClass: tempResult[2],
         status: window.assetInfo.status,
         statusNum: String(tempResult[0]),
@@ -2651,28 +2661,28 @@ export default function Search(props) {
 
     setURL(String(baseURL) + String(idxHash))
 
-          
+
     await window.contracts.STOR.methods.getPriceData(idxHash)
-    .call((_error, _result) => {
-      if (_error) {
-        console.log("IN ERROR IN ERROR IN ERROR")
-      } else {
-        if(Object.values(_result)[1] !== "2") {
-          return
+      .call((_error, _result) => {
+        if (_error) {
+          console.log("IN ERROR IN ERROR IN ERROR")
+        } else {
+          if (Object.values(_result)[1] !== "2") {
+            return
+          }
+          else {
+            setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
+            setCurrency("ü")
+          }
         }
-        else {
-          setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
-          setCurrency("ü")
-        }
-      }
-    })
+      })
 
 
     window.assetClass = tempResult[2]
     let assetClassName = await window.utils.getACName(tempResult[2])
 
     window.assetInfo = {
-      assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
+      assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
       assetClass: tempResult[2],
       status: await window.utils.getStatusString(String(tempResult[0])),
       statusNum: String(tempResult[0]),
@@ -2687,7 +2697,7 @@ export default function Search(props) {
     await getIPFSJSONObject(ipfsHash);
     setAuthLevel(window.authLevel);
     setAsset({
-      assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
+      assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
       assetClass: tempResult[2],
       status: window.assetInfo.status,
       statusNum: String(tempResult[0]),
@@ -3223,8 +3233,8 @@ export default function Search(props) {
                     )}
                     {currency !== "" && transaction && (
                       <h3>
-                      Purchasing Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                    </h3>
+                        Purchasing Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                      </h3>
                     )}
                     {isRecycling && (
                       <>

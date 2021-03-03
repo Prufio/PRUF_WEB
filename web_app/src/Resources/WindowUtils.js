@@ -304,9 +304,9 @@ function buildWindowUtils() {
           }
         });
     }
-    let acData = await window.utils.getACData("id", AC)
 
     if (addr !== undefined) {
+      let acData = await window.utils.getACData("id", AC)
       await window.utils.checkCreds(acData, AC);
       await window.utils.getCosts(6, AC);
     }
