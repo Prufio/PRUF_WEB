@@ -65,7 +65,7 @@ export default function NodeManager(props) {
 
   const [nodeData, setNodeData] = React.useState( 
     [["Loading Nodes...", "~", "~", "~"]],
-);
+  );
 
 
   React.useEffect(() => {
@@ -83,7 +83,11 @@ export default function NodeManager(props) {
   }, [])
 
   React.useEffect(()=>{
-    getNodesInWallet(Number(props.nodes))
+    if(Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~","~","~"]])
+    if(nodeData.length !== Number(props.nodes)){
+      getNodesInWallet(Number(props.nodes))
+    }
+    
   },[props.nodes])
 
   const getNodesInWallet = async (bal, ids) => {
