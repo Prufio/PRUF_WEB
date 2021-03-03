@@ -77,6 +77,7 @@ export default function Dashboard(props) {
   const [isMounted, setIsMounted] = React.useState(false);
   const [WD, setWD] = React.useState(false);
   const [assets, setAssets] = React.useState({})
+  const [nodeList, setNodeList] = React.useState(null)
   const [reserveAD, setReserveAD] = React.useState({})
   const [assetArr, setAssetArr] = React.useState([])
   const [winKey, setWinKey] = React.useState(String(Math.round(Math.random() * 100000)))
@@ -328,6 +329,8 @@ export default function Dashboard(props) {
         window.replaceAssetData = {};
         console.log("Invalid key passed. Aborted call to replace.")
       }
+
+      else if (window.replaceAssetData.nodeList) setNodeList(window.replaceAssetData.nodeList)
 
       else {
         setWinKey(String(Math.round(Math.random() * 100000)));

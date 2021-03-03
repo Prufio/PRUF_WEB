@@ -70,6 +70,15 @@ export default function NodeManager(props) {
     [["Loading Nodes...", "~", "~", "~"]],
   );
 
+  const thousandHashesOf = (varToHash) => {
+    if(!window.web3.utils) return window.location.href = "/#/user/home"
+    let tempHash = varToHash;
+    for (let i = 0; i < 1000; i++) {
+      tempHash = window.web3.utils.soliditySha3(tempHash);
+      //console.log(tempHash);
+    }
+    return tempHash;
+  }
 
   React.useEffect(() => {
     if (props.ps) {
@@ -86,14 +95,18 @@ export default function NodeManager(props) {
   }, [])
 
   React.useEffect(()=>{
-    if(Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~","~","~"]])
-    if(nodeData.length !== Number(props.nodes)){
+    if (props.nodeList && props.nodeList.length === Number(props.nodes)) {
+      setNodeData(props.nodeList)
+    }
+    else if(Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~","~","~"]])
+    else {
       getNodesInWallet(Number(props.nodes))
     }
     
   },[props.nodes])
 
   const getNodesInWallet = async (bal, ids) => {
+    const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return
 
     if(!bal){
@@ -103,6 +116,7 @@ export default function NodeManager(props) {
           getNodesInWallet(result)
         }
         else {
+          window.replaceAssetData = {key: pageKey, nodeList: [["No nodes held by user", "~","~","~"]]}
           setNodeData([["No nodes held by user", "~","~","~"]])
         }
       });
@@ -145,6 +159,7 @@ export default function NodeManager(props) {
       setTimeout(()=>{
         console.log(nodeData)
         setNodeData(nodeData)
+        window.replaceAssetData = {nodeList: nodeData}
       },300)
     }
 
