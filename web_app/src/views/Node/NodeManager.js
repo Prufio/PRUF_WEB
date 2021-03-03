@@ -62,6 +62,16 @@ export default function NodeManager(props) {
   const [totalRewards, setTotalRewards] = React.useState(false)
 
   React.useEffect(()=>{
+    if (props.ps) {
+      props.ps.element.scrollTop = 0;
+      //console.log("Scrolled to ", props.ps.element.scrollTop)
+    }
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+
+    }
     getNodesInWallet()
   },[])
   
