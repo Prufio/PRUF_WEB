@@ -53,9 +53,9 @@ const useStyles = makeStyles(styles);
 
 export default function NodeManager(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [dash, setDash] = React.useState(true)
+  const [dash, setDash] = React.useState(false)
   const [delegation, setDelegation] = React.useState(false)
-  const [analytics, setAnalytics] = React.useState(false)
+  const [analytics, setAnalytics] = React.useState(true)
 
   const [dashData, setDashData] = React.useState(
     dataTable.dataRowsNodeDash.map((prop, key) => {
@@ -269,24 +269,24 @@ export default function NodeManager(props) {
               <AccountBalance />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Node Manager</h4>
-            {dash && (
+            {analytics && (
               <Button
                 color="info"
                 Icon
-                className="nodeButtons1Active"
+                className="nodeButtons3Active"
               >
-                <Dashboard />
-              Node Dashboard
+                <BarChartRounded />
+              Analytics
               </Button>
             )}
-            {!dash && (
+            {!analytics && (
               <Button
                 Icon
-                className="nodeButtons1"
-                onClick={() => { setDashButton(true) }}
+                className="nodeButtons3"
+                onClick={() => { setAnalyticsButton(true) }}
               >
-                <Dashboard />
-              Node Dashboard
+                <BarChartRounded />
+              Analytics
               </Button>
             )}
             {delegation && (
@@ -309,24 +309,24 @@ export default function NodeManager(props) {
               Delegation List
               </Button>
             )}
-            {analytics && (
+            {dash && (
               <Button
                 color="info"
                 Icon
-                className="nodeButtons3Active"
+                className="nodeButtons1Active"
               >
-                <BarChartRounded />
-              Analytics
+                <Dashboard />
+              Node Dashboard
               </Button>
             )}
-            {!analytics && (
+            {!dash && (
               <Button
                 Icon
-                className="nodeButtons3"
-                onClick={() => { setAnalyticsButton(true) }}
+                className="nodeButtons1"
+                onClick={() => { setDashButton(true) }}
               >
-                <BarChartRounded />
-              Analytics
+                <Dashboard />
+              Node Dashboard
               </Button>
             )}
           </CardHeader>
