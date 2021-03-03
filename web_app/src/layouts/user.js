@@ -459,6 +459,7 @@ export default function Dashboard(props) {
                 pruf={prufBalance}
                 ether={ETHBalance}
                 assets={assetBalance}
+                nodes={assetClassBalance}
                 currentACPrice={currentACPrice}
                 IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}

@@ -57,7 +57,14 @@ export default function NodeManager(props) {
   const [delegation, setDelegation] = React.useState(false)
   const [analytics, setAnalytics] = React.useState(true)
 
-  React.useEffect(()=>{
+  const classes = useStyles();
+
+  const [nodeData, setNodeData] = React.useState( 
+    [["Loading Nodes...", "~", "~", "~"]],
+);
+
+
+  React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
@@ -68,16 +75,72 @@ export default function NodeManager(props) {
       document.scrollingElement.scrollTop = 0;
 
     }
-    getNodesInWallet()
-  },[])
-  
-  const getNodesInWallet = () => {
-    if(!window.contracts) return
-    
+    //getNodesInWallet()
+  }, [])
+
+  React.useEffect(()=>{
+    getNodesInWallet(Number(props.nodes))
+  },[props.nodes])
+
+  const getNodesInWallet = async (bal, ids) => {
+    if (!window.contracts || !props.addr) return
+
+    if(!bal){
+      await window.contracts.AC_TKN.methods.balanceOf(props.addr).call((error, result) => {
+        if (error) { console.log(error) }
+        else if (result > 0) {
+          getNodesInWallet(result)
+        }
+        else {
+          setNodeData([["No nodes held by user", "~","~","~"]])
+        }
+      });
+    }
+
+    else if (!ids){
+      let nodeIDs = []
+      for (let i = 0; i < Number(bal); i++) {
+        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(props.addr, i)
+          .call((_error, _result) => {
+            if (_error) {
+              return (console.log("IN ERROR IN ERROR IN ERROR"))
+            } else {
+              nodeIDs.push(_result)
+            }
+          });
+      }
+
+      setTimeout(()=>{
+        getNodesInWallet(bal, nodeIDs)
+      },300)
+
+    }
+
+    else {
+      let nodeData = [];
+      for (let i = 0; i < ids.length; i ++) {
+        await window.contracts.AC_MGR.methods
+          .getAC_name(ids[i])
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
+            else {
+              nodeData.push(
+                [_result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()), String(ids[i]), "N/A", "N/A"]
+                )
+            }
+        });
+      }
+
+      setTimeout(()=>{
+        console.log(nodeData)
+        setNodeData(nodeData)
+      },300)
+    }
+
   }
 
   const [dashData, setDashData] = React.useState(
-    dataTable.dataRowsNodeDash.map((prop, key) => {
+    nodeData.map((prop, key) => {
       return {
         id: key,
         name: prop[0],
@@ -224,7 +287,6 @@ export default function NodeManager(props) {
       };
     })
   );
-  const classes = useStyles();
 
   const setDashButton = () => {
     setDash(true)
@@ -377,7 +439,93 @@ export default function NodeManager(props) {
                     accessor: "actions"
                   }
                 ]}
-                data={dashData}
+                data={
+                  nodeData.map((prop, key) => {
+                    return {
+                      id: key,
+                      name: prop[0],
+                      nodeId: prop[1],
+                      totalStaked: prop[2],
+                      transactionsPerEpoch: prop[3],
+                      actions: (
+                        // we've added some custom button actions
+                        <div className="actions-right">
+                          {/* use this button to add a like kind of action */}
+                          
+                            {prop[0] === "No Nodes held" && (
+                              <>Create one</>
+                            )}
+                            {prop[0] !== "No Nodes held" && (
+              
+                              <form>
+                                <FormControl
+                                  className={classes.selectFormControl}
+                                >
+                                  <InputLabel className="functionSelectorText">
+                                    <Danger>
+                                      <Settings className="functionSelectorIcon" />
+                                    </Danger>
+                                Options
+                                    </InputLabel>
+                                  <Select
+                                    MenuProps={{
+                                      className: classes.selectMenu
+                                    }}
+                                    classes={{
+                                      select: classes.select
+                                    }}
+                                    value={simpleSelect}
+                                    onChange={(e) => handleSimple(e)}
+                                    inputProps={{
+                                      name: "simpleSelect",
+                                      id: "simple-select"
+                                    }}
+                                  >
+                                    <MenuItem
+                                      disabled
+                                      classes={{
+                                        root: classes.selectMenuItem
+                                      }}
+                                    >
+                                      Select an option from the list
+                                        </MenuItem>
+                                    <MenuItem
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected: classes.selectMenuItemSelected
+                                      }}
+                                      value="name"
+                                    >
+                                      Change Name
+                            </MenuItem>
+                                    <MenuItem
+                                      disabled
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected: classes.selectMenuItemSelected
+                                      }}
+                                      value="data"
+                                    >
+                                      Update Node Data
+                            </MenuItem>
+                                    <MenuItem
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected: classes.selectMenuItemSelected
+                                      }}
+                                      value="costs"
+                                    >
+                                      Update Operation Costs
+                                        </MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </form>
+                            )}
+                        </div>
+                      )
+                    };
+                  })
+                }
               />
             )}
             {!dash && delegation && !analytics && (
@@ -487,19 +635,19 @@ export default function NodeManager(props) {
                   </GridItem>
                 </GridContainer>
                 {/* <Card className="rewardsHistorySlider"> */}
-                  <GridContainer>
-                    <GridItem xs={12} sm={6} md={6} lg={3}>
-                      <Card>
-                        <CardHeader>
-                          <p className={classes.cardCategory}>Epoch xxx</p>
-                          {/* <h3 className={classes.cardTitle}>
+                <GridContainer>
+                  <GridItem xs={12} sm={6} md={6} lg={3}>
+                    <Card>
+                      <CardHeader>
+                        <p className={classes.cardCategory}>Epoch xxx</p>
+                        {/* <h3 className={classes.cardTitle}>
                       {props.pruf !== "~"
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
-                        </CardHeader>
-                        <CardFooter stats>
-                          {/* {!isRefreshingPruf && (
+                      </CardHeader>
+                      <CardFooter stats>
+                        {/* {!isRefreshingPruf && (
                       <div className="refresh">
                         <Cached onClick={() => refreshPrufBalance()} />
                       </div>
@@ -507,21 +655,21 @@ export default function NodeManager(props) {
                     {isRefreshingPruf && (
                       <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
                     )} */}
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                    <GridItem xs={12} sm={6} md={6} lg={3}>
-                      <Card>
-                        <CardHeader>
-                          <p className={classes.cardCategory}>Epoch xxx</p>
-                          {/* <h3 className={classes.cardTitle}>
+                      </CardFooter>
+                    </Card>
+                  </GridItem>
+                  <GridItem xs={12} sm={6} md={6} lg={3}>
+                    <Card>
+                      <CardHeader>
+                        <p className={classes.cardCategory}>Epoch xxx</p>
+                        {/* <h3 className={classes.cardTitle}>
                       {props.pruf !== "~"
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
-                        </CardHeader>
-                        <CardFooter stats>
-                          {/* {!isRefreshingPruf && (
+                      </CardHeader>
+                      <CardFooter stats>
+                        {/* {!isRefreshingPruf && (
                       <div className="refresh">
                         <Cached onClick={() => refreshPrufBalance()} />
                       </div>
@@ -529,21 +677,21 @@ export default function NodeManager(props) {
                     {isRefreshingPruf && (
                       <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
                     )} */}
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                    <GridItem xs={12} sm={6} md={6} lg={3}>
-                      <Card>
-                        <CardHeader>
-                          <p className={classes.cardCategory}>Epoch xxx</p>
-                          {/* <h3 className={classes.cardTitle}>
+                      </CardFooter>
+                    </Card>
+                  </GridItem>
+                  <GridItem xs={12} sm={6} md={6} lg={3}>
+                    <Card>
+                      <CardHeader>
+                        <p className={classes.cardCategory}>Epoch xxx</p>
+                        {/* <h3 className={classes.cardTitle}>
                       {props.pruf !== "~"
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
-                        </CardHeader>
-                        <CardFooter stats>
-                          {/* {!isRefreshingPruf && (
+                      </CardHeader>
+                      <CardFooter stats>
+                        {/* {!isRefreshingPruf && (
                       <div className="refresh">
                         <Cached onClick={() => refreshPrufBalance()} />
                       </div>
@@ -551,21 +699,21 @@ export default function NodeManager(props) {
                     {isRefreshingPruf && (
                       <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
                     )} */}
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                    <GridItem xs={12} sm={6} md={6} lg={3}>
-                      <Card>
-                        <CardHeader>
-                          <p className={classes.cardCategory}>Epoch xxx</p>
-                          {/* <h3 className={classes.cardTitle}>
+                      </CardFooter>
+                    </Card>
+                  </GridItem>
+                  <GridItem xs={12} sm={6} md={6} lg={3}>
+                    <Card>
+                      <CardHeader>
+                        <p className={classes.cardCategory}>Epoch xxx</p>
+                        {/* <h3 className={classes.cardTitle}>
                       {props.pruf !== "~"
                         ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
-                        </CardHeader>
-                        <CardFooter stats>
-                          {/* {!isRefreshingPruf && (
+                      </CardHeader>
+                      <CardFooter stats>
+                        {/* {!isRefreshingPruf && (
                       <div className="refresh">
                         <Cached onClick={() => refreshPrufBalance()} />
                       </div>
@@ -573,10 +721,10 @@ export default function NodeManager(props) {
                     {isRefreshingPruf && (
                       <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
                     )} */}
-                        </CardFooter>
-                      </Card>
-                    </GridItem>
-                  </GridContainer>
+                      </CardFooter>
+                    </Card>
+                  </GridItem>
+                </GridContainer>
                 {/* </Card> */}
                 <Button
                   color="info"
