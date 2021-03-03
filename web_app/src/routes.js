@@ -14,12 +14,17 @@ import Transfer from "views/Forms/Transfer.js";
 import Search from "views/Search/Search.js";
 import Verify from "views/Forms/Verify.js";
 import SetForSale from "views/Forms/SetForSale.js";
+import NodeManager from "views/Node/NodeManager.js";
+import ChangeNodeName from "views/Node/Forms/ChangeNodeName.js";
+import ChangeNodeData from "views/Node/Forms/ChangeNodeData.js";
+import ChangeNodeCosts from "views/Node/Forms/ChangeNodeCosts.js";
 
 // @material-ui/icons
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import HomeIcon from "@material-ui/icons/HomeOutlined";
 import SearchIcon from "@material-ui/icons/Search";
 import NewRecordIcon from "@material-ui/icons/LibraryAddOutlined";
+import NodeManagerIcon from "@material-ui/icons/AccountBalance";
 
 var dashRoutes = [
   {
@@ -48,6 +53,13 @@ var dashRoutes = [
     name: "New Asset",
     icon: NewRecordIcon,
     component: NewRecord,
+    layout: "/user"
+  },
+  {
+    path: "/node-manager",
+    name: "Node Manager",
+    icon: NodeManagerIcon,
+    component: NodeManager,
     layout: "/user"
   },
   {
@@ -115,6 +127,24 @@ var dashRoutes = [
     name: "Verify Asset",
     path: "/verify-asset",
     component: Verify,
+    layout: "/user"
+  },
+  {
+    name: "Change Name",
+    path: "/change-name",
+    component: ChangeNodeName,
+    layout: "/user"
+  },
+  {
+    name: "Change Data",
+    path: "/change-data",
+    component: ChangeNodeData,
+    layout: "/user"
+  },
+  {
+    name: "Change Costs",
+    path: "/change-costs",
+    component: ChangeNodeCosts,
     layout: "/user"
   },
 ];
