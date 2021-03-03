@@ -56,6 +56,15 @@ export default function NodeManager(props) {
   const [delegation, setDelegation] = React.useState(false)
   const [analytics, setAnalytics] = React.useState(false)
 
+  React.useEffect(()=>{
+    getNodesInWallet()
+  },[])
+  
+  const getNodesInWallet = () => {
+    if(!window.contracts) return
+    
+  }
+
   const [dashData, setDashData] = React.useState(
     dataTable.dataRowsNodeDash.map((prop, key) => {
       return {
