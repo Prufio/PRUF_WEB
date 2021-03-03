@@ -59,14 +59,26 @@ body {
     object-fit: cover !important;
 }
 
+.DBGradient:active {
+  background-color: #017ec0 !important;
+}
+
 .MDBGradient {
     background: linear-gradient(0deg, #005480, #015f92) !important;
     object-fit: cover !important;
 }
 
+.MDBGradient:active {
+  background-color: #002a40 !important;
+}
+
 .MLBGradient {
     background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
     /* object-fit: cover !important; */
+}
+
+.MLBGradient:active {
+  background-color: #002a40 !important;
 }
 
 .flexRowWithGap {
@@ -952,4 +964,74 @@ cursor:pointer;
   left: 10px;
   /* right:20px; */
 
+}
+
+.nodeButtons1 {
+  background-color: #002a40 !important;
+  font-size: 16px !important;
+  height: 50px;
+  width: 250px;
+}
+
+.nodeButtons1:active {
+  background-color: #00a8ff !important;
+}
+
+.nodeButtons2 {
+  background-color: #002a40 !important;
+  font-size: 16px !important;
+  height: 50px;
+  width: 250px;
+}
+
+.nodeButtons2:active {
+  background-color: #00a8ff !important;
+}
+
+.nodeButtons3 {
+  background-color: #002a40 !important;
+  font-size: 16px !important;
+  height: 50px;
+  width: 250px;
+}
+
+.nodeButtons3:active {
+  background-color: #00a8ff !important;
+}
+
+.nodeButtons1Active {
+  font-size: 16px !important;
+  height: 50px;
+  width: 250px;
+}
+
+.nodeButtons1Active:active {
+  background-color: #002a40 !important;
+}
+
+.nodeButtons2Active {
+  font-size: 16px !important;
+  height: 50px;
+  width: 250px;
+}
+
+.nodeButtons2Active:active {
+  background-color: #002a40 !important;
+}
+
+.nodeButtons3Active {
+  font-size: 16px !important;
+  height: 50px;
+  width: 250px;
+}
+
+.nodeButtons3Active:active {
+  background-color: #002a40 !important;
+}
+
+
+.rewardsHistorySlider {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 160px;
 }

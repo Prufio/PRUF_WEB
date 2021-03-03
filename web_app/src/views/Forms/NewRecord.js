@@ -50,8 +50,8 @@ export default function NewRecord(props) {
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("");
   const [isUploading, setIsUploading] = React.useState(false);
   const [NRCost, setNRCost] = React.useState("~");
-  const [mintedID, setMintedID] = React.useState(false)
-  const [selectedRootID, setSelectedRootID] = React.useState("")
+  const [mintedID, setMintedID] = React.useState(false);
+  const [selectedRootID, setSelectedRootID] = React.useState("");
 
 
   //const [ipfsObj, setIpfsObj] = React.useState("");
