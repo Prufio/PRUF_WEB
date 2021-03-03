@@ -14,10 +14,13 @@ import Transfer from "views/Forms/Transfer.js";
 import Search from "views/Search/Search.js";
 import Verify from "views/Forms/Verify.js";
 import SetForSale from "views/Forms/SetForSale.js";
+
 import NodeManager from "views/Node/NodeManager.js";
+
 import ChangeNodeName from "views/Node/Forms/ChangeNodeName.js";
 import ChangeNodeData from "views/Node/Forms/ChangeNodeData.js";
 import ChangeNodeCosts from "views/Node/Forms/ChangeNodeCosts.js";
+import Stake from "views/Node/Forms/Stake.js";
 
 // @material-ui/icons
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
@@ -145,6 +148,12 @@ var dashRoutes = [
     name: "Change Costs",
     path: "/change-costs",
     component: ChangeNodeCosts,
+    layout: "/user"
+  },
+  {
+    name: "Stake",
+    path: "/stake",
+    component: Stake,
     layout: "/user"
   },
 ];

@@ -194,7 +194,7 @@ function Table({ columns, data }) {
           </tbody>
         </table>
 
-        {/* <div className="-pagination">
+        <div className="-pagination">
           <div className="-previous">
             <button
               type="button"
@@ -305,7 +305,7 @@ function Table({ columns, data }) {
               Next
               </button>
           </div>
-        </div> */}
+        </div>
         <div className="pagination-bottom"></div>
       </div>
     </>
