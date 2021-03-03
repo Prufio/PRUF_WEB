@@ -21,6 +21,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardHeader from "components/Card/CardHeader.js";
 import ReactTable from "components/ReactTable/ReactTable.js";
+import ReactTableSimple from "components/ReactTable/ReactTableSimple.js";
 import CardFooter from "components/Card/CardFooter.js";
 
 import { dataTable } from "variables/general.js";
@@ -284,7 +285,7 @@ export default function NodeManager(props) {
                 className="nodeButtons1Active"
               >
                 <Dashboard />
-              Node Dash
+              Node Dashboard
               </Button>
             )}
             {!dash && (
@@ -294,7 +295,7 @@ export default function NodeManager(props) {
                 onClick={() => { setDashButton(true) }}
               >
                 <Dashboard />
-              Node Dash
+              Node Dashboard
               </Button>
             )}
             {delegation && (
@@ -343,7 +344,7 @@ export default function NodeManager(props) {
         <Card>
           <CardBody>
             {dash && !delegation && !analytics && (
-              <ReactTable
+              <ReactTableSimple
                 columns={[
                   {
                     Header: "Name",
