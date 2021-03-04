@@ -66,7 +66,7 @@ export default function NodeManager(props) {
   const classes = useStyles();
   const chartClasses = useChartStyles();
 
-  const [nodeData, setNodeData] = React.useState( 
+  const [nodeData, setNodeData] = React.useState(
     [["Loading Nodes...", "~", "~", "~"]],
   );
 
@@ -109,7 +109,7 @@ export default function NodeManager(props) {
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return
 
-    if(!bal){
+    if (!bal) {
       await window.contracts.AC_TKN.methods.balanceOf(props.addr).call((error, result) => {
         if (error) { console.log(error) }
         else if (result > 0) {
@@ -122,7 +122,7 @@ export default function NodeManager(props) {
       });
     }
 
-    else if (!ids){
+    else if (!ids) {
       let nodeIDs = []
       for (let i = 0; i < Number(bal); i++) {
         await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(props.addr, i)
@@ -135,15 +135,15 @@ export default function NodeManager(props) {
           });
       }
 
-      setTimeout(()=>{
+      setTimeout(() => {
         getNodesInWallet(bal, nodeIDs)
-      },300)
+      }, 300)
 
     }
 
     else {
       let nodeData = [];
-      for (let i = 0; i < ids.length; i ++) {
+      for (let i = 0; i < ids.length; i++) {
         await window.contracts.AC_MGR.methods
           .getAC_name(ids[i])
           .call((_error, _result) => {
@@ -151,128 +151,128 @@ export default function NodeManager(props) {
             else {
               nodeData.push(
                 [_result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()), String(ids[i]), "N/A", "N/A"]
-                )
+              )
             }
-        });
+          });
       }
 
-      setTimeout(()=>{
+      setTimeout(() => {
         console.log(nodeData)
-        setNodeData(nodeData)
         window.replaceAssetData = {nodeList: nodeData}
       },300)
+        setNodeData([nodeData,["~", "~", "~", "~"]])
     }
 
   }
 
-  const [dashData, setDashData] = React.useState(
-    nodeData.map((prop, key) => {
-      return {
-        id: key,
-        name: prop[0],
-        nodeId: prop[1],
-        totalStaked: prop[2],
-        transactionsPerEpoch: prop[3],
-        actions: (
-          // we've added some custom button actions
-          <div className="actions-right">
-            {/* use this button to add a like kind of action */}
-            <Button
-              // justIcon
-              // round
-              simple
-              onClick={() => {
-                let obj = dashData.find(o => o.id === key);
-                alert(
-                  "You've clicked LIKE button on \n{ \nName: " +
-                  obj.name +
-                  ", \nposition: " +
-                  obj.position +
-                  ", \noffice: " +
-                  obj.office +
-                  ", \nage: " +
-                  obj.age +
-                  "\n}."
-                );
-              }}
-              color="info"
-              className="like"
-            >
-              {prop[0] === "No Nodes held" && (
-                <>Create one</>
-              )}
-              {prop[0] !== "No Nodes held" && (
+  // const [dashData, setDashData] = React.useState(
+  //   nodeData.map((prop, key) => {
+  //     return {
+  //       id: key,
+  //       name: prop[0],
+  //       nodeId: prop[1],
+  //       totalStaked: prop[2],
+  //       transactionsPerEpoch: prop[3],
+  //       actions: (
+  //         // we've added some custom button actions
+  //         <div className="actions-right">
+  //           {/* use this button to add a like kind of action */}
+  //           <Button
+  //             // justIcon
+  //             // round
+  //             simple
+  //             onClick={() => {
+  //               let obj = dashData.find(o => o.id === key);
+  //               alert(
+  //                 "You've clicked LIKE button on \n{ \nName: " +
+  //                 obj.name +
+  //                 ", \nposition: " +
+  //                 obj.position +
+  //                 ", \noffice: " +
+  //                 obj.office +
+  //                 ", \nage: " +
+  //                 obj.age +
+  //                 "\n}."
+  //               );
+  //             }}
+  //             color="info"
+  //             className="like"
+  //           >
+  //             {prop[0] === "No nodes held by user" && (
+  //               <>Create Node</>
+  //             )}
+  //             {prop[0] !== "No nodes held by user" && (
 
-                <form>
-                  <FormControl
-                    className={classes.selectFormControl}
-                  >
-                    <InputLabel className="functionSelectorText">
-                      <Danger>
-                        <Settings className="functionSelectorIcon" />
-                      </Danger>
-                  Options
-                      </InputLabel>
-                    <Select
-                      MenuProps={{
-                        className: classes.selectMenu
-                      }}
-                      classes={{
-                        select: classes.select
-                      }}
-                      value={simpleSelect}
-                      onChange={(e) => handleSimple(e)}
-                      inputProps={{
-                        name: "simpleSelect",
-                        id: "simple-select"
-                      }}
-                    >
-                      <MenuItem
-                        disabled
-                        classes={{
-                          root: classes.selectMenuItem
-                        }}
-                      >
-                        Select an option from the list
-                          </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="name"
-                      >
-                        Change Name
-              </MenuItem>
-                      <MenuItem
-                        disabled
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="data"
-                      >
-                        Update Node Data
-              </MenuItem>
-                      <MenuItem
-                        classes={{
-                          root: classes.selectMenuItem,
-                          selected: classes.selectMenuItemSelected
-                        }}
-                        value="costs"
-                      >
-                        Update Operation Costs
-                          </MenuItem>
-                    </Select>
-                  </FormControl>
-                </form>
-              )}
-            </Button>{" "}
-          </div>
-        )
-      };
-    })
-  );
+  //               <form>
+  //                 <FormControl
+  //                   className={classes.selectFormControl}
+  //                 >
+  //                   <InputLabel className="functionSelectorText">
+  //                     <Danger>
+  //                       <Settings className="functionSelectorIcon" />
+  //                     </Danger>
+  //                 Options
+  //                     </InputLabel>
+  //                   <Select
+  //                     MenuProps={{
+  //                       className: classes.selectMenu
+  //                     }}
+  //                     classes={{
+  //                       select: classes.select
+  //                     }}
+  //                     value={simpleSelect}
+  //                     onChange={(e) => handleSimple(e)}
+  //                     inputProps={{
+  //                       name: "simpleSelect",
+  //                       id: "simple-select"
+  //                     }}
+  //                   >
+  //                     <MenuItem
+  //                       disabled
+  //                       classes={{
+  //                         root: classes.selectMenuItem
+  //                       }}
+  //                     >
+  //                       Select an option from the list
+  //                         </MenuItem>
+  //                     <MenuItem
+  //                       classes={{
+  //                         root: classes.selectMenuItem,
+  //                         selected: classes.selectMenuItemSelected
+  //                       }}
+  //                       value="name"
+  //                     >
+  //                       Change Name
+  //             </MenuItem>
+  //                     <MenuItem
+  //                       disabled
+  //                       classes={{
+  //                         root: classes.selectMenuItem,
+  //                         selected: classes.selectMenuItemSelected
+  //                       }}
+  //                       value="data"
+  //                     >
+  //                       Update Node Data
+  //             </MenuItem>
+  //                     <MenuItem
+  //                       classes={{
+  //                         root: classes.selectMenuItem,
+  //                         selected: classes.selectMenuItemSelected
+  //                       }}
+  //                       value="costs"
+  //                     >
+  //                       Update Operation Costs
+  //                         </MenuItem>
+  //                   </Select>
+  //                 </FormControl>
+  //               </form>
+  //             )}
+  //           </Button>{" "}
+  //         </div>
+  //       )
+  //     };
+  //   })
+  // );
   const [delegationData, setDelegationData] = React.useState(
     dataTable.dataRowsDelegation.map((prop, key) => {
       return {
@@ -413,7 +413,7 @@ export default function NodeManager(props) {
                 className="nodeButtonActive"
               >
                 <ListAltRounded />
-              Node Delegation List
+              Delegation List
               </Button>
             )}
             {!Delegation && (
@@ -423,7 +423,7 @@ export default function NodeManager(props) {
                 onClick={() => { setDelegationButton(true) }}
               >
                 <ListAltRounded />
-              Node Delegation List
+              Delegation List
               </Button>
             )}
             {dash && (
@@ -432,7 +432,7 @@ export default function NodeManager(props) {
                 className="nodeButtonActive"
               >
                 <Dashboard />
-              Node Dashboard
+              Dashboard
               </Button>
             )}
             {!dash && (
@@ -442,7 +442,7 @@ export default function NodeManager(props) {
                 onClick={() => { setDashButton(true) }}
               >
                 <Dashboard />
-              Node Dashboard
+              Dashboard
               </Button>
             )}
           </CardHeader>
@@ -486,76 +486,97 @@ export default function NodeManager(props) {
                         // we've added some custom button actions
                         <div className="actions-right">
                           {/* use this button to add a like kind of action */}
-                          
-                            {prop[0] === "No Nodes held" && (
-                              <>Create one</>
+
+                          {prop[0] === "No nodes held by user" && (
+                            <Button
+                              simple
+                              onClick={() => {
+                                window.location.href="/#/user/create-node"
+                              }}
+                              color="info"
+                              className="like"
+                            >
+                              Create Node
+                            </Button>
                             )}
-                            {prop[0] !== "No Nodes held" && (
-              
-                              <form>
-                                <FormControl
-                                  className="nodeOptions"
-                                >
-                                  <InputLabel className="functionSelectorText">
-                                    <Danger>
-                                      <Settings className="functionSelectorIcon" />
-                                    </Danger>
+                          {prop[0] === "Loading Nodes..." && (
+                            <Button
+                              simple
+                              onClick={() => {
+                                window.location.href="/#/user/create-node"
+                              }}
+                              color="info"
+                              className="like"
+                            >
+                              Create Node
+                            </Button>
+                          )}
+                          {prop[0] !== "No nodes held by user" && prop[0] !== "Loading Nodes..." && (
+
+                            <form>
+                              <FormControl
+                                className="nodeOptions"
+                              >
+                                <InputLabel className="functionSelectorText">
+                                  <Danger>
+                                    <Settings className="functionSelectorIcon" />
+                                  </Danger>
                                 Options
                                     </InputLabel>
-                                  <Select
-                                    MenuProps={{
-                                      className: classes.selectMenu
-                                    }}
+                                <Select
+                                  MenuProps={{
+                                    className: classes.selectMenu
+                                  }}
+                                  classes={{
+                                    select: classes.select
+                                  }}
+                                  value={simpleSelect}
+                                  onChange={(e) => handleSimple(e)}
+                                  inputProps={{
+                                    name: "simpleSelect",
+                                    id: "simple-select"
+                                  }}
+                                >
+                                  <MenuItem
+                                    disabled
                                     classes={{
-                                      select: classes.select
-                                    }}
-                                    value={simpleSelect}
-                                    onChange={(e) => handleSimple(e)}
-                                    inputProps={{
-                                      name: "simpleSelect",
-                                      id: "simple-select"
+                                      root: classes.selectMenuItem
                                     }}
                                   >
-                                    <MenuItem
-                                      disabled
-                                      classes={{
-                                        root: classes.selectMenuItem
-                                      }}
-                                    >
-                                      Select an option from the list
+                                    Select an option from the list
                                         </MenuItem>
-                                    <MenuItem
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected: classes.selectMenuItemSelected
-                                      }}
-                                      value="name"
-                                    >
-                                      Change Name
+                                  <MenuItem
+                                    classes={{
+                                      root: classes.selectMenuItem,
+                                      selected: classes.selectMenuItemSelected
+                                    }}
+                                    value="name"
+                                  >
+                                    Change Name
                             </MenuItem>
-                                    <MenuItem
-                                      disabled
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected: classes.selectMenuItemSelected
-                                      }}
-                                      value="data"
-                                    >
-                                      Update Node Data
+                                  <MenuItem
+                                    disabled
+                                    classes={{
+                                      root: classes.selectMenuItem,
+                                      selected: classes.selectMenuItemSelected
+                                    }}
+                                    value="data"
+                                  >
+                                    Update Data
                             </MenuItem>
-                                    <MenuItem
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected: classes.selectMenuItemSelected
-                                      }}
-                                      value="costs"
-                                    >
-                                      Update Operation Costs
+                                  <MenuItem
+                                    classes={{
+                                      root: classes.selectMenuItem,
+                                      selected: classes.selectMenuItemSelected
+                                    }}
+                                    value="costs"
+                                  >
+                                    Update Operation Costs
                                         </MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </form>
-                            )}
+                                </Select>
+                              </FormControl>
+                            </form>
+                          )}
                         </div>
                       )
                     };
@@ -601,10 +622,10 @@ export default function NodeManager(props) {
                         </CardIcon>
                         <p className={classes.cardCategory}>PRüF Balance</p>
                         <h3 className={classes.cardTitle}>
-                      {props.pruf !== "~"
-                        ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
-                        : <>{props.pruf} <small>PRüF</small></>}
-                    </h3>
+                          {props.pruf !== "~"
+                            ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
+                            : <>{props.pruf} <small>PRüF</small></>}
+                        </h3>
                         {/* <h3 className={classes.cardTitle}>
                         <small>PRüF</small>
                     </h3> */}
@@ -625,7 +646,7 @@ export default function NodeManager(props) {
                     <Card>
                       <CardHeader color="danger" stats icon>
                         <CardIcon className="headerIconBack">
-                          <AccountBalanceWallet/>
+                          <AccountBalanceWallet />
                         </CardIcon>
                         <p className={classes.cardCategory}>Total Rewards</p>
                         {/* <h3 className={classes.cardTitle}>
@@ -634,8 +655,8 @@ export default function NodeManager(props) {
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                        <small>0 PRüF</small>
-                    </h3>
+                          <small>0 PRüF</small>
+                        </h3>
                       </CardHeader>
                       <CardFooter stats>
                         {/* {!isRefreshingPruf && (
@@ -653,7 +674,7 @@ export default function NodeManager(props) {
                     <Card>
                       <CardHeader color="danger" stats icon>
                         <CardIcon className="headerIconBack">
-                          <VpnKey/>
+                          <VpnKey />
                         </CardIcon>
                         <p className={classes.cardCategory}>Total Delegated</p>
                         {/* <h3 className={classes.cardTitle}>
@@ -662,8 +683,8 @@ export default function NodeManager(props) {
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                        <small>0 PRüF</small>
-                    </h3>
+                          <small>0 PRüF</small>
+                        </h3>
                       </CardHeader>
                       <CardFooter stats>
                         {/* {!isRefreshingPruf && (
@@ -771,34 +792,34 @@ export default function NodeManager(props) {
                 </GridContainer>
                 {/* </Card> */}
                 {rewards && (
-                <Button
-                  Icon
-                  className="nodeButtonSmActive"
-                >
-                  <ShowChart />
+                  <Button
+                    Icon
+                    className="nodeButtonSmActive"
+                  >
+                    <ShowChart />
               Rewards
-              </Button>
-              )}
-              {!rewards && (
-              <Button
-                Icon
-                className="nodeButtonSm"
-                onClick={() => { setRewardsButton(true) }}
-              >
-                <ShowChart />
+                  </Button>
+                )}
+                {!rewards && (
+                  <Button
+                    Icon
+                    className="nodeButtonSm"
+                    onClick={() => { setRewardsButton(true) }}
+                  >
+                    <ShowChart />
             Rewards
-            </Button>
-            )}
-            {totalRewards && (
-                <Button
-                  Icon
-                  className="nodeButtonSmActive"
-                >
-                  <MultilineChart />
+                  </Button>
+                )}
+                {totalRewards && (
+                  <Button
+                    Icon
+                    className="nodeButtonSmActive"
+                  >
+                    <MultilineChart />
               Total Rewards
-              </Button>
-              )}
-              {!totalRewards && (
+                  </Button>
+                )}
+                {!totalRewards && (
                   <Button
                     Icon
                     className="nodeButtonSm"
@@ -806,7 +827,7 @@ export default function NodeManager(props) {
                   >
                     <MultilineChart />
                 Total Rewards
-                </Button>
+                  </Button>
                 )}
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={7}>
@@ -821,7 +842,7 @@ export default function NodeManager(props) {
                           listener={simpleBarChart.animation}
                         />
                       </CardHeader>
-                    <br/>
+                      <br />
                     </Card>
                   </GridItem>
                   <GridItem xs={12} sm={12} md={5}>
