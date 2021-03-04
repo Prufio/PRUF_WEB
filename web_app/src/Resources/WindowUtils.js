@@ -544,6 +544,29 @@ function buildWindowUtils() {
     }
   }
 
+  const _retreiveCosts = async (numOfServices, AC) => {
+    let costs = {}, costArray = [];
+    if (window.contracts === undefined) return
+      //console.log("Getting cost array");
+
+      for (var i = 1; i <= numOfServices; i++) {
+        await window.contracts.AC_MGR.methods
+          .getServiceCosts(AC, i)
+          .call((_error, _result) => {
+            if (_error) { console.log("Error: ", _error) }
+            else {
+              let root = window.web3.utils.fromWei(Object.values(_result)[1]);
+              let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
+              let rootAddress = Object.values(_result)[0]
+              let BeneficiaryAddress = Object.values(_result)[2]
+              costArray.push(window.web3.utils.toWei(String(Number(root) + Number(acth))));
+              costs["cost"+i] = {rootCost: window.web3.utils.toWei(root), acthCost: window.web3.utils.toWei(acth), totalCost: window.web3.utils.toWei(String(Number(root) + Number(acth))), rootAddress, BeneficiaryAddress}
+            }
+          })
+      }
+      return costs
+  }
+
   const _getACFromIdx = async (idxHash) => {
     await window.contracts.STOR.methods
       .retrieveShortRecord(idxHash)
@@ -867,6 +890,7 @@ function buildWindowUtils() {
 
     checkCreds: _checkCreds,
     getCosts: _getCosts,
+    retreiveCosts: _retreiveCosts,
     determineTokenBalance: _determineTokenBalance,
     getACData: _getACData,
     getACName: _getACName,

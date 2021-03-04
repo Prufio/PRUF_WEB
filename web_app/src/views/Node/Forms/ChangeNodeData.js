@@ -11,6 +11,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
+import TextField from "@material-ui/core/TextField";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import { GroupAdd } from "@material-ui/icons";
@@ -19,7 +20,10 @@ const useStyles = makeStyles(styles);
 
 export default function ChangeNodeData(props) {
 
-  if (!window.sentPacket) { window.location.href = "/#/user/node-manager"; window.location.reload();}
+  if (!window.sentPacket) { window.sentPacket = {DBindex:1, name:"Boop", id:"71",ipfs:{
+    idHashFields: [["Artist","text"],["Series", "text"],["Piece x", "number"], ["Out of y", "number"]], ownerHashFields: [["Name", "text"], ["Password", "text"]], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+    }}
+  }//window.location.href = "/#/user/node-manager"; window.location.reload();}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
 
@@ -75,16 +79,26 @@ export default function ChangeNodeData(props) {
 
   }
 
-  const handleIdInput = () => {
-
+  const handleIdInput = (job, index, val) => {
+    let temp = JSON.parse(JSON.stringify(newIpfs))
+    let element = temp.idHashFields[index]
+    element.splice(job,1,val);
+    temp.idHashFields.splice(index,1,element);
+    setNewIpfs(temp)
   }
 
-  const handleOwnerInput = () => {
-
+  const handleOwnerInput = (job, index, val) => {
+    let temp = JSON.parse(JSON.stringify(newIpfs))
+    let element = JSON.parse(JSON.stringify(temp.ownerHashFields[index]))
+    element.splice(job,1,val);
+    temp.ownerHashFields.splice(index,1,element);
+    setNewIpfs(temp)
   }
 
-  const handleLandingConfig = () => {
-
+  const handleLandingConfig = (job, val) => {
+    let temp = JSON.parse(JSON.stringify(newIpfs))
+    temp.landingConfig[job] = val
+    setNewIpfs(temp)
   }
 
   const generateNodeWorkspace = (obj) => {
@@ -93,30 +107,40 @@ export default function ChangeNodeData(props) {
     const landingConfig = obj.landingConfig;
 
     const generateIdFields = () => {
-      let component = [];
+      let component = [<h3>Token ID Inputs</h3>, <hr></hr>];
       for (let i = 0; i < idFields.length; i++) {
         component.push(
           <>
-          <CustomInput
+          <h4>{"Input "+(i+1)}</h4>
+          Title: {"  "}<TextField
             labelText="input title"
-            defualtValue={idFields[i][0]}
+            //defualtValue={idFields[i][0]}
+            value={idFields[i][0]}
             id={"title" + i}
-            inputProps={{
-              onChange: event => {
-                handleIdInput(0, i, event.target.value.trim())
-              },
+            onChange ={ (e) => {
+              handleIdInput(0, i, e.target.value.trim())
             }}
-          />
-          <CustomInput
+          /> Type: {"  "}
+          <TextField
             labelText="input type"
-            defualtValue={idFields[i][1]}
+            //defualtValue={idFields[i][1]}
+            value={idFields[i][1]}
             id={"type" + i}
-            inputProps={{
-              onChange: event => {
-                handleIdInput(1, i, event.target.value.trim())
-              },
+            onChange ={ (e) => {
+              handleIdInput(1, i, e.target.value.trim())
             }}
-          />
+          /><br/>
+          Minter Sees: {"  "}
+            <CustomInput
+              labelText={idFields[i][0]}
+              //type={idFields[i][1]}
+              id={"example" + i}
+              inputProps={{
+                type: idFields[i][1]
+              }}
+            />
+            <br/>
+            <hr/>
         </>
         );
       }
@@ -124,30 +148,39 @@ export default function ChangeNodeData(props) {
     }
 
     const generateOwnerFields = () => {
-      let component = [];
+      let component = [<h3>Owner Inputs</h3>, <hr></hr>];
       for (let i = 0; i < ownerFields.length; i++) {
         component.push(
           <>
-            <CustomInput
+          <h4>{"Input "+(i+1)}</h4>
+            Title: {"  "}<TextField
               labelText="input title"
-              defualtValue={ownerFields[i][0]}
+              //defualtValue={ownerFields[i][0]}
+              value={ownerFields[i][0]}
               id={"title" + i}
-              inputProps={{
-                onChange: event => {
-                  handleOwnerInput(0, i, event.target.value.trim())
-                },
+              onChange ={ (e) => {
+                handleOwnerInput(0, i, e.target.value.trim())
               }}
-            />
-            <CustomInput
+            /> Type: {"  "}
+            <TextField
               labelText="input type"
-              defualtValue={ownerFields[i][1]}
+              //defaultValue={ownerFields[i][1]}
+              value={ownerFields[i][1]}
               id={"type" + i}
+              onChange ={ (e) => {
+                handleOwnerInput(0, i, e.target.value.trim())
+              }}
+            /><br/>
+            Minter Sees: {"  "}
+            <CustomInput
+              labelText={ownerFields[i][0]}
+              id={"example" + i}
               inputProps={{
-                onChange: event => {
-                  handleOwnerInput(1, i, event.target.value.trim())
-                },
+                type: ownerFields[i][1]
               }}
             />
+            <br/>
+            <hr/>
           </>
         );
       }
@@ -168,22 +201,22 @@ export default function ChangeNodeData(props) {
             <h4>Node Selected: {nodeInfo.name}</h4>
               {idFields.length > 0 && (
                 <>
-                  {generateIdFields}
+                  {generateIdFields()}
                 </>
               )}
               {ownerFields.length > 0 && (
                 <>
-                {generateOwnerFields}
+                {generateOwnerFields()}
                 </>
               )}
               {landingConfig && (
                 <CustomInput
-                labelText="landing config"
+                labelText="landing url"
                 defualtValue={JSON.stringify(landingConfig)}
-                id="landingConfig"
+                id="landingUrl"
                 inputProps={{
                   onChange: event => {
-                    handleLandingConfig(event.target.value.trim())
+                    handleLandingConfig("url", event.target.value.trim())
                   },
                 }}
               />
