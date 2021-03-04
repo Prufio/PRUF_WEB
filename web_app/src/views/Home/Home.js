@@ -517,11 +517,11 @@ export default function Home(props) {
               <CardIcon className="headerIconBack" onClick={() => window.open("https://pruf.io/")}>
                 <img className="Icon" src={Pruf}></img>
               </CardIcon>
-              <p className={classes.cardCategory}>PRüF Balance</p>
+              <p className={classes.cardCategory}>PRUF Balance</p>
               <h3 className={classes.cardTitle}>
                 {props.pruf !== "~"
-                  ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
-                  : <>{props.pruf} <small>PRüF</small></>}
+                  ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRUF</small></>
+                  : <>{props.pruf} <small>PRUF</small></>}
               </h3>
             </CardHeader>
             <CardFooter stats>
