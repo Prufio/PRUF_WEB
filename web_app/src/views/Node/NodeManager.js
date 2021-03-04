@@ -71,7 +71,7 @@ export default function NodeManager(props) {
   );
 
   const thousandHashesOf = (varToHash) => {
-    if(!window.web3.utils) return window.location.href = "/#/user/home"
+    if (!window.web3.utils) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -94,16 +94,16 @@ export default function NodeManager(props) {
     //getNodesInWallet()
   }, [])
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     if (props.nodeList && props.nodeList.length === Number(props.nodes)) {
       setNodeData(props.nodeList)
     }
-    else if(Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~","~","~"]])
+    else if (Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~", "~", "~"]])
     else {
       getNodesInWallet(Number(props.nodes))
     }
-    
-  },[props.nodes])
+
+  }, [props.nodes])
 
   const getNodesInWallet = async (bal, ids) => {
     const pageKey = thousandHashesOf(props.addr, props.winKey);
@@ -116,8 +116,8 @@ export default function NodeManager(props) {
           getNodesInWallet(result)
         }
         else {
-          window.replaceAssetData = {key: pageKey, nodeList: [["No nodes held by user", "~","~","~"]]}
-          setNodeData([["No nodes held by user", "~","~","~"]])
+          window.replaceAssetData = { key: pageKey, nodeList: [["No nodes held by user", "~", "~", "~"]] }
+          setNodeData([["No nodes held by user", "~", "~", "~"]])
         }
       });
     }
@@ -158,9 +158,9 @@ export default function NodeManager(props) {
 
       setTimeout(() => {
         console.log(nodeData)
-        window.replaceAssetData = {nodeList: nodeData}
-      },300)
-        setNodeData([nodeData,["~", "~", "~", "~"]])
+        window.replaceAssetData = { nodeList: nodeData }
+      }, 300)
+      setNodeData([nodeData, ["~", "~", "~", "~"]])
     }
 
   }
@@ -371,6 +371,10 @@ export default function NodeManager(props) {
         href = "/#/user/change-costs";
         break
       }
+      case "transfer": {
+        href = "/#/user/transfer-node";
+        break
+      }
       default: {
         console.log("Invalid menu selection: '", e, "'");
         break
@@ -491,19 +495,7 @@ export default function NodeManager(props) {
                             <Button
                               simple
                               onClick={() => {
-                                window.location.href="/#/user/create-node"
-                              }}
-                              color="info"
-                              className="like"
-                            >
-                              Create Node
-                            </Button>
-                            )}
-                          {prop[0] === "Loading Nodes..." && (
-                            <Button
-                              simple
-                              onClick={() => {
-                                window.location.href="/#/user/create-node"
+                                window.location.href = "/#/user/create-node"
                               }}
                               color="info"
                               className="like"
@@ -511,7 +503,31 @@ export default function NodeManager(props) {
                               Create Node
                             </Button>
                           )}
-                          {prop[0] !== "No nodes held by user" && prop[0] !== "Loading Nodes..." && (
+                          {prop[0] === "Loading Nodes..." && (
+                            <Button
+                              simple
+                              onClick={() => {
+                                window.location.href = "/#/user/create-node"
+                              }}
+                              color="info"
+                              className="like"
+                            >
+                              Create Node
+                            </Button>
+                          )}
+                          {prop[0] === "~" && (
+                            <Button
+                              simple
+                              onClick={() => {
+                                window.location.href = "/#/user/create-node"
+                              }}
+                              color="info"
+                              className="like"
+                            >
+                              Create Node
+                            </Button>
+                          )}
+                          {prop[0] !== "No nodes held by user" && prop[0] !== "Loading Nodes..." && prop[0] !== "~" && (
 
                             <form>
                               <FormControl
@@ -572,6 +588,15 @@ export default function NodeManager(props) {
                                     value="costs"
                                   >
                                     Update Operation Costs
+                                        </MenuItem>
+                                  <MenuItem
+                                    classes={{
+                                      root: classes.selectMenuItem,
+                                      selected: classes.selectMenuItemSelected
+                                    }}
+                                    value="transfer"
+                                  >
+                                    Transfer
                                         </MenuItem>
                                 </Select>
                               </FormControl>
