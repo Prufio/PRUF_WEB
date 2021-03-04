@@ -160,7 +160,7 @@ export default function NodeManager(props) {
       setTimeout(() => {
         console.log(nodeData)
         window.replaceAssetData = {nodeList: nodeData}
-        //nodeData.push(["~", "~", "~", "~"])
+        nodeData.push(["~", "~", "~", "~"])
         setNodeData(nodeData)
       },300)
     }
