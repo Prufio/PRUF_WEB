@@ -505,6 +505,7 @@ export default function NodeManager(props) {
                           )}
                           {prop[0] === "Loading Nodes..." && (
                             <Button
+                              disabled
                               simple
                               onClick={() => {
                                 window.location.href = "/#/user/create-node"
