@@ -61,6 +61,7 @@ export default function NodeManager(props) {
   const [Delegation, setDelegation] = React.useState(false)
   const [analytics, setAnalytics] = React.useState(true)
   const [rewards, setRewards] = React.useState(true)
+  const [selectedNodeObj, setSelectedNodeObj] = React.useState({});
   const [totalRewards, setTotalRewards] = React.useState(false)
 
   const classes = useStyles();
@@ -350,39 +351,25 @@ export default function NodeManager(props) {
 
 
 
-  const handleSimple = event => {
+  const handleSimple = (e) => {
     if (props.ps) {
       props.ps.element.scrollTop = 0
       //console.log(props.ps.element.scrollTop)
     }
-    //console.log(window.sentPacket);
-    setSimpleSelect(event.target.value);
-    let e = event.target.value, href;
 
-    switch (e) {
-      case "name": {
-        href = "/#/user/change-name";
-        break
-      }
-      case "data": {
-        href = "/#/user/change-data";
-        break
-      }
-      case "costs": {
-        href = "/#/user/change-costs";
-        break
-      }
-      case "transfer": {
-        href = "/#/user/transfer-node";
-        break
-      }
-      default: {
-        console.log("Invalid menu selection: '", e, "'");
-        break
-      }
-    }
 
-    return window.location.href = href;
+    let costObj = window.utils.getCosts(8, e.id)
+    let tempObj = JSON.parse(JSON.stringify(e))
+    
+
+    tempObj.lastRef = "/#/user/node-manager";
+
+    window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+
+    console.log(tempObj)
+    console.log(window.sentPacket)
+    setSimpleSelect(e);
+    return window.location.href = e.href;
   };
   return (
     <GridContainer>
@@ -548,8 +535,8 @@ export default function NodeManager(props) {
                                   classes={{
                                     select: classes.select
                                   }}
-                                  value={simpleSelect}
-                                  onChange={(e) => handleSimple(e)}
+                                  // value={simpleSelect}
+                                  onChange={(e) => handleSimple(e.target.value)}
                                   inputProps={{
                                     name: "simpleSelect",
                                     id: "simple-select"
@@ -568,17 +555,24 @@ export default function NodeManager(props) {
                                       root: classes.selectMenuItem,
                                       selected: classes.selectMenuItemSelected
                                     }}
-                                    value="name"
+                                    value={{
+                                      href: "/#/user/change-name",
+                                      name: prop[0],
+                                      id: prop[1]
+                                    }}
                                   >
                                     Change Name
                             </MenuItem>
                                   <MenuItem
-                                    disabled
                                     classes={{
                                       root: classes.selectMenuItem,
                                       selected: classes.selectMenuItemSelected
                                     }}
-                                    value="data"
+                                    value={{
+                                      href: "/#/user/change-data",
+                                      name: prop[0],
+                                      id: prop[1]
+                                    }}
                                   >
                                     Update Data
                             </MenuItem>
@@ -587,7 +581,11 @@ export default function NodeManager(props) {
                                       root: classes.selectMenuItem,
                                       selected: classes.selectMenuItemSelected
                                     }}
-                                    value="costs"
+                                    value={{
+                                      href: "/#/user/change-costs",
+                                      name: prop[0],
+                                      id: prop[1]
+                                    }}
                                   >
                                     Update Operation Costs
                                         </MenuItem>
@@ -596,7 +594,11 @@ export default function NodeManager(props) {
                                       root: classes.selectMenuItem,
                                       selected: classes.selectMenuItemSelected
                                     }}
-                                    value="transfer"
+                                    value={{
+                                      href: "/#/user/transfer-node",
+                                      name: prop[0],
+                                      id: prop[1]
+                                    }}
                                   >
                                     Transfer
                                         </MenuItem>

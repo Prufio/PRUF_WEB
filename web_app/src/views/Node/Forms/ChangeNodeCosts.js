@@ -28,23 +28,37 @@ export default function ChangeNodeCosts(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [first, setFirst] = React.useState("");
-  const [middle, setMiddle] = React.useState("");
-  const [last, setLast] = React.useState("");
-  const [ID, setID] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [operation1, setOperation1] = React.useState("");
+  const [operation2, setOperation2] = React.useState("");
+  const [operation3, setOperation3] = React.useState("");
+  const [operation4, setOperation4] = React.useState("");
+  const [operation5, setOperation5] = React.useState("");
+  const [operation6, setOperation6] = React.useState("");
+  const [operation7, setOperation7] = React.useState("");
+  const [operation8, setOperation8] = React.useState("");
+  const [paymentAddress, setPaymentAddress] = React.useState("");
 
-  const [loginFirst, setloginFirst] = React.useState("");
-  const [loginLast, setloginLast] = React.useState("");
-  const [loginID, setloginID] = React.useState("");
-  const [loginPassword, setloginPassword] = React.useState("");
+  const [loginOperation1, setloginOperation1] = React.useState("");
+  const [loginOperation2, setloginOperation2] = React.useState("");
+  const [loginOperation3, setloginOperation3] = React.useState("");
+  const [loginOperation4, setloginOperation4] = React.useState("");
+  const [loginOperation5, setloginOperation5] = React.useState("");
+  const [loginOperation6, setloginOperation6] = React.useState("");
+  const [loginOperation7, setloginOperation7] = React.useState("");
+  const [loginOperation8, setloginOperation8] = React.useState("");
+  const [loginPaymentAddress, setloginPaymentAddress] = React.useState("");
 
-  const [loginFirstState, setloginFirstState] = React.useState("");
-  const [loginLastState, setloginLastState] = React.useState("");
-  const [loginIDState, setloginIDState] = React.useState("");
-  const [loginPasswordState, setloginPasswordState] = React.useState("");
+  const [loginOperation1State, setloginOperation1State] = React.useState("");
+  const [loginOperation2State, setloginOperation2State] = React.useState("");
+  const [loginOperation3State, setloginOperation3State] = React.useState("");
+  const [loginOperation4State, setloginOperation4State] = React.useState("");
+  const [loginOperation5State, setloginOperation5State] = React.useState("");
+  const [loginOperation6State, setloginOperation6State] = React.useState("");
+  const [loginOperation7State, setloginOperation7State] = React.useState("");
+  const [loginOperation8State, setloginOperation8State] = React.useState("");
+  const [loginPaymentAddressState, setloginPaymentAddressState] = React.useState("");
 
-  const [assetInfo, ] = React.useState(window.sentPacket)
+  const [nodeInfo,] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
 
@@ -58,109 +72,81 @@ export default function ChangeNodeCosts(props) {
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-    if (assetInfo === undefined || assetInfo === null) {
-      console.log("No asset found. Rerouting...")
+    if (nodeInfo === undefined || nodeInfo === null) {
+      console.log("No Node found. Rerouting...")
       window.location.href = "/#/user/home"
       window.location.reload()
     }
-    if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56" || assetInfo.statusNum === "70") {
+    if (nodeInfo.statusNum === "50" || nodeInfo.statusNum === "56" || nodeInfo.statusNum === "70") {
       swal({
-        title: "Asset not in correct status!",
-        text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
+        title: "Node not in correct status!",
+        text: "This Node is not in a modifiable status, please set Node into a non-escrow status before attempting to modify.",
         icon: "warning",
         button: "Close",
-      }).then(()=>{
-        window.backIndex = assetInfo.dBIndex;
-        window.location.href = assetInfo.lastRef;
+      }).then(() => {
+        window.backIndex = nodeInfo.dBIndex;
+        window.location.href = nodeInfo.lastRef;
       });
     }
-    
-    /* else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
+
+    /* else if (nodeInfo.statusNum === "53" || nodeInfo.statusNum === "54") {
       swal({
-        title: "Asset not in correct status!",
-        text: "This asset is in a lost or stolen status, please set asset to a non lost or stolen status before attempting to modify.",
+        title: "Node not in correct status!",
+        text: "This Node is in a lost or stolen status, please set Node to a non lost or stolen status before attempting to modify.",
         icon: "warning",
         button: "Close",
       }).then(()=>{
-        window.backIndex = assetInfo.dBIndex;
-        window.location.href = assetInfo.lastRef;
+        window.backIndex = nodeInfo.dBIndex;
+        window.location.href = nodeInfo.lastRef;
       });
     } */
-  
+
   }, [])
 
   const goBack = () => {
-    window.backIndex = assetInfo.dBIndex;
-    window.location.href=assetInfo.lastRef;
+    window.backIndex = nodeInfo.dBIndex;
+    window.location.href = nodeInfo.lastRef;
   }
 
   const refreshBalances = async () => {
-    if(!window.web3.eth) return
+    if (!window.web3.eth) return
 
     let pruf, ether;
-    
+
     console.log("Refreshing ether bal")
     await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
+      if (err) { console.log(err) }
       else { ether = window.web3.utils.fromWei(result, 'ether') }
       window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
         if (err) { console.log(err) }
         else { pruf = window.web3.utils.fromWei(result, 'ether') }
         window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
           if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
+          else { window.replaceAssetData = { assets: result, ether, pruf } }
         });
       });
     });
   }
 
-  const modifyRGT = async () => { //import held asset
-
-    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
-      if (loginFirst === "") {
-        setloginFirstState("error");
-      }
-      if (loginLast === "") {
-        setloginLastState("error");
-      }
-      if (loginID === "") {
-        setloginIDState("error");
-      }
-      if (loginPassword === "") {
-        setloginPasswordState("error");
-      }
-      return;
-    }
-
-    var rgtHashRaw;
-
-    rgtHashRaw = window.web3.utils.soliditySha3(
-      String(first).replace(/\s/g, ''),
-      String(middle).replace(/\s/g, ''),
-      String(last).replace(/\s/g, ''),
-      String(ID).replace(/\s/g, ''),
-      String(password).replace(/\s/g, ''),
-    )
-
-    var rgtHash = window.web3.utils.soliditySha3(assetInfo.idxHash, rgtHashRaw);
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
-
+  const changeCosts = async () => { //import held Node
     let tempTxHash;
     setShowHelp(false);
     setTxStatus(false);
     setTxHash("");
     setError(undefined);
-
     setTransactionActive(true);
 
-    await window.contracts.NP_NC.methods
-      ._changeRgt(
-        assetInfo.idxHash,
-        rgtHash,
+      if (loginOperation1 !== "" && loginPaymentAddress !== "") {
+    await window.contracts.AC_MGR.methods
+      .ACTH_setCosts(
+        nodeInfo.id,
+        "1",
+        operation1,
+        paymentAddress
       )
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -197,16 +183,781 @@ export default function ChangeNodeCosts(props) {
         link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
         swal({
-          title: "Owner Change Successful!",
+          title: "Cost Change Successful!",
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
-          //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
-          window.location.href = assetInfo.lastRef;
         })
       });
+      }    
+
+      if (loginOperation1 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "1",
+            operation1,
+            nodeInfo.paymentAddress1
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }
+
+      if (loginOperation2 !== "" && loginPaymentAddress !== "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "2",
+            operation2,
+            paymentAddress
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation2 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "2",
+            operation2,
+            nodeInfo.paymentAddress2
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }  
+
+      if (loginOperation3 !== "" && loginPaymentAddress !== "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "3",
+            operation3,
+            paymentAddress
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation3 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "3",
+            operation3,
+            nodeInfo.paymentAddress3
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation4 !== "" && loginPaymentAddress !== "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "4",
+            operation4,
+            paymentAddress
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation4 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "4",
+            operation4,
+            nodeInfo.paymentAddress4
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation5 !== "" && loginPaymentAddress !== "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "5",
+            operation5,
+            paymentAddress
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation5 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "5",
+            operation5,
+            nodeInfo.paymentAddress5
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation6 !== "" && loginPaymentAddress !== "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "6",
+            operation6,
+            paymentAddress
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation6 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "6",
+            operation6,
+            nodeInfo.paymentAddress6
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation7 !== "" && loginPaymentAddress !== "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "7",
+            operation7,
+            paymentAddress
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }     
+
+      if (loginOperation7 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "7",
+            operation7,
+            nodeInfo.paymentAddress7
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation8 !== "" && loginPaymentAddress !== "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "8",
+            operation8,
+            paymentAddress
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }      
+
+      if (loginOperation8 !== "" && loginPaymentAddress === "") {
+        await window.contracts.AC_MGR.methods
+          .ACTH_setCosts(
+            nodeInfo.id,
+            "8",
+            operation8,
+            nodeInfo.paymentAddress8
+          )
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+            let str2 = "' target='_blank'>here</a>"
+            link.innerHTML = String(str1 + tempTxHash + str2)
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Cost Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            })
+          });
+      }
+
+        return window.backIndex = nodeInfo.dBIndex, window.location.href = nodeInfo.lastRef;
+        
 
   }
 
@@ -221,100 +972,195 @@ export default function ChangeNodeCosts(props) {
       </CardHeader>
       <CardBody>
         <form>
-          <h4>Asset Selected: {assetInfo.name}</h4>
+          <h4>Node Selected: {nodeInfo.name}, ({nodeInfo.id})</h4>
           <>
             {!transactionActive && (
               <>
                 <CustomInput
-                  success={loginFirstState === "success"}
-                  error={loginFirstState === "error"}
-                  labelText="First Name *"
-                  id="firstName"
+                  success={loginOperation1State === "success"}
+                  error={loginOperation1State === "error"}
+                  labelText="Operation 1 *"
+                  id="operation1"
                   formControlProps={{
                     fullWidth: true
                   }}
                   inputProps={{
+                    type: "number",
                     onChange: event => {
-                      setFirst(event.target.value.trim())
+                      setOperation1(event.target.value.trim())
                       if (event.target.value !== "") {
-                        setloginFirstState("success");
+                        setloginOperation1State("success");
                       } else {
-                        setloginFirstState("error");
+                        setloginOperation1State("error");
                       }
-                      setloginFirst(event.target.value);
+                      setloginOperation1(event.target.value);
                     },
                   }}
                 />
                 <CustomInput
-                  labelText="Middle Name"
-                  id="middleName"
+                  success={loginOperation2State === "success"}
+                  error={loginOperation2State === "error"}
+                  labelText="Operation 2 *"
+                  id="operation2"
                   formControlProps={{
                     fullWidth: true
                   }}
                   inputProps={{
+                    type: "number",
                     onChange: event => {
-                      setMiddle(event.target.value.trim())
+                      setOperation2(event.target.value.trim())
+                      if (event.target.value !== "") {
+                        setloginOperation2State("success");
+                      } else {
+                        setloginOperation2State("error");
+                      }
+                      setloginOperation2(event.target.value);
                     },
                   }}
                 />
                 <CustomInput
-                  success={loginLastState === "success"}
-                  error={loginLastState === "error"}
-                  labelText="Last Name *"
-                  id="lastName"
+                  success={loginOperation3State === "success"}
+                  error={loginOperation3State === "error"}
+                  labelText="Operation 3 *"
+                  id="operation3"
                   formControlProps={{
                     fullWidth: true
                   }}
                   inputProps={{
+                    type: "number",
                     onChange: event => {
-                      setLast(event.target.value.trim())
+                      setOperation3(event.target.value.trim())
                       if (event.target.value !== "") {
-                        setloginLastState("success");
+                        setloginOperation3State("success");
                       } else {
-                        setloginLastState("error");
+                        setloginOperation3State("error");
                       }
-                      setloginLast(event.target.value);
+                      setloginOperation3(event.target.value);
                     },
                   }}
                 />
                 <CustomInput
-                  success={loginIDState === "success"}
-                  error={loginIDState === "error"}
-                  labelText="ID Number *"
-                  id="idNumber"
+                  success={loginOperation4State === "success"}
+                  error={loginOperation4State === "error"}
+                  labelText="Operation 4 *"
+                  id="operation4"
                   formControlProps={{
                     fullWidth: true
                   }}
                   inputProps={{
+                    type: "number",
                     onChange: event => {
-                      setID(event.target.value.trim())
+                      setOperation4(event.target.value.trim())
                       if (event.target.value !== "") {
-                        setloginIDState("success");
+                        setloginOperation4State("success");
                       } else {
-                        setloginIDState("error");
+                        setloginOperation4State("error");
                       }
-                      setloginID(event.target.value);
+                      setloginOperation4(event.target.value);
                     },
                   }}
                 />
                 <CustomInput
-                  success={loginPasswordState === "success"}
-                  error={loginPasswordState === "error"}
-                  labelText="Password *"
-                  id="ownerpassword"
+                  success={loginOperation5State === "success"}
+                  error={loginOperation5State === "error"}
+                  labelText="Operation 5 *"
+                  id="operation5"
                   formControlProps={{
                     fullWidth: true
                   }}
                   inputProps={{
-                    type: "password",
+                    type: "number",
                     onChange: event => {
-                      setPassword(event.target.value.trim())
+                      setOperation5(event.target.value.trim())
                       if (event.target.value !== "") {
-                        setloginPasswordState("success");
+                        setloginOperation5State("success");
                       } else {
-                        setloginPasswordState("error");
+                        setloginOperation5State("error");
                       }
-                      setloginPassword(event.target.value);
+                      setloginOperation5(event.target.value);
+                    },
+                  }}
+                />
+                <CustomInput
+                  success={loginOperation6State === "success"}
+                  error={loginOperation6State === "error"}
+                  labelText="Operation 6 *"
+                  id="operation6"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    type: "number",
+                    onChange: event => {
+                      setOperation6(event.target.value.trim())
+                      if (event.target.value !== "") {
+                        setloginOperation6State("success");
+                      } else {
+                        setloginOperation6State("error");
+                      }
+                      setloginOperation6(event.target.value);
+                    },
+                  }}
+                />
+                <CustomInput
+                  success={loginOperation7State === "success"}
+                  error={loginOperation7State === "error"}
+                  labelText="Operation 7 *"
+                  id="operation7"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    type: "number",
+                    onChange: event => {
+                      setOperation7(event.target.value.trim())
+                      if (event.target.value !== "") {
+                        setloginOperation7State("success");
+                      } else {
+                        setloginOperation7State("error");
+                      }
+                      setloginOperation7(event.target.value);
+                    },
+                  }}
+                />
+                <CustomInput
+                  success={loginOperation8State === "success"}
+                  error={loginOperation8State === "error"}
+                  labelText="Operation 8 *"
+                  id="operation8"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    type: "number",
+                    onChange: event => {
+                      setOperation8(event.target.value.trim())
+                      if (event.target.value !== "") {
+                        setloginOperation8State("success");
+                      } else {
+                        setloginOperation8State("error");
+                      }
+                      setloginOperation8(event.target.value);
+                    },
+                  }}
+                />
+                <CustomInput
+                  success={loginPaymentAddressState === "success"}
+                  error={loginPaymentAddressState === "error"}
+                  labelText="New Payment Address"
+                  id="paymentAddress"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    onChange: event => {
+                      setPaymentAddress(event.target.value.trim())
+                      if (event.target.value !== "") {
+                        setloginPaymentAddressState("success");
+                      } else {
+                        setloginPaymentAddressState("error");
+                      }
+                      setloginPaymentAddress(event.target.value);
                     },
                   }}
                 />
@@ -326,8 +1172,8 @@ export default function ChangeNodeCosts(props) {
             {transactionActive && (
               <>
                 <CustomInput
-                  labelText={first}
-                  id="first"
+                  labelText={operation1}
+                  id="operation1"
                   formControlProps={{
                     fullWidth: true
                   }}
@@ -336,8 +1182,8 @@ export default function ChangeNodeCosts(props) {
                   }}
                 />
                 <CustomInput
-                  labelText={middle}
-                  id="middle"
+                  labelText={operation2}
+                  id="operation2"
                   formControlProps={{
                     fullWidth: true
                   }}
@@ -346,8 +1192,8 @@ export default function ChangeNodeCosts(props) {
                   }}
                 />
                 <CustomInput
-                  labelText={last}
-                  id="last"
+                  labelText={operation3}
+                  id="operation3"
                   formControlProps={{
                     fullWidth: true
                   }}
@@ -356,8 +1202,8 @@ export default function ChangeNodeCosts(props) {
                   }}
                 />
                 <CustomInput
-                  labelText={ID}
-                  id="ID"
+                  labelText={operation4}
+                  id="operation4"
                   formControlProps={{
                     fullWidth: true
                   }}
@@ -366,13 +1212,52 @@ export default function ChangeNodeCosts(props) {
                   }}
                 />
                 <CustomInput
-                  labelText={password}
-                  id="ownerpassword"
+                  labelText={operation5}
+                  id="operation5"
                   formControlProps={{
                     fullWidth: true
                   }}
                   inputProps={{
-                    type: "password",
+                    disabled: true
+                  }}
+                />
+                <CustomInput
+                  labelText={operation6}
+                  id="operation6"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true
+                  }}
+                />
+                <CustomInput
+                  labelText={operation7}
+                  id="operation7"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true
+                  }}
+                />
+                <CustomInput
+                  labelText={operation8}
+                  id="operation8"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true
+                  }}
+                />
+                <CustomInput
+                  labelText={paymentAddress}
+                  id="paymentAddress"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
                     disabled: true
                   }}
                 />
@@ -381,7 +1266,7 @@ export default function ChangeNodeCosts(props) {
           </>
           {!transactionActive && (
             <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => modifyRGT()}>Submit New Owner Information</Button>
+              <Button color="info" className="MLBGradient" onClick={() => changeCosts()}>Update Costs</Button>
             </div>
           )}
           {transactionActive && (
