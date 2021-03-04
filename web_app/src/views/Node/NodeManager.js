@@ -166,7 +166,6 @@ export default function NodeManager(props) {
     }
 
   }
-
   const [delegationData, setDelegationData] = React.useState(
     dataTable.dataRowsDelegation.map((prop, key) => {
       return {
@@ -250,18 +249,16 @@ export default function NodeManager(props) {
     }
 
 
-    let costObj = window.utils.getCosts(8, e.id)
     let tempObj = JSON.parse(JSON.stringify(e))
-    
-
-    tempObj.lastRef = "/#/user/node-manager";
-
-    window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-
-    console.log(tempObj)
-    console.log(window.sentPacket)
-    setSimpleSelect(e);
-    return window.location.href = e.href;
+    window.utils.retreiveCosts(8, e.id).then((x) => {
+      tempObj.costs = x
+      tempObj.lastRef = "/#/user/node-manager";
+      window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+      console.log(tempObj)
+      console.log(window.sentPacket)
+      setSimpleSelect(e);
+      return window.location.href = e.href;
+    })
   };
   return (
     <GridContainer>
@@ -274,7 +271,6 @@ export default function NodeManager(props) {
             <h4 className={classes.cardIconTitle}>Node Manager</h4>
             {analytics && (
               <Button
-                Icon
                 className="nodeButtonActive"
               >
                 <BarChartRounded />
@@ -283,7 +279,6 @@ export default function NodeManager(props) {
             )}
             {!analytics && (
               <Button
-                Icon
                 className="nodeButton"
                 onClick={() => { setAnalyticsButton(true) }}
               >
@@ -293,7 +288,6 @@ export default function NodeManager(props) {
             )}
             {Delegation && (
               <Button
-                Icon
                 className="nodeButtonActive"
               >
                 <ListAltRounded />
@@ -302,7 +296,6 @@ export default function NodeManager(props) {
             )}
             {!Delegation && (
               <Button
-                Icon
                 className="nodeButton"
                 onClick={() => { setDelegationButton(true) }}
               >
@@ -312,7 +305,6 @@ export default function NodeManager(props) {
             )}
             {dash && (
               <Button
-                Icon
                 className="nodeButtonActive"
               >
                 <Dashboard />
@@ -321,7 +313,6 @@ export default function NodeManager(props) {
             )}
             {!dash && (
               <Button
-                Icon
                 className="nodeButton"
                 onClick={() => { setDashButton(true) }}
               >
@@ -427,7 +418,6 @@ export default function NodeManager(props) {
                                   classes={{
                                     select: classes.select
                                   }}
-                                  // value={simpleSelect}
                                   onChange={(e) => handleSimple(e.target.value)}
                                   inputProps={{
                                     name: "simpleSelect",
@@ -714,7 +704,6 @@ export default function NodeManager(props) {
                 {/* </Card> */}
                 {rewards && (
                   <Button
-                    Icon
                     className="nodeButtonSmActive"
                   >
                     <ShowChart />
@@ -723,7 +712,6 @@ export default function NodeManager(props) {
                 )}
                 {!rewards && (
                   <Button
-                    Icon
                     className="nodeButtonSm"
                     onClick={() => { setRewardsButton(true) }}
                   >
@@ -733,7 +721,6 @@ export default function NodeManager(props) {
                 )}
                 {totalRewards && (
                   <Button
-                    Icon
                     className="nodeButtonSmActive"
                   >
                     <MultilineChart />
@@ -742,7 +729,6 @@ export default function NodeManager(props) {
                 )}
                 {!totalRewards && (
                   <Button
-                    Icon
                     className="nodeButtonSm"
                     onClick={() => { setTotalRewardsButton(true) }}
                   >

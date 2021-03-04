@@ -77,27 +77,7 @@ export default function TransferNode(props) {
     return tempHash;
   }
 
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
-
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
-  }
-
-  const transferAsset = async () => { //transfer held Node
+  const transferNode = async () => { //transfer held Node
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     if(!window.web3.utils.isAddress(address)) {
@@ -126,7 +106,7 @@ export default function TransferNode(props) {
       .safeTransferFrom(
         props.addr,
         address,
-        nodeInfo.idxHash
+        nodeInfo.id
       )
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -216,7 +196,7 @@ export default function TransferNode(props) {
               </div>
           {!transactionActive && (
             <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => transferAsset()}>Transfer Node</Button>
+              <Button color="info" className="MLBGradient" onClick={() => transferNode()}>Transfer Node</Button>
             </div>
           )}
           {transactionActive && (
