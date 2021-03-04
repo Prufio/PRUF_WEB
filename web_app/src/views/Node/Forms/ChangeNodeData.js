@@ -11,6 +11,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
+import TextField from "@material-ui/core/TextField";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import { GroupAdd } from "@material-ui/icons";
@@ -19,7 +20,10 @@ const useStyles = makeStyles(styles);
 
 export default function ChangeNodeData(props) {
 
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+  if (!window.sentPacket) { window.sentPacket = {DBindex:1, name:"Boop", id:"71",ipfs:{
+    idHashFields: [["Artist","text"],["Series", "text"],["Piece x", "number"], ["Out of y", "number"]], ownerHashFields: [["Name", "text"], ["Password", "text"]], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+    }}
+  }//window.location.href = "/#/user/node-manager"; window.location.reload();}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
 
@@ -31,20 +35,15 @@ export default function ChangeNodeData(props) {
   const [first, setFirst] = React.useState("");
   const [middle, setMiddle] = React.useState("");
   const [last, setLast] = React.useState("");
-  const [ID, setID] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
-  const [loginFirst, setloginFirst] = React.useState("");
-  const [loginLast, setloginLast] = React.useState("");
-  const [loginID, setloginID] = React.useState("");
-  const [loginPassword, setloginPassword] = React.useState("");
+  const [ipfs,] = React.useState(JSON.parse(JSON.stringify(window.sentPacket.ipfs)) || {
+    idHashFields: [], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+  })
+  const [newIpfs, setNewIpfs] = React.useState(JSON.parse(JSON.stringify(window.sentPacket.ipfs)) || {
+    idHashFields: [], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+  });
 
-  const [loginFirstState, setloginFirstState] = React.useState("");
-  const [loginLastState, setloginLastState] = React.useState("");
-  const [loginIDState, setloginIDState] = React.useState("");
-  const [loginPasswordState, setloginPasswordState] = React.useState("");
-
-  const [assetInfo, ] = React.useState(window.sentPacket)
+  const [nodeInfo,] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
 
   const link = document.createElement('div')
 
@@ -53,101 +52,191 @@ export default function ChangeNodeData(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
+
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-    if (assetInfo === undefined || assetInfo === null) {
-      console.log("No asset found. Rerouting...")
-      window.location.href = "/#/user/home"
+    if (nodeInfo === undefined || nodeInfo === null) {
+      console.log("No node found. Rerouting...")
+      window.location.href = "/#/user/node-manager"
       window.location.reload()
     }
-    if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56" || assetInfo.statusNum === "70") {
-      swal({
-        title: "Asset not in correct status!",
-        text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
-        icon: "warning",
-        button: "Close",
-      }).then(()=>{
-        window.backIndex = assetInfo.dBIndex;
-        window.location.href = assetInfo.lastRef;
-      });
-    }
-    
-    /* else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
-      swal({
-        title: "Asset not in correct status!",
-        text: "This asset is in a lost or stolen status, please set asset to a non lost or stolen status before attempting to modify.",
-        icon: "warning",
-        button: "Close",
-      }).then(()=>{
-        window.backIndex = assetInfo.dBIndex;
-        window.location.href = assetInfo.lastRef;
-      });
-    } */
-  
+
   }, [])
 
   const goBack = () => {
-    window.backIndex = assetInfo.dBIndex;
-    window.location.href=assetInfo.lastRef;
+    window.backIndex = nodeInfo.dBIndex;
+    window.location.href = nodeInfo.lastRef;
   }
 
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
+  const uploadConfig = () => {
 
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
   }
 
-  const modifyRGT = async () => { //import held asset
+  const handleIdInput = (job, index, val) => {
+    let temp = JSON.parse(JSON.stringify(newIpfs))
+    let element = temp.idHashFields[index]
+    element.splice(job,1,val);
+    temp.idHashFields.splice(index,1,element);
+    setNewIpfs(temp)
+  }
 
-    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
-      if (loginFirst === "") {
-        setloginFirstState("error");
+  const handleOwnerInput = (job, index, val) => {
+    let temp = JSON.parse(JSON.stringify(newIpfs))
+    let element = JSON.parse(JSON.stringify(temp.ownerHashFields[index]))
+    element.splice(job,1,val);
+    temp.ownerHashFields.splice(index,1,element);
+    setNewIpfs(temp)
+  }
+
+  const handleLandingConfig = (job, val) => {
+    let temp = JSON.parse(JSON.stringify(newIpfs))
+    temp.landingConfig[job] = val
+    setNewIpfs(temp)
+  }
+
+  const generateNodeWorkspace = (obj) => {
+    const idFields = obj.idHashFields;
+    const ownerFields = obj.ownerHashFields;
+    const landingConfig = obj.landingConfig;
+
+    const generateIdFields = () => {
+      let component = [<h3>Token ID Inputs</h3>, <hr></hr>];
+      for (let i = 0; i < idFields.length; i++) {
+        component.push(
+          <>
+          <h4>{"Input "+(i+1)}</h4>
+          Title: {"  "}<TextField
+            labelText="input title"
+            //defualtValue={idFields[i][0]}
+            value={idFields[i][0]}
+            id={"title" + i}
+            onChange ={ (e) => {
+              handleIdInput(0, i, e.target.value.trim())
+            }}
+          /> Type: {"  "}
+          <TextField
+            labelText="input type"
+            //defualtValue={idFields[i][1]}
+            value={idFields[i][1]}
+            id={"type" + i}
+            onChange ={ (e) => {
+              handleIdInput(1, i, e.target.value.trim())
+            }}
+          /><br/>
+          Minter Sees: {"  "}
+            <CustomInput
+              labelText={idFields[i][0]}
+              //type={idFields[i][1]}
+              id={"example" + i}
+              inputProps={{
+                type: idFields[i][1]
+              }}
+            />
+            <br/>
+            <hr/>
+        </>
+        );
       }
-      if (loginLast === "") {
-        setloginLastState("error");
-      }
-      if (loginID === "") {
-        setloginIDState("error");
-      }
-      if (loginPassword === "") {
-        setloginPasswordState("error");
-      }
-      return;
+      return component;
     }
 
-    var rgtHashRaw;
+    const generateOwnerFields = () => {
+      let component = [<h3>Owner Inputs</h3>, <hr></hr>];
+      for (let i = 0; i < ownerFields.length; i++) {
+        component.push(
+          <>
+          <h4>{"Input "+(i+1)}</h4>
+            Title: {"  "}<TextField
+              labelText="input title"
+              //defualtValue={ownerFields[i][0]}
+              value={ownerFields[i][0]}
+              id={"title" + i}
+              onChange ={ (e) => {
+                handleOwnerInput(0, i, e.target.value.trim())
+              }}
+            /> Type: {"  "}
+            <TextField
+              labelText="input type"
+              //defaultValue={ownerFields[i][1]}
+              value={ownerFields[i][1]}
+              id={"type" + i}
+              onChange ={ (e) => {
+                handleOwnerInput(0, i, e.target.value.trim())
+              }}
+            /><br/>
+            Minter Sees: {"  "}
+            <CustomInput
+              labelText={ownerFields[i][0]}
+              id={"example" + i}
+              inputProps={{
+                type: ownerFields[i][1]
+              }}
+            />
+            <br/>
+            <hr/>
+          </>
+        );
+      }
+      return component;
+    }
 
-    rgtHashRaw = window.web3.utils.soliditySha3(
-      String(first).replace(/\s/g, ''),
-      String(middle).replace(/\s/g, ''),
-      String(last).replace(/\s/g, ''),
-      String(ID).replace(/\s/g, ''),
-      String(password).replace(/\s/g, ''),
-    )
+    return (
+      <>
+        <CardHeader icon>
+          <CardIcon className="headerIconBack">
+            <GroupAdd />
+          </CardIcon>
+          <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+          <h4 className={classes.cardIconTitle}>Configure Node</h4>
+        </CardHeader>
+        <CardBody>
+          <form>
+            <h4>Node Selected: {nodeInfo.name}</h4>
+              {idFields.length > 0 && (
+                <>
+                  {generateIdFields()}
+                </>
+              )}
+              {ownerFields.length > 0 && (
+                <>
+                {generateOwnerFields()}
+                </>
+              )}
+              {landingConfig && (
+                <CustomInput
+                labelText="landing url"
+                defualtValue={JSON.stringify(landingConfig)}
+                id="landingUrl"
+                inputProps={{
+                  onChange: event => {
+                    handleLandingConfig("url", event.target.value.trim())
+                  },
+                }}
+              />
+              )}
+            {!transactionActive && (
+              <div className="MLBGradientSubmit">
+                <Button color="info" className="MLBGradient" onClick={() => uploadConfig()}>Submit New Owner Information</Button>
+              </div>
+            )}
+            {transactionActive && (
+              <h3>
+                Changing Owner Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              </h3>
+            )}
+          </form>
+        </CardBody>
+        </>)
+  }
 
-    var rgtHash = window.web3.utils.soliditySha3(assetInfo.idxHash, rgtHashRaw);
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+  const updateConfigData = async () => { //import held asset
 
     let tempTxHash;
     setShowHelp(false);
@@ -157,10 +246,10 @@ export default function ChangeNodeData(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.NP_NC.methods
-      ._changeRgt(
-        assetInfo.idxHash,
-        rgtHash,
+    await window.contracts.AC_MGR.methods
+      .updateACipfs(
+        newIpfs,
+        nodeInfo.id,
       )
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -197,14 +286,13 @@ export default function ChangeNodeData(props) {
         link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
         swal({
-          title: "Owner Change Successful!",
+          title: "Node Configuration Saved!",
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
-          //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
-          window.location.href = assetInfo.lastRef;
+        }).then(() => {
+          window.backIndex = nodeInfo.dBIndex;
+          window.location.href = nodeInfo.lastRef;
         })
       });
 
@@ -212,185 +300,7 @@ export default function ChangeNodeData(props) {
 
   return (
     <Card>
-      <CardHeader icon>
-        <CardIcon className="headerIconBack">
-          <GroupAdd />
-        </CardIcon>
-        <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
-        <h4 className={classes.cardIconTitle}>Change Owner Information</h4>
-      </CardHeader>
-      <CardBody>
-        <form>
-          <h4>Asset Selected: {assetInfo.name}</h4>
-          <>
-            {!transactionActive && (
-              <>
-                <CustomInput
-                  success={loginFirstState === "success"}
-                  error={loginFirstState === "error"}
-                  labelText="First Name *"
-                  id="firstName"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    onChange: event => {
-                      setFirst(event.target.value.trim())
-                      if (event.target.value !== "") {
-                        setloginFirstState("success");
-                      } else {
-                        setloginFirstState("error");
-                      }
-                      setloginFirst(event.target.value);
-                    },
-                  }}
-                />
-                <CustomInput
-                  labelText="Middle Name"
-                  id="middleName"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    onChange: event => {
-                      setMiddle(event.target.value.trim())
-                    },
-                  }}
-                />
-                <CustomInput
-                  success={loginLastState === "success"}
-                  error={loginLastState === "error"}
-                  labelText="Last Name *"
-                  id="lastName"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    onChange: event => {
-                      setLast(event.target.value.trim())
-                      if (event.target.value !== "") {
-                        setloginLastState("success");
-                      } else {
-                        setloginLastState("error");
-                      }
-                      setloginLast(event.target.value);
-                    },
-                  }}
-                />
-                <CustomInput
-                  success={loginIDState === "success"}
-                  error={loginIDState === "error"}
-                  labelText="ID Number *"
-                  id="idNumber"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    onChange: event => {
-                      setID(event.target.value.trim())
-                      if (event.target.value !== "") {
-                        setloginIDState("success");
-                      } else {
-                        setloginIDState("error");
-                      }
-                      setloginID(event.target.value);
-                    },
-                  }}
-                />
-                <CustomInput
-                  success={loginPasswordState === "success"}
-                  error={loginPasswordState === "error"}
-                  labelText="Password *"
-                  id="ownerpassword"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    type: "password",
-                    onChange: event => {
-                      setPassword(event.target.value.trim())
-                      if (event.target.value !== "") {
-                        setloginPasswordState("success");
-                      } else {
-                        setloginPasswordState("error");
-                      }
-                      setloginPassword(event.target.value);
-                    },
-                  }}
-                />
-                <div className={classes.formCategory}>
-                  <small>*</small> Required fields
-                    </div>
-              </>
-            )}
-            {transactionActive && (
-              <>
-                <CustomInput
-                  labelText={first}
-                  id="first"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                />
-                <CustomInput
-                  labelText={middle}
-                  id="middle"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                />
-                <CustomInput
-                  labelText={last}
-                  id="last"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                />
-                <CustomInput
-                  labelText={ID}
-                  id="ID"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                />
-                <CustomInput
-                  labelText={password}
-                  id="ownerpassword"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    type: "password",
-                    disabled: true
-                  }}
-                />
-              </>
-            )}
-          </>
-          {!transactionActive && (
-            <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => modifyRGT()}>Submit New Owner Information</Button>
-            </div>
-          )}
-          {transactionActive && (
-            <h3>
-              Changing Owner Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-            </h3>
-          )}
-        </form>
-      </CardBody>
+      {generateNodeWorkspace(newIpfs)}
     </Card>
   );
 }
