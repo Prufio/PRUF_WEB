@@ -17,7 +17,7 @@ import { GroupAdd } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
-export default function ChangeNodeData(props) {
+export default function ChangeNodeCosts(props) {
 
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
