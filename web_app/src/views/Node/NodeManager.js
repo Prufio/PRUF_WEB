@@ -465,7 +465,6 @@ export default function NodeManager(props) {
                                     Change Name
                             </MenuItem>
                                   <MenuItem
-                                    disabled
                                     classes={{
                                       root: classes.selectMenuItem,
                                       selected: classes.selectMenuItemSelected
