@@ -37,7 +37,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft, KeyboardArrowRight, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 import swal from "sweetalert";
@@ -2080,21 +2080,21 @@ export default function Dashboard(props) {
               </Select>
               <div className="dashboardFooterPage">
                 {numOfPages > 0 && pageNum > 1 && (
-                  <><Button onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
+                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum - 1) }}><KeyboardArrowLeft/></Button>
                 )}
                 {numOfPages > 0 && pageNum === 1 && (
-                  <><Button disabled onClick={() => { newPageNum(pageNum - 1) }}>{"<-"}</Button></>
+                  <Button className="pageButton" disabled icon onClick={() => { newPageNum(pageNum - 1) }}><KeyboardArrowLeft/></Button>
                 )}
 
                 {numOfPages > 0 && (
-                  <h4>Page {pageNum} out of {numOfPages}</h4>
+                  <h4>Page {pageNum} / {numOfPages}</h4>
                 )}
 
                 {numOfPages > 0 && pageNum !== numOfPages && (
-                  <><Button onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
+                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum + 1) }}><KeyboardArrowRight/></Button>
                 )}
                 {numOfPages > 0 && pageNum === numOfPages && (
-                  <><Button disabled onClick={() => { newPageNum(pageNum + 1) }}>{"->"}</Button></>
+                  <Button className="pageButton" icon disabled onClick={() => { newPageNum(pageNum + 1) }}><KeyboardArrowRight/></Button>
                 )}
               </div>
         </Card>

@@ -2013,14 +2013,16 @@ export default function CreateNode(props) {
     <Card>
       <CardHeader icon>
         <CardIcon className="headerIconBack">
-          <GroupAdd />
+          <span class="material-icons">
+            dashboard_customize
+</span>
         </CardIcon>
         <Button color="info" className="MLBGradient" onClick={() => window.location.href = "/#/user/node-manager"}>Go Back</Button>
         <h4 className={classes.cardIconTitle}>Configure New Node</h4>
       </CardHeader>
       <CardBody>
         <form>
-        <h5>Current Node Price: {props.currentACPrice}</h5>
+          <h5>Current Node Price: {props.currentACPrice}</h5>
           <>
             {!transactionActive && (
               <>

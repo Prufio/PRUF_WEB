@@ -1036,3 +1036,9 @@ cursor:pointer;
   height: 100px !important;
   position: absolute !important;
 }
+
+.pageButton {
+  background-color: transparent !important;
+  color: black !important;
+  box-shadow: none !important;
+}
