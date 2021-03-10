@@ -37,7 +37,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { DashboardOutlined, KeyboardArrowLeft, KeyboardArrowRight, Settings } from "@material-ui/icons";
+import { ArrowBackIos, ArrowForwardIos, DashboardOutlined, KeyboardArrowLeft, KeyboardArrowRight, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 import swal from "sweetalert";
@@ -2080,10 +2080,10 @@ export default function Dashboard(props) {
               </Select>
               <div className="dashboardFooterPage">
                 {numOfPages > 0 && pageNum > 1 && (
-                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum - 1) }}><KeyboardArrowLeft/></Button>
+                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum - 1) }}><ArrowBackIos/></Button>
                 )}
                 {numOfPages > 0 && pageNum === 1 && (
-                  <Button className="pageButton" disabled icon onClick={() => { newPageNum(pageNum - 1) }}><KeyboardArrowLeft/></Button>
+                  <Button className="pageButton" disabled icon onClick={() => { newPageNum(pageNum - 1) }}><ArrowBackIos/></Button>
                 )}
 
                 {numOfPages > 0 && (
@@ -2091,10 +2091,10 @@ export default function Dashboard(props) {
                 )}
 
                 {numOfPages > 0 && pageNum !== numOfPages && (
-                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum + 1) }}><KeyboardArrowRight/></Button>
+                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum + 1) }}><ArrowForwardIos/></Button>
                 )}
                 {numOfPages > 0 && pageNum === numOfPages && (
-                  <Button className="pageButton" icon disabled onClick={() => { newPageNum(pageNum + 1) }}><KeyboardArrowRight/></Button>
+                  <Button className="pageButton" icon disabled onClick={() => { newPageNum(pageNum + 1) }}><ArrowForwardIos/></Button>
                 )}
               </div>
         </Card>
