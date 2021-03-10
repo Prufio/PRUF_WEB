@@ -75,7 +75,7 @@ export default function FixedPlugin(props) {
               <li className="adjustments-line">
                 <a className="switch-trigger active-color">
                   <div className="badge-colors text-center">
-                    {bgImage === TracesBW && (
+                    {bgImage === TracesBW && showImage && (
                       <span
                         className={
                           props.bgColor === "black"
@@ -90,7 +90,22 @@ export default function FixedPlugin(props) {
                         }}
                       />
                     )}
-                    {bgImage === BloomBW && (
+                    {bgImage === TracesBW && !showImage && (
+                      <span
+                        className={
+                          props.bgColor === "black"
+                            ? "badge filter badge-black active"
+                            : "badge filter badge-black"
+                        }
+                        data-color="orange"
+                        onClick={() => {
+                          props.handleBgColorClick("black");
+                          // props.handleImageClick(TracesWB);
+                          // setBgImage(TracesWB);
+                        }}
+                      />
+                    )}
+                    {bgImage === BloomBW && showImage && (
                       <span
                         className={
                           props.bgColor === "black"
@@ -102,6 +117,21 @@ export default function FixedPlugin(props) {
                           props.handleBgColorClick("black");
                           props.handleImageClick(BloomWB);
                           setBgImage(BloomWB);
+                        }}
+                      />
+                    )}
+                    {bgImage === BloomBW && !showImage && (
+                      <span
+                        className={
+                          props.bgColor === "black"
+                            ? "badge filter badge-black active"
+                            : "badge filter badge-black"
+                        }
+                        data-color="orange"
+                        onClick={() => {
+                          props.handleBgColorClick("black");
+                          // props.handleImageClick(BloomWB);
+                          // setBgImage(BloomWB);
                         }}
                       />
                     )}
@@ -118,7 +148,7 @@ export default function FixedPlugin(props) {
                         }}
                       />
                     )}
-                    {bgImage === BloomWB && (
+                    {bgImage === BloomWB && showImage && (
                       <span
                         className={
                           props.bgColor === "white"
@@ -133,7 +163,22 @@ export default function FixedPlugin(props) {
                         }}
                       />
                     )}
-                    {bgImage === TracesWB && (
+                    {bgImage === BloomWB && !showImage && (
+                      <span
+                        className={
+                          props.bgColor === "white"
+                            ? "badge filter badge-white active"
+                            : "badge filter badge-white"
+                        }
+                        data-color="orange"
+                        onClick={() => {
+                          props.handleBgColorClick("white");
+                          // props.handleImageClick(BloomBW);
+                          // setBgImage(BloomBW);
+                        }}
+                      />
+                    )}
+                    {bgImage === TracesWB && showImage && (
                       <span
                         className={
                           props.bgColor === "white"
@@ -145,6 +190,21 @@ export default function FixedPlugin(props) {
                           props.handleBgColorClick("white");
                           props.handleImageClick(TracesBW);
                           setBgImage(TracesBW);
+                        }}
+                      />
+                    )}
+                    {bgImage === TracesWB && !showImage && (
+                      <span
+                        className={
+                          props.bgColor === "white"
+                            ? "badge filter badge-white active"
+                            : "badge filter badge-white"
+                        }
+                        data-color="orange"
+                        onClick={() => {
+                          props.handleBgColorClick("white");
+                          // props.handleImageClick(TracesBW);
+                          // setBgImage(TracesBW);
                         }}
                       />
                     )}
@@ -161,7 +221,7 @@ export default function FixedPlugin(props) {
                         }}
                       />
                     )}
-                    {bgImage === TracesBW && (
+                    {bgImage === TracesBW && showImage && (
                       <span
                         className={
                           props.bgColor === "darkBlue"
@@ -176,7 +236,22 @@ export default function FixedPlugin(props) {
                         }}
                       />
                     )}
-                    {bgImage === BloomBW && (
+                    {bgImage === TracesBW && !showImage && (
+                      <span
+                        className={
+                          props.bgColor === "darkBlue"
+                            ? "badge filter badge-darkBlue active"
+                            : "badge filter badge-darkBlue"
+                        }
+                        data-color="orange"
+                        onClick={() => {
+                          props.handleBgColorClick("darkBlue");
+                          // props.handleImageClick(TracesWB);
+                          // setBgImage(TracesWB);
+                        }}
+                      />
+                    )}
+                    {bgImage === BloomBW && showImage && (
                       <span
                         className={
                           props.bgColor === "darkBlue"
@@ -188,6 +263,21 @@ export default function FixedPlugin(props) {
                           props.handleBgColorClick("darkBlue");
                           props.handleImageClick(BloomWB);
                           setBgImage(BloomWB);
+                        }}
+                      />
+                    )}
+                    {bgImage === BloomBW && !showImage && (
+                      <span
+                        className={
+                          props.bgColor === "darkBlue"
+                            ? "badge filter badge-darkBlue active"
+                            : "badge filter badge-darkBlue"
+                        }
+                        data-color="orange"
+                        onClick={() => {
+                          props.handleBgColorClick("darkBlue");
+                          // props.handleImageClick(BloomWB);
+                          // setBgImage(BloomWB);
                         }}
                       />
                     )}

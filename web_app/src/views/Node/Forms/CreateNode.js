@@ -2022,7 +2022,7 @@ export default function CreateNode(props) {
       </CardHeader>
       <CardBody>
         <form>
-          <h5>Current Node Price: {props.currentACPrice}</h5>
+          <h5>Current Node Price: ü{props.currentACPrice}</h5>
           <>
             {!transactionActive && (
               <>
