@@ -42,7 +42,8 @@ const accordionStyle = theme => ({
     }
   },
   expansionPanelSummaryContent: {
-    margin: "0 !important"
+    margin: "0px !important"
+
   },
   expansionPanelSummaryExpandIcon: {
     [theme.breakpoints.up("md")]: {

@@ -1021,3 +1021,18 @@ cursor:pointer;
 .nodeOptions {
   width: 100px;
 }
+
+.pricingCard {
+  padding: 10px !important;
+}
+
+.beneficiaryAddressCheckbox {
+  display: flex !important;
+  flex-direction: row !important; 
+}
+
+.standardSelected {
+  width: 100px !important;
+  height: 100px !important;
+  position: absolute !important;
+}

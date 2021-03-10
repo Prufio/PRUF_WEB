@@ -160,7 +160,7 @@ export default function NodeManager(props) {
       setTimeout(() => {
         console.log(nodeData)
         window.replaceAssetData = {nodeList: nodeData}
-        //nodeData.push(["~", "~", "~", "~"])
+        nodeData.push(["~", "~", "~", "~"])
         setNodeData(nodeData)
       },300)
     }
@@ -566,7 +566,7 @@ export default function NodeManager(props) {
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                          <small>0 PRüF</small>
+                        0 <small>PRüF</small>
                         </h3>
                       </CardHeader>
                       <CardFooter stats>
@@ -594,7 +594,7 @@ export default function NodeManager(props) {
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                          <small>0 PRüF</small>
+                        0 <small>PRüF</small>
                         </h3>
                       </CardHeader>
                       <CardFooter stats>

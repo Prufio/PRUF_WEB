@@ -154,7 +154,7 @@ export default function Search(props) {
   }, [])
 
   React.useEffect(() => {
-    if (window.contracts !== undefined && query) { retrieveRecordQR(query); setQuery(null); }
+    if (window.contracts !== undefined && query) { retrieveRecord(query); setQuery(null); }
   }, [window.contracts, query])
 
 
@@ -2208,7 +2208,7 @@ export default function Search(props) {
       setScanQR(!scanQR);
       let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
       console.log("Here is what we got in the scanner: ", scanQuery)
-      retrieveRecordQR(scanQuery);
+      retrieveRecord(scanQuery, true);
     }
     else {
       swal({
@@ -2335,199 +2335,133 @@ export default function Search(props) {
     return;
   }
 
-  const retrieveRecord = async () => {
-    if (props.ps) {
-      console.log(props.ps)
-      props.ps.element.scrollTop = 0
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
+  // const retrieveRecord = async () => {
+  //   else {
+  //     setRetrieving(true)
+  //     console.log("idxHash", idxHash);
+  //     console.log("addr: ", props.addr);
 
-    }
-    if (!IDXRawInput) {
-      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
+  //     await window.contracts.STOR.methods
+  //       .retrieveShortRecord(idxHash)
+  //       .call(
+  //         function (_error, _result) {
+  //           if (_error) {
+  //             setRetrieving(false);
+  //             setError(_error);
+  //             setResult("");
+  //             setIDXRaw("")
+  //             setIDXRawInput(false)
+  //             swal({
+  //               title: "Asset not found!",
+  //               icon: "warning",
+  //               button: "Close",
+  //             });
+  //           }
+  //           else {
 
-        if (loginType === "") {
-          setloginTypeState("error");
-        }
-        if (loginManufacturer === "") {
-          setloginManufacturerState("error");
-        }
-        if (loginModel === "") {
-          setloginModelState("error");
-        }
-        if (loginSerial === "") {
-          setloginSerialState("error");
-        }
-        return;
-      }
-    }
+  //             /* @dev
+  //             0 rec.assetStatus,
+  //             1 rec.forceModCount,
+  //             2 rec.assetClass,
+  //             3 rec.countDown,
+  //             4 rec.countDownStart,
+  //             5 rec.Ipfs1,
+  //             6 rec.Ipfs2,
+  //             7 rec.numberOfTransfers 
+  //             */
 
-    if (IDXRawInput) {
-      if (loginIDX === "") {
-        setloginIDXState("error");
-        return;
-      }
-    }
-
-    console.log("in rr")
-    let ipfsHash;
-    let tempResult;
-    let idxHash;
-
-    if (IDXRawInput === true) {
-      idxHash = IDXRaw
-    }
-
-
-    else if (IDXRawInput === false) {
-      idxHash = window.web3.utils.soliditySha3(
-        String(type).replace(/\s/g, ''),
-        String(manufacturer).replace(/\s/g, ''),
-        String(model).replace(/\s/g, ''),
-        String(serial).replace(/\s/g, ''),
-      )
-    }
-
-    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
-
-    if (!doesExist) {
-      swal({
-        title: "Asset does not exist!",
-        icon: "warning",
-        button: "Close",
-      })
-      setIDXRaw("")
-      setIDXRawInput(false)
-    }
-    else {
-      setRetrieving(true)
-      console.log("idxHash", idxHash);
-      console.log("addr: ", props.addr);
-
-      await window.contracts.STOR.methods
-        .retrieveShortRecord(idxHash)
-        .call(
-          function (_error, _result) {
-            if (_error) {
-              setRetrieving(false);
-              setError(_error);
-              setResult("");
-              setIDXRaw("")
-              setIDXRawInput(false)
-              swal({
-                title: "Asset not found!",
-                icon: "warning",
-                button: "Close",
-              });
-            }
-            else {
-
-                /* @dev
-                0 rec.assetStatus,
-                1 rec.forceModCount,
-                2 rec.assetClass,
-                3 rec.countDown,
-                4 rec.countDownStart,
-                5 rec.Ipfs1,
-                6 rec.Ipfs2,
-                7 rec.numberOfTransfers 
-                */
-
-              setIDXRaw("")
-              setIDXRawInput(false)
-              setloginIDXState("")
-              setManufacturer("")
-              setloginManufacturer("")
-              setloginManufacturerState("")
-              setType("")
-              setloginType("")
-              setloginTypeState("")
-              setModel("")
-              setloginModel("")
-              setloginModelState("")
-              setSerial("")
-              setloginSerial("")
-              setloginSerialState("")
-              console.log("rr conf");
-              setResult(Object.values(_result));
-              setError("");
-              tempResult = Object.values(_result);
-              if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-              console.log("ipfs data in promise", ipfsHash)
-              if (Object.values(_result)[6] > 0) {
-                console.log("Getting ipfs2 set up...")
-                let knownUrl = "https://ipfs.io/ipfs/";
-                let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
-                let fullUrl = knownUrl + hash;
-                console.log(fullUrl);
-                setInscription(fullUrl)
-              }
-            }
-          });
+  //             setIDXRaw("")
+  //             setIDXRawInput(false)
+  //             setloginIDXState("")
+  //             setManufacturer("")
+  //             setloginManufacturer("")
+  //             setloginManufacturerState("")
+  //             setType("")
+  //             setloginType("")
+  //             setloginTypeState("")
+  //             setModel("")
+  //             setloginModel("")
+  //             setloginModelState("")
+  //             setSerial("")
+  //             setloginSerial("")
+  //             setloginSerialState("")
+  //             console.log("rr conf");
+  //             setResult(Object.values(_result));
+  //             setError("");
+  //             tempResult = Object.values(_result);
+  //             if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+  //             console.log("ipfs data in promise", ipfsHash)
+  //             if (Object.values(_result)[6] > 0) {
+  //               console.log("Getting ipfs2 set up...")
+  //               let knownUrl = "https://ipfs.io/ipfs/";
+  //               let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
+  //               let fullUrl = knownUrl + hash;
+  //               console.log(fullUrl);
+  //               setInscription(fullUrl)
+  //             }
+  //           }
+  //         });
 
 
-      await window.contracts.STOR.methods.getPriceData(idxHash)
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR")
-          } else {
-            if (Object.values(_result)[1] !== "2") {
-              return
-            }
-            else {
-              setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
-              setCurrency("ü")
-            }
-          }
-        })
+  //     await window.contracts.STOR.methods.getPriceData(idxHash)
+  //       .call((_error, _result) => {
+  //         if (_error) {
+  //           console.log("IN ERROR IN ERROR IN ERROR")
+  //         } else {
+  //           if (Object.values(_result)[1] !== "2") {
+  //             return
+  //           }
+  //           else {
+  //             setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
+  //             setCurrency("ü")
+  //           }
+  //         }
+  //       })
 
-      setURL(String(baseURL) + String(idxHash))
+  //     setURL(String(baseURL) + String(idxHash))
 
-      window.assetClass = tempResult[2]
-      let assetClassName = await window.utils.getACName(tempResult[2])
+  //     window.assetClass = tempResult[2]
+  //     let assetClassName = await window.utils.getACName(tempResult[2])
 
-      window.assetInfo = {
-        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-        assetClass: tempResult[2],
-        status: await window.utils.getStatusString(String(tempResult[0])),
-        statusNum: String(tempResult[0]),
-        idx: idxHash
-      }
+  //     window.assetInfo = {
+  //       assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+  //       assetClass: tempResult[2],
+  //       status: await window.utils.getStatusString(String(tempResult[0])),
+  //       statusNum: String(tempResult[0]),
+  //       idx: idxHash
+  //     }
 
-      await window.utils.resolveACFromID(tempResult[2])
-      await getACData("id", window.assetClass)
+  //     await window.utils.resolveACFromID(tempResult[2])
+  //     await getACData("id", window.assetClass)
 
-      console.log(window.authLevel);
+  //     console.log(window.authLevel);
 
-      await getIPFSJSONObject(ipfsHash);
-      setAuthLevel(window.authLevel);
-      setScanQR(false);
-      setAsset({
-        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-        assetClass: tempResult[2],
-        status: window.assetInfo.status,
-        statusNum: String(tempResult[0]),
-        idxHash: idxHash,
-      })
+  //     await getIPFSJSONObject(ipfsHash);
+  //     setAuthLevel(window.authLevel);
+  //     setScanQR(false);
+  //     setAsset({
+  //       assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+  //       assetClass: tempResult[2],
+  //       status: window.assetInfo.status,
+  //       statusNum: String(tempResult[0]),
+  //       idxHash: idxHash,
+  //     })
 
-      if (tempResult[0] === "60") {
-        setRecycled(true)
-      }
-      else if (tempResult[0] !== "60") {
-        await window.utils.checkHoldsToken("asset", idxHash, props.addr)
-          .then((e) => {
-            console.log("is Owner Of? ", e)
-            if (e) {
-              getDBIndexOf(idxHash)
-              setOwnerOf(true)
-            }
-          })
-      }
-    }
-  }
+  //     if (tempResult[0] === "60") {
+  //       setRecycled(true)
+  //     }
+  //     else if (tempResult[0] !== "60") {
+  //       await window.utils.checkHoldsToken("asset", idxHash, props.addr)
+  //         .then((e) => {
+  //           console.log("is Owner Of? ", e)
+  //           if (e) {
+  //             getDBIndexOf(idxHash)
+  //             setOwnerOf(true)
+  //           }
+  //         })
+  //     }
+  //   }
+  // }
 
   const generateSubCatList = (arr) => {
     let subCatSelection = [
@@ -2591,19 +2525,7 @@ export default function Search(props) {
 
   }
 
-  const retrieveRecordQR = async (query) => {
-
-    let doesExist = await window.utils.checkAssetExistsBare(query);
-
-    if (!doesExist) {
-      swal({
-        title: "Asset Asset does not exist!",
-        icon: "warning",
-        button: "Close",
-      })
-      return setScanQR(false)
-    }
-
+  const retrieveRecord = async (query, isScanQR) => {
     if (props.ps) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
@@ -2614,109 +2536,166 @@ export default function Search(props) {
       document.scrollingElement.scrollTop = 0;
 
     }
-    setRetrieving(true)
-    console.log("in rrqr")
+
+    if (IDXRawInput && !isScanQR) {
+      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
+
+        if (loginType === "") {
+          setloginTypeState("error");
+        }
+        if (loginManufacturer === "") {
+          setloginManufacturerState("error");
+        }
+        if (loginModel === "") {
+          setloginModelState("error");
+        }
+        if (loginSerial === "") {
+          setloginSerialState("error");
+        }
+        console.log("error")
+        return;
+      }
+    }
     let ipfsHash;
     let tempResult;
-    let idxHash = query;
+    let idxHash;
 
-    console.log("idxHash", idxHash);
-    console.log("addr: ", props.addr);
+    if (!IDXRawInput && !isScanQR) {
+      if (loginIDX === "") {
+        console.log("error2")
+        setloginIDXState("error");
+        return;
+      }
+      else {
+        idxHash = IDXRaw
+      }
+    }
 
-    await window.contracts.STOR.methods
-      .retrieveShortRecord(idxHash)
-      .call(
-        function (_error, _result) {
+    else if (IDXRawInput === true && !isScanQR) {
+      idxHash = window.web3.utils.soliditySha3(
+        String(type).replace(/\s/g, ''),
+        String(manufacturer).replace(/\s/g, ''),
+        String(model).replace(/\s/g, ''),
+        String(serial).replace(/\s/g, ''),
+      )
+    }
+
+    if (isScanQR) {
+      idxHash = query
+    }
+
+    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+
+    if (!doesExist) {
+      swal({
+        title: "Asset does not exist!",
+        icon: "warning",
+        button: "Close",
+      })
+      setIDXRaw("")
+      setIDXRawInput(false)
+    }
+    else {
+      setRetrieving(true)
+      console.log("in rr")
+
+      console.log("idxHash", idxHash);
+      console.log("addr: ", props.addr);
+
+      await window.contracts.STOR.methods
+        .retrieveShortRecord(idxHash)
+        .call(
+          function (_error, _result) {
+            if (_error) {
+              console.log(_error);
+              setError(_error);
+              setResult("");
+              setScanQR(false);
+              setRetrieving(false);
+              swal({
+                title: "Asset not found!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            else {
+              setScanQR(false);
+              console.log("rr conf");
+              setResult(Object.values(_result));
+              setError("");
+              tempResult = Object.values(_result);
+              window.printObj = Object.values(_result);
+              if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+              console.log("ipfs data in promise", ipfsHash);
+              if (Object.values(_result)[6] > 0); {
+                console.log("Getting ipfs2 set up...");
+                let knownUrl = "https://ipfs.io/ipfs/";
+                let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
+                let fullUrl = knownUrl + hash;
+                console.log(fullUrl);
+                setInscription(fullUrl);
+              }
+            }
+          });
+
+      setURL(String(baseURL) + String(idxHash))
+
+
+      await window.contracts.STOR.methods.getPriceData(idxHash)
+        .call((_error, _result) => {
           if (_error) {
-            console.log(_error);
-            setError(_error);
-            setResult("");
-            setScanQR(false);
-            setRetrieving(false);
-            swal({
-              title: "Asset not found!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          else {
-            setScanQR(false);
-            console.log("rrqr conf");
-            setResult(Object.values(_result));
-            setError("");
-            tempResult = Object.values(_result);
-            window.printObj = Object.values(_result);
-            if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-            console.log("ipfs data in promise", ipfsHash);
-            if (Object.values(_result)[6] > 0); {
-              console.log("Getting ipfs2 set up...");
-              let knownUrl = "https://ipfs.io/ipfs/";
-              let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
-              let fullUrl = knownUrl + hash;
-              console.log(fullUrl);
-              setInscription(fullUrl);
+            console.log("IN ERROR IN ERROR IN ERROR")
+          } else {
+            if (Object.values(_result)[1] !== "2") {
+              return
+            }
+            else {
+              setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
+              setCurrency("ü")
             }
           }
-        });
-
-    setURL(String(baseURL) + String(idxHash))
+        })
 
 
-    await window.contracts.STOR.methods.getPriceData(idxHash)
-      .call((_error, _result) => {
-        if (_error) {
-          console.log("IN ERROR IN ERROR IN ERROR")
-        } else {
-          if (Object.values(_result)[1] !== "2") {
-            return
-          }
-          else {
-            setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
-            setCurrency("ü")
-          }
-        }
+      window.assetClass = tempResult[2]
+      let assetClassName = await window.utils.getACName(tempResult[2])
+
+      window.assetInfo = {
+        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+        assetClass: tempResult[2],
+        status: await window.utils.getStatusString(String(tempResult[0])),
+        statusNum: String(tempResult[0]),
+        idx: idxHash
+      }
+
+      await window.utils.resolveACFromID(tempResult[2])
+      await getACData("id", window.assetClass)
+
+      console.log(window.authLevel);
+
+      await getIPFSJSONObject(ipfsHash);
+      setAuthLevel(window.authLevel);
+      setAsset({
+        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+        assetClass: tempResult[2],
+        status: window.assetInfo.status,
+        statusNum: String(tempResult[0]),
+        idxHash: idxHash,
       })
 
-
-    window.assetClass = tempResult[2]
-    let assetClassName = await window.utils.getACName(tempResult[2])
-
-    window.assetInfo = {
-      assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-      assetClass: tempResult[2],
-      status: await window.utils.getStatusString(String(tempResult[0])),
-      statusNum: String(tempResult[0]),
-      idx: idxHash
+      if (tempResult[0] === "60") {
+        setRecycled(true)
+      }
+      else if (tempResult[0] !== "60") {
+        await window.utils.checkHoldsToken("asset", idxHash, props.addr)
+          .then((e) => {
+            console.log("is Owner Of? ", e)
+            if (e) {
+              setOwnerOf(true)
+            }
+          })
+      }
     }
-
-    await window.utils.resolveACFromID(tempResult[2])
-    await getACData("id", window.assetClass)
-
-    console.log(window.authLevel);
-
-    await getIPFSJSONObject(ipfsHash);
-    setAuthLevel(window.authLevel);
-    setAsset({
-      assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-      assetClass: tempResult[2],
-      status: window.assetInfo.status,
-      statusNum: String(tempResult[0]),
-      idxHash: idxHash,
-    })
-
-    if (tempResult[0] === "60") {
-      setRecycled(true)
-    }
-    else if (tempResult[0] !== "60") {
-      await window.utils.checkHoldsToken("asset", idxHash, props.addr)
-        .then((e) => {
-          console.log("is Owner Of? ", e)
-          if (e) {
-            setOwnerOf(true)
-          }
-        })
-    }
-
 
   }
 
@@ -2784,7 +2763,7 @@ export default function Search(props) {
               </CardHeader>
               <CardBody>
                 <form>
-                  {IDXRawInput === false && !retrieving && (
+                  {IDXRawInput === true && !retrieving && (
                     <>
                       <CustomInput
                         success={loginManufacturerState === "success"}
@@ -2871,7 +2850,7 @@ export default function Search(props) {
               </div>
                     </>
                   )}
-                  {IDXRawInput === false && retrieving && (
+                  {IDXRawInput === true && retrieving && (
                     <>
                       <CustomInput
                         labelText={manufacturer}
@@ -2915,30 +2894,7 @@ export default function Search(props) {
                       />
                     </>
                   )}
-                  {!retrieving && (
-                    <div className={classes.checkboxAndRadio}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            tabIndex={-1}
-                            onClick={() => setIDXRawInput(!IDXRawInput)}
-                            checkedIcon={<Check className={classes.checkedIcon} />}
-                            icon={<Check className={classes.uncheckedIcon} />}
-                            classes={{
-                              checked: classes.checked,
-                              root: classes.checkRoot
-                            }}
-                          />
-                        }
-                        classes={{
-                          label: classes.label,
-                          root: classes.labelRoot
-                        }}
-                        label="Search via asset ID"
-                      />
-                    </div>
-                  )}
-                  {IDXRawInput === true && !retrieving && (
+                  {IDXRawInput === false && !retrieving && (
                     <>
                       <CustomInput
                         success={loginIDXState === "success"}
@@ -2965,7 +2921,7 @@ export default function Search(props) {
                   </div>
                     </>
                   )}
-                  {IDXRawInput === true && retrieving && (
+                  {IDXRawInput === false && retrieving && (
                     <>
                       <CustomInput
                         labelText={IDXRaw}
@@ -2980,15 +2936,38 @@ export default function Search(props) {
                     </>
                   )}
                   {!retrieving && (
-                    <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
-                      <Tooltip
-                        title="Scan QR"
-                      >
-                        <Icon fontSize="large">
-                          qr_code_scanner
+                    <>
+                      <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
+                        <Tooltip
+                          title="Scan QR"
+                        >
+                          <Icon fontSize="large">
+                            qr_code_scanner
                   </Icon>
-                      </Tooltip>
-                    </div>
+                        </Tooltip>
+                      </div>
+                      <div className={classes.checkboxAndRadio}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              tabIndex={-1}
+                              onClick={() => setIDXRawInput(!IDXRawInput)}
+                              checkedIcon={<Check className={classes.checkedIcon} />}
+                              icon={<Check className={classes.uncheckedIcon} />}
+                              classes={{
+                                checked: classes.checked,
+                                root: classes.checkRoot
+                              }}
+                            />
+                          }
+                          classes={{
+                            label: classes.label,
+                            root: classes.labelRoot
+                          }}
+                          label="Search via asset data fields"
+                        />
+                      </div>
+                    </>
                   )}
                   {!retrieving && (
                     <div className="MLBGradientSubmit">
