@@ -35,7 +35,7 @@ const customSelectStyle = {
         borderBottomColor: grayColor[4] + "!important"
       },
       "&:after": {
-        borderBottomColor: primaryColor[0] + "!important"
+        borderBottomColor: primaryColor[5] + "!important"
       }
     }
   },
@@ -82,19 +82,19 @@ const customSelectStyle = {
     color: grayColor[7],
     paddingRight: "30px",
     "&:hover": {
-      backgroundColor: primaryColor[0],
+      backgroundColor: primaryColor[5],
       color: whiteColor,
       ...primaryBoxShadow
     }
   },
   selectMenuItemSelected: {
-    backgroundColor: primaryColor[0] + "!important",
+    backgroundColor: primaryColor[5] + "!important",
     color: whiteColor
   },
   selectMenuItemSelectedMultiple: {
     backgroundColor: "transparent !important",
     "&:hover": {
-      backgroundColor: primaryColor[0] + "!important",
+      backgroundColor: primaryColor[5] + "!important",
       color: whiteColor,
       ...primaryBoxShadow,
       "&:after": {
