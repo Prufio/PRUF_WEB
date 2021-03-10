@@ -56,7 +56,6 @@ export default function Search(props) {
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [query, setQuery] = React.useState(null)
   const [scanQR, setScanQR] = React.useState(false)
-  const [scanned, setScanned] = React.useState(false)
   const [data, setData] = React.useState("");
   const [result, setResult] = React.useState("");
   const [error, setError] = React.useState("");
@@ -2206,12 +2205,10 @@ export default function Search(props) {
     }
     //console.log(e)
     if (e.includes("0x") && e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)) {
-      setScanned(true); //@dev state updates not working (!!!BROKEN!!!)
       setScanQR(!scanQR);
-      console.log(scanned)
       let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
       console.log("Here is what we got in the scanner: ", scanQuery)
-      retrieveRecord(scanQuery);
+      retrieveRecord(scanQuery, true);
     }
     else {
       swal({
@@ -2528,7 +2525,7 @@ export default function Search(props) {
 
   }
 
-  const retrieveRecord = async (query) => {
+  const retrieveRecord = async (query, isScanQR) => {
     if (props.ps) {
       console.log(props.ps)
       props.ps.element.scrollTop = 0
@@ -2540,7 +2537,7 @@ export default function Search(props) {
 
     }
 
-    if (IDXRawInput && !scanned) {
+    if (IDXRawInput && !isScanQR) {
       if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
 
         if (loginType === "") {
@@ -2563,7 +2560,7 @@ export default function Search(props) {
     let tempResult;
     let idxHash;
 
-    if (!IDXRawInput && !scanned) {
+    if (!IDXRawInput && !isScanQR) {
       if (loginIDX === "") {
         console.log("error2")
         setloginIDXState("error");
@@ -2574,7 +2571,7 @@ export default function Search(props) {
       }
     }
 
-    else if (IDXRawInput === true && !scanned) {
+    else if (IDXRawInput === true && !isScanQR) {
       idxHash = window.web3.utils.soliditySha3(
         String(type).replace(/\s/g, ''),
         String(manufacturer).replace(/\s/g, ''),
@@ -2583,7 +2580,7 @@ export default function Search(props) {
       )
     }
 
-    if (scanned) {
+    if (isScanQR) {
       idxHash = query
     }
 
