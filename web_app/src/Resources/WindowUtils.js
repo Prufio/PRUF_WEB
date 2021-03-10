@@ -19,7 +19,7 @@ function buildWindowUtils() {
     return str;
   };
 
-  const _getIpfsHashFromBytes32 = (bytes32Hex) => {
+  const _getIpfsHashFromBytes32 = async(bytes32Hex) => {
     const hashHex = "1220" + bytes32Hex.slice(2);
     const hashBytes = Buffer.from(hashHex, "hex");
     const hashStr = bs58.encode(hashBytes);
@@ -759,8 +759,6 @@ function buildWindowUtils() {
             }
           });
       }
-
-      //alert(tknIDArray)
 
       for (let x = 0; x < tknIDArray.length; x++) {
         await window.contracts.STOR.methods.retrieveShortRecord(tknIDArray[x])

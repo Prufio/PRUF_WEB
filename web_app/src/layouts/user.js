@@ -200,7 +200,6 @@ export default function Dashboard(props) {
         if (e[0] !== window.addr) {
           window.location.reload()
         }
-
       }
       else if (e[0] !== window.addr) {
         window.location.reload()
@@ -868,7 +867,8 @@ export default function Dashboard(props) {
 
     window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
       if (simpleAssets.ipfs) {
-        if (!simpleAssetView) { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }
+        console.log(simpleAssets.ipfs)
+        if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") {setTimeout(()=>{getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length)}, 100)} }
         else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
       }
     })
@@ -896,30 +896,69 @@ export default function Dashboard(props) {
       return buildAssets(simpleAssets, _assetData);
     }
 
-    let lookup = array[iteration - 1]
-
-    for await (const chunk of window.ipfs.cat(lookup)) {
-      let str = new TextDecoder("utf-8").decode(chunk);
-      //console.log(str)
-      if (!str) {
-        _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-        console.log("error")
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-      }
-
-      else {
-        //console.log(str)
-        console.log("got job #", iteration)
-        try {
-          _assetData.push(JSON.parse(str))
+    let lookup = array[iteration - 1];
+    if(typeof lookup !== "string") lookup.then(async (e)=>{
+      try {
+        for await (const chunk of window.ipfs.cat(e)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          //console.log(str)
+          if (!str) {
+            _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+            console.log("error")
+            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+          }
+    
+          else {
+            //console.log(str)
+            console.log("got job #", iteration)
+            try {
+              _assetData.push(JSON.parse(str))
+            }
+            catch {
+              _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+            }
+            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+          }
+          //console.log(chunk)
         }
-        catch {
-          _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-        }
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
       }
-      //console.log(chunk)
+  
+      catch {
+        setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
+      }
+    })
+    
+    else{
+      try {
+        for await (const chunk of window.ipfs.cat(lookup)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          //console.log(str)
+          if (!str) {
+            _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+            console.log("error")
+            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+          }
+    
+          else {
+            //console.log(str)
+            console.log("got job #", iteration)
+            try {
+              _assetData.push(JSON.parse(str))
+            }
+            catch {
+              _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+            }
+            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+          }
+          //console.log(chunk)
+        }
+      }
+  
+      catch {
+        setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
+      }
     }
+
   };
 
   const buildAssets = async (simpleAssets, assetData, noIpfs) => {

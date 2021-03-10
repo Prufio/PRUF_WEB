@@ -26,8 +26,10 @@ export default function ChangeNodeData(props) {
 
   const [ipfsActive, setIpfsActive] = React.useState(false);
 
+  const defaultIpfs = {idHashFields: [], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }}
 
-  const [ipfs,] = React.useState( {
+
+  const [ipfs, setIpfs] = React.useState( {
     idHashFields: [], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
   })
   const [newIpfs, setNewIpfs] = React.useState( {
@@ -38,7 +40,7 @@ export default function ChangeNodeData(props) {
 
   const link = document.createElement('div')
 
-  window.sentPacket = null
+  //window.sentPacket = null
 
   const classes = useStyles();
 
@@ -59,8 +61,36 @@ export default function ChangeNodeData(props) {
       window.location.reload()
     }
 
-    if(window.sentPacket.ipfs){
-      
+    if(window.sentPacket.id){
+      let id = window.sentPacket.id;
+      window.sentPacket = null;
+      window.contracts.AC_MGR.methods
+        .getExtAC_data_nostruct(id)
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            window.utils.getIpfsHashFromBytes32(Object.values(_result)[4]).then(async (e)=>{
+              for await (const chunk of window.ipfs.cat(e)) {
+                let str = new TextDecoder("utf-8").decode(chunk);
+
+                if(!str){
+                  setIpfs(defaultIpfs)
+                  return setNewIpfs(defaultIpfs)
+                }
+                try {
+                  let obj = JSON.parse(str)
+                  setIpfs(obj)
+                  setNewIpfs(obj)
+                }
+                catch{
+                  setIpfs(defaultIpfs)
+                  return setNewIpfs(defaultIpfs)
+                }
+              }
+            }) 
+          }
+        });
+
     }
 
   }, [])
@@ -137,17 +167,13 @@ export default function ChangeNodeData(props) {
           <>
             <h4>{"Input " + (i + 1)}</h4>
           Title: {"  "}<TextField
-              labelText="input title"
-              //defualtValue={idFields[i][0]}
               value={idFields[i][0]}
               id={"Ititle" + i}
               onChange={(e) => {
                 handleIdInput(0, i, e.target.value)
               }}
-            /> Type: {"  "}
+            /> placeHolder: {"  "}
             <TextField
-              labelText="input type"
-              //defualtValue={idFields[i][1]}
               value={idFields[i][1]}
               id={"Itype" + i}
               onChange={(e) => {
@@ -157,10 +183,9 @@ export default function ChangeNodeData(props) {
           Minter Sees: {"  "}
             <CustomInput
               labelText={idFields[i][0]}
-              //type={idFields[i][1]}
-              id={"Iexample" + i}
+              id={"Iexample" + i}              
               inputProps={{
-                type: idFields[i][1]
+                placeholder: idFields[i][1]
               }}
             />
             <br />
@@ -178,8 +203,6 @@ export default function ChangeNodeData(props) {
           <>
             <h4>{"Input " + (i + 1)}</h4>
             Title: {"  "}<TextField
-              labelText="input title"
-              //defualtValue={ownerFields[i][0]}
               value={ownerFields[i][0]}
               id={"Otitle" + i}
               onChange={(e) => {
@@ -187,8 +210,6 @@ export default function ChangeNodeData(props) {
               }}
             /> Type: {"  "}
             <TextField
-              labelText="input type"
-              //defaultValue={ownerFields[i][1]}
               value={ownerFields[i][1]}
               id={"Otype" + i}
               onChange={(e) => {
@@ -199,9 +220,7 @@ export default function ChangeNodeData(props) {
             <CustomInput
               labelText={ownerFields[i][0]}
               id={"Oexample" + i}
-              inputProps={{
-                type: ownerFields[i][1]
-              }}
+              placeholder={ownerFields[i][1]}
             />
             <br />
             <hr />
@@ -228,23 +247,21 @@ export default function ChangeNodeData(props) {
                 {generateIdFields()}
               </>
             )}
-            {ownerFields.length > 0 && (
+            {/* {ownerFields.length > 0 && (
               <>
                 {generateOwnerFields()}
               </>
-            )}
+            )} */}
             {landingConfig && (
               <>
-                <TextField
-                  labelText="Landing page url"
+                URL: {"  "} <TextField
                   value={landingConfig.url}
                   id="landingUrl"
                   onChange={ (e) => {
                     handleLandingConfig("url", e.target.value)
                   }}
                 />
-                <TextField
-                  labelText="Landing page database"
+                Database: {"  "} <TextField
                   value={landingConfig.DBref}
                   id="landingDB"
                   onChange={ (e) => {
