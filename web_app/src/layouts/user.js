@@ -329,7 +329,10 @@ export default function Dashboard(props) {
         console.log("Invalid key passed. Aborted call to replace.")
       }
 
-      else if (window.replaceAssetData.nodeList) setNodeList(window.replaceAssetData.nodeList)
+      else if (window.replaceAssetData.nodeList) {
+        console.log("Setting nodeList"); 
+        setNodeList(window.replaceAssetData.nodeList)
+      }
 
       else {
         setWinKey(String(Math.round(Math.random() * 100000)));
@@ -466,6 +469,7 @@ export default function Dashboard(props) {
                 IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
+                nodeList={nodeList}
               />)}
             key={key}
           />

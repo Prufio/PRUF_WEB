@@ -100,7 +100,8 @@ export default function NodeManager(props) {
   }, [])
 
   React.useEffect(() => {
-    if (props.nodeList && props.nodeList.length === Number(props.nodes)) {
+    if(props.nodeList) console.log(props.nodeList.length, Number(props.nodes) + 1)
+    if (props.nodeList && props.nodeList.length === Number(props.nodes) + 1) {
       setNodeData(props.nodeList)
     }
     else if (Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~", "~", "~"]])
@@ -168,8 +169,8 @@ export default function NodeManager(props) {
 
       setTimeout(() => {
         console.log(nodeData)
-        window.replaceAssetData = { nodeList: nodeData }
         nodeData.push(["~", "~", "~", "~"])
+        window.replaceAssetData = { key: pageKey, nodeList: nodeData }
         setNodeData(nodeData)
       }, 300)
     }
