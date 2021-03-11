@@ -3321,7 +3321,7 @@ export default function Search(props) {
                       </div>
                     )}
                     <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
-                    <h4 className={classes.cardTitle}>Class: {asset.assetClassName} (NODE ID:{asset.assetClass})</h4>
+                    <h4 className={classes.cardTitle}>Class: {asset.assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())} (Node ID:{asset.assetClass})</h4>
                     {currency === "0" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
                     {currency !== "0" && (
                       <>
