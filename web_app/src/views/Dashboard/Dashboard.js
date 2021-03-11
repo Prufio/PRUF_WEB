@@ -146,18 +146,18 @@ export default function Dashboard(props) {
 
       if (window.newDescObj) {
         newObj = JSON.parse(JSON.stringify(window.newDescObj))
-        if(newObj.photo.DisplayImage){
+        if (newObj.photo.DisplayImage) {
           newObj.DisplayImage = newObj.photo.DisplayImage
         }
-        else if(newObj.photo && Object.values(newObj.photo).length > 0){
+        else if (newObj.photo && Object.values(newObj.photo).length > 0) {
           newObj.DisplayImage = Object.values(newObj.photo)[0]
         }
-        else{
+        else {
           newObj.DisplayImage = "";
         }
       }
 
-      else {
+      else if (arr[backIndex]){
         newObj = { text: arr[backIndex].text, photo: arr[backIndex].photo, urls: arr[backIndex].urls, name: arr[backIndex].name }
         newObj.DisplayImage = arr[backIndex].DisplayImage
       }
@@ -195,7 +195,7 @@ export default function Dashboard(props) {
         photoUrls: newObj.photoUrls,
         identicon: arr[backIndex].identicon,
         price: newObj.price,
-        currency: newObj.currency 
+        currency: newObj.currency
       });
 
       window.backIndex = undefined
@@ -242,7 +242,7 @@ export default function Dashboard(props) {
                       photoUrls: arr[i].photoUrls,
                       identicon: arr[i].identicon,
                       price: arr[i].price,
-                      currency: arr[i].currency 
+                      currency: arr[i].currency
                     })}>
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
@@ -318,7 +318,7 @@ export default function Dashboard(props) {
                         photoUrls: arr[i].photoUrls,
                         identicon: arr[i].identicon,
                         price: arr[i].price,
-                        currency: arr[i].currency 
+                        currency: arr[i].currency
                       })}>
                         <Icon>
                           login
@@ -329,13 +329,13 @@ export default function Dashboard(props) {
                 )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
                 {arr[i].currency === "0" && (
-                <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
+                  <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
                 )}
                 {arr[i].currency === undefined && (
-                <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
+                  <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
                 )}
                 {arr[i].currency !== "0" && (
-                <h5 className={classes.cardTitle}>Status: For Sale</h5>
+                  <h5 className={classes.cardTitle}>Status: For Sale</h5>
                 )}
 
               </CardBody>
@@ -1673,63 +1673,98 @@ export default function Dashboard(props) {
 
     tempObj.lastRef = "/#/user/dashboard";
 
-    window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-    window.assetsPerPage = assetsPerPage;
 
-    console.log(tempObj)
-    console.log(window.sentPacket)
-    //console.log(window.sentPacket);
-    setSimpleSelect(event.target.value);
-    let e = event.target.value, href;
+    let e = event.target.value, href, costId;
 
     switch (e) {
       case "sell": {
         href = "/#/user/set-for-sale";
+        costId = null;
         break
       }
       case "transfer": {
         href = "/#/user/transfer-asset";
+        costId = null;
         break
       }
       case "escrow": {
         href = "/#/user/escrow-manager";
+        costId = null;
         break
       }
       case "import": {
         href = "/#/user/import-asset";
+        costId = 1;
         break
       }
       case "export": {
         href = "/#/user/export-asset";
+        costId = null;
         break
       }
       case "discard": {
         href = "/#/user/discard-asset";
+        costId = null;
         break
       }
       case "modify-status": {
         href = "/#/user/modify-status";
+        costId = 5;
         break
       }
       case "edit-information": {
         href = "/#/user/modify-description";
+        costId = 8;
         break
       }
       case "edit-rightsholder": {
         href = "/#/user/modify-rightsholder";
+        costId = 6;
         break
       }
       case "verify": {
         href = "/#/user/verify-asset";
+        costId = null;
         break
       }
       default: {
         console.log("Invalid menu selection: '", e, "'");
+        costId = null;
         break
       }
     }
+    if (costId > -1) {
+      window.contracts.AC_MGR.methods
+        .getServiceCosts(selectedAssetObj.assetClass, costId)
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let root = window.web3.utils.fromWei(Object.values(_result)[1]);
+            let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
+            tempObj.opCost = String(Number(root) + Number(acth));
 
-    return window.location.href = href;
+            window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+            window.assetsPerPage = assetsPerPage;
+
+            console.log(tempObj)
+            console.log(window.sentPacket)
+            setSimpleSelect(event.target.value);
+            return window.location.href = href;
+          }
+        })
+    }
+
+    else {
+      window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+      window.assetsPerPage = assetsPerPage;
+
+      console.log(tempObj)
+      console.log(window.sentPacket)
+      setSimpleSelect(event.target.value);
+      return window.location.href = href;
+    }
+
+
   };
 
   const classes = useStyles();
@@ -1748,12 +1783,12 @@ export default function Dashboard(props) {
                     Asset Dashboard
               </h4>
                   <Tooltip
-                  title="Refresh"
-                >
-                  <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
-                    <Refresh />
-                  </Icon>
-                </Tooltip>
+                    title="Refresh"
+                  >
+                    <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
+                      <Refresh />
+                    </Icon>
+                  </Tooltip>
                 </div>
               </div>
               <br />
@@ -1764,17 +1799,17 @@ export default function Dashboard(props) {
           </Card>
         </GridItem>
       </GridContainer>
-      {props.addr && props.isMounted && props.assets === "~" &&(
+      {props.addr && props.isMounted && props.assets === "~" && (
         <GridContainer>
           <><h3>Getting Token Balances</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
         </GridContainer>
       )}
-      {!props.addr && !props.isMounted && props.assets === "~" &&(
+      {!props.addr && !props.isMounted && props.assets === "~" && (
         <GridContainer>
           <><h3>Getting User Address</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
         </GridContainer>
       )}
-      {!viewAsset && props.addr && props.assets !== "~" &&(
+      {!viewAsset && props.addr && props.assets !== "~" && (
         <GridContainer>
           {generateAssetDash(props.assetArr || [])}
         </GridContainer>
@@ -1863,12 +1898,12 @@ export default function Dashboard(props) {
 
               {selectedAssetObj.currency === "0" && (<h4 className={classes.cardTitle}>Status: {selectedAssetObj.status} </h4>)}
               {selectedAssetObj.currency === undefined && (<h4 className={classes.cardTitle}>Status: {selectedAssetObj.status} </h4>)}
-                    {selectedAssetObj.currency !== "0" && selectedAssetObj.currency !== undefined && (
-                      <>
-                        <h4 className={classes.cardTitle}>Status: For Sale </h4>
-                        <h4 className={classes.cardTitle}>Price: {currency} {selectedAssetObj.price} </h4>
-                      </>
-                    )}
+              {selectedAssetObj.currency !== "0" && selectedAssetObj.currency !== undefined && (
+                <>
+                  <h4 className={classes.cardTitle}>Status: For Sale </h4>
+                  <h4 className={classes.cardTitle}>Price: {currency} {selectedAssetObj.price} </h4>
+                </>
+              )}
               <br />
               <TextField
                 id="outlined-multiline-static"
@@ -2002,101 +2037,101 @@ export default function Dashboard(props) {
       {!viewAsset && props.addr && props.assets !== "0" && props.assets !== "~" && (
         <Card className="dashboardFooter" >
           <h4>Assets Per Page: </h4>
-          <br/>
-              <Select
-                MenuProps={{
-                  className: classes.selectMenu
-                }}
-                className="assetNumDropdown"
-                value={assetsPerPage}
-                onChange={(e) => { handleShowNum(e.target.value) }}
-                inputProps={{
-                  name: "simpleSelect",
-                  id: "simple-select"
-                }}
-              >
-                <MenuItem
-                  disabled
-                  classes={{
-                    root: classes.selectMenuItem
-                  }}
-                >
-                  Assets per page
+          <br />
+          <Select
+            MenuProps={{
+              className: classes.selectMenu
+            }}
+            className="assetNumDropdown"
+            value={assetsPerPage}
+            onChange={(e) => { handleShowNum(e.target.value) }}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select"
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem
+              }}
+            >
+              Assets per page
                         </MenuItem>
-                <MenuItem
-                  classes={{
-                    root: classes.selectMenuItem,
-                    selected: classes.selectMenuItemSelected
-                  }}
-                  value={3}
-                >
-                  3
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={3}
+            >
+              3
                         </MenuItem>
-                <MenuItem
-                  classes={{
-                    root: classes.selectMenuItem,
-                    selected: classes.selectMenuItemSelected
-                  }}
-                  value={6}
-                >
-                  6
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={6}
+            >
+              6
                         </MenuItem>
-                <MenuItem
-                  classes={{
-                    root: classes.selectMenuItem,
-                    selected: classes.selectMenuItemSelected
-                  }}
-                  value={9}
-                >
-                  9
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={9}
+            >
+              9
                         </MenuItem>
-                <MenuItem
-                  classes={{
-                    root: classes.selectMenuItem,
-                    selected: classes.selectMenuItemSelected
-                  }}
-                  value={12}
-                >
-                  12
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={12}
+            >
+              12
                         </MenuItem>
-                <MenuItem
-                  classes={{
-                    root: classes.selectMenuItem,
-                    selected: classes.selectMenuItemSelected
-                  }}
-                  value={15}
-                >
-                  15
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={15}
+            >
+              15
                         </MenuItem>
-                <MenuItem
-                  classes={{
-                    root: classes.selectMenuItem,
-                    selected: classes.selectMenuItemSelected
-                  }}
-                  value={60}
-                >
-                  60
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={60}
+            >
+              60
                         </MenuItem>
-              </Select>
-              <div className="dashboardFooterPage">
-                {numOfPages > 0 && pageNum > 1 && (
-                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum - 1) }}><ArrowBackIos/></Button>
-                )}
-                {numOfPages > 0 && pageNum === 1 && (
-                  <Button className="pageButton" disabled icon onClick={() => { newPageNum(pageNum - 1) }}><ArrowBackIos/></Button>
-                )}
+          </Select>
+          <div className="dashboardFooterPage">
+            {numOfPages > 0 && pageNum > 1 && (
+              <Button className="pageButton" icon onClick={() => { newPageNum(pageNum - 1) }}><ArrowBackIos /></Button>
+            )}
+            {numOfPages > 0 && pageNum === 1 && (
+              <Button className="pageButton" disabled icon onClick={() => { newPageNum(pageNum - 1) }}><ArrowBackIos /></Button>
+            )}
 
-                {numOfPages > 0 && (
-                  <h4>Page {pageNum} / {numOfPages}</h4>
-                )}
+            {numOfPages > 0 && (
+              <h4>Page {pageNum} / {numOfPages}</h4>
+            )}
 
-                {numOfPages > 0 && pageNum !== numOfPages && (
-                  <Button className="pageButton" icon onClick={() => { newPageNum(pageNum + 1) }}><ArrowForwardIos/></Button>
-                )}
-                {numOfPages > 0 && pageNum === numOfPages && (
-                  <Button className="pageButton" icon disabled onClick={() => { newPageNum(pageNum + 1) }}><ArrowForwardIos/></Button>
-                )}
-              </div>
+            {numOfPages > 0 && pageNum !== numOfPages && (
+              <Button className="pageButton" icon onClick={() => { newPageNum(pageNum + 1) }}><ArrowForwardIos /></Button>
+            )}
+            {numOfPages > 0 && pageNum === numOfPages && (
+              <Button className="pageButton" icon disabled onClick={() => { newPageNum(pageNum + 1) }}><ArrowForwardIos /></Button>
+            )}
+          </div>
         </Card>
       )}
     </div>

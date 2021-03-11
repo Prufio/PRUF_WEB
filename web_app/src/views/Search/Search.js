@@ -1579,6 +1579,7 @@ export default function Search(props) {
       document.scrollingElement.scrollTop = 0;
 
     }
+
     let temp = Object.assign(asset, ipfsObject)
     let tempObj = JSON.parse(JSON.stringify(temp))
 
@@ -1586,43 +1587,49 @@ export default function Search(props) {
     tempObj.lastRef = "/#/user/search";
     tempObj.root = selectedRootID;
 
-    console.log(tempObj)
 
-    window.sentPacket = tempObj;
-    setSimpleSelect(event.target.value);
-    let e = event.target.value, href;
+    let e = event.target.value, href, costId;
+    window.backIndex = null;
 
     switch (e) {
       case "transfer": {
         href = "/#/user/transfer-asset";
+        costId = null;
         break
       }
       case "escrow": {
         href = "/#/user/escrow-manager";
+        costId = null;
         break
       }
       case "import": {
         href = "/#/user/import-asset";
+        costId = 1;
         break
       }
       case "export": {
         href = "/#/user/export-asset";
+        costId = null;
         break
       }
       case "discard": {
         href = "/#/user/discard-asset";
+        costId = null;
         break
       }
       case "modify-status": {
         href = "/#/user/modify-status";
+        costId = 5;
         break
       }
       case "edit-information": {
         href = "/#/user/modify-description";
+        costId = 8;
         break
       }
       case "edit-rightsholder": {
         href = "/#/user/modify-rightsholder";
+        costId = 6;
         break
       }
       case "verify": {
@@ -1631,10 +1638,34 @@ export default function Search(props) {
       }
       default: {
         console.log("Invalid menu selection: '", e, "'");
+        href = "/#/user/home";
         break
       }
     }
-    if (href !== undefined) {
+    if (costId > -1) {
+      window.contracts.AC_MGR.methods
+        .getServiceCosts(asset.assetClass, costId)
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let root = window.web3.utils.fromWei(Object.values(_result)[1]);
+            let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
+            tempObj.opCost = String(Number(root) + Number(acth));
+
+            console.log(tempObj)
+
+            window.sentPacket = tempObj;
+            setSimpleSelect(event.target.value);
+            return window.location.href = href;
+          }
+        })
+    }
+
+    else {
+      console.log(tempObj)
+
+      window.sentPacket = tempObj;
+      setSimpleSelect(event.target.value);
       return window.location.href = href;
     }
   };
@@ -1706,114 +1737,59 @@ export default function Search(props) {
 
   const getIPFSJSONObject = async (lookup) => {
     //console.log(lookup)
-    for await (const chunk of window.ipfs.cat(lookup)) {
-      let result = new TextDecoder("utf-8").decode(chunk);
-      if (!result) {
-        console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-        setRetrieving(false);
-        setSelectedImage("")
-        setMoreInfo(true);
-        return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
-      }
-
-      else {
-        //console.log(lookup, "Here's what we found for asset description: ", result);
-        let assetObj = JSON.parse(result)
-        assetObj.photoUrls = JSON.parse(result).photo;
-        let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-
-        if (keys.length < 1) {
-          setIpfsObject(assetObj)
-          setSelectedImage("")
-          setMoreInfo(true);
-          setRetrieving(false);
-          return console.log(assetObj);
-        }
-
-        for (let i = 0; i < keys.length; i++) {
-          const get = () => {
-            if (vals[i].includes("data") && vals[i].includes("base64")) {
-              assetObj.photo[keys[i]] = vals[i];
-              console.log(assetObj.photo[keys[i]]);
-              if (keys[i] === "DisplayImage") {
-                console.log("Setting Display Image")
-                assetObj.DisplayImage = (assetObj.photo[keys[i]])
-              }
-              else if (i === keys.length - 1) {
-                console.log("Setting Display Image")
-                assetObj.DisplayImage = (assetObj.photo[keys[0]])
-              }
-
-              if (i + 1 === keys.length) {
-                setIpfsObject(assetObj)
-                setSelectedImage(assetObj.DisplayImage)
-                setMoreInfo(true);
-                setRetrieving(false);
-                console.log(assetObj);
-                console.log(assetObj.DisplayImage);
-              }
-
-              forceUpdate();
+    if (typeof lookup !== "string") {
+      lookup.then(async (_lookup)=>{
+        for await (const chunk of window.ipfs.cat(_lookup)) {
+          let result = new TextDecoder("utf-8").decode(chunk);
+          if (!result) {
+            console.log(lookup, "Something went wrong. Unable to find file on IPFS");
+            setRetrieving(false);
+            setSelectedImage("")
+            setMoreInfo(true);
+            return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
+          }
+    
+          else {
+            //console.log(lookup, "Here's what we found for asset description: ", result);
+            let assetObj = JSON.parse(result)
+            assetObj.photoUrls = JSON.parse(result).photo;
+            let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
+    
+            if (keys.length < 1) {
+              setIpfsObject(assetObj)
+              setSelectedImage("")
+              setMoreInfo(true);
+              setRetrieving(false);
+              return console.log(assetObj);
             }
-
-            else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-              assetObj.photo[keys[i]] = vals[i];
-              if (keys[i] === "DisplayImage") {
-                console.log("Setting Display Image")
-                assetObj.DisplayImage = (assetObj.photo[keys[i]])
-              }
-              else if (i === keys.length - 1) {
-                console.log("Setting Display Image")
-                assetObj.DisplayImage = (assetObj.photo[keys[0]])
-              }
-
-              if (i + 1 === keys.length) {
-                setIpfsObject(assetObj)
-                setSelectedImage(assetObj.DisplayImage)
-                setMoreInfo(true);
-                setRetrieving(false);
-                console.log(assetObj);
-                console.log(assetObj.DisplayImage);
-              }
-
-              forceUpdate();
-            }
-
-            else {
-              const req = new XMLHttpRequest();
-              req.responseType = "text";
-
-              req.onload = function (e) {
-                console.log("in onload")
-                if (this.response.includes("base64")) {
-                  assetObj.photo[keys[i]] = this.response;
-                  //console.log(assetObj.photo[keys[i]]);
-
+    
+            for (let i = 0; i < keys.length; i++) {
+              const get = () => {
+                if (vals[i].includes("data") && vals[i].includes("base64")) {
+                  assetObj.photo[keys[i]] = vals[i];
+                  console.log(assetObj.photo[keys[i]]);
                   if (keys[i] === "DisplayImage") {
                     console.log("Setting Display Image")
-                    assetObj.DisplayImage = assetObj.photo[keys[i]]
+                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
                   }
-
                   else if (i === keys.length - 1) {
                     console.log("Setting Display Image")
-                    assetObj.DisplayImage = assetObj.photo[keys[0]]
+                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
                   }
+    
+                  if (i + 1 === keys.length) {
+                    setIpfsObject(assetObj)
+                    setSelectedImage(assetObj.DisplayImage)
+                    setMoreInfo(true);
+                    setRetrieving(false);
+                    console.log(assetObj);
+                    console.log(assetObj.DisplayImage);
+                  }
+    
                   forceUpdate();
                 }
-
-                if (i + 1 === keys.length) {
-                  setIpfsObject(assetObj)
-                  setSelectedImage(assetObj.DisplayImage)
-                  setMoreInfo(true);
-                  setRetrieving(false);
-                  console.log(assetObj);
-                  //console.log(assetObj.DisplayImage);
-                }
-              }
-
-              req.onerror = function (e) {
-                console.log("http request error")
-                if (vals[i].includes("http")) {
+    
+                else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
                   assetObj.photo[keys[i]] = vals[i];
                   if (keys[i] === "DisplayImage") {
                     console.log("Setting Display Image")
@@ -1823,9 +1799,127 @@ export default function Search(props) {
                     console.log("Setting Display Image")
                     assetObj.DisplayImage = (assetObj.photo[keys[0]])
                   }
+    
+                  if (i + 1 === keys.length) {
+                    setIpfsObject(assetObj)
+                    setSelectedImage(assetObj.DisplayImage)
+                    setMoreInfo(true);
+                    setRetrieving(false);
+                    console.log(assetObj);
+                    console.log(assetObj.DisplayImage);
+                  }
+    
                   forceUpdate();
                 }
-
+    
+                else {
+                  const req = new XMLHttpRequest();
+                  req.responseType = "text";
+    
+                  req.onload = function (e) {
+                    console.log("in onload")
+                    if (this.response.includes("base64")) {
+                      assetObj.photo[keys[i]] = this.response;
+                      //console.log(assetObj.photo[keys[i]]);
+    
+                      if (keys[i] === "DisplayImage") {
+                        console.log("Setting Display Image")
+                        assetObj.DisplayImage = assetObj.photo[keys[i]]
+                      }
+    
+                      else if (i === keys.length - 1) {
+                        console.log("Setting Display Image")
+                        assetObj.DisplayImage = assetObj.photo[keys[0]]
+                      }
+                      forceUpdate();
+                    }
+    
+                    if (i + 1 === keys.length) {
+                      setIpfsObject(assetObj)
+                      setSelectedImage(assetObj.DisplayImage)
+                      setMoreInfo(true);
+                      setRetrieving(false);
+                      console.log(assetObj);
+                      //console.log(assetObj.DisplayImage);
+                    }
+                  }
+    
+                  req.onerror = function (e) {
+                    console.log("http request error")
+                    if (vals[i].includes("http")) {
+                      assetObj.photo[keys[i]] = vals[i];
+                      if (keys[i] === "DisplayImage") {
+                        console.log("Setting Display Image")
+                        assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                      }
+                      else if (i === keys.length - 1) {
+                        console.log("Setting Display Image")
+                        assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                      }
+                      forceUpdate();
+                    }
+    
+                    if (i + 1 === keys.length) {
+                      setIpfsObject(assetObj)
+                      setSelectedImage(assetObj.DisplayImage)
+                      setMoreInfo(true);
+                      setRetrieving(false);
+                      console.log(assetObj);
+                      console.log(assetObj.DisplayImage);
+                    }
+                  }
+    
+                  req.open('GET', vals[i], true);
+                  req.send();
+                }
+    
+              }
+              await get()
+            }
+    
+          }
+        };
+      })
+    }
+    else{
+      for await (const chunk of window.ipfs.cat(lookup)) {
+        let result = new TextDecoder("utf-8").decode(chunk);
+        if (!result) {
+          console.log(lookup, "Something went wrong. Unable to find file on IPFS");
+          setRetrieving(false);
+          setSelectedImage("")
+          setMoreInfo(true);
+          return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
+        }
+  
+        else {
+          //console.log(lookup, "Here's what we found for asset description: ", result);
+          let assetObj = JSON.parse(result)
+          assetObj.photoUrls = JSON.parse(result).photo;
+          let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
+  
+          if (keys.length < 1) {
+            setIpfsObject(assetObj)
+            setSelectedImage("")
+            setMoreInfo(true);
+            setRetrieving(false);
+            return console.log(assetObj);
+          }
+  
+          for (let i = 0; i < keys.length; i++) {
+            const get = () => {
+              if (vals[i].includes("data") && vals[i].includes("base64")) {
+                assetObj.photo[keys[i]] = vals[i];
+                console.log(assetObj.photo[keys[i]]);
+                if (keys[i] === "DisplayImage") {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                }
+  
                 if (i + 1 === keys.length) {
                   setIpfsObject(assetObj)
                   setSelectedImage(assetObj.DisplayImage)
@@ -1834,19 +1928,103 @@ export default function Search(props) {
                   console.log(assetObj);
                   console.log(assetObj.DisplayImage);
                 }
+  
+                forceUpdate();
               }
-
-              req.open('GET', vals[i], true);
-              req.send();
+  
+              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                assetObj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  console.log("Setting Display Image")
+                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                }
+  
+                if (i + 1 === keys.length) {
+                  setIpfsObject(assetObj)
+                  setSelectedImage(assetObj.DisplayImage)
+                  setMoreInfo(true);
+                  setRetrieving(false);
+                  console.log(assetObj);
+                  console.log(assetObj.DisplayImage);
+                }
+  
+                forceUpdate();
+              }
+  
+              else {
+                const req = new XMLHttpRequest();
+                req.responseType = "text";
+  
+                req.onload = function (e) {
+                  console.log("in onload")
+                  if (this.response.includes("base64")) {
+                    assetObj.photo[keys[i]] = this.response;
+                    //console.log(assetObj.photo[keys[i]]);
+  
+                    if (keys[i] === "DisplayImage") {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = assetObj.photo[keys[i]]
+                    }
+  
+                    else if (i === keys.length - 1) {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = assetObj.photo[keys[0]]
+                    }
+                    forceUpdate();
+                  }
+  
+                  if (i + 1 === keys.length) {
+                    setIpfsObject(assetObj)
+                    setSelectedImage(assetObj.DisplayImage)
+                    setMoreInfo(true);
+                    setRetrieving(false);
+                    console.log(assetObj);
+                    //console.log(assetObj.DisplayImage);
+                  }
+                }
+  
+                req.onerror = function (e) {
+                  console.log("http request error")
+                  if (vals[i].includes("http")) {
+                    assetObj.photo[keys[i]] = vals[i];
+                    if (keys[i] === "DisplayImage") {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                    }
+                    else if (i === keys.length - 1) {
+                      console.log("Setting Display Image")
+                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                    }
+                    forceUpdate();
+                  }
+  
+                  if (i + 1 === keys.length) {
+                    setIpfsObject(assetObj)
+                    setSelectedImage(assetObj.DisplayImage)
+                    setMoreInfo(true);
+                    setRetrieving(false);
+                    console.log(assetObj);
+                    console.log(assetObj.DisplayImage);
+                  }
+                }
+  
+                req.open('GET', vals[i], true);
+                req.send();
+              }
+  
             }
-
+            await get()
           }
-          await get()
+  
         }
+  
+      };
+    }
 
-      }
-
-    };
 
   };
 
@@ -3475,7 +3653,13 @@ export default function Search(props) {
                                   )}
                                 </>
                                 {!transaction && (
-                                  <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                                  <>
+                                    {recycleCost > 0
+                                      ? <h4>Cost to modify asset info: ü{recycleCost}</h4>
+                                      : <></>
+                                    }
+                                    <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                                  </>
                                 )}
                                 {transaction && (
                                   <h3>

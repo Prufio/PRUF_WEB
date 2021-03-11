@@ -485,9 +485,15 @@ export default function ModifyStatus(props) {
             </FormControl>
           )}
           {!transactionActive && status !== "" && (
+            <>
+            {assetInfo.opCost > 0
+            ?<h4>Cost to modify status: ü{assetInfo.opCost}</h4>
+            :<></>
+            }
             <div className="MLBGradientSubmit">
               <Button color="info" className="MLBGradient" onClick={() => modifyStatus()}>Modify Status</Button>
             </div>
+            </>
           )}
           {!transactionActive && status === "" && (
             <div className="MLBGradientSubmit">

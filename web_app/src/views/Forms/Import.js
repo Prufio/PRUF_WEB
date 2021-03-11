@@ -304,9 +304,15 @@ export default function Import(props) {
                 </>
               )}
               {!transactionActive && (
+                <>
+                {assetInfo.opCost > 0
+                  ?<h4>Cost to import asset: ü{assetInfo.opCost}</h4>
+                  :<></>
+                  }
                 <div className="MLBGradientSubmit">
                   <Button color="info" className="MLBGradient" onClick={() => importAsset()}>Import Asset</Button>
                 </div>
+                </>
               )}
               {transactionActive && (
                 <h3>

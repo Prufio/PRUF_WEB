@@ -33,7 +33,7 @@ export default function ChangeNodeData(props) {
     idHashFields: [], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
   })
   const [newIpfs, setNewIpfs] = React.useState( {
-    idHashFields: [], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["field4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
   });
 
   const [nodeInfo,] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
@@ -45,7 +45,7 @@ export default function ChangeNodeData(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
-
+    if(window.sentPacket === undefined && nodeInfo === undefined) window.location.href = "/#/user/node-manager"; window.location.reload();
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)

@@ -542,135 +542,87 @@ export default function Dashboard(props) {
             }
 
             let newAsset = {}
-
-            window.utils.getACName(tempResult[2]).then((e) => {
-              newAsset = Object.assign(newAsset, {
-                id: idxHash,
-                idxHash: idxHash,
-                statusNum: String(tempResult[0]),
-                identicon: <Jdenticon value={idxHash} />,
-                assetClass: tempResult[2],
-                assetClassName: e,
-                note: fullUrl,
-                ipfs: ipfsHash,
-                countPair: [tempResult[4], tempResult[3]]
-              })
-
-              window.utils.getStatusString(String(tempResult[0])).then(async (e) => {
-                newAsset.status = e;
-
-                let assetObj;
-                for await (const chunk of window.ipfs.cat(ipfsHash)) {
-                  let str = new TextDecoder("utf-8").decode(chunk);
-
-                  if (!str) {
-                    assetObj = { text: {}, photo: {}, urls: {}, name: "" }
-                    newAsset.text = assetObj.text;
-                    newAsset.Description = "";
-                    newAsset.urls = assetObj.urls;
-                    newAsset.name = assetObj.name;
-                    newAsset.photo = assetObj.photo;
-                    newAsset.DisplayImage = ""
-                    finalize(newAsset)
-                  }
-
-                  else {
-                    console.log("Got updated asset ipfs")
-                    try {
-                      assetObj = JSON.parse(str)
-                    }
-                    catch {
-                      assetObj = { text: {}, photo: {}, urls: {}, name: "" }
-                    }
-                    newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
-                    let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-
-                    newAsset.text = assetObj.text;
-                    newAsset.Description = assetObj.text.Description;
-                    newAsset.urls = assetObj.urls;
-                    newAsset.name = assetObj.name;
-
-                    if (keys.length < 1) {
-                      newAsset.photo = assetObj.photo;
-                      newAsset.DisplayImage = ""
-                      finalize(newAsset)
-                    }
-                    //console.log(chunk)
-                    for (let i = 0; i < keys.length; i++) {
-                      const get = () => {
-                        if (vals[i].includes("data") && vals[i].includes("base64")) {
-                          assetObj.photo[keys[i]] = vals[i];
-                          //console.log(assetObj.photo[keys[i]]);
-                          if (keys[i] === "DisplayImage") {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                          }
-                          else if (i === keys.length - 1) {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                          }
-
-                          if (i + 1 === keys.length) {
-                            newAsset.photo = assetObj.photo;
-                            newAsset.DisplayImage = assetObj.DisplayImage;
-                            finalize(newAsset)
-                          }
-
-                          forceUpdate();
+            if (typeof ipfsHash !== "string"){
+              ipfsHash.then((_ipfsHash)=>{
+                window.utils.getACName(tempResult[2]).then((e) => {
+                  newAsset = Object.assign(newAsset, {
+                    id: idxHash,
+                    idxHash: idxHash,
+                    statusNum: String(tempResult[0]),
+                    identicon: <Jdenticon value={idxHash} />,
+                    assetClass: tempResult[2],
+                    assetClassName: e,
+                    note: fullUrl,
+                    ipfs: _ipfsHash,
+                    countPair: [tempResult[4], tempResult[3]]
+                  })
+    
+                  window.utils.getStatusString(String(tempResult[0])).then(async (e) => {
+                    newAsset.status = e;
+    
+                    let assetObj;
+    
+                    
+                    for await (const chunk of window.ipfs.cat(_ipfsHash)) {
+                      let str = new TextDecoder("utf-8").decode(chunk);
+    
+                      if (!str) {
+                        assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+                        newAsset.text = assetObj.text;
+                        newAsset.Description = "";
+                        newAsset.urls = assetObj.urls;
+                        newAsset.name = assetObj.name;
+                        newAsset.photo = assetObj.photo;
+                        newAsset.DisplayImage = ""
+                        finalize(newAsset)
+                      }
+    
+                      else {
+                        console.log("Got updated asset ipfs")
+                        try {
+                          assetObj = JSON.parse(str)
                         }
-
-                        else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                          assetObj.photo[keys[i]] = vals[i];
-                          if (keys[i] === "DisplayImage") {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                          }
-                          else if (i === keys.length - 1) {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                          }
-
-                          if (i + 1 === keys.length) {
-                            newAsset.photo = assetObj.photo;
-                            newAsset.DisplayImage = assetObj.DisplayImage;
-                            finalize(newAsset)
-                          }
-
-                          forceUpdate();
+                        catch {
+                          assetObj = { text: {}, photo: {}, urls: {}, name: "" }
                         }
-
-                        else {
-                          const req = new XMLHttpRequest();
-                          req.responseType = "text";
-
-                          req.onload = function (e) {
-                            //console.log("in onload")
-                            if (this.response.includes("base64")) {
-                              assetObj.photo[keys[i]] = this.response;
+                        newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
+                        let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
+    
+                        newAsset.text = assetObj.text;
+                        newAsset.Description = assetObj.text.Description;
+                        newAsset.urls = assetObj.urls;
+                        newAsset.name = assetObj.name;
+    
+                        if (keys.length < 1) {
+                          newAsset.photo = assetObj.photo;
+                          newAsset.DisplayImage = ""
+                          finalize(newAsset)
+                        }
+                        //console.log(chunk)
+                        for (let i = 0; i < keys.length; i++) {
+                          const get = () => {
+                            if (vals[i].includes("data") && vals[i].includes("base64")) {
+                              assetObj.photo[keys[i]] = vals[i];
                               //console.log(assetObj.photo[keys[i]]);
-
                               if (keys[i] === "DisplayImage") {
                                 //console.log("Setting Display Image")
-                                assetObj.DisplayImage = assetObj.photo[keys[i]]
+                                assetObj.DisplayImage = (assetObj.photo[keys[i]])
                               }
-
                               else if (i === keys.length - 1) {
                                 //console.log("Setting Display Image")
-                                assetObj.DisplayImage = assetObj.photo[keys[0]]
+                                assetObj.DisplayImage = (assetObj.photo[keys[0]])
                               }
+    
+                              if (i + 1 === keys.length) {
+                                newAsset.photo = assetObj.photo;
+                                newAsset.DisplayImage = assetObj.DisplayImage;
+                                finalize(newAsset)
+                              }
+    
                               forceUpdate();
                             }
-
-                            if (i + 1 === keys.length) {
-                              newAsset.photo = assetObj.photo;
-                              newAsset.DisplayImage = assetObj.DisplayImage;
-                              finalize(newAsset)
-                            }
-                          }
-
-                          req.onerror = function (e) {
-                            //console.log("http request error")
-                            if (vals[i].includes("http")) {
+    
+                            else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
                               assetObj.photo[keys[i]] = vals[i];
                               if (keys[i] === "DisplayImage") {
                                 //console.log("Setting Display Image")
@@ -680,25 +632,240 @@ export default function Dashboard(props) {
                                 //console.log("Setting Display Image")
                                 assetObj.DisplayImage = (assetObj.photo[keys[0]])
                               }
+    
+                              if (i + 1 === keys.length) {
+                                newAsset.photo = assetObj.photo;
+                                newAsset.DisplayImage = assetObj.DisplayImage;
+                                finalize(newAsset)
+                              }
+    
                               forceUpdate();
                             }
-
+    
+                            else {
+                              const req = new XMLHttpRequest();
+                              req.responseType = "text";
+    
+                              req.onload = function (e) {
+                                //console.log("in onload")
+                                if (this.response.includes("base64")) {
+                                  assetObj.photo[keys[i]] = this.response;
+                                  //console.log(assetObj.photo[keys[i]]);
+    
+                                  if (keys[i] === "DisplayImage") {
+                                    //console.log("Setting Display Image")
+                                    assetObj.DisplayImage = assetObj.photo[keys[i]]
+                                  }
+    
+                                  else if (i === keys.length - 1) {
+                                    //console.log("Setting Display Image")
+                                    assetObj.DisplayImage = assetObj.photo[keys[0]]
+                                  }
+                                  forceUpdate();
+                                }
+    
+                                if (i + 1 === keys.length) {
+                                  newAsset.photo = assetObj.photo;
+                                  newAsset.DisplayImage = assetObj.DisplayImage;
+                                  finalize(newAsset)
+                                }
+                              }
+    
+                              req.onerror = function (e) {
+                                //console.log("http request error")
+                                if (vals[i].includes("http")) {
+                                  assetObj.photo[keys[i]] = vals[i];
+                                  if (keys[i] === "DisplayImage") {
+                                    //console.log("Setting Display Image")
+                                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                                  }
+                                  else if (i === keys.length - 1) {
+                                    //console.log("Setting Display Image")
+                                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                                  }
+                                  forceUpdate();
+                                }
+    
+                                if (i + 1 === keys.length) {
+                                  newAsset.photo = assetObj.photo;
+                                  newAsset.DisplayImage = assetObj.DisplayImage;
+                                  finalize(newAsset)
+                                }
+                              }
+                              req.open('GET', vals[i], true);
+                              req.send();
+                            }
+                          }
+                          await get()
+                        }
+                      }
+                    }
+                  });
+                })
+              })
+            }
+            else{
+              window.utils.getACName(tempResult[2]).then((e) => {
+                newAsset = Object.assign(newAsset, {
+                  id: idxHash,
+                  idxHash: idxHash,
+                  statusNum: String(tempResult[0]),
+                  identicon: <Jdenticon value={idxHash} />,
+                  assetClass: tempResult[2],
+                  assetClassName: e,
+                  note: fullUrl,
+                  ipfs: ipfsHash,
+                  countPair: [tempResult[4], tempResult[3]]
+                })
+  
+                window.utils.getStatusString(String(tempResult[0])).then(async (e) => {
+                  newAsset.status = e;
+  
+                  let assetObj;
+  
+                  
+                  for await (const chunk of window.ipfs.cat(e)) {
+                    let str = new TextDecoder("utf-8").decode(chunk);
+  
+                    if (!str) {
+                      assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+                      newAsset.text = assetObj.text;
+                      newAsset.Description = "";
+                      newAsset.urls = assetObj.urls;
+                      newAsset.name = assetObj.name;
+                      newAsset.photo = assetObj.photo;
+                      newAsset.DisplayImage = ""
+                      finalize(newAsset)
+                    }
+  
+                    else {
+                      console.log("Got updated asset ipfs")
+                      try {
+                        assetObj = JSON.parse(str)
+                      }
+                      catch {
+                        assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+                      }
+                      newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
+                      let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
+  
+                      newAsset.text = assetObj.text;
+                      newAsset.Description = assetObj.text.Description;
+                      newAsset.urls = assetObj.urls;
+                      newAsset.name = assetObj.name;
+  
+                      if (keys.length < 1) {
+                        newAsset.photo = assetObj.photo;
+                        newAsset.DisplayImage = ""
+                        finalize(newAsset)
+                      }
+                      //console.log(chunk)
+                      for (let i = 0; i < keys.length; i++) {
+                        const get = () => {
+                          if (vals[i].includes("data") && vals[i].includes("base64")) {
+                            assetObj.photo[keys[i]] = vals[i];
+                            //console.log(assetObj.photo[keys[i]]);
+                            if (keys[i] === "DisplayImage") {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                            }
+                            else if (i === keys.length - 1) {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                            }
+  
                             if (i + 1 === keys.length) {
                               newAsset.photo = assetObj.photo;
                               newAsset.DisplayImage = assetObj.DisplayImage;
                               finalize(newAsset)
                             }
+  
+                            forceUpdate();
                           }
-                          req.open('GET', vals[i], true);
-                          req.send();
+  
+                          else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                            assetObj.photo[keys[i]] = vals[i];
+                            if (keys[i] === "DisplayImage") {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                            }
+                            else if (i === keys.length - 1) {
+                              //console.log("Setting Display Image")
+                              assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                            }
+  
+                            if (i + 1 === keys.length) {
+                              newAsset.photo = assetObj.photo;
+                              newAsset.DisplayImage = assetObj.DisplayImage;
+                              finalize(newAsset)
+                            }
+  
+                            forceUpdate();
+                          }
+  
+                          else {
+                            const req = new XMLHttpRequest();
+                            req.responseType = "text";
+  
+                            req.onload = function (e) {
+                              //console.log("in onload")
+                              if (this.response.includes("base64")) {
+                                assetObj.photo[keys[i]] = this.response;
+                                //console.log(assetObj.photo[keys[i]]);
+  
+                                if (keys[i] === "DisplayImage") {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = assetObj.photo[keys[i]]
+                                }
+  
+                                else if (i === keys.length - 1) {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = assetObj.photo[keys[0]]
+                                }
+                                forceUpdate();
+                              }
+  
+                              if (i + 1 === keys.length) {
+                                newAsset.photo = assetObj.photo;
+                                newAsset.DisplayImage = assetObj.DisplayImage;
+                                finalize(newAsset)
+                              }
+                            }
+  
+                            req.onerror = function (e) {
+                              //console.log("http request error")
+                              if (vals[i].includes("http")) {
+                                assetObj.photo[keys[i]] = vals[i];
+                                if (keys[i] === "DisplayImage") {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                                }
+                                else if (i === keys.length - 1) {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                                }
+                                forceUpdate();
+                              }
+  
+                              if (i + 1 === keys.length) {
+                                newAsset.photo = assetObj.photo;
+                                newAsset.DisplayImage = assetObj.DisplayImage;
+                                finalize(newAsset)
+                              }
+                            }
+                            req.open('GET', vals[i], true);
+                            req.send();
+                          }
                         }
+                        await get()
                       }
-                      await get()
                     }
                   }
-                }
-              });
-            })
+                });
+              })
+            }
+
+
           }
         })
   };
@@ -778,7 +945,7 @@ export default function Dashboard(props) {
             else {
               window.utils.resolveACFromID(String(acArray[i])).then((e) => {
                 allClasses.push(String(acArray[i]));
-                allClassNames.push(e);
+                allClassNames.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
               })
             }
 

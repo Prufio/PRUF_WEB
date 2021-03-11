@@ -983,6 +983,10 @@ export default function ModifyDescription(props) {
           )}
           {!transactionActive && !isUploading &&(
             <div className="MLBGradientSubmit">
+              {asset.opCost > 0
+              ?<h4>Cost to modify asset info: ü{asset.opCost}</h4>
+              :<></>
+              }
               <hr className="medium_hr" />
               <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
             </div>

@@ -71,6 +71,10 @@ export default function NodeManager(props) {
     [["Loading Nodes...", "~", "~", "~"]],
   );
 
+  const [delegationList, setDelegationList] = React.useState(
+    [["Loading Nodes...", "~", "~", "~"]],
+  );
+
   const thousandHashesOf = (varToHash) => {
     if (!window.web3.utils) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
@@ -105,6 +109,11 @@ export default function NodeManager(props) {
     }
 
   }, [props.nodes])
+
+  React.useEffect(() => {
+    buildDelegationList();
+
+  }, [props.assetClassSets])
 
   const getNodesInWallet = async (bal, ids) => {
     const pageKey = thousandHashesOf(props.addr, props.winKey);
@@ -159,11 +168,29 @@ export default function NodeManager(props) {
 
       setTimeout(() => {
         console.log(nodeData)
-        window.replaceAssetData = {nodeList: nodeData}
+        window.replaceAssetData = { nodeList: nodeData }
         nodeData.push(["~", "~", "~", "~"])
         setNodeData(nodeData)
-      },300)
+      }, 300)
     }
+
+  }
+
+
+  const buildDelegationList = () => {
+    let _delegationList = [];
+    if (!props.assetClassSets || !props.rootNames) return
+
+    for (let i = 0; i < Object.values(props.assetClassSets).length; i++) {
+      for (let x = 0; x < Object.values(props.assetClassSets)[i].length; x++) {
+        _delegationList.push(
+          [props.rootNames[i], Object.values(props.assetClassSets)[i][x].name, Object.values(props.assetClassSets)[i][x].id, "N/A", "N/A"]
+        )
+      }
+    }
+
+    setDelegationList(_delegationList)
+
 
   }
   const [delegationData, setDelegationData] = React.useState(
@@ -341,7 +368,7 @@ export default function NodeManager(props) {
                     accessor: "totalStaked"
                   },
                   {
-                    Header: "Transactions This Epoch",
+                    Header: "Transaction Count",
                     accessor: "transactionsPerEpoch"
                   },
                   {
@@ -499,6 +526,10 @@ export default function NodeManager(props) {
               <ReactTable
                 columns={[
                   {
+                    Header: "Root",
+                    accessor: "root"
+                  },
+                  {
                     Header: "Name",
                     accessor: "name"
                   },
@@ -511,7 +542,7 @@ export default function NodeManager(props) {
                     accessor: "totalStaked"
                   },
                   {
-                    Header: "Transactions This Epoch",
+                    Header: "Transaction Count",
                     accessor: "transactionsPerEpoch"
                   },
                   {
@@ -519,7 +550,43 @@ export default function NodeManager(props) {
                     accessor: "actions"
                   }
                 ]}
-                data={delegationData}
+                data={delegationList.map((prop, key) => {
+                  return {
+                    id: key,
+                    root: prop[0],
+                    name: prop[1],
+                    nodeId: prop[2],
+                    totalStaked: prop[3],
+                    transactionsPerEpoch: prop[4],
+                    actions: (
+                      // we've added some custom button actions
+                      <div className="actions-right">
+                        {/* use this button to add a like kind of action */}
+                        <Button
+                          // justIcon
+                          // round
+                          simple
+                          onClick={() => {
+                            alert(
+                              "You've clicked LIKE button on \n{ \nRoot: " +
+                              prop[0] +
+                              ", \nName: " +
+                              prop[1] +
+                              ", \nID: " +
+                              prop[2] +
+                              "\n}."
+                            );
+                          }}
+                          color="info"
+                          className="like"
+                        >
+                          Delegation
+                        </Button>{" "}
+                      </div>
+                    )
+                  };
+                })
+                }
               />
             )}
             {!dash && !Delegation && analytics && (
@@ -566,7 +633,7 @@ export default function NodeManager(props) {
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                        0 <small>PRüF</small>
+                          0 <small>PRüF</small>
                         </h3>
                       </CardHeader>
                       <CardFooter stats>
@@ -594,7 +661,7 @@ export default function NodeManager(props) {
                         : <>{props.pruf} <small>PRüF</small></>}
                     </h3> */}
                         <h3 className={classes.cardTitle}>
-                        0 <small>PRüF</small>
+                          0 <small>PRüF</small>
                         </h3>
                       </CardHeader>
                       <CardFooter stats>

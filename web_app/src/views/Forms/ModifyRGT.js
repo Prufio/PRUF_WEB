@@ -380,9 +380,16 @@ export default function ModifyRGT(props) {
             )}
           </>
           {!transactionActive && (
+          <>
+            {assetInfo.opCost > 0
+            ?<h4>Cost to modify owner info: ü{assetInfo.opCost}</h4>
+            :<></>
+            }
+            
             <div className="MLBGradientSubmit">
               <Button color="info" className="MLBGradient" onClick={() => modifyRGT()}>Submit New Owner Information</Button>
             </div>
+            </>
           )}
           {transactionActive && (
             <h3>
