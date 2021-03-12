@@ -1048,3 +1048,58 @@ cursor:pointer;
   background-color: #00aaff2a !important;
   width: fit-content !important;
 }
+
+.delegateButton {
+  background-color: transparent !important;
+  font-weight: 550 !important;
+  font-size: 15px !important;
+  color:#00c3ff !important;
+  border-width: 3px !important;
+  border-style: outset !important;
+  border-color: #00c3ff !important;
+  border-radius: 10px !important;
+}
+
+.delegationCard {
+  padding: 10px;
+}
+
+.delegationTitle {
+  font-size: 25px;
+  font-weight: bold !important;
+}
+
+.delegationPin {
+  width: 12px !important;
+  margin-right: 3px !important;
+  margin-top: 6px !important;
+}
+
+.delegationTips {
+  display: flex;
+  flex-direction: row !important;
+  justify-self: flex-start !important;
+  /* margin-left: 10px !important; */
+}
+
+.delegationTipsContent {
+  font-size: 12px;
+  font-weight: 500 !important;
+}
+
+.delegationInfoSec {
+  display: flex;
+}
+
+.delegationInfo {
+  color: black !important;
+  font-weight: 600;
+  /* text-decoration: underline; */
+  margin-right: 5px !important;
+}
+
+.currencyDignifier {
+  position: absolute;
+  bottom: 115px;
+  right: 20px;
+}

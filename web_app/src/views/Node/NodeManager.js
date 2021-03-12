@@ -1,6 +1,7 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import "../../assets/css/custom.css";
+import swalReact from '@sweetalert/with-react';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
@@ -23,11 +24,12 @@ import CardHeader from "components/Card/CardHeader.js";
 import ReactTable from "components/ReactTable/ReactTable.js";
 import ReactTableSimple from "components/ReactTable/ReactTableSimple.js";
 import CardFooter from "components/Card/CardFooter.js";
+import TextField from "@material-ui/core/TextField";
 
 import { dataTable } from "variables/general.js";
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.js";
-import { AccountBalance, AccountBalanceOutlined, AccountBalanceWallet, AccountBalanceWalletOutlined, BarChartRounded, Dashboard, ListAltRounded, MultilineChart, Settings, ShowChart, Timeline, VpnKey } from "@material-ui/icons";
+import { AccountBalance, AccountBalanceOutlined, AccountBalanceWallet, AccountBalanceWalletOutlined, BarChartRounded, Dashboard, FiberManualRecordTwoTone, HdrWeakTwoTone, ListAltRounded, MultilineChart, Settings, ShowChart, Timeline, VpnKey } from "@material-ui/icons";
 import { List } from "@material-ui/core";
 import Danger from "components/Typography/Danger";
 import Pruf from "../../assets/img/pruftoken.png";
@@ -59,11 +61,12 @@ const useChartStyles = makeStyles(chartStyles);
 export default function NodeManager(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [dash, setDash] = React.useState(true)
-  const [Delegation, setDelegation] = React.useState(false)
+  const [delegation, setDelegation] = React.useState(false)
   const [analytics, setAnalytics] = React.useState(false)
   const [rewards, setRewards] = React.useState(true)
   const [selectedNodeObj, setSelectedNodeObj] = React.useState({});
   const [totalRewards, setTotalRewards] = React.useState(false)
+  const [delegationAmount, setDelegationAmount] = React.useState("")
 
   const classes = useStyles();
   const chartClasses = useChartStyles();
@@ -101,8 +104,8 @@ export default function NodeManager(props) {
   }, [])
 
   React.useEffect(() => {
-    if(props.nodeList) console.log(props.nodeList.length, Number(props.nodes)+1)
-    if (props.nodeList && props.nodeList.length === Number(props.nodes)+1) {
+    if (props.nodeList) console.log(props.nodeList.length, Number(props.nodes) + 1)
+    if (props.nodeList && props.nodeList.length === Number(props.nodes) + 1) {
       setNodeData(props.nodeList)
     }
     else if (Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~", "~", "~"]])
@@ -195,46 +198,46 @@ export default function NodeManager(props) {
 
 
   }
-  const [delegationData, setDelegationData] = React.useState(
-    dataTable.dataRowsDelegation.map((prop, key) => {
-      return {
-        id: key,
-        name: prop[0],
-        nodeId: prop[1],
-        totalStaked: prop[2],
-        transactionsPerEpoch: prop[3],
-        actions: (
-          // we've added some custom button actions
-          <div className="actions-right">
-            {/* use this button to add a like kind of action */}
-            <Button
-              // justIcon
-              // round
-              simple
-              onClick={() => {
-                let obj = delegationData.find(o => o.id === key);
-                alert(
-                  "You've clicked LIKE button on \n{ \nName: " +
-                  obj.name +
-                  ", \nposition: " +
-                  obj.position +
-                  ", \noffice: " +
-                  obj.office +
-                  ", \nage: " +
-                  obj.age +
-                  "\n}."
-                );
-              }}
-              color="info"
-              className="like"
-            >
-              Delegation
-            </Button>{" "}
-          </div>
-        )
-      };
-    })
-  );
+  // const [delegationData, setDelegationData] = React.useState(
+  //   dataTable.dataRowsDelegation.map((prop, key) => {
+  //     return {
+  //       id: key,
+  //       name: prop[0],
+  //       nodeId: prop[1],
+  //       totalStaked: prop[2],
+  //       transactionsPerEpoch: prop[3],
+  //       actions: (
+  //         // we've added some custom button actions
+  //         <div className="actions-right">
+  //           {/* use this button to add a like kind of action */}
+  //           <Button
+  //             // justIcon
+  //             // round
+  //             simple
+  //             onClick={() => {
+  //               let obj = delegationData.find(o => o.id === key);
+  //               alert(
+  //                 "You've clicked LIKE button on \n{ \nName: " +
+  //                 obj.name +
+  //                 ", \nposition: " +
+  //                 obj.position +
+  //                 ", \noffice: " +
+  //                 obj.office +
+  //                 ", \nage: " +
+  //                 obj.age +
+  //                 "\n}."
+  //               );
+  //             }}
+  //             color="info"
+  //             className="like"
+  //           >
+  //             Delegate
+  //           </Button>{" "}
+  //         </div>
+  //       )
+  //     };
+  //   })
+  // );
 
   const setDashButton = () => {
     setDash(true)
@@ -278,8 +281,6 @@ export default function NodeManager(props) {
       props.ps.element.scrollTop = 0
       //console.log(props.ps.element.scrollTop)
     }
-
-
     let tempObj = JSON.parse(JSON.stringify(e))
     window.utils.retreiveCosts(8, e.id).then((x) => {
       tempObj.costs = x
@@ -290,6 +291,105 @@ export default function NodeManager(props) {
       setSimpleSelect(e);
       return window.location.href = e.href;
     })
+  };
+
+
+  const handleDelegation = (e) => {
+    if (props.ps) {
+      props.ps.element.scrollTop = 0
+      //console.log(props.ps.element.scrollTop)
+    }
+
+
+
+
+    swalReact({
+      content:
+        <Card className="delegationCard">
+          <h4 className="delegationTitle">Delegation Confirmation</h4>
+          <div className="delegationTips">
+            <FiberManualRecordTwoTone className="delegationPin" />
+            <h5 className="delegationTipsContent">
+              You can delegate to as many nodes as you please.
+             </h5>
+          </div>
+          <div className="delegationTips">
+            <FiberManualRecordTwoTone className="delegationPin" />
+            <h5 className="delegationTipsContent">
+              You can un-delegate at any time.
+             </h5>
+          </div>
+          <div className="delegationInfoSec">
+            <h4 className="delegationInfo">
+              Node Name :
+            </h4>
+            <h4>
+              {e.name}
+            </h4>
+          </div>
+          <div className="delegationInfoSec">
+            <h4 className="delegationInfo">
+              Node ID :
+            </h4>
+            <h4>
+              {e.id}
+            </h4>
+          </div>
+          <span className="currencyDignifier"> = PRüF</span>
+          <TextField
+            onChange={(e) => { setDelegationAmount(e.target.value) }}
+            id="outlined-full-width"
+            label="Amount"
+            defaultValue={props.pruf}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+          />
+          <TextField
+            // onChange={(e) => { handleName(e.target.value) }}
+            id="outlined-full-width"
+            label="Password"
+            // defaultValue={newAssetInfo.name}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+          />
+        </Card>,
+      buttons: {
+        delete: {
+          text: "Delegate",
+          value: "delegate"
+        },
+        back: {
+          text: "Back",
+          value: "back"
+        }
+      }
+    })
+      .then((value) => {
+        switch (value) {
+
+          case "delegate":
+            if (delegationAmount > props.pruf) {
+              return swal("Insufficient Balance.")
+            }
+            // setDisplayImage(selectedImage, selectedKey)
+            swal("Delegation Set!");
+            break;
+
+          case "back":
+            break;
+
+          default:
+            return;
+        }
+      })
   };
   return (
     <GridContainer>
@@ -334,7 +434,7 @@ export default function NodeManager(props) {
               Analytics
               </Button>
             )}
-            {Delegation && (
+            {delegation && (
               <Button
                 className="nodeButtonActive"
               >
@@ -342,7 +442,7 @@ export default function NodeManager(props) {
               Delegation List
               </Button>
             )}
-            {!Delegation && (
+            {!delegation && (
               <Button
                 className="nodeButton"
                 onClick={() => { setDelegationButton(true) }}
@@ -356,7 +456,7 @@ export default function NodeManager(props) {
         </Card>
         <Card>
           <CardBody>
-            {dash && !Delegation && !analytics && (
+            {dash && !delegation && !analytics && (
               <ReactTableSimple
                 columns={[
                   {
@@ -526,7 +626,7 @@ export default function NodeManager(props) {
                 }
               />
             )}
-            {!dash && Delegation && !analytics && (
+            {!dash && delegation && !analytics && (
               <ReactTable
                 columns={[
                   {
@@ -566,26 +666,40 @@ export default function NodeManager(props) {
                       // we've added some custom button actions
                       <div className="actions-right">
                         {/* use this button to add a like kind of action */}
-                        <Button
-                          // justIcon
-                          // round
-                          simple
-                          onClick={() => {
-                            alert(
-                              "You've clicked LIKE button on \n{ \nRoot: " +
-                              prop[0] +
-                              ", \nName: " +
-                              prop[1] +
-                              ", \nID: " +
-                              prop[2] +
-                              "\n}."
-                            );
-                          }}
-                          color="info"
-                          className="like"
-                        >
-                          Delegation
-                        </Button>{" "}
+                        {prop[0] !== "Loading Nodes..." && (
+                          <Button
+                            // justIcon
+                            // round
+                            // simple
+                            onClick={() => {
+                              handleDelegation({
+                                name: prop[1],
+                                id: prop[2],
+                                totalDelegated: prop[3]
+                              })
+                            }}
+                            color="info"
+                            className="delegateButton"
+                          >
+                            Delegate
+                          </Button>
+                        )}
+                        {prop[0] === "Loading Nodes..." && (
+                          <Button
+                            disabled
+                            onClick={() => {
+                              handleDelegation({
+                                name: prop[1],
+                                id: prop[2],
+                                totalDelegated: prop[3]
+                              })
+                            }}
+                            color="info"
+                            className="delegateButton"
+                          >
+                            Delegate
+                          </Button>
+                        )}
                       </div>
                     )
                   };
@@ -593,7 +707,7 @@ export default function NodeManager(props) {
                 }
               />
             )}
-            {!dash && !Delegation && analytics && (
+            {!dash && !delegation && analytics && (
               <>
                 <GridContainer>
                   <GridItem xs={12} sm={6} md={6} lg={4}>
