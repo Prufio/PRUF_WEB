@@ -147,39 +147,38 @@ export default function CreateNode(props) {
 
   }, [])
 
-  // const generateRootList = (arr) => {
-  //   let rootNames = props.rootNames
-  //   let rootSelection = [
-  //     <MenuItem
-  //       disabled
-  //       key={"keySelClass"}
-  //       classes={{
-  //         root: classes.selectMenuItem
-  //       }}
-  //     >
-  //       Select a Class
-  //     </MenuItem>
-  //   ];
+  const generateRootList = (arr) => {
+    let rootNames = props.rootNames
+    let rootSelection = [
+      <MenuItem
+        disabled
+        key={"keySelClass"}
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select a Class
+      </MenuItem>
+    ];
 
-  //   for (let i = 0; i < arr.length; i++) {
-  //     rootSelection.push(
-  //       <MenuItem
-  //         key={"key" + String(arr[i])}
-  //         classes={{
-  //           root: classes.selectMenuItem,
-  //           selected: classes.selectMenuItemSelected
-  //         }}
-  //         value={String(arr[i])}
-  //       >
-  //         {rootNames[i]}
-  //       </MenuItem>
-  //     );
+    for (let i = 0; i < arr.length; i++) {
+      rootSelection.push(
+        <MenuItem
+          key={"key" + String(arr[i])}
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          value={String(arr[i])}
+        >
+          {rootNames[i]}
+        </MenuItem>
+      );
+    }
 
-  //   }
+    return rootSelection;
 
-  //   return rootSelection;
-
-  // }
+  }
 
   const rootLogin = (e) => {
 
@@ -2068,7 +2067,7 @@ export default function CreateNode(props) {
                       id: "root-select"
                     }}
                   >
-                    {/* {generateRootList(props.roots)} */}
+                  {generateRootList(props.roots)}
                   </Select>
                 </FormControl>
                 <div className={classes.formCategory}>

@@ -100,8 +100,8 @@ export default function NodeManager(props) {
   }, [])
 
   React.useEffect(() => {
-    if(props.nodeList) console.log(props.nodeList.length, Number(props.nodes) + 1)
-    if (props.nodeList && props.nodeList.length === Number(props.nodes) + 1) {
+    if(props.nodeList) console.log(props.nodeList.length, Number(props.nodes)+1)
+    if (props.nodeList && props.nodeList.length === Number(props.nodes)+1) {
       setNodeData(props.nodeList)
     }
     else if (Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~", "~", "~"]])
