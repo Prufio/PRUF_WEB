@@ -28,7 +28,9 @@ import { CeckCircleOutline, CheckCircleOutline, GroupAdd } from "@material-ui/ic
 import { Component } from "react";
 import placeholder from "../../../assets/img/placeholder.jpg";
 import placeholderCheck from "../../../assets/img/placeholderCheck.jpg";
+import placeholderComingSoon from "../../../assets/img/placeholderComingSoon.jpg";
 import Success from "components/Typography/Success";
+import { Tooltip } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 const useCardStyles = makeStyles(cardStyles);
@@ -149,6 +151,7 @@ export default function CreateNode(props) {
 
   const generateRootList = (arr) => {
     let rootNames = props.rootNames
+    if (!arr || !rootNames) return
     let rootSelection = [
       <MenuItem
         disabled
@@ -335,19 +338,21 @@ export default function CreateNode(props) {
         <GridItem xs={12} sm={12} md={4}>
           <Card chart className={cardClasses.cardHover} onClick={() => setStandard("1")}>
             <CardHeader image icon className={cardClasses.cardHeaderHoverDashboard}>
-              {standard1 && (
+              {/* {standard1 && (
                 <img title="View Asset" src={placeholderCheck} alt="" />
-              )}
-              {!standard1 && (
+              )} */}
+              {/* {!standard1 && (
                 <img title="View Asset" src={placeholder} alt="" />
-              )}
+              )} */}
+              {/* @dev temp */}
+              <img title="View Asset" src={placeholderComingSoon} alt="" />
             </CardHeader>
-            <CardBody>
+            {/* <CardBody>
               Standard 1
-            </CardBody>
+            </CardBody> */}
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
+        {/* <GridItem xs={12} sm={12} md={4}>
           <Card chart className={cardClasses.cardHover} onClick={() => setStandard("2")}>
             <CardHeader image className={cardClasses.cardHeaderHoverDashboard}>
               {standard2 && (
@@ -376,7 +381,7 @@ export default function CreateNode(props) {
               Standard 3
             </CardBody>
           </Card>
-        </GridItem>
+        </GridItem> */}
       </GridContainer>
     );
     return component
@@ -386,671 +391,771 @@ export default function CreateNode(props) {
     let component = [];
     component.push(
       <Card className="pricingCard">
-        <CustomInput
-          success={loginOperation1State === "success"}
-          error={loginOperation1State === "error"}
-          labelText="Operation 1 *"
-          id="operation1"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation1),
-            onChange: event => {
-              setOperation1(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation1State("success");
-              } else {
-                setloginOperation1State("error");
-              }
-              setloginOperation1(event.target.value);
-            },
-          }}
-        />
-        <div className="beneficiaryAddressCheckbox">
+        <Card className="pricingCard">
+          <Tooltip
+            title="New Asset, Recycle, Import"
+            arrow
+          >
+            <Button className="operationButton">Operation 1 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation1State === "success"}
+            error={loginOperation1State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation1"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation1),
+              onChange: event => {
+                setOperation1(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation1State("success");
+                } else {
+                  setloginOperation1State("error");
+                }
+                setloginOperation1(event.target.value);
+              },
+            }}
+          />
+          <div className="beneficiaryAddressCheckbox">
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked1(!locked1)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked1(!locked1)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
                 classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked1 && (
+              <CustomInput
+                success={loginBeneficiaryAddress1State === "success"}
+                error={loginBeneficiaryAddress1State === "error"}
+                labelText="Beneficiary Address 1"
+                id="beneficiaryAddress1"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress1,
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
-            }}
-            label="Edit Beneficiary"
-          />
-          {locked1 && (
-            <CustomInput
-              success={loginBeneficiaryAddress1State === "success"}
-              error={loginBeneficiaryAddress1State === "error"}
-              labelText="Beneficiary Address 1"
-              id="beneficiaryAddress1"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress1,
-              }}
-            />
-          )}
-          {!locked1 && (
-            <CustomInput
-              success={loginBeneficiaryAddress1State === "success"}
-              error={loginBeneficiaryAddress1State === "error"}
-              labelText="Beneficiary Address 1"
-              id="beneficiaryAddress1"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress1,
-                onChange: event => {
-                  setBeneficiaryAddress1(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress1State("success");
-                  } else {
-                    setloginBeneficiaryAddress1State("error");
-                  }
-                  setloginBeneficiaryAddress1(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
-        <br />
-        <br />
-        <CustomInput
-          success={loginOperation2State === "success"}
-          error={loginOperation2State === "error"}
-          labelText="Operation 2 *"
-          id="operation2"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation2),
-            onChange: event => {
-              setOperation2(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation2State("success");
-              } else {
-                setloginOperation2State("error");
-              }
-              setloginOperation2(event.target.value);
-            },
-          }}
-        />
-
-        <div className="beneficiaryAddressCheckbox">
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked2(!locked2)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
-                classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+            )}
+            {!locked1 && (
+              <CustomInput
+                success={loginBeneficiaryAddress1State === "success"}
+                error={loginBeneficiaryAddress1State === "error"}
+                labelText="Beneficiary Address 1"
+                id="beneficiaryAddress1"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress1,
+                  onChange: event => {
+                    setBeneficiaryAddress1(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress1State("success");
+                    } else {
+                      setloginBeneficiaryAddress1State("error");
+                    }
+                    setloginBeneficiaryAddress1(event.target.value);
+                  },
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
+            )}
+          </div>
+        </Card>
+
+        <Card className="pricingCard">
+          <Tooltip
+            title="Unused in current application"
+            arrow
+          >
+            <Button className="operationButton">Operation 2 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation2State === "success"}
+            error={loginOperation2State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation2"
+            formControlProps={{
+              fullWidth: true
             }}
-            label="Edit Beneficiary"
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation2),
+              onChange: event => {
+                setOperation2(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation2State("success");
+                } else {
+                  setloginOperation2State("error");
+                }
+                setloginOperation2(event.target.value);
+              },
+            }}
           />
-          {locked2 && (
-            <CustomInput
-              success={loginBeneficiaryAddress2State === "success"}
-              error={loginBeneficiaryAddress2State === "error"}
-              labelText="Beneficiary Address 2"
-              id="beneficiaryAddress2"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress2,
-              }}
-            />
-          )}
-          {!locked2 && (
-            <CustomInput
-              success={loginBeneficiaryAddress2State === "success"}
-              error={loginBeneficiaryAddress2State === "error"}
-              labelText="Beneficiary Address 2"
-              id="beneficiaryAddress2"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress2,
-                onChange: event => {
-                  setBeneficiaryAddress2(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress2State("success");
-                  } else {
-                    setloginBeneficiaryAddress2State("error");
-                  }
-                  setloginBeneficiaryAddress2(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
-        <CustomInput
-          success={loginOperation3State === "success"}
-          error={loginOperation3State === "error"}
-          labelText="Operation 3 *"
-          id="operation3"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation3),
-            onChange: event => {
-              setOperation3(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation3State("success");
-              } else {
-                setloginOperation3State("error");
-              }
-              setloginOperation3(event.target.value);
-            },
-          }}
-        />
 
-        <div className="beneficiaryAddressCheckbox">
+          <div className="beneficiaryAddressCheckbox">
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked3(!locked3)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked2(!locked2)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
                 classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked2 && (
+              <CustomInput
+                success={loginBeneficiaryAddress2State === "success"}
+                error={loginBeneficiaryAddress2State === "error"}
+                labelText="Beneficiary Address 2"
+                id="beneficiaryAddress2"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress2,
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
-            }}
-            label="Edit Beneficiary"
-          />
-          {locked3 && (
-            <CustomInput
-              success={loginBeneficiaryAddress3State === "success"}
-              error={loginBeneficiaryAddress3State === "error"}
-              labelText="Beneficiary Address 3"
-              id="beneficiaryAddress3"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress3,
-              }}
-            />
-          )}
-          {!locked3 && (
-            <CustomInput
-              success={loginBeneficiaryAddress3State === "success"}
-              error={loginBeneficiaryAddress3State === "error"}
-              labelText="Beneficiary Address 3"
-              id="beneficiaryAddress3"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress3,
-                onChange: event => {
-                  setBeneficiaryAddress3(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress3State("success");
-                  } else {
-                    setloginBeneficiaryAddress3State("error");
-                  }
-                  setloginBeneficiaryAddress3(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
-        <CustomInput
-          success={loginOperation4State === "success"}
-          error={loginOperation4State === "error"}
-          labelText="Operation 4 *"
-          id="operation4"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation4),
-            onChange: event => {
-              setOperation4(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation4State("success");
-              } else {
-                setloginOperation4State("error");
-              }
-              setloginOperation4(event.target.value);
-            },
-          }}
-        />
-
-        <div className="beneficiaryAddressCheckbox">
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked4(!locked4)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
-                classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+            )}
+            {!locked2 && (
+              <CustomInput
+                success={loginBeneficiaryAddress2State === "success"}
+                error={loginBeneficiaryAddress2State === "error"}
+                labelText="Beneficiary Address 2"
+                id="beneficiaryAddress2"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress2,
+                  onChange: event => {
+                    setBeneficiaryAddress2(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress2State("success");
+                    } else {
+                      setloginBeneficiaryAddress2State("error");
+                    }
+                    setloginBeneficiaryAddress2(event.target.value);
+                  },
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
+            )}
+          </div>
+        </Card>
+        <Card className="pricingCard">
+          <Tooltip
+            title="Unused in current application"
+            arrow
+          >
+            <Button className="operationButton">Operation 3 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation3State === "success"}
+            error={loginOperation3State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation3"
+            formControlProps={{
+              fullWidth: true
             }}
-            label="Edit Beneficiary"
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation3),
+              onChange: event => {
+                setOperation3(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation3State("success");
+                } else {
+                  setloginOperation3State("error");
+                }
+                setloginOperation3(event.target.value);
+              },
+            }}
           />
-          {locked4 && (
-            <CustomInput
-              success={loginBeneficiaryAddress4State === "success"}
-              error={loginBeneficiaryAddress4State === "error"}
-              labelText="Beneficiary Address 4"
-              id="beneficiaryAddress4"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress4,
-              }}
-            />
-          )}
-          {!locked4 && (
-            <CustomInput
-              success={loginBeneficiaryAddress4State === "success"}
-              error={loginBeneficiaryAddress4State === "error"}
-              labelText="Beneficiary Address 4"
-              id="beneficiaryAddress4"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress4,
-                onChange: event => {
-                  setloginBeneficiaryAddress4(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress4State("success");
-                  } else {
-                    setloginBeneficiaryAddress4State("error");
-                  }
-                  setloginBeneficiaryAddress4(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
-        <CustomInput
-          success={loginOperation5State === "success"}
-          error={loginOperation5State === "error"}
-          labelText="Operation 5 *"
-          id="operation5"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation5),
-            onChange: event => {
-              setOperation5(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation5State("success");
-              } else {
-                setloginOperation5State("error");
-              }
-              setloginOperation5(event.target.value);
-            },
-          }}
-        />
 
-        <div className="beneficiaryAddressCheckbox">
+          <div className="beneficiaryAddressCheckbox">
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked5(!locked5)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked3(!locked3)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
                 classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked3 && (
+              <CustomInput
+                success={loginBeneficiaryAddress3State === "success"}
+                error={loginBeneficiaryAddress3State === "error"}
+                labelText="Beneficiary Address 3"
+                id="beneficiaryAddress3"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress3,
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
-            }}
-            label="Edit Beneficiary"
-          />
-          {locked5 && (
-            <CustomInput
-              success={loginBeneficiaryAddress5State === "success"}
-              error={loginBeneficiaryAddress5State === "error"}
-              labelText="Beneficiary Address 5"
-              id="beneficiaryAddress5"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress5,
-              }}
-            />
-          )}
-          {!locked5 && (
-            <CustomInput
-              success={loginBeneficiaryAddress5State === "success"}
-              error={loginBeneficiaryAddress5State === "error"}
-              labelText="Beneficiary Address 5"
-              id="beneficiaryAddress5"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress5,
-                onChange: event => {
-                  setBeneficiaryAddress5(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress5State("success");
-                  } else {
-                    setloginBeneficiaryAddress5State("error");
-                  }
-                  setloginBeneficiaryAddress5(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
-        <CustomInput
-          success={loginOperation6State === "success"}
-          error={loginOperation6State === "error"}
-          labelText="Operation 6 *"
-          id="operation6"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation6),
-            onChange: event => {
-              setOperation6(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation6State("success");
-              } else {
-                setloginOperation6State("error");
-              }
-              setloginOperation6(event.target.value);
-            },
-          }}
-        />
-
-        <div className="beneficiaryAddressCheckbox">
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked6(!locked6)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
-                classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+            )}
+            {!locked3 && (
+              <CustomInput
+                success={loginBeneficiaryAddress3State === "success"}
+                error={loginBeneficiaryAddress3State === "error"}
+                labelText="Beneficiary Address 3"
+                id="beneficiaryAddress3"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress3,
+                  onChange: event => {
+                    setBeneficiaryAddress3(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress3State("success");
+                    } else {
+                      setloginBeneficiaryAddress3State("error");
+                    }
+                    setloginBeneficiaryAddress3(event.target.value);
+                  },
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
+            )}
+          </div>
+        </Card>
+
+        <Card className="pricingCard">
+          <Tooltip
+            title="Unused in current application"
+            arrow
+          >
+            <Button className="operationButton">Operation 4 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation4State === "success"}
+            error={loginOperation4State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation4"
+            formControlProps={{
+              fullWidth: true
             }}
-            label="Edit Beneficiary"
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation4),
+              onChange: event => {
+                setOperation4(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation4State("success");
+                } else {
+                  setloginOperation4State("error");
+                }
+                setloginOperation4(event.target.value);
+              },
+            }}
           />
-          {locked6 && (
-            <CustomInput
-              success={loginBeneficiaryAddress6State === "success"}
-              error={loginBeneficiaryAddress6State === "error"}
-              labelText="Beneficiary Address 6"
-              id="beneficiaryAddress6"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress6,
-              }}
-            />
-          )}
-          {!locked6 && (
-            <CustomInput
-              success={loginBeneficiaryAddress6State === "success"}
-              error={loginBeneficiaryAddress6State === "error"}
-              labelText="Beneficiary Address 6"
-              id="beneficiaryAddress6"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress6,
-                onChange: event => {
-                  setBeneficiaryAddress6(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress6State("success");
-                  } else {
-                    setloginBeneficiaryAddress6State("error");
-                  }
-                  setloginBeneficiaryAddress6(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
-        <CustomInput
-          success={loginOperation7State === "success"}
-          error={loginOperation7State === "error"}
-          labelText="Operation 7 *"
-          id="operation7"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation7),
-            onChange: event => {
-              setOperation7(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation7State("success");
-              } else {
-                setloginOperation7State("error");
-              }
-              setloginOperation7(event.target.value);
-            },
-          }}
-        />
 
-        <div className="beneficiaryAddressCheckbox">
+          <div className="beneficiaryAddressCheckbox">
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked7(!locked7)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked4(!locked4)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
                 classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked4 && (
+              <CustomInput
+                success={loginBeneficiaryAddress4State === "success"}
+                error={loginBeneficiaryAddress4State === "error"}
+                labelText="Beneficiary Address 4"
+                id="beneficiaryAddress4"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress4,
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
-            }}
-            label="Edit Beneficiary"
-          />
-          {locked7 && (
-            <CustomInput
-              success={loginBeneficiaryAddress7State === "success"}
-              error={loginBeneficiaryAddress7State === "error"}
-              labelText="Beneficiary Address 7"
-              id="beneficiaryAddress7"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress7,
-              }}
-            />
-          )}
-          {!locked7 && (
-            <CustomInput
-              success={loginBeneficiaryAddress7State === "success"}
-              error={loginBeneficiaryAddress7State === "error"}
-              labelText="Beneficiary Address 7"
-              id="beneficiaryAddress7"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress7,
-                onChange: event => {
-                  setBeneficiaryAddress7(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress7State("success");
-                  } else {
-                    setloginBeneficiaryAddress7State("error");
-                  }
-                  setloginBeneficiaryAddress7(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
-        <CustomInput
-          success={loginOperation8State === "success"}
-          error={loginOperation8State === "error"}
-          labelText="Operation 8 *"
-          id="operation8"
-          formControlProps={{
-            fullWidth: true
-          }}
-          inputProps={{
-            type: "number",
-            defaultValue: window.web3.utils.fromWei(operation8),
-            onChange: event => {
-              setOperation8(event.target.value.trim())
-              if (event.target.value !== "") {
-                setloginOperation8State("success");
-              } else {
-                setloginOperation8State("error");
-              }
-              setloginOperation8(event.target.value);
-            },
-          }}
-        />
-
-        <div className="beneficiaryAddressCheckbox">
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                tabIndex={-1}
-                onClick={() => setLocked8(!locked8)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
-                classes={{
-                  checked: classes.checked,
-                  root: classes.checkRoot
+            )}
+            {!locked4 && (
+              <CustomInput
+                success={loginBeneficiaryAddress4State === "success"}
+                error={loginBeneficiaryAddress4State === "error"}
+                labelText="Beneficiary Address 4"
+                id="beneficiaryAddress4"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress4,
+                  onChange: event => {
+                    setloginBeneficiaryAddress4(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress4State("success");
+                    } else {
+                      setloginBeneficiaryAddress4State("error");
+                    }
+                    setloginBeneficiaryAddress4(event.target.value);
+                  },
                 }}
               />
-            }
-            classes={{
-              label: classes.label,
-              root: classes.labelRoot
+            )}
+          </div>
+        </Card>
+
+        <Card className="pricingCard">
+          <Tooltip
+            title="Change Status"
+            arrow
+          >
+            <Button className="operationButton">Operation 5 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation5State === "success"}
+            error={loginOperation5State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation5"
+            formControlProps={{
+              fullWidth: true
             }}
-            label="Edit Beneficiary"
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation5),
+              onChange: event => {
+                setOperation5(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation5State("success");
+                } else {
+                  setloginOperation5State("error");
+                }
+                setloginOperation5(event.target.value);
+              },
+            }}
           />
-          {locked8 && (
-            <CustomInput
-              success={loginBeneficiaryAddress8State === "success"}
-              error={loginBeneficiaryAddress8State === "error"}
-              labelText="Beneficiary Address 8"
-              id="beneficiaryAddress8"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                disabled: "true",
-                defaultValue: beneficiaryAddress8,
-              }}
-            />
-          )}
-          {!locked8 && (
-            <CustomInput
-              success={loginBeneficiaryAddress8State === "success"}
-              error={loginBeneficiaryAddress8State === "error"}
-              labelText="Beneficiary Address 8"
-              id="beneficiaryAddress8"
-              formControlProps={{
-                fullWidth: true
-              }}
-              inputProps={{
-                defaultValue: beneficiaryAddress8,
-                onChange: event => {
-                  setBeneficiaryAddress8(event.target.value.trim())
-                  if (event.target.value !== "") {
-                    setloginBeneficiaryAddress8State("success");
-                  } else {
-                    setloginBeneficiaryAddress8State("error");
-                  }
-                  setloginBeneficiaryAddress8(event.target.value);
-                },
-              }}
-            />
-          )}
-        </div>
+
+          <div className="beneficiaryAddressCheckbox">
+
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked5(!locked5)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
+                classes={{
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked5 && (
+              <CustomInput
+                success={loginBeneficiaryAddress5State === "success"}
+                error={loginBeneficiaryAddress5State === "error"}
+                labelText="Beneficiary Address 5"
+                id="beneficiaryAddress5"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress5,
+                }}
+              />
+            )}
+            {!locked5 && (
+              <CustomInput
+                success={loginBeneficiaryAddress5State === "success"}
+                error={loginBeneficiaryAddress5State === "error"}
+                labelText="Beneficiary Address 5"
+                id="beneficiaryAddress5"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress5,
+                  onChange: event => {
+                    setBeneficiaryAddress5(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress5State("success");
+                    } else {
+                      setloginBeneficiaryAddress5State("error");
+                    }
+                    setloginBeneficiaryAddress5(event.target.value);
+                  },
+                }}
+              />
+            )}
+          </div>
+        </Card>
+
+        <Card className="pricingCard">
+          <Tooltip
+            title="Change Owner Info"
+            arrow
+          >
+            <Button className="operationButton">Operation 6 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation6State === "success"}
+            error={loginOperation6State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation6"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation6),
+              onChange: event => {
+                setOperation6(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation6State("success");
+                } else {
+                  setloginOperation6State("error");
+                }
+                setloginOperation6(event.target.value);
+              },
+            }}
+          />
+
+          <div className="beneficiaryAddressCheckbox">
+
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked6(!locked6)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
+                classes={{
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked6 && (
+              <CustomInput
+                success={loginBeneficiaryAddress6State === "success"}
+                error={loginBeneficiaryAddress6State === "error"}
+                labelText="Beneficiary Address 6"
+                id="beneficiaryAddress6"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress6,
+                }}
+              />
+            )}
+            {!locked6 && (
+              <CustomInput
+                success={loginBeneficiaryAddress6State === "success"}
+                error={loginBeneficiaryAddress6State === "error"}
+                labelText="Beneficiary Address 6"
+                id="beneficiaryAddress6"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress6,
+                  onChange: event => {
+                    setBeneficiaryAddress6(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress6State("success");
+                    } else {
+                      setloginBeneficiaryAddress6State("error");
+                    }
+                    setloginBeneficiaryAddress6(event.target.value);
+                  },
+                }}
+              />
+            )}
+          </div>
+        </Card>
+
+        <Card className="pricingCard">
+          <Tooltip
+            title="Unused in current application"
+            arrow
+          >
+            <Button className="operationButton">Operation 7 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation7State === "success"}
+            error={loginOperation7State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation7"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation7),
+              onChange: event => {
+                setOperation7(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation7State("success");
+                } else {
+                  setloginOperation7State("error");
+                }
+                setloginOperation7(event.target.value);
+              },
+            }}
+          />
+
+          <div className="beneficiaryAddressCheckbox">
+
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked7(!locked7)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
+                classes={{
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked7 && (
+              <CustomInput
+                success={loginBeneficiaryAddress7State === "success"}
+                error={loginBeneficiaryAddress7State === "error"}
+                labelText="Beneficiary Address 7"
+                id="beneficiaryAddress7"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress7,
+                }}
+              />
+            )}
+            {!locked7 && (
+              <CustomInput
+                success={loginBeneficiaryAddress7State === "success"}
+                error={loginBeneficiaryAddress7State === "error"}
+                labelText="Beneficiary Address 7"
+                id="beneficiaryAddress7"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress7,
+                  onChange: event => {
+                    setBeneficiaryAddress7(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress7State("success");
+                    } else {
+                      setloginBeneficiaryAddress7State("error");
+                    }
+                    setloginBeneficiaryAddress7(event.target.value);
+                  },
+                }}
+              />
+            )}
+          </div>
+        </Card>
+
+        <Card className="pricingCard">
+          <Tooltip
+            title="Change Asset Info"
+            arrow
+          >
+            <Button className="operationButton">Operation 8 :</Button>
+          </Tooltip>
+          <CustomInput
+            success={loginOperation8State === "success"}
+            error={loginOperation8State === "error"}
+            labelText="In PRüF (ü)"
+            id="operation8"
+            formControlProps={{
+              fullWidth: true
+            }}
+            inputProps={{
+              type: "number",
+              defaultValue: window.web3.utils.fromWei(operation8),
+              onChange: event => {
+                setOperation8(event.target.value.trim())
+                if (event.target.value !== "") {
+                  setloginOperation8State("success");
+                } else {
+                  setloginOperation8State("error");
+                }
+                setloginOperation8(event.target.value);
+              },
+            }}
+          />
+
+          <div className="beneficiaryAddressCheckbox">
+
+            <Tooltip
+              title="Change node action rewards address."
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    tabIndex={-1}
+                    onClick={() => setLocked8(!locked8)}
+                    checkedIcon={<Check className={classes.checkedIcon} />}
+                    icon={<Check className={classes.uncheckedIcon} />}
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot
+                    }}
+                  />
+                }
+                classes={{
+                  label: classes.label,
+                  root: classes.labelRoot
+                }}
+                label="Edit Beneficiary"
+              />
+            </Tooltip>
+            {locked8 && (
+              <CustomInput
+                success={loginBeneficiaryAddress8State === "success"}
+                error={loginBeneficiaryAddress8State === "error"}
+                labelText="Beneficiary Address 8"
+                id="beneficiaryAddress8"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  disabled: "true",
+                  defaultValue: beneficiaryAddress8,
+                }}
+              />
+            )}
+            {!locked8 && (
+              <CustomInput
+                success={loginBeneficiaryAddress8State === "success"}
+                error={loginBeneficiaryAddress8State === "error"}
+                labelText="Beneficiary Address 8"
+                id="beneficiaryAddress8"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  defaultValue: beneficiaryAddress8,
+                  onChange: event => {
+                    setBeneficiaryAddress8(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginBeneficiaryAddress8State("success");
+                    } else {
+                      setloginBeneficiaryAddress8State("error");
+                    }
+                    setloginBeneficiaryAddress8(event.target.value);
+                  },
+                }}
+              />
+            )}
+          </div>
+        </Card>
       </Card>
     );
     return component
@@ -2017,7 +2122,7 @@ export default function CreateNode(props) {
 </span>
         </CardIcon>
         <Button color="info" className="MLBGradient" onClick={() => window.location.href = "/#/user/node-manager"}>Go Back</Button>
-        <h4 className={classes.cardIconTitle}>Configure New Node</h4>
+        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
       </CardHeader>
       <CardBody>
         <form>
@@ -2067,9 +2172,12 @@ export default function CreateNode(props) {
                       id: "root-select"
                     }}
                   >
-                  {generateRootList(props.roots)}
+                    {props.roots !== undefined && (
+                      generateRootList(props.roots)
+                  )}
                   </Select>
                 </FormControl>
+                <br/>
                 <div className={classes.formCategory}>
                   <small>*</small> Required fields
                     </div>
@@ -2092,7 +2200,7 @@ export default function CreateNode(props) {
                       label: classes.label,
                       root: classes.labelRoot
                     }}
-                    label="Advanced Options (Optional)"
+                    label="Advanced Options"
                   />
                 </div>
                 {advanced && (

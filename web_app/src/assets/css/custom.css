@@ -1042,3 +1042,9 @@ cursor:pointer;
   color: black !important;
   box-shadow: none !important;
 }
+
+.operationButton {
+  color :rgb(0, 0, 0) !important;
+  background-color: #00aaff2a !important;
+  width: fit-content !important;
+}

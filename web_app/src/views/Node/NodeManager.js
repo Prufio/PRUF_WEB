@@ -42,6 +42,7 @@ import {
 } from "variables/charts.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import chartStyles from "assets/jss/material-dashboard-pro-react/views/chartsStyle.js";
+import swal from "sweetalert";
 
 
 // const styles = {
@@ -57,9 +58,9 @@ const useChartStyles = makeStyles(chartStyles);
 
 export default function NodeManager(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [dash, setDash] = React.useState(false)
+  const [dash, setDash] = React.useState(true)
   const [Delegation, setDelegation] = React.useState(false)
-  const [analytics, setAnalytics] = React.useState(true)
+  const [analytics, setAnalytics] = React.useState(false)
   const [rewards, setRewards] = React.useState(true)
   const [selectedNodeObj, setSelectedNodeObj] = React.useState({});
   const [totalRewards, setTotalRewards] = React.useState(false)
@@ -245,6 +246,7 @@ export default function NodeManager(props) {
     setDash(false)
     setDelegation(true)
     setAnalytics(false)
+    // swal("Coming Soon!")
 
   }
 
@@ -252,6 +254,7 @@ export default function NodeManager(props) {
     setDash(false)
     setDelegation(false)
     setAnalytics(true)
+    // swal("Coming Soon!")
 
   }
 
@@ -297,6 +300,23 @@ export default function NodeManager(props) {
               <AccountBalance />
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Node Manager</h4>
+            {dash && (
+              <Button
+                className="nodeButtonActive"
+              >
+                <Dashboard />
+              Dashboard
+              </Button>
+            )}
+            {!dash && (
+              <Button
+                className="nodeButton"
+                onClick={() => { setDashButton(true) }}
+              >
+                <Dashboard />
+              Dashboard
+              </Button>
+            )}
             {analytics && (
               <Button
                 className="nodeButtonActive"
@@ -329,23 +349,6 @@ export default function NodeManager(props) {
               >
                 <ListAltRounded />
               Delegation List
-              </Button>
-            )}
-            {dash && (
-              <Button
-                className="nodeButtonActive"
-              >
-                <Dashboard />
-              Dashboard
-              </Button>
-            )}
-            {!dash && (
-              <Button
-                className="nodeButton"
-                onClick={() => { setDashButton(true) }}
-              >
-                <Dashboard />
-              Dashboard
               </Button>
             )}
           </CardHeader>
