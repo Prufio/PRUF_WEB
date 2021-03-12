@@ -2,6 +2,7 @@ import React from "react";
 import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
 import Web3 from "web3";
+//import OrbitDB from 'orbit-db';
 import buildContracts from "../Resources/Contracts";
 import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -49,6 +50,8 @@ export default function Dashboard(props) {
   */
 
   const IPFS = require('ipfs-http-client') //require("ipfs-mini")
+  //const OrbitDB = require('orbit-db')
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [miniActive, setMiniActive] = React.useState(false);
   const [image, setImage] = React.useState(require("assets/img/Sidebar Backgrounds/TracesWB.jpg"));
@@ -122,7 +125,6 @@ export default function Dashboard(props) {
     if (window.ethereum) {
       //console.log("Found ethereum object");
       let web3;
-
       web3 = require("web3");
       const ethereum = window.ethereum;
       //console.log("Here");
@@ -278,6 +280,7 @@ export default function Dashboard(props) {
       setTimeout(handleEthereum, 3300); // 3.3 seconds
     }
 
+    //initOrbitDB()
 
   }
 
@@ -479,6 +482,15 @@ export default function Dashboard(props) {
       }
     });
   };
+
+  const initOrbitDB = async () => {
+    //const orbitdb = await OrbitDB.createInstance(window.ipfs)
+    //const db = await orbitdb.log('hello');
+
+    //console.log(db)
+
+    //window.orbitDB = orbitdb;
+  }
 
   const reloadAssetAt = async (index, id) => {
     if (!window.contracts || !window.web3) return
