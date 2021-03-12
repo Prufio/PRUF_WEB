@@ -151,6 +151,7 @@ export default function CreateNode(props) {
 
   const generateRootList = (arr) => {
     let rootNames = props.rootNames
+    if (!arr || !rootNames) return
     let rootSelection = [
       <MenuItem
         disabled
@@ -343,8 +344,8 @@ export default function CreateNode(props) {
               {/* {!standard1 && (
                 <img title="View Asset" src={placeholder} alt="" />
               )} */}
-                {/* @dev temp */}
-                <img title="View Asset" src={placeholderComingSoon} alt="" /> 
+              {/* @dev temp */}
+              <img title="View Asset" src={placeholderComingSoon} alt="" />
             </CardHeader>
             {/* <CardBody>
               Standard 1
@@ -2121,7 +2122,7 @@ export default function CreateNode(props) {
 </span>
         </CardIcon>
         <Button color="info" className="MLBGradient" onClick={() => window.location.href = "/#/user/node-manager"}>Go Back</Button>
-        <h4 className={classes.cardIconTitle}>Configure New Node</h4>
+        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
       </CardHeader>
       <CardBody>
         <form>
@@ -2171,9 +2172,12 @@ export default function CreateNode(props) {
                       id: "root-select"
                     }}
                   >
-                  {generateRootList(props.roots)}
+                    {props.roots !== undefined && (
+                      generateRootList(props.roots)
+                  )}
                   </Select>
                 </FormControl>
+                <br/>
                 <div className={classes.formCategory}>
                   <small>*</small> Required fields
                     </div>
