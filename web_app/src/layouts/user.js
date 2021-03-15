@@ -212,7 +212,16 @@ export default function Dashboard(props) {
 
           return setIsKovan(true);
         }
-        else { window.isKovan = false; return setIsKovan(false); }
+        else { 
+          window.isKovan = false; 
+          setIsKovan(false); 
+          return swal({
+            title: "Connect to the Kovan Testnet!",
+            text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
+            icon: "warning",
+            button: "Okay",
+          })
+        }
       })
 
       //More globals (eth-is-connected specific)
@@ -382,7 +391,7 @@ export default function Dashboard(props) {
       }
 
       else if (window.replaceAssetData.nodeList) {
-        console.log("Setting nodeList"); 
+        //console.log("Setting nodeList"); 
         setNodeList(window.replaceAssetData.nodeList)
         setCookieTo('nodeList', window.replaceAssetData.nodeList)
       }
