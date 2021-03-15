@@ -221,7 +221,9 @@ export default function ModifyRGT(props) {
       </CardHeader>
       <CardBody>
         <form>
+          {assetInfo && (
           <h4>Asset Selected: {assetInfo.name}</h4>
+          )}
           <>
             {!transactionActive && (
               <>
