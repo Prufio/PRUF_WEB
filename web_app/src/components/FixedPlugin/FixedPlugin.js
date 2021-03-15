@@ -321,7 +321,7 @@ export default function FixedPlugin(props) {
                   <div className="clearfix" />
                 </a>
               </li>
-              <li className="header-title">Sidebar Backgrounds</li>
+              <li className="header-title">Sidebar Images</li>
               <li className={bgImage === BloomWB ? "active" : ""}>
                 {props.bgColor !== "white" && (
                   <a
