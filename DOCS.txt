@@ -1,0 +1,5 @@
+To do: 
+
+Local hash matching for ipfs cached data
+Sync all ac node ops with backend
+? Clear cookies from app? ?

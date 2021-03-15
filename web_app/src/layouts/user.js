@@ -812,7 +812,7 @@ export default function Dashboard(props) {
   
                         setCookieTo(_ipfsHash, JSON.parse(str))
 
-                        if(assetArr[index].ipfs){
+                        if(assetArr[index] && assetArr[index].ipfs){
                           if(typeof assetArr[index].ipfs !== "string")
                           assetArr[index].ipfs.then((e)=>{
                             console.log("Removing cookie: ", e)
