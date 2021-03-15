@@ -1130,12 +1130,12 @@ background-color: #02c944 !important;
 }
 
 .declineCookies {
-background-color: #ff1500;
+background-color: grey;
 padding: 6px !important;
 }
 
 .declineCookies:hover {
-background-color: #af0f00 !important;
+background-color: rgb(58, 58, 58) !important;
 }
 
 .moreCookieInfo {
