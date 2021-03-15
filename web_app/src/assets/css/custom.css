@@ -1121,21 +1121,21 @@ cursor:pointer;
 }
 
 .acceptCookies {
-background-color: #00ff55;
+background-color: #02c944;
 padding: 6px !important;
 }
 
 .acceptCookies:hover {
-background-color: #02c944 !important;
+background-color: #00832c !important;
 }
 
 .declineCookies {
-background-color: #ff1500;
+background-color: grey;
 padding: 6px !important;
 }
 
 .declineCookies:hover {
-background-color: #af0f00 !important;
+background-color: rgb(58, 58, 58) !important;
 }
 
 .moreCookieInfo {
