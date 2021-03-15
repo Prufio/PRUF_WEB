@@ -22,7 +22,6 @@ import ChangeNodeData from "views/Node/Forms/ChangeNodeData.js";
 import ChangeNodeCosts from "views/Node/Forms/ChangeNodeCosts.js";
 import CreateNode from "views/Node/Forms/CreateNode.js";
 import TransferNode from "views/Node/Forms/TransferNode.js";
-import Stake from "views/Node/Forms/Stake.js";
 
 // @material-ui/icons
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
@@ -156,12 +155,6 @@ var dashRoutes = [
     name: "Create Node",
     path: "/create-node",
     component: CreateNode,
-    layout: "/user"
-  },
-  {
-    name: "Stake",
-    path: "/stake",
-    component: Stake,
     layout: "/user"
   },
   {

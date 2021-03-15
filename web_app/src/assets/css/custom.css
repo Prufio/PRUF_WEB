@@ -1103,3 +1103,15 @@ cursor:pointer;
   bottom: 115px;
   right: 20px;
 }
+
+.delegationButtonDelegate {
+  width: 213px;
+  height: 50px !important;
+  background-color: #00a8ff !important;
+}
+
+.delegationButtonBack {
+  width: 213px;
+  height: 50px !important;
+  background-color: #002a40 !important;
+}

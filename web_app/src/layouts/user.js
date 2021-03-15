@@ -2,6 +2,7 @@ import React from "react";
 import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
 import Web3 from "web3";
+import { isMobile } from "react-device-detect";
 //import OrbitDB from 'orbit-db';
 import buildContracts from "../Resources/Contracts";
 import buildWindowUtils from "../Resources/WindowUtils";
@@ -64,7 +65,7 @@ export default function Dashboard(props) {
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
   const [isIDHolder, setIsIDHolder] = React.useState();
-  const [sidebarRoutes,] = React.useState([routes[0], routes[2], routes[1], routes[3], routes[4]]);
+  const [sidebarRoutes, setSidebarRoutes] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
   const [sps, setSps] = React.useState(undefined)
 
   const [prufBalance, setPrufBalance] = React.useState("~");
@@ -302,6 +303,8 @@ export default function Dashboard(props) {
       setSps(ps);
       //console.log(ps);
     }
+
+    if(!isMobile) setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
     window.addEventListener("resize", resizeFunction);
 
     // Specify how to clean up after this effect:

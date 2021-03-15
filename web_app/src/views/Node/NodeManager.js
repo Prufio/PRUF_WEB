@@ -340,7 +340,7 @@ export default function NodeManager(props) {
             onChange={(e) => { setDelegationAmount(e.target.value) }}
             id="outlined-full-width"
             label="Amount"
-            defaultValue={props.pruf}
+            defaultValue={Number(props.pruf).toFixed(2)}
             fullWidth
             margin="normal"
             InputLabelProps={{
@@ -362,13 +362,16 @@ export default function NodeManager(props) {
           />
         </Card>,
       buttons: {
-        delete: {
-          text: "Delegate",
-          value: "delegate"
-        },
         back: {
           text: "Back",
-          value: "back"
+          value: "back",
+          className: "delegationButtonBack"
+        },
+        delete: {
+          text: "Delegate",
+          value: "delegate",
+          className: "delegationButtonDelegate"
+
         }
       }
     })
@@ -379,7 +382,6 @@ export default function NodeManager(props) {
             if (delegationAmount > props.pruf) {
               return swal("Insufficient Balance.")
             }
-            // setDisplayImage(selectedImage, selectedKey)
             swal("Delegation Set!");
             break;
 
