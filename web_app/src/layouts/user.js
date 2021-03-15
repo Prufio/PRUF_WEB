@@ -111,6 +111,12 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
+  Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
   //console.log("pre-load href", window.location.href)
 
   const handleNoEthereum = () => {
@@ -126,7 +132,10 @@ export default function Dashboard(props) {
   }
 
   const checkForCookies = () => {
-    removeCookie("[object Promise]")
+    //removeCookie("[object Promise]")
+    //let date = new Date()
+    //console.log(Date())
+    //console.log(new Date().addDays(15))
 
     if(!cookies.hasBeenNotified){
       swal({
@@ -180,7 +189,7 @@ export default function Dashboard(props) {
   const setCookieTo = (job, val) => {
     //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
     console.log("Setting cookie", job, "to", val)
-    setCookie(job, JSON.stringify(val), { path: '/' })
+    setCookie(job, JSON.stringify(val), { path: "/", expires: new Date().addDays(15) })
   }
 
   const readCookie = async (job) => {
@@ -234,7 +243,16 @@ export default function Dashboard(props) {
 
           return setIsKovan(true);
         }
-        else { window.isKovan = false; return setIsKovan(false); }
+        else { 
+          window.isKovan = false; 
+          setIsKovan(false); 
+          return swal({
+            title: "Connect to the Kovan Testnet!",
+            text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
+            icon: "warning",
+            button: "Okay",
+          })
+        }
       })
 
       //More globals (eth-is-connected specific)
@@ -404,7 +422,7 @@ export default function Dashboard(props) {
       }
 
       else if (window.replaceAssetData.nodeList) {
-        console.log("Setting nodeList"); 
+        //console.log("Setting nodeList"); 
         setNodeList(window.replaceAssetData.nodeList)
         setCookieTo('nodeList', window.replaceAssetData.nodeList)
       }
