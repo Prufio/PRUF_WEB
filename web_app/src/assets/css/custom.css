@@ -1119,3 +1119,34 @@ cursor:pointer;
   height: 50px !important;
   background-color: #002a40 !important;
 }
+
+.acceptCookies {
+background-color: #00ff55;
+padding: 6px !important;
+}
+
+.acceptCookies:hover {
+background-color: #02c944 !important;
+}
+
+.declineCookies {
+background-color: #ff1500;
+padding: 6px !important;
+}
+
+.declineCookies:hover {
+background-color: #af0f00 !important;
+}
+
+.moreCookieInfo {
+background-color: transparent;
+text-decoration: underline;
+color: black;
+padding: 0px !important;
+}
+
+.moreCookieInfo:hover {
+background-color: transparent !important;
+text-decoration: underline !important;
+color: rgb(99, 99, 99) !important;
+}

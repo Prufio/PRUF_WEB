@@ -30,6 +30,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import NewRecordIcon from "@material-ui/icons/LibraryAddOutlined";
 import NodeManagerIcon from "@material-ui/icons/AccountBalance";
 
+import Cookies from "Resources/Cookies.js";
+
 var dashRoutes = [
   {
     path: "/home",
@@ -161,6 +163,12 @@ var dashRoutes = [
     name: "Transfer Node",
     path: "/transfer-node",
     component: TransferNode,
+    layout: "/user"
+  },
+  {
+    name: "Cookies Policy",
+    path: "/cookies-policy",
+    component: Cookies,
     layout: "/user"
   },
 ];
