@@ -1,12 +1,14 @@
 import React from "react";
 import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
+import swal from 'sweetalert';
 import Web3 from "web3";
 import { isMobile } from "react-device-detect";
 //import OrbitDB from 'orbit-db';
 import buildContracts from "../Resources/Contracts";
 import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -77,6 +79,7 @@ export default function Dashboard(props) {
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [assetClassBalance, setAssetClassBalance] = React.useState("~");
   const [IDBalance, setIDBalance] = React.useState("0");
+  const [cookies, setCookie, removeCookie] = useCookies(['nodeList'])
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
   const [WD, setWD] = React.useState(false);
@@ -120,6 +123,38 @@ export default function Dashboard(props) {
     window.web3 = web3;
     window.isKovan = true;
     return setIsMounted(true);
+  }
+
+  const checkForCookies = () => {
+    //removeCookie("[object Promise]")
+
+    if(!cookies.hasBeenNotified){
+      swal({
+        title: "Bare minimum use of cookies",
+        text: "WE VALUE USER PRIVACY.\n\n -Cookies are ONLY used to improve site performance. \n\n -By using the site, you agree to these terms.",
+        icon: "info",
+        button: "Okay",
+      }).then(()=>{
+        setCookieTo("hasBeenNotified", true)
+      });
+    }
+    console.log("Cookies:", cookies)
+    readCookie('nodeList').then((e)=>{
+      if(e) setNodeList(e)
+      console.log("Found nodeList: ",e)
+    })
+    
+  }
+
+  const setCookieTo = (job, val) => {
+    //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
+    console.log("Setting cookie", job, "to", val)
+    setCookie(job, JSON.stringify(val), { path: '/' })
+  }
+
+  const readCookie = async (job) => {
+    if(!cookies[job]) return console.log("Referenced nonexistant cookie")
+    return cookies[job];
   }
 
   const handleEthereum = () => {
@@ -304,6 +339,8 @@ export default function Dashboard(props) {
       //console.log(ps);
     }
 
+    if(cookies) checkForCookies()
+
     if(!isMobile) setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
     window.addEventListener("resize", resizeFunction);
 
@@ -338,6 +375,7 @@ export default function Dashboard(props) {
       else if (window.replaceAssetData.nodeList) {
         console.log("Setting nodeList"); 
         setNodeList(window.replaceAssetData.nodeList)
+        setCookieTo('nodeList', window.replaceAssetData.nodeList)
       }
 
       else {
@@ -580,11 +618,10 @@ export default function Dashboard(props) {
                     newAsset.status = e;
     
                     let assetObj;
-    
-                    
-                    for await (const chunk of window.ipfs.cat(_ipfsHash)) {
-                      let str = new TextDecoder("utf-8").decode(chunk);
-    
+
+                    if(cookies[_ipfsHash]){
+                      console.log("Using cached ipfs data:", cookies[_ipfsHash])
+                      let str = JSON.stringify(cookies[_ipfsHash])
                       if (!str) {
                         assetObj = { text: {}, photo: {}, urls: {}, name: "" }
                         newAsset.text = assetObj.text;
@@ -719,6 +756,161 @@ export default function Dashboard(props) {
                         }
                       }
                     }
+
+                    else{
+                      for await (const chunk of window.ipfs.cat(_ipfsHash)) {
+                        let str = new TextDecoder("utf-8").decode(chunk);
+  
+                        setCookieTo(_ipfsHash, JSON.parse(str))
+
+                        if(assetArr[index].ipfs){
+                          if(typeof assetArr[index].ipfs !== "string")
+                          assetArr[index].ipfs.then((e)=>{
+                            console.log("Removing cookie: ", e)
+                            removeCookie(e)
+                          })
+                          else{
+                            console.log("Removing cookie: ", assetArr[index].ipfs)
+                            removeCookie(assetArr[index].ipfs)
+                          }
+                        }
+      
+                        if (!str) {
+                          assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+                          newAsset.text = assetObj.text;
+                          newAsset.Description = "";
+                          newAsset.urls = assetObj.urls;
+                          newAsset.name = assetObj.name;
+                          newAsset.photo = assetObj.photo;
+                          newAsset.DisplayImage = ""
+                          finalize(newAsset)
+                        }
+      
+                        else {
+                          console.log("Got updated asset ipfs")
+                          try {
+                            assetObj = JSON.parse(str)
+                          }
+                          catch {
+                            assetObj = { text: {}, photo: {}, urls: {}, name: "" }
+                          }
+                          newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
+                          let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
+      
+                          newAsset.text = assetObj.text;
+                          newAsset.Description = assetObj.text.Description;
+                          newAsset.urls = assetObj.urls;
+                          newAsset.name = assetObj.name;
+      
+                          if (keys.length < 1) {
+                            newAsset.photo = assetObj.photo;
+                            newAsset.DisplayImage = ""
+                            finalize(newAsset)
+                          }
+                          //console.log(chunk)
+                          for (let i = 0; i < keys.length; i++) {
+                            const get = () => {
+                              if (vals[i].includes("data") && vals[i].includes("base64")) {
+                                assetObj.photo[keys[i]] = vals[i];
+                                //console.log(assetObj.photo[keys[i]]);
+                                if (keys[i] === "DisplayImage") {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                                }
+                                else if (i === keys.length - 1) {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                                }
+      
+                                if (i + 1 === keys.length) {
+                                  newAsset.photo = assetObj.photo;
+                                  newAsset.DisplayImage = assetObj.DisplayImage;
+                                  finalize(newAsset)
+                                }
+      
+                                forceUpdate();
+                              }
+      
+                              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+                                assetObj.photo[keys[i]] = vals[i];
+                                if (keys[i] === "DisplayImage") {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                                }
+                                else if (i === keys.length - 1) {
+                                  //console.log("Setting Display Image")
+                                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                                }
+      
+                                if (i + 1 === keys.length) {
+                                  newAsset.photo = assetObj.photo;
+                                  newAsset.DisplayImage = assetObj.DisplayImage;
+                                  finalize(newAsset)
+                                }
+      
+                                forceUpdate();
+                              }
+      
+                              else {
+                                const req = new XMLHttpRequest();
+                                req.responseType = "text";
+      
+                                req.onload = function (e) {
+                                  //console.log("in onload")
+                                  if (this.response.includes("base64")) {
+                                    assetObj.photo[keys[i]] = this.response;
+                                    //console.log(assetObj.photo[keys[i]]);
+      
+                                    if (keys[i] === "DisplayImage") {
+                                      //console.log("Setting Display Image")
+                                      assetObj.DisplayImage = assetObj.photo[keys[i]]
+                                    }
+      
+                                    else if (i === keys.length - 1) {
+                                      //console.log("Setting Display Image")
+                                      assetObj.DisplayImage = assetObj.photo[keys[0]]
+                                    }
+                                    forceUpdate();
+                                  }
+      
+                                  if (i + 1 === keys.length) {
+                                    newAsset.photo = assetObj.photo;
+                                    newAsset.DisplayImage = assetObj.DisplayImage;
+                                    finalize(newAsset)
+                                  }
+                                }
+      
+                                req.onerror = function (e) {
+                                  //console.log("http request error")
+                                  if (vals[i].includes("http")) {
+                                    assetObj.photo[keys[i]] = vals[i];
+                                    if (keys[i] === "DisplayImage") {
+                                      //console.log("Setting Display Image")
+                                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
+                                    }
+                                    else if (i === keys.length - 1) {
+                                      //console.log("Setting Display Image")
+                                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
+                                    }
+                                    forceUpdate();
+                                  }
+      
+                                  if (i + 1 === keys.length) {
+                                    newAsset.photo = assetObj.photo;
+                                    newAsset.DisplayImage = assetObj.DisplayImage;
+                                    finalize(newAsset)
+                                  }
+                                }
+                                req.open('GET', vals[i], true);
+                                req.send();
+                              }
+                            }
+                            await get()
+                          }
+                        }
+                      }
+                    } 
+
                   });
                 })
               })
@@ -737,15 +929,28 @@ export default function Dashboard(props) {
                   countPair: [tempResult[4], tempResult[3]]
                 })
   
-                window.utils.getStatusString(String(tempResult[0])).then(async (e) => {
-                  newAsset.status = e;
+                window.utils.getStatusString(String(tempResult[0])).then(async (x) => {
+                  newAsset.status = x;
   
                   let assetObj;
   
                   
-                  for await (const chunk of window.ipfs.cat(e)) {
+                  for await (const chunk of window.ipfs.cat(ipfsHash)) {
                     let str = new TextDecoder("utf-8").decode(chunk);
   
+                    setCookieTo(ipfsHash, JSON.parse(str))
+                    if(assetArr[index].ipfs){
+                      if(typeof assetArr[index].ipfs !== "string")
+                      assetArr[index].ipfs.then((e)=>{
+                        console.log("Removing cookie: ", e)
+                        removeCookie(e)
+                      })
+                      else{
+                        console.log("Removing cookie: ", assetArr[index].ipfs)
+                        removeCookie(assetArr[index].ipfs)
+                      }
+                    }
+
                     if (!str) {
                       assetObj = { text: {}, photo: {}, urls: {}, name: "" }
                       newAsset.text = assetObj.text;
@@ -1084,65 +1289,82 @@ export default function Dashboard(props) {
 
     let lookup = array[iteration - 1];
     if(typeof lookup !== "string") lookup.then(async (e)=>{
-      try {
-        for await (const chunk of window.ipfs.cat(e)) {
-          let str = new TextDecoder("utf-8").decode(chunk);
-          //console.log(str)
-          if (!str) {
-            _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-            console.log("error")
-            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-          }
-    
-          else {
-            //console.log(str)
-            console.log("got job #", iteration)
-            try {
-              _assetData.push(JSON.parse(str))
-            }
-            catch {
-              _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-            }
-            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-          }
-          //console.log(chunk)
-        }
+      if(cookies[e]){
+        console.log("Using cached ipfs:", cookies[e])
+        _assetData.push(cookies[e])
+        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
       }
-  
-      catch {
-        setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
+      else{
+        try {
+          for await (const chunk of window.ipfs.cat(e)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            //console.log(str)
+            if (!str) {
+              _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+              console.log("error")
+              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+            }
+      
+            else {
+              //console.log(str)
+              console.log("got job #", iteration)
+              try {
+                _assetData.push(JSON.parse(str))
+                setCookieTo(e, JSON.parse(str))
+              }
+              catch {
+                _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+              }
+              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+            }
+            //console.log(chunk)
+          }
+        }
+    
+        catch {
+          setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
+        }
       }
     })
     
     else{
-      try {
-        for await (const chunk of window.ipfs.cat(lookup)) {
-          let str = new TextDecoder("utf-8").decode(chunk);
-          //console.log(str)
-          if (!str) {
-            _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-            console.log("error")
-            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-          }
-    
-          else {
+      if(cookies[lookup]){
+        console.log("Using cached ipfs:", cookies[lookup])
+        _assetData.push(cookies[lookup])
+        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+      }
+      else{
+        try {
+          for await (const chunk of window.ipfs.cat(lookup)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
             //console.log(str)
-            console.log("got job #", iteration)
-            try {
-              _assetData.push(JSON.parse(str))
-            }
-            catch {
+            if (!str) {
               _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+              console.log("error")
+              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
             }
-            return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+      
+            else {
+              //console.log(str)
+              console.log("got job #", iteration)
+              try {
+                _assetData.push(JSON.parse(str))
+                setCookieTo(lookup, JSON.parse(str))
+              }
+              catch {
+                _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
+              }
+              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+            }
+            //console.log(chunk)
           }
-          //console.log(chunk)
+        }
+    
+        catch {
+          setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
         }
       }
-  
-      catch {
-        setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
-      }
+
     }
 
   };
