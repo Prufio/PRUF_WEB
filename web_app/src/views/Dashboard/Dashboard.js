@@ -140,7 +140,7 @@ export default function Dashboard(props) {
   const generateAssetDash = (arr) => {
 
     if (!arr) return <></>;
-    console.log(window.backIndex);
+    //console.log(window.backIndex);
     if (window.backIndex > -1 && window.backIndex !== null && window.backIndex !== undefined) {
       let backIndex = window.backIndex, newObj, newStat, newStatNum;
 
