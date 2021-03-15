@@ -111,6 +111,12 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
+  Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
   //console.log("pre-load href", window.location.href)
 
   const handleNoEthereum = () => {
@@ -127,6 +133,9 @@ export default function Dashboard(props) {
 
   const checkForCookies = () => {
     //removeCookie("[object Promise]")
+    //let date = new Date()
+    //console.log(Date())
+    //console.log(new Date().addDays(15))
 
     if(!cookies.hasBeenNotified){
       swal({
@@ -149,7 +158,7 @@ export default function Dashboard(props) {
   const setCookieTo = (job, val) => {
     //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
     console.log("Setting cookie", job, "to", val)
-    setCookie(job, JSON.stringify(val), { path: '/' })
+    setCookie(job, JSON.stringify(val), { path: "/", expires: new Date().addDays(15) })
   }
 
   const readCookie = async (job) => {
