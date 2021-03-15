@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import Draggable from 'react-draggable';
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 
@@ -57,12 +58,17 @@ export default function FixedPlugin(props) {
   return (
 
     <ClickAwayListener onClickAway={handleClickAway}>
+
+    <Draggable
+    axis="y"
+    >
       <div
         className={"fixed-plugin" + (props.rtlActive ? " fixed-plugin-rtl" : "")}
       >
         <div id="fixedPluginClasses" className={props.fixedClasses}>
           <div onClick={handleClick}>
             {/* <i className="fa fa-cog fa-2x" /> */}
+            
             <Icon className="fixedPlugin">
               {/* <span class="material-icons"> */}
             tune
@@ -396,6 +402,7 @@ export default function FixedPlugin(props) {
           )}
         </div>
       </div>
+      </Draggable>
     </ClickAwayListener>
   );
 }

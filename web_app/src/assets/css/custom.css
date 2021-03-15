@@ -751,9 +751,11 @@ cursor:pointer;
 }
 
 .addressText {
-  font-size: 15px;
-  top: -15px !important;
+  font-size: 16px;
+  top: 24px !important;
+  left: 80px !important;
   color: white;
+  position: absolute;
 }
 
 .addressText:hover {
@@ -762,9 +764,11 @@ cursor:pointer;
 }
 
 .addressTextBlack {
-  font-size: 15px;
-  top: -15px !important;
+  font-size: 16px;
+  top: 24px !important;
+  left: 80px !important;
   color: rgb(0, 0, 0);
+  position: absolute;
 }
 
 .addressTextBlack:hover {
@@ -791,17 +795,17 @@ cursor:pointer;
 }
 
 .addressIcon {
-  float: left;
-  width: 34px;
-  height: 34px;
+  /* float: left; */
+  width: 34px !important;
+  height: 34px !important;
   z-index: 5;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: 0 10px 30px -12px rgb(0 0 0 / 42%), 0 4px 25px 0px rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
   transition: all 300ms linear;
   margin-left: 23px;
   margin-right: 11px;
   border-radius: 50%;
-  margin-top: 15px;
+  margin-top: 18px;
 }
 
 .addressIconAndroid {

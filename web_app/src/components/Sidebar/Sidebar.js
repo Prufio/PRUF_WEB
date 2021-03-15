@@ -228,13 +228,13 @@ class Sidebar extends React.Component {
                 typeof prop.icon === "string" ? (
                   <Icon className={itemIcon}>{prop.icon}</Icon>
                 ) : (
-                    <prop.icon className={itemIcon} />
-                  )
+                  <prop.icon className={itemIcon} />
+                )
               ) : (
-                  <span className={collapseItemMini}>
-                    {rtlActive ? prop.rtlMini : prop.mini}
-                  </span>
-                )}
+                <span className={collapseItemMini}>
+                  {rtlActive ? prop.rtlMini : prop.mini}
+                </span>
+              )}
               <ListItemText
                 primary={rtlActive ? prop.rtlName : prop.name}
                 secondary={
@@ -324,13 +324,13 @@ class Sidebar extends React.Component {
               typeof prop.icon === "string" ? (
                 <Icon className={itemIcon}>{prop.icon}</Icon>
               ) : (
-                  <prop.icon className={itemIcon} />
-                )
+                <prop.icon className={itemIcon} />
+              )
             ) : (
-                <span className={collapseItemMini}>
-                  {rtlActive ? prop.rtlMini : prop.mini}
-                </span>
-              )}
+              <span className={collapseItemMini}>
+                {rtlActive ? prop.rtlMini : prop.mini}
+              </span>
+            )}
             <ListItemText
               primary={rtlActive ? prop.rtlName : prop.name}
               disableTypography={true}
@@ -409,10 +409,11 @@ class Sidebar extends React.Component {
         setTimeout(() => { this.setState({ copyText: false }) }, 1000);
       }
     }
+
     var user = (
-      <div className={userWrapperClass}>
-        {!this.props.miniActive && isAndroid &&(
-          <div className="addressIconAndroid">
+      <div className={logoClasses}>
+        {!this.props.miniActive && isAndroid && (
+          <>
             {addr === undefined && (
               <img src={pruftoken} alt="logo" />
             )}
@@ -422,132 +423,241 @@ class Sidebar extends React.Component {
             {addr !== undefined && addr !== "" && (
               <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
             )}
-          </div>
-        )}
-        {this.props.miniActive && isAndroid &&(
-          <div className="addressIconUpAndroid">
-            {(addr === undefined || addr === "") && (
-              <img src={pruftoken} alt="logo" />
-            )}
-            {addr !== undefined && addr !== "" && (
-              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
-            )}
-          </div>
-        )}
-        {!this.props.miniActive && !isAndroid &&(
-          <div className="addressIcon">
-            {addr === undefined && (
-              <img src={pruftoken} alt="logo" />
-            )}
-            {addr === "" && (
-              <img src={pruftoken} alt="logo" />
-            )}
-            {addr !== undefined && addr !== "" && (
-              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
-            )}
-          </div>
-        )}
-        {this.props.miniActive && !isAndroid &&(
-          <div className="addressIconUp">
-            {(addr === undefined || addr === "") && (
-              <img src={pruftoken} alt="logo" />
-            )}
-            {addr !== undefined && addr !== "" && (
-              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
-            )}
-          </div>
-        )}
-        {/* <List className={classes.list}>
-          <ListItem className={classes.item + " " + classes.userItem}> */}
-        { !this.props.miniActive && (
-          <NavLink
-            to={"#"}
-            className={classes.itemLink}
-          // onClick={() => this.openCollapse("openAvatar")}
-          >
-            {addr !== undefined && !isAndroid && (
+
+            {isAndroid && add !== undefined && (
               <>
-
-                {!this.state.copyText && bgColor !== "white" && (
-                  <Tooltip
-                    title="Copy to Clipboard"
-                  >
-                    <h5>
-                      <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
-                    </h5>
+                {bgColor !== "white" && (
+                  <Tooltip title="Copy to Clipboard">
+                    <div className="addressText">
+                      <CopyToClipboard text={addr}
+                        onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                        <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                      </CopyToClipboard>
+                    </div>
                   </Tooltip>
                 )}
 
-                {this.state.copyText && (bgColor !== "white" || bgColor === undefined) && (
-                  <Tooltip
-                    title="Copied to Clipboard"
-                  >
-                    <h5>
-                      <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
-                    </h5>
-                  </Tooltip>
-                )}
-
-                {!this.state.copyText && bgColor === "white" && (
-                  <Tooltip
-                    title="Copy to Clipboard"
-                  >
-                    <h5>
-                      <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
-                    </h5>
-                  </Tooltip>
-                )}
-
-                {this.state.copyText && bgColor === "white" && (
-                  <Tooltip
-                    title="Copied to Clipboard"
-                  >
-                    <h5>
-                      <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
-                    </h5>
+                {bgColor === "white" && (
+                  <Tooltip title="Copy to Clipboard">
+                    <div className="addressTextBlack">
+                      <CopyToClipboard text={addr}
+                        onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                        <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                      </CopyToClipboard>
+                    </div>
                   </Tooltip>
                 )}
               </>
             )}
+          </>
+        )}
 
-            {addr !== undefined && isAndroid && bgColor !== "white" && (
+        {this.props.miniActive && isAndroid && (
+          <a>
+            {(addr === undefined || addr === "") && (
+              <img src={pruftoken} alt="logo" />
+            )}
+            {addr !== undefined && addr !== "" && (
+              <>
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+
+            {bgColor !== "white" && (
               <Tooltip title="Copy to Clipboard">
                 <div className="addressText">
-                <CopyToClipboard text={addr}
-                  onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
-                  <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
-                </CopyToClipboard>
+                  <CopyToClipboard text={addr}
+                    onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                    <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                  </CopyToClipboard>
                 </div>
               </Tooltip>
             )}
-            
-            {addr !== undefined && isAndroid && bgColor === "white" && (
+
+            {bgColor === "white" && (
               <Tooltip title="Copy to Clipboard">
                 <div className="addressTextBlack">
-                <CopyToClipboard text={addr}
-                  onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
-                  <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
-                </CopyToClipboard>
+                  <CopyToClipboard text={addr}
+                    onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                    <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                  </CopyToClipboard>
                 </div>
               </Tooltip>
             )}
-
-            {addr === undefined && bgColor !== "white" && (
-              <h5 className="addressText">
-                User Address Unavailable
-              </h5>
+            </>
             )}
-
-            {addr === undefined && bgColor === "white" && (
-              <h5 className="addressTextBlack">
-                User Address Unavailable
-              </h5>
-            )}
-
-          </NavLink>
+          </a>
         )}
-        {this.props.miniActive && (
-          <br />
+        {!isAndroid && (
+          <>
+            <a
+              className={logoMini}
+            >
+              {addr === undefined && (
+                <img src={pruftoken} alt="logo" className={classes.img} />
+              )}
+              {addr === "" && (
+                <img src={pruftoken} alt="logo" className={classes.img} />
+              )}
+              {addr !== undefined && addr !== "" && (
+                <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} className="addressIcon" />
+              )}
+            </a>
+            <a
+              className={logoNormal}
+            >
+              {!this.props.miniActive && (
+                <>
+                  {addr !== undefined && (
+                    <>
+
+                      {!this.state.copyText && bgColor !== "white" && (
+                        <Tooltip
+                          title="Copy to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+
+                      {this.state.copyText && (bgColor !== "white" || bgColor === undefined) && (
+                        <Tooltip
+                          title="Copied to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+
+                      {!this.state.copyText && bgColor === "white" && (
+                        <Tooltip
+                          title="Copy to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+
+                      {this.state.copyText && bgColor === "white" && (
+                        <Tooltip
+                          title="Copied to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+                    </>
+                  )}
+
+                  {addr === undefined && bgColor !== "white" && (
+                    <h5 className="addressText">
+                      User Address Unavailable
+                    </h5>
+                  )}
+
+                  {addr === undefined && bgColor === "white" && (
+                    <h5 className="addressTextBlack">
+                      User Address Unavailable
+                    </h5>
+                  )}
+                </>
+              )}
+              {this.props.miniActive && (
+                <>
+                  {addr !== undefined && (
+                    <>
+
+                      {!this.state.copyText && bgColor !== "white" && (
+                        <Tooltip
+                          title="Copy to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+
+                      {this.state.copyText && (bgColor !== "white" || bgColor === undefined) && (
+                        <Tooltip
+                          title="Copied to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressText" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+
+                      {!this.state.copyText && bgColor === "white" && (
+                        <Tooltip
+                          title="Copy to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+
+                      {this.state.copyText && bgColor === "white" && (
+                        <Tooltip
+                          title="Copied to Clipboard"
+                          arrow
+                        >
+                          <h5>
+                            <a className="addressTextBlack" onClick={() => { copyTextSnippet(addr) }}>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</a>
+                          </h5>
+                        </Tooltip>
+                      )}
+                    </>
+                  )}
+
+                  {addr !== undefined && isAndroid && bgColor !== "white" && (
+                    <Tooltip title="Copy to Clipboard"
+                      arrow>
+                      <div className="addressText">
+                        <CopyToClipboard text={addr}
+                          onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                          <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                        </CopyToClipboard>
+                      </div>
+                    </Tooltip>
+                  )}
+
+                  {addr !== undefined && isAndroid && bgColor === "white" && (
+                    <Tooltip title="Copy to Clipboard"
+                      arrow>
+                      <div className="addressTextBlack">
+                        <CopyToClipboard text={addr}
+                          onCopy={() => { swal("Address Copied to Clipboard!\n" + addr.substring(0, 8) + "..." + addr.substring(34, 42)) }}>
+                          <span>{addr.substring(0, 8) + "..." + addr.substring(34, 42)}</span>
+                        </CopyToClipboard>
+                      </div>
+                    </Tooltip>
+                  )}
+
+                  {addr === undefined && bgColor !== "white" && (
+                    <h5 className="addressText">
+                      User Address Unavailable
+                    </h5>
+                  )}
+
+                  {addr === undefined && bgColor === "white" && (
+                    <h5 className="addressTextBlack">
+                      User Address Unavailable
+                    </h5>
+                  )}
+                </>
+              )}
+            </a>
+          </>
         )}
       </div>
     );
@@ -579,6 +689,7 @@ class Sidebar extends React.Component {
         [classes.whiteAfter]: bgColor === "white"
       });
     var brand = (
+
       <div className={logoClasses}>
         <a
           href="/#/user/home"
