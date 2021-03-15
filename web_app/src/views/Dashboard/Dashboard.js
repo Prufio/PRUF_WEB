@@ -140,8 +140,8 @@ export default function Dashboard(props) {
   const generateAssetDash = (arr) => {
 
     if (!arr) return <></>;
-    //console.log(window.backIndex);
-    if (window.backIndex > -1) {
+    console.log(window.backIndex);
+    if (window.backIndex > -1 && window.backIndex !== null && window.backIndex !== undefined) {
       let backIndex = window.backIndex, newObj, newStat, newStatNum;
 
       if (window.newDescObj) {
@@ -1674,7 +1674,7 @@ export default function Dashboard(props) {
     tempObj.lastRef = "/#/user/dashboard";
 
 
-    let e = event.target.value, href, costId;
+    let e = event.target.value, href, costId = null;
 
     switch (e) {
       case "sell": {
@@ -1733,7 +1733,7 @@ export default function Dashboard(props) {
         break
       }
     }
-    if (costId > -1) {
+    if (costId !== null) {
       window.contracts.AC_MGR.methods
         .getServiceCosts(selectedAssetObj.assetClass, costId)
         .call((_error, _result) => {

@@ -1570,7 +1570,7 @@ export default function Search(props) {
 
   const handleSimple = event => {
     if (props.ps) {
-      console.log(props.ps)
+      //console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
     else {
@@ -1588,12 +1588,17 @@ export default function Search(props) {
     tempObj.root = selectedRootID;
 
 
-    let e = event.target.value, href, costId;
+    let e = event.target.value, href, costId = null;
     window.backIndex = null;
 
     switch (e) {
       case "transfer": {
         href = "/#/user/transfer-asset";
+        costId = null;
+        break
+      }
+      case "sell": {
+        href = "/#/user/set-for-sale";
         costId = null;
         break
       }
@@ -1642,7 +1647,7 @@ export default function Search(props) {
         break
       }
     }
-    if (costId > -1) {
+    if (costId !== null) {
       window.contracts.AC_MGR.methods
         .getServiceCosts(asset.assetClass, costId)
         .call((_error, _result) => {
@@ -2705,7 +2710,7 @@ export default function Search(props) {
 
   const retrieveRecord = async (query, isScanQR) => {
     if (props.ps) {
-      console.log(props.ps)
+      //console.log(props.ps)
       props.ps.element.scrollTop = 0
     }
     else {

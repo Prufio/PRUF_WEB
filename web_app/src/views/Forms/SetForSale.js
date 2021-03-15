@@ -83,7 +83,7 @@ export default function SetForSale(props) {
     }, [])
 
     const goBack = () => {
-        window.backIndex = assetInfo.dBIndex;
+        if (assetInfo.lastRef === "/#/user/dashboard") window.backIndex = assetInfo.dBIndex;
         window.location.href = assetInfo.lastRef;
     }
 
