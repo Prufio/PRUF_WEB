@@ -415,13 +415,13 @@ class Sidebar extends React.Component {
         {!this.props.miniActive && isAndroid && (
           <>
             {addr === undefined && (
-              <img src={pruftoken} alt="logo" />
+              <img src={pruftoken} alt="logo"  className="addressIcon" />
             )}
             {addr === "" && (
-              <img src={pruftoken} alt="logo" />
+              <img src={pruftoken} alt="logo"  className="addressIcon" />
             )}
             {addr !== undefined && addr !== "" && (
-              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} className="addressIcon" />
             )}
 
             {isAndroid && add !== undefined && (
@@ -455,11 +455,11 @@ class Sidebar extends React.Component {
         {this.props.miniActive && isAndroid && (
           <a>
             {(addr === undefined || addr === "") && (
-              <img src={pruftoken} alt="logo" />
+              <img src={pruftoken} alt="logo" className="addressIcon" />
             )}
             {addr !== undefined && addr !== "" && (
               <>
-              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} />
+              <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} className="addressIcon" />
 
             {bgColor !== "white" && (
               <Tooltip title="Copy to Clipboard">
@@ -492,10 +492,10 @@ class Sidebar extends React.Component {
               className={logoMini}
             >
               {addr === undefined && (
-                <img src={pruftoken} alt="logo" className={classes.img} />
+                <img src={pruftoken} alt="logo" className="addressIcon" />
               )}
               {addr === "" && (
-                <img src={pruftoken} alt="logo" className={classes.img} />
+                <img src={pruftoken} alt="logo" className="addressIcon" />
               )}
               {addr !== undefined && addr !== "" && (
                 <Blockies scale={4} color={getPrufColor("primary", addr)} bgColor={getPrufColor("secondary", addr)} spotColor={getPrufColor("analogous", addr)} size={15} seed={addr} className="addressIcon" />

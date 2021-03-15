@@ -56,7 +56,7 @@ export default function Dashboard(props) {
   //const OrbitDB = require('orbit-db')
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [miniActive, setMiniActive] = React.useState(false);
+  const [miniActive, setMiniActive] = React.useState(true);
   const [image, setImage] = React.useState(require("assets/img/Sidebar Backgrounds/TracesWB.jpg"));
   const [color, setColor] = React.useState("blue");
   const [bgColor, setBgColor] = React.useState("darkBlue");
@@ -139,12 +139,43 @@ export default function Dashboard(props) {
 
     if(!cookies.hasBeenNotified){
       swal({
-        title: "Bare minimum use of cookies",
-        text: "WE VALUE USER PRIVACY.\n\n -Cookies are ONLY used to improve site performance. \n\n -By using the site, you agree to these terms.",
-        icon: "info",
-        button: "Okay",
-      }).then(()=>{
-        setCookieTo("hasBeenNotified", true)
+        title: "Cookies on app.pruf.io",
+        text: "This site uses minimal cookies to offer you optimal performance and loading times.",
+        icon: "warning",
+        buttons: {
+          moreInfo: {
+            text: "Learn more",
+            value: "moreInfo",
+            className: "moreCookieInfo"
+          },
+          decline: {
+            text: "Decline Cookie Use",
+            value: "decline",
+            className: "declineCookies"
+          },
+          accept: {
+            text: "Accept and continue",
+            value: "accept",
+            className: "acceptCookies"
+          }
+        },
+      }).then((value) => {
+        switch (value) {
+          case "accept":
+            setCookieTo("hasBeenNotified", true)
+            break;
+
+          case "moreInfo":
+            window.location.href="/#/user/cookies-policy"
+            break;
+
+            case "decline":
+              setCookieTo("hasBeenNotified", false)
+              break;
+
+            default:
+              break;
+        }
       });
     }
     console.log("Cookies:", cookies)
