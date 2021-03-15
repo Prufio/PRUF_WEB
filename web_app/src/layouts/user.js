@@ -1,6 +1,7 @@
 import React from "react";
 import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
+import swal from 'sweetalert';
 import Web3 from "web3";
 import { isMobile } from "react-device-detect";
 //import OrbitDB from 'orbit-db';
@@ -78,7 +79,7 @@ export default function Dashboard(props) {
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [assetClassBalance, setAssetClassBalance] = React.useState("~");
   const [IDBalance, setIDBalance] = React.useState("0");
-  const [cookies, setCookie, removeCookie] = useCookies(['nodeList', 'assets', 'nodes', 'ipfsCache'])
+  const [cookies, setCookie, removeCookie] = useCookies(['nodeList'])
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
   const [WD, setWD] = React.useState(false);
@@ -126,6 +127,17 @@ export default function Dashboard(props) {
 
   const checkForCookies = () => {
     //removeCookie("[object Promise]")
+
+    if(!cookies.hasBeenNotified){
+      swal({
+        title: "Bare minimum use of cookies",
+        text: "WE VALUE USER PRIVACY.\n\n -Cookies are ONLY used to improve site performance. \n\n -By using the site, you agree to these terms.",
+        icon: "info",
+        button: "Okay",
+      }).then(()=>{
+        setCookieTo("hasBeenNotified", true)
+      });
+    }
     console.log("Cookies:", cookies)
     readCookie('nodeList').then((e)=>{
       if(e) setNodeList(e)
