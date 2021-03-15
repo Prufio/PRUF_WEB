@@ -246,18 +246,18 @@ export default function NodeManager(props) {
   }
 
   const setDelegationButton = () => {
-    setDash(false)
-    setDelegation(true)
-    setAnalytics(false)
-    // swal("Coming Soon!")
+    // setDash(false)
+    // setDelegation(true)
+    // setAnalytics(false)
+    swal("Coming Soon!")
 
   }
 
   const setAnalyticsButton = () => {
-    setDash(false)
-    setDelegation(false)
-    setAnalytics(true)
-    // swal("Coming Soon!")
+    // setDash(false)
+    // setDelegation(false)
+    // setAnalytics(true)
+    swal("Coming Soon!")
 
   }
 
