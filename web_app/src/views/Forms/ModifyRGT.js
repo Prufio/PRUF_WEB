@@ -44,7 +44,7 @@ export default function ModifyRGT(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
-  const [assetInfo, ] = React.useState(window.sentPacket)
+  const [assetInfo,] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
 
@@ -58,7 +58,7 @@ export default function ModifyRGT(props) {
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
@@ -73,12 +73,12 @@ export default function ModifyRGT(props) {
         text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
         icon: "warning",
         button: "Close",
-      }).then(()=>{
+      }).then(() => {
         window.backIndex = assetInfo.dBIndex;
         window.location.href = assetInfo.lastRef;
       });
     }
-    
+
     /* else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
       swal({
         title: "Asset not in correct status!",
@@ -90,29 +90,29 @@ export default function ModifyRGT(props) {
         window.location.href = assetInfo.lastRef;
       });
     } */
-  
+
   }, [])
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;
-    window.location.href=assetInfo.lastRef;
+    window.location.href = assetInfo.lastRef;
   }
 
   const refreshBalances = async () => {
-    if(!window.web3.eth) return
+    if (!window.web3.eth) return
 
     let pruf, ether;
-    
+
     console.log("Refreshing ether bal")
     await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
+      if (err) { console.log(err) }
       else { ether = window.web3.utils.fromWei(result, 'ether') }
       window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
         if (err) { console.log(err) }
         else { pruf = window.web3.utils.fromWei(result, 'ether') }
         window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
           if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
+          else { window.replaceAssetData = { assets: result, ether, pruf } }
         });
       });
     });
@@ -201,7 +201,7 @@ export default function ModifyRGT(props) {
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
+        }).then(() => {
           //refreshBalances()
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
@@ -222,7 +222,7 @@ export default function ModifyRGT(props) {
       <CardBody>
         <form>
           {assetInfo && (
-          <h4>Asset Selected: {assetInfo.name}</h4>
+            <h4>Asset Selected: {assetInfo.name}</h4>
           )}
           <>
             {!transactionActive && (
@@ -382,15 +382,15 @@ export default function ModifyRGT(props) {
             )}
           </>
           {!transactionActive && (
-          <>
-            {assetInfo.opCost > 0
-            ?<h4>Cost to modify owner info: ü{assetInfo.opCost}</h4>
-            :<></>
-            }
-            
-            <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => modifyRGT()}>Submit New Owner Information</Button>
-            </div>
+            <>
+
+              {assetInfo.opCost > 0
+                ? <h4 className="costsText">Cost: ü{assetInfo.opCost}</h4>
+                : <></>
+              }
+              <div className="MLBGradientSubmit">
+                <Button color="info" className="MLBGradient" onClick={() => modifyRGT()}>Submit New Owner Information</Button>
+              </div>
             </>
           )}
           {transactionActive && (

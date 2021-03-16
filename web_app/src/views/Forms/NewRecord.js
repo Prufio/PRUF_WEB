@@ -1,6 +1,9 @@
 import React from "react";
 import swal from 'sweetalert';
 import base64 from 'base64-arraybuffer';
+import Jdenticon from 'react-jdenticon';
+import { Component } from "react";
+import { setConstantValue } from "typescript";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,17 +11,19 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import Jdenticon from 'react-jdenticon';
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import TextField from "@material-ui/core/TextField";
 
 // @material-ui/icons
 import Category from "@material-ui/icons/Category";
 import AccountBox from "@material-ui/icons/AccountBox";
+import { DashboardOutlined, Description } from "@material-ui/icons";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import TextField from "@material-ui/core/TextField";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -26,11 +31,10 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { DashboardOutlined, Description } from "@material-ui/icons";
-import { setConstantValue } from "typescript";
-import { Component } from "react";
+import extStyles from "assets/jss/material-dashboard-pro-react/views/extendedFormsStyle";
 
 const useStyles = makeStyles(styles);
+const useExtStyles = makeStyles(extStyles);
 
 export default function NewRecord(props) {
 
@@ -52,6 +56,7 @@ export default function NewRecord(props) {
   const [NRCost, setNRCost] = React.useState("~");
   const [mintedID, setMintedID] = React.useState(false);
   const [selectedRootID, setSelectedRootID] = React.useState("");
+  const [publicNode, setPublicNode] = React.useState(false);
 
 
   //const [ipfsObj, setIpfsObj] = React.useState("");
@@ -106,6 +111,7 @@ export default function NewRecord(props) {
   const maxImageSize = 1000;
 
   const acArr = [1, 11, 12, 13, 2, 21, 22, 23, 3, 31, 32, 33, 4, 41, 42, 43, 5, 51, 52, 53, 6, 61, 62, 63];
+
 
   const link = document.createElement('div');
   const resizeImg = require('resize-img');
@@ -563,7 +569,7 @@ export default function NewRecord(props) {
             root: classes.selectMenuItem,
             selected: classes.selectMenuItemSelected
           }}
-          key={"key"+arr[i].name}
+          key={"key" + arr[i].name}
           value={String(arr[i].id)}
         >
           {arr[i].name}
@@ -591,7 +597,7 @@ export default function NewRecord(props) {
     for (let i = 0; i < arr.length; i++) {
       rootSelection.push(
         <MenuItem
-        key={"key"+String(arr[i])}
+          key={"key" + String(arr[i])}
           classes={{
             root: classes.selectMenuItem,
             selected: classes.selectMenuItemSelected
@@ -605,6 +611,40 @@ export default function NewRecord(props) {
     }
 
     return rootSelection;
+
+  }
+
+  const generateNodeList = (arr) => {
+    let nodeNames = props.rootNames
+    let nodeSelection = [
+      <MenuItem
+        disabled
+        key={"keySelClass"}
+        classes={{
+          node: classes.selectMenuItem
+        }}
+      >
+        Select a Class
+      </MenuItem>
+    ];
+
+    for (let i = 0; i < arr.length; i++) {
+      nodeSelection.push(
+        <MenuItem
+          key={"key" + String(arr[i])}
+          classes={{
+            node: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          value={String(arr[i])}
+        >
+          {nodeNames[i]}
+        </MenuItem>
+      );
+
+    }
+
+    return nodeSelection;
 
   }
 
@@ -631,7 +671,7 @@ export default function NewRecord(props) {
       name: ipfsObj.name,
       DisplayImage: displayImage,
       assetClass: assetClass,
-      assetClassName: assetClassName.substring(0,1).toUpperCase()+assetClassName.substring(1,assetClassName.length).toLowerCase(),
+      assetClassName: assetClassName.substring(0, 1).toUpperCase() + assetClassName.substring(1, assetClassName.length).toLowerCase(),
       dBIndex: props.assetArr.length,
       countPair: [100000, 100000],
       status: "Transferable",
@@ -745,6 +785,7 @@ export default function NewRecord(props) {
   }
 
   const classes = useStyles();
+  const extClasses = useExtStyles();
   return (
     <>
       {window.contracts === undefined && (
@@ -803,94 +844,6 @@ export default function NewRecord(props) {
       )}
       {window.contracts !== undefined && props.IDHolder !== undefined && props.assetClassSets !== undefined && (
         <GridContainer>
-          {/* {props.IDHolder === false && (
-            <>
-              {assetClass === "" && transactionActive && (
-                <Card>
-                  <CardHeader icon>
-                    <CardIcon className="headerIconBack">
-                      <Category />
-                    </CardIcon>
-                    <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
-                  </CardHeader>
-                  <CardBody>
-                    <form>
-                      <h3>
-                        Creating ID<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-                      </h3>
-                    </form>
-                  </CardBody>
-                  <br />
-                </Card>
-              )}
-              {assetClass === "" && !transactionActive && (
-                <Card>
-                  <CardHeader icon>
-                    <CardIcon className="headerIconBack">
-                      <Category />
-                    </CardIcon>
-                    <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
-                  </CardHeader>
-                  <CardBody>
-                    <form>
-                      <FormControl
-                        fullWidth
-                        className={classes.selectFormControl}
-                      >
-                        <InputLabel
-                        >
-                          Select Asset Class
-                        </InputLabel>
-                        <Select
-                          MenuProps={{
-                            className: classes.selectMenu
-                          }}
-                          classes={{
-                            select: classes.select
-                          }}
-                          value={simpleSelect}
-                          onChange={(e) => { ACLogin(e) }}
-                          inputProps={{
-                            name: "simpleSelect",
-                            id: "simple-select"
-                          }}
-                        >
-                          <MenuItem
-                            disabled
-                            classes={{
-                              root: classes.selectMenuItem
-                            }}
-                          >
-                            Select Asset Class
-                          </MenuItem>
-                          <MenuItem
-                            classes={{
-                              root: classes.selectMenuItem,
-                              selected: classes.selectMenuItemSelected
-                            }}
-                            value="1000003"
-                          >
-                            Trinkets
-                          </MenuItem>
-                          <MenuItem
-                            classes={{
-                              root: classes.selectMenuItem,
-                              selected: classes.selectMenuItemSelected
-                            }}
-                            value="1000004"
-                          >
-                            Personal Computers
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    </form>
-                  </CardBody>
-                  <br />
-                </Card>
-              )}
-            </>
-          )} */}
-          {/* {mintedID && !props.IDHolder && ( */}
           <>
             <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
             {assetClass === "" && !transactionActive && (
@@ -903,60 +856,66 @@ export default function NewRecord(props) {
                 </CardHeader>
                 <CardBody>
                   <form>
-                    <FormControl
-                      fullWidth
-                      className={classes.selectFormControl}
-                    >
-                      <InputLabel
+                    {publicNode && (
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}
                       >
-                        Select Asset Class
+                        <InputLabel
+                        >
+                          Select Asset Class
                       </InputLabel>
-                      <Select
-                        MenuProps={{
-                          className: classes.selectMenu
-                        }}
-                        classes={{
-                          select: classes.select
-                        }}
-                        value={rootSelect}
-                        onChange={(e) => { rootLogin(e) }}
-                        inputProps={{
-                          name: "rootSelect",
-                          id: "root-select"
-                        }}
+                        <Select
+                          MenuProps={{
+                            className: classes.selectMenu
+                          }}
+                          classes={{
+                            select: classes.select
+                          }}
+                          value={rootSelect}
+                          onChange={(e) => { rootLogin(e) }}
+                          inputProps={{
+                            name: "rootSelect",
+                            id: "root-select"
+                          }}
+                        >
+                          {generateRootList(props.roots)}
+                        </Select>
+                      </FormControl>
+                    )}
+                    {!publicNode && (
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}
                       >
-                        {generateRootList(props.roots)}
-                      </Select>
-                    </FormControl>
+                        <InputLabel
+                        >
+                          Select Asset Class
+                      </InputLabel>
+                        <Select
+                          MenuProps={{
+                            className: classes.selectMenu
+                          }}
+                          classes={{
+                            select: classes.select
+                          }}
+                          value={rootSelect}
+                          onChange={(e) => { ACLogin(e) }}
+                          inputProps={{
+                            name: "rootSelect",
+                            id: "root-select"
+                          }}
+                        >
+                          {generateNodeList(props.nodeList)}
+                        </Select>
+                      </FormControl>
+                    )}
                     <br></br>
-                    <FormControl
-                      fullWidth
-                      className={classes.selectFormControl}
-                    >
-                      {selectedRootID === ""
-                        ? <>
-                          <InputLabel
-                          >
-                            Select Asset Subclass
-                      </InputLabel>
-                          <Select
-                            disabled
-                            MenuProps={{
-                              className: classes.selectMenu
-                            }}
-                            classes={{
-                              select: classes.select
-                            }}
-                            value={classSelect}
-                            onChange={() => { }}
-                            inputProps={{
-                              name: "classSelect",
-                              id: "class-select"
-                            }}
-                          >
-                          </Select>
-                        </>
-                        :
+                    {selectedRootID !== "" && (
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}
+                      >
                         <>
                           <InputLabel
                           >
@@ -979,8 +938,31 @@ export default function NewRecord(props) {
                             {generateSubCatList(props.assetClassSets[selectedRootID])}
                           </Select>
                         </>
-                      }
-                    </FormControl>
+                      </FormControl>
+                    )}
+                    {!transactionActive && (
+                      <div className={extClasses.block}>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={publicNode}
+                              onChange={event => setPublicNode(!publicNode)}
+                              value="publicNode"
+                              classes={{
+                                switchBase: extClasses.switchBase,
+                                checked: extClasses.switchChecked,
+                                thumb: extClasses.switchIcon,
+                                track: extClasses.switchBar
+                              }}
+                            />
+                          }
+                          classes={{
+                            label: extClasses.label
+                          }}
+                          label="Select Public Node"
+                        />
+                      </div>
+                    )}
                   </form>
                 </CardBody>
                 <br />
@@ -1418,7 +1400,7 @@ export default function NewRecord(props) {
                         </>
                         {!transactionActive && !isUploading && (
                           <>
-                            <h4>Cost to create asset in AC: ü{NRCost}</h4>
+                            <h4 className="costsText">Cost: ü{NRCost}</h4>
                             <div className="MLBGradientSubmit">
                               <Button color="info" className="MLBGradient" onClick={() => checkAsset()}>Create New Asset</Button>
                             </div>
