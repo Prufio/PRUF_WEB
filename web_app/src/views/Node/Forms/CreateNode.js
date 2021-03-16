@@ -130,6 +130,9 @@ export default function CreateNode(props) {
   const [nodeInfo,] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
+  const sampleIpfs = {
+    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["Field 4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+  }
 
   window.sentPacket = null
 
@@ -215,7 +218,7 @@ export default function CreateNode(props) {
     let tempTxHash;
 
     swal({
-      title: "In order to mint asset tokens, you must first have an ID token.",
+      title: "In order to purchase a node token, you must first have an ID token.",
       icon: "warning",
       text: "If you would like to mint an ID token, please select Yes",
       buttons: {
@@ -329,6 +332,24 @@ export default function CreateNode(props) {
         console.log("Error in standard switch")
       }
     }
+  }
+
+  const handleNewAssetClass = async () => {
+    let id;
+    await window.contracts.AC_MGR.methods
+      .resolveAssetClass(name)
+      .call(function (_error, _result) {
+        if (_error) {
+          return (console.log("IN ERROR IN ERROR IN ERROR"))
+        } else {
+          id = _result
+          tempArr = props.nodeList;
+          tempArr.push([name, id, "N/A", "N/A"])
+          window.replaceAssetData = { key: pageKey, nodeList: tempArr }
+          window.location.href = "/#/user/node-manager";
+        } 
+    }); 
+    
   }
 
   const setLayout = () => {
@@ -1161,8 +1182,36 @@ export default function CreateNode(props) {
     return component
   }
 
+  const checkForAC = async () => {
+    setTransactionActive(true);
 
-  const purchaseNode = async () => { //import held asset
+    await window.contracts.AC_MGR.methods
+      .resolveAssetClass(name)
+      .call(function (_error, _result) {
+        if (_error || _result === undefined) {
+          window.ipfs.add(sampleIpfs).then((hash)=>{
+            if (!hash) {
+              console.error("error sending to ipfs")
+              //return setIpfsActive(false);
+            }
+            else{
+              let url = `https://ipfs.io/ipfs/${hash.cid}`
+              console.log(`Url --> ${url}`)
+              let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid))
+              //setIpfsActive(false);
+              purchaseNode(b32Hash)
+            } 
+          })
+        } else {
+          swal({
+            title: "That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io",
+            button: "Okay",
+          });
+        } 
+    }); 
+  }
+
+  const purchaseNode = async (ipfsHash) => { //import held asset
 
     let tempTxHash;
     setShowHelp(false);
@@ -1170,11 +1219,12 @@ export default function CreateNode(props) {
     setTxHash("");
     setError(undefined);
 
-    setTransactionActive(true);
-
     await window.contracts.AC_MGR.methods
       .purchaseACnode(
-        nodeInfo.idxHash,
+        name,
+        root,
+        2,
+        ipfsHash,
       )
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -1217,10 +1267,182 @@ export default function CreateNode(props) {
           button: "Close",
         }).then(() => {
           //refreshBalances()
-          window.backIndex = nodeInfo.dBIndex;
-          window.location.href = nodeInfo.ipfsRef;
+          handleNewAssetClass()
         })
       });
+
+  }
+
+  return (
+    <Card>
+      <CardHeader icon>
+        <CardIcon className="headerIconBack">
+          <span class="material-icons">
+            dashboard_customize
+</span>
+        </CardIcon>
+        <Button color="info" className="MLBGradient" onClick={() => window.location.href = "/#/user/node-manager"}>Go Back</Button>
+        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
+      </CardHeader>
+      <CardBody>
+        <form>
+          <h5>Current Node Price: ü{props.currentACPrice}</h5>
+          <>
+            {!transactionActive && (
+              <>
+                <CustomInput
+                  success={loginNameState === "success"}
+                  error={loginNameState === "error"}
+                  labelText="Name *"
+                  id="name"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    onChange: event => {
+                      setName(event.target.value.trim())
+                      if (event.target.value !== "") {
+                        setloginNameState("success");
+                      } else {
+                        setloginNameState("error");
+                      }
+                      setloginName(event.target.value);
+                    },
+                  }}
+                />
+                <FormControl
+                  fullWidth
+                  className={classes.selectFormControl}
+                >
+                  <InputLabel
+                  >
+                    Select Asset Class *
+                  </InputLabel>
+                  <Select
+                    MenuProps={{
+                      className: classes.selectMenu
+                    }}
+                    classes={{
+                      select: classes.select
+                    }}
+                    value={root}
+                    onChange={(e) => { rootLogin(e) }}
+                    inputProps={{
+                      name: "rootSelect",
+                      id: "root-select"
+                    }}
+                  >
+                    {props.roots !== undefined && (
+                      generateRootList(props.roots)
+                  )}
+                  </Select>
+                </FormControl>
+                <br/>
+                <div className={classes.formCategory}>
+                  <small>*</small> Required fields
+                    </div>
+
+                <div className={classes.checkboxAndRadio}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        tabIndex={-1}
+                        onClick={() => setAdvanced(!advanced)}
+                        checkedIcon={<Check className={classes.checkedIcon} />}
+                        icon={<Check className={classes.uncheckedIcon} />}
+                        classes={{
+                          checked: classes.checked,
+                          root: classes.checkRoot
+                        }}
+                      />
+                    }
+                    classes={{
+                      label: classes.label,
+                      root: classes.labelRoot
+                    }}
+                    label="Advanced Options"
+                  />
+                </div>
+                {advanced && (
+                  <Card>
+                    <CardHeader>
+                      <h4 className={classes.cardTitle}>Advanced Options</h4>
+                    </CardHeader>
+                    <CardBody>
+                      <Accordion
+                        // active={0}
+                        collapses={[
+                          {
+                            title: "Set Pricing (Optional)",
+                            content:
+                              setPricing()
+                          },
+                          {
+                            title: "Select Class Layout (Optional)",
+                            content:
+                              setLayout()
+                          }
+                        ]}
+                      />
+                    </CardBody>
+                  </Card>
+                )}
+              </>
+            )}
+            {transactionActive && (
+              <>
+                <CustomInput
+                  labelText={name}
+                  id="name"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true
+                  }}
+                />
+                <CustomInput
+                  labelText={root}
+                  id="root"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true
+                  }}
+                />
+                <CustomInput
+                  labelText={ipfs}
+                  id="ipfs"
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  inputProps={{
+                    disabled: true
+                  }}
+                />
+              </>
+            )}
+          </>
+          {!transactionActive && (
+            <div className="MLBGradientSubmit">
+              <Button color="info" className="MLBGradient" onClick={() => checkForAC()}>Purchase AC Node</Button>
+            </div>
+          )}
+          {transactionActive && (
+            <h3>
+              Changing Owner Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+        </form>
+      </CardBody>
+    </Card>
+  );
+}
+
+
+/*
+
 
     let op1 = window.web3.utils.toWei(operation1);
     let op2 = window.web3.utils.toWei(operation2);
@@ -2111,171 +2333,4 @@ export default function CreateNode(props) {
         });
     }
 
-  }
-
-  return (
-    <Card>
-      <CardHeader icon>
-        <CardIcon className="headerIconBack">
-          <span class="material-icons">
-            dashboard_customize
-</span>
-        </CardIcon>
-        <Button color="info" className="MLBGradient" onClick={() => window.location.href = "/#/user/node-manager"}>Go Back</Button>
-        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
-      </CardHeader>
-      <CardBody>
-        <form>
-          <h5>Current Node Price: ü{props.currentACPrice}</h5>
-          <>
-            {!transactionActive && (
-              <>
-                <CustomInput
-                  success={loginNameState === "success"}
-                  error={loginNameState === "error"}
-                  labelText="Name *"
-                  id="name"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    onChange: event => {
-                      setName(event.target.value.trim())
-                      if (event.target.value !== "") {
-                        setloginNameState("success");
-                      } else {
-                        setloginNameState("error");
-                      }
-                      setloginName(event.target.value);
-                    },
-                  }}
-                />
-                <FormControl
-                  fullWidth
-                  className={classes.selectFormControl}
-                >
-                  <InputLabel
-                  >
-                    Select Asset Class *
-                  </InputLabel>
-                  <Select
-                    MenuProps={{
-                      className: classes.selectMenu
-                    }}
-                    classes={{
-                      select: classes.select
-                    }}
-                    value={root}
-                    onChange={(e) => { rootLogin(e) }}
-                    inputProps={{
-                      name: "rootSelect",
-                      id: "root-select"
-                    }}
-                  >
-                    {props.roots !== undefined && (
-                      generateRootList(props.roots)
-                  )}
-                  </Select>
-                </FormControl>
-                <br/>
-                <div className={classes.formCategory}>
-                  <small>*</small> Required fields
-                    </div>
-
-                <div className={classes.checkboxAndRadio}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        tabIndex={-1}
-                        onClick={() => setAdvanced(!advanced)}
-                        checkedIcon={<Check className={classes.checkedIcon} />}
-                        icon={<Check className={classes.uncheckedIcon} />}
-                        classes={{
-                          checked: classes.checked,
-                          root: classes.checkRoot
-                        }}
-                      />
-                    }
-                    classes={{
-                      label: classes.label,
-                      root: classes.labelRoot
-                    }}
-                    label="Advanced Options"
-                  />
-                </div>
-                {advanced && (
-                  <Card>
-                    <CardHeader>
-                      <h4 className={classes.cardTitle}>Advanced Options</h4>
-                    </CardHeader>
-                    <CardBody>
-                      <Accordion
-                        // active={0}
-                        collapses={[
-                          {
-                            title: "Set Pricing (Optional)",
-                            content:
-                              setPricing()
-                          },
-                          {
-                            title: "Select Class Layout (Optional)",
-                            content:
-                              setLayout()
-                          }
-                        ]}
-                      />
-                    </CardBody>
-                  </Card>
-                )}
-              </>
-            )}
-            {transactionActive && (
-              <>
-                <CustomInput
-                  labelText={name}
-                  id="name"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                />
-                <CustomInput
-                  labelText={root}
-                  id="root"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                />
-                <CustomInput
-                  labelText={ipfs}
-                  id="ipfs"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                />
-              </>
-            )}
-          </>
-          {!transactionActive && (
-            <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => purchaseNode()}>Purchase AC Node</Button>
-            </div>
-          )}
-          {transactionActive && (
-            <h3>
-              Changing Owner Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-            </h3>
-          )}
-        </form>
-      </CardBody>
-    </Card>
-  );
-}
+*/

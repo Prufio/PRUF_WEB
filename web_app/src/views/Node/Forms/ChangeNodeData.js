@@ -30,10 +30,10 @@ export default function ChangeNodeData(props) {
 
 
   const [ipfs, setIpfs] = React.useState( {
-    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["field4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["Field 4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
   })
   const [newIpfs, setNewIpfs] = React.useState( {
-    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["field4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["Field 4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
   });
 
   const [nodeInfo,] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
