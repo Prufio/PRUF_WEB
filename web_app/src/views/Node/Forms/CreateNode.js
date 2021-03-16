@@ -1286,7 +1286,7 @@ export default function CreateNode(props) {
       </CardHeader>
       <CardBody>
         <form>
-          <h5>Current Node Price: ü{props.currentACPrice}</h5>
+          <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
           <>
             {!transactionActive && (
               <>

@@ -573,7 +573,7 @@ body {
   height: 80px;
   background-color: #888888ce;
   border-radius: 0px 6px 6px 0px;
-  z-index: 3000;
+  z-index: 1000;
   position: absolute;
   margin-top: 2.5px;
   margin-left: -2px;
@@ -1149,4 +1149,8 @@ padding: 0px !important;
 background-color: transparent !important;
 text-decoration: underline !important;
 color: rgb(99, 99, 99) !important;
+}
+
+.costsText {
+  font-weight: bold;
 }

@@ -487,7 +487,7 @@ export default function ModifyStatus(props) {
           {!transactionActive && status !== "" && (
             <>
             {assetInfo.opCost > 0
-            ?<h4>Cost to modify status: ü{assetInfo.opCost}</h4>
+            ?<h4 className="costsText">Cost: ü{assetInfo.opCost}</h4>
             :<></>
             }
             <div className="MLBGradientSubmit">

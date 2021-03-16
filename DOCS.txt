@@ -1,7 +1,10 @@
 To do: 
 
+Backend:
 Local hash matching for ipfs cached data
 Sync all ac node ops with backend
 -Node mods all reload the list
 
-? Clear cookies from app ?
+UX:
+
+
