@@ -950,7 +950,7 @@ export default function NewRecord(props) {
                         </>
                       </FormControl>
                     )}
-                    {!transactionActive && (
+                    {/* {!transactionActive && (
                       <div className={extClasses.block}>
                         <FormControlLabel
                           control={
@@ -972,7 +972,7 @@ export default function NewRecord(props) {
                           label="Select Public Node"
                         />
                       </div>
-                    )}
+                    )} */}
                   </form>
                 </CardBody>
                 <br />
