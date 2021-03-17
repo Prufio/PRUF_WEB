@@ -922,7 +922,8 @@ export default function NewRecord(props) {
                       </FormControl>
                     )}
                     <br></br>
-                    {selectedRootID !== "" && !publicNode && (
+                    {/* {selectedRootID !== "" && !publicNode && ( */}
+                    {selectedRootID !== "" && (
                       <FormControl
                         fullWidth
                         className={classes.selectFormControl}
