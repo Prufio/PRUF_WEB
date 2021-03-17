@@ -1,10 +1,63 @@
-To do: 
+To do:
 
-Backend:
-Local hash matching for ipfs cached data
-Sync all ac node ops with backend
-? Clear cookies from app? ?
+Stage1(Alpha Release):
+
+Interface Backend:
+JS:Local hash matching for ipfs cached data
+JS:Sync all ac node ops with backend
+JS:Clear cookies from app
 
 UX:
 
+Contracts:
+CTS:CostodyType and Immutability
 
+Testing:
+DS:AC Custody and permissions
+Complete Interface Testnet
+
+
+Stage2(Alpha Staking Release):
+
+Interface Backend:
+JS:API Buildout
+JS:API Plugged in
+
+UX:
+DS:Alertify Components
+DS:Finish AC Buildout
+
+Contracts:
+CTS:Staking and minor governance
+
+Testing:
+DS: Staking
+Complete Interface Testing
+
+
+Stage3(Testnet Live):
+
+Interface Backend:
+JS:API MODS
+JS:React Template Backend
+JS:RWeave Implementation
+
+UX:
+DS:Layouts
+
+Contracts:
+CTS:Governance
+
+Testing:
+DS:Governance
+
+
+Stage4(DAO):
+
+Interface Backend:
+
+UX:
+
+Contracts:
+
+Testing:
