@@ -52,6 +52,7 @@ export default function CreateNode(props) {
   const [name, setName] = React.useState("");
   const [root, setRoot] = React.useState("");
   const [ipfs, setIPFS] = React.useState("");
+  const [pricingObj, setPricingObj] = React.useState({})
 
   const [loginName, setloginName] = React.useState("");
   const [loginIPFS, setloginIPFS] = React.useState("");
@@ -130,6 +131,9 @@ export default function CreateNode(props) {
   const [nodeInfo,] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
+  const sampleIpfs = {
+    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["Field 4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
+  }
 
   window.sentPacket = null
 
@@ -215,7 +219,7 @@ export default function CreateNode(props) {
     let tempTxHash;
 
     swal({
-      title: "In order to mint asset tokens, you must first have an ID token.",
+      title: "In order to purchase a node token, you must first have an ID token.",
       icon: "warning",
       text: "If you would like to mint an ID token, please select Yes",
       buttons: {
@@ -331,6 +335,41 @@ export default function CreateNode(props) {
     }
   }
 
+  const setPrices = () => {
+    console.log(pricingObj)
+  }
+
+  const handlePriceAdjustment = (job, val) => {
+    let tempObj = JSON.parse(JSON.stringify(pricingObj))
+    if(!val || val < 0){
+      delete tempObj[job]
+      setPricingObj(tempObj)
+    }
+    else{
+      tempObj[job] = String(val)
+      setPricingObj(tempObj)
+    }
+  }
+
+  const handleNewAssetClass = async () => {
+    const pageKey = thousandHashesOf(props.addr, props.winKey);
+    let id;
+    await window.contracts.AC_MGR.methods
+      .resolveAssetClass(name)
+      .call(function (_error, _result) {
+        if (_error) {
+          return (console.log("IN ERROR IN ERROR IN ERROR"))
+        } else {
+          id = _result
+          let tempArr = props.nodeList;
+          tempArr.push([name, id, "N/A", "N/A"])
+          window.replaceAssetData = { key: pageKey, nodeList: tempArr }
+          window.location.href = "/#/user/node-manager";
+        } 
+    }); 
+    
+  }
+
   const setLayout = () => {
     let component = [];
     component.push(
@@ -408,8 +447,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation1),
+              value: (operation1),
               onChange: event => {
+                handlePriceAdjustment("1", Number(event.target.value).toFixed(3))
                 setOperation1(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation1State("success");
@@ -503,8 +543,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation2),
+              value: (operation2),
               onChange: event => {
+                handlePriceAdjustment("2", Number(event.target.value).toFixed(3))
                 setOperation2(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation2State("success");
@@ -598,8 +639,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation3),
+              value: (operation3),
               onChange: event => {
+                handlePriceAdjustment("3", Number(event.target.value).toFixed(3))
                 setOperation3(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation3State("success");
@@ -694,8 +736,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation4),
+              value: (operation4),
               onChange: event => {
+                handlePriceAdjustment("4", Number(event.target.value).toFixed(3))
                 setOperation4(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation4State("success");
@@ -790,8 +833,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation5),
+              value: (operation5),
               onChange: event => {
+                handlePriceAdjustment("5", Number(event.target.value).toFixed(3))
                 setOperation5(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation5State("success");
@@ -886,8 +930,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation6),
+              value: (operation6),
               onChange: event => {
+                handlePriceAdjustment("6", Number(event.target.value).toFixed(3))
                 setOperation6(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation6State("success");
@@ -982,8 +1027,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation7),
+              value: (operation7),
               onChange: event => {
+                handlePriceAdjustment("7", Number(event.target.value).toFixed(3))
                 setOperation7(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation7State("success");
@@ -1078,8 +1124,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation8),
+              value: (operation8),
               onChange: event => {
+                handlePriceAdjustment("8", Number(event.target.value).toFixed(3))
                 setOperation8(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation8State("success");
@@ -1161,8 +1208,36 @@ export default function CreateNode(props) {
     return component
   }
 
+  const checkForAC = async () => {
+    setTransactionActive(true);
 
-  const purchaseNode = async () => { //import held asset
+    await window.contracts.AC_MGR.methods
+      .resolveAssetClass(name)
+      .call(function (_error, _result) {
+        if (_error || _result === undefined) {
+          window.ipfs.add(sampleIpfs).then((hash)=>{
+            if (!hash) {
+              console.error("error sending to ipfs")
+              //return setIpfsActive(false);
+            }
+            else{
+              let url = `https://ipfs.io/ipfs/${hash.cid}`
+              console.log(`Url --> ${url}`)
+              let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid))
+              //setIpfsActive(false);
+              purchaseNode(b32Hash)
+            } 
+          })
+        } else {
+          swal({
+            title: "That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io",
+            button: "Okay",
+          });
+        } 
+    }); 
+  }
+
+  const purchaseNode = async (ipfsHash) => { //import held asset
 
     let tempTxHash;
     setShowHelp(false);
@@ -1170,11 +1245,12 @@ export default function CreateNode(props) {
     setTxHash("");
     setError(undefined);
 
-    setTransactionActive(true);
-
     await window.contracts.AC_MGR.methods
       .purchaseACnode(
-        nodeInfo.idxHash,
+        name,
+        root,
+        2,
+        ipfsHash,
       )
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -1217,899 +1293,9 @@ export default function CreateNode(props) {
           button: "Close",
         }).then(() => {
           //refreshBalances()
-          window.backIndex = nodeInfo.dBIndex;
-          window.location.href = nodeInfo.ipfsRef;
+          handleNewAssetClass()
         })
       });
-
-    let op1 = window.web3.utils.toWei(operation1);
-    let op2 = window.web3.utils.toWei(operation2);
-    let op3 = window.web3.utils.toWei(operation3);
-    let op4 = window.web3.utils.toWei(operation4);
-    let op5 = window.web3.utils.toWei(operation5);
-    let op6 = window.web3.utils.toWei(operation6);
-    let op7 = window.web3.utils.toWei(operation7);
-    let op8 = window.web3.utils.toWei(operation8);
-
-    if (loginOperation1 !== "" && loginBeneficiaryAddress1 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress1)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "1",
-          op1,
-          beneficiaryAddress1
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation1 !== "" && loginBeneficiaryAddress1 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "1",
-          op1,
-          beneficiaryAddress1
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation2 !== "" && loginBeneficiaryAddress2 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress2)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "2",
-          op2,
-          beneficiaryAddress2
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation2 !== "" && loginBeneficiaryAddress2 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "2",
-          op2,
-          beneficiaryAddress2
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation3 !== "" && loginBeneficiaryAddress3 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress3)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "3",
-          op3,
-          beneficiaryAddress3
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation3 !== "" && loginBeneficiaryAddress3 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "3",
-          op3,
-          beneficiaryAddress3
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation4 !== "" && loginBeneficiaryAddress4 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress4)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "4",
-          op4,
-          beneficiaryAddress4
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation4 !== "" && loginBeneficiaryAddress4 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "4",
-          op4,
-          beneficiaryAddress4
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation5 !== "" && loginBeneficiaryAddress5 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress5)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "5",
-          op5,
-          beneficiaryAddress5
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation5 !== "" && loginBeneficiaryAddress5 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "5",
-          op5,
-          beneficiaryAddress5
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation6 !== "" && loginBeneficiaryAddress6 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress6)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "6",
-          op6,
-          beneficiaryAddress6
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation6 !== "" && loginBeneficiaryAddress6 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "6",
-          op6,
-          beneficiaryAddress6
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation7 !== "" && loginBeneficiaryAddress7 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress7)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "7",
-          op7,
-          beneficiaryAddress7
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation7 !== "" && loginBeneficiaryAddress7 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "7",
-          op7,
-          beneficiaryAddress7
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation8 !== "" && loginBeneficiaryAddress8 !== "") {
-      if (!window.web3.utils.isAddress(beneficiaryAddress8)) {
-        return swal({
-          title: "Submitted address is not valid!",
-          text: "Please check form and input a valid ethereum address.",
-          icon: "warning",
-          button: "Close",
-        });
-      }
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "8",
-          op8,
-          beneficiaryAddress8
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
-
-    if (loginOperation8 !== "" && loginBeneficiaryAddress8 === "") {
-      await window.contracts.AC_MGR.methods
-        .ACTH_setCosts(
-          nodeInfo.id,
-          "8",
-          op8,
-          beneficiaryAddress8
-        )
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
-        });
-    }
 
   }
 
@@ -2182,7 +1368,7 @@ export default function CreateNode(props) {
                   <small>*</small> Required fields
                     </div>
 
-                <div className={classes.checkboxAndRadio}>
+                {/* <div className={classes.checkboxAndRadio}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -2226,7 +1412,7 @@ export default function CreateNode(props) {
                       />
                     </CardBody>
                   </Card>
-                )}
+                )} */}
               </>
             )}
             {transactionActive && (
@@ -2266,7 +1452,7 @@ export default function CreateNode(props) {
           </>
           {!transactionActive && (
             <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => purchaseNode()}>Purchase AC Node</Button>
+              <Button color="info" className="MLBGradient" onClick={() => checkForAC()}>Purchase AC Node</Button>
             </div>
           )}
           {transactionActive && (

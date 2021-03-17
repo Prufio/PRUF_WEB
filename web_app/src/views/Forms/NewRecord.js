@@ -615,6 +615,7 @@ export default function NewRecord(props) {
   }
 
   const generateNodeList = (arr) => {
+    if(!arr || arr === null) return
     let nodeNames = props.rootNames
     let nodeSelection = [
       <MenuItem

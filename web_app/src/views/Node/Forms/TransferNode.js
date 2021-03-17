@@ -77,8 +77,21 @@ export default function TransferNode(props) {
     return tempHash;
   }
 
+  const spliceNodeList = (arr) => {
+    let tempArr = arr;
+    for( let i = 0; i < tempArr.length; i++ ){
+      if (String(nodeInfo.id) === String(tempArr[i][1])){
+        console.log("removing array index:",i, tempArr[i])
+        tempArr.splice(i, 1)
+      }
+    }
+    console.log("New nodeList:", tempArr)
+    return tempArr
+  }
+
   const transferNode = async () => { //transfer held Node
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+    const splicedList = spliceNodeList(props.nodeList);
 
     if(!window.web3.utils.isAddress(address)) {
       return swal({
@@ -151,6 +164,7 @@ export default function TransferNode(props) {
         }).then(()=>{
           //refreshBalances()
           //window.backIndex = nodeInfo.dBIndex;
+          window.replaceAssetData = { key: pageKey, nodeList: splicedList }
           window.location.href = nodeInfo.lastRef;
         })
       });

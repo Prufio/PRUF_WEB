@@ -137,7 +137,7 @@ export default function Dashboard(props) {
     //console.log(Date())
     //console.log(new Date().addDays(15))
 
-    if(!cookies.hasBeenNotified){
+    if (!cookies.hasBeenNotified) {
       swal({
         title: "Cookies on app.pruf.io",
         text: "This site uses minimal cookies to offer you optimal performance and loading times.",
@@ -166,24 +166,24 @@ export default function Dashboard(props) {
             break;
 
           case "moreInfo":
-            window.location.href="/#/user/cookies-policy"
+            window.location.href = "/#/user/cookies-policy"
             break;
 
-            case "decline":
-              setCookieTo("hasBeenNotified", false)
-              break;
+          case "decline":
+            setCookieTo("hasBeenNotified", false)
+            break;
 
-            default:
-              break;
+          default:
+            break;
         }
       });
     }
     console.log("Cookies:", cookies)
-    readCookie('nodeList').then((e)=>{
-      if(e) setNodeList(e)
-      console.log("Found nodeList: ",e)
+    readCookie('nodeList').then((e) => {
+      if (e) setNodeList(e)
+      console.log("Found nodeList: ", e)
     })
-    
+
   }
 
   const setCookieTo = (job, val) => {
@@ -193,7 +193,7 @@ export default function Dashboard(props) {
   }
 
   const readCookie = async (job) => {
-    if(!cookies[job]) return console.log("Referenced nonexistant cookie")
+    if (!cookies[job]) return console.log("Referenced nonexistant cookie")
     return cookies[job];
   }
 
@@ -243,9 +243,9 @@ export default function Dashboard(props) {
 
           return setIsKovan(true);
         }
-        else { 
-          window.isKovan = false; 
-          setIsKovan(false); 
+        else {
+          window.isKovan = false;
+          setIsKovan(false);
           return swal({
             title: "Connect to the Kovan Testnet!",
             text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
@@ -388,7 +388,7 @@ export default function Dashboard(props) {
       //console.log(ps);
     }
 
-    if(cookies) checkForCookies()
+    if (cookies) checkForCookies()
 
     // if(!isMobile) setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]); @dev temp for testing release
     window.addEventListener("resize", resizeFunction);
@@ -425,6 +425,7 @@ export default function Dashboard(props) {
         //console.log("Setting nodeList"); 
         setNodeList(window.replaceAssetData.nodeList)
         setCookieTo('nodeList', window.replaceAssetData.nodeList)
+        window.replaceAssetData = {};
       }
 
       else {
@@ -648,8 +649,8 @@ export default function Dashboard(props) {
             }
 
             let newAsset = {}
-            if (typeof ipfsHash !== "string"){
-              ipfsHash.then((_ipfsHash)=>{
+            if (typeof ipfsHash !== "string") {
+              ipfsHash.then((_ipfsHash) => {
                 window.utils.getACName(tempResult[2]).then((e) => {
                   newAsset = Object.assign(newAsset, {
                     id: idxHash,
@@ -662,13 +663,13 @@ export default function Dashboard(props) {
                     ipfs: _ipfsHash,
                     countPair: [tempResult[4], tempResult[3]]
                   })
-    
+
                   window.utils.getStatusString(String(tempResult[0])).then(async (e) => {
                     newAsset.status = e;
-    
+
                     let assetObj;
 
-                    if(cookies[_ipfsHash]){
+                    if (cookies[_ipfsHash]) {
                       console.log("Using cached ipfs data:", cookies[_ipfsHash])
                       let str = JSON.stringify(cookies[_ipfsHash])
                       if (!str) {
@@ -681,7 +682,7 @@ export default function Dashboard(props) {
                         newAsset.DisplayImage = ""
                         finalize(newAsset)
                       }
-    
+
                       else {
                         console.log("Got updated asset ipfs")
                         try {
@@ -692,12 +693,12 @@ export default function Dashboard(props) {
                         }
                         newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
                         let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-    
+
                         newAsset.text = assetObj.text;
                         newAsset.Description = assetObj.text.Description;
                         newAsset.urls = assetObj.urls;
                         newAsset.name = assetObj.name;
-    
+
                         if (keys.length < 1) {
                           newAsset.photo = assetObj.photo;
                           newAsset.DisplayImage = ""
@@ -717,16 +718,16 @@ export default function Dashboard(props) {
                                 //console.log("Setting Display Image")
                                 assetObj.DisplayImage = (assetObj.photo[keys[0]])
                               }
-    
+
                               if (i + 1 === keys.length) {
                                 newAsset.photo = assetObj.photo;
                                 newAsset.DisplayImage = assetObj.DisplayImage;
                                 finalize(newAsset)
                               }
-    
+
                               forceUpdate();
                             }
-    
+
                             else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
                               assetObj.photo[keys[i]] = vals[i];
                               if (keys[i] === "DisplayImage") {
@@ -737,45 +738,45 @@ export default function Dashboard(props) {
                                 //console.log("Setting Display Image")
                                 assetObj.DisplayImage = (assetObj.photo[keys[0]])
                               }
-    
+
                               if (i + 1 === keys.length) {
                                 newAsset.photo = assetObj.photo;
                                 newAsset.DisplayImage = assetObj.DisplayImage;
                                 finalize(newAsset)
                               }
-    
+
                               forceUpdate();
                             }
-    
+
                             else {
                               const req = new XMLHttpRequest();
                               req.responseType = "text";
-    
+
                               req.onload = function (e) {
                                 //console.log("in onload")
                                 if (this.response.includes("base64")) {
                                   assetObj.photo[keys[i]] = this.response;
                                   //console.log(assetObj.photo[keys[i]]);
-    
+
                                   if (keys[i] === "DisplayImage") {
                                     //console.log("Setting Display Image")
                                     assetObj.DisplayImage = assetObj.photo[keys[i]]
                                   }
-    
+
                                   else if (i === keys.length - 1) {
                                     //console.log("Setting Display Image")
                                     assetObj.DisplayImage = assetObj.photo[keys[0]]
                                   }
                                   forceUpdate();
                                 }
-    
+
                                 if (i + 1 === keys.length) {
                                   newAsset.photo = assetObj.photo;
                                   newAsset.DisplayImage = assetObj.DisplayImage;
                                   finalize(newAsset)
                                 }
                               }
-    
+
                               req.onerror = function (e) {
                                 //console.log("http request error")
                                 if (vals[i].includes("http")) {
@@ -790,7 +791,7 @@ export default function Dashboard(props) {
                                   }
                                   forceUpdate();
                                 }
-    
+
                                 if (i + 1 === keys.length) {
                                   newAsset.photo = assetObj.photo;
                                   newAsset.DisplayImage = assetObj.DisplayImage;
@@ -806,24 +807,24 @@ export default function Dashboard(props) {
                       }
                     }
 
-                    else{
+                    else {
                       for await (const chunk of window.ipfs.cat(_ipfsHash)) {
                         let str = new TextDecoder("utf-8").decode(chunk);
-  
+
                         setCookieTo(_ipfsHash, JSON.parse(str))
 
-                        if(assetArr[index] && assetArr[index].ipfs){
-                          if(typeof assetArr[index].ipfs !== "string")
-                          assetArr[index].ipfs.then((e)=>{
-                            console.log("Removing cookie: ", e)
-                            removeCookie(e)
-                          })
-                          else{
+                        if (assetArr[index] && assetArr[index].ipfs) {
+                          if (typeof assetArr[index].ipfs !== "string")
+                            assetArr[index].ipfs.then((e) => {
+                              console.log("Removing cookie: ", e)
+                              removeCookie(e)
+                            })
+                          else {
                             console.log("Removing cookie: ", assetArr[index].ipfs)
                             removeCookie(assetArr[index].ipfs)
                           }
                         }
-      
+
                         if (!str) {
                           assetObj = { text: {}, photo: {}, urls: {}, name: "" }
                           newAsset.text = assetObj.text;
@@ -834,7 +835,7 @@ export default function Dashboard(props) {
                           newAsset.DisplayImage = ""
                           finalize(newAsset)
                         }
-      
+
                         else {
                           console.log("Got updated asset ipfs")
                           try {
@@ -845,12 +846,12 @@ export default function Dashboard(props) {
                           }
                           newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
                           let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-      
+
                           newAsset.text = assetObj.text;
                           newAsset.Description = assetObj.text.Description;
                           newAsset.urls = assetObj.urls;
                           newAsset.name = assetObj.name;
-      
+
                           if (keys.length < 1) {
                             newAsset.photo = assetObj.photo;
                             newAsset.DisplayImage = ""
@@ -870,16 +871,16 @@ export default function Dashboard(props) {
                                   //console.log("Setting Display Image")
                                   assetObj.DisplayImage = (assetObj.photo[keys[0]])
                                 }
-      
+
                                 if (i + 1 === keys.length) {
                                   newAsset.photo = assetObj.photo;
                                   newAsset.DisplayImage = assetObj.DisplayImage;
                                   finalize(newAsset)
                                 }
-      
+
                                 forceUpdate();
                               }
-      
+
                               else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
                                 assetObj.photo[keys[i]] = vals[i];
                                 if (keys[i] === "DisplayImage") {
@@ -890,45 +891,45 @@ export default function Dashboard(props) {
                                   //console.log("Setting Display Image")
                                   assetObj.DisplayImage = (assetObj.photo[keys[0]])
                                 }
-      
+
                                 if (i + 1 === keys.length) {
                                   newAsset.photo = assetObj.photo;
                                   newAsset.DisplayImage = assetObj.DisplayImage;
                                   finalize(newAsset)
                                 }
-      
+
                                 forceUpdate();
                               }
-      
+
                               else {
                                 const req = new XMLHttpRequest();
                                 req.responseType = "text";
-      
+
                                 req.onload = function (e) {
                                   //console.log("in onload")
                                   if (this.response.includes("base64")) {
                                     assetObj.photo[keys[i]] = this.response;
                                     //console.log(assetObj.photo[keys[i]]);
-      
+
                                     if (keys[i] === "DisplayImage") {
                                       //console.log("Setting Display Image")
                                       assetObj.DisplayImage = assetObj.photo[keys[i]]
                                     }
-      
+
                                     else if (i === keys.length - 1) {
                                       //console.log("Setting Display Image")
                                       assetObj.DisplayImage = assetObj.photo[keys[0]]
                                     }
                                     forceUpdate();
                                   }
-      
+
                                   if (i + 1 === keys.length) {
                                     newAsset.photo = assetObj.photo;
                                     newAsset.DisplayImage = assetObj.DisplayImage;
                                     finalize(newAsset)
                                   }
                                 }
-      
+
                                 req.onerror = function (e) {
                                   //console.log("http request error")
                                   if (vals[i].includes("http")) {
@@ -943,7 +944,7 @@ export default function Dashboard(props) {
                                     }
                                     forceUpdate();
                                   }
-      
+
                                   if (i + 1 === keys.length) {
                                     newAsset.photo = assetObj.photo;
                                     newAsset.DisplayImage = assetObj.DisplayImage;
@@ -958,13 +959,13 @@ export default function Dashboard(props) {
                           }
                         }
                       }
-                    } 
+                    }
 
                   });
                 })
               })
             }
-            else{
+            else {
               window.utils.getACName(tempResult[2]).then((e) => {
                 newAsset = Object.assign(newAsset, {
                   id: idxHash,
@@ -977,24 +978,24 @@ export default function Dashboard(props) {
                   ipfs: ipfsHash,
                   countPair: [tempResult[4], tempResult[3]]
                 })
-  
+
                 window.utils.getStatusString(String(tempResult[0])).then(async (x) => {
                   newAsset.status = x;
-  
+
                   let assetObj;
-  
-                  
+
+
                   for await (const chunk of window.ipfs.cat(ipfsHash)) {
                     let str = new TextDecoder("utf-8").decode(chunk);
-  
+
                     setCookieTo(ipfsHash, JSON.parse(str))
-                    if(assetArr[index].ipfs){
-                      if(typeof assetArr[index].ipfs !== "string")
-                      assetArr[index].ipfs.then((e)=>{
-                        console.log("Removing cookie: ", e)
-                        removeCookie(e)
-                      })
-                      else{
+                    if (assetArr[index].ipfs) {
+                      if (typeof assetArr[index].ipfs !== "string")
+                        assetArr[index].ipfs.then((e) => {
+                          console.log("Removing cookie: ", e)
+                          removeCookie(e)
+                        })
+                      else {
                         console.log("Removing cookie: ", assetArr[index].ipfs)
                         removeCookie(assetArr[index].ipfs)
                       }
@@ -1010,7 +1011,7 @@ export default function Dashboard(props) {
                       newAsset.DisplayImage = ""
                       finalize(newAsset)
                     }
-  
+
                     else {
                       console.log("Got updated asset ipfs")
                       try {
@@ -1021,12 +1022,12 @@ export default function Dashboard(props) {
                       }
                       newAsset.photoUrls = JSON.parse(JSON.stringify(assetObj)).photo;
                       let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-  
+
                       newAsset.text = assetObj.text;
                       newAsset.Description = assetObj.text.Description;
                       newAsset.urls = assetObj.urls;
                       newAsset.name = assetObj.name;
-  
+
                       if (keys.length < 1) {
                         newAsset.photo = assetObj.photo;
                         newAsset.DisplayImage = ""
@@ -1046,16 +1047,16 @@ export default function Dashboard(props) {
                               //console.log("Setting Display Image")
                               assetObj.DisplayImage = (assetObj.photo[keys[0]])
                             }
-  
+
                             if (i + 1 === keys.length) {
                               newAsset.photo = assetObj.photo;
                               newAsset.DisplayImage = assetObj.DisplayImage;
                               finalize(newAsset)
                             }
-  
+
                             forceUpdate();
                           }
-  
+
                           else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
                             assetObj.photo[keys[i]] = vals[i];
                             if (keys[i] === "DisplayImage") {
@@ -1066,45 +1067,45 @@ export default function Dashboard(props) {
                               //console.log("Setting Display Image")
                               assetObj.DisplayImage = (assetObj.photo[keys[0]])
                             }
-  
+
                             if (i + 1 === keys.length) {
                               newAsset.photo = assetObj.photo;
                               newAsset.DisplayImage = assetObj.DisplayImage;
                               finalize(newAsset)
                             }
-  
+
                             forceUpdate();
                           }
-  
+
                           else {
                             const req = new XMLHttpRequest();
                             req.responseType = "text";
-  
+
                             req.onload = function (e) {
                               //console.log("in onload")
                               if (this.response.includes("base64")) {
                                 assetObj.photo[keys[i]] = this.response;
                                 //console.log(assetObj.photo[keys[i]]);
-  
+
                                 if (keys[i] === "DisplayImage") {
                                   //console.log("Setting Display Image")
                                   assetObj.DisplayImage = assetObj.photo[keys[i]]
                                 }
-  
+
                                 else if (i === keys.length - 1) {
                                   //console.log("Setting Display Image")
                                   assetObj.DisplayImage = assetObj.photo[keys[0]]
                                 }
                                 forceUpdate();
                               }
-  
+
                               if (i + 1 === keys.length) {
                                 newAsset.photo = assetObj.photo;
                                 newAsset.DisplayImage = assetObj.DisplayImage;
                                 finalize(newAsset)
                               }
                             }
-  
+
                             req.onerror = function (e) {
                               //console.log("http request error")
                               if (vals[i].includes("http")) {
@@ -1119,7 +1120,7 @@ export default function Dashboard(props) {
                                 }
                                 forceUpdate();
                               }
-  
+
                               if (i + 1 === keys.length) {
                                 newAsset.photo = assetObj.photo;
                                 newAsset.DisplayImage = assetObj.DisplayImage;
@@ -1260,15 +1261,15 @@ export default function Dashboard(props) {
           });
       }
 
-      
 
-      setTimeout(()=>{
+
+      setTimeout(() => {
         console.log("Class Sets: ", _assetClassSets)
         setRoots(rootArray)
         setRootNames(rootNameArray)
         setAssetClassSets(_assetClassSets)
-      },500)
-      
+      }, 500)
+
     })
 
   }
@@ -1308,7 +1309,7 @@ export default function Dashboard(props) {
     window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
       if (simpleAssets.ipfs) {
         console.log(simpleAssets.ipfs)
-        if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") {setTimeout(()=>{getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length)}, 100)} }
+        if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") { setTimeout(() => { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }, 100) } }
         else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
       }
     })
@@ -1337,13 +1338,13 @@ export default function Dashboard(props) {
     }
 
     let lookup = array[iteration - 1];
-    if(typeof lookup !== "string") lookup.then(async (e)=>{
-      if(cookies[e]){
+    if (typeof lookup !== "string") lookup.then(async (e) => {
+      if (cookies[e]) {
         console.log("Using cached ipfs:", cookies[e])
         _assetData.push(cookies[e])
         return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
       }
-      else{
+      else {
         try {
           for await (const chunk of window.ipfs.cat(e)) {
             let str = new TextDecoder("utf-8").decode(chunk);
@@ -1353,7 +1354,7 @@ export default function Dashboard(props) {
               console.log("error")
               return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
             }
-      
+
             else {
               //console.log(str)
               console.log("got job #", iteration)
@@ -1369,20 +1370,20 @@ export default function Dashboard(props) {
             //console.log(chunk)
           }
         }
-    
+
         catch {
-          setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
+          setTimeout(() => { getIpfsData(simpleAssets, array, jobs) }, 500)
         }
       }
     })
-    
-    else{
-      if(cookies[lookup]){
+
+    else {
+      if (cookies[lookup]) {
         console.log("Using cached ipfs:", cookies[lookup])
         _assetData.push(cookies[lookup])
         return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
       }
-      else{
+      else {
         try {
           for await (const chunk of window.ipfs.cat(lookup)) {
             let str = new TextDecoder("utf-8").decode(chunk);
@@ -1392,7 +1393,7 @@ export default function Dashboard(props) {
               console.log("error")
               return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
             }
-      
+
             else {
               //console.log(str)
               console.log("got job #", iteration)
@@ -1408,9 +1409,9 @@ export default function Dashboard(props) {
             //console.log(chunk)
           }
         }
-    
+
         catch {
-          setTimeout(()=>{getIpfsData(simpleAssets, array, jobs)}, 500)
+          setTimeout(() => { getIpfsData(simpleAssets, array, jobs) }, 500)
         }
       }
 
