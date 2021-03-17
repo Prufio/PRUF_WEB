@@ -56,7 +56,7 @@ export default function NewRecord(props) {
   const [NRCost, setNRCost] = React.useState("~");
   const [mintedID, setMintedID] = React.useState(false);
   const [selectedRootID, setSelectedRootID] = React.useState("");
-  const [publicNode, setPublicNode] = React.useState(false);
+  const [publicNode, setPublicNode] = React.useState(true);
 
 
   //const [ipfsObj, setIpfsObj] = React.useState("");
@@ -901,18 +901,28 @@ export default function NewRecord(props) {
                             select: classes.select
                           }}
                           value={rootSelect}
-                          onChange={(e) => { ACLogin(e) }}
+                          // onChange={(e) => { ACLogin(e) }}
                           inputProps={{
                             name: "rootSelect",
                             id: "root-select"
                           }}
                         >
-                          {generateNodeList(props.nodeList)}
+
+                          <MenuItem
+                            disabled
+                            key={"N/A"}
+                            classes={{
+                              node: classes.selectMenuItem
+                            }}
+                          >
+                            Currently Unavailable
+                          </MenuItem>
+                          {/* {generateNodeList(props.nodeList)} */}
                         </Select>
                       </FormControl>
                     )}
                     <br></br>
-                    {selectedRootID !== "" && (
+                    {selectedRootID !== "" && !publicNode && (
                       <FormControl
                         fullWidth
                         className={classes.selectFormControl}
