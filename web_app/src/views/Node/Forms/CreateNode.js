@@ -52,6 +52,7 @@ export default function CreateNode(props) {
   const [name, setName] = React.useState("");
   const [root, setRoot] = React.useState("");
   const [ipfs, setIPFS] = React.useState("");
+  const [pricingObj, setPricingObj] = React.useState({})
 
   const [loginName, setloginName] = React.useState("");
   const [loginIPFS, setloginIPFS] = React.useState("");
@@ -334,7 +335,24 @@ export default function CreateNode(props) {
     }
   }
 
+  const setPrices = () => {
+    console.log(pricingObj)
+  }
+
+  const handlePriceAdjustment = (job, val) => {
+    let tempObj = JSON.parse(JSON.stringify(pricingObj))
+    if(!val || val < 0){
+      delete tempObj[job]
+      setPricingObj(tempObj)
+    }
+    else{
+      tempObj[job] = String(val)
+      setPricingObj(tempObj)
+    }
+  }
+
   const handleNewAssetClass = async () => {
+    const pageKey = thousandHashesOf(props.addr, props.winKey);
     let id;
     await window.contracts.AC_MGR.methods
       .resolveAssetClass(name)
@@ -343,7 +361,7 @@ export default function CreateNode(props) {
           return (console.log("IN ERROR IN ERROR IN ERROR"))
         } else {
           id = _result
-          tempArr = props.nodeList;
+          let tempArr = props.nodeList;
           tempArr.push([name, id, "N/A", "N/A"])
           window.replaceAssetData = { key: pageKey, nodeList: tempArr }
           window.location.href = "/#/user/node-manager";
@@ -429,8 +447,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation1),
+              value: (operation1),
               onChange: event => {
+                handlePriceAdjustment("1", Number(event.target.value).toFixed(3))
                 setOperation1(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation1State("success");
@@ -524,8 +543,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation2),
+              value: (operation2),
               onChange: event => {
+                handlePriceAdjustment("2", Number(event.target.value).toFixed(3))
                 setOperation2(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation2State("success");
@@ -619,8 +639,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation3),
+              value: (operation3),
               onChange: event => {
+                handlePriceAdjustment("3", Number(event.target.value).toFixed(3))
                 setOperation3(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation3State("success");
@@ -715,8 +736,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation4),
+              value: (operation4),
               onChange: event => {
+                handlePriceAdjustment("4", Number(event.target.value).toFixed(3))
                 setOperation4(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation4State("success");
@@ -811,8 +833,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation5),
+              value: (operation5),
               onChange: event => {
+                handlePriceAdjustment("5", Number(event.target.value).toFixed(3))
                 setOperation5(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation5State("success");
@@ -907,8 +930,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation6),
+              value: (operation6),
               onChange: event => {
+                handlePriceAdjustment("6", Number(event.target.value).toFixed(3))
                 setOperation6(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation6State("success");
@@ -1003,8 +1027,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation7),
+              value: (operation7),
               onChange: event => {
+                handlePriceAdjustment("7", Number(event.target.value).toFixed(3))
                 setOperation7(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation7State("success");
@@ -1099,8 +1124,9 @@ export default function CreateNode(props) {
             }}
             inputProps={{
               type: "number",
-              defaultValue: window.web3.utils.fromWei(operation8),
+              value: (operation8),
               onChange: event => {
+                handlePriceAdjustment("8", Number(event.target.value).toFixed(3))
                 setOperation8(event.target.value.trim())
                 if (event.target.value !== "") {
                   setloginOperation8State("success");
@@ -1342,7 +1368,7 @@ export default function CreateNode(props) {
                   <small>*</small> Required fields
                     </div>
 
-                <div className={classes.checkboxAndRadio}>
+                {/* <div className={classes.checkboxAndRadio}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -1386,7 +1412,7 @@ export default function CreateNode(props) {
                       />
                     </CardBody>
                   </Card>
-                )}
+                )} */}
               </>
             )}
             {transactionActive && (
