@@ -137,7 +137,7 @@ export default function Dashboard(props) {
     //console.log(Date())
     //console.log(new Date().addDays(15))
 
-    if (!cookies.hasBeenNotified) {
+    // if (!cookies.hasBeenNotified) {
       swal({
         title: "Cookies on app.pruf.io",
         text: "This site uses minimal cookies to offer you optimal performance and loading times.",
@@ -166,7 +166,35 @@ export default function Dashboard(props) {
             break;
 
           case "moreInfo":
-            window.location.href = "/#/user/cookies-policy"
+            swal({
+              title: "Cookies on app.pruf.io",
+              text: "This site uses minimal cookies to offer you optimal performance and loading times.",
+              buttons: {
+                decline: {
+                  text: "Decline Cookie Use",
+                  value: "decline",
+                  className: "declineCookies"
+                },
+                accept: {
+                  text: "Accept and continue",
+                  value: "accept",
+                  className: "acceptCookies"
+                }
+              },
+            }).then((value) => {
+              switch (value) {
+                case "accept":
+                  setCookieTo("hasBeenNotified", true)
+                  break;
+      
+                case "decline":
+                  setCookieTo("hasBeenNotified", false)
+                  break;
+      
+                default:
+                  break;
+              }
+            });
             break;
 
           case "decline":
@@ -177,7 +205,7 @@ export default function Dashboard(props) {
             break;
         }
       });
-    }
+    // }
     console.log("Cookies:", cookies)
     readCookie('nodeList').then((e) => {
       if (e) setNodeList(e)
