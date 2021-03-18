@@ -1,5 +1,9 @@
 To do:
 
+IPFS2 metadata must override ACNode and IPFS1 metadata items with the same Names
+Override priority : IPFS2>IPFS1>ACNODE (immutable overrides customizations overrides defaults)
+ 
+
 Stage1(Alpha Release):
 
 Interface Backend:
