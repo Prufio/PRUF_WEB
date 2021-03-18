@@ -168,7 +168,7 @@ export default function Dashboard(props) {
           case "moreInfo":
             swal({
               title: "Cookies on app.pruf.io",
-              text: "This site uses minimal cookies to offer you optimal performance and loading times.",
+              text: "Placeholder",
               buttons: {
                 decline: {
                   text: "Decline Cookie Use",
