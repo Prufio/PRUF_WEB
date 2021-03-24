@@ -3,9 +3,11 @@ import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
 import swal from 'sweetalert';
 import Web3 from "web3";
+
+import PRUF from "../Resources/pruf-api";
 import { isMobile } from "react-device-detect";
 //import OrbitDB from 'orbit-db';
-import buildContracts from "../Resources/Contracts";
+import resolveContracts from "../Resources/Contracts";
 import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useCookies } from 'react-cookie';
@@ -37,21 +39,6 @@ export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
 
-  // @dev use to determine recycle and import eligibility
-  /* 
-    await window.contracts.AC_MGR.methods
-      .isSameRootAC(AC, temp)
-      .call(function (_error, _result) {
-        if (_error) {
-          return (console.log("IN ERROR IN ERROR IN ERROR"))
-        } else if (_result === "170") {
-          tempBool = true
-        } else {
-          tempBool = false
-        }
-      });
-  */
-
   const IPFS = require('ipfs-http-client') //require("ipfs-mini")
   //const OrbitDB = require('orbit-db')
 
@@ -71,6 +58,7 @@ export default function Dashboard(props) {
   const [sps, setSps] = React.useState(undefined)
 
   const [prufBalance, setPrufBalance] = React.useState("~");
+  const [prufClient, setPrufClient] = React.useState()
   const [roots, setRoots] = React.useState(undefined);
   const [rootNames, setRootNames] = React.useState(undefined);
   const [assetClassSets, setAssetClassSets] = React.useState(undefined);
@@ -564,6 +552,7 @@ export default function Dashboard(props) {
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
                 nodeList={nodeList}
+                prufClient={prufClient}
               />)}
             key={key}
           />
@@ -1170,7 +1159,12 @@ export default function Dashboard(props) {
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
     if (window.ethereum) {
-      window._contracts = await buildContracts(_web3).then(() => {
+
+      const _prufClient = new PRUF(_web3)
+      console.log(_prufClient)
+      setPrufClient(_prufClient)
+
+      window._contracts = await resolveContracts(_web3).then(() => {
         window.isSettingUpContracts = false;
         setWD(true)
         if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
@@ -1185,7 +1179,7 @@ export default function Dashboard(props) {
 
     else {
       window.isSettingUpContracts = true;
-      window._contracts = await buildContracts(_web3).then(() => {
+      window._contracts = await resolveContracts(_web3).then(() => {
         window.isSettingUpContracts = false;
         setWD(true)
       })
@@ -1275,6 +1269,7 @@ export default function Dashboard(props) {
   }
 
   const setUpAssets = async (who, _addr) => {
+
     console.log("SUA, called from ", who)
 
     let tempObj = {};
