@@ -1,6 +1,6 @@
 import returnABIs from "./returnABIs";
 
-async function buildContracts(_web3) {
+async function resolveContracts(_web3) {
 
   const abis = returnABIs();
 
@@ -289,7 +289,7 @@ async function buildContracts(_web3) {
       DECORATE: DECORATE
     }
     
-  return console.log(window.contracts)
+  return window.contracts
 }
 
-export default buildContracts;
+export default resolveContracts;

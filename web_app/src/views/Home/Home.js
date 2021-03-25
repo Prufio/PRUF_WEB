@@ -28,7 +28,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import "../../assets/css/custom.css";
 
-import { Cached, DashboardOutlined, Close } from "@material-ui/icons";
+import { Cached, DashboardOutlined, Close, ContactSupport } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -119,7 +119,7 @@ export default function Home(props) {
   };
 
   const purchasePRUF = async () => {
-    let tempTxHash;
+/*     let tempTxHash;
 
     if (loginDeposit === "" || loginDeposit < 10000) {
       setloginDepositState("error");
@@ -197,7 +197,28 @@ export default function Home(props) {
         window.replaceAssetData = { pruf: props.pruf + deposit }
         forceUpdate()
         //refreshBalances()
-      });
+      }); */
+      props.prufClient.calls
+      .getTokenRecord("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634")
+      .call((error, result)=>{
+        if(result) console.log(result)
+        else console.error(error)
+      })
+
+      props.prufClient.methods
+      .verifyRightsHolder("0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d", "0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d")
+      .send({from: props.addr})
+      .on("error", (error)=>{
+        console.log("PRUF_ERR:",error)
+      })
+      .on("receipt", (receipt)=>{
+        console.log(receipt.events.REPORT.returnValues._msg)
+      })
+
+      console.log(window.ipfs)
+
+      console.log(props.prufClient.utils.isValidId("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634"))
+
     return clearPRUFForm();
   }
 
