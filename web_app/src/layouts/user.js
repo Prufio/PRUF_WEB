@@ -1274,8 +1274,143 @@ export default function Dashboard(props) {
 
   }
 
+  const isGenericCall = async (e) => {
+    //console.log("Checking call", e)
+    let str;
+
+    const genericCalls = [
+      "CONTRACT_ADMIN_ROLE",
+      "B320xF_",
+      "ASSET_TXFR_ROLE",
+      "NODE_MINTER_ROLE",
+      "PAUSER_ROLE",
+      "CONTRACT_ADMIN_ROLE",
+      "acPrice_L1",
+      "DEFAULT_ADMIN_ROLE",
+      "acPrice_L2",
+      "acPrice_L3",
+      "acPrice_L4",
+      "acPrice_L5",
+      "acPrice_L6",
+      "acPrice_L7",
+      "grantRole",
+      "hasRole",
+      "unpause",
+      "upperLimit",
+      "OO_SetACpricing",
+      "OO_SetACupgrade",
+      "OO_resolveContractAddresses",
+      "OO_setStorageContract",
+      "OO_transferACToken",
+      "MINTER_ROLE",
+      "getRoleAdmin",
+      "getApproved",
+      "getRoleMember",
+      "grantRole",
+      "getRoleMemberCount",
+      "name",
+      "ownerOf",
+      "isApprovedForAll",
+      "pause",
+      "paused",
+      "revokeRole",
+      "renounceRole",
+      "safeTransferFrom",
+      "supportsInterface",
+      "symbol",
+      "tokenByIndex",
+      "tokenOfOwnerByIndex",
+      "tokenURI",
+      "totalSupply",
+      "transferFrom",
+      "AdminSetSharesAddress",
+      "burnFrom",
+      "cap",
+      "decimals",
+      "decreaseAllowance",
+      "increaseAllowance",
+      "mint",
+      "payForService",
+      "takeSnapshot",
+      "totalSupply",
+      "totalSupplyAt",
+      "transfer",
+      "trustedAgentBurn",
+      "transferFrom",
+      "trustedAgentTransfer",
+      "unSetColdWallet",
+      "balanceOf",
+      "baseURI",
+      "burn",
+      "approve",
+      "setApprovalForAll",
+      "createAssetClass",
+      "onERC721Received",
+      "DISCARD_ROLE",
+      "",
+      ""
+    ]
+
+    if (e.includes("(")) {
+      str = e.substring(0, e.indexOf("("))
+    }
+
+    else {
+      str = e;
+    }
+
+    if (str.substring(0, 2) === "0x" || str.substring(0, 2) === "OO") {
+      //console.log("Caught genCall:", str);
+      return true
+    }
+
+    else if (genericCalls.includes(str)) {
+      //console.log("Caught genCall:", str); 
+      return true
+    }
+
+    else {
+      return false
+    }
+  }
+
+  const listAllMethods = () => {
+    let allMethods = {};
+
+    for (let i = 0; i < Object.values(window.contracts).length; i++) {
+      let tempArr = [], badBatch = [];
+      let contract = Object.values(window.contracts)[i];
+
+      console.log(contract)
+
+      for (let x = 0; x < Object.values(contract.methods).length; x++) {
+        isGenericCall(Object.keys(contract.methods)[x]).then((e) => {
+          if (e === false && Object.keys(contract.methods)[x].includes("(") && Object.keys(contract.methods)[x].includes(")")) {
+            tempArr.push(Object.keys(contract.methods)[x])
+            if(x === Object.values(contract.methods).length - 1){
+              console.log("Good",allMethods)
+              console.log("Bad",badBatch)
+            }
+          }
+          else {
+            badBatch.push(Object.keys(contract.methods)[x])
+            if(x === Object.values(contract.methods).length - 1){
+              console.log("Good",allMethods)
+              console.log("Bad",badBatch)
+            }
+          }
+        })
+      }
+      allMethods[Object.keys(window.contracts)[i]] = tempArr;
+    }
+
+    
+  }
+
   const setUpAssets = async (who, _addr) => {
     console.log("SUA, called from ", who)
+
+    listAllMethods()
 
     let tempObj = {};
 
