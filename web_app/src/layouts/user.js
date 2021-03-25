@@ -1172,7 +1172,7 @@ export default function Dashboard(props) {
 
       if (_addr) {
         await window.utils.getETHBalance(_addr);
-        await setUpTokenVals(true, "SetupContractEnvironment", _addr)
+        await setUpTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
         await setUpACInformation(_addr);
       }
     }
@@ -1401,11 +1401,11 @@ export default function Dashboard(props) {
     
   }
 
-  const setUpAssets = async (who, _addr) => {
+  const setUpAssets = async (who, _addr, pruf) => {
 
     console.log("SUA, called from ", who)
 
-    listAllMethods()
+    //listAllMethods()
 
     let tempObj = {};
 
@@ -1432,11 +1432,11 @@ export default function Dashboard(props) {
       if (window.balances !== undefined) window.balances.assetBalance = 0;
       window.recount = false
       await window.utils.getETHBalance(_addr);
-      return setUpTokenVals(true, "SUA recount", _addr)
+      return setUpTokenVals(true, "SUA recount", _addr, pruf)
     }
     console.log("SUA: In setUpAssets")
 
-    window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
+    window.utils.getAssetTokenInfo(_addr, pruf).then((simpleAssets) => {
       if (simpleAssets.ipfs) {
         console.log(simpleAssets.ipfs)
         if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") { setTimeout(() => { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }, 100) } }
@@ -1726,7 +1726,7 @@ export default function Dashboard(props) {
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-  const setUpTokenVals = async (willSetup, who, _addr) => {
+  const setUpTokenVals = async (willSetup, who, _addr, pruf) => {
     console.log("STV: Setting up balances, called from ", who)
 
     await window.utils.determineTokenBalance(_addr).then((e) => {
@@ -1770,7 +1770,7 @@ export default function Dashboard(props) {
 
     if (willSetup) {
       forceUpdate();
-      return setUpAssets("setUpTokenVals", _addr)
+      return setUpAssets("setUpTokenVals", _addr, pruf)
     }
 
     return forceUpdate();

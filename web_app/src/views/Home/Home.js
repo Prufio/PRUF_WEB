@@ -198,14 +198,14 @@ export default function Home(props) {
         forceUpdate()
         //refreshBalances()
       }); */
-      props.prufClient.calls
-      .getTokenRecord("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634")
+      props.prufClient.get
+      .assetRecord("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634")
       .call((error, result)=>{
         if(result) console.log(result)
         else console.error(error)
       })
 
-      props.prufClient.methods
+      props.prufClient.do
       .verifyRightsHolder("0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d", "0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d")
       .send({from: props.addr})
       .on("error", (error)=>{

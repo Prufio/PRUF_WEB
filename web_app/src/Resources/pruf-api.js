@@ -5,10 +5,10 @@ import assembleInterface from "./Interface"
 
 class PRUF {
     constructor(web3Provider) {
-        this.provider = web3Provider;
+        //this.provider = web3Provider;
 
         if (!web3Provider) throw "Web3 returned undefined. Get web3 before initializing PRUF"
-
+        
         else {
             try {
                 web3Provider.eth.net.getNetworkType().then((e) => {
@@ -22,9 +22,9 @@ class PRUF {
                                     try {
                                         assembleInterface(f).then((g) => {
                                             if (!g) throw "Interface returned undefined"
-                                            this.calls = g.calls
+                                            this.get = g.calls
                                             this.utils = g.utils
-                                            this.methods = g.methods
+                                            this.do = g.methods
                                         })
                                     }
                                     catch (err) {
