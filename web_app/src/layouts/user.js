@@ -3,9 +3,11 @@ import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
 import swal from 'sweetalert';
 import Web3 from "web3";
+
+import PRUF from "../Resources/pruf-api";
 import { isMobile } from "react-device-detect";
 //import OrbitDB from 'orbit-db';
-import buildContracts from "../Resources/Contracts";
+import resolveContracts from "../Resources/Contracts";
 import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useCookies } from 'react-cookie';
@@ -37,21 +39,6 @@ export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
 
-  // @dev use to determine recycle and import eligibility
-  /* 
-    await window.contracts.AC_MGR.methods
-      .isSameRootAC(AC, temp)
-      .call(function (_error, _result) {
-        if (_error) {
-          return (console.log("IN ERROR IN ERROR IN ERROR"))
-        } else if (_result === "170") {
-          tempBool = true
-        } else {
-          tempBool = false
-        }
-      });
-  */
-
   const IPFS = require('ipfs-http-client') //require("ipfs-mini")
   //const OrbitDB = require('orbit-db')
 
@@ -71,6 +58,7 @@ export default function Dashboard(props) {
   const [sps, setSps] = React.useState(undefined)
 
   const [prufBalance, setPrufBalance] = React.useState("~");
+  const [prufClient, setPrufClient] = React.useState()
   const [roots, setRoots] = React.useState(undefined);
   const [rootNames, setRootNames] = React.useState(undefined);
   const [assetClassSets, setAssetClassSets] = React.useState(undefined);
@@ -592,6 +580,7 @@ export default function Dashboard(props) {
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
                 nodeList={nodeList}
+                prufClient={prufClient}
               />)}
             key={key}
           />
@@ -1198,7 +1187,12 @@ export default function Dashboard(props) {
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
     if (window.ethereum) {
-      window._contracts = await buildContracts(_web3).then(() => {
+
+      const _prufClient = new PRUF(_web3)
+      console.log(_prufClient)
+      setPrufClient(_prufClient)
+
+      window._contracts = await resolveContracts(_web3).then(() => {
         window.isSettingUpContracts = false;
         setWD(true)
         if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
@@ -1213,7 +1207,7 @@ export default function Dashboard(props) {
 
     else {
       window.isSettingUpContracts = true;
-      window._contracts = await buildContracts(_web3).then(() => {
+      window._contracts = await resolveContracts(_web3).then(() => {
         window.isSettingUpContracts = false;
         setWD(true)
       })
@@ -1302,8 +1296,144 @@ export default function Dashboard(props) {
 
   }
 
+  const isGenericCall = async (e) => {
+    //console.log("Checking call", e)
+    let str;
+
+    const genericCalls = [
+      "CONTRACT_ADMIN_ROLE",
+      "B320xF_",
+      "ASSET_TXFR_ROLE",
+      "NODE_MINTER_ROLE",
+      "PAUSER_ROLE",
+      "CONTRACT_ADMIN_ROLE",
+      "acPrice_L1",
+      "DEFAULT_ADMIN_ROLE",
+      "acPrice_L2",
+      "acPrice_L3",
+      "acPrice_L4",
+      "acPrice_L5",
+      "acPrice_L6",
+      "acPrice_L7",
+      "grantRole",
+      "hasRole",
+      "unpause",
+      "upperLimit",
+      "OO_SetACpricing",
+      "OO_SetACupgrade",
+      "OO_resolveContractAddresses",
+      "OO_setStorageContract",
+      "OO_transferACToken",
+      "MINTER_ROLE",
+      "getRoleAdmin",
+      "getApproved",
+      "getRoleMember",
+      "grantRole",
+      "getRoleMemberCount",
+      "name",
+      "ownerOf",
+      "isApprovedForAll",
+      "pause",
+      "paused",
+      "revokeRole",
+      "renounceRole",
+      "safeTransferFrom",
+      "supportsInterface",
+      "symbol",
+      "tokenByIndex",
+      "tokenOfOwnerByIndex",
+      "tokenURI",
+      "totalSupply",
+      "transferFrom",
+      "AdminSetSharesAddress",
+      "burnFrom",
+      "cap",
+      "decimals",
+      "decreaseAllowance",
+      "increaseAllowance",
+      "mint",
+      "payForService",
+      "takeSnapshot",
+      "totalSupply",
+      "totalSupplyAt",
+      "transfer",
+      "trustedAgentBurn",
+      "transferFrom",
+      "trustedAgentTransfer",
+      "unSetColdWallet",
+      "balanceOf",
+      "baseURI",
+      "burn",
+      "approve",
+      "setApprovalForAll",
+      "createAssetClass",
+      "onERC721Received",
+      "DISCARD_ROLE",
+      "",
+      ""
+    ]
+
+    if (e.includes("(")) {
+      str = e.substring(0, e.indexOf("("))
+    }
+
+    else {
+      str = e;
+    }
+
+    if (str.substring(0, 2) === "0x" || str.substring(0, 2) === "OO") {
+      //console.log("Caught genCall:", str);
+      return true
+    }
+
+    else if (genericCalls.includes(str)) {
+      //console.log("Caught genCall:", str); 
+      return true
+    }
+
+    else {
+      return false
+    }
+  }
+
+  const listAllMethods = () => {
+    let allMethods = {};
+
+    for (let i = 0; i < Object.values(window.contracts).length; i++) {
+      let tempArr = [], badBatch = [];
+      let contract = Object.values(window.contracts)[i];
+
+      console.log(contract)
+
+      for (let x = 0; x < Object.values(contract.methods).length; x++) {
+        isGenericCall(Object.keys(contract.methods)[x]).then((e) => {
+          if (e === false && Object.keys(contract.methods)[x].includes("(") && Object.keys(contract.methods)[x].includes(")")) {
+            tempArr.push(Object.keys(contract.methods)[x])
+            if(x === Object.values(contract.methods).length - 1){
+              console.log("Good",allMethods)
+              console.log("Bad",badBatch)
+            }
+          }
+          else {
+            badBatch.push(Object.keys(contract.methods)[x])
+            if(x === Object.values(contract.methods).length - 1){
+              console.log("Good",allMethods)
+              console.log("Bad",badBatch)
+            }
+          }
+        })
+      }
+      allMethods[Object.keys(window.contracts)[i]] = tempArr;
+    }
+
+    
+  }
+
   const setUpAssets = async (who, _addr) => {
+
     console.log("SUA, called from ", who)
+
+    listAllMethods()
 
     let tempObj = {};
 
