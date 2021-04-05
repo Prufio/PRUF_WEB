@@ -32,6 +32,7 @@ import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import extStyles from "assets/jss/material-dashboard-pro-react/views/extendedFormsStyle";
+import { keys } from "@material-ui/core/styles/createBreakpoints";
 
 const useStyles = makeStyles(styles);
 const useExtStyles = makeStyles(extStyles);
@@ -130,6 +131,25 @@ export default function NewRecord(props) {
 
     }
   }, [])
+
+  const postToArweave = async (data, metaData) => {
+    let dataTransaction = await props.arweaveClient.createTransaction({
+      data,
+    }, props.testWeave.rootJWK)
+
+    console.log(dataTransaction);
+
+    if(metaData){
+
+      const vals = Object.values(metaData);
+      const keys = Object.keys(metaData);
+
+      for (let i = 0; i < keys.length; i++) {
+        dataTransaction.addTag(String(keys[i]), String(vals[i]))
+      }
+
+    }
+  }
 
   const rootLogin = (e) => {
 

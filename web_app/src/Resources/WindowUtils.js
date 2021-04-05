@@ -15,7 +15,7 @@ function buildWindowUtils() {
   }
 
   const _getBytes32FromIPFSHash = (hash) => {
-    let str = "0x" + bs58.decode(hash).slice(2).toString("hex");
+    const str = "0x" + bs58.decode(hash).slice(2).toString("hex");
     return str;
   };
 
