@@ -1,18 +1,5 @@
 const gulp = require("gulp");
 const gap = require("gulp-append-prepend");
-const inlinesource = require('gulp-inline-source')
-const replace = require('gulp-replace')
-
-gulp.task('default', () => {
-      gulp.src('./build/index.html')
-      .pipe(replace('.js"></script>', '.js" inline></script>'))
-      .pipe(replace('rel="stylesheet">', 'rel="stylesheet" inline>'))
-      .pipe(inlinesource({
-          compress: false,
-          ignore: ['png']
-      }))
-      .pipe(gulp.dest('./build'))
-});
 
 gulp.task("licenses", async function() {
   // this is to add Creative Tim licenses in the production mode for the minified js

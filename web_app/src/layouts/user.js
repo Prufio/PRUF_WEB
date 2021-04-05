@@ -148,7 +148,7 @@ export default function Dashboard(props) {
     //console.log(Date())
     //console.log(new Date().addDays(15))
 
-    // if (!cookies.hasBeenNotified) {
+     if (!cookies.hasBeenNotified) {
       swal({
         title: "Cookies on app.pruf.io",
         text: "This site uses minimal cookies to offer you optimal performance and loading times.",
@@ -216,7 +216,7 @@ export default function Dashboard(props) {
             break;
         }
       });
-    // }
+     }
     console.log("Cookies:", cookies)
     readCookie('nodeList').then((e) => {
       if (e) setNodeList(e)
