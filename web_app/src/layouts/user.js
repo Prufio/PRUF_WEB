@@ -3,6 +3,8 @@ import cx from "classnames";
 import Jdenticon from 'react-jdenticon';
 import swal from 'sweetalert';
 import Web3 from "web3";
+import Arweave from "arweave"
+import TestWeave from 'testweave-sdk';
 
 import PRUF from "../Resources/pruf-api";
 import { isMobile } from "react-device-detect";
@@ -76,7 +78,8 @@ export default function Dashboard(props) {
   const [reserveAD, setReserveAD] = React.useState({})
   const [assetArr, setAssetArr] = React.useState([])
   const [winKey, setWinKey] = React.useState(String(Math.round(Math.random() * 100000)))
-
+  const [arweaveClient, setArweaveClient] = React.useState();
+  const [testWeave, setTestWeave] = React.useState()
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   const acArr = [1, 11, 12, 13, 2, 21, 22, 23, 3, 31, 32, 33, 4, 41, 42, 43, 5, 51, 52, 53, 6, 61, 62, 63];
@@ -106,6 +109,26 @@ export default function Dashboard(props) {
   }
 
   //console.log("pre-load href", window.location.href)
+  const initArweave = async () => {
+    const _arweave = Arweave
+    const arweave = _arweave.init({
+      host: '127.0.0.1',
+      port: 1984,
+      protocol: 'http'
+    });
+
+    setArweaveClient(arweave)
+
+    console.log(arweave)
+    
+    const testWeave = await TestWeave.init(arweave);
+
+    setTestWeave(testWeave)
+
+    console.log(testWeave)
+
+    return {testWeave: testWeave, arweave: arweave}
+  }
 
   const handleNoEthereum = () => {
     console.log("No ethereum object available");
@@ -581,6 +604,8 @@ export default function Dashboard(props) {
                 winKey={winKey}
                 nodeList={nodeList}
                 prufClient={prufClient}
+                arweaveClient={arweaveClient}
+                testWeave={testWeave}
               />)}
             key={key}
           />
@@ -1186,6 +1211,18 @@ export default function Dashboard(props) {
     //console.log("IN SUCE, addr:", _addr)
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
     window.isSettingUpContracts = true;
+    initArweave()
+
+    /* const Arweave = require('arweave');
+
+    Arweave.init({
+      host: 'arweave.net',// Hostname or IP address for a Arweave host
+      port: 443,          // Port
+      protocol: 'https',  // Network protocol http or https
+      timeout: 20000,     // Network request timeouts in milliseconds
+      logging: false,     // Enable network request logging
+    }).then(e=>setArweaveClient(e)) */
+
     if (window.ethereum) {
 
       const _prufClient = new PRUF(_web3)
@@ -1200,9 +1237,11 @@ export default function Dashboard(props) {
 
       if (_addr) {
         await window.utils.getETHBalance(_addr);
-        await setUpTokenVals(true, "SetupContractEnvironment", _addr)
+        await setUpTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
         await setUpACInformation(_addr);
       }
+
+
     }
 
     else {
@@ -1429,11 +1468,11 @@ export default function Dashboard(props) {
     
   }
 
-  const setUpAssets = async (who, _addr) => {
+  const setUpAssets = async (who, _addr, pruf) => {
 
     console.log("SUA, called from ", who)
 
-    listAllMethods()
+    //listAllMethods()
 
     let tempObj = {};
 
@@ -1460,11 +1499,11 @@ export default function Dashboard(props) {
       if (window.balances !== undefined) window.balances.assetBalance = 0;
       window.recount = false
       await window.utils.getETHBalance(_addr);
-      return setUpTokenVals(true, "SUA recount", _addr)
+      return setUpTokenVals(true, "SUA recount", _addr, pruf)
     }
     console.log("SUA: In setUpAssets")
 
-    window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
+    window.utils.getAssetTokenInfo(_addr, pruf).then((simpleAssets) => {
       if (simpleAssets.ipfs) {
         console.log(simpleAssets.ipfs)
         if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") { setTimeout(() => { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }, 100) } }
@@ -1754,7 +1793,7 @@ export default function Dashboard(props) {
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-  const setUpTokenVals = async (willSetup, who, _addr) => {
+  const setUpTokenVals = async (willSetup, who, _addr, pruf) => {
     console.log("STV: Setting up balances, called from ", who)
 
     await window.utils.determineTokenBalance(_addr).then((e) => {
@@ -1798,7 +1837,7 @@ export default function Dashboard(props) {
 
     if (willSetup) {
       forceUpdate();
-      return setUpAssets("setUpTokenVals", _addr)
+      return setUpAssets("setUpTokenVals", _addr, pruf)
     }
 
     return forceUpdate();

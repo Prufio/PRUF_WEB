@@ -15,11 +15,11 @@ function buildWindowUtils() {
   }
 
   const _getBytes32FromIPFSHash = (hash) => {
-    let str = "0x" + bs58.decode(hash).slice(2).toString("hex");
+    const str = "0x" + bs58.decode(hash).slice(2).toString("hex");
     return str;
   };
 
-  const _getIpfsHashFromBytes32 = async(bytes32Hex) => {
+  const _getIpfsHashFromBytes32 = async (bytes32Hex) => {
     const hashHex = "1220" + bytes32Hex.slice(2);
     const hashBytes = Buffer.from(hashHex, "hex");
     const hashStr = bs58.encode(hashBytes);
@@ -73,117 +73,32 @@ function buildWindowUtils() {
 
   const _getStatusString = async (_status) => {
     let tempStat;
-    let status = String(_status)
+    let statusId = String(_status)
 
-    console.log(status)
-    if (status === "0") {
-      tempStat = "No Status"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "1") {
-      tempStat = "Transferable"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "2") {
-      tempStat = "Non-Transferable"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "3") {
-      tempStat = "MARKED STOLEN"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "4") {
-      tempStat = "MARKED LOST"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "5") {
-      tempStat = "Transferred"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "6") {
-      tempStat = "Supervised Escrow"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "7") {
-      tempStat = "Out of Supervised Escrow"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "50") {
-      tempStat = "Locked Escrow"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "51") {
-      tempStat = "Transferable"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "52") {
-      tempStat = "Non-Transferable"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "53") {
-      tempStat = "MARKED STOLEN"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "54") {
-      tempStat = "MARKED LOST"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "55") {
-      tempStat = "Transferred"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "56") {
-      tempStat = "Supervised Escrow"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "57") {
-      tempStat = "Out of Supervised Escrow"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "58") {
-      tempStat = "Out of Escrow"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "59") {
-      tempStat = "Discardable"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "60") {
-      tempStat = "Recyclable"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "70") {
-      tempStat = "Ready for Import"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else if (status === "") {
-      tempStat = "Undefined"
-      console.log("Asset in :", tempStat, "status.")
-    }
-
-    else {
-      console.log("Asset in unauthorized status (Does not exist)")
-    }
+    console.log(statusId)
+    switch(statusId) {
+      case("0") : tempStat = "No Status Set"; break        
+      case("1") : tempStat = "Transferable"; break
+      case("2") : tempStat = "Non-Transferable"; break
+      case("3") : tempStat = "MARKED STOLEN"; break
+      case("4") : tempStat = "MARKED LOST"; break
+      case("5") : tempStat = "Transferred (Unclaimed)"; break
+      case("6") : tempStat = "In Supervised Escrow"; break
+      case("7") : tempStat = "Out of Supervised Escrow"; break
+      case("50") : tempStat = "In Locked Escrow"; break
+      case("51") : tempStat = "Transferable"; break
+      case("52") : tempStat = "Non-Transferable"; break
+      case("53") : tempStat = "MARKED STOLEN"; break
+      case("54") : tempStat = "MARKED LOST"; break
+      case("55") : tempStat = "Transferred (Unclaimed)"; break
+      case("56") : tempStat = "In Supervised Escrow"; break
+      case("57") : tempStat = "Out of Escrow"; break
+      case("58") : tempStat = "Out of Escrow"; break
+      case("59") : tempStat = "Ready for Discard"; break
+      case("60") : tempStat = "Ready to Recycle"; break
+      case("70") : tempStat = "Ready for Import"; break
+      default : console.error('PRUF_ERR: Status id "', statusId, '"not recognized.'); break
+  }
 
     return (tempStat)
   }
@@ -723,7 +638,7 @@ function buildWindowUtils() {
     return { names, custodyTypes, exData, roots, discounts, ids: tknIDArray }
   }
 
-  const _getAssetTokenInfo = async (addr) => {
+  const _getAssetTokenInfo = async (addr, pruf) => {
     let obj = {};
 
     if (window.balances === undefined) { return }
@@ -745,7 +660,7 @@ function buildWindowUtils() {
 
 
       for (let i = 0; i < window.balances.assetBalance; i++) {
-        await window.contracts.A_TKN.methods.tokenOfOwnerByIndex(addr, i)
+        await pruf.get.heldAssetAtIndex(addr, i)
           .call((_error, _result) => {
             if (_error) {
               return (console.log("IN ERROR IN ERROR IN ERROR"))
@@ -761,7 +676,7 @@ function buildWindowUtils() {
       }
 
       for (let x = 0; x < tknIDArray.length; x++) {
-        await window.contracts.STOR.methods.retrieveShortRecord(tknIDArray[x])
+        await pruf.get.assetRecord(tknIDArray[x])
           .call((_error, _result) => {
             if (_error) {
               console.log("IN ERROR IN ERROR IN ERROR")
@@ -797,7 +712,7 @@ function buildWindowUtils() {
               countPairs.push([Object.values(_result)[3], Object.values(_result)[4]]);
             }
           })
-        await window.contracts.STOR.methods.getPriceData(tknIDArray[x])
+        await pruf.get.assetPriceData(tknIDArray[x])
           .call((_error, _result) => {
             if (_error) {
               console.log("IN ERROR IN ERROR IN ERROR")
