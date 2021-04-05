@@ -262,6 +262,29 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "uint256",
+					"name": "_contractNumber",
+					"type": "uint256"
+				},
+				{
+					"internalType": "string",
+					"name": "_name",
+					"type": "string"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_contractAuthLevel",
+					"type": "uint8"
+				}
+			],
+			"name": "addDefaultContracts",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "bytes32",
 					"name": "_idxHash",
 					"type": "bytes32"
@@ -340,6 +363,19 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				}
+			],
+			"name": "enableDefaultContractsForAC",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "bytes32",
 					"name": "_idxHash",
 					"type": "bytes32"
@@ -348,6 +384,37 @@ function returnABIs() {
 			"name": "endEscrow",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_contractNumber",
+					"type": "uint256"
+				}
+			],
+			"name": "getDefaultContract",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "uint8",
+							"name": "contractType",
+							"type": "uint8"
+						},
+						{
+							"internalType": "string",
+							"name": "name",
+							"type": "string"
+						}
+					],
+					"internalType": "struct DefaultContract",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -487,7 +554,12 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_Ipfs1",
+					"name": "_Ipfs1a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs1b",
 					"type": "bytes32"
 				}
 			],
@@ -505,7 +577,12 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_Ipfs2",
+					"name": "_Ipfs2a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs2b",
 					"type": "bytes32"
 				}
 			],
@@ -691,12 +768,22 @@ function returnABIs() {
 						},
 						{
 							"internalType": "bytes32",
-							"name": "Ipfs1",
+							"name": "Ipfs1a",
 							"type": "bytes32"
 						},
 						{
 							"internalType": "bytes32",
-							"name": "Ipfs2",
+							"name": "Ipfs2a",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "Ipfs1b",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "Ipfs2b",
 							"type": "bytes32"
 						},
 						{
@@ -747,6 +834,16 @@ function returnABIs() {
 					"internalType": "uint32",
 					"name": "",
 					"type": "uint32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "",
+					"type": "bytes32"
 				},
 				{
 					"internalType": "bytes32",
@@ -1086,18 +1183,17 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_IpfsHash",
+					"name": "_Ipfs2a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs2b",
 					"type": "bytes32"
 				}
 			],
 			"name": "addIpfs2Note",
-			"outputs": [
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				}
-			],
+			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
@@ -1682,18 +1778,17 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_IpfsHash",
+					"name": "_Ipfs1a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs1b",
 					"type": "bytes32"
 				}
 			],
 			"name": "_modIpfs1",
-			"outputs": [
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				}
-			],
+			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
@@ -2661,6 +2756,77 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
+			"inputs": [
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClassRoot",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_custodyType",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_managementType",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_storageProvider",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_discount",
+					"type": "uint32"
+				},
+				{
+					"internalType": "address",
+					"name": "_refAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IPFS",
+					"type": "bytes32"
+				}
+			],
+			"name": "AdminModAssetClass",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_position",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_bit",
+					"type": "uint8"
+				}
+			],
+			"name": "AdminModAssetClassSwitches",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "B320xF_",
 			"outputs": [
@@ -2718,57 +2884,9 @@ function returnABIs() {
 					"internalType": "uint256",
 					"name": "_L1",
 					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_L2",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_L3",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_L4",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_L5",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_L6",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_L7",
-					"type": "uint256"
 				}
 			],
 			"name": "OO_SetACpricing",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "_prufPerShare",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_upperLimit",
-					"type": "uint256"
-				}
-			],
-			"name": "OO_SetACupgrade",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -2838,85 +2956,12 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
-			"inputs": [],
-			"name": "acPrice_L2",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "acPrice_L3",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "acPrice_L4",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "acPrice_L5",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "acPrice_L6",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "acPrice_L7",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
 			"inputs": [
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
 				{
 					"internalType": "bytes32",
 					"name": "_addrHash",
@@ -2926,11 +2971,6 @@ function returnABIs() {
 					"internalType": "uint8",
 					"name": "_userType",
 					"type": "uint8"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
 				}
 			],
 			"name": "addUser",
@@ -2941,19 +2981,32 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "_recipientAddress",
-					"type": "address"
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_newDiscount",
+					"type": "uint32"
+				}
+			],
+			"name": "adminIncreaseShare",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
 				},
 				{
 					"internalType": "string",
 					"name": "_name",
 					"type": "string"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
 				},
 				{
 					"internalType": "uint32",
@@ -2966,14 +3019,24 @@ function returnABIs() {
 					"type": "uint8"
 				},
 				{
-					"internalType": "bytes32",
-					"name": "_IPFS",
-					"type": "bytes32"
+					"internalType": "uint8",
+					"name": "_managementType",
+					"type": "uint8"
 				},
 				{
 					"internalType": "uint32",
 					"name": "_discount",
 					"type": "uint32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IPFS",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "address",
+					"name": "_recipientAddress",
+					"type": "address"
 				}
 			],
 			"name": "createAssetClass",
@@ -2985,36 +3048,6 @@ function returnABIs() {
 			"inputs": [],
 			"name": "currentACpricingInfo",
 			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				},
 				{
 					"internalType": "uint256",
 					"name": "",
@@ -3048,6 +3081,11 @@ function returnABIs() {
 					"internalType": "uint32",
 					"name": "",
 					"type": "uint32"
+				},
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
 				},
 				{
 					"internalType": "uint8",
@@ -3134,29 +3172,29 @@ function returnABIs() {
 							"type": "uint8"
 						},
 						{
+							"internalType": "uint8",
+							"name": "managementType",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint8",
+							"name": "storageProvider",
+							"type": "uint8"
+						},
+						{
 							"internalType": "uint32",
 							"name": "discount",
 							"type": "uint32"
 						},
 						{
-							"internalType": "uint8",
-							"name": "byte1",
-							"type": "uint8"
-						},
-						{
-							"internalType": "uint8",
-							"name": "byte2",
-							"type": "uint8"
-						},
-						{
-							"internalType": "uint8",
-							"name": "byte3",
-							"type": "uint8"
-						},
-						{
 							"internalType": "address",
 							"name": "referenceAddress",
 							"type": "address"
+						},
+						{
+							"internalType": "uint8",
+							"name": "switches",
+							"type": "uint8"
 						},
 						{
 							"internalType": "bytes32",
@@ -3167,45 +3205,6 @@ function returnABIs() {
 					"internalType": "struct AC",
 					"name": "",
 					"type": "tuple"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				}
-			],
-			"name": "getExtAC_data_nostruct",
-			"outputs": [
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "",
-					"type": "uint8"
-				},
-				{
-					"internalType": "address",
-					"name": "",
-					"type": "address"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
 				}
 			],
 			"stateMutability": "view",
@@ -3291,19 +3290,24 @@ function returnABIs() {
 				{
 					"components": [
 						{
+							"internalType": "uint32",
+							"name": "assetClass",
+							"type": "uint32"
+						},
+						{
 							"internalType": "address",
 							"name": "rootAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "address",
+							"name": "ACTHaddress",
 							"type": "address"
 						},
 						{
 							"internalType": "uint256",
 							"name": "rootPrice",
 							"type": "uint256"
-						},
-						{
-							"internalType": "address",
-							"name": "ACTHaddress",
-							"type": "address"
 						},
 						{
 							"internalType": "uint256",
@@ -3314,6 +3318,30 @@ function returnABIs() {
 					"internalType": "struct Invoice",
 					"name": "",
 					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_position",
+					"type": "uint8"
+				}
+			],
+			"name": "getSwitchAt",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",
@@ -3389,30 +3417,6 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				},
-				{
-					"internalType": "uint256",
-					"name": "_amount",
-					"type": "uint256"
-				}
-			],
-			"name": "increaseShare",
-			"outputs": [
-				{
-					"internalType": "uint32",
-					"name": "",
-					"type": "uint32"
-				}
-			],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint32",
 					"name": "_assetClass1",
 					"type": "uint32"
 				},
@@ -3482,19 +3486,6 @@ function returnABIs() {
 					"internalType": "bool",
 					"name": "",
 					"type": "bool"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "prufPerShare",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",
@@ -3610,11 +3601,6 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
-					"internalType": "string",
-					"name": "_name",
-					"type": "string"
-				},
-				{
 					"internalType": "uint32",
 					"name": "_assetClass_source",
 					"type": "uint32"
@@ -3623,6 +3609,11 @@ function returnABIs() {
 					"internalType": "uint32",
 					"name": "_assetClass_dest",
 					"type": "uint32"
+				},
+				{
+					"internalType": "string",
+					"name": "_name",
+					"type": "string"
 				}
 			],
 			"name": "transferName",
@@ -3640,14 +3631,42 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
-					"internalType": "bytes32",
-					"name": "_IPFS",
-					"type": "bytes32"
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
 				},
+				{
+					"internalType": "uint8",
+					"name": "_managementType",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint8",
+					"name": "_storageProvider",
+					"type": "uint8"
+				},
+				{
+					"internalType": "address",
+					"name": "_refAddress",
+					"type": "address"
+				}
+			],
+			"name": "updateACImmutable",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
 				{
 					"internalType": "uint32",
 					"name": "_assetClass",
 					"type": "uint32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_IPFS",
+					"type": "bytes32"
 				}
 			],
 			"name": "updateACipfs",
@@ -3658,68 +3677,22 @@ function returnABIs() {
 		{
 			"inputs": [
 				{
-					"internalType": "string",
-					"name": "_name",
-					"type": "string"
-				},
-				{
 					"internalType": "uint32",
 					"name": "_assetClass",
 					"type": "uint32"
+				},
+				{
+					"internalType": "string",
+					"name": "_name",
+					"type": "string"
 				}
 			],
 			"name": "updateACname",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_extData",
-					"type": "address"
-				},
-				{
-					"internalType": "uint8",
-					"name": "_byte1",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "_byte2",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint8",
-					"name": "_byte3",
-					"type": "uint8"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				}
-			],
-			"name": "updateACreferenceAddress",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "upperLimit",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
 		}
-	]
+	];
 
 	//............................................................................................................................................
 
@@ -4436,6 +4409,25 @@ function returnABIs() {
 				}
 			],
 			"name": "tokenByIndex",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "tokenId",
+					"type": "uint256"
+				}
+			],
+			"name": "tokenExists",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -6238,18 +6230,17 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_IpfsHash",
+					"name": "_Ipfs2a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs2b",
 					"type": "bytes32"
 				}
 			],
 			"name": "addIpfs2Note",
-			"outputs": [
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				}
-			],
+			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
@@ -6427,11 +6418,54 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_IpfsHash",
+					"name": "_Ipfs1a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs1b",
 					"type": "bytes32"
 				}
 			],
 			"name": "newRecordWithDescription",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "bytes32",
+					"name": "_idxHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_countDownStart",
+					"type": "uint32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs2a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs2b",
+					"type": "bytes32"
+				}
+			],
+			"name": "newRecordWithNote",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -6830,18 +6864,17 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_IpfsHash",
+					"name": "_Ipfs1a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs1b",
 					"type": "bytes32"
 				}
 			],
 			"name": "_modIpfs1",
-			"outputs": [
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				}
-			],
+			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
 		},
@@ -9717,6 +9750,42 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenId",
+					"type": "uint256"
+				}
+			],
+			"name": "IdData",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "uint256",
+							"name": "trustLevel",
+							"type": "uint256"
+						},
+						{
+							"internalType": "bytes32",
+							"name": "URI",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "string",
+							"name": "userName",
+							"type": "string"
+						}
+					],
+					"internalType": "struct ID",
+					"name": "",
+					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "MINTER_ROLE",
 			"outputs": [
@@ -9801,6 +9870,19 @@ function returnABIs() {
 				}
 			],
 			"name": "burn",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenId",
+					"type": "uint256"
+				}
+			],
+			"name": "burnPRUF_ID",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -9961,8 +10043,13 @@ function returnABIs() {
 				},
 				{
 					"internalType": "uint256",
-					"name": "tokenId",
+					"name": "_tokenId",
 					"type": "uint256"
+				},
+				{
+					"internalType": "string",
+					"name": "_URI",
+					"type": "string"
 				}
 			],
 			"name": "mintPRUF_IDToken",
@@ -10037,7 +10124,7 @@ function returnABIs() {
 				},
 				{
 					"internalType": "uint256",
-					"name": "tokenId",
+					"name": "_tokenId",
 					"type": "uint256"
 				}
 			],
@@ -10102,7 +10189,7 @@ function returnABIs() {
 				},
 				{
 					"internalType": "uint256",
-					"name": "tokenId",
+					"name": "_tokenId",
 					"type": "uint256"
 				}
 			],
@@ -10125,7 +10212,7 @@ function returnABIs() {
 				},
 				{
 					"internalType": "uint256",
-					"name": "tokenId",
+					"name": "_tokenId",
 					"type": "uint256"
 				},
 				{
@@ -10161,7 +10248,55 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "uint256",
-					"name": "tokenId",
+					"name": "_tokenId",
+					"type": "uint256"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_URI",
+					"type": "bytes32"
+				}
+			],
+			"name": "setIdURI",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenId",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_trustLevel",
+					"type": "uint256"
+				}
+			],
+			"name": "setTrustLevel",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenId",
 					"type": "uint256"
 				},
 				{
@@ -10171,6 +10306,30 @@ function returnABIs() {
 				}
 			],
 			"name": "setURI",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenId",
+					"type": "uint256"
+				},
+				{
+					"internalType": "string",
+					"name": "_userName",
+					"type": "string"
+				}
+			],
+			"name": "setUserName",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -10236,7 +10395,7 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "uint256",
-					"name": "tokenId",
+					"name": "_tokenId",
 					"type": "uint256"
 				}
 			],
@@ -10328,6 +10487,44 @@ function returnABIs() {
 			"name": "transferFrom",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenId",
+					"type": "uint256"
+				}
+			],
+			"name": "trustLevel",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "trustedLevelByAddress",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -11008,19 +11205,24 @@ function returnABIs() {
 				{
 					"components": [
 						{
+							"internalType": "uint32",
+							"name": "assetClass",
+							"type": "uint32"
+						},
+						{
 							"internalType": "address",
 							"name": "rootAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "address",
+							"name": "ACTHaddress",
 							"type": "address"
 						},
 						{
 							"internalType": "uint256",
 							"name": "rootPrice",
 							"type": "uint256"
-						},
-						{
-							"internalType": "address",
-							"name": "ACTHaddress",
-							"type": "address"
 						},
 						{
 							"internalType": "uint256",
@@ -12463,19 +12665,6 @@ function returnABIs() {
 		},
 		{
 			"inputs": [],
-			"name": "DISCARD_ROLE",
-			"outputs": [
-				{
-					"internalType": "bytes32",
-					"name": "",
-					"type": "bytes32"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
 			"name": "OO_resolveContractAddresses",
 			"outputs": [],
 			"stateMutability": "nonpayable",
@@ -12523,24 +12712,6 @@ function returnABIs() {
 				}
 			],
 			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "address",
-					"name": "_sender",
-					"type": "address"
-				}
-			],
-			"name": "discard",
-			"outputs": [],
-			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
@@ -12705,29 +12876,6 @@ function returnABIs() {
 			"inputs": [
 				{
 					"internalType": "bytes32",
-					"name": "_idxHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "bytes32",
-					"name": "_rgtHash",
-					"type": "bytes32"
-				},
-				{
-					"internalType": "uint32",
-					"name": "_assetClass",
-					"type": "uint32"
-				}
-			],
-			"name": "recycle",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "bytes32",
 					"name": "role",
 					"type": "bytes32"
 				},
@@ -12779,8 +12927,54 @@ function returnABIs() {
 			"type": "function"
 		},
 		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_tokenID",
+					"type": "uint256"
+				}
+			],
+			"name": "unWrap721",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_foreignTokenID",
+					"type": "uint256"
+				},
+				{
+					"internalType": "address",
+					"name": "_foreignTokenContract",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_rgtHash",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_assetClass",
+					"type": "uint32"
+				},
+				{
+					"internalType": "uint32",
+					"name": "_countDownStart",
+					"type": "uint32"
+				}
+			],
+			"name": "wrap721",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -13090,7 +13284,12 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_IpfsHash",
+					"name": "_Ipfs1a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs1b",
 					"type": "bytes32"
 				}
 			],
@@ -13164,7 +13363,12 @@ function returnABIs() {
 				},
 				{
 					"internalType": "bytes32",
-					"name": "_IpfsHash",
+					"name": "_Ipfs2a",
+					"type": "bytes32"
+				},
+				{
+					"internalType": "bytes32",
+					"name": "_Ipfs2b",
 					"type": "bytes32"
 				}
 			],
