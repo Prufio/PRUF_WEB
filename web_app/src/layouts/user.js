@@ -429,7 +429,7 @@ export default function Dashboard(props) {
 
     if (cookies) checkForCookies()
 
-    // if(!isMobile) setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]); @dev temp for testing release
+    if(!isMobile) setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
     window.addEventListener("resize", resizeFunction);
 
     // Specify how to clean up after this effect:
