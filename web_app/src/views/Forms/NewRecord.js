@@ -82,6 +82,9 @@ export default function NewRecord(props) {
   const [description, setDescription] = React.useState("");
   const [displayImage, setDisplayImage] = React.useState("");
   const [displayImageUrl, setDisplayImageUrl] = React.useState("");
+  const [fileMetaData, setFileMetaData] = React.useState("");
+  const [rawFile, setRawFile] = React.useState()
+  const [storageProvider, setStorageProvider] = React.useState("");
 
 
   const [loginManufacturer, setloginManufacturer] = React.useState("");
@@ -136,16 +139,16 @@ export default function NewRecord(props) {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-
     }
+    //postToArweave("String to upload", {name: "Beans", size: "Also beans"})
   }, [])
 
-  const postToArweave = async (data, metaData) => {
+  const postToArweave = async (data, metaData, idxHash, ipfsObj) => {
     let dataTransaction = await props.arweaveClient.createTransaction({
       data,
     }, props.testWeave.rootJWK)
 
-    console.log(dataTransaction);
+    console.log("pre-tags", dataTransaction.tags, "Size:", Buffer.from(JSON.stringify(dataTransaction.tags)).length);
 
     if(metaData){
 
@@ -157,6 +160,30 @@ export default function NewRecord(props) {
       }
 
     }
+
+    console.log("post-tags", dataTransaction.tags, "Size:", Buffer.from(JSON.stringify(dataTransaction.tags)).length)
+    
+    console.log(dataTransaction);
+
+    await props.arweaveClient.transactions.sign(dataTransaction, props.testWeave.rootJWK)
+    const statusBeforePost = await props.arweaveClient.transactions.getStatus(dataTransaction.id)
+    console.log(statusBeforePost); // this will return 404
+    await props.arweaveClient.transactions.post(dataTransaction)
+    const statusAfterPost = await props.arweaveClient.transactions.getStatus(dataTransaction.id)
+    console.log(statusAfterPost); // this will return 202
+    //await testWeave.mine();
+    mineTx().then(async ()=>{
+      const statusAfterMine = await props.arweaveClient.transactions.getStatus(dataTransaction.id);
+      console.log(statusAfterMine);
+      setIpfsActive(false)
+      handleHash(window.web3.utils.utf8ToHex(dataTransaction.id), idxHash, ipfsObj);
+    });
+  }
+
+  const mineTx = async () => {
+    await props.testWeave.mine(); 
+    await props.testWeave.mine()
+    await props.testWeave.mine() 
   }
 
   const rootLogin = (e) => {
@@ -186,6 +213,7 @@ export default function NewRecord(props) {
           window.utils.getCosts(6, event.target.value).then((e) => {
             setNRCost(window.web3.utils.fromWei(e.newAsset))
           })
+          setStorageProvider("arweave");
         })
       }
       catch {
@@ -434,23 +462,42 @@ export default function NewRecord(props) {
 
     i.src = src;
   }
+  const uploadOther = (e) => {
+    e.preventDefault()
+    if (!e.target.files[0]) return
+    let file;
+    file = e.target.files[0]
+    const reader = new FileReader();
+
+    reader.onloadend = (e) => {
+      setFileMetaData(file);
+      const prefix = `data:${file.type};base64,`;
+      const buf = Buffer(reader.result)
+      setRawFile(reader.result)
+      setDisplayImage(prefix+base64.encode(buf))
+    }
+
+    reader.readAsArrayBuffer(file); // Read Provided File
+  } 
 
   const uploadImage = (e) => {
     e.preventDefault()
     if (!e.target.files[0]) return
     let file;
     file = e.target.files[0]
+
+    if(storageProvider === "arweave"){
+      return uploadOther(e)
+    }
+
+    else if (!file.type.includes("image")){
+      return
+    }
+
     const reader = new FileReader();
     reader.onloadend = (e) => {
 
       console.log(file)
-      if (!file.type.includes("image")) {
-        //setIsUploading(false)
-        return swal({
-          title: "Unsupported File Type",
-          button: "Close"
-        })
-      }
       setIsUploading(true)
       const fileType = file.type;
       const prefix = `data:${fileType};base64,`;
@@ -463,8 +510,16 @@ export default function NewRecord(props) {
   }
 
   const handleHash = (ipfsHash, idxHash, ipfsObj) => {
-    let ipfsB32 = window.utils.getBytes32FromIPFSHash(String(ipfsHash));
-    _newRecord(ipfsB32, idxHash, ipfsObj)
+    if(storageProvider === "arweave"){
+      let extDataA = String(ipfsHash).substring(0, 66)
+      let extDataB = String(ipfsHash).substring(66, String(ipfsHash).length)
+      _newRecord(extDataA, extDataB, idxHash, ipfsObj)
+    }
+
+    else {
+      let ipfsB32 = window.utils.getBytes32FromIPFSHash(String(ipfsHash));
+      _newRecord(ipfsB32, "", idxHash, ipfsObj)
+    }
   }
 
   const removeDisplayImage = () => {
@@ -476,6 +531,7 @@ export default function NewRecord(props) {
           } */
     setDisplayImageUrl("")
     setDisplayImage("")
+    setRawFile()
     /*     };
     
         i.src = displayImage; */
@@ -568,17 +624,31 @@ export default function NewRecord(props) {
 
     setIpfsActive(true);
 
-    window.ipfs.add(payload).then((hash) => {
-      if (!hash) {
-        console.log("Something went wrong. Unable to upload to ipfs");
-        setIpfsActive(false);
-      }
-      else {
-        console.log("uploaded at hash: ", hash.cid.string);
-        handleHash(String(hash.cid), idxHash, ipfsObj);
-        setIpfsActive(false);
-      }
-    })
+    if(storageProvider === "ipfs"){
+      window.ipfs.add(payload).then((hash) => {
+        if (!hash) {
+          console.log("Something went wrong. Unable to upload to ipfs");
+          setIpfsActive(false);
+        }
+        else {
+          console.log("uploaded at hash: ", hash.cid.string);
+          handleHash(String(hash.cid), idxHash, ipfsObj);
+          setIpfsActive(false);
+        }
+      })
+    }
+
+    else if (storageProvider === "arweave"){
+      let file = fileMetaData;
+      let metaData = {nodeKey: assetClassName, description: ipfsObj.text.Description, name: ipfsObj.name}
+      metaData["Content-Type"] = file.type
+      metaData["Size"] = file.size
+      metaData["FileName"] = file.name
+      metaData["Last-Modified"] = file.lastModified
+
+      postToArweave(rawFile, metaData, idxHash, ipfsObj)
+    }
+    
   }
 
   const thousandHashesOf = (varToHash) => {
@@ -692,7 +762,7 @@ export default function NewRecord(props) {
 
 
 
-  const _newRecord = async (ipfs, idx, ipfsObj) => { //create a new asset record
+  const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => { //create a new asset record
     //console.log("assetClass: ", assetClass)
 
     swalReact({
@@ -716,127 +786,250 @@ export default function NewRecord(props) {
 
     const pageKey = thousandHashesOf(props.addr, props.winKey)
 
-    let tempTxHash;
-    var ipfsHash = ipfs;
-    var rgtHashRaw, idxHash;
-
-    let newAsset = {
-      root: selectedRootID,
-      idxHash: idx,
-      id: idx,
-      ipfs: ipfs,
-      photo: { DisplayImage: displayImage },
-      photoUrls: { DisplayImage: displayImageUrl },
-      text: ipfsObj.text,
-      urls: ipfsObj.urls,
-      name: ipfsObj.name,
-      DisplayImage: displayImage,
-      assetClass: assetClass,
-      assetClassName: assetClassName.substring(0, 1).toUpperCase() + assetClassName.substring(1, assetClassName.length).toLowerCase(),
-      dBIndex: props.assetArr.length,
-      countPair: [100000, 100000],
-      status: "Transferable",
-      statusNum: 51,
-      Description: ipfsObj.text.Description,
-      note: "",
-      identicon: [<Jdenticon value={idx} />],
-      identiconLG: [<Jdenticon value={idx} />]
+    if(storageProvider === "ipfs"){
+      let tempTxHash;
+      var ipfsHash = extDataA;
+      var rgtHashRaw, idxHash;
+  
+      let newAsset = {
+        root: selectedRootID,
+        idxHash: idx,
+        id: idx,
+        ipfs: ipfsHash,
+        photo: { DisplayImage: displayImage },
+        photoUrls: { DisplayImage: displayImageUrl },
+        text: ipfsObj.text,
+        urls: ipfsObj.urls,
+        name: ipfsObj.name,
+        DisplayImage: displayImage,
+        assetClass: assetClass,
+        assetClassName: assetClassName.substring(0, 1).toUpperCase() + assetClassName.substring(1, assetClassName.length).toLowerCase(),
+        dBIndex: props.assetArr.length,
+        countPair: [100000, 100000],
+        status: "Transferable",
+        statusNum: 51,
+        Description: ipfsObj.text.Description,
+        note: "",
+        identicon: [<Jdenticon value={idx} />],
+        identiconLG: [<Jdenticon value={idx} />]
+      }
+  
+      idxHash = idx;
+  
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
+      )
+  
+      var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
+      rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+  
+      setShowHelp(false);
+      setTxStatus(false);
+      setTxHash("");
+      setError(undefined);
+      //setResult("");
+      setTransactionActive(true);
+      console.log("idxHash", idxHash);
+      console.log("New rgtRaw", rgtHashRaw);
+      console.log("New rgtHash", rgtHash);
+      console.log("addr: ", props.addr);
+      console.log("AC: ", assetClass);
+  
+      //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+      console.log("IPFS bytes32: ", ipfsHash);
+  
+      /* swal({
+        title: "You are about to create asset: "+idxHash,
+        text:  "Address: "+props.addr+"\nipfs: "+ipfsHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+        button: "Okay",
+      }) */
+  
+      await window.contracts.APP_NC.methods
+        .newRecordWithDescription(
+          idxHash,
+          rgtHash,
+          assetClass,
+          "1000000",
+          ipfsHash,
+          ""
+        )
+        .send({ from: props.addr })
+        .on("error", function (_error) {
+          setTransactionActive(false);
+          setTxStatus(false);
+          setTxHash(Object.values(_error)[0].transactionHash);
+          tempTxHash = Object.values(_error)[0].transactionHash
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+          let str2 = "' target='_blank'>here</a>"
+          link.innerHTML = String(str1 + tempTxHash + str2)
+          setError(Object.values(_error)[0]);
+          if (tempTxHash !== undefined) {
+            swal({
+              title: "Something went wrong!",
+              content: link,
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          if (tempTxHash === undefined) {
+            swal({
+              title: "Something went wrong!",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          clearForms();
+        })
+        .on("receipt", (receipt) => {
+          setTransactionActive(false);
+          setTxStatus(receipt.status);
+          tempTxHash = receipt.transactionHash
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+          let str2 = "' target='_blank'>here</a>"
+          link.innerHTML = String(str1 + tempTxHash + str2)
+          setTxHash(receipt.transactionHash);
+          swal({
+            title: "Asset Created!",
+            content: link,
+            icon: "success",
+            button: "Close",
+          }).then(() => {
+            //refreshBalances()
+            //window.replaceAssetData = { pruf: props.pruf-NRCost }
+            window.location.href = "/#/user/dashboard"
+            window.replaceAssetData = { key: pageKey, newAsset: newAsset }
+          })
+        });
     }
 
-    idxHash = idx; /* window.web3.utils.soliditySha3(
-      String(type).replace(/\s/g, ''),
-      String(manufacturer).replace(/\s/g, ''),
-      String(model).replace(/\s/g, ''),
-      String(serial).replace(/\s/g, ''),
-    ) */
-
-    rgtHashRaw = window.web3.utils.soliditySha3(
-      String(first).replace(/\s/g, ''),
-      String(middle).replace(/\s/g, ''),
-      String(last).replace(/\s/g, ''),
-      String(ID).replace(/\s/g, ''),
-      String(password).replace(/\s/g, ''),
-    )
-
-    var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
-
-    setShowHelp(false);
-    setTxStatus(false);
-    setTxHash("");
-    setError(undefined);
-    //setResult("");
-    setTransactionActive(true);
-    console.log("idxHash", idxHash);
-    console.log("New rgtRaw", rgtHashRaw);
-    console.log("New rgtHash", rgtHash);
-    console.log("addr: ", props.addr);
-    console.log("AC: ", assetClass);
-
-    //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
-    console.log("IPFS bytes32: ", ipfsHash);
-
-    /* swal({
-      title: "You are about to create asset: "+idxHash,
-      text:  "Address: "+props.addr+"\nipfs: "+ipfsHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
-      button: "Okay",
-    }) */
-
-    await window.contracts.APP_NC.methods
-      .newRecordWithDescription(
-        idxHash,
-        rgtHash,
-        assetClass,
-        "1000000",
-        ipfsHash
+    else if (storageProvider === "arweave") {
+      let tempTxHash;
+      var ipfsHash = extDataA + extDataB;
+      var rgtHashRaw, idxHash;
+  
+      let newAsset = {
+        root: selectedRootID,
+        idxHash: idx,
+        id: idx,
+        ipfs: ipfsHash,
+        photo: { DisplayImage: displayImage },
+        photoUrls: { DisplayImage: displayImageUrl },
+        text: ipfsObj.text,
+        urls: ipfsObj.urls,
+        name: ipfsObj.name,
+        DisplayImage: displayImage,
+        assetClass: assetClass,
+        assetClassName: assetClassName.substring(0, 1).toUpperCase() + assetClassName.substring(1, assetClassName.length).toLowerCase(),
+        dBIndex: props.assetArr.length,
+        countPair: [100000, 100000],
+        status: "Transferable",
+        statusNum: 51,
+        Description: ipfsObj.text.Description,
+        note: "",
+        identicon: [<Jdenticon value={idx} />],
+        identiconLG: [<Jdenticon value={idx} />]
+      }
+  
+      idxHash = idx; /* window.web3.utils.soliditySha3(
+        String(type).replace(/\s/g, ''),
+        String(manufacturer).replace(/\s/g, ''),
+        String(model).replace(/\s/g, ''),
+        String(serial).replace(/\s/g, ''),
+      ) */
+  
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
       )
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransactionActive(false);
-        setTxStatus(false);
-        setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
-        setError(Object.values(_error)[0]);
-        if (tempTxHash !== undefined) {
-          swal({
-            title: "Something went wrong!",
-            content: link,
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Something went wrong!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        clearForms();
-      })
-      .on("receipt", (receipt) => {
-        setTransactionActive(false);
-        setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
-        setTxHash(receipt.transactionHash);
-        swal({
-          title: "Asset Created!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        }).then(() => {
-          //refreshBalances()
-          //window.replaceAssetData = { pruf: props.pruf-NRCost }
-          window.location.href = "/#/user/dashboard"
-          window.replaceAssetData = { key: pageKey, newAsset: newAsset }
+  
+      var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
+      rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+  
+      setShowHelp(false);
+      setTxStatus(false);
+      setTxHash("");
+      setError(undefined);
+      //setResult("");
+      setTransactionActive(true);
+      console.log("idxHash", idxHash);
+      console.log("New rgtRaw", rgtHashRaw);
+      console.log("New rgtHash", rgtHash);
+      console.log("addr: ", props.addr);
+      console.log("AC: ", assetClass);
+  
+      //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+      console.log("IPFS bytes32: ", ipfsHash);
+  
+      /* swal({
+        title: "You are about to create asset: "+idxHash,
+        text:  "Address: "+props.addr+"\nipfs: "+ipfsHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+        button: "Okay",
+      }) */
+  
+      await window.contracts.APP_NC.methods
+        .newRecordWithDescription(
+          idxHash,
+          rgtHash,
+          assetClass,
+          "1000000",
+          extDataA,
+          extDataB
+        )
+        .send({ from: props.addr })
+        .on("error", function (_error) {
+          setTransactionActive(false);
+          setTxStatus(false);
+          setTxHash(Object.values(_error)[0].transactionHash);
+          tempTxHash = Object.values(_error)[0].transactionHash
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+          let str2 = "' target='_blank'>here</a>"
+          link.innerHTML = String(str1 + tempTxHash + str2)
+          setError(Object.values(_error)[0]);
+          if (tempTxHash !== undefined) {
+            swal({
+              title: "Something went wrong!",
+              content: link,
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          if (tempTxHash === undefined) {
+            swal({
+              title: "Something went wrong!",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          clearForms();
         })
-      });
+        .on("receipt", (receipt) => {
+          setTransactionActive(false);
+          setTxStatus(receipt.status);
+          tempTxHash = receipt.transactionHash
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+          let str2 = "' target='_blank'>here</a>"
+          link.innerHTML = String(str1 + tempTxHash + str2)
+          setTxHash(receipt.transactionHash);
+          swal({
+            title: "Asset Created!",
+            content: link,
+            icon: "success",
+            button: "Close",
+          }).then(() => {
+            //refreshBalances()
+            //window.replaceAssetData = { pruf: props.pruf-NRCost }
+            window.location.href = "/#/user/dashboard"
+            window.replaceAssetData = { key: pageKey, newAsset: newAsset }
+          })
+        });
+    }
 
     setAssetClass("");
   }
