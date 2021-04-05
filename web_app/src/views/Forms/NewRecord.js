@@ -1,5 +1,7 @@
 import React from "react";
+import "../../assets/css/custom.css";
 import swal from 'sweetalert';
+import swalReact from '@sweetalert/with-react';
 import base64 from 'base64-arraybuffer';
 import Jdenticon from 'react-jdenticon';
 import { Component } from "react";
@@ -19,6 +21,7 @@ import TextField from "@material-ui/core/TextField";
 import Category from "@material-ui/icons/Category";
 import AccountBox from "@material-ui/icons/AccountBox";
 import { DashboardOutlined, Description } from "@material-ui/icons";
+import Icon from '@material-ui/core/Icon';
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
@@ -33,6 +36,10 @@ import CardBody from "components/Card/CardBody.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import extStyles from "assets/jss/material-dashboard-pro-react/views/extendedFormsStyle";
 import { keys } from "@material-ui/core/styles/createBreakpoints";
+
+import ARweavePNG from "../../assets/img/arweave.png";
+import IPFSPNG from "../../assets/img/ipfs.png";
+import fileUpload from "../../assets/img/fileUpload.png";
 
 const useStyles = makeStyles(styles);
 const useExtStyles = makeStyles(extStyles);
@@ -58,6 +65,7 @@ export default function NewRecord(props) {
   const [mintedID, setMintedID] = React.useState(false);
   const [selectedRootID, setSelectedRootID] = React.useState("");
   const [publicNode, setPublicNode] = React.useState(true);
+  const [file, setFile] = React.useState(null);
 
 
   //const [ipfsObj, setIpfsObj] = React.useState("");
@@ -350,6 +358,19 @@ export default function NewRecord(props) {
     fileInput.current.value = "";
     fileInput.current.click();
   }
+
+  const handleFileChange = e => {
+    // e.preventDefault();
+    let reader = new FileReader();
+    let newFile = e.target.files[0];
+    reader.onloadend = () => {
+      setFile(newFile);
+    };
+    if (newFile) {
+      reader.readAsDataURL(newFile);
+    }
+    console.log("newFile:", e.target.files[0])
+  };
 
   const clearForms = () => {
     setDisplayImage("");
@@ -705,7 +726,7 @@ export default function NewRecord(props) {
   }
 
   const generateNodeList = (arr) => {
-    if(!arr || arr === null) return
+    if (!arr || arr === null) return
     let nodeNames = props.rootNames
     let nodeSelection = [
       <MenuItem
@@ -743,6 +764,25 @@ export default function NewRecord(props) {
 
   const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => { //create a new asset record
     //console.log("assetClass: ", assetClass)
+
+    swalReact({
+      content:
+        <div className="picture-container">
+          <img src={ARweavePNG} className="ARweave" />
+          <h4>Please upload your ARweave key file</h4>
+          <div className="picture">
+            <img src={fileUpload} className="uploadFile" />
+            <input type="file" onChange={e => handleFileChange(e)} />
+          </div>
+          {file === null && (
+            <h6 className="description">Choose File</h6>
+          )}
+          {file !== null && (
+            <h6 className="description">{file}</h6>
+          )}
+        </div>,
+      buttons: "close"
+    })
 
     const pageKey = thousandHashesOf(props.addr, props.winKey)
 
@@ -1452,6 +1492,8 @@ export default function NewRecord(props) {
                           </>
                         )}
                         <h4>AC Selected: {assetClassName} (ID: {assetClass})</h4>
+                        <h6 className="storageProviderText">Permanent data storage made possible with <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
+                        <h6 className="storageProviderText">Asset data stored using  <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS"></img></a></h6>
                       </form>
                     </CardBody>
                   </Card>

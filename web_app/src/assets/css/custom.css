@@ -1154,3 +1154,36 @@ color: rgb(99, 99, 99) !important;
 .costsText {
   font-weight: bold;
 }
+
+.ARweave {
+  max-width: 100px;
+  max-height: 30px;
+}
+
+.ARweave2 {
+  max-width: 200px;
+  max-height: 60px;
+}
+
+.ARweave:hover {
+  cursor: pointer;
+}
+
+.IPFS {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+.IPFS:hover {
+  cursor: pointer;
+}
+
+.storageProviderText {
+  font-weight: 400; 
+}
+
+.uploadFile {
+  margin-top: 10px;
+  margin-left: 10px;
+max-width: 80px !important;
+}
