@@ -5,15 +5,15 @@ import swal from 'sweetalert';
 import { makeStyles } from "@material-ui/core/styles";
 
 // core components
-import CustomInput from "components/CustomInput/CustomInput.js";
-import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
+import NavPills from "components/NavPills/NavPills.js";
+import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { SwapHoriz } from "@material-ui/icons";
+import { LockOpen, SwapHoriz } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -173,52 +173,79 @@ export default function UnlockNode(props) {
 
   return (
     <Card>
-      <CardHeader icon>
-        <CardIcon className="headerIconBack">
-          <SwapHoriz />
-        </CardIcon>
+    <CardHeader icon>
+      <CardIcon className="headerIconBack">
+        <LockOpen />
+      </CardIcon>
         <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
-        <h4 className={classes.cardIconTitle}>Transfer Node</h4>
-      </CardHeader>
+      <h4 className={classes.cardIconTitle}>Transfer Asset</h4>
+    </CardHeader>
       <CardBody>
-        <form>
-          {nodeInfo !== undefined && (
-          <h4>Node Selected: {nodeInfo.name} ({nodeInfo.id})</h4>
-          )}
-          <CustomInput
-            success={loginAddressState === "success"}
-            error={loginAddressState === "error"}
-            labelText="Recieving Address *"
-            id="address"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              onChange: event => {
-                setAddress(event.target.value.trim())
-                if (event.target.value !== "") {
-                  setloginAddressState("success");
-                } else {
-                  setloginAddressState("error");
-                }
-                setloginAddress(event.target.value);
-              },
-            }}
-          />
-          <div className={classes.formCategory}>
-            <small>*</small> Required fields
-              </div>
-          {!transactionActive && (
-            <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => transferNode()}>Transfer Node</Button>
-            </div>
-          )}
-          {transactionActive && (
-            <h3>
-              Transferring Node<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
-            </h3>
-          )}
-        </form>
+        <NavPills
+          color="rose"
+          horizontal={{
+            tabsGrid: { xs: 12, sm: 12, md: 4 },
+            contentGrid: { xs: 12, sm: 12, md: 8 }
+          }}
+          tabs={[
+            {
+              tabButton: "Profile",
+              tabContent: (
+                <span>
+                  <p>
+                    Collaboratively administrate empowered markets via
+                    plug-and-play networks. Dynamically procrastinate B2C
+                    users after installed base benefits.
+                  </p>
+                  <br />
+                  <p>
+                    Dramatically visualize customer directed convergence
+                    without revolutionary ROI. Collaboratively
+                    administrate empowered markets via plug-and-play
+                    networks. Dynamically procrastinate B2C users after
+                    installed base benefits.
+                  </p>
+                  <br />
+                  <p>This is very nice.</p>
+                </span>
+              )
+            },
+            {
+              tabButton: "Settings",
+              tabContent: (
+                <span>
+                  <p>
+                    Efficiently unleash cross-media information without
+                    cross-media value. Quickly maximize timely
+                    deliverables for real-time schemas.
+                  </p>
+                  <br />
+                  <p>
+                    Dramatically maintain clicks-and-mortar solutions
+                    without functional solutions.
+                  </p>
+                </span>
+              )
+            },
+            {
+              tabButton: "Options",
+              tabContent: (
+                <span>
+                  <p>
+                    Completely synergize resource taxing relationships via
+                    premier niche markets. Professionally cultivate
+                    one-to-one customer service with robust ideas.{" "}
+                  </p>
+                  <br />
+                  <p>
+                    Dynamically innovate resource-leveling customer
+                    service for state of the art customer service.
+                  </p>
+                </span>
+              )
+            }
+          ]}
+        />
       </CardBody>
     </Card>
   );
