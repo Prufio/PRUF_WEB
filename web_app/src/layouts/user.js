@@ -30,7 +30,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
-import { AirlineSeatLegroomExtraSharp } from "@material-ui/icons";
+import { AirlineSeatLegroomExtraSharp, IndeterminateCheckBox } from "@material-ui/icons";
 
 var ps;
 
@@ -82,7 +82,7 @@ export default function Dashboard(props) {
   const [testWeave, setTestWeave] = React.useState()
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
-  const acArr = [1, 2, 3, 4, 5, 6, 7];
+  const acArr = [1, 2, 3, 4, 5, 6, 7, 1000000];
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
@@ -1238,7 +1238,7 @@ export default function Dashboard(props) {
       if (_addr) {
         await window.utils.getETHBalance(_addr);
         await setUpTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
-        await setUpACInformation(_addr);
+        await getACsFromDB();
       }
 
 
@@ -1254,50 +1254,54 @@ export default function Dashboard(props) {
 
   };
 
-  const getACsFromDB = async () => {
+  const getACsFromDB = async (iteration, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames) => {
     const acArray = acArr;
+    if(!iteration) iteration = 0
+    if(!rootArray) rootArray = [];
+    if(!rootNameArray) rootNameArray = [];
+    if(!allClasses) allClasses = [];
+    if(!allClassNames) allClassNames = [];
+    if(!_assetClassSets) _assetClassSets = {};
 
-    let rootArray = [], rootNameArray = [], allClasses = [], allClassNames = [];
-    let _assetClassSets = {};
+    if (iteration === acArray.length) return setUpACInformation({ sets: _assetClassSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames })
 
-    for (let i = 0; i < acArray.length; i++) {
       await window.contracts.AC_MGR.methods
-        .getAC_data(String(acArray[i]))
+        .getAC_data(String(acArray[iteration]))
         .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
+          if (_error) { console.log("Error: ", _error); getACsFromDB(iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)}
 
           else {
             let resArr = Object.values(_result)
 
-            if (String(acArray[i]) === String(resArr[0])) {
-              window.utils.resolveACFromID(String(acArray[i])).then((e) => {
-                rootArray.push(acArray[i]);
+            if (String(acArray[iteration]) === String(resArr[0])) {
+              window.utils.resolveACFromID(String(acArray[iteration])).then((e) => {
+                rootArray.push(acArray[iteration]);
                 rootNameArray.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
-                _assetClassSets[String(acArray[i])] = [];
+                _assetClassSets[String(acArray[iteration])] = [];
+                getACsFromDB(iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
               })
             }
 
             else {
-              window.utils.resolveACFromID(String(acArray[i])).then((e) => {
-                allClasses.push(String(acArray[i]));
+              //console.log(acArray[i])
+              window.utils.resolveACFromID(String(acArray[iteration])).then((e) => {
+                allClasses.push(String(acArray[iteration]));
                 allClassNames.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
+                getACsFromDB(iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
               })
             }
 
           }
 
         });
-
-    }
-
-    return { sets: _assetClassSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
+    
+    //return { sets: _assetClassSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
 
   }
 
-  const setUpACInformation = async (addr) => {
+  const setUpACInformation = async (obj) => {
 
-    getACsFromDB().then(async (e) => {
-      let allClasses = e.allCArr, rootArray = e.rArr, _assetClassSets = e.sets, rootNameArray = e.rnArr, allClassNames = e.allCNArr;
+      let allClasses = obj.allCArr, rootArray = obj.rArr, _assetClassSets = obj.sets, rootNameArray = obj.rnArr, allClassNames = obj.allCNArr;
 
       console.log(allClasses, allClassNames, rootArray)
 
@@ -1310,7 +1314,7 @@ export default function Dashboard(props) {
             else {
               let resArr = Object.values(_result);
               for (let x = 0; x < rootArray.length; x++) {
-
+                console.log(resArr[0], rootArray[x])
                 if (String(rootArray[x]) === String(resArr[0])) {
                   _assetClassSets[String(rootArray[x])]
                     .push({ id: allClasses[i], name: allClassNames[i].toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) })
@@ -1330,8 +1334,6 @@ export default function Dashboard(props) {
         setRootNames(rootNameArray)
         setAssetClassSets(_assetClassSets)
       }, 500)
-
-    })
 
   }
 
@@ -1506,14 +1508,14 @@ export default function Dashboard(props) {
     window.utils.getAssetTokenInfo(_addr, pruf).then((simpleAssets) => {
       if (simpleAssets.ipfs) {
         console.log(simpleAssets.ipfs)
-        if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") { setTimeout(() => { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }, 100) } }
+        if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") { setTimeout(() => { getAssetExtData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }, 100) } }
         else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
       }
     })
 
   };
 
-  const getIpfsData = async (simpleAssets, array, jobs, iteration, assetData) => {
+  const getAssetExtData = async (simpleAssets, array, jobs, iteration, assetData) => {
     let _assetData
     if (!array) return
     //console.log(array)
@@ -1539,17 +1541,18 @@ export default function Dashboard(props) {
       if (cookies[e]) {
         console.log("Using cached ipfs:", cookies[e])
         _assetData.push(cookies[e])
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+        return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
       }
       else {
         try {
+          console.log(simpleAssets)
           for await (const chunk of window.ipfs.cat(e)) {
             let str = new TextDecoder("utf-8").decode(chunk);
             //console.log(str)
             if (!str) {
               _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
               console.log("error")
-              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
             }
 
             else {
@@ -1562,14 +1565,14 @@ export default function Dashboard(props) {
               catch {
                 _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
               }
-              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
             }
             //console.log(chunk)
           }
         }
 
         catch {
-          setTimeout(() => { getIpfsData(simpleAssets, array, jobs) }, 500)
+          setTimeout(() => { getAssetExtData(simpleAssets, array, jobs) }, 500)
         }
       }
     })
@@ -1578,17 +1581,18 @@ export default function Dashboard(props) {
       if (cookies[lookup]) {
         console.log("Using cached ipfs:", cookies[lookup])
         _assetData.push(cookies[lookup])
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+        return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
       }
       else {
         try {
+          console.log(simpleAssets)
           for await (const chunk of window.ipfs.cat(lookup)) {
             let str = new TextDecoder("utf-8").decode(chunk);
             //console.log(str)
             if (!str) {
               _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
               console.log("error")
-              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
             }
 
             else {
@@ -1601,14 +1605,14 @@ export default function Dashboard(props) {
               catch {
                 _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
               }
-              return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
+              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
             }
             //console.log(chunk)
           }
         }
 
         catch {
-          setTimeout(() => { getIpfsData(simpleAssets, array, jobs) }, 500)
+          setTimeout(() => { getAssetExtData(simpleAssets, array, jobs) }, 500)
         }
       }
 

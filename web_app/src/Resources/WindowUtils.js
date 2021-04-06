@@ -432,7 +432,7 @@ function buildWindowUtils() {
             else {
               let root = window.web3.utils.fromWei(Object.values(_result)[1]);
               let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
-              window.costArray.push(window.web3.utils.toWei(String(Number(root) + Number(acth))));
+              //window.costArray.push(String(Number(root) + Number(acth)));
             }
           })
       }
@@ -460,7 +460,7 @@ function buildWindowUtils() {
   }
 
   const _retreiveCosts = async (numOfServices, AC) => {
-    let costs = {}, costArray = [];
+    let costs = {};
     if (window.contracts === undefined) return
     //console.log("Getting cost array");
 
@@ -470,11 +470,12 @@ function buildWindowUtils() {
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
           else {
-            let root = window.web3.utils.fromWei(Object.values(_result)[1]);
-            let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
-            let rootAddress = Object.values(_result)[0]
-            let BeneficiaryAddress = Object.values(_result)[2]
-            // costArray.push(window.web3.utils.toWei(String(Number(root) + Number(acth))));
+            //console.log(_result)
+            let root = window.web3.utils.fromWei(_result.ACTHprice);
+            let acth = window.web3.utils.fromWei(_result.rootPrice);
+            console.log("root:", root, "acth:",acth)
+            let rootAddress = _result.rootAddress
+            let BeneficiaryAddress = _result.ACTHaddress
             costs["cost" + i] = {
               rootCost: root,
               acthCost: acth,

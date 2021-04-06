@@ -84,7 +84,7 @@ export default function NewRecord(props) {
   const [displayImageUrl, setDisplayImageUrl] = React.useState("");
   const [fileMetaData, setFileMetaData] = React.useState("");
   const [rawFile, setRawFile] = React.useState()
-  const [storageProvider, setStorageProvider] = React.useState("");
+  const [storageProvider, setStorageProvider] = React.useState("arweave");
 
 
   const [loginManufacturer, setloginManufacturer] = React.useState("");
@@ -200,18 +200,16 @@ export default function NewRecord(props) {
   }
 
   const ACLogin = (event) => {
-    if (!props.IDHolder && !mintedID) {
-      IDHolderPrompt()
-    }
-    else {
+
       setAssetClass(event.target.value);
       setClassSelect(event.target.value);
+      console.log(event.target.value);
       try {
         window.utils.resolveACFromID(event.target.value).then((e) => {
           let str = e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase();
           setAssetClassName(str)
-          window.utils.getCosts(6, event.target.value).then((e) => {
-            setNRCost(window.web3.utils.fromWei(e.newAsset))
+          window.utils.retreiveCosts(6, event.target.value).then((e) => {
+            setNRCost(e.cost1.totalCost)
           })
           setStorageProvider("arweave");
         })
@@ -228,9 +226,6 @@ export default function NewRecord(props) {
           },
         })
       }
-
-
-    }
   };
 
   const refreshBalances = async () => {
@@ -764,7 +759,7 @@ export default function NewRecord(props) {
 
   const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => { //create a new asset record
     //console.log("assetClass: ", assetClass)
-
+    extDataB = "0x"+extDataB
     swalReact({
       content:
         <div className="picture-container">
@@ -849,7 +844,7 @@ export default function NewRecord(props) {
       }) */
   
       await window.contracts.APP_NC.methods
-        .newRecordWithDescription(
+        .newRecordWithNote(
           idxHash,
           rgtHash,
           assetClass,
@@ -974,7 +969,7 @@ export default function NewRecord(props) {
       }) */
   
       await window.contracts.APP_NC.methods
-        .newRecordWithDescription(
+        .newRecordWithNote(
           idxHash,
           rgtHash,
           assetClass,
