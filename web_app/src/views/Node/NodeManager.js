@@ -638,6 +638,21 @@ export default function NodeManager(props) {
                                   >
                                     Transfer
                                         </MenuItem>
+                                  {window.tempACData.exData !== 255 && (
+                                    <MenuItem
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected: classes.selectMenuItemSelected
+                                      }}
+                                      value={{
+                                        href: "/#/user/unlock-node",
+                                        name: prop[0],
+                                        id: prop[1]
+                                      }}
+                                    >
+                                      Unlock
+                                    </MenuItem>
+                                  )}
                                 </Select>
                               </FormControl>
                             </form>
