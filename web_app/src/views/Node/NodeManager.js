@@ -638,7 +638,7 @@ export default function NodeManager(props) {
                                   >
                                     Transfer
                                         </MenuItem>
-                                  {window.tempACData.exData !== 255 && (
+                                  {window.tempACData.exData === 255 && (
                                     <MenuItem
                                       classes={{
                                         root: classes.selectMenuItem,
