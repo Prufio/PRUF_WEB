@@ -25,7 +25,7 @@ async function resolveContracts(_web3) {
   const WRAP_ABI = abis.WRAP;
   const DECORATE_ABI = abis.DECORATE;
 
-  const STOR_Address = "0x03dA1A10099595489888926E8211530db7B2Dd67";
+  const STOR_Address = "0x53Fe23cC52C68307928797436aB081D48C09B340";
   const PARTY_Address = "0xacb584F434615327acf372607C41EeA57EB277aa";
 
   const STOR = new _web3.eth.Contract(STOR_ABI, STOR_Address);
