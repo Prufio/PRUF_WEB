@@ -28,25 +28,25 @@ export default function ChangeNodeCosts(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [operation1, setOperation1] = React.useState("");
-  const [operation2, setOperation2] = React.useState("");
-  const [operation3, setOperation3] = React.useState("");
-  const [operation4, setOperation4] = React.useState("");
-  const [operation5, setOperation5] = React.useState("");
-  const [operation6, setOperation6] = React.useState("");
-  const [operation7, setOperation7] = React.useState("");
-  const [operation8, setOperation8] = React.useState("");
-  const [beneficiaryAddress, setBeneficiaryAddress] = React.useState("");
+  const [operation1, setOperation1] = React.useState(window.sentPacket.costs.cost1.acthCost);
+  const [operation2, setOperation2] = React.useState(window.sentPacket.costs.cost2.acthCost);
+  const [operation3, setOperation3] = React.useState(window.sentPacket.costs.cost3.acthCost);
+  const [operation4, setOperation4] = React.useState(window.sentPacket.costs.cost4.acthCost);
+  const [operation5, setOperation5] = React.useState(window.sentPacket.costs.cost5.acthCost);
+  const [operation6, setOperation6] = React.useState(window.sentPacket.costs.cost6.acthCost);
+  const [operation7, setOperation7] = React.useState(window.sentPacket.costs.cost7.acthCost);
+  const [operation8, setOperation8] = React.useState(window.sentPacket.costs.cost8.acthCost);
+  const [beneficiaryAddress, setBeneficiaryAddress] = React.useState(window.sentPacket.costs.cost1.BeneficiaryAddress);
 
-  const [loginOperation1, setloginOperation1] = React.useState("");
-  const [loginOperation2, setloginOperation2] = React.useState("");
-  const [loginOperation3, setloginOperation3] = React.useState("");
-  const [loginOperation4, setloginOperation4] = React.useState("");
-  const [loginOperation5, setloginOperation5] = React.useState("");
-  const [loginOperation6, setloginOperation6] = React.useState("");
-  const [loginOperation7, setloginOperation7] = React.useState("");
-  const [loginOperation8, setloginOperation8] = React.useState("");
-  const [loginBeneficiaryAddress, setloginBeneficiaryAddress] = React.useState("");
+  const [loginOperation1, setloginOperation1] = React.useState(window.sentPacket.costs.cost1.acthCost);
+  const [loginOperation2, setloginOperation2] = React.useState(window.sentPacket.costs.cost2.acthCost);
+  const [loginOperation3, setloginOperation3] = React.useState(window.sentPacket.costs.cost3.acthCost);
+  const [loginOperation4, setloginOperation4] = React.useState(window.sentPacket.costs.cost4.acthCost);
+  const [loginOperation5, setloginOperation5] = React.useState(window.sentPacket.costs.cost5.acthCost);
+  const [loginOperation6, setloginOperation6] = React.useState(window.sentPacket.costs.cost6.acthCost);
+  const [loginOperation7, setloginOperation7] = React.useState(window.sentPacket.costs.cost7.acthCost);
+  const [loginOperation8, setloginOperation8] = React.useState(window.sentPacket.costs.cost8.acthCost);
+  const [loginBeneficiaryAddress, setloginBeneficiaryAddress] = React.useState(window.sentPacket.costs.cost1.BeneficiaryAddress);
 
   const [loginOperation1State, setloginOperation1State] = React.useState("");
   const [loginOperation2State, setloginOperation2State] = React.useState("");
@@ -61,8 +61,6 @@ export default function ChangeNodeCosts(props) {
   const [nodeInfo,] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
-
-  window.sentPacket = null
 
   const classes = useStyles();
 
@@ -81,6 +79,7 @@ export default function ChangeNodeCosts(props) {
       window.location.href = "/#/user/node-manager"
       window.location.reload()
     }
+    //window.sentPacket = null
 
   }, [])
 
@@ -96,14 +95,14 @@ export default function ChangeNodeCosts(props) {
     setTxHash("");
     setError(undefined);
     setTransactionActive(true);
-    let op1 = window.web3.utils.toWei(operation1);
-    let op2 = window.web3.utils.toWei(operation2);
-    let op3 = window.web3.utils.toWei(operation3);
-    let op4 = window.web3.utils.toWei(operation4);
-    let op5 = window.web3.utils.toWei(operation5);
-    let op6 = window.web3.utils.toWei(operation6);
-    let op7 = window.web3.utils.toWei(operation7);
-    let op8 = window.web3.utils.toWei(operation8);
+    let op1 = window.web3.utils.toWei(String(operation1));
+    let op2 = window.web3.utils.toWei(String(operation2));
+    let op3 = window.web3.utils.toWei(String(operation3));
+    let op4 = window.web3.utils.toWei(String(operation4));
+    let op5 = window.web3.utils.toWei(String(operation5));
+    let op6 = window.web3.utils.toWei(String(operation6));
+    let op7 = window.web3.utils.toWei(String(operation7));
+    let op8 = window.web3.utils.toWei(String(operation8));
 
     if (loginOperation1 !== "" && loginBeneficiaryAddress !== "") {
       if(!window.web3.utils.isAddress(beneficiaryAddress)) {
@@ -1017,7 +1016,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost1.acthCost),
+                    defaultValue: nodeInfo.costs.cost1.acthCost,
                     onChange: event => {
                       setOperation1(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1039,7 +1038,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost2.acthCost),
+                    defaultValue: nodeInfo.costs.cost2.acthCost,
                     onChange: event => {
                       setOperation2(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1061,7 +1060,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost3.acthCost),
+                    defaultValue: nodeInfo.costs.cost3.acthCost,
                     onChange: event => {
                       setOperation3(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1083,7 +1082,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost4.acthCost),
+                    defaultValue: nodeInfo.costs.cost4.acthCost,
                     onChange: event => {
                       setOperation4(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1105,7 +1104,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost5.acthCost),
+                    defaultValue: nodeInfo.costs.cost5.acthCost,
                     onChange: event => {
                       setOperation5(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1127,7 +1126,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost6.acthCost),
+                    defaultValue: nodeInfo.costs.cost6.acthCost,
                     onChange: event => {
                       setOperation6(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1149,7 +1148,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost7.acthCost),
+                    defaultValue: nodeInfo.costs.cost7.acthCost,
                     onChange: event => {
                       setOperation7(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1171,7 +1170,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: window.web3.utils.fromWei(nodeInfo.costs.cost8.acthCost),
+                    defaultValue: nodeInfo.costs.cost8.acthCost,
                     onChange: event => {
                       setOperation8(event.target.value.trim())
                       if (event.target.value !== "") {
