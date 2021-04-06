@@ -1214,8 +1214,9 @@ export default function CreateNode(props) {
     await window.contracts.AC_MGR.methods
       .resolveAssetClass(name)
       .call(function (_error, _result) {
-        if (_error || _result === undefined) {
-          window.ipfs.add(sampleIpfs).then((hash)=>{
+        console.log(_result)
+        if (_error || _result === "0") {
+          window.ipfs.add(JSON.stringify(sampleIpfs)).then((hash)=>{
             if (!hash) {
               console.error("error sending to ipfs")
               //return setIpfsActive(false);

@@ -1311,7 +1311,7 @@ export default function ChangeNodeCosts(props) {
           )}
           {transactionActive && (
             <h3>
-              Changing Owner Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Updating operation costs<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </form>
