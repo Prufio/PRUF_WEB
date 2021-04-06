@@ -67,6 +67,7 @@ export default function NodeManager(props) {
   const [selectedNodeObj, setSelectedNodeObj] = React.useState({});
   const [totalRewards, setTotalRewards] = React.useState(false)
   const [delegationAmount, setDelegationAmount] = React.useState("")
+  const [forceReload,] = React.useState(true);
 
   const classes = useStyles();
   const chartClasses = useChartStyles();
@@ -105,7 +106,7 @@ export default function NodeManager(props) {
 
   React.useEffect(() => {
     if (props.nodeList) console.log(props.nodeList.length, Number(props.nodes) + 1)
-    if (props.nodeList && props.nodeList.length === Number(props.nodes) + 1) {
+    if (props.nodeList && props.nodeList.length === Number(props.nodes) + 1 && !forceReload) {
       setNodeData(props.nodeList)
     }
     else if (Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~", "~", "~"]])
@@ -120,7 +121,7 @@ export default function NodeManager(props) {
 
   }, [props.assetClassSets])
 
-  const getNodesInWallet = async (bal, ids) => {
+  const getNodesInWallet = async (bal, ids, forceReload) => {
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return
 
