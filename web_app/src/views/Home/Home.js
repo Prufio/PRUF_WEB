@@ -119,7 +119,7 @@ export default function Home(props) {
   };
 
   const purchasePRUF = async () => {
-/*     let tempTxHash;
+    let tempTxHash;
 
     if (loginDeposit === "" || loginDeposit < 10000) {
       setloginDepositState("error");
@@ -153,7 +153,7 @@ export default function Home(props) {
     setPrufTransactionActive(true)
 
     await window.web3.eth
-      .sendTransaction({ from: props.addr, to: "0xE8bC284a7465d071e5E66884510349dF97A20c8E", value: amount / 100000 })
+      .sendTransaction({ from: props.addr, to: "0xacb584F434615327acf372607C41EeA57EB277aa", value: amount / 100000 })
       .on("error", function (_error) {
         setPrufTransactionActive(false);
         setTxStatus(false);
@@ -197,8 +197,8 @@ export default function Home(props) {
         window.replaceAssetData = { pruf: props.pruf + deposit }
         forceUpdate()
         //refreshBalances()
-      }); */
-      props.prufClient.get
+      });
+      /* props.prufClient.get
       .assetRecord("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634")
       .call((error, result)=>{
         if(result) console.log(result)
@@ -213,7 +213,7 @@ export default function Home(props) {
       })
       .on("receipt", (receipt)=>{
         console.log(receipt.events.REPORT.returnValues._msg)
-      })
+      }) */
 
       console.log(window.ipfs)
 

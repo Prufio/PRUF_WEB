@@ -82,7 +82,7 @@ export default function Dashboard(props) {
   const [testWeave, setTestWeave] = React.useState()
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
-  const acArr = [1, 11, 12, 13, 2, 21, 22, 23, 3, 31, 32, 33, 4, 41, 42, 43, 5, 51, 52, 53, 6, 61, 62, 63];
+  const acArr = [1, 2, 3, 4, 5, 6, 7];
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
@@ -1469,7 +1469,7 @@ export default function Dashboard(props) {
   }
 
   const setUpAssets = async (who, _addr, pruf) => {
-
+    console.log(window.contracts)
     console.log("SUA, called from ", who)
 
     //listAllMethods()
