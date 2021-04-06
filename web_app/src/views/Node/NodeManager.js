@@ -176,7 +176,7 @@ export default function NodeManager(props) {
                   else {
                     _mType = _result["2"];
                     _nodeData.push(
-                      [_name, _id, _mType, "N/A"]
+                      [_name, _id, "N/A", "N/A"]
                     )
                     _extDataArr.push({
                       root: _result["0"],
@@ -503,7 +503,7 @@ export default function NodeManager(props) {
                   },
                   {
                     Header: "Total Delegated",
-                    accessor: "totalStaked"
+                    accessor: "totalDelegated"
                   },
                   {
                     Header: "Transaction Count",
@@ -520,7 +520,7 @@ export default function NodeManager(props) {
                       id: key,
                       name: prop[0],
                       nodeId: prop[1],
-                      managementType: prop[2],
+                      totalDelegated: prop[2],
                       transactionsPerEpoch: prop[3],
                       actions: (
                         // we've added some custom button actions
@@ -653,7 +653,7 @@ export default function NodeManager(props) {
                                   >
                                     Transfer
                                         </MenuItem>
-                                  {prop[2] === "255" && (
+                                  {extDataArr[key] && extDataArr[key].managementType === "255" && (
                                     <MenuItem
                                       classes={{
                                         root: classes.selectMenuItem,
