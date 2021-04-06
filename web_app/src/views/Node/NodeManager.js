@@ -193,7 +193,7 @@ export default function NodeManager(props) {
       }
 
       setTimeout(() => {
-        console.log(nodeData)
+        console.log(_nodeData)
         _nodeData.push(["~", "~", "~", "~"])
         window.replaceAssetData = { key: pageKey, nodeList: nodeData }
         setNodeData(_nodeData)
