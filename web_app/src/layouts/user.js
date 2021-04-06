@@ -82,7 +82,7 @@ export default function Dashboard(props) {
   const [testWeave, setTestWeave] = React.useState()
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
-  const acArr = [1, 2, 3, 4, 5, 6, 7, 1000000];
+  const acArr = [1, 2, 3, 4, 5, 6, 7, 1000002, 1000001];
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
