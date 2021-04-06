@@ -5,6 +5,7 @@ import swal from 'sweetalert';
 import Web3 from "web3";
 import Arweave from "arweave"
 import TestWeave from 'testweave-sdk';
+import arconf from "../Resources/arconf";
 
 import PRUF from "../Resources/pruf-api";
 import { isMobile } from "react-device-detect";
@@ -111,11 +112,7 @@ export default function Dashboard(props) {
   //console.log("pre-load href", window.location.href)
   const initArweave = async () => {
     const _arweave = Arweave
-    const arweave = _arweave.init({
-      host: '127.0.0.1',
-      port: 1984,
-      protocol: 'http'
-    });
+    const arweave = _arweave.init(arconf);
 
     setArweaveClient(arweave)
 

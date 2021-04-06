@@ -122,9 +122,6 @@ export default function NewRecord(props) {
 
   const maxImageSize = 1000;
 
-  const acArr = [1, 11, 12, 13, 2, 21, 22, 23, 3, 31, 32, 33, 4, 41, 42, 43, 5, 51, 52, 53, 6, 61, 62, 63];
-
-
   const link = document.createElement('div');
   const resizeImg = require('resize-img');
 
