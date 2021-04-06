@@ -283,14 +283,34 @@ export default function NodeManager(props) {
       //console.log(props.ps.element.scrollTop)
     }
     let tempObj = JSON.parse(JSON.stringify(e))
+
     window.utils.retreiveCosts(8, e.id).then((x) => {
       tempObj.costs = x
       tempObj.lastRef = "/#/user/node-manager";
-      window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-      console.log(tempObj)
-      console.log(window.sentPacket)
-      setSimpleSelect(e);
-      return window.location.href = e.href;
+      
+      window.contracts.AC_MGR.methods
+        .getAC_data(e.id)
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            tempObj.root = _result["0"];
+            tempObj.custodyType = _result["1"];
+            tempObj.managementType = _result["2"];
+            tempObj.discount = _result["3"];
+            tempObj.referenceAddress = _result["4"];
+
+            window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+            
+            console.log(tempObj)
+            console.log(window.sentPacket)
+            console.log(_result)
+            setSimpleSelect(e);
+            return window.location.href = e.href;
+
+          }
+        });
+
+      
     })
   };
 

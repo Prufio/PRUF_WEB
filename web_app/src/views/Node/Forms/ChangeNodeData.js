@@ -61,7 +61,7 @@ export default function ChangeNodeData(props) {
       window.location.reload()
     }
 
-    if(window.sentPacket.id){
+/*     if(window.sentPacket.id){
       let id = window.sentPacket.id;
       window.sentPacket = null;
       window.contracts.AC_MGR.methods
@@ -91,7 +91,7 @@ export default function ChangeNodeData(props) {
           }
         });
 
-    }
+    } */
 
   }, [])
 

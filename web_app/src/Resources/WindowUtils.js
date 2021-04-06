@@ -411,9 +411,11 @@ function buildWindowUtils() {
               exData: Object.values(_result)[3],
               AC: tempAC
             }
+            console.log(_result)
           }
         });
       window.tempACData = tempData;
+      
       return tempData;
     }
 
