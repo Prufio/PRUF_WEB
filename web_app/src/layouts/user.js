@@ -1469,7 +1469,7 @@ export default function Dashboard(props) {
   }
 
   const setUpAssets = async (who, _addr, pruf) => {
-
+    console.log(window.contracts)
     console.log("SUA, called from ", who)
 
     //listAllMethods()
