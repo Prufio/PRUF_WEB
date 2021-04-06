@@ -660,13 +660,13 @@ export default function NodeManager(props) {
                                         selected: classes.selectMenuItemSelected
                                       }}
                                       value={{
-                                        href: "/#/user/unlock-node",
+                                        href: "/#/user/finalize-node",
                                         name: prop[0],
                                         id: prop[1],
                                         index: key
                                       }}
                                     >
-                                      Unlock
+                                      Finalize
                                     </MenuItem>
                                   )}
                                 </Select>

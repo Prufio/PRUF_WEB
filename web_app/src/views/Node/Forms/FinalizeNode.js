@@ -9,15 +9,21 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
-import NavPills from "components/NavPills/NavPills.js";
 import Button from "components/CustomButtons/Button.js";
+import Wizard from "components/Wizard/Wizard.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import { LockOpen, SwapHoriz } from "@material-ui/icons";
 
+
+import Step1 from "./NodeWizzard/Step1.js";
+import Step2 from "./NodeWizzard/Step2.js";
+import Step3 from "./NodeWizzard/Step3.js";
 const useStyles = makeStyles(styles);
 
-export default function UnlockNode(props) {
+export default function FinalizeNode(props) {
 
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
@@ -48,12 +54,6 @@ export default function UnlockNode(props) {
         }
     }, [])
 
-    const clearForms = () => {
-        setAddress("");
-        setloginAddressState("");
-        console.log("clearing forms");
-    };
-
     const classes = useStyles();
 
     if (nodeInfo === undefined || nodeInfo === null) {
@@ -67,31 +67,8 @@ export default function UnlockNode(props) {
         window.location.href = nodeInfo.lastRef;
     }
 
-    const thousandHashesOf = (varToHash) => {
-        if (!window.web3) return window.location.href = "/#/user/home"
-        let tempHash = varToHash;
-        for (let i = 0; i < 1000; i++) {
-            tempHash = window.web3.utils.soliditySha3(tempHash);
-            //console.log(tempHash);
-        }
-        return tempHash;
-    }
+    const finalizeNode = async () => { //transfer held Node
 
-    const spliceNodeList = (arr) => {
-        let tempArr = arr;
-        for (let i = 0; i < tempArr.length; i++) {
-            if (String(nodeInfo.id) === String(tempArr[i][1])) {
-                console.log("removing array index:", i, tempArr[i])
-                tempArr.splice(i, 1)
-            }
-        }
-        console.log("New nodeList:", tempArr)
-        return tempArr
-    }
-
-    const transferNode = async () => { //transfer held Node
-        const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-        const splicedList = spliceNodeList(props.nodeList);
 
         if (!window.web3.utils.isAddress(address)) {
             return swal({
@@ -146,7 +123,6 @@ export default function UnlockNode(props) {
                         button: "Close",
                     });
                 }
-                clearForms();
             })
             .on("receipt", (receipt) => {
                 setTransactionActive(false);
@@ -164,7 +140,6 @@ export default function UnlockNode(props) {
                 }).then(() => {
                     //refreshBalances()
                     //window.backIndex = nodeInfo.dBIndex;
-                    window.replaceAssetData = { key: pageKey, nodeList: splicedList }
                     window.location.href = nodeInfo.lastRef;
                 })
             });
@@ -172,74 +147,20 @@ export default function UnlockNode(props) {
     }
 
     return (
-        <Card>
-            <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                    <LockOpen />
-                </CardIcon>
-                <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
-                <h4 className={classes.cardIconTitle}>Transfer Asset</h4>
-            </CardHeader>
-            <CardBody>
-                <NavPills
-                    color="rose"
-                    horizontal={{
-                        tabsGrid: { xs: 12, sm: 12, md: 4 },
-                        contentGrid: { xs: 12, sm: 12, md: 8 }
-                    }}
-                    tabs={[
-                        {
-                            tabButton: "Restricted",
-                            tabContent: (
-                                <span>
-                                    <p>
-                                        Restriced node access allows only the node holder to create, export and import assets.
-                  </p>
-                                    <p>
-                                        Non-node holders will still be allowed basic node modification such as transfering, and other simple asset management functions.
-                  </p>
-                                </span>
-                            )
-                        },
-                        {
-                            tabButton: "Permissive",
-                            tabContent: (
-                                <span>
-                                    <p>
-                                        Permissive node access allows only the node holder to create and import assets.
-                </p>
-                                    <p>
-                                        Non-node holders will still be allowed node modification such as transfering, exporting, and other simple asset management functions.
-                </p>
-                                </span>
-                            )
-                        },
-                        {
-                            tabButton: "Authorized",
-                            tabContent: (
-                                <span>
-                                    <p>
-                                        Authorized node access allows only authorized users to do any modification to assets under this node ID
-                </p>
-                                    <p>
-                                        Unpermissioned users will not be able to modify their assets without the help of an authorized address.
-                </p>
-                                </span>
-                            )
-                        },
-                        {
-                            tabButton: "Trusted",
-                            tabContent: (
-                                <span>
-                                    <p>
-                                        Trusted node access allows only heavily trusted agents in the ecosystem to perform admin-tier functions on assets under this node ID
-                </p>
-                                </span>
-                            )
-                        }
-                    ]}
-                />
-            </CardBody>
-        </Card>
+      <GridContainer justify="center">
+        <GridItem xs={12} sm={8}>
+          <Wizard
+            validate
+            steps={[
+              { stepName: "About", stepComponent: Step1, stepId: "about" },
+              { stepName: "Account", stepComponent: Step2, stepId: "account" },
+              { stepName: "Address", stepComponent: Step3, stepId: "address" }
+            ]}
+            title="Build Your Profile"
+            subtitle="This information will let us know more about you."
+            finishButtonClick={e => alert(e)}
+          />
+        </GridItem>
+      </GridContainer>
     );
 }
