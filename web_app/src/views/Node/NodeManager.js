@@ -67,6 +67,7 @@ export default function NodeManager(props) {
   const [selectedNodeObj, setSelectedNodeObj] = React.useState({});
   const [totalRewards, setTotalRewards] = React.useState(false)
   const [delegationAmount, setDelegationAmount] = React.useState("")
+  const [extDataArr, setExtDataArr] = React.useState([])
   const [forceReload,] = React.useState(true);
 
   const classes = useStyles();
@@ -158,25 +159,45 @@ export default function NodeManager(props) {
     }
 
     else {
-      let nodeData = [];
+      let _nodeData = [], _extDataArr = [];
       for (let i = 0; i < ids.length; i++) {
+        let _name, _id, _mType;
         await window.contracts.AC_MGR.methods
           .getAC_name(ids[i])
           .call((_error, _result) => {
             if (_error) { console.log("Error: ", _error) }
             else {
-              nodeData.push(
-                [_result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()), String(ids[i]), "N/A", "N/A"]
-              )
+              _name = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
+              _id = String(ids[i])
+              window.contracts.AC_MGR.methods
+                .getAC_data(_id)
+                .call((_error, _result) => {
+                  if (_error) { console.log("Error: ", _error) }
+                  else {
+                    _mType = _result["2"];
+                    _nodeData.push(
+                      [_name, _id, _mType, "N/A"]
+                    )
+                    _extDataArr.push({
+                      root: _result["0"],
+                      custodyType: _result["1"],
+                      managementType: _result["2"],
+                      discount: _result["3"],
+                      referenceAddress: _result["4"]
+                    })
+                  }
+                });
+
             }
           });
       }
 
       setTimeout(() => {
         console.log(nodeData)
-        nodeData.push(["~", "~", "~", "~"])
+        _nodeData.push(["~", "~", "~", "~"])
         window.replaceAssetData = { key: pageKey, nodeList: nodeData }
-        setNodeData(nodeData)
+        setNodeData(_nodeData)
+        setExtDataArr(_extDataArr)
       }, 300)
     }
 
@@ -285,32 +306,22 @@ export default function NodeManager(props) {
     let tempObj = JSON.parse(JSON.stringify(e))
 
     window.utils.retreiveCosts(8, e.id).then((x) => {
+
       tempObj.costs = x
       tempObj.lastRef = "/#/user/node-manager";
-      
-      window.contracts.AC_MGR.methods
-        .getAC_data(e.id)
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-            tempObj.root = _result["0"];
-            tempObj.custodyType = _result["1"];
-            tempObj.managementType = _result["2"];
-            tempObj.discount = _result["3"];
-            tempObj.referenceAddress = _result["4"];
+      tempObj.root = extDataArr[e.index].root;
+      tempObj.custodyType = extDataArr[e.index].custodyType;
+      tempObj.managementType = extDataArr[e.index].managementType;
+      tempObj.discount = extDataArr[e.index].discount;
+      tempObj.referenceAddress = extDataArr[e.index].referenceAddress;
+      window.sentPacket = JSON.parse(JSON.stringify(tempObj));
 
-            window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-            
-            console.log(tempObj)
-            console.log(window.sentPacket)
-            console.log(_result)
-            setSimpleSelect(e);
-            return window.location.href = e.href;
+      console.log(tempObj)
+      console.log(window.sentPacket)
+      setSimpleSelect(e);
+      return window.location.href = e.href;
 
-          }
-        });
 
-      
     })
   };
 
@@ -509,7 +520,7 @@ export default function NodeManager(props) {
                       id: key,
                       name: prop[0],
                       nodeId: prop[1],
-                      totalStaked: prop[2],
+                      managementType: prop[2],
                       transactionsPerEpoch: prop[3],
                       actions: (
                         // we've added some custom button actions
@@ -594,7 +605,8 @@ export default function NodeManager(props) {
                                     value={{
                                       href: "/#/user/change-name",
                                       name: prop[0],
-                                      id: prop[1]
+                                      id: prop[1],
+                                      index: key
                                     }}
                                   >
                                     Change Name
@@ -607,7 +619,8 @@ export default function NodeManager(props) {
                                     value={{
                                       href: "/#/user/change-data",
                                       name: prop[0],
-                                      id: prop[1]
+                                      id: prop[1],
+                                      index: key
                                     }}
                                   >
                                     Update Data
@@ -620,7 +633,8 @@ export default function NodeManager(props) {
                                     value={{
                                       href: "/#/user/change-costs",
                                       name: prop[0],
-                                      id: prop[1]
+                                      id: prop[1],
+                                      index: key
                                     }}
                                   >
                                     Update Operation Costs
@@ -633,12 +647,13 @@ export default function NodeManager(props) {
                                     value={{
                                       href: "/#/user/transfer-node",
                                       name: prop[0],
-                                      id: prop[1]
+                                      id: prop[1],
+                                      index: key
                                     }}
                                   >
                                     Transfer
                                         </MenuItem>
-                                  {window.tempACData.exData !== 255 && (
+                                  {prop[2] === "255" && (
                                     <MenuItem
                                       classes={{
                                         root: classes.selectMenuItem,
@@ -647,7 +662,8 @@ export default function NodeManager(props) {
                                       value={{
                                         href: "/#/user/unlock-node",
                                         name: prop[0],
-                                        id: prop[1]
+                                        id: prop[1],
+                                        index: key
                                       }}
                                     >
                                       Unlock
