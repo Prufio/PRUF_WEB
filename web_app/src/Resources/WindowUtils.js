@@ -76,29 +76,29 @@ function buildWindowUtils() {
     let statusId = String(_status)
 
     console.log(statusId)
-    switch(statusId) {
-      case("0") : tempStat = "No Status Set"; break        
-      case("1") : tempStat = "Transferable"; break
-      case("2") : tempStat = "Non-Transferable"; break
-      case("3") : tempStat = "MARKED STOLEN"; break
-      case("4") : tempStat = "MARKED LOST"; break
-      case("5") : tempStat = "Transferred (Unclaimed)"; break
-      case("6") : tempStat = "In Supervised Escrow"; break
-      case("7") : tempStat = "Out of Supervised Escrow"; break
-      case("50") : tempStat = "In Locked Escrow"; break
-      case("51") : tempStat = "Transferable"; break
-      case("52") : tempStat = "Non-Transferable"; break
-      case("53") : tempStat = "MARKED STOLEN"; break
-      case("54") : tempStat = "MARKED LOST"; break
-      case("55") : tempStat = "Transferred (Unclaimed)"; break
-      case("56") : tempStat = "In Supervised Escrow"; break
-      case("57") : tempStat = "Out of Escrow"; break
-      case("58") : tempStat = "Out of Escrow"; break
-      case("59") : tempStat = "Ready for Discard"; break
-      case("60") : tempStat = "Ready to Recycle"; break
-      case("70") : tempStat = "Ready for Import"; break
-      default : console.error('PRUF_ERR: Status id "', statusId, '"not recognized.'); break
-  }
+    switch (statusId) {
+      case ("0"): tempStat = "No Status Set"; break
+      case ("1"): tempStat = "Transferable"; break
+      case ("2"): tempStat = "Non-Transferable"; break
+      case ("3"): tempStat = "MARKED STOLEN"; break
+      case ("4"): tempStat = "MARKED LOST"; break
+      case ("5"): tempStat = "Transferred (Unclaimed)"; break
+      case ("6"): tempStat = "In Supervised Escrow"; break
+      case ("7"): tempStat = "Out of Supervised Escrow"; break
+      case ("50"): tempStat = "In Locked Escrow"; break
+      case ("51"): tempStat = "Transferable"; break
+      case ("52"): tempStat = "Non-Transferable"; break
+      case ("53"): tempStat = "MARKED STOLEN"; break
+      case ("54"): tempStat = "MARKED LOST"; break
+      case ("55"): tempStat = "Transferred (Unclaimed)"; break
+      case ("56"): tempStat = "In Supervised Escrow"; break
+      case ("57"): tempStat = "Out of Escrow"; break
+      case ("58"): tempStat = "Out of Escrow"; break
+      case ("59"): tempStat = "Ready for Discard"; break
+      case ("60"): tempStat = "Ready to Recycle"; break
+      case ("70"): tempStat = "Ready for Import"; break
+      default: console.error('PRUF_ERR: Status id "', statusId, '"not recognized.'); break
+    }
 
     return (tempStat)
   }
@@ -462,24 +462,30 @@ function buildWindowUtils() {
   const _retreiveCosts = async (numOfServices, AC) => {
     let costs = {}, costArray = [];
     if (window.contracts === undefined) return
-      //console.log("Getting cost array");
+    //console.log("Getting cost array");
 
-      for (var i = 1; i <= numOfServices; i++) {
-        await window.contracts.AC_MGR.methods
-          .getServiceCosts(AC, i)
-          .call((_error, _result) => {
-            if (_error) { console.log("Error: ", _error) }
-            else {
-              let root = window.web3.utils.fromWei(Object.values(_result)[1]);
-              let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
-              let rootAddress = Object.values(_result)[0]
-              let BeneficiaryAddress = Object.values(_result)[2]
-              costArray.push(window.web3.utils.toWei(String(Number(root) + Number(acth))));
-              costs["cost"+i] = {rootCost: window.web3.utils.toWei(root), acthCost: window.web3.utils.toWei(acth), totalCost: window.web3.utils.toWei(String(Number(root) + Number(acth))), rootAddress, BeneficiaryAddress}
+    for (var i = 1; i <= numOfServices; i++) {
+      await window.contracts.AC_MGR.methods
+        .getServiceCosts(AC, i)
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            let root = window.web3.utils.fromWei(Object.values(_result)[1]);
+            let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
+            let rootAddress = Object.values(_result)[0]
+            let BeneficiaryAddress = Object.values(_result)[2]
+            // costArray.push(window.web3.utils.toWei(String(Number(root) + Number(acth))));
+            costs["cost" + i] = {
+              rootCost: root,
+              acthCost: acth,
+              totalCost: String(Number(root) + Number(acth)),
+              rootAddress,
+              BeneficiaryAddress
             }
-          })
-      }
-      return costs
+          }
+        })
+    }
+    return costs
   }
 
   const _getACFromIdx = async (idxHash) => {
@@ -738,8 +744,8 @@ function buildWindowUtils() {
         obj.assetClassNames = e;
       })
 
-      for(let i = 0; i < tknIDArray.length; i++){
-        await window.utils.getACData("id", assetClasses[i]).then((e)=>{
+      for (let i = 0; i < tknIDArray.length; i++) {
+        await window.utils.getACData("id", assetClasses[i]).then((e) => {
           roots.push(e.root);
         })
       }
