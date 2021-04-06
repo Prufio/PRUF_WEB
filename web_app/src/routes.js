@@ -22,6 +22,7 @@ import ChangeNodeData from "views/Node/Forms/ChangeNodeData.js";
 import ChangeNodeCosts from "views/Node/Forms/ChangeNodeCosts.js";
 import CreateNode from "views/Node/Forms/CreateNode.js";
 import TransferNode from "views/Node/Forms/TransferNode.js";
+import UnlockNode from "views/Node/Forms/UnlockNode.js";
 
 // @material-ui/icons
 import DashboardIcon from "@material-ui/icons/DashboardOutlined";
@@ -150,6 +151,12 @@ var dashRoutes = [
     name: "Change Costs",
     path: "/change-costs",
     component: ChangeNodeCosts,
+    layout: "/user"
+  },
+  {
+    name: "Unlock Node",
+    path: "/unlock-node",
+    component: UnlockNode,
     layout: "/user"
   },
   {
