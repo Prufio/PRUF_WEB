@@ -137,7 +137,7 @@ const customCheckboxRadioSwitch = {
       borderColor: grayColor[9],
       textAlign: "center",
       verticalAlign: "middle",
-      borderRadius: "50%",
+      borderRadius: "4px",
       color: "inherit",
       transition: "all 0.2s"
     },
