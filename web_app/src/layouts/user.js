@@ -1472,7 +1472,7 @@ export default function Dashboard(props) {
       "DISCARD_ROLE",
       "",
       ""
-    ]
+    ];
 
     if (e.includes("(")) {
       str = e.substring(0, e.indexOf("("))

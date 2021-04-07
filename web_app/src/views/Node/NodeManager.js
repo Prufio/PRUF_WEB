@@ -122,9 +122,12 @@ export default function NodeManager(props) {
 
   }, [props.assetClassSets])
 
-  const getNodesInWallet = async (bal, ids, forceReload) => {
+  const getNodesInWallet = async (bal, ids, iteration) => {
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return
+    if (!iteration) iteration = 0;
+    if(!ids) ids = [];
+    if (iteration >= bal) return buildNodesInWallet(ids)
 
     if (!bal) {
       await window.contracts.AC_TKN.methods.balanceOf(props.addr).call((error, result) => {
@@ -139,68 +142,64 @@ export default function NodeManager(props) {
       });
     }
 
-    else if (!ids) {
-      let nodeIDs = []
-      for (let i = 0; i < Number(bal); i++) {
-        await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(props.addr, i)
-          .call((_error, _result) => {
-            if (_error) {
-              return (console.log("IN ERROR IN ERROR IN ERROR"))
-            } else {
-              nodeIDs.push(_result)
-            }
-          });
-      }
+    else {
+      await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(props.addr, iteration)
+        .call((_error, _result) => {
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR"); return getNodesInWallet(bal, ids, iteration + 1)
+          } else {
+            ids.push(_result)
+            return getNodesInWallet(bal, ids, iteration + 1)
+          }
+        });
 
-      setTimeout(() => {
-        getNodesInWallet(bal, nodeIDs)
-      }, 300)
+    }
+  }
 
+  const buildNodesInWallet = async (ids, _extDataArr, _nodeData, iteration) => {
+    if (!ids) return;
+    if (!iteration) iteration = 0;
+    if (!_nodeData) _nodeData = [];
+    if (!_extDataArr) _extDataArr = [];
+    const pageKey = thousandHashesOf(props.addr, props.winKey);
+    let _name, _id, _mType;
+    if (iteration < ids.length) {
+      await window.contracts.AC_MGR.methods
+        .getAC_name(ids[iteration])
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
+          else {
+            _name = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
+            _id = String(ids[iteration])
+            window.contracts.AC_MGR.methods
+              .getAC_data(_id)
+              .call((_error, _result) => {
+                if (_error) { console.log("Error: ", _error) }
+                else {
+                  _nodeData.push(
+                    [_name, _id, "N/A", "N/A"]
+                  )
+                  _extDataArr.push({
+                    root: _result["0"],
+                    custodyType: _result["1"],
+                    managementType: _result["2"],
+                    discount: _result["3"],
+                    referenceAddress: _result["4"]
+                  })
+                  return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+                }
+              });
+          }
+        });
     }
 
     else {
-      let _nodeData = [], _extDataArr = [];
-      for (let i = 0; i < ids.length; i++) {
-        let _name, _id, _mType;
-        await window.contracts.AC_MGR.methods
-          .getAC_name(ids[i])
-          .call((_error, _result) => {
-            if (_error) { console.log("Error: ", _error) }
-            else {
-              _name = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
-              _id = String(ids[i])
-              window.contracts.AC_MGR.methods
-                .getAC_data(_id)
-                .call((_error, _result) => {
-                  if (_error) { console.log("Error: ", _error) }
-                  else {
-                    _mType = _result["2"];
-                    _nodeData.push(
-                      [_name, _id, "N/A", "N/A"]
-                    )
-                    _extDataArr.push({
-                      root: _result["0"],
-                      custodyType: _result["1"],
-                      managementType: _result["2"],
-                      discount: _result["3"],
-                      referenceAddress: _result["4"]
-                    })
-                  }
-                });
-
-            }
-          });
-      }
-
-      setTimeout(() => {
-        console.log(_nodeData)
-        _nodeData.push(["~", "~", "~", "~"])
-        window.replaceAssetData = { key: pageKey, nodeList: nodeData }
-        setNodeData(_nodeData)
-        setExtDataArr(_extDataArr)
-      }, 300)
+      _nodeData.push(["~", "~", "~", "~"])
+      window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
+      setNodeData(_nodeData)
+      setExtDataArr(_extDataArr)
+      return console.log(_nodeData)
     }
-
   }
 
 
