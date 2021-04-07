@@ -83,7 +83,7 @@ export default function Dashboard(props) {
   const [testWeave, setTestWeave] = React.useState()
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
-  const acArr = [1, 2, 3, 4, 5, 6, 7, 1000002, 1000001];
+  const [acArr, setAcArr] = React.useState([1, 2, 3, 4, 5, 6, 7, 1000002, 1000001]);
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
@@ -1226,24 +1226,22 @@ export default function Dashboard(props) {
       console.log(_prufClient)
       setPrufClient(_prufClient)
 
-      window._contracts = await resolveContracts(_web3).then(() => {
+     await resolveContracts(_web3).then(() => {
         window.isSettingUpContracts = false;
         setWD(true)
+        if (_addr) {
+          window.utils.getETHBalance(_addr);
+          setUpTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
+          buildNodeHeap()/* .then(e=>getACsFromDB(e)) */
+        }
         if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
       })
-
-      if (_addr) {
-        await window.utils.getETHBalance(_addr);
-        await setUpTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
-        await getACsFromDB();
-      }
-
 
     }
 
     else {
       window.isSettingUpContracts = true;
-      window._contracts = await resolveContracts(_web3).then(() => {
+      await resolveContracts(_web3).then(() => {
         window.isSettingUpContracts = false;
         setWD(true)
       })
@@ -1251,8 +1249,75 @@ export default function Dashboard(props) {
 
   };
 
-  const getACsFromDB = async (iteration, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames) => {
-    const acArray = acArr;
+  const buildNodeHeap = (iteration, arr, rootsDone, acsDone) => {
+    if(!window.contracts) return
+    //const acBegin = 1000000
+    //const rootBegin = 1
+    if(!rootsDone && !acsDone) rootsDone = false; acsDone = false;
+    if(!iteration) iteration = 1;
+    if (!arr) arr = [];
+    if (rootsDone === true && acsDone === true) {console.log("Found all nodes", arr); setAcArr(arr); getACsFromDB(arr);}
+    let noMore = false;
+
+    if (rootsDone !== true){
+        console.log("trying ", iteration);
+        window.contracts.AC_TKN.methods.tokenExists(String(iteration))
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error); iteration++; return buildNodeHeap(iteration, arr, false, false); }
+  
+          else {
+  
+            if (_result === "170") {
+              arr.push(iteration);
+              console.log("found ", iteration);
+              iteration++;
+              return buildNodeHeap(iteration, arr, false, false);
+            }
+  
+            else {
+              noMore = true;
+              console.log("There is no root ", iteration);
+              iteration++;
+              return buildNodeHeap(1000001, arr, true, false);
+            }
+  
+          }
+  
+        });
+    }
+    
+    else if (rootsDone === true && acsDone !== true){
+        console.log("trying ", iteration);
+        window.contracts.AC_TKN.methods.tokenExists(String(iteration))
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error); iteration++; return buildNodeHeap(iteration, arr, true, false);}
+
+          else {
+  
+            if (_result === "170") {
+              arr.push(iteration)
+              console.log("found ", iteration);
+              iteration++;
+              return buildNodeHeap(iteration, arr, true, false);
+            }
+  
+            else {
+              noMore = true;
+              console.log("There is no ac ", iteration);
+              iteration++;
+              console.log("Found all nodes", arr); 
+              setAcArr(arr); 
+              return getACsFromDB(arr);
+            }
+  
+          }
+      });
+    }
+
+  }
+
+  const getACsFromDB = async (acArray, iteration, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames) => {
+    //console.log(acArray);
     if(!iteration) iteration = 0
     if(!rootArray) rootArray = [];
     if(!rootNameArray) rootNameArray = [];
@@ -1265,7 +1330,7 @@ export default function Dashboard(props) {
       await window.contracts.AC_MGR.methods
         .getAC_data(String(acArray[iteration]))
         .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error); getACsFromDB(iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)}
+          if (_error) { console.log("Error: ", _error); getACsFromDB(acArray, iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)}
 
           else {
             let resArr = Object.values(_result)
@@ -1275,7 +1340,7 @@ export default function Dashboard(props) {
                 rootArray.push(acArray[iteration]);
                 rootNameArray.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
                 _assetClassSets[String(acArray[iteration])] = [];
-                getACsFromDB(iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
+                getACsFromDB(acArray, iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
               })
             }
 
@@ -1284,7 +1349,7 @@ export default function Dashboard(props) {
               window.utils.resolveACFromID(String(acArray[iteration])).then((e) => {
                 allClasses.push(String(acArray[iteration]));
                 allClassNames.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
-                getACsFromDB(iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
+                getACsFromDB(acArray, iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
               })
             }
 
@@ -1300,7 +1365,7 @@ export default function Dashboard(props) {
 
       let allClasses = obj.allCArr, rootArray = obj.rArr, _assetClassSets = obj.sets, rootNameArray = obj.rnArr, allClassNames = obj.allCNArr;
 
-      console.log(allClasses, allClassNames, rootArray)
+      //console.log(allClasses, allClassNames, rootArray)
 
       for (let i = 0; i < allClasses.length; i++) {
         await window.contracts.AC_MGR.methods
@@ -1311,7 +1376,7 @@ export default function Dashboard(props) {
             else {
               let resArr = Object.values(_result);
               for (let x = 0; x < rootArray.length; x++) {
-                console.log(resArr[0], rootArray[x])
+                //console.log(resArr[0], rootArray[x])
                 if (String(rootArray[x]) === String(resArr[0])) {
                   _assetClassSets[String(rootArray[x])]
                     .push({ id: allClasses[i], name: allClassNames[i].toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) })
@@ -1322,8 +1387,6 @@ export default function Dashboard(props) {
 
           });
       }
-
-
 
       setTimeout(() => {
         console.log("Class Sets: ", _assetClassSets)
