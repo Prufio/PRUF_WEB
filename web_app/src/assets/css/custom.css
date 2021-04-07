@@ -1187,3 +1187,11 @@ color: rgb(99, 99, 99) !important;
   margin-left: 10px;
 max-width: 80px !important;
 }
+
+.ARweaveButton{
+  width: 200px;
+}
+
+.IPFSButton{
+  width: 200px;
+}

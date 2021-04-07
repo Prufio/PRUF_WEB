@@ -13,13 +13,13 @@ const customCheckboxRadioSwitch = {
   checkRoot: {
     padding: "14px",
     "&:hover": {
-      backgroundColor: "unset"
+      backgroundColor: primaryColor[5]
     }
   },
   radioRoot: {
     padding: "16px",
     "&:hover": {
-      backgroundColor: "unset"
+      backgroundColor: primaryColor[5]
     }
   },
   labelRoot: {
@@ -126,13 +126,13 @@ const customCheckboxRadioSwitch = {
     marginTop: "8px"
   },
   iconCheckbox: {
-    height: "116px",
-    width: "116px",
+    // height: "116px",
+    width: "250px",
     color: grayColor[0],
     padding: "0",
     margin: "0 auto 20px",
     "& > span:first-child": {
-      borderWidth: "4px",
+      borderWidth: "0px",
       borderStyle: "solid",
       borderColor: grayColor[9],
       textAlign: "center",
@@ -143,15 +143,16 @@ const customCheckboxRadioSwitch = {
     },
     "&:hover": {
       color: primaryColor[5],
+      backgroundColor: primaryColor[7],
       "& > span:first-child": {
         borderColor: primaryColor[5]
       }
     }
   },
   iconCheckboxChecked: {
-    color: roseColor[0],
+    backgroundColor: primaryColor[7],
     "& > span:first-child": {
-      borderColor: roseColor[0]
+      borderColor: primaryColor[5]
     }
   },
   iconCheckboxIcon: {

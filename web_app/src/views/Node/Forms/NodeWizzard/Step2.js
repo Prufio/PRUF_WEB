@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import "../../../../assets/css/custom.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Select from "@material-ui/core/Select";
@@ -14,6 +15,8 @@ import GridItem from "components/Grid/GridItem.js";
 
 import customSelectStyle from "assets/jss/material-dashboard-pro-react/customSelectStyle.js";
 import customCheckboxRadioSwitch from "assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.js";
+import ARweavePNG from "../../../../assets/img/arweave.png";
+import IPFSPNG from "../../../../assets/img/ipfs.png";
 
 const style = {
   infoText: {
@@ -69,18 +72,10 @@ class Step2 extends React.Component {
                     tabIndex={-1}
                     onClick={this.handleChange("desgin")}
                     checkedIcon={
-                      <i
-                        className={
-                          "fas fa-pencil-alt " + classes.iconCheckboxIcon
-                        }
-                      />
+                      <img src={IPFSPNG} className="IPFSButton" ></img>
                     }
                     icon={
-                      <i
-                        className={
-                          "fas fa-pencil-alt " + classes.iconCheckboxIcon
-                        }
-                      />
+                      <img src={IPFSPNG} className="IPFSButton" ></img>
                     }
                     classes={{
                       checked: classes.iconCheckboxChecked,
@@ -94,100 +89,20 @@ class Step2 extends React.Component {
                 <div className={classes.choiche}>
                   <Checkbox
                     tabIndex={-1}
-                    onClick={this.handleChange("code")}
+                    onClick={this.handleChange("desgin")}
                     checkedIcon={
-                      <i
-                        className={
-                          "fas fa-terminal " + classes.iconCheckboxIcon
-                        }
-                      />
+                      <img src={ARweavePNG} className="ARweaveButton" ></img>
                     }
                     icon={
-                      <i
-                        className={
-                          "fas fa-terminal " + classes.iconCheckboxIcon
-                        }
-                      />
+                      <img src={ARweavePNG} className="ARweaveButton" ></img>
                     }
                     classes={{
                       checked: classes.iconCheckboxChecked,
                       root: classes.iconCheckbox
                     }}
                   />
-                  <h6>Code</h6>
+                  <h6>Design</h6>
                 </div>
-              </GridItem>
-              <GridItem xs={12} sm={4}>
-                <div className={classes.choiche}>
-                  <Checkbox
-                    tabIndex={-1}
-                    onClick={this.handleChange("develop")}
-                    checkedIcon={
-                      <i
-                        className={"fas fa-laptop " + classes.iconCheckboxIcon}
-                      />
-                    }
-                    icon={
-                      <i
-                        className={"fas fa-laptop " + classes.iconCheckboxIcon}
-                      />
-                    }
-                    classes={{
-                      checked: classes.iconCheckboxChecked,
-                      root: classes.iconCheckbox
-                    }}
-                  />
-                  <h6>Develop</h6>
-                </div>
-                <FormControl fullWidth className={classes.selectFormControl}>
-                  <InputLabel
-                    htmlFor="simple-select"
-                    className={classes.selectLabel}
-                  >
-                    Choose City
-                  </InputLabel>
-                  <Select
-                    MenuProps={{
-                      className: classes.selectMenu
-                    }}
-                    classes={{
-                      select: classes.select
-                    }}
-                    value={this.state.simpleSelect}
-                    onChange={this.handleSimple}
-                    inputProps={{
-                      name: "simpleSelect",
-                      id: "simple-select"
-                    }}
-                  >
-                    <MenuItem
-                      disabled
-                      classes={{
-                        root: classes.selectMenuItem
-                      }}
-                    >
-                      Choose City
-                    </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="2"
-                    >
-                      Paris
-                    </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="3"
-                    >
-                      Bucharest
-                    </MenuItem>
-                  </Select>
-                </FormControl>
               </GridItem>
             </GridContainer>
           </GridItem>
