@@ -35,6 +35,7 @@ export default function TransferNode(props) {
   const link = document.createElement('div');
 
   window.sentPacket = null;
+  document.body.style.cursor='default';
 
   React.useEffect(() => {
     if (props.ps) {

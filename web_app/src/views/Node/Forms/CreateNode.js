@@ -136,6 +136,7 @@ export default function CreateNode(props) {
   }
 
   window.sentPacket = null
+  document.body.style.cursor='default';
 
   const classes = useStyles();
   const cardClasses = useCardStyles();

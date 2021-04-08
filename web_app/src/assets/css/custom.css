@@ -1221,6 +1221,7 @@ max-width: 80px !important;
 .slide-right {
   width: 100%;
   overflow: hidden;
+  padding: 20px;
   /* margin-left: 300px; */
   /* max-width: 500px */
 }

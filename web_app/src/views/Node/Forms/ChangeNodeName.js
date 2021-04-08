@@ -37,6 +37,7 @@ export default function ChangeNodeName(props) {
   const link = document.createElement('div')
 
   window.sentPacket = null
+  document.body.style.cursor='default';
 
   const classes = useStyles();
 
