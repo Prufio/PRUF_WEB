@@ -761,7 +761,7 @@ export default function NewRecord(props) {
       content:
         <div className="picture-container">
           <img src={ARweavePNG} className="ARweave" />
-          <h4>Please upload your ARweave key file</h4>
+          <h4>Please upload your Arweave key file</h4>
           <div className="picture">
             <img src={fileUpload} className="uploadFile" />
             <input type="file" onChange={e => handleFileChange(e)} />

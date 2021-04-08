@@ -475,7 +475,7 @@ function buildWindowUtils() {
             //console.log(_result)
             let root = window.web3.utils.fromWei(_result.ACTHprice);
             let acth = window.web3.utils.fromWei(_result.rootPrice);
-            console.log("root:", root, "acth:",acth)
+            //console.log("root:", root, "acth:",acth)
             let rootAddress = _result.rootAddress
             let BeneficiaryAddress = _result.ACTHaddress
             costs["cost" + i] = {
@@ -702,8 +702,8 @@ function buildWindowUtils() {
               else {
                 noteArray.push("0")
               }
-
-              if (_result[0] === "50") { statuses.push("In Locked Escrow") }
+              statuses.push(_getStatusString(_result[0]))
+              /* if (_result[0] === "50") { statuses.push("In Locked Escrow") }
               else if (_result[0] === "51") { statuses.push("Transferable") }
               else if (_result[0] === "52") { statuses.push("Non-Transferable") }
               else if (_result[0] === "53") { statuses.push("MARKED STOLEN") }
@@ -715,7 +715,7 @@ function buildWindowUtils() {
               else if (_result[0] === "59") { statuses.push("Discardable") }
               else if (_result[0] === "60") { statuses.push("Recyclable") }
               else if (_result[0] === "70") { statuses.push("Ready for Import") }
-              else if (_result[0] === "0") { statuses.push("Status Not Set") }
+              else if (_result[0] === "0") { statuses.push("Status Not Set") } */
               statusNums.push(_result[0])
               assetClasses.push(Object.values(_result)[2]);
               countPairs.push([Object.values(_result)[3], Object.values(_result)[4]]);

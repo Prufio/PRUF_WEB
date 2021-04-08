@@ -516,9 +516,15 @@ export default function Home(props) {
                 <img className="Icon" src={Eth}></img>
               </CardIcon>
               <p className={classes.cardCategory}>ETH Balance</p>
-              <h3 className={classes.cardTitle}>
+              { props.ether ?
+                <h3 className={classes.cardTitle}>
                 {props.ether.substring(0, 7)} <small>Ether</small>
-              </h3>
+                </h3>
+                :
+                <h3 className={classes.cardTitle}>
+                ~ <small>Ether</small>
+                </h3>
+              }
             </CardHeader>
             <CardFooter stats>
               {!isRefreshingEther && (

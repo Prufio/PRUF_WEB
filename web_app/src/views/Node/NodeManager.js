@@ -29,7 +29,7 @@ import TextField from "@material-ui/core/TextField";
 import { dataTable } from "variables/general.js";
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.js";
-import { AccountBalance, AccountBalanceOutlined, AccountBalanceWallet, AccountBalanceWalletOutlined, BarChartRounded, Dashboard, FiberManualRecordTwoTone, HdrWeakTwoTone, ListAltRounded, MultilineChart, Settings, ShowChart, Timeline, VpnKey } from "@material-ui/icons";
+import { AccountBalance, AccountBalanceOutlined, AccountBalanceWallet, AccountBalanceWalletOutlined, BarChartRounded, ContactSupportOutlined, Dashboard, FiberManualRecordTwoTone, HdrWeakTwoTone, ListAltRounded, MultilineChart, Settings, ShowChart, Timeline, VpnKey } from "@material-ui/icons";
 import { List } from "@material-ui/core";
 import Danger from "components/Typography/Danger";
 import Pruf from "../../assets/img/pruftoken.png";
@@ -123,6 +123,26 @@ export default function NodeManager(props) {
   }, [props.assetClassSets])
 
   const getNodesInWallet = async (bal, ids, iteration) => {
+
+ /*    window.contracts.AC_MGR.methods
+    .updateACImmutable(
+      "1000002",
+      "2",
+      "2",
+      "0xBef3b0b67061CACD4E10968d8Ba23A1c864c8049"
+  )
+  .send({ from: props.addr })
+  .on("error", function (_error) {
+          swal({
+              title: "Something went wrong!",
+              icon: "warning",
+              button: "Close",
+          });
+  })
+  .on("receipt", (receipt) => {
+    console.log("Success")
+  }); */
+
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return
     if (!iteration) iteration = 0;
@@ -152,7 +172,6 @@ export default function NodeManager(props) {
             return getNodesInWallet(bal, ids, iteration + 1)
           }
         });
-
     }
   }
 

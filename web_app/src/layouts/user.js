@@ -7,7 +7,7 @@ import Arweave from "arweave"
 import TestWeave from 'testweave-sdk';
 import arconf from "../Resources/arconf";
 
-import PRUF from "../Resources/pruf-api";
+import PRUF from "pruf-js";
 import { isMobile } from "react-device-detect";
 //import OrbitDB from 'orbit-db';
 import resolveContracts from "../Resources/Contracts";
@@ -117,14 +117,16 @@ export default function Dashboard(props) {
     setArweaveClient(arweave)
 
     console.log(arweave)
-    
+
     const testWeave = await TestWeave.init(arweave);
 
     setTestWeave(testWeave)
 
     console.log(testWeave)
 
-    return {testWeave: testWeave, arweave: arweave}
+    window.arweave = arweave;
+
+    return { testWeave: testWeave, arweave: arweave }
   }
 
   const handleNoEthereum = () => {
@@ -132,8 +134,12 @@ export default function Dashboard(props) {
     let web3;
     web3 = require("web3");
     web3 = new Web3("https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959");
-    setUpContractEnvironment(web3).then(() => {
+    const _prufClient = new PRUF(web3)
+    console.log(_prufClient)
+    setPrufClient(_prufClient)
+    setUpContractEnvironment(_prufClient, web3).then(() => {
     });
+
     window.web3 = web3;
     window.isKovan = true;
     return setIsMounted(true);
@@ -145,7 +151,7 @@ export default function Dashboard(props) {
     //console.log(Date())
     //console.log(new Date().addDays(15))
 
-     if (!cookies.hasBeenNotified) {
+    if (!cookies.hasBeenNotified) {
       swal({
         title: "Cookies on app.pruf.io",
         text: "This site uses minimal cookies to offer you optimal performance and loading times.",
@@ -194,11 +200,11 @@ export default function Dashboard(props) {
                 case "accept":
                   setCookieTo("hasBeenNotified", true)
                   break;
-      
+
                 case "decline":
                   setCookieTo("hasBeenNotified", false)
                   break;
-      
+
                 default:
                   break;
               }
@@ -213,7 +219,7 @@ export default function Dashboard(props) {
             break;
         }
       });
-     }
+    }
     console.log("Cookies:", cookies)
     readCookie('nodeList').then((e) => {
       if (e) setNodeList(e)
@@ -243,6 +249,9 @@ export default function Dashboard(props) {
 
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
+      const _prufClient = new PRUF(web3)
+      console.log(_prufClient)
+      setPrufClient(_prufClient)
       window.costs = {};
       window.additionalElementArrays = {
         photo: [],
@@ -261,7 +270,7 @@ export default function Dashboard(props) {
             if (accounts[0] !== undefined) {
               setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
               window.addr = window.web3.utils.toChecksumAddress(accounts[0])
-              setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
+              setUpContractEnvironment(_prufClient, web3, window.web3.utils.toChecksumAddress(accounts[0]));
               setIsMounted(true);
             }
 
@@ -270,7 +279,7 @@ export default function Dashboard(props) {
                 if (accounts[0] !== undefined) {
                   setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
                   window.addr = window.web3.utils.toChecksumAddress(accounts[0])
-                  setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
+                  setUpContractEnvironment(_prufClient, web3, window.web3.utils.toChecksumAddress(accounts[0]));
                   setIsMounted(true);
                 }
               });
@@ -426,7 +435,7 @@ export default function Dashboard(props) {
 
     if (cookies) checkForCookies()
 
-    if(!isMobile) setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
+    if (!isMobile) setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
     window.addEventListener("resize", resizeFunction);
 
     // Specify how to clean up after this effect:
@@ -1203,7 +1212,7 @@ export default function Dashboard(props) {
     return tempHash;
   };
 
-  const setUpContractEnvironment = async (_web3, _addr) => {
+  const setUpContractEnvironment = async (_prufClient, _web3, _addr) => {
     if (window.isKovan === false) { return }
     //console.log("IN SUCE, addr:", _addr)
     if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
@@ -1222,17 +1231,12 @@ export default function Dashboard(props) {
 
     if (window.ethereum) {
 
-      const _prufClient = new PRUF(_web3)
-      console.log(_prufClient)
-      setPrufClient(_prufClient)
-
-     await resolveContracts(_web3).then(() => {
+      await resolveContracts(_web3).then(() => {
         window.isSettingUpContracts = false;
         setWD(true)
         if (_addr) {
-          window.utils.getETHBalance(_addr);
           setUpTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
-          buildNodeHeap()/* .then(e=>getACsFromDB(e)) */
+          buildNodeHeap()
         }
         if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
       })
@@ -1250,150 +1254,150 @@ export default function Dashboard(props) {
   };
 
   const buildNodeHeap = (iteration, arr, rootsDone, acsDone) => {
-    if(!window.contracts) return
+    if (!window.contracts) return
     //const acBegin = 1000000
     //const rootBegin = 1
-    if(!rootsDone && !acsDone) rootsDone = false; acsDone = false;
-    if(!iteration) iteration = 1;
+    if (!rootsDone && !acsDone) rootsDone = false; acsDone = false;
+    if (!iteration) iteration = 1;
     if (!arr) arr = [];
-    if (rootsDone === true && acsDone === true) {console.log("Found all nodes", arr); setAcArr(arr); getACsFromDB(arr);}
+    if (rootsDone === true && acsDone === true) { console.log("Found all nodes", arr); setAcArr(arr); getACsFromDB(arr); }
     let noMore = false;
 
-    if (rootsDone !== true){
-        console.log("trying ", iteration);
-        window.contracts.AC_TKN.methods.tokenExists(String(iteration))
+    if (rootsDone !== true) {
+      //console.log("trying ", iteration);
+      window.contracts.AC_TKN.methods.tokenExists(String(iteration))
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error); iteration++; return buildNodeHeap(iteration, arr, false, false); }
-  
+
           else {
-  
+
             if (_result === "170") {
               arr.push(iteration);
               console.log("found ", iteration);
               iteration++;
               return buildNodeHeap(iteration, arr, false, false);
             }
-  
+
             else {
               noMore = true;
               console.log("There is no root ", iteration);
               iteration++;
               return buildNodeHeap(1000001, arr, true, false);
             }
-  
+
           }
-  
+
         });
     }
-    
-    else if (rootsDone === true && acsDone !== true){
-        console.log("trying ", iteration);
-        window.contracts.AC_TKN.methods.tokenExists(String(iteration))
+
+    else if (rootsDone === true && acsDone !== true) {
+      //console.log("trying ", iteration);
+      window.contracts.AC_TKN.methods.tokenExists(String(iteration))
         .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error); iteration++; return buildNodeHeap(iteration, arr, true, false);}
+          if (_error) { console.log("Error: ", _error); iteration++; return buildNodeHeap(iteration, arr, true, false); }
 
           else {
-  
+
             if (_result === "170") {
               arr.push(iteration)
               console.log("found ", iteration);
               iteration++;
               return buildNodeHeap(iteration, arr, true, false);
             }
-  
+
             else {
               noMore = true;
               console.log("There is no ac ", iteration);
               iteration++;
-              console.log("Found all nodes", arr); 
-              setAcArr(arr); 
+              console.log("Found all nodes", arr);
+              setAcArr(arr);
               return getACsFromDB(arr);
             }
-  
+
           }
-      });
+        });
     }
 
   }
 
   const getACsFromDB = async (acArray, iteration, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames) => {
     //console.log(acArray);
-    if(!iteration) iteration = 0
-    if(!rootArray) rootArray = [];
-    if(!rootNameArray) rootNameArray = [];
-    if(!allClasses) allClasses = [];
-    if(!allClassNames) allClassNames = [];
-    if(!_assetClassSets) _assetClassSets = {};
+    if (!iteration) iteration = 0
+    if (!rootArray) rootArray = [];
+    if (!rootNameArray) rootNameArray = [];
+    if (!allClasses) allClasses = [];
+    if (!allClassNames) allClassNames = [];
+    if (!_assetClassSets) _assetClassSets = {};
 
     if (iteration === acArray.length) return setUpACInformation({ sets: _assetClassSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames })
 
-      await window.contracts.AC_MGR.methods
-        .getAC_data(String(acArray[iteration]))
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error); getACsFromDB(acArray, iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)}
+    await window.contracts.AC_MGR.methods
+      .getAC_data(String(acArray[iteration]))
+      .call((_error, _result) => {
+        if (_error) { console.log("Error: ", _error); getACsFromDB(acArray, iteration + 1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames) }
 
-          else {
-            let resArr = Object.values(_result)
+        else {
+          let resArr = Object.values(_result)
 
-            if (String(acArray[iteration]) === String(resArr[0])) {
-              window.utils.resolveACFromID(String(acArray[iteration])).then((e) => {
-                rootArray.push(acArray[iteration]);
-                rootNameArray.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
-                _assetClassSets[String(acArray[iteration])] = [];
-                getACsFromDB(acArray, iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
-              })
-            }
-
-            else {
-              //console.log(acArray[i])
-              window.utils.resolveACFromID(String(acArray[iteration])).then((e) => {
-                allClasses.push(String(acArray[iteration]));
-                allClassNames.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
-                getACsFromDB(acArray, iteration+1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
-              })
-            }
-
+          if (String(acArray[iteration]) === String(resArr[0])) {
+            window.utils.resolveACFromID(String(acArray[iteration])).then((e) => {
+              rootArray.push(acArray[iteration]);
+              rootNameArray.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
+              _assetClassSets[String(acArray[iteration])] = [];
+              getACsFromDB(acArray, iteration + 1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
+            })
           }
 
-        });
-    
+          else {
+            //console.log(acArray[i])
+            window.utils.resolveACFromID(String(acArray[iteration])).then((e) => {
+              allClasses.push(String(acArray[iteration]));
+              allClassNames.push(e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
+              getACsFromDB(acArray, iteration + 1, _assetClassSets, rootArray, rootNameArray, allClasses, allClassNames)
+            })
+          }
+
+        }
+
+      });
+
     //return { sets: _assetClassSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
 
   }
 
   const setUpACInformation = async (obj) => {
 
-      let allClasses = obj.allCArr, rootArray = obj.rArr, _assetClassSets = obj.sets, rootNameArray = obj.rnArr, allClassNames = obj.allCNArr;
+    let allClasses = obj.allCArr, rootArray = obj.rArr, _assetClassSets = obj.sets, rootNameArray = obj.rnArr, allClassNames = obj.allCNArr;
 
-      //console.log(allClasses, allClassNames, rootArray)
+    //console.log(allClasses, allClassNames, rootArray)
 
-      for (let i = 0; i < allClasses.length; i++) {
-        await window.contracts.AC_MGR.methods
-          .getAC_data(String(allClasses[i]))
-          .call((_error, _result) => {
-            if (_error) { console.log("Error: ", _error) }
+    for (let i = 0; i < allClasses.length; i++) {
+      await window.contracts.AC_MGR.methods
+        .getAC_data(String(allClasses[i]))
+        .call((_error, _result) => {
+          if (_error) { console.log("Error: ", _error) }
 
-            else {
-              let resArr = Object.values(_result);
-              for (let x = 0; x < rootArray.length; x++) {
-                //console.log(resArr[0], rootArray[x])
-                if (String(rootArray[x]) === String(resArr[0])) {
-                  _assetClassSets[String(rootArray[x])]
-                    .push({ id: allClasses[i], name: allClassNames[i].toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) })
-                }
-
+          else {
+            let resArr = Object.values(_result);
+            for (let x = 0; x < rootArray.length; x++) {
+              //console.log(resArr[0], rootArray[x])
+              if (String(rootArray[x]) === String(resArr[0])) {
+                _assetClassSets[String(rootArray[x])]
+                  .push({ id: allClasses[i], name: allClassNames[i].toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()) })
               }
+
             }
+          }
 
-          });
-      }
+        });
+    }
 
-      setTimeout(() => {
-        console.log("Class Sets: ", _assetClassSets)
-        setRoots(rootArray)
-        setRootNames(rootNameArray)
-        setAssetClassSets(_assetClassSets)
-      }, 500)
+    setTimeout(() => {
+      console.log("Class Sets: ", _assetClassSets)
+      setRoots(rootArray)
+      setRootNames(rootNameArray)
+      setAssetClassSets(_assetClassSets)
+    }, 500)
 
   }
 
@@ -1510,16 +1514,16 @@ export default function Dashboard(props) {
         isGenericCall(Object.keys(contract.methods)[x]).then((e) => {
           if (e === false && Object.keys(contract.methods)[x].includes("(") && Object.keys(contract.methods)[x].includes(")")) {
             tempArr.push(Object.keys(contract.methods)[x])
-            if(x === Object.values(contract.methods).length - 1){
-              console.log("Good",allMethods)
-              console.log("Bad",badBatch)
+            if (x === Object.values(contract.methods).length - 1) {
+              console.log("Good", allMethods)
+              console.log("Bad", badBatch)
             }
           }
           else {
             badBatch.push(Object.keys(contract.methods)[x])
-            if(x === Object.values(contract.methods).length - 1){
-              console.log("Good",allMethods)
-              console.log("Bad",badBatch)
+            if (x === Object.values(contract.methods).length - 1) {
+              console.log("Good", allMethods)
+              console.log("Bad", badBatch)
             }
           }
         })
@@ -1527,336 +1531,400 @@ export default function Dashboard(props) {
       allMethods[Object.keys(window.contracts)[i]] = tempArr;
     }
 
-    
+
   }
 
-  const setUpAssets = async (who, _addr, pruf) => {
-    console.log(window.contracts)
-    console.log("SUA, called from ", who)
-
-    //listAllMethods()
-
-    let tempObj = {};
-
-    window.hasNoAssets = false;
-    window.hasNoAssetClasses = false;
-    window.ipfsCounter = 0;
-    window.ipfsHashArray = [];
-    window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-    window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
-    window.hasLoadedAssetClasses = false;
-    window.assetTokenInfo = {
-      assetClass: undefined,
-      idxHash: undefined,
-      name: undefined,
-      photos: undefined,
-      text: undefined,
-      status: undefined,
-    }
-
-    //Case of recount
-    if (window.recount === true) {
-      window.aTknIDs = [];
-      window.acTknIDs = [];
-      if (window.balances !== undefined) window.balances.assetBalance = 0;
-      window.recount = false
-      await window.utils.getETHBalance(_addr);
-      return setUpTokenVals(true, "SUA recount", _addr, pruf)
-    }
-    console.log("SUA: In setUpAssets")
-
-    window.utils.getAssetTokenInfo(_addr, pruf).then((simpleAssets) => {
-      if (simpleAssets.ipfs) {
-        console.log(simpleAssets.ipfs)
-        if (!simpleAssetView) { console.log(typeof simpleAssets.ipfs[0]); if (typeof simpleAssets.ipfs[0] !== "string") { setTimeout(() => { getAssetExtData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }, 100) } }
-        else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
-      }
-    })
-
-  };
-
-  const getAssetExtData = async (simpleAssets, array, jobs, iteration, assetData) => {
-    let _assetData
-    if (!array) return
-    //console.log(array)
-    if (!iteration) {
-      iteration = 1
-    }
-    if (!jobs) {
-      jobs = array.length
-    }
-    if (assetData) {
-      _assetData = assetData
-    } else {
-      _assetData = [];
-    }
-    if (jobs < iteration) {
-      //console.log(_assetData);
-      console.log("Finished getting extended data.");
-      return buildAssets(simpleAssets, _assetData);
-    }
-
-    let lookup = array[iteration - 1];
-    if (typeof lookup !== "string") lookup.then(async (e) => {
-      if (cookies[e]) {
-        console.log("Using cached ipfs:", cookies[e])
-        _assetData.push(cookies[e])
-        return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
-      }
-      else {
-        try {
-          console.log(simpleAssets)
-          for await (const chunk of window.ipfs.cat(e)) {
-            let str = new TextDecoder("utf-8").decode(chunk);
-            //console.log(str)
-            if (!str) {
-              _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-              console.log("error")
-              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
+  const getAssetIds = (_addr, _prufClient, bal, ids, iteration) => {
+    if (!bal) return
+    if (Number(bal) === 0) return console.log("No assets held by user")
+    if (!ids) ids = [];
+    if (!iteration) iteration = 0;
+    if (ids.length >= bal) return buildAssetHeap(_addr, _prufClient, ids)
+    else {
+      _prufClient.get.heldAssetAtIndex(_addr, iteration)
+        .call((_error, _result) => {
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR");
+            return getAssetIds(_addr, _prufClient, bal, ids, iteration + 1)
+          } else {
+            let resStr;
+            resStr = window.web3.utils.numberToHex(_result);
+            while (resStr.length < 66) {
+              resStr = resStr.substring(0, 2) + "0" + resStr.substring(2, resStr.length)
             }
-
-            else {
-              //console.log(str)
-              console.log("got job #", iteration)
-              try {
-                _assetData.push(JSON.parse(str))
-                setCookieTo(e, JSON.parse(str))
-              }
-              catch {
-                _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-              }
-              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
-            }
-            //console.log(chunk)
+            ids.push(resStr)
+            getAssetIds(_addr, _prufClient, bal, ids, iteration + 1)
           }
-        }
+        });
+    }
+  }
 
-        catch {
-          setTimeout(() => { getAssetExtData(simpleAssets, array, jobs) }, 500)
-        }
-      }
-    })
+  const buildAssetHeap = (_addr, _prufClient, ids, data, iteration) => {
+    console.log(_prufClient.get, iteration)
+    if (!ids) return
+    if (!data) data = [];
+    if (!iteration) iteration = 0;
+    if (iteration >= ids.length) return getMutableData(data, _prufClient)
 
     else {
-      if (cookies[lookup]) {
-        console.log("Using cached ipfs:", cookies[lookup])
-        _assetData.push(cookies[lookup])
-        return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
-      }
-      else {
-        try {
-          console.log(simpleAssets)
-          for await (const chunk of window.ipfs.cat(lookup)) {
-            let str = new TextDecoder("utf-8").decode(chunk);
-            //console.log(str)
-            if (!str) {
-              _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-              console.log("error")
-              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
+      _prufClient.get.assetRecord(ids[iteration])
+        .call((_error, _result) => {
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR")
+            data.push({})
+            return buildAssetHeap(_addr, _prufClient, ids, data, iteration + 1)
+          } else {
+
+            let obj = {
+              id: ids[iteration],
+              statusNum: _result["0"],
+              forceModCount: _result["1"],
+              assetClass: _result["2"],
+              countPair: [_result["3"], _result["4"]],
+              mutableDataA: _result["5"],
+              mutableDataB: _result["6"],
+              engravingA: _result["7"],
+              engravingB: _result["8"],
+              numberOfTransfers: _result["9"]
             }
 
-            else {
-              //console.log(str)
-              console.log("got job #", iteration)
-              try {
-                _assetData.push(JSON.parse(str))
-                setCookieTo(lookup, JSON.parse(str))
-              }
-              catch {
-                _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-              }
-              return getAssetExtData(simpleAssets, array, jobs, iteration + 1, _assetData)
-            }
-            //console.log(chunk)
+            obj.identicon = <Jdenticon value={obj.id} />;
+            obj.identiconLG = <Jdenticon value={obj.id} />;
+
+            _prufClient.utils.stringifyStatus(_result[0]).then(e=>{
+              obj.status = e
+            })
+
+            _prufClient.get.assetPriceData(ids[iteration])
+              .call((_error, _result) => {
+                if (_error) {
+                  console.log("IN ERROR IN ERROR IN ERROR")
+                  data.push(obj)
+                  return buildAssetHeap(_addr, _prufClient, ids, data, iteration + 1)
+                } else {
+                  obj.price = _result["0"]
+                  obj.currency = _result["1"]
+                  _prufClient.get.nodeData(obj.assetClass)
+                    .call((_error, _result) => {
+                      if (_error) {
+                        console.log("IN ERROR IN ERROR IN ERROR")
+                        data.push(obj)
+                        return buildAssetHeap(_addr, _prufClient, ids, data, iteration + 1)
+                      } else {
+                        obj.assetClassName = _result.name
+                        //console.log(_result)
+
+                        obj.assetClassData = {
+                          name: _result.name,
+                          root: _result.root,
+                          custodyType: _result.custodyType,
+                          managementType: _result.managementType,
+                          discount: _result.discount,
+                          referenceAddress: _result.referenceAddress,
+                          extData: _result["IPFS"],
+                          storageProvider: _result.storageProvider,
+                          switches: _result.switches
+                        }
+                        data.push(obj)
+                        return buildAssetHeap(_addr, _prufClient, ids, data, iteration + 1)
+                      }
+                    })
+                }
+              })
           }
-        }
+        })
+    }
+  }
 
-        catch {
-          setTimeout(() => { getAssetExtData(simpleAssets, array, jobs) }, 500)
-        }
-      }
+  const getMutableData = (assetHeap, _prufClient, assetsWithMutableData, iteration) => {
+    if (!assetHeap) return console.log("Failed upon reception of:",assetHeap)
+    if (!iteration) iteration = 0;
+    if (!assetsWithMutableData) assetsWithMutableData = [];
+    if (iteration >= assetHeap.length) {console.log("EXIT"); return getEngravings(assetsWithMutableData, _prufClient)}
 
+    let _arweave = window.arweave;
+
+    console.log("Contracts: ", window.contracts);
+    console.log("Assets Prior to mutable data retreival:", assetHeap);
+
+    let obj = assetHeap[iteration]
+    let storageType = obj.assetClassData.storageProvider;
+    let mutableDataQuery;
+
+    if (obj.mutableDataA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      obj.mutableData = ""
+      assetsWithMutableData.push(obj)
+      console.log("EXIT")
+      return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
     }
 
+    else if (storageType === "1") {
+      mutableDataQuery = _prufClient.utils.ipfsFromB32(obj.mutableDataA);
+      console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
+      //engravingQuery = await _prufClient.utils.ipfsFromB32(obj.engravingA);
+
+      if (cookies[mutableDataQuery]) {
+        console.log("Using cached mutable data:", cookies[mutableDataQuery])
+        obj.mutableData = cookies[mutableDataQuery]
+        assetsWithMutableData.push(obj)
+        console.log("EXIT")
+        return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+      }
+
+      else {
+        for (const chunk of window.ipfs.cat(mutableDataQuery)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          console.log(str)
+          try {
+            obj.mutableData = JSON.parse(str)
+          }
+          catch {
+            obj.mutableData = str;
+          }
+
+          assetsWithMutableData.push(obj)
+          setCookieTo(mutableDataQuery, obj)
+          console.log("EXIT")
+          return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+        }
+      }
+    }
+
+    else if (storageType === "2") {
+      console.log(obj.mutableDataA, obj.mutableDataB)
+      mutableDataQuery = window.web3.utils.hexToUtf8(obj.mutableDataA + obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000")))
+      console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
+      //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
+      if (cookies[mutableDataQuery]) {
+        console.log("Using cached mutable data:", cookies[mutableDataQuery])
+        obj.mutableData = cookies[mutableDataQuery]
+        assetsWithMutableData.push(obj)
+        console.log("EXIT")
+        return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+      }
+
+      else {
+        _arweave.transactions.get(mutableDataQuery).then(e => {
+          let tempObj = {};
+          e.get('tags').forEach(tag => {
+            let key = tag.get('name', { decode: true, string: true });
+            let value = tag.get('value', { decode: true, string: true });
+            tempObj[key] = value;
+            //console.log(`${key} : ${value}`);
+          })
+          //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
+          tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`
+          obj.mutableData = tempObj;
+          assetsWithMutableData.push(obj)
+          setCookieTo(mutableDataQuery, tempObj)
+          console.log("EXIT")
+          return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+        })
+      }
+    }
   };
 
-  const buildAssets = async (simpleAssets, assetData, noIpfs) => {
-    let ids = simpleAssets.ids;
-    setReserveAD(assetData)
-    console.log("BA: In buildAssets.")
-    let tempObj = simpleAssets;
-    let assetArray = [];
+  const getEngravings = (assetHeap, _prufClient, assetsWithEngravings, iteration) => {
+    if (!assetHeap) return console.log("Failed upon reception of:",assetHeap)
+    if (!iteration) iteration = 0;
+    if (!assetsWithEngravings) assetsWithEngravings = [];
+    if (iteration >= assetHeap.length) {console.log("EXIT"); return finalizeAssets(assetsWithEngravings)}
 
-    if (ids.length > 0) {
-      if (noIpfs) {
-        for (let x = 0; x < ids.length; x++) {
-          let assetObj = { text: {}, photo: {}, urls: {}, name: "Name Unavailable" }
+    let _arweave = window.arweave;
 
-          assetObj.DisplayImage = "";
-          assetObj.identicon = <Jdenticon value={ids[x]} />;
-          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-          assetObj.note = "";
-          assetObj.photoUrls = {}
-          assetObj.id = simpleAssets.ids[x];
-          assetObj.ipfs = simpleAssets.ipfs[x];
-          assetObj.countPair = simpleAssets.countPairs[x];
-          assetObj.assetClass = simpleAssets.assetClasses[x];
-          assetObj.status = simpleAssets.statuses[x];
-          assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x].toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
-          assetObj.root = simpleAssets.roots[x];
-          assetObj.currency = simpleAssets.prices[x].currency;
-          assetObj.price = simpleAssets.prices[x].price;
+    console.log("Assets Prior to engraving retreival:", assetHeap);
 
-          console.log(assetObj)
-          assetArray.push(assetObj)
-          forceUpdate()
-        }
+    let obj = assetHeap[iteration]
+    let storageType = obj.assetClassData.storageProvider;
+    let engravingQuery;
+
+    if (obj.engravingA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      obj.engraving = ""
+      assetsWithEngravings.push(obj)
+      console.log("EXIT")
+      return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+    }
+
+    else if (storageType === "1") {
+      engravingQuery = _prufClient.utils.ipfsFromB32(obj.engravingA);
+      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
+
+      if (cookies[engravingQuery]) {
+        console.log("Using cached engraving:", cookies[engravingQuery])
+        obj.engraving = cookies[engravingQuery]
+        console.log("EXIT")
+        assetsWithEngravings.push(obj)
+        return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
       }
+
       else {
-        for (let x = 0; x < assetData.length; x++) {
-          let vals = Object.values(assetData[x].photo), keys = Object.keys(assetData[x].photo);
-          let assetObj = { text: {}, photo: {}, urls: {}, name: "" }
-
-          if (assetData[x].name === "" || assetData[x].name === undefined) {
-            assetObj.name = "Name Unavailable";
+        for (const chunk of window.ipfs.cat(engravingQuery)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          console.log(str)
+          try {
+            obj.engraving = JSON.parse(str)
+          }
+          catch {
+            obj.engraving = str;
           }
 
-          else {
-            assetObj.name = assetData[x].name
-          }
-
-          for (let i = 0; i < keys.length; i++) {
-            const get = () => {
-              if (vals[i].includes("data") && vals[i].includes("base64")) {
-                assetObj.photo[keys[i]] = vals[i];
-                //console.log(assetObj.photo[keys[i]]);
-                //console.log(x);
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-                forceUpdate();
-              }
-
-              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                assetObj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-                forceUpdate();
-              }
-
-              else {
-                const req = new XMLHttpRequest();
-                req.responseType = "text";
-
-                req.onload = function (e) {
-                  //console.log("in onload")
-                  if (this.response.includes("base64")) {
-                    assetObj.photo[keys[i]] = this.response;
-                    //console.log(assetObj.photo[keys[i]]);
-                    //console.log(x);
-                    if (keys[i] === "DisplayImage") {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                    }
-                    else if (i === keys.length - 1) {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                    }
-                    forceUpdate();
-                  }
-                }
-
-                req.onerror = function (e) {
-                  //console.log("http request error")
-                  if (vals[i].includes("http")) {
-                    assetObj.photo[keys[i]] = vals[i];
-                    if (keys[i] === "DisplayImage") {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                    }
-                    else if (i === keys.length - 1) {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                    }
-                    forceUpdate();
-                  }
-                }
-
-                req.open('GET', vals[i], true);
-                req.send();
-              }
-            }
-            await get()
-          }
-
-
-          if (keys.length === 0) {
-            assetObj.DisplayImage = "";
-          }
-
-          assetObj.note = simpleAssets.notes[x];
-          assetObj.photoUrls = assetData[x].photo
-          assetObj.text = assetData[x].text
-          assetObj.urls = assetData[x].urls
-
-          assetObj.root = simpleAssets.roots[x];
-          assetObj.id = simpleAssets.ids[x];
-          assetObj.ipfs = simpleAssets.ipfs[x];
-          assetObj.countPair = simpleAssets.countPairs[x];
-          assetObj.assetClass = simpleAssets.assetClasses[x];
-          assetObj.status = simpleAssets.statuses[x];
-          assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x];
-          assetObj.identicon = <Jdenticon value={ids[x]} />;
-          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-
-          assetObj.id = simpleAssets.ids[x];
-          assetObj.ipfs = simpleAssets.ipfs[x];
-          assetObj.countPair = simpleAssets.countPairs[x];
-          assetObj.assetClass = simpleAssets.assetClasses[x];
-          assetObj.status = simpleAssets.statuses[x];
-          assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x];
-
-          assetObj.price = simpleAssets.prices[x].price;
-          assetObj.currency = simpleAssets.prices[x].currency;
-
-          //console.log(assetObj)
-          assetArray.push(assetObj)
+          assetsWithEngravings.push(obj)
+          setCookieTo(engravingQuery, obj)
+          console.log("EXIT")
+          return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
         }
-
       }
     }
 
-    if (window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance) {
-      setAssetBalance(window.balances.assetBalance);
-      setAssetClassBalance(window.balances.assetClassBalance);
-      setPrufBalance(window.balances.prufTokenBalance);
-      setIDBalance(window.balances.IDTokenBalance);
-      setIsAssetHolder(window.window.assetHolderBool);
-      setIsAssetClassHolder(window.assetClassHolderBool);
-      setIsIDHolder(window.IDHolderBool);
-      setHasFetchedBalances(window.hasFetchedBalances);
+    else if (storageType === "2") {
+      engravingQuery = window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engravingB.indexOf("0000000000"))}`)
+      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
+      if (cookies[engravingQuery]) {
+        console.log("Using cached engraving:", cookies[engravingQuery])
+        obj.engraving = cookies[engravingQuery]
+        console.log("EXIT")
+        assetsWithEngravings.push(obj)
+        return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+      }
+
+      else {
+        _arweave.transactions.get(engravingQuery).then(e => {
+          let tempObj = {};
+          e.get('tags').forEach(tag => {
+            let key = tag.get('name', { decode: true, string: true });
+            let value = tag.get('value', { decode: true, string: true });
+            tempObj[key] = value;
+            //console.log(`${key} : ${value}`);
+          })
+          //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
+          tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`
+          obj.engraving = tempObj;
+          assetsWithEngravings.push(obj)
+          setCookieTo(engravingQuery, tempObj)
+          console.log("EXIT")
+          return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+        })
+      }
+    }
+  }
+
+  const finalizeAssets = (assetHeap, finalizedAssets, iteration) => {
+    if (!assetHeap) return console.log("Failed upon reception of:",assetHeap)
+    if (!finalizedAssets) finalizedAssets = [];
+    if (!iteration) iteration = 0;
+    if (iteration >= assetHeap.length) {
+      setReserveAD(assetHeap); 
+      console.log("Finalized assets: ", finalizedAssets)
+      return setAssetArr(finalizedAssets)
     }
 
-    setAssetArr(assetArray)
-    console.log("BA: Assets after rebuild: ", assetArray);
-    forceUpdate();
-  };
+    console.log("Assets Prior to final sorting:", assetHeap);
 
-  //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
+    let obj = assetHeap[iteration]
+
+    obj.photo = (obj.engraving.photo || obj.mutableData.photo || {})
+    obj.text = (obj.engraving.text || obj.mutableData.text || {})
+    obj.urls = (obj.engraving.urls || obj.mutableData.urls || {})
+    obj.name = (obj.engraving.name || obj.mutableData.name || "Name Unavailable")
+    obj.photoUrls = (obj.engraving.photo || obj.mutableData.photo || {})
+
+    let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
+
+    if (keys.length === 0) {
+
+      if(obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")){
+        obj.DisplayImage = obj.engraving.contentUrl
+      }
+      
+      else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")){
+        obj.DisplayImage = obj.mutableData.contentUrl
+      }
+
+      else obj.DisplayImage = "";
+
+      finalizedAssets.push(obj)
+      finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+    }
+
+    for (let i = 0; i < keys.length; i++) {
+      const get = () => {
+        if (vals[i].includes("data") && vals[i].includes("base64")) {
+          obj.photo[keys[i]] = vals[i];
+          if (keys[i] === "DisplayImage") {
+            obj.DisplayImage = (obj.photo[keys[i]])
+          }
+          else if (i === keys.length - 1) {
+            //console.log("Setting Display Image")
+            obj.DisplayImage = (obj.photo[keys[0]])
+          }
+          forceUpdate();
+          finalizedAssets.push(obj)
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
+
+        else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+          obj.photo[keys[i]] = vals[i];
+          if (keys[i] === "DisplayImage") {
+            //console.log("Setting Display Image")
+            obj.DisplayImage = (obj.photo[keys[i]])
+          }
+          else if (i === keys.length - 1) {
+            //console.log("Setting Display Image")
+            obj.DisplayImage = (obj.photo[keys[0]])
+          }
+          forceUpdate();
+          finalizedAssets.push(obj)
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
+
+        else {
+          const req = new XMLHttpRequest();
+          req.responseType = "text";
+
+          req.onload = function (e) {
+            //console.log("in onload")
+            if (this.response.includes("base64")) {
+              obj.photo[keys[i]] = this.response;
+              if (keys[i] === "DisplayImage") {
+                //console.log("Setting Display Image")
+                obj.DisplayImage = (obj.photo[keys[i]])
+              }
+              else if (i === keys.length - 1) {
+                //console.log("Setting Display Image")
+                obj.DisplayImage = (obj.photo[keys[0]])
+              }
+              forceUpdate();
+              finalizedAssets.push(obj)
+              finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+            }
+          }
+
+          req.onerror = function (e) {
+            //console.log("http request error")
+            if (vals[i].includes("http")) {
+              obj.photo[keys[i]] = vals[i];
+              if (keys[i] === "DisplayImage") {
+                //console.log("Setting Display Image")
+                obj.DisplayImage = (obj.photo[keys[i]])
+              }
+              else if (i === keys.length - 1) {
+                //console.log("Setting Display Image")
+                obj.DisplayImage = (obj.photo[keys[0]])
+              }
+              forceUpdate();
+              finalizedAssets.push(obj)
+              finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+            }
+          }
+          req.open('GET', vals[i], true);
+          req.send();
+        }
+      }
+       get()
+    }
+  }
+
+  //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
   const setUpTokenVals = async (willSetup, who, _addr, pruf) => {
     console.log("STV: Setting up balances, called from ", who)
 
@@ -1871,11 +1939,12 @@ export default function Dashboard(props) {
       setIsIDHolder(window.IDHolderBool);
       setHasFetchedBalances(window.hasFetchedBalances);
       setETHBalance(window.ETHBalance)
+
+      if (willSetup) {
+        forceUpdate();
+        getAssetIds(_addr, pruf, e.assetBalance)
+      }
     })
-
-
-    let temp;
-    let temp2;
 
     if (window.contracts) {
       await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
@@ -1884,24 +1953,12 @@ export default function Dashboard(props) {
             return (console.log("IN ERROR IN ERROR IN ERROR"))
           }
           else {
-            temp = window.web3.utils.fromWei(Object.values(_result)[0])
-            return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
+            setCurrentACIndex(window.web3.utils.fromWei(Object.values(_result)[0]))
+            setCurrentACPrice(window.web3.utils.fromWei(Object.values(_result)[1]))
           }
 
         }
       );
-    }
-
-    if (temp !== undefined) {
-      setCurrentACIndex(temp)
-      setCurrentACPrice(temp2)
-    }
-
-    //await console.log(window.balances);
-
-    if (willSetup) {
-      forceUpdate();
-      return setUpAssets("setUpTokenVals", _addr, pruf)
     }
 
     return forceUpdate();
@@ -1940,13 +1997,13 @@ export default function Dashboard(props) {
             </div>
           </div>
         ) : (
-            <div className={classes.map}>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
-              </Switch>
-            </div>
-          )}
+          <div className={classes.map}>
+            <Switch>
+              {getRoutes(routes)}
+              <Redirect from="/user" to="/user/home" />
+            </Switch>
+          </div>
+        )}
         {getRoute() ? <Footer fluid /> : null}
         <FixedPlugin
           handleImageClick={handleImageClick}
