@@ -13,7 +13,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { GroupAdd } from "@material-ui/icons";
+import { StoreMallDirectory } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -43,7 +43,6 @@ export default function ChangeNodeName(props) {
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-      //console.log("Scrolled to ", props.ps.element.scrollTop)
     }
     else {
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -64,79 +63,81 @@ export default function ChangeNodeName(props) {
   }
 
   const changeName = async () => { //import held asset
+    let nameExists = await window.utils.checkACName(loginName)
 
-    if (loginName === "" || loginName === nodeInfo.name) {
-      if (loginName === "") {
-        console.log("error1")
-        setloginNameState("error");
-        swal("Node name has not changed or the field is empty.")
-      }
-      if (loginName === nodeInfo.name) {
-        console.log("error2")
-        setloginNameState("error");
-        swal("Node name has not changed.")
-      }
-      return;
+    if (nameExists === false) {
+
+      let tempTxHash;
+      setShowHelp(false);
+      setTxStatus(false);
+      setTxHash("");
+      setError(undefined);
+
+      setTransactionActive(true);
+
+      await window.contracts.AC_MGR.methods
+        .updateACname(
+          nodeInfo.id,
+          name,
+        )
+        .send({ from: props.addr })
+        .on("error", function (_error) {
+          setTransactionActive(false);
+          setTxStatus(false);
+          setTxHash(Object.values(_error)[0].transactionHash);
+          tempTxHash = Object.values(_error)[0].transactionHash
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+          let str2 = "' target='_blank'>here</a>"
+          link.innerHTML = String(str1 + tempTxHash + str2)
+          setError(Object.values(_error)[0]);
+          if (tempTxHash !== undefined) {
+            swal({
+              title: "Something went wrong!",
+              content: link,
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          if (tempTxHash === undefined) {
+            swal({
+              title: "Something went wrong!",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+        })
+        .on("receipt", (receipt) => {
+          setTransactionActive(false);
+          setTxStatus(receipt.status);
+          tempTxHash = receipt.transactionHash
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+          let str2 = "' target='_blank'>here</a>"
+          link.innerHTML = String(str1 + tempTxHash + str2)
+          setTxHash(receipt.transactionHash);
+          swal({
+            title: "Name Change Successful!",
+            content: link,
+            icon: "success",
+            button: "Close",
+          }).then(() => {
+            //refreshBalances()
+            window.backIndex = nodeInfo.dBIndex;
+            window.location.href = nodeInfo.lastRef;
+          })
+        });
+
+
     }
 
-    let tempTxHash;
-    setShowHelp(false);
-    setTxStatus(false);
-    setTxHash("");
-    setError(undefined);
-
-    setTransactionActive(true);
-
-    await window.contracts.AC_MGR.methods
-      .updateACname(
-        name,
-        nodeInfo.id,
-      )
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransactionActive(false);
-        setTxStatus(false);
-        setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
-        setError(Object.values(_error)[0]);
-        if (tempTxHash !== undefined) {
-          swal({
-            title: "Something went wrong!",
-            content: link,
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Something went wrong!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-      })
-      .on("receipt", (receipt) => {
-        setTransactionActive(false);
-        setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
-        setTxHash(receipt.transactionHash);
-        swal({
-          title: "Name Change Successful!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        }).then(() => {
-          //refreshBalances()
-          window.backIndex = nodeInfo.dBIndex;
-          window.location.href = nodeInfo.lastRef;
-        })
-      });
+    else if ((loginName === nodeInfo.name) || (loginName === "")) {
+      console.log("error2")
+      setloginNameState("error");
+      swal("Node name has not changed.")
+    }
+    else if (nameExists === true) {
+      swal("Node name is already recorded in the system.")
+      return;
+    }
 
   }
 
@@ -144,10 +145,10 @@ export default function ChangeNodeName(props) {
     <Card>
       <CardHeader icon>
         <CardIcon className="headerIconBack">
-          <GroupAdd />
+          <StoreMallDirectory />
         </CardIcon>
         <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
-        <h4 className={classes.cardIconTitle}>Change Owner Information</h4>
+        <h4 className={classes.cardIconTitle}>Change Node Name</h4>
       </CardHeader>
       <CardBody>
         <form>
@@ -167,7 +168,7 @@ export default function ChangeNodeName(props) {
                   inputProps={{
                     defaultValue: nodeInfo.name,
                     onChange: event => {
-                      setName(event.target.value.trim())
+                      setName(event.target.value.toUpperCase().trim())
                       if (event.target.value !== "" || event.target.value !== nodeInfo.name) {
                         setloginNameState("success");
                       } else {
@@ -204,7 +205,7 @@ export default function ChangeNodeName(props) {
           )}
           {transactionActive && (
             <h3>
-              Changing Name<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Changing Node Name<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </form>

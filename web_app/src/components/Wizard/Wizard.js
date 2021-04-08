@@ -299,7 +299,7 @@ class Wizard extends React.Component {
             <div className={classes.right}>
               {this.state.nextButton ? (
                 <Button
-                  color="rose"
+                  color="info"
                   className={this.props.nextButtonClasses}
                   onClick={() => this.nextButtonClick()}
                 >
@@ -308,7 +308,7 @@ class Wizard extends React.Component {
               ) : null}
               {this.state.finishButton ? (
                 <Button
-                  color="rose"
+                  color="info"
                   className={this.finishButtonClasses}
                   onClick={() => this.finishButtonClick()}
                 >

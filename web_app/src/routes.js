@@ -136,7 +136,7 @@ var dashRoutes = [
     layout: "/user"
   },
   {
-    name: "Change Name",
+    name: "Change Node Name",
     path: "/change-name",
     component: ChangeNodeName,
     layout: "/user"

@@ -1,6 +1,7 @@
 import React from "react";
 import "../../../assets/css/custom.css";
 import swal from 'sweetalert';
+import swalReact from '@sweetalert/with-react';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -15,26 +16,35 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { LockOpen, SwapHoriz } from "@material-ui/icons";
+import { ArrowLeft, ArrowRight, ArrowRightAlt, AssignmentTurnedIn, Category, Check, CheckCircleOutline, FiberManualRecordTwoTone, KeyboardArrowLeft, LockOpen, Security, SwapHoriz, VerifiedUser, VpnKey } from "@material-ui/icons";
+import ARweaveGreyPNG from "../../../assets/img/arweavegrey.png";
+import ARweavePNG from "../../../assets/img/arweave.png";
+import IPFSPNG from "../../../assets/img/ipfs.png";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 
 
-import Step1 from "./NodeWizzard/Step1.js";
-import Step2 from "./NodeWizzard/Step2.js";
-import Step3 from "./NodeWizzard/Step3.js";
+// import Step1 from "./NodeWizzard/Step1.js";
+// import Step2 from "./NodeWizzard/Step2.js";
 const useStyles = makeStyles(styles);
 
 export default function FinalizeNode(props) {
 
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
-    const [address, setAddress] = React.useState("");
-    const [loginAddress, setloginAddress] = React.useState("");
-    const [loginAddressState, setloginAddressState] = React.useState("");
     const [transactionActive, setTransactionActive] = React.useState(false);
-    const [error, setError] = React.useState("");
-    const [showHelp, setShowHelp] = React.useState(false);
     const [txStatus, setTxStatus] = React.useState(false);
     const [txHash, setTxHash] = React.useState("");
+
+    const [managementType, setManagementType] = React.useState("1");
+    const [managementType1, setManagementType1] = React.useState(true);
+    const [managementType2, setManagementType2] = React.useState(false);
+    const [managementType3, setManagementType3] = React.useState(false);
+    const [managementType4, setManagementType4] = React.useState(false);
+    const [storageType, setStorageType] = React.useState("1");
+    const [storageType1, setStorageType1] = React.useState(true);
+    const [storageType2, setStorageType2] = React.useState(false);
+    const [card1, setCard1] = React.useState(true);
+    const [card2, setCard2] = React.useState(false);
 
     const [nodeInfo,] = React.useState(window.sentPacket);
 
@@ -67,100 +77,353 @@ export default function FinalizeNode(props) {
         window.location.href = nodeInfo.lastRef;
     }
 
+    const setManagementType1Button = () => {
+        setManagementType("1")
+        setManagementType1(true)
+        setManagementType2(false)
+        setManagementType3(false)
+        setManagementType4(false)
+    }
+
+    const setManagementType2Button = () => {
+        setManagementType("2")
+        setManagementType1(false)
+        setManagementType2(true)
+        setManagementType3(false)
+        setManagementType4(false)
+    }
+
+    const setManagementType3Button = () => {
+        setManagementType("3")
+        setManagementType1(false)
+        setManagementType2(false)
+        setManagementType3(true)
+        setManagementType4(false)
+    }
+
+    const setManagementType4Button = () => {
+        setManagementType("4")
+        setManagementType1(false)
+        setManagementType2(false)
+        setManagementType3(false)
+        setManagementType4(true)
+    }
+
+    const setStorageType1Button = () => {
+        setStorageType("1")
+        setStorageType1(true)
+        setStorageType2(false)
+    }
+
+    const setStorageType2Button = () => {
+        setStorageType("2")
+        setStorageType1(false)
+        setStorageType2(true)
+    }
+
+    const nextCard = () => {
+        setCard1(false)
+        setCard2(true)
+        props.ps.element.scrollTop = 0;
+    }
+
+    const previousCard = () => {
+        setCard1(true)
+        setCard2(false)
+        props.ps.element.scrollTop = 0;
+    }
+
     const finalizeNode = async () => { //transfer held Node
 
-
-        if (!window.web3.utils.isAddress(address)) {
-            return swal({
-                title: "Submitted address is not valid!",
-                text: "Please check form and input a valid ethereum address.",
-                icon: "warning",
-                button: "Close",
-            });
-        }
-
-        if (loginAddress === "") {
-            setloginAddressState("error");
-            return;
-        }
-
-        let tempTxHash;
-        setShowHelp(false);
-        setTxStatus(false);
-        setTxHash("");
-        setError(undefined);
-
-        setTransactionActive(true);
-
-        await window.contracts.AC_TKN.methods
-            .safeTransferFrom(
-                props.addr,
-                address,
-                nodeInfo.id
-            )
-            .send({ from: props.addr })
-            .on("error", function (_error) {
-                setTransactionActive(false);
-                setTxStatus(false);
-                setTxHash(Object.values(_error)[0].transactionHash);
-                tempTxHash = Object.values(_error)[0].transactionHash;
-                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-                let str2 = "' target='_blank'>here</a>";
-                link.innerHTML = String(str1 + tempTxHash + str2);
-                setError(Object.values(_error)[0]);
-                if (tempTxHash !== undefined) {
-                    swal({
-                        title: "Something went wrong!",
-                        content: link,
-                        icon: "warning",
-                        button: "Close",
-                    });
+        swalReact({
+            icon: "warning",
+            content: <Card className="delegationCard">
+                <h4 className="delegationTitle">Submitted information is immutable!</h4>
+                <h5 className="finalizingTipsContent">
+                    Please make sure the following info is correct before submitting! These setting cannot be changed, and you can only finalize a node once!
+               </h5>
+                <div className="delegationTips">
+                    <h4 className="alertText">
+                        Management Type: &nbsp;
+                    {managementType === "1" && (
+                            <>Restricted</>
+                        )}
+                        {managementType === "2" && (
+                            <>Permissive</>
+                        )}
+                        {managementType === "3" && (
+                            <>Authorized</>
+                        )}
+                        {managementType === "4" && (
+                            <>Trusted</>
+                        )}
+                    </h4>
+                </div>
+                <div className="delegationTips">
+                    <h4 className="alertText">
+                        Storage Type:
+                    {storageType === "1" && (
+                            <img src={IPFSPNG} className="IPFS2" />
+                        )}
+                        {storageType === "2" && (
+                            <img src={ARweavePNG} className="ARweave3" />
+                        )}
+                    </h4>
+                </div>
+            </Card>,
+            buttons: {
+                back: {
+                    text: "Go Back",
+                    className: "delegationButtonBack"
+                },
+                finalize: {
+                    text: "Finalize",
+                    className: "delegationButtonBack"
                 }
-                if (tempTxHash === undefined) {
-                    swal({
-                        title: "Something went wrong!",
-                        icon: "warning",
-                        button: "Close",
-                    });
+            },
+        })
+            .then((value) => {
+                switch (value) {
+
+                    case "finalize":
+                        let tempTxHash;
+                        setTransactionActive(true)
+
+                        window.contracts.AC_MGR.methods
+                            .updateACImmutable(nodeInfo.id, managementType, storageType, "0x0000000000000000000000000000000000000000")
+                            .send({ from: props.addr })
+                            .on("error", function (_error) {
+                                setTransactionActive(false);
+                                setTxStatus(false);
+                                setTxHash(Object.values(_error)[0].transactionHash);
+                                tempTxHash = Object.values(_error)[0].transactionHash;
+                                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+                                let str2 = "' target='_blank'>here</a>";
+                                link.innerHTML = String(str1 + tempTxHash + str2);
+                                if (tempTxHash !== undefined) {
+                                    swal({
+                                        title: "Something went wrong!",
+                                        content: link,
+                                        icon: "warning",
+                                        button: "Close",
+                                    });
+                                }
+                                if (tempTxHash === undefined) {
+                                    swal({
+                                        title: "Something went wrong!",
+                                        icon: "warning",
+                                        button: "Close",
+                                    });
+                                }
+                            })
+                            .on("receipt", (receipt) => {
+                                setTransactionActive(false);
+                                setTxStatus(receipt.status);
+                                tempTxHash = receipt.transactionHash;
+                                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+                                let str2 = "' target='_blank'>here</a>";
+                                link.innerHTML = String(str1 + tempTxHash + str2);
+                                swal({
+                                    title: "Node Finalized!",
+                                    content: link,
+                                    icon: "success",
+                                    button: "Close"
+                                })
+                            })
+
+                        break;
+
+                    case "back":
+                        break;
+
+                    default:
+                        break;
                 }
-            })
-            .on("receipt", (receipt) => {
-                setTransactionActive(false);
-                setTxStatus(receipt.status);
-                tempTxHash = receipt.transactionHash;
-                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-                let str2 = "' target='_blank'>here</a>";
-                link.innerHTML = String(str1 + tempTxHash + str2);
-                setTxHash(receipt.transactionHash);
-                swal({
-                    title: "Transfer Successful!",
-                    content: link,
-                    icon: "success",
-                    button: "Close",
-                }).then(() => {
-                    //refreshBalances()
-                    //window.backIndex = nodeInfo.dBIndex;
-                    window.location.href = nodeInfo.lastRef;
-                })
             });
 
     }
 
     return (
-      <GridContainer justify="center">
-        <GridItem xs={12} sm={8}>
-          <Wizard
-            validate
-            steps={[
-              { stepName: "About", stepComponent: Step1, stepId: "about" },
-              { stepName: "Account", stepComponent: Step2, stepId: "account" },
-              { stepName: "Address", stepComponent: Step3, stepId: "address" }
-            ]}
-            title="Build Your Profile"
-            subtitle="This information will let us know more about you."
-            finishButtonClick={e => alert(e)}
-          />
-        </GridItem>
-      </GridContainer>
+        <Card className="finalizeNode">
+            <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                    <Category />
+                </CardIcon>
+                <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+                <h4 className={classes.cardIconTitle}>Finalize Node: {nodeInfo.name}, ID: ({nodeInfo.id})</h4>
+            </CardHeader>
+            {card1 && (
+                <Card className="Slider">
+                    <CardHeader>
+                        <h2 className={classes.cardIconTitle}>Select Management Type</h2>
+                    </CardHeader>
+                    <GridContainer>
+                        <GridItem xs={12} sm={4}>
+                            {!managementType1 && (
+                                <Button className="managementType" color="info" onClick={() => setManagementType1Button()}>
+                                    <VpnKey />
+                Restricted
+                                </Button>
+                            )}
+                            {managementType1 && (
+                                <Button className="managementTypeSelected" onClick={() => setManagementType1Button()}>
+                                    <VpnKey />
+                            Restricted
+                                </Button>
+                            )}
+                            {!managementType2 && (
+                                <Button className="managementType" color="info" onClick={() => setManagementType2Button()}>
+                                    <Security />
+                Permissive
+                                </Button>
+                            )}
+                            {managementType2 && (
+                                <Button className="managementTypeSelected" onClick={() => setManagementType2Button()}>
+                                    <Security />
+                Permissive
+                                </Button>
+                            )}
+                            {!managementType3 && (
+                                <Button className="managementType" color="info" onClick={() => setManagementType3Button()}>
+                                    <AssignmentTurnedIn />
+                Authorized
+                                </Button>
+                            )}
+                            {managementType3 && (
+                                <Button className="managementTypeSelected" onClick={() => setManagementType3Button()}>
+                                    <AssignmentTurnedIn />
+                Authorized
+                                </Button>
+                            )}
+                            {!managementType4 && (
+                                <Button className="managementType" color="info" onClick={() => setManagementType4Button()}>
+                                    <VerifiedUser />
+                Trusted
+                                </Button>
+                            )}
+                            {managementType4 && (
+                                <Button className="managementTypeSelected" onClick={() => setManagementType4Button()}>
+                                    <VerifiedUser />
+                Trusted
+                                </Button>
+                            )}
+                        </GridItem>
+                        <GridItem xs={12} sm={8}>
+                            <div className="slide-right">
+                                {managementType1 && (
+                                    <>
+                                        <h3>Restricted</h3>
+                                        <p>
+                                            The Restricted management type is by far the most exclusive. With restriced access to node operations, this type allows only
+                                            the node holder to create assets within the node, export assets within the node, or import assets into the node. This
+                                            enables a provably secure and tight-knit operation, and would be most suited to artists, or one-of-a-kind asset creation.
+                            </p>
+                                    </>
+                                )}
+                                {managementType2 && (
+                                    <>
+                                        <h3>Permissive</h3>
+                                        <p>
+                                            Much like the Restricted management type, the Permissive management type is just a little bit more diverse. Alongside
+                                            it's reduced access to public node operations such as private asset importing and creation, this type allows asset-holders
+                                            to export assets out of the node. This allows for a more diverse range of items, and allows the node use to be more public to
+                                            its users. Permissive node management is a great option for variations of collectables, or every-day use items such as bicicles,
+                                            motor-vehicles or BETTER EXAMPLES...
+                            </p>
+                                    </>
+                                )}
+                                {managementType3 && (
+                                    <>
+                                        <h3>Authorized</h3>
+                                        <p>
+                                            The Authorized management type is the most private options for private businesses or enterprises. Authorized node management
+                                            allows for a permission based authority for any party authorized by the node holder. In order to access any operations within the
+                                            node, the calling user must be authorized, otherwise access is entirely limited. This allows for a private, secure, yet expandable
+                                            node management, and would be best used by private businesses and enterprises yada yada im not the person for this job...
+                            </p>
+                                    </>
+                                )}
+                                {managementType4 && (
+                                    <>
+                                        <h3>Trusted</h3>
+                                        <p>
+                                            Trusted node management is by far the most public node management solution. It is completely open to all individual
+                                            users trusted within the PRUF network. This implies that any user accessing public node operations would be pre-checked
+                                            and unique to the system, disincentivising bad actors. Trusted node management is targeted towards all public asset classification or merit-based
+                                            systems. Somebody please take over...
+                            </p>
+                                    </>
+                                )}
+                            </div>
+                        </GridItem>
+                    </GridContainer>
+                </Card>
+            )}
+            {card2 && (
+                <Card>
+                    <CardHeader>
+                        <h2 className={classes.cardIconTitle}>Select Storage Provider</h2>
+                    </CardHeader>
+                    <GridContainer>
+                        <GridItem xs={12} sm={4}>
+                            {!storageType1 && (
+                                <Button className="managementType" color="info" onClick={() => setStorageType1Button()}>
+                                    <img src={IPFSPNG} className="IPFS2" />
+                                </Button>
+                            )}
+                            {storageType1 && (
+                                <Button className="managementTypeSelected" onClick={() => setStorageType1Button()}>
+                                    <img src={IPFSPNG} className="IPFS2" />
+                                </Button>
+                            )}
+                            {!storageType2 && (
+                                <Button className="managementType" color="info" onClick={() => setStorageType2Button()}>
+                                    <img src={ARweaveGreyPNG} className="ARweave3" />
+                                </Button>
+                            )}
+                            {storageType2 && (
+                                <Button className="managementTypeSelected" onClick={() => setStorageType2Button()}>
+
+                                    <img src={ARweaveGreyPNG} className="ARweave3" />
+
+                                </Button>
+                            )}
+                        </GridItem>
+                        <GridItem xs={12} sm={8}>
+                            <div className="slide-right">
+                                {storageType1 && (
+                                    <>
+                                        <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS3"></img></a>
+                                        <p>
+                                            The InterPlanetary File System (IPFS) is a protocol and peer-to-peer network for storing and sharing data in a distributed file system.
+                                            IPFS allows users to not only receive but host content, in a similar manner to BitTorrent.
+                            </p>
+                                    </>
+                                )}
+                                {storageType2 && (
+                                    <>
+                                        <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave4"></img></a>
+                                        <p>
+                                            A novel data storage blockchain protocol enabling a permanent serverless web and creating truly permanent data storage for the first time.
+                            </p>
+                                    </>
+                                )}
+                            </div>
+                        </GridItem>
+                    </GridContainer>
+                </Card>
+            )}
+            {card1 && (
+                <div className="MLBGradientSubmit">
+                    <Button className="MLBGradient" onClick={() => nextCard()} icon >Next <KeyboardArrowRight /> </Button>
+                </div>
+            )}
+            {card2 && (
+                <div className="MLBGradientSubmit">
+                    <Button className="MLBGradient" onClick={() => finalizeNode()} icon>Finish <CheckCircleOutline /> </Button>
+                    <Button className="MLBGradient" onClick={() => previousCard()} icon > <KeyboardArrowLeft />Back</Button>
+                </div>
+            )}
+        </Card>
     );
 }

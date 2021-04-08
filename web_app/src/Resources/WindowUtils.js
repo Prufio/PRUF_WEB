@@ -345,6 +345,7 @@ function buildWindowUtils() {
           }
         });
     }
+    console.log(tempBool)
     return tempBool;
   }
 

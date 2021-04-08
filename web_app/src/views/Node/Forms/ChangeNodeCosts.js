@@ -13,7 +13,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { GroupAdd } from "@material-ui/icons";
+import { GroupAdd, LocalOffer } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -21,12 +21,20 @@ export default function ChangeNodeCosts(props) {
 
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
-  const [transactionActive, setTransactionActive] = React.useState(false);
+  const [transaction1Active, setTransaction1Active] = React.useState(false);
+  const [transaction2Active, setTransaction2Active] = React.useState(false);
+  const [transaction3Active, setTransaction3Active] = React.useState(false);
+  const [transaction4Active, setTransaction4Active] = React.useState(false);
+  const [transaction5Active, setTransaction5Active] = React.useState(false);
+  const [transaction6Active, setTransaction6Active] = React.useState(false);
+  const [transaction7Active, setTransaction7Active] = React.useState(false);
+  const [transaction8Active, setTransaction8Active] = React.useState(false);
 
   const [error, setError] = React.useState("");
   const [showHelp, setShowHelp] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
+  const [formChanged, setFormChanged] = React.useState(false);
 
   const [operation1, setOperation1] = React.useState(window.sentPacket.costs.cost1.acthCost);
   const [operation2, setOperation2] = React.useState(window.sentPacket.costs.cost2.acthCost);
@@ -94,7 +102,6 @@ export default function ChangeNodeCosts(props) {
     setTxStatus(false);
     setTxHash("");
     setError(undefined);
-    setTransactionActive(true);
     let op1 = window.web3.utils.toWei(String(operation1));
     let op2 = window.web3.utils.toWei(String(operation2));
     let op3 = window.web3.utils.toWei(String(operation3));
@@ -104,14 +111,16 @@ export default function ChangeNodeCosts(props) {
     let op7 = window.web3.utils.toWei(String(operation7));
     let op8 = window.web3.utils.toWei(String(operation8));
 
-    if (loginOperation1 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation1 !== nodeInfo.costs.cost1.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction1Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -122,7 +131,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation1(nodeInfo.costs.cost1.acthCost)
+          setOperation1(nodeInfo.costs.cost1.acthCost)
+          setTransaction1Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -147,23 +160,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction1Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation1 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation1 !== nodeInfo.costs.cost1.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction1Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -173,7 +188,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation1(nodeInfo.costs.cost1.acthCost)
+          setOperation1(nodeInfo.costs.cost1.acthCost)
+          setTransaction1Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -198,30 +216,32 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction1Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation2 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation2 !== nodeInfo.costs.cost2.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction2Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -232,7 +252,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation2(nodeInfo.costs.cost2.acthCost)
+          setOperation2(nodeInfo.costs.cost2.acthCost)
+          setTransaction2Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -257,23 +281,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction2Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation2 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation2 !== nodeInfo.costs.cost2.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction2Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -283,7 +309,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation2(nodeInfo.costs.cost2.acthCost)
+          setOperation2(nodeInfo.costs.cost2.acthCost)
+          setTransaction2Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -308,30 +337,32 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction2Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation3 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation3 !== nodeInfo.costs.cost3.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction3Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -342,7 +373,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation3(nodeInfo.costs.cost3.acthCost)
+          setOperation3(nodeInfo.costs.cost3.acthCost)
+          setTransaction3Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -367,23 +402,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction3Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation3 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation3 !== nodeInfo.costs.cost3.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction3Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -393,7 +430,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation3(nodeInfo.costs.cost3.acthCost)
+          setOperation3(nodeInfo.costs.cost3.acthCost)
+          setTransaction3Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -418,30 +458,32 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction3Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation4 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation4 !== nodeInfo.costs.cost4.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction4Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -452,7 +494,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation4(nodeInfo.costs.cost4.acthCost)
+          setOperation4(nodeInfo.costs.cost4.acthCost)
+          setTransaction4Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -477,23 +523,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction4Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation4 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation4 !== nodeInfo.costs.cost4.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction4Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -503,7 +551,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation4(nodeInfo.costs.cost4.acthCost)
+          setOperation4(nodeInfo.costs.cost4.acthCost)
+          setTransaction4Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -528,30 +579,32 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction4Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation5 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation5 !== nodeInfo.costs.cost5.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction5Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -562,7 +615,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation5(nodeInfo.costs.cost5.acthCost)
+          setOperation5(nodeInfo.costs.cost5.acthCost)
+          setTransaction5Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -587,23 +644,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction5Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation5 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation5 !== nodeInfo.costs.cost5.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction5Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -613,7 +672,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation5(nodeInfo.costs.cost5.acthCost)
+          setOperation5(nodeInfo.costs.cost5.acthCost)
+          setTransaction5Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -638,30 +700,32 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction5Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation6 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation6 !== nodeInfo.costs.cost6.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction6Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -672,7 +736,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation6(nodeInfo.costs.cost6.acthCost)
+          setOperation6(nodeInfo.costs.cost6.acthCost)
+          setTransaction6Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -697,23 +765,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction6Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation6 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation6 !== nodeInfo.costs.cost6.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction6Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -723,7 +793,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation6(nodeInfo.costs.cost6.acthCost)
+          setOperation6(nodeInfo.costs.cost6.acthCost)
+          setTransaction6Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -748,7 +821,7 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction6Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
@@ -764,14 +837,16 @@ export default function ChangeNodeCosts(props) {
         });
     }
 
-    if (loginOperation7 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation7 !== nodeInfo.costs.cost7.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction7Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -782,7 +857,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation7(nodeInfo.costs.cost7.acthCost)
+          setOperation7(nodeInfo.costs.cost7.acthCost)
+          setTransaction6Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -807,23 +886,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction7Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation7 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation7 !== nodeInfo.costs.cost7.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction7Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -833,7 +914,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation7(nodeInfo.costs.cost7.acthCost)
+          setOperation7(nodeInfo.costs.cost7.acthCost)
+          setTransaction7Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -858,30 +942,32 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction7Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation8 !== "" && loginBeneficiaryAddress !== "") {
-      if(!window.web3.utils.isAddress(beneficiaryAddress)) {
+    if (loginOperation8 !== nodeInfo.costs.cost8.acthCost && loginBeneficiaryAddress !== "") {
+      setFormChanged(true)
+      setTransaction8Active(true);
+      if (!window.web3.utils.isAddress(beneficiaryAddress)) {
         return swal({
           title: "Submitted address is not valid!",
           text: "Please check form and input a valid ethereum address.",
           icon: "warning",
           button: "Close",
-        });   
+        });
       }
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
@@ -892,7 +978,11 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setBeneficiaryAddress("")
+          setloginOperation8(nodeInfo.costs.cost8.acthCost)
+          setOperation8(nodeInfo.costs.cost8.acthCost)
+          setTransaction8Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -917,23 +1007,25 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction8Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
 
-    if (loginOperation8 !== "" && loginBeneficiaryAddress === "") {
+    if (loginOperation8 !== nodeInfo.costs.cost8.acthCost && loginBeneficiaryAddress === "") {
+      setFormChanged(true)
+      setTransaction8Active(true);
       await window.contracts.AC_MGR.methods
         .ACTH_setCosts(
           nodeInfo.id,
@@ -943,7 +1035,10 @@ export default function ChangeNodeCosts(props) {
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
-          setTransactionActive(false);
+          setFormChanged(false)
+          setloginOperation8(nodeInfo.costs.cost8.acthCost)
+          setOperation8(nodeInfo.costs.cost8.acthCost)
+          setTransaction8Active(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
           tempTxHash = Object.values(_error)[0].transactionHash
@@ -968,24 +1063,27 @@ export default function ChangeNodeCosts(props) {
           }
         })
         .on("receipt", (receipt) => {
-          setTransactionActive(false);
+          setTransaction8Active(false);
           setTxStatus(receipt.status);
           tempTxHash = receipt.transactionHash
           let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
           let str2 = "' target='_blank'>here</a>"
           link.innerHTML = String(str1 + tempTxHash + str2)
           setTxHash(receipt.transactionHash);
-          swal({
-            title: "Cost Change Successful!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          })
+          // swal({
+          //   title: "Cost Change Successful!",
+          //   content: link,
+          //   icon: "success",
+          //   button: "Close",
+          // })
         });
     }
-
-    return window.backIndex = nodeInfo.dBIndex, window.location.href = nodeInfo.lastRef;
-
+    if (!formChanged) {
+      swal("Costs not changed")
+    }
+    else {
+      return window.backIndex = nodeInfo.dBIndex, window.location.href = nodeInfo.lastRef;
+    }
 
   }
 
@@ -993,7 +1091,7 @@ export default function ChangeNodeCosts(props) {
     <Card>
       <CardHeader icon>
         <CardIcon className="headerIconBack">
-          <GroupAdd />
+          <LocalOffer />
         </CardIcon>
         <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
         <h4 className={classes.cardIconTitle}>Change Node Operation Costs</h4>
@@ -1004,7 +1102,7 @@ export default function ChangeNodeCosts(props) {
             <h4>Node Selected: {nodeInfo.name}, ({nodeInfo.id})</h4>
           )}
           <>
-            {!transactionActive && nodeInfo !== null && nodeInfo !== undefined && (
+            {!transaction1Active && !transaction2Active && !transaction3Active && !transaction4Active && !transaction5Active && !transaction6Active && !transaction7Active && !transaction8Active && nodeInfo !== null && nodeInfo !== undefined && (
               <>
                 <CustomInput
                   success={loginOperation1State === "success"}
@@ -1016,7 +1114,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost1.acthCost,
+                    defaultValue: loginOperation1,
                     onChange: event => {
                       setOperation1(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1038,7 +1136,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost2.acthCost,
+                    defaultValue: loginOperation2,
                     onChange: event => {
                       setOperation2(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1060,7 +1158,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost3.acthCost,
+                    defaultValue: loginOperation3,
                     onChange: event => {
                       setOperation3(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1082,7 +1180,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost4.acthCost,
+                    defaultValue: loginOperation4,
                     onChange: event => {
                       setOperation4(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1104,7 +1202,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost5.acthCost,
+                    defaultValue: loginOperation5,
                     onChange: event => {
                       setOperation5(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1126,7 +1224,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost6.acthCost,
+                    defaultValue: loginOperation6,
                     onChange: event => {
                       setOperation6(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1148,7 +1246,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost7.acthCost,
+                    defaultValue: loginOperation7,
                     onChange: event => {
                       setOperation7(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1170,7 +1268,7 @@ export default function ChangeNodeCosts(props) {
                   }}
                   inputProps={{
                     type: "number",
-                    defaultValue: nodeInfo.costs.cost8.acthCost,
+                    defaultValue: loginOperation8,
                     onChange: event => {
                       setOperation8(event.target.value.trim())
                       if (event.target.value !== "") {
@@ -1208,7 +1306,7 @@ export default function ChangeNodeCosts(props) {
                     </div>
               </>
             )}
-            {transactionActive && (
+            {transaction1Active || transaction2Active || transaction3Active || transaction4Active || transaction5Active || transaction6Active || transaction7Active || transaction8Active && (
               <>
                 <CustomInput
                   labelText={operation1}
@@ -1303,14 +1401,49 @@ export default function ChangeNodeCosts(props) {
               </>
             )}
           </>
-          {!transactionActive && (
+          {!transaction1Active && !transaction2Active && !transaction3Active && !transaction4Active && !transaction5Active && !transaction6Active && !transaction7Active && !transaction8Active && nodeInfo !== null && nodeInfo !== undefined && (
             <div className="MLBGradientSubmit">
               <Button color="info" className="MLBGradient" onClick={() => changeCosts()}>Update Costs</Button>
             </div>
           )}
-          {transactionActive && (
+          {transaction1Active && (
             <h3>
-              Updating operation costs<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Updating operation cost 1<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {transaction2Active && (
+            <h3>
+              Updating operation cost 2<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {transaction3Active && (
+            <h3>
+              Updating operation cost 3<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {transaction4Active && (
+            <h3>
+              Updating operation cost 4<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {transaction5Active && (
+            <h3>
+              Updating operation cost 5<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {transaction6Active && (
+            <h3>
+              Updating operation cost 6<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {transaction7Active && (
+            <h3>
+              Updating operation cost 7<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+            </h3>
+          )}
+          {transaction8Active && (
+            <h3>
+              Updating operation cost 8<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </form>

@@ -22,6 +22,7 @@ export default function NavPills(props) {
   const [active, setActive] = React.useState(props.active);
   const handleChange = (event, active) => {
     setActive(active);
+    console.log(active)
   };
   const handleChangeIndex = index => {
     setActive(index);
@@ -111,7 +112,7 @@ NavPills.propTypes = {
     PropTypes.shape({
       tabButton: PropTypes.string,
       tabIcon: PropTypes.object,
-      tabContent: PropTypes.node
+      tabContent: PropTypes.node,
     })
   ).isRequired,
   color: PropTypes.oneOf([

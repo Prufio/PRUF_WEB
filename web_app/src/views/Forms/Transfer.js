@@ -30,7 +30,7 @@ export default function Transfer(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo, ] = React.useState(window.sentPacket);
+  const [assetInfo,] = React.useState(window.sentPacket);
 
   const link = document.createElement('div');
 
@@ -42,7 +42,7 @@ export default function Transfer(props) {
       //console.log("Scrolled to ", props.ps.element.scrollTop);
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
@@ -68,7 +68,7 @@ export default function Transfer(props) {
       text: "This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.",
       icon: "warning",
       button: "Close",
-    }).then(()=>{goBack()});
+    }).then(() => { goBack() });
     if (assetInfo === undefined || assetInfo === null) {
       console.log("No asset found. Rerouting...")
       window.location.href = "/#/user/home"
@@ -78,11 +78,11 @@ export default function Transfer(props) {
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;
-    window.location.href=assetInfo.lastRef;
+    window.location.href = assetInfo.lastRef;
   }
 
   const thousandHashesOf = (varToHash) => {
-    if(!window.web3) return window.location.href = "/#/user/home"
+    if (!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -92,20 +92,20 @@ export default function Transfer(props) {
   }
 
   const refreshBalances = async () => {
-    if(!window.web3.eth) return
+    if (!window.web3.eth) return
 
     let pruf, ether;
-    
+
     console.log("Refreshing ether bal")
     await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
+      if (err) { console.log(err) }
       else { ether = window.web3.utils.fromWei(result, 'ether') }
       window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
         if (err) { console.log(err) }
         else { pruf = window.web3.utils.fromWei(result, 'ether') }
         window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
           if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
+          else { window.replaceAssetData = { assets: result, ether, pruf } }
         });
       });
     });
@@ -114,13 +114,13 @@ export default function Transfer(props) {
   const transferAsset = async () => { //transfer held asset
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
-    if(!window.web3.utils.isAddress(address)) {
+    if (!window.web3.utils.isAddress(address)) {
       return swal({
         title: "Submitted address is not valid!",
         text: "Please check form and input a valid ethereum address.",
         icon: "warning",
         button: "Close",
-      });   
+      });
     }
 
     if (loginAddress === "") {
@@ -182,11 +182,11 @@ export default function Transfer(props) {
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
+        }).then(() => {
           //refreshBalances()
           //window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
-          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex}
+          window.replaceAssetData = { key: pageKey, dBIndex: assetInfo.dBIndex }
         })
       });
 
@@ -204,29 +204,45 @@ export default function Transfer(props) {
       <CardBody>
         <form>
           <h4>Asset Selected: {assetInfo.name}</h4>
-          <CustomInput
-            success={loginAddressState === "success"}
-            error={loginAddressState === "error"}
-            labelText="Recieving Address *"
-            id="address"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              onChange: event => {
-                setAddress(event.target.value.trim())
-                if (event.target.value !== "") {
-                  setloginAddressState("success");
-                } else {
-                  setloginAddressState("error");
-                }
-                setloginAddress(event.target.value);
-              },
-            }}
-          />
-          <div className={classes.formCategory}>
-            <small>*</small> Required fields
+          {!transactionActive && (
+            <>
+              <CustomInput
+                success={loginAddressState === "success"}
+                error={loginAddressState === "error"}
+                labelText="Recieving Address *"
+                id="address"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  onChange: event => {
+                    setAddress(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginAddressState("success");
+                    } else {
+                      setloginAddressState("error");
+                    }
+                    setloginAddress(event.target.value);
+                  },
+                }}
+              />
+              <div className={classes.formCategory}>
+                <small>*</small> Required fields
               </div>
+            </>
+          )}
+          {transactionActive && (
+            <CustomInput
+              labelText={address}
+              id="middle"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                disabled: true
+              }}
+            />
+          )}
           {!transactionActive && (
             <div className="MLBGradientSubmit">
               <Button color="info" className="MLBGradient" onClick={() => transferAsset()}>Transfer Asset</Button>
