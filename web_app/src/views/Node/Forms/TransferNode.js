@@ -30,7 +30,7 @@ export default function TransferNode(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [nodeInfo, ] = React.useState(window.sentPacket);
+  const [nodeInfo,] = React.useState(window.sentPacket);
 
   const link = document.createElement('div');
 
@@ -42,7 +42,7 @@ export default function TransferNode(props) {
       //console.log("Scrolled to ", props.ps.element.scrollTop);
     }
     else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
@@ -64,11 +64,11 @@ export default function TransferNode(props) {
 
   const goBack = () => {
     window.backIndex = nodeInfo.dBIndex;
-    window.location.href=nodeInfo.lastRef;
+    window.location.href = nodeInfo.lastRef;
   }
 
   const thousandHashesOf = (varToHash) => {
-    if(!window.web3) return window.location.href = "/#/user/home"
+    if (!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
@@ -79,9 +79,9 @@ export default function TransferNode(props) {
 
   const spliceNodeList = (arr) => {
     let tempArr = arr;
-    for( let i = 0; i < tempArr.length; i++ ){
-      if (String(nodeInfo.id) === String(tempArr[i][1])){
-        console.log("removing array index:",i, tempArr[i])
+    for (let i = 0; i < tempArr.length; i++) {
+      if (String(nodeInfo.id) === String(tempArr[i][1])) {
+        console.log("removing array index:", i, tempArr[i])
         tempArr.splice(i, 1)
       }
     }
@@ -93,13 +93,13 @@ export default function TransferNode(props) {
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
     const splicedList = spliceNodeList(props.nodeList);
 
-    if(!window.web3.utils.isAddress(address)) {
+    if (!window.web3.utils.isAddress(address)) {
       return swal({
         title: "Submitted address is not valid!",
         text: "Please check form and input a valid ethereum address.",
         icon: "warning",
         button: "Close",
-      });   
+      });
     }
 
     if (loginAddress === "") {
@@ -161,7 +161,7 @@ export default function TransferNode(props) {
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
+        }).then(() => {
           //refreshBalances()
           //window.backIndex = nodeInfo.dBIndex;
           window.replaceAssetData = { key: pageKey, nodeList: splicedList }
@@ -183,31 +183,47 @@ export default function TransferNode(props) {
       <CardBody>
         <form>
           {nodeInfo !== undefined && (
-          <h4>Node Selected: {nodeInfo.name} ({nodeInfo.id})</h4>
+            <h4>Node Selected: {nodeInfo.name} ({nodeInfo.id})</h4>
           )}
-          <CustomInput
-            success={loginAddressState === "success"}
-            error={loginAddressState === "error"}
-            labelText="Recieving Address *"
-            id="address"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              onChange: event => {
-                setAddress(event.target.value.trim())
-                if (event.target.value !== "") {
-                  setloginAddressState("success");
-                } else {
-                  setloginAddressState("error");
-                }
-                setloginAddress(event.target.value);
-              },
-            }}
-          />
-          <div className={classes.formCategory}>
-            <small>*</small> Required fields
+          {!transactionActive && (
+            <>
+              <CustomInput
+                success={loginAddressState === "success"}
+                error={loginAddressState === "error"}
+                labelText="Recieving Address *"
+                id="address"
+                formControlProps={{
+                  fullWidth: true
+                }}
+                inputProps={{
+                  onChange: event => {
+                    setAddress(event.target.value.trim())
+                    if (event.target.value !== "") {
+                      setloginAddressState("success");
+                    } else {
+                      setloginAddressState("error");
+                    }
+                    setloginAddress(event.target.value);
+                  },
+                }}
+              />
+              <div className={classes.formCategory}>
+                <small>*</small> Required fields
               </div>
+            </>
+          )}
+          {transactionActive && (
+            <CustomInput
+              labelText={address}
+              id="middle"
+              formControlProps={{
+                fullWidth: true
+              }}
+              inputProps={{
+                disabled: true
+              }}
+            />
+          )}
           {!transactionActive && (
             <div className="MLBGradientSubmit">
               <Button color="info" className="MLBGradient" onClick={() => transferNode()}>Transfer Node</Button>
