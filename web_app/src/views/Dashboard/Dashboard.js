@@ -1834,7 +1834,13 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <a href='https://www.arweave.org/' target='_blank'><img src={selectedImage} alt="..." /></a>
+                      <Tooltip
+                        title="See it on ARweave"
+                      >
+                        <a href='https://www.arweave.org/' target='_blank'>
+                          <img src={selectedImage} alt="..." />
+                        </a>
+                      </Tooltip>
                     </>
                   )}
                   {selectedAssetObj.DisplayImage === "" && (
@@ -1907,19 +1913,31 @@ export default function Dashboard(props) {
                 </>
               )}
               <br />
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                multiline
-                rows={4}
-                defaultValue={selectedAssetObj.Description}
-                variant="outlined"
-                fullWidth
-                disabled
-              />
-
+              {selectedAssetObj.Description !== undefined && (
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  defaultValue="None"
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              )}
+              {selectedAssetObj.Description === undefined && (
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  defaultValue={selectedAssetObj.Description}
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              )}
               <h6 className="storageProviderText">See it on <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
-
               {/*@dev URLs go here*/}
               <br />
               <div>
