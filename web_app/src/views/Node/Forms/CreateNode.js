@@ -51,6 +51,7 @@ export default function CreateNode(props) {
 
   const [name, setName] = React.useState("");
   const [root, setRoot] = React.useState("");
+  const [rootName, setRootName] = React.useState("");
   const [ipfs, setIPFS] = React.useState("");
   const [pricingObj, setPricingObj] = React.useState({})
 
@@ -136,7 +137,7 @@ export default function CreateNode(props) {
   }
 
   window.sentPacket = null
-  document.body.style.cursor='default';
+  document.body.style.cursor = 'default';
 
   const classes = useStyles();
   const cardClasses = useCardStyles();
@@ -196,6 +197,33 @@ export default function CreateNode(props) {
     }
 
     else {
+      if (e.target.value === "1") {
+        setRootName("Art")
+      }
+      if (e.target.value === "2") {
+        setRootName("Digital Art")
+
+      }
+      if (e.target.value === "3") {
+        setRootName("Trinkets")
+
+      }
+      if (e.target.value === "4") {
+        setRootName("Musical instrumnts")
+
+      }
+      if (e.target.value === "5") {
+        setRootName("Apparel")
+
+      }
+      if (e.target.value === "6") {
+        setRootName("Mobile Electronics")
+
+      }
+      if (e.target.value === "7") {
+        setRootName("Non-motor Vehicles")
+
+      }
       setRoot(e.target.value)
       setSelectedRootID(e.target.value)
     }
@@ -342,11 +370,11 @@ export default function CreateNode(props) {
 
   const handlePriceAdjustment = (job, val) => {
     let tempObj = JSON.parse(JSON.stringify(pricingObj))
-    if(!val || val < 0){
+    if (!val || val < 0) {
       delete tempObj[job]
       setPricingObj(tempObj)
     }
-    else{
+    else {
       tempObj[job] = String(val)
       setPricingObj(tempObj)
     }
@@ -366,9 +394,9 @@ export default function CreateNode(props) {
           tempArr.push([name, id, "N/A", "N/A"])
           window.replaceAssetData = { key: pageKey, nodeList: tempArr }
           window.location.href = "/#/user/node-manager";
-        } 
-    }); 
-    
+        }
+      });
+
   }
 
   const setLayout = () => {
@@ -1217,26 +1245,26 @@ export default function CreateNode(props) {
       .call(function (_error, _result) {
         console.log(_result)
         if (_error || _result === "0") {
-          window.ipfs.add(JSON.stringify(sampleIpfs)).then((hash)=>{
+          window.ipfs.add(JSON.stringify(sampleIpfs)).then((hash) => {
             if (!hash) {
               console.error("error sending to ipfs")
               //return setIpfsActive(false);
             }
-            else{
+            else {
               let url = `https://ipfs.io/ipfs/${hash.cid}`
               console.log(`Url --> ${url}`)
               let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid))
               //setIpfsActive(false);
               purchaseNode(b32Hash)
-            } 
+            }
           })
         } else {
           swal({
             title: "That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io",
             button: "Okay",
           });
-        } 
-    }); 
+        }
+      });
   }
 
   const purchaseNode = async (ipfsHash) => { //import held asset
@@ -1289,7 +1317,7 @@ export default function CreateNode(props) {
         link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(receipt.transactionHash);
         swal({
-          title: "Owner Change Successful!",
+          title: "Node Minting Successul!",
           content: link,
           icon: "success",
           button: "Close",
@@ -1362,10 +1390,10 @@ export default function CreateNode(props) {
                   >
                     {props.roots !== undefined && (
                       generateRootList(props.roots)
-                  )}
+                    )}
                   </Select>
                 </FormControl>
-                <br/>
+                <br />
                 <div className={classes.formCategory}>
                   <small>*</small> Required fields
                     </div>
@@ -1430,7 +1458,7 @@ export default function CreateNode(props) {
                   }}
                 />
                 <CustomInput
-                  labelText={root}
+                  labelText={rootName}
                   id="root"
                   formControlProps={{
                     fullWidth: true
@@ -1439,7 +1467,7 @@ export default function CreateNode(props) {
                     disabled: true
                   }}
                 />
-                <CustomInput
+                {/* <CustomInput
                   labelText={ipfs}
                   id="ipfs"
                   formControlProps={{
@@ -1448,7 +1476,7 @@ export default function CreateNode(props) {
                   inputProps={{
                     disabled: true
                   }}
-                />
+                /> */}
               </>
             )}
           </>
