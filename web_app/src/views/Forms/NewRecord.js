@@ -757,24 +757,24 @@ export default function NewRecord(props) {
   const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => { //create a new asset record
     //console.log("assetClass: ", assetClass)
     extDataB = "0x"+extDataB
-    swalReact({
-      content:
-        <div className="picture-container">
-          <img src={ARweavePNG} className="ARweave" />
-          <h4>Please upload your Arweave key file</h4>
-          <div className="picture">
-            <img src={fileUpload} className="uploadFile" />
-            <input type="file" onChange={e => handleFileChange(e)} />
-          </div>
-          {file === null && (
-            <h6 className="description">Choose File</h6>
-          )}
-          {file !== null && (
-            <h6 className="description">{file}</h6>
-          )}
-        </div>,
-      buttons: "close"
-    })
+    // swalReact({
+    //   content:
+    //     <div className="picture-container">
+    //       <img src={ARweavePNG} className="ARweave" />
+    //       <h4>Please upload your Arweave key file</h4>
+    //       <div className="picture">
+    //         <img src={fileUpload} className="uploadFile" />
+    //         <input type="file" onChange={e => handleFileChange(e)} />
+    //       </div>
+    //       {file === null && (
+    //         <h6 className="description">Choose File</h6>
+    //       )}
+    //       {file !== null && (
+    //         <h6 className="description">{file}</h6>
+    //       )}
+    //     </div>,
+    //   buttons: "close"
+    // })
 
     const pageKey = thousandHashesOf(props.addr, props.winKey)
 

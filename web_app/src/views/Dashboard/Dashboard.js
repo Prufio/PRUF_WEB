@@ -40,6 +40,7 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import { ArrowBackIos, ArrowForwardIos, DashboardOutlined, KeyboardArrowLeft, KeyboardArrowRight, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
+import ARweavePNG from "../../assets/img/arweave.png";
 import swal from "sweetalert";
 
 const useStyles = makeStyles(styles);
@@ -157,7 +158,7 @@ export default function Dashboard(props) {
         }
       }
 
-      else if (arr[backIndex]){
+      else if (arr[backIndex]) {
         newObj = { text: arr[backIndex].text, photo: arr[backIndex].photo, urls: arr[backIndex].urls, name: arr[backIndex].name }
         newObj.DisplayImage = arr[backIndex].DisplayImage
       }
@@ -195,7 +196,8 @@ export default function Dashboard(props) {
         photoUrls: newObj.photoUrls,
         identicon: arr[backIndex].identicon,
         price: newObj.price,
-        currency: newObj.currency
+        currency: newObj.currency,
+        storageHash: "placeholder"
       });
 
       window.backIndex = undefined
@@ -1832,7 +1834,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <img src={selectedImage} alt="..." />
+                      <a href='https://www.arweave.org/' target='_blank'><img src={selectedImage} alt="..." /></a>
                     </>
                   )}
                   {selectedAssetObj.DisplayImage === "" && (
@@ -1915,6 +1917,9 @@ export default function Dashboard(props) {
                 fullWidth
                 disabled
               />
+
+              <h6 className="storageProviderText">Permanent data storage by <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
+
               {/*@dev URLs go here*/}
               <br />
               <div>
