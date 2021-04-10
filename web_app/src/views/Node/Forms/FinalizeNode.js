@@ -49,7 +49,7 @@ export default function FinalizeNode(props) {
     const [nodeInfo,] = React.useState(window.sentPacket);
 
     const link = document.createElement('div');
-
+    document.body.style.cursor = 'default';
     window.sentPacket = null;
 
     React.useEffect(() => {
@@ -229,6 +229,7 @@ export default function FinalizeNode(props) {
                                     icon: "success",
                                     button: "Close"
                                 })
+                                window.location.href = nodeInfo.lastRef;
                             })
 
                         break;
@@ -309,7 +310,7 @@ export default function FinalizeNode(props) {
                             )}
                         </GridItem>
                         <GridItem xs={12} sm={8}>
-                            <div className="slide-right">
+                            <Card className="slide-right">
                                 {managementType1 && (
                                     <>
                                         <h3>Restricted</h3>
@@ -354,7 +355,7 @@ export default function FinalizeNode(props) {
                             </p>
                                     </>
                                 )}
-                            </div>
+                            </Card>
                         </GridItem>
                     </GridContainer>
                 </Card>
@@ -390,7 +391,7 @@ export default function FinalizeNode(props) {
                             )}
                         </GridItem>
                         <GridItem xs={12} sm={8}>
-                            <div className="slide-right">
+                            <Card className="slide-right">
                                 {storageType1 && (
                                     <>
                                         <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS3"></img></a>
@@ -408,21 +409,30 @@ export default function FinalizeNode(props) {
                             </p>
                                     </>
                                 )}
-                            </div>
+                            </Card>
                         </GridItem>
                     </GridContainer>
                 </Card>
             )}
-            {card1 && (
-                <div className="MLBGradientSubmit">
-                    <Button className="MLBGradient" onClick={() => nextCard()} icon >Next <KeyboardArrowRight /> </Button>
-                </div>
+            {!transactionActive && (
+                <>
+                    {card1 && (
+                        <div className="MLBGradientSubmit">
+                            <Button className="MLBGradient" onClick={() => nextCard()} icon >Next <KeyboardArrowRight /> </Button>
+                        </div>
+                    )}
+                    {card2 && (
+                        <div className="MLBGradientSubmit">
+                            <Button className="MLBGradient" onClick={() => finalizeNode()} icon>Finish <CheckCircleOutline /> </Button>
+                            <Button className="MLBGradient" onClick={() => previousCard()} icon > <KeyboardArrowLeft />Back</Button>
+                        </div>
+                    )}
+                </>
             )}
-            {card2 && (
-                <div className="MLBGradientSubmit">
-                    <Button className="MLBGradient" onClick={() => finalizeNode()} icon>Finish <CheckCircleOutline /> </Button>
-                    <Button className="MLBGradient" onClick={() => previousCard()} icon > <KeyboardArrowLeft />Back</Button>
-                </div>
+            {transactionActive && (
+                <h3>
+                    Finalizing Node<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                </h3>
             )}
         </Card>
     );

@@ -39,6 +39,7 @@ export default function ChangeNodeData(props) {
   const [nodeInfo,] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
 
   const link = document.createElement('div')
+  document.body.style.cursor='default';
 
   //window.sentPacket = null
 

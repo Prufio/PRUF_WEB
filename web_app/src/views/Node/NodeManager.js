@@ -317,6 +317,7 @@ export default function NodeManager(props) {
 
 
   const handleSimple = (e) => {
+    document.body.style.cursor='wait';
     if (props.ps) {
       props.ps.element.scrollTop = 0
       //console.log(props.ps.element.scrollTop)
