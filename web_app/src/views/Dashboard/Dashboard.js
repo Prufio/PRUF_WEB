@@ -1918,7 +1918,7 @@ export default function Dashboard(props) {
                 disabled
               />
 
-              <h6 className="storageProviderText">Permanent data storage by <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
+              <h6 className="storageProviderText">See it on <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
 
               {/*@dev URLs go here*/}
               <br />
