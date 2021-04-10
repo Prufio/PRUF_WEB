@@ -84,7 +84,7 @@ export default function NewRecord(props) {
   const [displayImageUrl, setDisplayImageUrl] = React.useState("");
   const [fileMetaData, setFileMetaData] = React.useState("");
   const [rawFile, setRawFile] = React.useState()
-  const [storageProvider, setStorageProvider] = React.useState("arweave");
+  const [storageProvider, setStorageProvider] = React.useState("2");
 
 
   const [loginManufacturer, setloginManufacturer] = React.useState("");
@@ -181,6 +181,7 @@ export default function NewRecord(props) {
     await props.testWeave.mine(); 
     await props.testWeave.mine()
     await props.testWeave.mine() 
+    return
   }
 
   const rootLogin = (e) => {
@@ -208,7 +209,7 @@ export default function NewRecord(props) {
           window.utils.retreiveCosts(6, event.target.value).then((e) => {
             setNRCost(e.cost1.totalCost)
           })
-          setStorageProvider("arweave");
+          setStorageProvider("2");
         })
       }
       catch {
@@ -478,7 +479,7 @@ export default function NewRecord(props) {
     let file;
     file = e.target.files[0]
 
-    if(storageProvider === "arweave"){
+    if(storageProvider === "2"){
       return uploadOther(e)
     }
 
@@ -502,9 +503,9 @@ export default function NewRecord(props) {
   }
 
   const handleHash = (extendedDataHash, idxHash, ipfsObj) => {
-    if(storageProvider === "arweave"){
+    if(storageProvider === "2"){
       let extDataA = String(extendedDataHash).substring(0, 66)
-      let extDataB = String(extendedDataHash).substring(66, String(extendedDataHash).length)
+      let extDataB = "0x"+String(extendedDataHash).substring(66, String(extendedDataHash).length)
       _newRecord(extDataA, extDataB, idxHash, ipfsObj)
     }
 
@@ -616,7 +617,7 @@ export default function NewRecord(props) {
 
     setIpfsActive(true);
 
-    if(storageProvider === "ipfs"){
+    if(storageProvider === "1"){
       window.ipfs.add(payload).then((hash) => {
         if (!hash) {
           console.log("Something went wrong. Unable to upload to ipfs");
@@ -630,14 +631,14 @@ export default function NewRecord(props) {
       })
     }
 
-    else if (storageProvider === "arweave"){
+    else if (storageProvider === "2"){
       let file = fileMetaData;
-      let metaData = {maker: manufacturer, type: type, series: model, serial: serial, nodeKey: assetClassName, Description: ipfsObj.text.Description, name: ipfsObj.name}
+      let metaData = {maker: manufacturer, type: type, series: model, serial: serial, nodeKey: assetClassName, Description: ipfsObj.Description, name: ipfsObj.name}
       metaData["Content-Type"] = file.type
       metaData["Size"] = file.size
       metaData["FileName"] = file.name
       metaData["Last-Modified"] = file.lastModified
-
+ 
       postToArweave(rawFile, metaData, idxHash, ipfsObj)
     }
     
@@ -756,7 +757,6 @@ export default function NewRecord(props) {
 
   const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => { //create a new asset record
     //console.log("assetClass: ", assetClass)
-    extDataB = "0x"+extDataB
     swalReact({
       content:
         <div className="picture-container">
@@ -778,7 +778,8 @@ export default function NewRecord(props) {
 
     const pageKey = thousandHashesOf(props.addr, props.winKey)
 
-    if(storageProvider === "ipfs"){
+    if(storageProvider === "1"){
+      console.log('Using ipfs')
       let tempTxHash;
       var extendedDataHash = extDataA;
       var rgtHashRaw, idxHash;
@@ -787,6 +788,7 @@ export default function NewRecord(props) {
         root: selectedRootID,
         idxHash: idx,
         id: idx,
+        storageProvider: "1",
         ipfs: extendedDataHash,
         DisplayImage: displayImage,
         photo:  ipfsObj.photo,
@@ -802,7 +804,7 @@ export default function NewRecord(props) {
         status: "Transferable",
         statusNum: 51,
         Description: ipfsObj.Description,
-        note: "",
+        engraving: ipfsObj,
         identicon: [<Jdenticon value={idx} />],
         identiconLG: [<Jdenticon value={idx} />]
       }
@@ -899,7 +901,8 @@ export default function NewRecord(props) {
         });
     }
 
-    else if (storageProvider === "arweave") {
+    else if (storageProvider === "2") {
+      console.log('Using arweave')
       let tempTxHash;
       var extendedDataHash = extDataA + extDataB;
       var rgtHashRaw, idxHash;
@@ -908,13 +911,14 @@ export default function NewRecord(props) {
         root: selectedRootID,
         idxHash: idx,
         id: idx,
+        storageProvider: "2",
         ipfs: extendedDataHash,
         photo:  ipfsObj.photo,
         photoUrls: { DisplayImage: displayImageUrl },
         text: ipfsObj.text,
         urls: ipfsObj.urls,
         name: ipfsObj.name,
-        DisplayImage: displayImage,
+        DisplayImage: `http://localhost:1984/${extendedDataHash}`,
         assetClass: assetClass,
         assetClassName: assetClassName.substring(0, 1).toUpperCase() + assetClassName.substring(1, assetClassName.length).toLowerCase(),
         dBIndex: props.assetArr.length,
@@ -922,7 +926,7 @@ export default function NewRecord(props) {
         status: "Transferable",
         statusNum: 51,
         Description: ipfsObj.Description,
-        note: "",
+        engraving: ipfsObj,
         identicon: [<Jdenticon value={idx} />],
         identiconLG: [<Jdenticon value={idx} />]
       }
@@ -1485,7 +1489,7 @@ export default function NewRecord(props) {
                           </>
                         )}
                         <h4>AC Selected: {assetClassName} (ID: {assetClass})</h4>
-                        {storageProvider === "arweave"
+                        {storageProvider === "2"
                         ? <h6 className="storageProviderText">Permanent data storage by <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
                         :<h6 className="storageProviderText">Asset data stored using  <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS"></img></a></h6>
                         }
@@ -1670,7 +1674,7 @@ export default function NewRecord(props) {
                         )}
                         {!transactionActive && ipfsActive && (
                           <h3>
-                            Sending extended data to {`${storageProvider}`}<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                            Sending extended data to {`Arweave`}<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                           </h3>
                         )}
                         {!ipfsActive && transactionActive && (
