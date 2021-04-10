@@ -453,13 +453,11 @@ export default function Dashboard(props) {
       if (!window.replaceAssetData || Object.values(window.replaceAssetData).length === 0) {
         window.replaceAssetData = {};
       }
-      if (window.replaceAssetData.ether || window.replaceAssetData.pruf || window.replaceAssetData.assets || window.replaceAssetData.IDHolder) {
+      if (!window.replaceAssetData.refreshBals) {
         console.log("Resetting token value")
-        if (window.replaceAssetData.ether) setETHBalance(window.replaceAssetData.ether);
-        if (window.replaceAssetData.pruf) setPrufBalance(window.replaceAssetData.pruf);
-        if (window.replaceAssetData.assets) setAssetBalance(window.replaceAssetData.assets);
-        if (window.replaceAssetData.IDHolder) console.log("Setting IDHolder to true"); setIsIDHolder(true);
+        setupTokenVals(false, "refresh", addr, prufClient)
         window.replaceAssetData = {};
+        forceUpdate()
       }
 
       else if (window.replaceAssetData.key !== thousandHashesOf(addr, winKey)) {
@@ -681,7 +679,7 @@ export default function Dashboard(props) {
         window.isSettingUpContracts = false;
         setWD(true)
         if (_addr) {
-          setUpTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
+          setupTokenVals(true, "SetupContractEnvironment", _addr, _prufClient)
           buildNodeHeap()
         }
         if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
@@ -1367,7 +1365,7 @@ export default function Dashboard(props) {
   }
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const setUpTokenVals = async (willSetup, who, _addr, pruf) => {
+  const setupTokenVals = async (willSetup, who, _addr, pruf) => {
     if (!_addr) return swal("Unable to reach user's wallet.")
     console.log("STV: Setting up balances, called from ", who)
 
