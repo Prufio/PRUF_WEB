@@ -1487,7 +1487,7 @@ export default function CreateNode(props) {
           )}
           {transactionActive && (
             <h3>
-              Changing Owner Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Purchasing Node<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
             </h3>
           )}
         </form>
