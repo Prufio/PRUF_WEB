@@ -194,53 +194,32 @@ export default function Home(props) {
           icon: "success",
           button: "Close",
         });
-        window.replaceAssetData = { pruf: props.pruf + deposit }
+        refreshBalances()
         forceUpdate()
         //refreshBalances()
       });
-      /* props.prufClient.get
-      .assetRecord("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634")
-      .call((error, result)=>{
-        if(result) console.log(result)
-        else console.error(error)
-      })
+    /* props.prufClient.get
+    .assetRecord("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634")
+    .call((error, result)=>{
+      if(result) console.log(result)
+      else console.error(error)
+    })
 
-      props.prufClient.do
-      .verifyRightsHolder("0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d", "0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d")
-      .send({from: props.addr})
-      .on("error", (error)=>{
-        console.log("PRUF_ERR:",error)
-      })
-      .on("receipt", (receipt)=>{
-        console.log(receipt.events.REPORT.returnValues._msg)
-      }) */
+    props.prufClient.do
+    .verifyRightsHolder("0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d", "0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d")
+    .send({from: props.addr})
+    .on("error", (error)=>{
+      console.log("PRUF_ERR:",error)
+    })
+    .on("receipt", (receipt)=>{
+      console.log(receipt.events.REPORT.returnValues._msg)
+    }) */
 
-      console.log(window.ipfs)
+    console.log(window.ipfs)
 
-      console.log(props.prufClient.utils.isValidId("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634"))
+    console.log(props.prufClient.utils.isValidId("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634"))
 
     return clearPRUFForm();
-  }
-
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return
-
-    let pruf, ether;
-
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) }
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = { assets: result, ether, pruf } }
-          forceUpdate()
-        });
-      });
-    });
   }
 
   const mintID = () => {
@@ -310,34 +289,10 @@ export default function Home(props) {
     return tempHash;
   }
 
-  const refreshEtherBalance = () => {
-    if (!window.web3.eth) return
-    console.log("Refreshing ether bal")
-    setIsRefreshingEther(true)
-    window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { 
-        setIsRefreshingEther(false)
-        console.log(err)
-      }
-      else { window.replaceAssetData = { ether: window.web3.utils.fromWei(result, 'ether') } }
-      setIsRefreshingEther(false)
-      forceUpdate()
-    });
-  }
-
-  const refreshPrufBalance = () => {
-    if (!window.contracts) return
-    console.log("Refreshing pruf bal")
-    setIsRefreshingPruf(true)
-    window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-      if (err) { 
-        setIsRefreshingPruf(false) 
-        console.log(err)
-      }
-      else { window.replaceAssetData = { pruf: window.web3.utils.fromWei(result, 'ether') } }
-      setIsRefreshingPruf(false)
-      forceUpdate()
-    });
+  const refreshBalances = () => {
+    console.log("Refreshing balances")
+    window.replaceAssetData = { refreshBals: true }
+    forceUpdate()
   }
 
   const purchaseNode = async () => {//create a new asset class record
@@ -516,20 +471,20 @@ export default function Home(props) {
                 <img className="Icon" src={Eth}></img>
               </CardIcon>
               <p className={classes.cardCategory}>ETH Balance</p>
-              { props.ether ?
+              {props.ether ?
                 <h3 className={classes.cardTitle}>
-                {props.ether.substring(0, 7)} <small>Ether</small>
+                  {props.ether.substring(0, 7)} <small>Ether</small>
                 </h3>
                 :
                 <h3 className={classes.cardTitle}>
-                ~ <small>Ether</small>
+                  ~ <small>Ether</small>
                 </h3>
               }
             </CardHeader>
             <CardFooter stats>
               {!isRefreshingEther && (
                 <div className="refresh">
-                  <Cached onClick={() => refreshEtherBalance()} />
+                  <Cached onClick={() => refreshBalances()} />
                 </div>
               )}
               {isRefreshingEther && (
@@ -554,7 +509,7 @@ export default function Home(props) {
             <CardFooter stats>
               {!isRefreshingPruf && (
                 <div className="refresh">
-                  <Cached onClick={() => refreshPrufBalance()} />
+                  <Cached onClick={() => refreshBalances()} />
                 </div>
               )}
               {isRefreshingPruf && (
