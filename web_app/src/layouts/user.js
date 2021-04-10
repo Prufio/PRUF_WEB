@@ -635,7 +635,7 @@ export default function Dashboard(props) {
     if (!window.contracts || !window.web3) return
 
     console.log("reloading asset at index ", index)
-    let ipfsHash;
+    let extendedDataHash;
     let tempResult;
     let fullUrl = "";
     let idxHash;
@@ -657,8 +657,8 @@ export default function Dashboard(props) {
             console.log("Found asset!");
             tempResult = Object.values(_result);
 
-            if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-            console.log("ipfs data in promise", ipfsHash);
+            if (Object.values(_result)[5] > 0) { extendedDataHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+            console.log("ipfs data in promise", extendedDataHash);
 
             if (Object.values(_result)[6] > 0); {
               let knownUrl = "https://ipfs.io/ipfs/";
@@ -697,8 +697,8 @@ export default function Dashboard(props) {
             }
 
             let newAsset = {}
-            if (typeof ipfsHash !== "string") {
-              ipfsHash.then((_ipfsHash) => {
+            if (typeof extendedDataHash !== "string") {
+              extendedDataHash.then((_ipfsHash) => {
                 window.utils.getACName(tempResult[2]).then((e) => {
                   newAsset = Object.assign(newAsset, {
                     id: idxHash,
@@ -718,7 +718,7 @@ export default function Dashboard(props) {
                     let assetObj;
 
                     if (cookies[_ipfsHash]) {
-                      console.log("Using cached ipfs data:", cookies[_ipfsHash])
+                      //console.log("Using cached ipfs data:", cookies[_ipfsHash])
                       let str = JSON.stringify(cookies[_ipfsHash])
                       if (!str) {
                         assetObj = { text: {}, photo: {}, urls: {}, name: "" }
@@ -1023,7 +1023,7 @@ export default function Dashboard(props) {
                   assetClass: tempResult[2],
                   assetClassName: e,
                   note: fullUrl,
-                  ipfs: ipfsHash,
+                  ipfs: extendedDataHash,
                   countPair: [tempResult[4], tempResult[3]]
                 })
 
@@ -1033,10 +1033,10 @@ export default function Dashboard(props) {
                   let assetObj;
 
 
-                  for await (const chunk of window.ipfs.cat(ipfsHash)) {
+                  for await (const chunk of window.ipfs.cat(extendedDataHash)) {
                     let str = new TextDecoder("utf-8").decode(chunk);
 
-                    setCookieTo(ipfsHash, JSON.parse(str))
+                    setCookieTo(extendedDataHash, JSON.parse(str))
                     if (assetArr[index].ipfs) {
                       if (typeof assetArr[index].ipfs !== "string")
                         assetArr[index].ipfs.then((e) => {
@@ -1260,7 +1260,7 @@ export default function Dashboard(props) {
     if (!rootsDone && !acsDone) rootsDone = false; acsDone = false;
     if (!iteration) iteration = 1;
     if (!arr) arr = [];
-    if (rootsDone === true && acsDone === true) { console.log("Found all nodes", arr); setAcArr(arr); getACsFromDB(arr); }
+    if (rootsDone === true && acsDone === true) { setAcArr(arr); getACsFromDB(arr); }
     let noMore = false;
 
     if (rootsDone !== true) {
@@ -1273,14 +1273,14 @@ export default function Dashboard(props) {
 
             if (_result === "170") {
               arr.push(iteration);
-              console.log("found ", iteration);
+              //console.log("found ", iteration);
               iteration++;
               return buildNodeHeap(iteration, arr, false, false);
             }
 
             else {
               noMore = true;
-              console.log("There is no root ", iteration);
+              //console.log("There is no root ", iteration);
               iteration++;
               return buildNodeHeap(1000001, arr, true, false);
             }
@@ -1300,14 +1300,14 @@ export default function Dashboard(props) {
 
             if (_result === "170") {
               arr.push(iteration)
-              console.log("found ", iteration);
+              //console.log("found ", iteration);
               iteration++;
               return buildNodeHeap(iteration, arr, true, false);
             }
 
             else {
               noMore = true;
-              console.log("There is no ac ", iteration);
+              //console.log("There is no ac ", iteration);
               iteration++;
               console.log("Found all nodes", arr);
               setAcArr(arr);
@@ -1560,10 +1560,10 @@ export default function Dashboard(props) {
   }
 
   const buildAssetHeap = (_addr, _prufClient, ids, data, iteration) => {
-    console.log(_prufClient.get, iteration)
+    //console.log(_prufClient.get, iteration)
     if (!ids) return
     if (!data) data = [];
-    if (!iteration) iteration = 0;
+    if (!iteration) { console.log("ids: ", ids); iteration = 0; }
     if (iteration >= ids.length) return getMutableData(data, _prufClient)
 
     else {
@@ -1591,7 +1591,7 @@ export default function Dashboard(props) {
             obj.identicon = <Jdenticon value={obj.id} />;
             obj.identiconLG = <Jdenticon value={obj.id} />;
 
-            _prufClient.utils.stringifyStatus(_result[0]).then(e=>{
+            _prufClient.utils.stringifyStatus(_result[0]).then(e => {
               obj.status = e
             })
 
@@ -1637,15 +1637,12 @@ export default function Dashboard(props) {
   }
 
   const getMutableData = (assetHeap, _prufClient, assetsWithMutableData, iteration) => {
-    if (!assetHeap) return console.log("Failed upon reception of:",assetHeap)
-    if (!iteration) iteration = 0;
+    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap)
+    if (!iteration) { console.log("Assets Prior to mutable data retreival:", assetHeap); iteration = 0; }
     if (!assetsWithMutableData) assetsWithMutableData = [];
-    if (iteration >= assetHeap.length) {console.log("EXIT"); return getEngravings(assetsWithMutableData, _prufClient)}
+    if (iteration >= assetHeap.length) { /* console.log("EXIT"); */ return getEngravings(assetsWithMutableData, _prufClient) }
 
     let _arweave = window.arweave;
-
-    console.log("Contracts: ", window.contracts);
-    console.log("Assets Prior to mutable data retreival:", assetHeap);
 
     let obj = assetHeap[iteration]
     let storageType = obj.assetClassData.storageProvider;
@@ -1654,20 +1651,20 @@ export default function Dashboard(props) {
     if (obj.mutableDataA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
       obj.mutableData = ""
       assetsWithMutableData.push(obj)
-      console.log("EXIT")
+      //console.log("EXIT")
       return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
     }
 
     else if (storageType === "1") {
       mutableDataQuery = _prufClient.utils.ipfsFromB32(obj.mutableDataA);
-      console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
+      //console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
       //engravingQuery = await _prufClient.utils.ipfsFromB32(obj.engravingA);
 
       if (cookies[mutableDataQuery]) {
-        console.log("Using cached mutable data:", cookies[mutableDataQuery])
+        //console.log("Using cached mutable data:", cookies[mutableDataQuery])
         obj.mutableData = cookies[mutableDataQuery]
         assetsWithMutableData.push(obj)
-        console.log("EXIT")
+        //console.log("EXIT")
         return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
       }
 
@@ -1684,7 +1681,7 @@ export default function Dashboard(props) {
 
           assetsWithMutableData.push(obj)
           setCookieTo(mutableDataQuery, obj)
-          console.log("EXIT")
+          //console.log("EXIT")
           return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
         }
       }
@@ -1696,10 +1693,10 @@ export default function Dashboard(props) {
       console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
       //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
       if (cookies[mutableDataQuery]) {
-        console.log("Using cached mutable data:", cookies[mutableDataQuery])
+        //console.log("Using cached mutable data:", cookies[mutableDataQuery])
         obj.mutableData = cookies[mutableDataQuery]
         assetsWithMutableData.push(obj)
-        console.log("EXIT")
+        //console.log("EXIT")
         return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
       }
 
@@ -1717,7 +1714,7 @@ export default function Dashboard(props) {
           obj.mutableData = tempObj;
           assetsWithMutableData.push(obj)
           setCookieTo(mutableDataQuery, tempObj)
-          console.log("EXIT")
+          //console.log("EXIT")
           return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
         })
       }
@@ -1725,14 +1722,12 @@ export default function Dashboard(props) {
   };
 
   const getEngravings = (assetHeap, _prufClient, assetsWithEngravings, iteration) => {
-    if (!assetHeap) return console.log("Failed upon reception of:",assetHeap)
-    if (!iteration) iteration = 0;
+    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap)
+    if (!iteration) { console.log("Assets Prior to engraving retreival:", assetHeap); iteration = 0; }
     if (!assetsWithEngravings) assetsWithEngravings = [];
-    if (iteration >= assetHeap.length) {console.log("EXIT"); return finalizeAssets(assetsWithEngravings)}
+    if (iteration >= assetHeap.length) { /* console.log("EXIT"); */ return finalizeAssets(assetsWithEngravings) }
 
     let _arweave = window.arweave;
-
-    console.log("Assets Prior to engraving retreival:", assetHeap);
 
     let obj = assetHeap[iteration]
     let storageType = obj.assetClassData.storageProvider;
@@ -1741,7 +1736,7 @@ export default function Dashboard(props) {
     if (obj.engravingA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
       obj.engraving = ""
       assetsWithEngravings.push(obj)
-      console.log("EXIT")
+      //console.log("EXIT")
       return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
     }
 
@@ -1750,9 +1745,9 @@ export default function Dashboard(props) {
       console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
 
       if (cookies[engravingQuery]) {
-        console.log("Using cached engraving:", cookies[engravingQuery])
+        //console.log("Using cached engraving:", cookies[engravingQuery])
         obj.engraving = cookies[engravingQuery]
-        console.log("EXIT")
+        //console.log("EXIT")
         assetsWithEngravings.push(obj)
         return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
       }
@@ -1770,7 +1765,7 @@ export default function Dashboard(props) {
 
           assetsWithEngravings.push(obj)
           setCookieTo(engravingQuery, obj)
-          console.log("EXIT")
+          //console.log("EXIT")
           return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
         }
       }
@@ -1778,11 +1773,11 @@ export default function Dashboard(props) {
 
     else if (storageType === "2") {
       engravingQuery = window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engravingB.indexOf("0000000000"))}`)
-      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
+      //console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
       if (cookies[engravingQuery]) {
-        console.log("Using cached engraving:", cookies[engravingQuery])
+        //console.log("Using cached engraving:", cookies[engravingQuery])
         obj.engraving = cookies[engravingQuery]
-        console.log("EXIT")
+        //console.log("EXIT")
         assetsWithEngravings.push(obj)
         return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
       }
@@ -1801,7 +1796,7 @@ export default function Dashboard(props) {
           obj.engraving = tempObj;
           assetsWithEngravings.push(obj)
           setCookieTo(engravingQuery, tempObj)
-          console.log("EXIT")
+          //console.log("EXIT")
           return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
         })
       }
@@ -1809,16 +1804,16 @@ export default function Dashboard(props) {
   }
 
   const finalizeAssets = (assetHeap, finalizedAssets, iteration) => {
-    if (!assetHeap) return console.log("Failed upon reception of:",assetHeap)
+    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap)
     if (!finalizedAssets) finalizedAssets = [];
-    if (!iteration) iteration = 0;
+    if (!iteration) { console.log("Assets Prior to final sorting:", assetHeap); iteration = 0; }
     if (iteration >= assetHeap.length) {
-      setReserveAD(assetHeap); 
+      setReserveAD(assetHeap);
       console.log("Finalized assets: ", finalizedAssets)
       return setAssetArr(finalizedAssets)
     }
 
-    console.log("Assets Prior to final sorting:", assetHeap);
+
 
     let obj = assetHeap[iteration]
 
@@ -1827,16 +1822,17 @@ export default function Dashboard(props) {
     obj.urls = (obj.engraving.urls || obj.mutableData.urls || {})
     obj.name = (obj.engraving.name || obj.mutableData.name || "Name Unavailable")
     obj.photoUrls = (obj.engraving.photo || obj.mutableData.photo || {})
+    obj.Description = (obj.engraving.Description || obj.mutableData.Description || "")
 
     let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
     if (keys.length === 0) {
 
-      if(obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")){
+      if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
         obj.DisplayImage = obj.engraving.contentUrl
       }
-      
-      else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")){
+
+      else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")) {
         obj.DisplayImage = obj.mutableData.contentUrl
       }
 
@@ -1920,48 +1916,77 @@ export default function Dashboard(props) {
           req.send();
         }
       }
-       get()
+      get()
     }
   }
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
   const setUpTokenVals = async (willSetup, who, _addr, pruf) => {
+    if (!_addr) return swal("Unable to reach user's wallet.")
     console.log("STV: Setting up balances, called from ", who)
 
-    await window.utils.determineTokenBalance(_addr).then((e) => {
-      if (e === undefined) return console.log("Account Locked")
-      setAssetBalance(e.assetBalance);
-      setAssetClassBalance(e.assetClassBalance);
-      setPrufBalance(e.prufTokenBalance);
-      setIDBalance(e.IDTokenBalance);
-      setIsAssetHolder(window.assetHolderBool);
-      setIsAssetClassHolder(window.assetClassHolderBool);
-      setIsIDHolder(window.IDHolderBool);
-      setHasFetchedBalances(window.hasFetchedBalances);
-      setETHBalance(window.ETHBalance)
+    await window.web3.eth.getBalance(_addr, (error, result) => {
+      if (error) { } else {
+        setETHBalance(window.web3.utils.fromWei(result, "ether"))
+      }
+    });
 
-      if (willSetup) {
-        forceUpdate();
-        getAssetIds(_addr, pruf, e.assetBalance)
+    await window.contracts.AC_TKN.methods.balanceOf(_addr).call((error, result) => {
+      if (error) { console.log(error) }
+      else {
+        setAssetClassBalance(result);
+        if (Number(result) > 0) {
+          setIsAssetClassHolder(true)
+        } else {
+          setIsAssetClassHolder(false)
+        }
+      }
+    });
+
+    window.contracts.ID_TKN.methods.balanceOf(_addr).call((error, result) => {
+      if (error) { console.log(error) }
+      else {
+        setIDBalance(result);
+        if (Number(result) > 0 && Number(result) < 2) {
+          setIsIDHolder(true)
+        } else {
+          setIsIDHolder(false)
+        }
+      }
+    });
+
+    await window.contracts.A_TKN.methods.balanceOf(_addr).call((error, result) => {
+      if (error) { console.log(error) }
+      else {
+        setAssetBalance(result);
+        if (Number(result) > 0) {
+          setIsAssetHolder(true)
+        } else {
+          setIsAssetHolder(false)
+        }
+        if (willSetup) {
+          forceUpdate();
+          getAssetIds(_addr, pruf, result)
+        }
       }
     })
+    await window.contracts.UTIL_TKN.methods.balanceOf(_addr).call((error, result) => {
+      if (error) { console.log(error) }
+      else {
+        setPrufBalance(window.web3.utils.fromWei(result, 'ether'));
+      }
+    });
 
-    if (window.contracts) {
-      await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
-        function (_error, _result) {
-          if (_error) {
-            return (console.log("IN ERROR IN ERROR IN ERROR"))
-          }
-          else {
-            setCurrentACIndex(window.web3.utils.fromWei(Object.values(_result)[0]))
-            setCurrentACPrice(window.web3.utils.fromWei(Object.values(_result)[1]))
-          }
+    await window.contracts.AC_MGR.methods.currentACpricingInfo().call((error, result) => {
+      if (error) {
+        return (console.log("IN ERROR IN ERROR IN ERROR"))
+      }
+      else {
+        setCurrentACIndex(window.web3.utils.fromWei(result["0"]))
+        setCurrentACPrice(window.web3.utils.fromWei(result["1"]))
+      }
+    });
 
-        }
-      );
-    }
-
-    return forceUpdate();
   };
 
   return (

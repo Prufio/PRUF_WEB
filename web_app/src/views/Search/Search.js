@@ -2312,7 +2312,7 @@ export default function Search(props) {
     }
 
     console.log("in vr")
-    let ipfsHash;
+    let extendedDataHash;
     let tempResult;
     let idxHash = asset.idxHash;
     let rgtHashRaw;
@@ -2572,8 +2572,8 @@ export default function Search(props) {
   //             setResult(Object.values(_result));
   //             setError("");
   //             tempResult = Object.values(_result);
-  //             if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-  //             console.log("ipfs data in promise", ipfsHash)
+  //             if (Object.values(_result)[5] > 0) { extendedDataHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+  //             console.log("ipfs data in promise", extendedDataHash)
   //             if (Object.values(_result)[6] > 0) {
   //               console.log("Getting ipfs2 set up...")
   //               let knownUrl = "https://ipfs.io/ipfs/";
@@ -2619,7 +2619,7 @@ export default function Search(props) {
 
   //     console.log(window.authLevel);
 
-  //     await getIPFSJSONObject(ipfsHash);
+  //     await getIPFSJSONObject(extendedDataHash);
   //     setAuthLevel(window.authLevel);
   //     setScanQR(false);
   //     setAsset({
@@ -2739,7 +2739,7 @@ export default function Search(props) {
         return;
       }
     }
-    let ipfsHash;
+    let extendedDataHash;
     let tempResult;
     let idxHash;
 
@@ -2808,8 +2808,8 @@ export default function Search(props) {
               setError("");
               tempResult = Object.values(_result);
               window.printObj = Object.values(_result);
-              if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-              console.log("ipfs data in promise", ipfsHash);
+              if (Object.values(_result)[5] > 0) { extendedDataHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
+              console.log("ipfs data in promise", extendedDataHash);
               if (Object.values(_result)[6] > 0); {
                 console.log("Getting ipfs2 set up...");
                 let knownUrl = "https://ipfs.io/ipfs/";
@@ -2856,7 +2856,7 @@ export default function Search(props) {
 
       console.log(window.authLevel);
 
-      await getIPFSJSONObject(ipfsHash);
+      await getIPFSJSONObject(extendedDataHash);
       setAuthLevel(window.authLevel);
       setAsset({
         assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),

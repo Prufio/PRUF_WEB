@@ -290,7 +290,7 @@ export default function ChangeNodeData(props) {
       </>)
   }
 
-  const updateConfigData = async (ipfsHash) => { //import held asset
+  const updateConfigData = async (extendedDataHash) => { //import held asset
 
     let tempTxHash;
 
@@ -298,7 +298,7 @@ export default function ChangeNodeData(props) {
 
     await window.contracts.AC_MGR.methods
       .updateACipfs(
-        ipfsHash,
+        extendedDataHash,
         nodeInfo.id,
       )
       .send({ from: props.addr })

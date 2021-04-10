@@ -1238,7 +1238,7 @@ export default function CreateNode(props) {
     }); 
   }
 
-  const purchaseNode = async (ipfsHash) => { //import held asset
+  const purchaseNode = async (extendedDataHash) => { //import held asset
 
     let tempTxHash;
     setShowHelp(false);
@@ -1251,7 +1251,7 @@ export default function CreateNode(props) {
         name,
         root,
         2,
-        ipfsHash,
+        extendedDataHash,
       )
       .send({ from: props.addr })
       .on("error", function (_error) {

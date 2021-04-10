@@ -175,7 +175,7 @@ export default function Verify(props) {
         }
     
         console.log("in vr")
-        let ipfsHash;
+        let extendedDataHash;
         let tempResult;
         let idxHash = assetInfo.idxHash;
         let rgtHashRaw;

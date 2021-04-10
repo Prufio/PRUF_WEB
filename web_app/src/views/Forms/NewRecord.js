@@ -501,15 +501,15 @@ export default function NewRecord(props) {
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
   }
 
-  const handleHash = (ipfsHash, idxHash, ipfsObj) => {
+  const handleHash = (extendedDataHash, idxHash, ipfsObj) => {
     if(storageProvider === "arweave"){
-      let extDataA = String(ipfsHash).substring(0, 66)
-      let extDataB = String(ipfsHash).substring(66, String(ipfsHash).length)
+      let extDataA = String(extendedDataHash).substring(0, 66)
+      let extDataB = String(extendedDataHash).substring(66, String(extendedDataHash).length)
       _newRecord(extDataA, extDataB, idxHash, ipfsObj)
     }
 
     else {
-      let ipfsB32 = window.utils.getBytes32FromIPFSHash(String(ipfsHash));
+      let ipfsB32 = window.utils.getBytes32FromIPFSHash(String(extendedDataHash));
       _newRecord(ipfsB32, "", idxHash, ipfsObj)
     }
   }
@@ -571,19 +571,19 @@ export default function NewRecord(props) {
     setShowHelp(false);
 
     if (nameTag !== "") {
-      ipfsObj = { photo: {}, text: {}, urls: {}, name: String(nameTag) }
+      ipfsObj = { photo: {}, text: {}, urls: {}, Description: "", DisplayImage: "", name: String(nameTag) }
     }
 
     else {
-      ipfsObj = { photo: {}, text: {}, urls: {}, name: "" }
+      ipfsObj = { photo: {}, text: {}, urls: {}, Description: "", DisplayImage: "", name: "" }
     }
 
     if (description !== "") {
-      ipfsObj.text.Description = description;
+      ipfsObj.Description = description;
     }
 
     if (displayImage !== "") {
-      ipfsObj.photo.DisplayImage = displayImageUrl;
+      ipfsObj.DisplayImage = displayImageUrl;
     }
 
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
@@ -632,7 +632,7 @@ export default function NewRecord(props) {
 
     else if (storageProvider === "arweave"){
       let file = fileMetaData;
-      let metaData = {nodeKey: assetClassName, description: ipfsObj.text.Description, name: ipfsObj.name}
+      let metaData = {maker: manufacturer, type: type, series: model, serial: serial, nodeKey: assetClassName, Description: ipfsObj.text.Description, name: ipfsObj.name}
       metaData["Content-Type"] = file.type
       metaData["Size"] = file.size
       metaData["FileName"] = file.name
@@ -780,15 +780,16 @@ export default function NewRecord(props) {
 
     if(storageProvider === "ipfs"){
       let tempTxHash;
-      var ipfsHash = extDataA;
+      var extendedDataHash = extDataA;
       var rgtHashRaw, idxHash;
   
       let newAsset = {
         root: selectedRootID,
         idxHash: idx,
         id: idx,
-        ipfs: ipfsHash,
-        photo: { DisplayImage: displayImage },
+        ipfs: extendedDataHash,
+        DisplayImage: displayImage,
+        photo:  ipfsObj.photo,
         photoUrls: { DisplayImage: displayImageUrl },
         text: ipfsObj.text,
         urls: ipfsObj.urls,
@@ -800,7 +801,7 @@ export default function NewRecord(props) {
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: 51,
-        Description: ipfsObj.text.Description,
+        Description: ipfsObj.Description,
         note: "",
         identicon: [<Jdenticon value={idx} />],
         identiconLG: [<Jdenticon value={idx} />]
@@ -832,11 +833,11 @@ export default function NewRecord(props) {
       console.log("AC: ", assetClass);
   
       //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
-      console.log("IPFS bytes32: ", ipfsHash);
+      console.log("IPFS bytes32: ", extendedDataHash);
   
       /* swal({
         title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+ipfsHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
         button: "Okay",
       }) */
   
@@ -846,7 +847,7 @@ export default function NewRecord(props) {
           rgtHash,
           assetClass,
           "1000000",
-          ipfsHash,
+          extendedDataHash,
           ""
         )
         .send({ from: props.addr })
@@ -900,15 +901,15 @@ export default function NewRecord(props) {
 
     else if (storageProvider === "arweave") {
       let tempTxHash;
-      var ipfsHash = extDataA + extDataB;
+      var extendedDataHash = extDataA + extDataB;
       var rgtHashRaw, idxHash;
   
       let newAsset = {
         root: selectedRootID,
         idxHash: idx,
         id: idx,
-        ipfs: ipfsHash,
-        photo: { DisplayImage: displayImage },
+        ipfs: extendedDataHash,
+        photo:  ipfsObj.photo,
         photoUrls: { DisplayImage: displayImageUrl },
         text: ipfsObj.text,
         urls: ipfsObj.urls,
@@ -920,7 +921,7 @@ export default function NewRecord(props) {
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: 51,
-        Description: ipfsObj.text.Description,
+        Description: ipfsObj.Description,
         note: "",
         identicon: [<Jdenticon value={idx} />],
         identiconLG: [<Jdenticon value={idx} />]
@@ -957,11 +958,11 @@ export default function NewRecord(props) {
       console.log("AC: ", assetClass);
   
       //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
-      console.log("IPFS bytes32: ", ipfsHash);
+      console.log("IPFS bytes32: ", extendedDataHash);
   
       /* swal({
         title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+ipfsHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
         button: "Okay",
       }) */
   
@@ -1333,7 +1334,7 @@ export default function NewRecord(props) {
                               label="Asset Description:"
                               multiline
                               disabled
-                              placeHolder={description}
+                              placeholder={description}
                               rows={4}
                               variant="outlined"
                               fullWidth
@@ -1484,8 +1485,10 @@ export default function NewRecord(props) {
                           </>
                         )}
                         <h4>AC Selected: {assetClassName} (ID: {assetClass})</h4>
-                        <h6 className="storageProviderText">Permanent data storage made possible with <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
-                        <h6 className="storageProviderText">Asset data stored using  <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS"></img></a></h6>
+                        {storageProvider === "arweave"
+                        ? <h6 className="storageProviderText">Permanent data storage by <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
+                        :<h6 className="storageProviderText">Asset data stored using  <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS"></img></a></h6>
+                        }
                       </form>
                     </CardBody>
                   </Card>
@@ -1667,12 +1670,12 @@ export default function NewRecord(props) {
                         )}
                         {!transactionActive && ipfsActive && (
                           <h3>
-                            Uploading IPFS Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                            Sending extended data to {`${storageProvider}`}<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                           </h3>
                         )}
                         {!ipfsActive && transactionActive && (
                           <h3>
-                            Creating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                            Minting Asset Token<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                           </h3>
                         )}
                       </form>
