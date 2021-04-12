@@ -1840,7 +1840,7 @@ export default function Dashboard(props) {
                       <Tooltip
                         title="See it on ARweave"
                       >
-                        <a href='https://www.arweave.org/' target='_blank'>
+                        <a href={`${selectedAssetObj.ContentUrl}`} target='_blank'>
                           <img src={selectedImage} alt="..." />
                         </a>
                       </Tooltip>
