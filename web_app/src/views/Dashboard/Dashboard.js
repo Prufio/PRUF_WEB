@@ -79,7 +79,7 @@ export default function Dashboard(props) {
 
 
   const moreInfo = (e) => {
-    //console.log(props.ps);
+    console.log(e);
     if (props.ps) {
       //console.log(props.ps)
       props.ps.element.scrollTop = 0
@@ -193,6 +193,7 @@ export default function Dashboard(props) {
         text: newObj.text,
         urls: newObj.urls,
         photo: newObj.photo,
+        ContentUrl: newObj.ContentUrl,
         photoUrls: newObj.photoUrls,
         identicon: arr[backIndex].identicon,
         price: newObj.price,
@@ -231,7 +232,7 @@ export default function Dashboard(props) {
                       idxHash: arr[i].id,
                       descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
                       DisplayImage: arr[i].DisplayImage,
-                      contentUrl: arr[i].contentUrl,
+                      ContentUrl: arr[i].ContentUrl,
                       name: arr[i].name,
                       assetClass: arr[i].assetClass,
                       assetClassName: arr[i].assetClassName,
@@ -309,7 +310,7 @@ export default function Dashboard(props) {
                         descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
                         DisplayImage: arr[i].DisplayImage,
                         name: arr[i].name,
-                        contentUrl: arr[i].contentUrl,
+                        ContentUrl: arr[i].ContentUrl,
                         assetClass: arr[i].assetClass,
                         assetClassName: arr[i].assetClassName,
                         status: arr[i].status,
@@ -1920,7 +1921,7 @@ export default function Dashboard(props) {
                 disabled
               />
 
-              <h6 className="storageProviderText">See it on <a href={`http://localhost:1984/${}`} target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
+              <h6 className="storageProviderText">See it on <a href={`${selectedAssetObj.ContentUrl}`} target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
 
               {/*@dev URLs go here*/}
               <br />

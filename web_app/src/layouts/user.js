@@ -453,7 +453,7 @@ export default function Dashboard(props) {
       if (!window.replaceAssetData || Object.values(window.replaceAssetData).length === 0) {
         window.replaceAssetData = {};
       }
-      if (!window.replaceAssetData.refreshBals) {
+      if (window.replaceAssetData.refreshBals) {
         console.log("Resetting token value")
         setupTokenVals(false, "refresh", addr, prufClient)
         window.replaceAssetData = {};
@@ -1261,12 +1261,13 @@ export default function Dashboard(props) {
 
     let obj = assetHeap[iteration]
 
-    obj.photo = (obj.engraving.photo || obj.mutableData.photo || {})
-    obj.text = (obj.engraving.text || obj.mutableData.text || {})
-    obj.urls = (obj.engraving.urls || obj.mutableData.urls || {})
-    obj.name = (obj.engraving.name || obj.mutableData.name || "Name Unavailable")
-    obj.photoUrls = (obj.engraving.photo || obj.mutableData.photo || {})
-    obj.Description = (obj.engraving.Description || obj.mutableData.Description || "")
+    obj.photo = (obj.engraving.photo || obj.mutableData.photo || {});
+    obj.text = (obj.engraving.text || obj.mutableData.text || {});
+    obj.urls = (obj.engraving.urls || obj.mutableData.urls || {});
+    obj.name = (obj.engraving.name || obj.mutableData.name || "Name Unavailable");
+    obj.photoUrls = (obj.engraving.photo || obj.mutableData.photo || {});
+    obj.Description = (obj.engraving.Description || obj.mutableData.Description || "");
+    obj.ContentUrl = (obj.engraving.contentUrl || obj.mutableData.contentUrl || "");
 
     let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
