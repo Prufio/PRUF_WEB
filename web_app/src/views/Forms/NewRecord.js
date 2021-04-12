@@ -1253,7 +1253,7 @@ export default function NewRecord(props) {
                               }}
                             />
                           )}
-                          {transactionActive && (
+                          {transactionActive  || ipfsActive &&(
                             <CustomInput
                               labelText={nameTag}
                               id="assetName"
@@ -1293,7 +1293,7 @@ export default function NewRecord(props) {
                           <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                           <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
                         </>)}
-                        {transactionActive && displayImage !== "" && (
+                        {transactionActive && displayImage !== "" || ipfsActive &&(
                           <Button disabled> ... </Button>
                         )}
                         {!transactionActive && (
@@ -1309,7 +1309,7 @@ export default function NewRecord(props) {
                             />
                           </>
                         )}
-                        {transactionActive && description !== "" && (
+                        {transactionActive && description !== "" || ipfsActive &&(
                           <>
                             <TextField
                               id="outlined-multiline-static"
@@ -1410,7 +1410,7 @@ export default function NewRecord(props) {
               </div>
                           </>
                         )}
-                        {transactionActive && (
+                        {transactionActive || ipfsActive &&(
                           <>
                             {assetName !== "" && (
                               <CustomInput
@@ -1586,7 +1586,7 @@ export default function NewRecord(props) {
                     </div>
                             </>
                           )}
-                          {transactionActive && (
+                          {transactionActive || ipfsActive && (
                             <>
                               <CustomInput
                                 labelText={first}
