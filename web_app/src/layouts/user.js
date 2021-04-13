@@ -232,7 +232,7 @@ export default function Dashboard(props) {
   const setCookieTo = (job, val) => {
     //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
     console.log("Setting cookie", job, "to", val)
-    setCookie(job, JSON.stringify(val), { path: "/", expires: new Date().addDays(15) })
+    setCookie(String(job), JSON.stringify(val), { path: "/", expires: new Date().addDays(15) })
   }
 
   const readCookie = async (job) => {
@@ -1060,7 +1060,7 @@ export default function Dashboard(props) {
 
                         obj.assetClassData = {
                           name: _result.name,
-                          root: _result.root,
+                          root: _result.assetClassRoot,
                           custodyType: _result.custodyType,
                           managementType: _result.managementType,
                           discount: _result.discount,
@@ -1136,9 +1136,9 @@ export default function Dashboard(props) {
       mutableDataQuery = window.web3.utils.hexToUtf8(obj.mutableDataA + obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000")))
       console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
       //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
-      if (cookies[mutableDataQuery]) {
+      if (cookies[window.web3.utils.soliditySha3(mutableDataQuery)]) {
         //console.log("Using cached mutable data:", cookies[mutableDataQuery])
-        obj.mutableData = cookies[mutableDataQuery]
+        obj.mutableData = cookies[window.web3.utils.soliditySha3(mutableDataQuery)]
         assetsWithMutableData.push(obj)
         //console.log("EXIT")
         return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
@@ -1148,40 +1148,40 @@ export default function Dashboard(props) {
         let xhr = new XMLHttpRequest();
 
         xhr.onload = () => {
-        if(xhr.status !== 404){
-        try {
-          _arweave.transactions.get(mutableDataQuery).then(e => {
-            let tempObj = {};
-            e.get('tags').forEach(tag => {
-              let key = tag.get('name', { decode: true, string: true });
-              let value = tag.get('value', { decode: true, string: true });
-              tempObj[key] = value;
-              //console.log(`${key} : ${value}`);
-            })
-            //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
-            tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`
-            obj.mutableData = tempObj;
-            assetsWithMutableData.push(obj)
-            setCookieTo(mutableDataQuery, tempObj)
-            //console.log("EXIT")
+          if (xhr.status !== 404) {
+            try {
+              _arweave.transactions.get(mutableDataQuery).then(e => {
+                let tempObj = {};
+                e.get('tags').forEach(tag => {
+                  let key = tag.get('name', { decode: true, string: true });
+                  let value = tag.get('value', { decode: true, string: true });
+                  tempObj[key] = value;
+                  //console.log(`${key} : ${value}`);
+                })
+                //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
+                tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`
+                obj.mutableData = tempObj;
+                assetsWithMutableData.push(obj)
+                setCookieTo(window.web3.utils.soliditySha3(mutableDataQuery), tempObj)
+                //console.log("EXIT")
+                return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+              })
+            }
+            catch {
+              obj.mutableData = "";
+              assetsWithMutableData.push(obj)
+              return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+            }
+          }
+          else {
+            console.log("Id returned 404")
+            obj.mutableData = "";
+            assetsWithMutableData.push(obj);
             return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
-          })
+          }
         }
-        catch {
-          obj.mutableData = "";
-          assetsWithMutableData.push(obj)
-          return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
-        }
-      }
-      else{
-        console.log("Id returned 404")
-        obj.mutableData = "";
-        assetsWithMutableData.push(obj);
-        return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
-      }
-      }
 
-        xhr.open('GET', `http://localhost:1984/tx/${mutableDataQuery}`, false); 
+        xhr.open('GET', `http://localhost:1984/tx/${mutableDataQuery}`, false);
         xhr.send(null);
       }
     }
@@ -1238,11 +1238,11 @@ export default function Dashboard(props) {
     }
 
     else if (storageType === "2") {
-      engravingQuery = window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engravingB.indexOf("0000000000"))}`)
+      engravingQuery = window.web3.utils.hexToUtf8(obj.engravingA + obj.engravingB.substring(2, obj.engravingB.indexOf("0000000000000000000000") + 1))
       //console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
-      if (cookies[engravingQuery]) {
+      if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
         //console.log("Using cached engraving:", cookies[engravingQuery])
-        obj.engraving = cookies[engravingQuery]
+        obj.engraving = cookies[window.web3.utils.soliditySha3(engravingQuery)]
         //console.log("EXIT")
         assetsWithEngravings.push(obj)
         return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
@@ -1252,44 +1252,53 @@ export default function Dashboard(props) {
         let xhr = new XMLHttpRequest();
 
         xhr.onload = () => {
-        if(xhr.status !== 404){
-        try {
-          _arweave.transactions.get(engravingQuery).then(e => {
-            if(!e) throw "Thrown";
-            let tempObj = {};
-            e.get('tags').forEach(tag => {
-              let key = tag.get('name', { decode: true, string: true });
-              let value = tag.get('value', { decode: true, string: true });
-              tempObj[key] = value;
-              //console.log(`${key} : ${value}`);
-            })
-            //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
-            tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`
-            obj.engraving = tempObj;
-            assetsWithEngravings.push(obj)
-            setCookieTo(engravingQuery, tempObj)
-            //console.log("EXIT")
+          if (xhr.status !== 404) {
+            try {
+              _arweave.transactions.get(engravingQuery).then(e => {
+                if (!e) throw "Thrown";
+                let tempObj = {};
+                e.get('tags').forEach(tag => {
+                  let key = tag.get('name', { decode: true, string: true });
+                  let value = tag.get('value', { decode: true, string: true });
+                  tempObj[key] = value;
+                  //console.log(`${key} : ${value}`);
+                })
+                //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
+                tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`
+                obj.engraving = tempObj;
+                assetsWithEngravings.push(obj)
+                setCookieTo(window.web3.utils.soliditySha3(engravingQuery), tempObj)
+                //console.log("EXIT")
+                return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+              })
+            }
+            catch {
+              console.log("In arweave catch clause")
+              obj.engraving = "";
+              assetsWithEngravings.push(obj);
+              return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+            }
+          }
+          else {
+            console.log("Id returned 404")
+            obj.engraving = "";
+            obj.contentUrl = `http://localhost:1984/${engravingQuery}`
+            assetsWithEngravings.push(obj);
             return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
-          })
+          }
+        }
+
+        xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, false);
+        try {
+          xhr.send(null);
         }
         catch {
-          console.log("In arweave catch clause")
+          console.log("Gateway returned 404")
           obj.engraving = "";
+          obj.contentUrl = `http://localhost:1984/${engravingQuery}`
           assetsWithEngravings.push(obj);
           return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
         }
-      }
-      else{
-        console.log("Id returned 404")
-        obj.engraving = "";
-        obj.contentUrl = `http://localhost:1984/${engravingQuery}`
-        assetsWithEngravings.push(obj);
-        return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
-      }
-      }
-
-        xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, false); 
-        xhr.send(null);
       }
     }
   }
@@ -1318,20 +1327,27 @@ export default function Dashboard(props) {
 
     let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
-    if (keys.length === 0) {
+    if (obj.assetClassData.storageProvider === "2") {
 
-      if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
-        obj.DisplayImage = obj.engraving.contentUrl
-      }
+        console.log("detected storageProvider 2")
 
-      else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")) {
-        obj.DisplayImage = obj.mutableData.contentUrl
-      }
-
-      else obj.DisplayImage = "";
-
-      finalizedAssets.push(obj)
-      finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
+          obj.DisplayImage = obj.engraving.contentUrl
+          finalizedAssets.push(obj)
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
+  
+        else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")) {
+          obj.DisplayImage = obj.mutableData.contentUrl
+          finalizedAssets.push(obj)
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
+      
+        else if (keys.length === 0) {
+          obj.DisplayImage = "";
+          finalizedAssets.push(obj)
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
     }
 
     for (let i = 0; i < keys.length; i++) {

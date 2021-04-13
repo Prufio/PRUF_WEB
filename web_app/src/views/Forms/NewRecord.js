@@ -215,7 +215,7 @@ export default function NewRecord(props) {
 
             setNodeExtendedData({
               name: _result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-              root: _result.root,
+              root: _result.assetClassRoot,
               custodyType: _result.custodyType,
               managementType: _result.managementType,
               discount: _result.discount,
@@ -594,7 +594,7 @@ export default function NewRecord(props) {
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
 
     if (doesExist) {
-      return swal({
+      swal({
         title: "Asset already exists!",
         icon: "warning",
         button: "Close",
@@ -1328,10 +1328,10 @@ export default function NewRecord(props) {
                           <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                           <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
                         </>)}
-                        {transactionActive && displayImage !== "" (
+                        {transactionActive && displayImage !== "" && (
                           <Button disabled> ... </Button>
                         )}
-                        {!transactionActive && ipfsActive &&(
+                        {!transactionActive && ipfsActive && (
                           <Button disabled> ... </Button>
                         )}
                         {!transactionActive && (
