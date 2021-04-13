@@ -347,6 +347,30 @@ export default function NodeManager(props) {
 
 
   const handleSimple = (e) => {
+    if (e.temp === "view") {
+      let tempObj = JSON.parse(JSON.stringify(e.obj))
+      return swalReact({
+          icon: "warning",
+          content: <Card className="delegationCard">
+              <h4 className="delegationTitle">Submitted information is critical!</h4>
+              <h5 className="finalizingTipsContent">
+                  Please make sure the following account is correct before submitting!
+             </h5>
+          <div className="delegationTips">
+            <FiberManualRecordTwoTone className="delegationPin" />
+            <h5 className="delegationTipsContent">
+              You can un-delegate at any time.
+             </h5>
+          </div>
+          </Card>,
+          buttons: {
+              close: {
+                  text: "Close",
+                  className: "delegationButtonBack"
+              }
+          },
+      })
+    }
     document.body.style.cursor = 'wait';
     if (props.ps) {
       props.ps.element.scrollTop = 0
@@ -717,6 +741,20 @@ export default function NodeManager(props) {
                                   >
                                     Transfer
                                         </MenuItem>
+                                  <MenuItem
+                                    classes={{
+                                      root: classes.selectMenuItem,
+                                      selected: classes.selectMenuItemSelected
+                                    }}
+                                    value={{
+                                      temp: "view",
+                                      name: prop[0],
+                                      id: prop[1],
+                                      index: key
+                                    }}
+                                  >
+                                    View
+                                        </MenuItem>
                                   {extDataArr[key] && extDataArr[key].managementType === "255" && (
                                     <MenuItem
                                       classes={{
@@ -725,8 +763,7 @@ export default function NodeManager(props) {
                                       }}
                                       value={{
                                         href: "/#/user/finalize-node",
-                                        name: prop[0],
-                                        id: prop[1],
+                                        obj: prop,
                                         index: key
                                       }}
                                     >
