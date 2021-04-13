@@ -18,18 +18,12 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
-import Accordion from "components/Accordion/Accordion.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import cardStyles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { CeckCircleOutline, CheckCircleOutline, GroupAdd } from "@material-ui/icons";
-import { Component } from "react";
-import placeholder from "../../../assets/img/placeholder.jpg";
-import placeholderCheck from "../../../assets/img/placeholderCheck.jpg";
 import placeholderComingSoon from "../../../assets/img/placeholderComingSoon.jpg";
-import Success from "components/Typography/Success";
 import { Tooltip } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
@@ -47,21 +41,17 @@ export default function CreateNode(props) {
   const [txHash, setTxHash] = React.useState("");
   const [mintedID, setMintedID] = React.useState(false);
   const [selectedRootID, setSelectedRootID] = React.useState("");
-  const [advanced, setAdvanced] = React.useState(false)
 
   const [name, setName] = React.useState("");
   const [root, setRoot] = React.useState("");
   const [rootName, setRootName] = React.useState("");
-  const [ipfs, setIPFS] = React.useState("");
   const [pricingObj, setPricingObj] = React.useState({})
 
   const [loginName, setloginName] = React.useState("");
   const [loginIPFS, setloginIPFS] = React.useState("");
-  const [loginRoot, setloginRoot] = React.useState("");
 
   const [loginNameState, setloginNameState] = React.useState("");
   const [loginIPFSState, setloginIPFSState] = React.useState("");
-  const [loginRootState, setloginRootState] = React.useState("");
 
   const [standard1, setStandard1] = React.useState(true);
   const [standard2, setStandard2] = React.useState(false);
@@ -129,7 +119,6 @@ export default function CreateNode(props) {
   const [loginBeneficiaryAddress7State, setloginBeneficiaryAddress7State] = React.useState("");
   const [loginBeneficiaryAddress8State, setloginBeneficiaryAddress8State] = React.useState("");
 
-  const [nodeInfo,] = React.useState(window.sentPacket)
 
   const link = document.createElement('div')
   const sampleIpfs = {

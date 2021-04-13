@@ -9,14 +9,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
-import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
-import Wizard from "components/Wizard/Wizard.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { ArrowLeft, ArrowRight, ArrowRightAlt, AssignmentTurnedIn, Category, Check, CheckCircleOutline, FiberManualRecordTwoTone, KeyboardArrowLeft, LockOpen, Security, SwapHoriz, VerifiedUser, VpnKey } from "@material-ui/icons";
+import { AssignmentTurnedIn, Category, CheckCircleOutline, KeyboardArrowLeft, Security, VerifiedUser, VpnKey } from "@material-ui/icons";
 import ARweaveGreyPNG from "../../../assets/img/arweavegrey.png";
 import ARweavePNG from "../../../assets/img/arweave.png";
 import IPFSPNG from "../../../assets/img/ipfs.png";
@@ -163,10 +161,10 @@ export default function FinalizeNode(props) {
                     <h4 className="alertText">
                         Storage Type:
                     {storageType === "1" && (
-                            <img src={IPFSPNG} className="IPFS2" />
+                            <img src={IPFSPNG} className="IPFS2" alt="" />
                         )}
                         {storageType === "2" && (
-                            <img src={ARweavePNG} className="ARweave3" />
+                            <img src={ARweavePNG} className="ARweave3" alt="" />
                         )}
                     </h4>
                 </div>
@@ -369,23 +367,23 @@ export default function FinalizeNode(props) {
                         <GridItem xs={12} sm={4}>
                             {!storageType1 && (
                                 <Button className="managementType" color="info" onClick={() => setStorageType1Button()}>
-                                    <img src={IPFSPNG} className="IPFS2" />
+                                    <img src={IPFSPNG} className="IPFS2" alt="" />
                                 </Button>
                             )}
                             {storageType1 && (
                                 <Button className="managementTypeSelected" onClick={() => setStorageType1Button()}>
-                                    <img src={IPFSPNG} className="IPFS2" />
+                                    <img src={IPFSPNG} className="IPFS2" alt="" />
                                 </Button>
                             )}
                             {!storageType2 && (
                                 <Button className="managementType" color="info" onClick={() => setStorageType2Button()}>
-                                    <img src={ARweaveGreyPNG} className="ARweave3" />
+                                    <img src={ARweaveGreyPNG} className="ARweave3" alt="" />
                                 </Button>
                             )}
                             {storageType2 && (
                                 <Button className="managementTypeSelected" onClick={() => setStorageType2Button()}>
 
-                                    <img src={ARweaveGreyPNG} className="ARweave3" />
+                                    <img src={ARweaveGreyPNG} className="ARweave3" alt="" />
 
                                 </Button>
                             )}
@@ -394,7 +392,7 @@ export default function FinalizeNode(props) {
                             <Card className="slide-right">
                                 {storageType1 && (
                                     <>
-                                        <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS3"></img></a>
+                                        <a href='https://ipfs.io/' target='_blank' rel="noopener noreferrer"><img src={IPFSPNG} className="IPFS3" alt=""></img></a>
                                         <p>
                                             The InterPlanetary File System (IPFS) is a protocol and peer-to-peer network for storing and sharing data in a distributed file system.
                                             IPFS allows users to not only receive but host content, in a similar manner to BitTorrent.
@@ -403,7 +401,7 @@ export default function FinalizeNode(props) {
                                 )}
                                 {storageType2 && (
                                     <>
-                                        <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave4"></img></a>
+                                        <a href='https://www.arweave.org/' target='_blank' rel="noopener noreferrer"><img src={ARweavePNG} className="ARweave4" alt=""></img></a>
                                         <p>
                                             A novel data storage blockchain protocol enabling a permanent serverless web and creating truly permanent data storage for the first time.
                             </p>

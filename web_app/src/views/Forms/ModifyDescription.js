@@ -19,11 +19,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
-import { AddPhotoAlternateOutlined, DeleteForever, DeleteForeverOutlined, KeyboardArrowLeft, Settings, SettingsCellSharp } from "@material-ui/icons";
+import { AddPhotoAlternateOutlined, DeleteForever, Settings } from "@material-ui/icons";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
-import Share from "@material-ui/icons/Share";
-import Print from "@material-ui/icons/Print";
 import placeholder from "../../assets/img/placeholder.jpg";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -54,7 +52,7 @@ export default function ModifyDescription(props) {
   const [hasMounted, setHasMounted] = React.useState(false);
 
   const [txHash, setTxHash] = React.useState("");
-  const [customJSON, setCustomJSON] = React.useState("");
+  // const [customJSON, setCustomJSON] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
   const [selectedKey, setSelectedKey] = React.useState("");
   const [error, setError] = React.useState("");
@@ -64,17 +62,17 @@ export default function ModifyDescription(props) {
   const [loginURLState, setloginURLState] = React.useState("");
   const [loginURLTitle, setloginURLTitle] = React.useState("");
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
-  const [downloadName, setDownloadName] = React.useState("");
-  const [downloadLink, setDownloadLink] = React.useState("");
+  // const [downloadName, setDownloadName] = React.useState("");
+  // const [downloadLink, setDownloadLink] = React.useState("");
   const [copyText, setCopyText] = React.useState(false)
 
-  const [additionalImages, setAdditionalImages] = React.useState([]);
+  // const [additionalImages, setAdditionalImages] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   const link = document.createElement('div');
   const image = "photo", text = "text", url = "urls";
   const maxImageSize = 1000;
   const resizeImg = require('resize-img');
-  const fs = require('fs');
+  // const fs = require('fs');
 
   const classes = useStyles();
   const formClasses = useFormStyles();
@@ -1016,7 +1014,7 @@ export default function ModifyDescription(props) {
                   title="Copy to Clipboard"
                 >
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
+                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</Button>
                   </div>
                 </Tooltip>
               )}
@@ -1025,7 +1023,7 @@ export default function ModifyDescription(props) {
                   title="Copied to Clipboard"
                 >
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</a>
+                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</Button>
                   </div>
                 </Tooltip>
               )}
@@ -1038,7 +1036,7 @@ export default function ModifyDescription(props) {
                   title="Copy to Clipboard"
                 >
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 10) + "..." + idxHash.substring(56, 66)}</a>
+                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 10) + "..." + idxHash.substring(56, 66)}</Button>
                   </div>
                 </Tooltip>
               )}
@@ -1047,7 +1045,7 @@ export default function ModifyDescription(props) {
                   title="Copied to Clipboard"
                 >
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 10) + "..." + idxHash.substring(56, 66)}</a>
+                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 10) + "..." + idxHash.substring(56, 66)}</Button>
                   </div>
                 </Tooltip>
               )}

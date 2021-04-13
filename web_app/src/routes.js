@@ -4,7 +4,6 @@ import Home from "views/Home/Home.js";
 import NewRecord from "views/Forms/NewRecord.js";
 import Recycle from "views/Forms/Recycle.js";
 import Discard from "views/Forms/Discard.js";
-import EscrowManager from "views/Forms/EscrowManager.js";
 import Export from "views/Forms/Export.js";
 import Import from "views/Forms/Import.js";
 import ModifyDescription from "views/Forms/ModifyDescription.js";

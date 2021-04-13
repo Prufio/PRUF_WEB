@@ -11,17 +11,10 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import Button from "components/CustomButtons/Button.js";
-import Wizard from "components/Wizard/Wizard.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { ArrowLeft, ArrowRight, ArrowRightAlt, AssignmentTurnedIn, Category, Check, CheckCircleOutline, FiberManualRecordTwoTone, KeyboardArrowLeft, LockOpen, Security, SwapHoriz, VerifiedUser, VpnKey } from "@material-ui/icons";
-import ARweaveGreyPNG from "../../../assets/img/arweavegrey.png";
-import ARweavePNG from "../../../assets/img/arweave.png";
-import IPFSPNG from "../../../assets/img/ipfs.png";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import { Category } from "@material-ui/icons";
 
 
 // import Step1 from "./NodeWizzard/Step1.js";
@@ -39,12 +32,12 @@ export default function AuthorizeUser(props) {
     const [loginAddress, setloginAddress] = React.useState("");
     const [loginAddressState, setloginAddressState] = React.useState("");
 
-    const [userType, setUserType] = React.useState("1");
+    // const [userType, setUserType] = React.useState("1");
     // const [userType1, setUserType1] = React.useState(true);
     // const [userType2, setUserType2] = React.useState(false);
     // const [userType3, setUserType3] = React.useState(false);
-    const [card1, setCard1] = React.useState(true);
-    const [card2, setCard2] = React.useState(false);
+    // const [card1, setCard1] = React.useState(true);
+    // const [card2, setCard2] = React.useState(false);
 
     const [nodeInfo,] = React.useState(window.sentPacket);
 

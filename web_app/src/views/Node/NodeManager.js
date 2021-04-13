@@ -803,7 +803,7 @@ export default function NodeManager(props) {
                     <Card>
                       <CardHeader color="danger" stats icon>
                         <CardIcon className="headerIconBack">
-                          <img className="Icon" src={Pruf}></img>
+                          <img className="Icon" src={Pruf} alt=""></img>
                         </CardIcon>
                         <p className={classes.cardCategory}>PRüF Balance</p>
                         <h3 className={classes.cardTitle}>
