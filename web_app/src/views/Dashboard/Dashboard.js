@@ -353,7 +353,7 @@ export default function Dashboard(props) {
       return component
     }
 
-    else if (props.assets === "0") { return <h1>No assets held by user. <a className="lightBlue" href="/#/user/new-asset">Create One</a>.</h1> }
+    else if (props.assets === "0") { return <h2>No assets held by user. <a className="lightBlue" href="/#/user/new-asset">Create One</a>.</h2> }
 
     else { return <><h3>Getting Asset Data</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
 
