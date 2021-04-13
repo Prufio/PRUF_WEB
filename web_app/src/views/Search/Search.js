@@ -20,8 +20,7 @@ import Icon from '@material-ui/core/Icon';
 import Check from "@material-ui/icons/Check";
 import Share from "@material-ui/icons/Share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import Create from "@material-ui/icons/Create";
-import { DashboardOutlined, KeyboardArrowLeft, Scanner, Settings } from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import Category from "@material-ui/icons/Category";
 import AccountBox from "@material-ui/icons/AccountBox";
 
@@ -86,8 +85,6 @@ export default function Search(props) {
   const [classSelect, setClassSelect] = React.useState("");
   const [selectedRootID, setSelectedRootID] = React.useState("");
   const [recycleCost, setRecycleCost] = React.useState("");
-
-
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
@@ -158,37 +155,37 @@ export default function Search(props) {
   }, [window.contracts, query])
 
 
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return
 
-    let pruf, ether;
+  //   let pruf, ether;
 
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) }
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = { assets: result, ether, pruf } }
-        });
-      });
-    });
-  }
+  //   console.log("Refreshing ether bal")
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) { console.log(err) }
+  //     else { ether = window.web3.utils.fromWei(result, 'ether') }
+  //     window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
+  //       if (err) { console.log(err) }
+  //       else { pruf = window.web3.utils.fromWei(result, 'ether') }
+  //       window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
+  //         if (err) { console.log(err) }
+  //         else { window.replaceAssetData = { assets: result, ether, pruf } }
+  //       });
+  //     });
+  //   });
+  // }
 
-  const rootLogin = (e) => {
+  // const rootLogin = (e) => {
 
-    if (!e.target.value) return setRootSelect("")
-    if (!props.IDHolder) {
-      IDHolderPrompt()
-    }
+  //   if (!e.target.value) return setRootSelect("")
+  //   if (!props.IDHolder) {
+  //     IDHolderPrompt()
+  //   }
 
-    else {
-      setSelectedRootID(e.target.value)
-    }
-  }
+  //   else {
+  //     setSelectedRootID(e.target.value)
+  //   }
+  // }
 
   const ACLogin = (event) => {
     if (!props.IDHolder) {
@@ -4070,7 +4067,7 @@ export default function Search(props) {
                         title="Copy to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</a>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4079,7 +4076,7 @@ export default function Search(props) {
                         title="Copied to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</a>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4092,7 +4089,7 @@ export default function Search(props) {
                         title="Copy to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</a>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4101,7 +4098,7 @@ export default function Search(props) {
                         title="Copied to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</a>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</Button>
                         </div>
                       </Tooltip>
                     )}

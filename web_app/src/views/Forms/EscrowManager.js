@@ -263,10 +263,16 @@ export default function EscrowManager(props) {
               />
             </>
           )}
-          {(!transactionActive && assetInfo.statusNum == "50") || assetInfo.statusNum == "56" && (
+          {!transactionActive && assetInfo.statusNum === "50" && (
             <Button color="info" className="MLBGradient" onClick={() => setIsSettingEscrow(false)}>End Escrow</Button>
           )}
-          {(!transactionActive && assetInfo.statusNum !== "50") || assetInfo.statusNum !== "56" && (
+          {!transactionActive && assetInfo.statusNum === "56" && (
+            <Button color="info" className="MLBGradient" onClick={() => setIsSettingEscrow(false)}>End Escrow</Button>
+          )}
+          {!transactionActive && assetInfo.statusNum !== "50" && (
+            <Button color="info" className="MLBGradient" onClick={() => setIsSettingEscrow(true)}>Set Escrow</Button>
+          )}
+          {!transactionActive && assetInfo.statusNum !== "56" && (
             <Button color="info" className="MLBGradient" onClick={() => setIsSettingEscrow(true)}>Set Escrow</Button>
           )}
         </form>

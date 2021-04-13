@@ -113,7 +113,7 @@ export default function ModifyStatus(props) {
       }
     }
 
-    return setStatus(status), setStatusName(statusName);
+    return (setStatus(status), setStatusName(statusName));
   };
 
   const modifyStatus = async () => {

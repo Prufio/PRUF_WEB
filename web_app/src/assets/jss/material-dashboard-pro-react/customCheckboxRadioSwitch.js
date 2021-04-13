@@ -4,7 +4,6 @@ import {
   roseColor,
   grayColor,
   blackColor,
-  darkBlueColor,
   whiteColor,
   hexToRgb
 } from "assets/jss/material-dashboard-pro-react.js";

@@ -4,7 +4,6 @@ import Home from "views/Home/Home.js";
 import NewRecord from "views/Forms/NewRecord.js";
 import Recycle from "views/Forms/Recycle.js";
 import Discard from "views/Forms/Discard.js";
-import EscrowManager from "views/Forms/EscrowManager.js";
 import Export from "views/Forms/Export.js";
 import Import from "views/Forms/Import.js";
 import ModifyDescription from "views/Forms/ModifyDescription.js";
@@ -18,6 +17,7 @@ import SetForSale from "views/Forms/SetForSale.js";
 import NodeManager from "views/Node/NodeManager.js";
 
 import ChangeNodeName from "views/Node/Forms/ChangeNodeName.js";
+import AuthorizeUser from "views/Node/Forms/AuthorizeUser.js";
 import ChangeNodeData from "views/Node/Forms/ChangeNodeData.js";
 import ChangeNodeCosts from "views/Node/Forms/ChangeNodeCosts.js";
 import CreateNode from "views/Node/Forms/CreateNode.js";
@@ -169,6 +169,12 @@ var dashRoutes = [
     name: "Transfer Node",
     path: "/transfer-node",
     component: TransferNode,
+    layout: "/user"
+  },
+  {
+    name: "Authorize User",
+    path: "/authorize-user",
+    component: AuthorizeUser,
     layout: "/user"
   },
 ];

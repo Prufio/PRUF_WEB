@@ -13,7 +13,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
-import { GroupAdd, LocalOffer } from "@material-ui/icons";
+import { LocalOffer } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -143,7 +143,7 @@ export default function ChangeNodeCosts(props) {
 
     if (Object.values(obj).length < iteration && nodeInfo.costs[`cost${index}`].BeneficiaryAddress !== undefined && nodeInfo.costs[`cost${index}`].BeneficiaryAddress === _beneficiaryAddress) {
       swal("Cost updates complete!")
-      return window.backIndex = nodeInfo.dBIndex, window.location.href = nodeInfo.lastRef;
+      return (window.backIndex = nodeInfo.dBIndex, window.location.href = nodeInfo.lastRef);
     }
 
     if (!obj[index] && nodeInfo.costs[`cost${index}`].BeneficiaryAddress !== undefined && nodeInfo.costs[`cost${index}`].BeneficiaryAddress === _beneficiaryAddress) {

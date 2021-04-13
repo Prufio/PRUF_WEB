@@ -124,29 +124,29 @@ export default function NodeManager(props) {
 
   const getNodesInWallet = async (bal, ids, iteration) => {
 
- /*    window.contracts.AC_MGR.methods
-    .updateACImmutable(
-      "1000002",
-      "2",
-      "2",
-      "0xBef3b0b67061CACD4E10968d8Ba23A1c864c8049"
-  )
-  .send({ from: props.addr })
-  .on("error", function (_error) {
-          swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-          });
-  })
-  .on("receipt", (receipt) => {
-    console.log("Success")
-  }); */
+    /*    window.contracts.AC_MGR.methods
+       .updateACImmutable(
+         "1000002",
+         "2",
+         "2",
+         "0xBef3b0b67061CACD4E10968d8Ba23A1c864c8049"
+     )
+     .send({ from: props.addr })
+     .on("error", function (_error) {
+             swal({
+                 title: "Something went wrong!",
+                 icon: "warning",
+                 button: "Close",
+             });
+     })
+     .on("receipt", (receipt) => {
+       console.log("Success")
+     }); */
 
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return
     if (!iteration) iteration = 0;
-    if(!ids) ids = [];
+    if (!ids) ids = [];
     if (iteration >= bal) return buildNodesInWallet(ids)
 
     if (!bal) {
@@ -317,7 +317,7 @@ export default function NodeManager(props) {
 
 
   const handleSimple = (e) => {
-    document.body.style.cursor='wait';
+    document.body.style.cursor = 'wait';
     if (props.ps) {
       props.ps.element.scrollTop = 0
       //console.log(props.ps.element.scrollTop)
@@ -658,6 +658,22 @@ export default function NodeManager(props) {
                                   >
                                     Update Operation Costs
                                         </MenuItem>
+                                  {extDataArr[key] && extDataArr[key].managementType === "3" && (
+                                    <MenuItem
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected: classes.selectMenuItemSelected
+                                      }}
+                                      value={{
+                                        href: "/#/user/authorize-user",
+                                        name: prop[0],
+                                        id: prop[1],
+                                        index: key
+                                      }}
+                                    >
+                                      Authorize User
+                                    </MenuItem>
+                                  )}
                                   <MenuItem
                                     classes={{
                                       root: classes.selectMenuItem,
@@ -787,7 +803,7 @@ export default function NodeManager(props) {
                     <Card>
                       <CardHeader color="danger" stats icon>
                         <CardIcon className="headerIconBack">
-                          <img className="Icon" src={Pruf}></img>
+                          <img className="Icon" src={Pruf} alt=""></img>
                         </CardIcon>
                         <p className={classes.cardCategory}>PRüF Balance</p>
                         <h3 className={classes.cardTitle}>

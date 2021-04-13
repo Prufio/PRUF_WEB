@@ -28,7 +28,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import "../../assets/css/custom.css";
 
-import { Cached, DashboardOutlined, Close, ContactSupport } from "@material-ui/icons";
+import { Cached, DashboardOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -37,13 +37,13 @@ export default function Home(props) {
 
 
   const [error, setError] = React.useState("");
-  const [simpleSelect, setSimpleSelect] = React.useState("");
+  // const [simpleSelect, setSimpleSelect] = React.useState("");
   const [prufTransactionActive, setPrufTransactionActive] = React.useState(false);
   const [nodeTransactionActive, setNodeTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [rootName, setRootName] = React.useState("");
   const [txHash, setTxHash] = React.useState("");
-  const [ACPrice, setACPrice] = React.useState("");
+  // const [ACPrice, setACPrice] = React.useState("");
   const [isMinting, setIsMinting] = React.useState(false)
   const link = document.createElement('div')
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false)
@@ -76,32 +76,32 @@ export default function Home(props) {
     }
   }, [])
 
-  const rootLogin = event => {
-    setRoot(event.target.value)
-    if (event.target.value !== "") {
-      setloginRootState("success");
-    } else {
-      setloginRootState("error");
-    }
+  // const rootLogin = event => {
+  //   setRoot(event.target.value)
+  //   if (event.target.value !== "") {
+  //     setloginRootState("success");
+  //   } else {
+  //     setloginRootState("error");
+  //   }
 
-    setloginRoot(event.target.value);
+  //   setloginRoot(event.target.value);
 
-    if (event.target.value === "101") {
-      setRootName("Electronics")
-    }
-    if (event.target.value === "102") {
-      setRootName("Collectables")
-    }
-    if (event.target.value === "103") {
-      setRootName("Transportation")
-    }
-    if (event.target.value === "104") {
-      setRootName("Virtual")
-    }
-    if (event.target.value === "105") {
-      setRootName("Other")
-    }
-  };
+  //   if (event.target.value === "101") {
+  //     setRootName("Electronics")
+  //   }
+  //   if (event.target.value === "102") {
+  //     setRootName("Collectables")
+  //   }
+  //   if (event.target.value === "103") {
+  //     setRootName("Transportation")
+  //   }
+  //   if (event.target.value === "104") {
+  //     setRootName("Virtual")
+  //   }
+  //   if (event.target.value === "105") {
+  //     setRootName("Other")
+  //   }
+  // };
 
   const clearPRUFForm = () => {
     setDeposit(10000);
@@ -447,15 +447,15 @@ export default function Home(props) {
                 props.IDHolder === false ?
                   !isMinting ?
                     <>
-                      <a className="homeCardText" onClick={() => mintID}>
+                      <Button className="homeCardText" onClick={() => mintID}>
                         No ID held by user
-                    </a>
+                    </Button>
                     </>
                     :
                     <>
-                      <a className="homeCardText" onClick={() => mintID}>
+                      <Button className="homeCardText" onClick={() => mintID}>
                         <div className={classes.stats}><div className="lds-ellipsisCard"><div></div><div></div><div></div></div></div>
-                      </a>
+                      </Button>
                     </>
                   :
                   <>
@@ -468,7 +468,7 @@ export default function Home(props) {
           <Card>
             <CardHeader stats icon>
               <CardIcon className="headerIconBack" onClick={() => window.open("https://ethereum.org/en/")}>
-                <img className="Icon" src={Eth}></img>
+                <img className="Icon" src={Eth} alt=""></img>
               </CardIcon>
               <p className={classes.cardCategory}>ETH Balance</p>
               {props.ether ?
@@ -497,7 +497,7 @@ export default function Home(props) {
           <Card>
             <CardHeader color="danger" stats icon>
               <CardIcon className="headerIconBack" onClick={() => window.open("https://pruf.io/")}>
-                <img className="Icon" src={Pruf}></img>
+                <img className="Icon" src={Pruf} alt=""></img>
               </CardIcon>
               <p className={classes.cardCategory}>PRUF Balance</p>
               <h3 className={classes.cardTitle}>
@@ -523,7 +523,7 @@ export default function Home(props) {
       <Card>
         <CardHeader color="info" icon>
           <CardIcon className="headerIconBack">
-            <img className="IconFaucet" src={Pruf}></img>
+            <img className="IconFaucet" src={Pruf} alt=""></img>
           </CardIcon>
           <h4 className={classes.cardIconTitle}>PRUF Faucet (Kovan Testnet Only)</h4>
         </CardHeader>

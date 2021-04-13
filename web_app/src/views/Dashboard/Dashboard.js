@@ -14,15 +14,10 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Icon from '@material-ui/core/Icon';
-import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 
 // @material-ui/icons
-// import ContentCopy from "@material-ui/icons/ContentCopy";
-// import InfoOutline from "@material-ui/icons/InfoOutline";
 import Refresh from "@material-ui/icons/Refresh";
 import Share from "@material-ui/icons/Share";
-import Create from "@material-ui/icons/Create";
-import Edit from "@material-ui/icons/Edit";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
@@ -37,7 +32,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { ArrowBackIos, ArrowForwardIos, DashboardOutlined, KeyboardArrowLeft, KeyboardArrowRight, Settings } from "@material-ui/icons";
+import { ArrowBackIos, ArrowForwardIos, DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 import ARweavePNG from "../../assets/img/arweave.png";
@@ -225,7 +220,7 @@ export default function Dashboard(props) {
               <>
                 {!isMobile && (
                   <CardHeader image className={classes.cardHeaderHoverDashboard}>
-                    <a className="dashboardAssetImage" onClick={() => moreInfo({
+                    <Button className="dashboardAssetImage" onClick={() => moreInfo({
                       dBIndex: i,
                       id: arr[i].id,
                       countPair: arr[i].countPair,
@@ -263,12 +258,12 @@ export default function Dashboard(props) {
                           <Jdenticon value={arr[i].id} />
                         </>
                       )}
-                    </a>
+                    </Button>
                   </CardHeader>
                 )}
                 {isMobile && (
                   <CardHeader image className={classes.cardHeaderHover}>
-                    <a>
+                    <Button>
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
                         <img title="View Asset" src={arr[i].DisplayImage} alt="" />
@@ -284,7 +279,7 @@ export default function Dashboard(props) {
                           <Jdenticon value={arr[i].id} />
                         </>
                       )}
-                    </a>
+                    </Button>
                   </CardHeader>
                 )}
               </>
@@ -1837,7 +1832,13 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <a href='https://www.arweave.org/' target='_blank'><img src={selectedImage} alt="..." /></a>
+                      <Tooltip
+                        title="See it on ARweave"
+                      >
+                        <a href={`${selectedAssetObj.ContentUrl}`} target='_blank' rel="noopener noreferrer">
+                          <img src={selectedImage} alt="" />
+                        </a>
+                      </Tooltip>
                     </>
                   )}
                   {selectedAssetObj.DisplayImage === "" && (
@@ -1910,19 +1911,31 @@ export default function Dashboard(props) {
                 </>
               )}
               <br />
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                multiline
-                rows={4}
-                defaultValue={selectedAssetObj.Description}
-                variant="outlined"
-                fullWidth
-                disabled
-              />
-
-              <h6 className="storageProviderText">See it on <a href={`${selectedAssetObj.ContentUrl}`} target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
-
+              {selectedAssetObj.Description !== undefined && (
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  defaultValue="None"
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              )}
+              {selectedAssetObj.Description === undefined && (
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  defaultValue={selectedAssetObj.Description}
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              )}
+              <h6 className="storageProviderText">See it on <a href={`${selectedAssetObj.ContentUrl}`} target='_blank' rel="noopener noreferrer"><img src={ARweavePNG} className="ARweave" alt=""></img></a></h6>
               {/*@dev URLs go here*/}
               <br />
               <div>
@@ -1948,7 +1961,7 @@ export default function Dashboard(props) {
                       title="Copy to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</Button>
                       </div>
                     </Tooltip>
                   )}
@@ -1957,7 +1970,7 @@ export default function Dashboard(props) {
                       title="Copied to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</Button>
                       </div>
                     </Tooltip>
                   )}
@@ -1970,7 +1983,7 @@ export default function Dashboard(props) {
                       title="Copy to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</a>
+                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</Button>
                       </div>
                     </Tooltip>
                   )}
@@ -1979,7 +1992,7 @@ export default function Dashboard(props) {
                       title="Copied to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</a>
+                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</Button>
                       </div>
                     </Tooltip>
                   )}

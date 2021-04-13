@@ -1009,9 +1009,9 @@ export default function NewRecord(props) {
     setAssetClass("");
   }
 
-  const goBack = () => {
-    window.location.href = "/#/user/dashboard";
-  }
+  // const goBack = () => {
+  //   window.location.href = "/#/user/dashboard";
+  // }
 
   const classes = useStyles();
   const extClasses = useExtStyles();
@@ -1253,7 +1253,7 @@ export default function NewRecord(props) {
                               }}
                             />
                           )}
-                          {transactionActive && (
+                          {transactionActive && !ipfsActive &&(
                             <CustomInput
                               labelText={nameTag}
                               id="assetName"
@@ -1261,16 +1261,22 @@ export default function NewRecord(props) {
                               formControlProps={{
                                 fullWidth: true
                               }}
-                              inputProps={{
-                                onChange: event => {
-                                  setNameTag(event.target.value.trim())
-                                },
+                            />
+                          )}
+                          {!transactionActive && ipfsActive &&(
+                            <CustomInput
+                              labelText={nameTag}
+                              id="assetName"
+                              disabled
+                              formControlProps={{
+                                fullWidth: true
                               }}
                             />
                           )}
                         </>
                         {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
-                        {displayImage === "" && isUploading && (<>
+                        {displayImage === "" && isUploading && (
+                        <>
                           <br />
                           <br />
                           <CardHeader image className={classes.cardHeaderHoverCustom}>
@@ -1278,14 +1284,17 @@ export default function NewRecord(props) {
                               <div className="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                             </div>
                           </CardHeader>
-                        </>)}
-                        {displayImage !== "" && !isUploading && (<>
+                        </>
+                        )}
+                        {displayImage !== "" && !isUploading && (
+                        <>
                           <br />
                           <br />
                           <CardHeader image className={classes.cardHeaderHoverCustom}>
-                            <img src={displayImage} />
+                            <img src={displayImage} alt=""/>
                           </CardHeader>
-                        </>)}
+                        </>
+                        )}
                         {!transactionActive && displayImage === "" && !isUploading && (
                           <Button color="info" onClick={() => { handleClick() }}>Upload Display Image</Button>
                         )}
@@ -1293,7 +1302,10 @@ export default function NewRecord(props) {
                           <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                           <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
                         </>)}
-                        {transactionActive && displayImage !== "" && (
+                        {transactionActive && displayImage !== "" (
+                          <Button disabled> ... </Button>
+                        )}
+                        {!transactionActive && ipfsActive &&(
                           <Button disabled> ... </Button>
                         )}
                         {!transactionActive && (
@@ -1310,6 +1322,20 @@ export default function NewRecord(props) {
                           </>
                         )}
                         {transactionActive && description !== "" && (
+                          <>
+                            <TextField
+                              id="outlined-multiline-static"
+                              label="Asset Description:"
+                              multiline
+                              disabled
+                              placeholder={description}
+                              rows={4}
+                              variant="outlined"
+                              fullWidth
+                            />
+                          </>
+                        )}
+                        {!transactionActive && ipfsActive && (
                           <>
                             <TextField
                               id="outlined-multiline-static"
@@ -1466,10 +1492,66 @@ export default function NewRecord(props) {
                             />
                           </>
                         )}
+                        {!transactionActive && ipfsActive &&(
+                          <>
+                            {assetName !== "" && (
+                              <CustomInput
+                                labelText={assetName}
+                                id="assetName"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                            )}
+                            <CustomInput
+                              labelText={manufacturer}
+                              id="manufacturer"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                            <CustomInput
+                              labelText={type}
+                              id="type"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                            <CustomInput
+                              labelText={model}
+                              id="model"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                            <CustomInput
+                              labelText={serial}
+                              id="serial"
+                              formControlProps={{
+                                fullWidth: true
+                              }}
+                              inputProps={{
+                                disabled: true
+                              }}
+                            />
+                          </>
+                        )}
                         <h4>AC Selected: {assetClassName} (ID: {assetClass})</h4>
                         {storageProvider === "2"
-                        ? <h6 className="storageProviderText">Permanent data storage by <a href='https://www.arweave.org/' target='_blank'><img src={ARweavePNG} className="ARweave"></img></a></h6>
-                        :<h6 className="storageProviderText">Asset data stored using  <a href='https://ipfs.io/' target='_blank'><img src={IPFSPNG} className="IPFS"></img></a></h6>
+                        ? <h6 className="storageProviderText">Permanent data storage by <a href='https://www.arweave.org/' target='_blank' rel="noopener noreferrer"><img src={ARweavePNG} className="ARweave" alt=""></img></a></h6>
+                        :<h6 className="storageProviderText">Asset data stored using  <a href='https://ipfs.io/' target='_blank' rel="noopener noreferrer"><img src={IPFSPNG} className="IPFS" alt=""></img></a></h6>
                         }
                       </form>
                     </CardBody>
@@ -1587,6 +1669,61 @@ export default function NewRecord(props) {
                             </>
                           )}
                           {transactionActive && (
+                            <>
+                              <CustomInput
+                                labelText={first}
+                                id="first"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={middle}
+                                id="middle"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={last}
+                                id="last"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={ID}
+                                id="ID"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  disabled: true
+                                }}
+                              />
+                              <CustomInput
+                                labelText={password}
+                                id="password"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  type: "password",
+                                  disabled: true
+                                }}
+                              />
+                            </>
+                          )}
+                          {!transactionActive && ipfsActive && (
                             <>
                               <CustomInput
                                 labelText={first}
