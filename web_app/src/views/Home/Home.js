@@ -49,6 +49,10 @@ export default function Home(props) {
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false)
   const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false)
 
+  const [updatedEther, setUpdatedEther] = React.useState()
+  const [updatedPruf, setUpdatedPruf] = React.useState()
+  const [updatedAssets, setUpdatedAssets] = React.useState()
+
   const [deposit, setDeposit] = React.useState(10000);
   const [loginDeposit, setloginDeposit] = React.useState(10000);
   const [loginDepositState, setloginDepositState] = React.useState("");
@@ -119,6 +123,7 @@ export default function Home(props) {
   };
 
   const purchasePRUF = async () => {
+    let etherBal = updatedEther || props.ether
     let tempTxHash;
 
     if (loginDeposit === "" || loginDeposit < 10000) {
@@ -136,7 +141,7 @@ export default function Home(props) {
       return setloginDepositState("error");
     }
 
-    if (deposit > (props.ether * 100000)) {
+    if (deposit > etherBal * 100000) {
       //console.log(props.ether)
       swal({
         title: "Insufficient KΞ",
@@ -271,7 +276,7 @@ export default function Home(props) {
           icon: "success",
           button: "Close"
         }).then(() => {
-          //refreshBalances()
+          refreshBalances()
           window.replaceAssetData = { IDHolder: true }
           setHasMinted(true)
           forceUpdate()
@@ -289,8 +294,30 @@ export default function Home(props) {
     return tempHash;
   }
 
-  const refreshBalances = () => {
+  const refreshBalances = async () => {
     console.log("Refreshing balances")
+
+    await window.web3.eth.getBalance(props.addr, (error, result) => {
+      if (error) { } else {
+        setUpdatedEther(window.web3.utils.fromWei(result, "ether"))
+      }
+    });
+
+    await props.prufClient.get.assetBalance(props.addr).call((error, result) => {
+      if (error) { console.log(error) }
+      else {
+        setUpdatedAssets(result);
+      }
+    });
+
+
+    await props.prufClient.get.prufBalance(props.addr).call((error, result) => {
+      if (error) { console.log(error) }
+      else {
+        setUpdatedPruf(window.web3.utils.fromWei(result, 'ether'));
+      }
+    });
+
     window.replaceAssetData = { refreshBals: true }
     forceUpdate()
   }
@@ -359,7 +386,7 @@ export default function Home(props) {
           icon: "success",
           button: "Close",
         });
-        //refreshBalances()
+        refreshBalances()
       });
 
     return clearACFrom()
@@ -377,10 +404,16 @@ export default function Home(props) {
               <p className={classes.cardCategory}>Assets Held</p>
               <Tooltip
                 title="View Assets"
-              >
+              > 
+              {updatedAssets ?
+                <h3 className={classes.cardTitle}>
+                  {updatedAssets} <small>Assets</small>
+                </h3>
+                :
                 <h3 className={classes.cardTitle}>
                   {props.assets} <small>Assets</small>
                 </h3>
+              }
               </Tooltip>
             </CardHeader>
             <CardFooter stats>
@@ -471,7 +504,11 @@ export default function Home(props) {
                 <img className="Icon" src={Eth} alt=""></img>
               </CardIcon>
               <p className={classes.cardCategory}>ETH Balance</p>
-              {props.ether ?
+              {updatedEther ?
+                <h3 className={classes.cardTitle}>
+                  {updatedEther.substring(0, 7)} <small>Ether</small>
+                </h3>
+                : props.ether ?
                 <h3 className={classes.cardTitle}>
                   {props.ether.substring(0, 7)} <small>Ether</small>
                 </h3>
@@ -500,11 +537,17 @@ export default function Home(props) {
                 <img className="Icon" src={Pruf} alt=""></img>
               </CardIcon>
               <p className={classes.cardCategory}>PRUF Balance</p>
+              {updatedPruf ?
+               <h3 className={classes.cardTitle}>
+                <>{String(Math.round(Number(updatedPruf) * 100) / 100)} <small>PRUF</small></>
+             </h3>
+              :
               <h3 className={classes.cardTitle}>
                 {props.pruf !== "~"
                   ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRUF</small></>
                   : <>{props.pruf} <small>PRUF</small></>}
               </h3>
+              }
             </CardHeader>
             <CardFooter stats>
               {!isRefreshingPruf && (
