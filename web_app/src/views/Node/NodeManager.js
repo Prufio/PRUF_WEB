@@ -182,8 +182,38 @@ export default function NodeManager(props) {
     if (!_extDataArr) _extDataArr = [];
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     let _name, _id, _mType;
+
     if (iteration < ids.length) {
-      await window.contracts.AC_MGR.methods
+      props.prufClient.get.nodeData(ids[iteration])
+      .call((_error, _result) => {
+        if (_error) {
+          console.log("IN ERROR IN ERROR IN ERROR")
+          _nodeData.push(
+            ["N/A", String(ids[iteration]), "N/A", "N/A"]
+          )
+          _extDataArr.push({})
+          buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+          //data.push(obj)
+        } else {
+          _nodeData.push(
+            [_result.name, String(ids[iteration]), "N/A", "N/A"]
+          )
+          _extDataArr.push({
+            name: _result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+            root: _result.root,
+            custodyType: _result.custodyType,
+            managementType: _result.managementType,
+            discount: _result.discount,
+            referenceAddress: _result.referenceAddress,
+            extData: _result["IPFS"],
+            storageProvider: _result.storageProvider,
+            switches: _result.switches
+          })
+          return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+        }
+      })
+
+/*       await window.contracts.AC_MGR.methods
         .getAC_name(ids[iteration])
         .call((_error, _result) => {
           if (_error) { console.log("Error: ", _error) }
@@ -209,7 +239,7 @@ export default function NodeManager(props) {
                 }
               });
           }
-        });
+        }); */
     }
 
     else {
@@ -339,7 +369,6 @@ export default function NodeManager(props) {
       console.log(window.sentPacket)
       setSimpleSelect(e);
       return window.location.href = e.href;
-
 
     })
   };

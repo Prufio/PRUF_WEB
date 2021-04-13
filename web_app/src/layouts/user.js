@@ -1145,6 +1145,10 @@ export default function Dashboard(props) {
       }
 
       else {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onload = () => {
+        if(xhr.status !== 404){
         try {
           _arweave.transactions.get(mutableDataQuery).then(e => {
             let tempObj = {};
@@ -1168,6 +1172,17 @@ export default function Dashboard(props) {
           assetsWithMutableData.push(obj)
           return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
         }
+      }
+      else{
+        console.log("Id returned 404")
+        obj.mutableData = "";
+        assetsWithMutableData.push(obj);
+        return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+      }
+      }
+
+        xhr.open('GET', `http://localhost:1984/tx/${mutableDataQuery}`, false); 
+        xhr.send(null);
       }
     }
   };
@@ -1234,6 +1249,10 @@ export default function Dashboard(props) {
       }
 
       else {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onload = () => {
+        if(xhr.status !== 404){
         try {
           _arweave.transactions.get(engravingQuery).then(e => {
             if(!e) throw "Thrown";
@@ -1259,6 +1278,18 @@ export default function Dashboard(props) {
           assetsWithEngravings.push(obj);
           return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
         }
+      }
+      else{
+        console.log("Id returned 404")
+        obj.engraving = "";
+        obj.contentUrl = `http://localhost:1984/${engravingQuery}`
+        assetsWithEngravings.push(obj);
+        return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+      }
+      }
+
+        xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, false); 
+        xhr.send(null);
       }
     }
   }
