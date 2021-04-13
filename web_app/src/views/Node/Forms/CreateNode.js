@@ -392,8 +392,9 @@ export default function CreateNode(props) {
           id = _result
           let tempArr = props.nodeList;
           tempArr.push([name, id, "N/A", "N/A"])
-          window.replaceAssetData = { key: pageKey, nodeList: tempArr }
+          window.replaceAssetData = { key: pageKey, refreshBals:true, nodeList: tempArr }
           window.location.href = "/#/user/node-manager";
+          //window.location.reload();
         }
       });
 

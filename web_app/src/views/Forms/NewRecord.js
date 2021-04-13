@@ -178,9 +178,9 @@ export default function NewRecord(props) {
   }
 
   const mineTx = async () => {
-    await props.testWeave.mine(); 
-    await props.testWeave.mine()
-    await props.testWeave.mine() 
+    await props.testWeave.mine();
+    await props.testWeave.mine();
+    await props.testWeave.mine();
     return
   }
 

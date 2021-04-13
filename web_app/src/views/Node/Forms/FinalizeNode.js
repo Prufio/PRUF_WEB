@@ -146,7 +146,7 @@ export default function FinalizeNode(props) {
                     <h4 className="alertText">
                         Management Type: &nbsp;
                     {managementType === "1" && (
-                            <>Restricted</>
+                            <>Private</>
                         )}
                         {managementType === "2" && (
                             <>Permissive</>
@@ -229,6 +229,7 @@ export default function FinalizeNode(props) {
                                     icon: "success",
                                     button: "Close"
                                 })
+                                window.replaceAssetData = { refreshBals:true }
                                 window.location.href = nodeInfo.lastRef;
                             })
 
@@ -263,13 +264,13 @@ export default function FinalizeNode(props) {
                             {!managementType1 && (
                                 <Button className="managementType" color="info" onClick={() => setManagementType1Button()}>
                                     <VpnKey />
-                Restricted
+                Private
                                 </Button>
                             )}
                             {managementType1 && (
                                 <Button className="managementTypeSelected" onClick={() => setManagementType1Button()}>
                                     <VpnKey />
-                            Restricted
+                            Private
                                 </Button>
                             )}
                             {!managementType2 && (
@@ -313,46 +314,52 @@ export default function FinalizeNode(props) {
                             <Card className="slide-right">
                                 {managementType1 && (
                                     <>
-                                        <h3>Restricted</h3>
+                                        <h3>Private</h3>
                                         <p>
-                                            The Restricted management type is by far the most exclusive. With restriced access to node operations, this type allows only
-                                            the node holder to create assets within the node, export assets within the node, or import assets into the node. This
-                                            enables a provably secure and tight-knit operation, and would be most suited to artists, or one-of-a-kind asset creation.
-                            </p>
+                                            Guaranteed exclusivity.
+                                        </p>
+                                        <p>
+                                            The Private management type is by far the most secure. With exclusive access to node operations, this type allows only
+                                            the node owner to create, export, or import assets within the node. This enables a provably secure pattern for asset minting.
+                                            Best suited for creators and curators.
+                                        </p>
                                     </>
                                 )}
                                 {managementType2 && (
                                     <>
                                         <h3>Permissive</h3>
                                         <p>
-                                            Much like the Restricted management type, the Permissive management type is just a little bit more diverse. Alongside
-                                            it's reduced access to public node operations such as private asset importing and creation, this type allows asset-holders
-                                            to export assets out of the node. This allows for a more diverse range of items, and allows the node use to be more public to
-                                            its users. Permissive node management is a great option for variations of collectables, or every-day use items such as bicicles,
-                                            motor-vehicles or BETTER EXAMPLES...
-                            </p>
+                                            Flexibility.
+                                        </p>
+                                        <p>
+                                            Much like the Private management type, Permissive management allows only the node owner to mint or import assets. This management
+                                            type grants slightly more mobility to asset holders by allowing them to export their assets to other nodes.
+                                        </p>
                                     </>
                                 )}
                                 {managementType3 && (
                                     <>
                                         <h3>Authorized</h3>
                                         <p>
-                                            The Authorized management type is the most private options for private businesses or enterprises. Authorized node management
-                                            allows for a permission based authority for any party authorized by the node holder. In order to access any operations within the
-                                            node, the calling user must be authorized, otherwise access is entirely limited. This allows for a private, secure, yet expandable
-                                            node management, and would be best used by private businesses and enterprises yada yada im not the person for this job...
-                            </p>
+                                            Dynamic Control.
+                                        </p>
+                                        <p>
+                                            The Authorized management type is a robust and secure option, designed for private businesses or enterprises. Authorized
+                                            management allows the node owner to specify addresses which can mint, import, and export assets.
+                                            Address authorization can be granted or revoked by the node owner at any time.
+                                        </p>
                                     </>
                                 )}
                                 {managementType4 && (
                                     <>
-                                        <h3>Trusted</h3>
+                                        <h3>Public</h3>
                                         <p>
-                                            Trusted node management is by far the most public node management solution. It is completely open to all individual
-                                            users trusted within the PRUF network. This implies that any user accessing public node operations would be pre-checked
-                                            and unique to the system, disincentivising bad actors. Trusted node management is targeted towards all public asset classification or merit-based
-                                            systems. Somebody please take over...
-                            </p>
+                                            User-First
+                                        </p>
+                                        <p>
+                                            Public management is the user-sovereign approach. Any user who holds a verified ID Token may mint, import, and export assets. 
+                                            May apply to the management of any common goods or services.
+                                        </p>
                                     </>
                                 )}
                             </Card>

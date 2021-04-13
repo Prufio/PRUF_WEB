@@ -1145,22 +1145,29 @@ export default function Dashboard(props) {
       }
 
       else {
-        _arweave.transactions.get(mutableDataQuery).then(e => {
-          let tempObj = {};
-          e.get('tags').forEach(tag => {
-            let key = tag.get('name', { decode: true, string: true });
-            let value = tag.get('value', { decode: true, string: true });
-            tempObj[key] = value;
-            //console.log(`${key} : ${value}`);
+        try {
+          _arweave.transactions.get(mutableDataQuery).then(e => {
+            let tempObj = {};
+            e.get('tags').forEach(tag => {
+              let key = tag.get('name', { decode: true, string: true });
+              let value = tag.get('value', { decode: true, string: true });
+              tempObj[key] = value;
+              //console.log(`${key} : ${value}`);
+            })
+            //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
+            tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`
+            obj.mutableData = tempObj;
+            assetsWithMutableData.push(obj)
+            setCookieTo(mutableDataQuery, tempObj)
+            //console.log("EXIT")
+            return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
           })
-          //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
-          tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`
-          obj.mutableData = tempObj;
+        }
+        catch {
+          obj.mutableData = "";
           assetsWithMutableData.push(obj)
-          setCookieTo(mutableDataQuery, tempObj)
-          //console.log("EXIT")
           return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
-        })
+        }
       }
     }
   };
@@ -1227,22 +1234,31 @@ export default function Dashboard(props) {
       }
 
       else {
-        _arweave.transactions.get(engravingQuery).then(e => {
-          let tempObj = {};
-          e.get('tags').forEach(tag => {
-            let key = tag.get('name', { decode: true, string: true });
-            let value = tag.get('value', { decode: true, string: true });
-            tempObj[key] = value;
-            //console.log(`${key} : ${value}`);
+        try {
+          _arweave.transactions.get(engravingQuery).then(e => {
+            if(!e) throw "Thrown";
+            let tempObj = {};
+            e.get('tags').forEach(tag => {
+              let key = tag.get('name', { decode: true, string: true });
+              let value = tag.get('value', { decode: true, string: true });
+              tempObj[key] = value;
+              //console.log(`${key} : ${value}`);
+            })
+            //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
+            tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`
+            obj.engraving = tempObj;
+            assetsWithEngravings.push(obj)
+            setCookieTo(engravingQuery, tempObj)
+            //console.log("EXIT")
+            return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
           })
-          //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
-          tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`
-          obj.engraving = tempObj;
-          assetsWithEngravings.push(obj)
-          setCookieTo(engravingQuery, tempObj)
-          //console.log("EXIT")
+        }
+        catch {
+          console.log("In arweave catch clause")
+          obj.engraving = "";
+          assetsWithEngravings.push(obj);
           return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
-        })
+        }
       }
     }
   }
