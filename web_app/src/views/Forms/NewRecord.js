@@ -205,7 +205,7 @@ export default function NewRecord(props) {
       setClassSelect(event.target.value);
       console.log(event.target.value);
       try {
-        props.prufClient.get.nodeData(assetClass)
+        props.prufClient.get.nodeData(event.target.value)
         .call((_error, _result) => {
           if (_error) {
             console.log("IN ERROR IN ERROR IN ERROR")
@@ -226,7 +226,7 @@ export default function NewRecord(props) {
             })
 
             props.prufClient.get
-            .operationCost(assetClass, "1")
+            .operationCost(event.target.value, "1")
             .call((_error, _result) => {
               if (_error) { console.log("Error: ", _error); setNRCost("N/A") }
               else {
