@@ -1423,7 +1423,7 @@ export default function Dashboard(props) {
       }
     });
 
-    await window.contracts.AC_TKN.methods.balanceOf(_addr).call((error, result) => {
+    await pruf.get.nodeBalance(_addr).call((error, result) => {
       if (error) { console.log(error) }
       else {
         setAssetClassBalance(result);
@@ -1447,7 +1447,7 @@ export default function Dashboard(props) {
       }
     });
 
-    await window.contracts.A_TKN.methods.balanceOf(_addr).call((error, result) => {
+    await pruf.get.assetBalance(_addr).call((error, result) => {
       if (error) { console.log(error) }
       else {
         setAssetBalance(result);
@@ -1462,14 +1462,15 @@ export default function Dashboard(props) {
         }
       }
     })
-    await window.contracts.UTIL_TKN.methods.balanceOf(_addr).call((error, result) => {
+
+    await pruf.get.prufBalance(_addr).call((error, result) => {
       if (error) { console.log(error) }
       else {
         setPrufBalance(window.web3.utils.fromWei(result, 'ether'));
       }
     });
 
-    await window.contracts.AC_MGR.methods.currentACpricingInfo().call((error, result) => {
+    await pruf.get.nodePricing().call((error, result) => {
       if (error) {
         return (console.log("IN ERROR IN ERROR IN ERROR"))
       }
