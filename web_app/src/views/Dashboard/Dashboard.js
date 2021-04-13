@@ -67,7 +67,7 @@ export default function Dashboard(props) {
   const [selectedImage, setSelectedImage] = React.useState("");
   const [copyText, setCopyText] = React.useState(false);
   const [pageNum, setPageNum] = React.useState(1);
-  const [assetsPerPage, setAssetsPerPage] = React.useState(6);
+  const [assetsPerPage, setAssetsPerPage] = React.useState(8);
   const [currency, setCurrency] = React.useState("ü");
 
   const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage)
@@ -215,12 +215,12 @@ export default function Dashboard(props) {
         //console.log(i, arr.length - start)
         //if(i < arr.length - start){
         component.push(
-          <GridItem key={"asset" + i} xs={12} sm={12} md={4}>
+          <GridItem key={"asset" + i} xs={12} sm={6} md={6} lg={3}>
             <Card chart className={classes.cardHover}>
               <>
                 {!isMobile && (
                   <CardHeader image className={classes.cardHeaderHoverDashboard}>
-                    <Button className="dashboardAssetImage" onClick={() => moreInfo({
+                    <button className="dashboardAssetImage" onClick={() => moreInfo({
                       dBIndex: i,
                       id: arr[i].id,
                       countPair: arr[i].countPair,
@@ -258,7 +258,7 @@ export default function Dashboard(props) {
                           <Jdenticon value={arr[i].id} />
                         </>
                       )}
-                    </Button>
+                    </button>
                   </CardHeader>
                 )}
                 {isMobile && (
@@ -1961,7 +1961,7 @@ export default function Dashboard(props) {
                       title="Copy to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</Button>
+                        Asset ID: &nbsp; <button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</button>
                       </div>
                     </Tooltip>
                   )}
@@ -1970,7 +1970,7 @@ export default function Dashboard(props) {
                       title="Copied to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</Button>
+                        Asset ID: &nbsp; <button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</button>
                       </div>
                     </Tooltip>
                   )}
@@ -1983,7 +1983,7 @@ export default function Dashboard(props) {
                       title="Copy to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</Button>
+                        Asset ID: &nbsp; <button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</button>
                       </div>
                     </Tooltip>
                   )}
@@ -1992,7 +1992,7 @@ export default function Dashboard(props) {
                       title="Copied to Clipboard"
                     >
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</Button>
+                        Asset ID: &nbsp; <button className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</button>
                       </div>
                     </Tooltip>
                   )}
@@ -2084,27 +2084,18 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value={3}
+              value={4}
             >
-              3
+              4
                         </MenuItem>
             <MenuItem
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value={6}
+              value={8}
             >
-              6
-                        </MenuItem>
-            <MenuItem
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected
-              }}
-              value={9}
-            >
-              9
+              8
                         </MenuItem>
             <MenuItem
               classes={{
@@ -2120,9 +2111,18 @@ export default function Dashboard(props) {
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected
               }}
-              value={15}
+              value={16}
             >
-              15
+              16
+                        </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected
+              }}
+              value={20}
+            >
+              20
                         </MenuItem>
             <MenuItem
               classes={{

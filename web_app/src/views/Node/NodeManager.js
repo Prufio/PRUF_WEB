@@ -185,61 +185,63 @@ export default function NodeManager(props) {
 
     if (iteration < ids.length) {
       props.prufClient.get.nodeData(ids[iteration])
-      .call((_error, _result) => {
-        if (_error) {
-          console.log("IN ERROR IN ERROR IN ERROR")
-          _nodeData.push(
-            ["N/A", String(ids[iteration]), "N/A", "N/A"]
-          )
-          _extDataArr.push({})
-          buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
-          //data.push(obj)
-        } else {
-          _nodeData.push(
-            [_result.name, String(ids[iteration]), "N/A", "N/A"]
-          )
-          _extDataArr.push({
-            name: _result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-            root: _result.root,
-            custodyType: _result.custodyType,
-            managementType: _result.managementType,
-            discount: _result.discount,
-            referenceAddress: _result.referenceAddress,
-            extData: _result["IPFS"],
-            storageProvider: _result.storageProvider,
-            switches: _result.switches
-          })
-          return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
-        }
-      })
-
-/*       await window.contracts.AC_MGR.methods
-        .getAC_name(ids[iteration])
         .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-            _name = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
-            _id = String(ids[iteration])
-            window.contracts.AC_MGR.methods
-              .getAC_data(_id)
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR")
+            _nodeData.push(
+              ["N/A", String(ids[iteration]), "N/A", "N/A"]
+            )
+            _extDataArr.push({})
+            buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+            //data.push(obj)
+          } else {
+            _nodeData.push(
+              [_result.name, String(ids[iteration]), "N/A", "N/A"]
+            )
+            _extDataArr.push({
+              id: ids[iteration],
+              name: _result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+              root: _result.assetClassRoot,
+              custodyType: _result.custodyType,
+              managementType: _result.managementType,
+              discount: _result.discount,
+              referenceAddress: _result.referenceAddress,
+              extData: _result["IPFS"],
+              storageProvider: _result.storageProvider,
+              switches: _result.switches
+            })
+            console.log("_result", _result)
+            return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+          }
+        })
+
+      /*       await window.contracts.AC_MGR.methods
+              .getAC_name(ids[iteration])
               .call((_error, _result) => {
                 if (_error) { console.log("Error: ", _error) }
                 else {
-                  _nodeData.push(
-                    [_name, _id, "N/A", "N/A"]
-                  )
-                  _extDataArr.push({
-                    root: _result["0"],
-                    custodyType: _result["1"],
-                    managementType: _result["2"],
-                    discount: _result["3"],
-                    referenceAddress: _result["4"]
-                  })
-                  return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+                  _name = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
+                  _id = String(ids[iteration])
+                  window.contracts.AC_MGR.methods
+                    .getAC_data(_id)
+                    .call((_error, _result) => {
+                      if (_error) { console.log("Error: ", _error) }
+                      else {
+                        _nodeData.push(
+                          [_name, _id, "N/A", "N/A"]
+                        )
+                        _extDataArr.push({
+                          root: _result["0"],
+                          custodyType: _result["1"],
+                          managementType: _result["2"],
+                          discount: _result["3"],
+                          referenceAddress: _result["4"]
+                        })
+                        return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+                      }
+                    });
                 }
-              });
-          }
-        }); */
+              }); */
     }
 
     else {
@@ -346,31 +348,65 @@ export default function NodeManager(props) {
 
 
 
-  const handleSimple = (e) => {
+  const handleSimple = async (e) => {
     if (e.temp === "view") {
-      let tempObj = JSON.parse(JSON.stringify(e.obj))
-      return swalReact({
-          icon: "warning",
-          content: <Card className="delegationCard">
-              <h4 className="delegationTitle">Submitted information is critical!</h4>
-              <h5 className="finalizingTipsContent">
-                  Please make sure the following account is correct before submitting!
-             </h5>
-          <div className="delegationTips">
-            <FiberManualRecordTwoTone className="delegationPin" />
-            <h5 className="delegationTipsContent">
-              You can un-delegate at any time.
-             </h5>
-          </div>
-          </Card>,
-          buttons: {
+      let tempObj = {}
+      console.log("root",extDataArr[e.index].root)
+
+      props.prufClient.get.nodeName(extDataArr[e.index].root)
+      .call((_error, _result) => {
+        if (_error) {
+          console.log("IN ERROR IN ERROR IN ERROR")
+        } else {
+
+          tempObj.name = extDataArr[e.index].name;
+          tempObj.id = extDataArr[e.index].id;
+          tempObj.rootName = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+          tempObj.root = extDataArr[e.index].root;
+          tempObj.managementType = extDataArr[e.index].managementType;
+          tempObj.storageProvider = extDataArr[e.index].storageProvider;
+          console.log("tempObj",tempObj)
+
+          swalReact({
+            content: <Card className="delegationCard">
+              <h4 className="delegationTitle">Node Information</h4>
+              <div className="delegationTips">
+                <FiberManualRecordTwoTone className="delegationPin" />
+                <h5 className="delegationTipsContent">
+                  Name: &nbsp; {tempObj.name} ID:({tempObj.id})
+                 </h5>
+              </div>
+              <div className="delegationTips">
+                <FiberManualRecordTwoTone className="delegationPin" />
+                <h5 className="delegationTipsContent">
+                  Asset Class: &nbsp; {tempObj.rootName} ID:({tempObj.root})
+                 </h5>
+              </div>
+              <div className="delegationTips">
+                <FiberManualRecordTwoTone className="delegationPin" />
+                <h5 className="delegationTipsContent">
+                  Management Type: &nbsp; {tempObj.managementType}
+                </h5>
+              </div>
+              <div className="delegationTips">
+                <FiberManualRecordTwoTone className="delegationPin" />
+                <h5 className="delegationTipsContent">
+                  Storage Provider: &nbsp; {tempObj.storageProvider}
+                </h5>
+              </div>
+            </Card>,
+            buttons: {
               close: {
-                  text: "Close",
-                  className: "delegationButtonBack"
+                text: "Close",
+                className: "delegationButtonBack"
               }
-          },
+            },
+          })
+        }
       })
     }
+
+    else {
     document.body.style.cursor = 'wait';
     if (props.ps) {
       props.ps.element.scrollTop = 0
@@ -395,6 +431,7 @@ export default function NodeManager(props) {
       return window.location.href = e.href;
 
     })
+  }
   };
 
 
@@ -658,7 +695,7 @@ export default function NodeManager(props) {
                                   onChange={(e) => handleSimple(e.target.value)}
                                   inputProps={{
                                     name: "simpleSelect",
-                                    id: "simple-select"
+                                    id: ""
                                   }}
                                 >
                                   <MenuItem
@@ -741,20 +778,20 @@ export default function NodeManager(props) {
                                   >
                                     Transfer
                                         </MenuItem>
-                                  <MenuItem
-                                    classes={{
-                                      root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected
-                                    }}
-                                    value={{
-                                      temp: "view",
-                                      name: prop[0],
-                                      id: prop[1],
-                                      index: key
-                                    }}
-                                  >
-                                    View
-                                        </MenuItem>
+                                  {extDataArr[key] && extDataArr[key].managementType !== "255" && (
+                                    <MenuItem
+                                      classes={{
+                                        root: classes.selectMenuItem,
+                                        selected: classes.selectMenuItemSelected
+                                      }}
+                                      value={{
+                                        temp: "view",
+                                        index: key
+                                      }}
+                                    >
+                                      View
+                                    </MenuItem>
+                                  )}
                                   {extDataArr[key] && extDataArr[key].managementType === "255" && (
                                     <MenuItem
                                       classes={{
@@ -763,7 +800,8 @@ export default function NodeManager(props) {
                                       }}
                                       value={{
                                         href: "/#/user/finalize-node",
-                                        obj: prop,
+                                        name: prop[0],
+                                        id: prop[1],
                                         index: key
                                       }}
                                     >

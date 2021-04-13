@@ -1100,35 +1100,38 @@ export default function Dashboard(props) {
     }
 
     else if (storageType === "1") {
-      mutableDataQuery = _prufClient.utils.ipfsFromB32(obj.mutableDataA);
-      //console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
-      //engravingQuery = await _prufClient.utils.ipfsFromB32(obj.engravingA);
+      _prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
 
-      if (cookies[mutableDataQuery]) {
-        //console.log("Using cached mutable data:", cookies[mutableDataQuery])
-        obj.mutableData = cookies[mutableDataQuery]
-        assetsWithMutableData.push(obj)
-        //console.log("EXIT")
-        return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
-      }
-
-      else {
-        for (const chunk of window.ipfs.cat(mutableDataQuery)) {
-          let str = new TextDecoder("utf-8").decode(chunk);
-          console.log(str)
-          try {
-            obj.mutableData = JSON.parse(str)
-          }
-          catch {
-            obj.mutableData = str;
-          }
-
+        //console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
+        //engravingQuery = await _prufClient.utils.ipfsFromB32(obj.engravingA);
+            console.log("MDQ", e)
+  
+        if (cookies[e]) {
+          //console.log("Using cached mutable data:", cookies[mutableDataQuery])
+          obj.mutableData = cookies[e]
           assetsWithMutableData.push(obj)
-          setCookieTo(mutableDataQuery, obj)
           //console.log("EXIT")
           return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
         }
-      }
+  
+        else {
+          for await (const chunk of window.ipfs.cat(e)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            console.log(str)
+            try {
+              obj.mutableData = JSON.parse(str)
+            }
+            catch {
+              obj.mutableData = str;
+            }
+            assetsWithMutableData.push(obj)
+            setCookieTo(e, obj)
+            //console.log("EXIT")
+            return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
+          }
+        }
+
+      })
     }
 
     else if (storageType === "2") {
@@ -1289,7 +1292,16 @@ export default function Dashboard(props) {
       }
 
         xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, false); 
-        xhr.send(null);
+        try{
+          xhr.send(null);
+        }
+        catch {
+          console.log("failed xhr send")
+          obj.engraving = "";
+          obj.contentUrl = `http://localhost:1984/${engravingQuery}`
+          assetsWithEngravings.push(obj);
+          return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+        }
       }
     }
   }

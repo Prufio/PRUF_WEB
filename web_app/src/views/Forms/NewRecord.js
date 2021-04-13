@@ -515,7 +515,10 @@ export default function NewRecord(props) {
 
     else {
       let ipfsB32 = window.utils.getBytes32FromIPFSHash(String(extendedDataHash));
-      _newRecord(ipfsB32, "", idxHash, ipfsObj)
+      console.log(ipfsB32)
+      console.log(idxHash)
+      console.log(ipfsObj)
+      _newRecord(ipfsB32, "0x0000000000000000000000000000000000000000000000000000000000000000", idxHash, ipfsObj)
     }
   }
 
@@ -589,6 +592,7 @@ export default function NewRecord(props) {
 
     if (displayImage !== "") {
       ipfsObj.DisplayImage = displayImageUrl;
+      ipfsObj.photo.DisplayImage = displayImageUrl;
     }
 
     let doesExist = await window.utils.checkAssetExistsBare(idxHash);
@@ -629,7 +633,9 @@ export default function NewRecord(props) {
         }
         else {
           console.log("uploaded at hash: ", hash.cid.string);
-          handleHash(String(hash.cid), idxHash, ipfsObj);
+          console.log("idxHash: ", idxHash);
+          console.log("ipfsObj: ", ipfsObj);
+          handleHash(hash.cid.string, idxHash, ipfsObj);
           setIpfsActive(false);
         }
       })
@@ -848,13 +854,13 @@ export default function NewRecord(props) {
       }) */
   
       await window.contracts.APP_NC.methods
-        .newRecordWithNote(
+        .newRecordWithDescription(
           idxHash,
           rgtHash,
           assetClass,
           "1000000",
           extendedDataHash,
-          ""
+          extDataB
         )
         .send({ from: props.addr })
         .on("error", function (_error) {
@@ -1328,10 +1334,10 @@ export default function NewRecord(props) {
                           <Button color="info" onClick={() => { handleClick() }}>Change Display Image</Button>
                           <Button color="danger" onClick={() => { removeDisplayImage() }}>Remove Image</Button>
                         </>)}
-                        {transactionActive && displayImage !== "" (
+                        {transactionActive && displayImage !== "" &&(
                           <Button disabled> ... </Button>
                         )}
-                        {!transactionActive && ipfsActive &&(
+                        {!transactionActive && ipfsActive && (
                           <Button disabled> ... </Button>
                         )}
                         {!transactionActive && (
