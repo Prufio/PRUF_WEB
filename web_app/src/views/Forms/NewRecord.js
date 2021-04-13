@@ -116,6 +116,8 @@ export default function NewRecord(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
+  const [nodeExtendedData, setNodeExtendedData] = React.useState()
+
   const [txHash, setTxHash] = React.useState("");
 
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
@@ -203,13 +205,37 @@ export default function NewRecord(props) {
       setClassSelect(event.target.value);
       console.log(event.target.value);
       try {
-        window.utils.resolveACFromID(event.target.value).then((e) => {
-          let str = e.substring(0, 1).toUpperCase() + e.substring(1, e.length).toLowerCase();
-          setAssetClassName(str)
-          window.utils.retreiveCosts(6, event.target.value).then((e) => {
-            setNRCost(e.cost1.totalCost)
-          })
-          setStorageProvider("2");
+        props.prufClient.get.nodeData(assetClass)
+        .call((_error, _result) => {
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR")
+          } else {
+            setAssetClassName(_result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()));
+            setStorageProvider(_result.managementType);
+
+            setNodeExtendedData({
+              name: _result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+              root: _result.root,
+              custodyType: _result.custodyType,
+              managementType: _result.managementType,
+              discount: _result.discount,
+              referenceAddress: _result.referenceAddress,
+              extData: _result["IPFS"],
+              storageProvider: _result.storageProvider,
+              switches: _result.switches
+            })
+
+            props.prufClient.get
+            .operationCost(assetClass, "1")
+            .call((_error, _result) => {
+              if (_error) { console.log("Error: ", _error); setNRCost("N/A") }
+              else {
+                let root = window.web3.utils.fromWei(_result.ACTHprice);
+                let acth = window.web3.utils.fromWei(_result.rootPrice);
+                setNRCost(String(Number(root) + Number(acth)))
+              }
+            })
+          }
         })
       }
       catch {
