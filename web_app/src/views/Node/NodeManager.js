@@ -139,25 +139,7 @@ export default function NodeManager(props) {
   }, [props.assetClassSets]);
 
   const getNodesInWallet = async (bal, ids, iteration) => {
-    /*    window.contracts.AC_MGR.methods
-       .updateACImmutable(
-         "1000002",
-         "2",
-         "2",
-         "0xBef3b0b67061CACD4E10968d8Ba23A1c864c8049"
-     )
-     .send({ from: props.addr })
-     .on("error", function (_error) {
-             swal({
-                 title: "Something went wrong!",
-                 icon: "warning",
-                 button: "Close",
-             });
-     })
-     .on("receipt", (receipt) => {
-       console.log("Success")
-     }); */
-
+    
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return;
     if (!iteration) iteration = 0;
@@ -204,35 +186,36 @@ export default function NodeManager(props) {
     let _name, _id, _mType;
 
     if (iteration < ids.length) {
-      props.prufClient.get.nodeData(ids[iteration]).call((_error, _result) => {
-        if (_error) {
-          console.log("IN ERROR IN ERROR IN ERROR");
-          _nodeData.push(["N/A", String(ids[iteration]), "N/A", "N/A"]);
-          _extDataArr.push({});
-          buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1);
-          //data.push(obj)
-        } else {
-          _nodeData.push([_result.name, String(ids[iteration]), "N/A", "N/A"]);
-          _extDataArr.push({
-            id: ids[iteration],
-            name: _result.name
-              .toLowerCase()
-              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                letter.toUpperCase()
-              ),
-            root: _result.assetClassRoot,
-            custodyType: _result.custodyType,
-            managementType: _result.managementType,
-            discount: _result.discount,
-            referenceAddress: _result.referenceAddress,
-            extData: _result["IPFS"],
-            storageProvider: _result.storageProvider,
-            switches: _result.switches,
-          });
-          console.log("_result", _result);
-          return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1);
-        }
-      });
+      props.prufClient.get.nodeData(ids[iteration])
+        .call((_error, _result) => {
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR")
+            _nodeData.push(
+              ["N/A", String(ids[iteration]), "N/A", "N/A"]
+            )
+            _extDataArr.push({})
+            buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+            //data.push(obj)
+          } else {
+            _nodeData.push(
+              [_result.name, String(ids[iteration]), "N/A", "N/A"]
+            )
+            _extDataArr.push({
+              id: ids[iteration],
+              name: _result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
+              root: _result.assetClassRoot,
+              custodyType: _result.custodyType,
+              managementType: _result.managementType,
+              discount: _result.discount,
+              referenceAddress: _result.referenceAddress,
+              extData: _result["IPFS"],
+              storageProvider: _result.storageProvider,
+              switches: _result.switches
+            })
+            //console.log("_result", _result)
+            return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
+          }
+        })
 
       /*       await window.contracts.AC_MGR.methods
               .getAC_name(ids[iteration])
