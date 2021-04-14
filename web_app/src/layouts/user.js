@@ -1125,8 +1125,8 @@ export default function Dashboard(props) {
               obj.mutableData = str;
             }
             assetsWithMutableData.push(obj)
-            setCookieTo(e, obj)
-            //console.log("EXIT")
+            setCookieTo(e, JSON.parse(str))
+            console.log("EXIT")
             return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
           }
         }
