@@ -1125,7 +1125,7 @@ export default function Dashboard(props) {
               obj.mutableData = str;
             }
             assetsWithMutableData.push(obj)
-            setCookieTo(e, obj)
+            setCookieTo(e, str)
             //console.log("EXIT")
             return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
           }
@@ -1233,7 +1233,7 @@ export default function Dashboard(props) {
           }
 
           assetsWithEngravings.push(obj)
-          setCookieTo(engravingQuery, obj)
+          setCookieTo(engravingQuery, str)
           //console.log("EXIT")
           return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
         }
