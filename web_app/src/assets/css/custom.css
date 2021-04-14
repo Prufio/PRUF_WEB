@@ -493,7 +493,10 @@ body {
 
 
       .back {
-        background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+        /* background: linear-gradient(0deg, #017ec0, #02a1f7) !important; */
+        /* background-color: transparent !important; */
+        /* color: black !important; */
+        
         object-fit: cover !important;
         bottom: -60px;
         right: -10px;
@@ -1288,4 +1291,8 @@ max-width: 80px !important;
   color: #ff1500;
   font-size: 12px;
   font-weight: 500 !important;
+}
+
+.bottomSpace {
+  margin-top: 15px !important;
 }
