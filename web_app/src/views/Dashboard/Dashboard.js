@@ -2055,7 +2055,7 @@ export default function Dashboard(props) {
         </div>
       )}
 
-      {!viewAsset && props.addr && props.assets !== "0" && props.assets !== "~" && (
+      {!viewAsset && (
         <Card className="dashboardFooter" >
           <h4>Assets Per Page: </h4>
           <br />
