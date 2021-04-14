@@ -1032,8 +1032,8 @@ export default function Dashboard(props) {
               numberOfTransfers: _result["9"]
             }
 
-            obj.identicon = <Jdenticon value={obj.id} />;
-            obj.identiconLG = <Jdenticon value={obj.id} />;
+            obj.identicon = <Jdenticon value={obj.id} size="1000"/>;
+            obj.identiconLG = <Jdenticon value={obj.id} size="1000"/>;
 
             _prufClient.utils.stringifyStatus(_result[0]).then(e => {
               obj.status = e
@@ -1316,8 +1316,6 @@ export default function Dashboard(props) {
       return setAssetArr(finalizedAssets)
     }
 
-
-
     let obj = assetHeap[iteration]
 
     obj.photo = (obj.engraving.photo || obj.mutableData.photo || {});
@@ -1353,6 +1351,47 @@ export default function Dashboard(props) {
         }
     }
 
+    else if (obj.assetClassData.storageProvider === "1") {
+      const getAndSet = (url) => {
+        const req = new XMLHttpRequest();
+        req.responseType = "text";
+
+        req.onload = function () {
+          //console.log("in onload")
+          if (this.response.includes("base64")) {
+            obj.DisplayImage = this.response;
+            finalizedAssets.push(obj)
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+          }
+        }
+
+        req.onerror = function (e) {
+          //console.log("http request error")
+          obj.DisplayImage = ""
+          finalizedAssets.push(obj)
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+          }
+        req.open('GET', url, true);
+        try{
+          req.send();
+        } 
+        catch{
+          obj.DisplayImage = ""
+          finalizedAssets.push(obj)
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
+      }
+
+      if (obj.engraving.DisplayImage !== "") {
+        getAndSet(obj.DisplayImage)
+      }
+
+      else if (obj.mutableData.DisplayImage !== "") {
+        getAndSet(obj.DisplayImage)
+      }
+    }
+
+    else if (keys.length > 0) {
     for (let i = 0; i < keys.length; i++) {
       const get = () => {
         if (vals[i].includes("data") && vals[i].includes("base64")) {
@@ -1429,6 +1468,8 @@ export default function Dashboard(props) {
       }
       get()
     }
+  }
+  else {console.log("No conditions met")}
   }
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
