@@ -1352,6 +1352,7 @@ export default function NewRecord(props) {
                               rows={4}
                               variant="outlined"
                               fullWidth
+                              className="bottomSpace"
                             />
                           </>
                         )}
@@ -1366,6 +1367,7 @@ export default function NewRecord(props) {
                               rows={4}
                               variant="outlined"
                               fullWidth
+                              className="bottomSpace"
                             />
                           </>
                         )}
@@ -1380,6 +1382,7 @@ export default function NewRecord(props) {
                               rows={4}
                               variant="outlined"
                               fullWidth
+                              className="bottomSpace"
                             />
                           </>
                         )}

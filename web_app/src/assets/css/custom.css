@@ -1292,3 +1292,7 @@ max-width: 80px !important;
   font-size: 12px;
   font-weight: 500 !important;
 }
+
+.bottomSpace {
+  margin-top: 15px !important;
+}
