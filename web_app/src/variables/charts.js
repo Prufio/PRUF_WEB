@@ -23,11 +23,11 @@ var delays2 = 80,
 const dailySalesChart = {
   data: {
     labels: ["M", "T", "W", "T", "F", "S", "S"],
-    series: [[12, 17, 7, 17, 23, 18, 38]]
+    series: [[12, 17, 7, 17, 23, 18, 38]],
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 0
+      tension: 0,
     }),
     low: 0,
     high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
@@ -35,12 +35,12 @@ const dailySalesChart = {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
-    }
+      left: 0,
+    },
   },
   // for animation
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "line" || data.type === "area") {
         data.element.animate({
           d: {
@@ -52,8 +52,8 @@ const dailySalesChart = {
               .translate(0, data.chartRect.height())
               .stringify(),
             to: data.path.clone().stringify(),
-            easing: Chartist.Svg.Easing.easeOutQuint
-          }
+            easing: Chartist.Svg.Easing.easeOutQuint,
+          },
         });
       } else if (data.type === "point") {
         data.element.animate({
@@ -62,12 +62,12 @@ const dailySalesChart = {
             dur: durations,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -88,13 +88,13 @@ const emailsSubscriptionChart = {
       "Sep",
       "Oct",
       "Nov",
-      "Dec"
+      "Dec",
     ],
-    series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+    series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]],
   },
   options: {
     axisX: {
-      showGrid: false
+      showGrid: false,
     },
     low: 0,
     high: 1000,
@@ -102,8 +102,8 @@ const emailsSubscriptionChart = {
       top: 0,
       right: 5,
       bottom: 0,
-      left: 0
-    }
+      left: 0,
+    },
   },
   responsiveOptions: [
     [
@@ -111,15 +111,15 @@ const emailsSubscriptionChart = {
       {
         seriesBarDistance: 5,
         axisX: {
-          labelInterpolationFnc: function(value) {
+          labelInterpolationFnc: function (value) {
             return value[0];
-          }
-        }
-      }
-    ]
+          },
+        },
+      },
+    ],
   ],
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "bar") {
         data.element.animate({
           opacity: {
@@ -127,12 +127,12 @@ const emailsSubscriptionChart = {
             dur: durations2,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -142,11 +142,11 @@ const emailsSubscriptionChart = {
 const completedTasksChart = {
   data: {
     labels: ["12am", "3pm", "6pm", "9pm", "12pm", "3am", "6am", "9am"],
-    series: [[230, 750, 450, 300, 280, 240, 200, 190]]
+    series: [[230, 750, 450, 300, 280, 240, 200, 190]],
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 0
+      tension: 0,
     }),
     low: 0,
     high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
@@ -154,11 +154,11 @@ const completedTasksChart = {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
-    }
+      left: 0,
+    },
   },
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "line" || data.type === "area") {
         data.element.animate({
           d: {
@@ -170,8 +170,8 @@ const completedTasksChart = {
               .translate(0, data.chartRect.height())
               .stringify(),
             to: data.path.clone().stringify(),
-            easing: Chartist.Svg.Easing.easeOutQuint
-          }
+            easing: Chartist.Svg.Easing.easeOutQuint,
+          },
         });
       } else if (data.type === "point") {
         data.element.animate({
@@ -180,12 +180,12 @@ const completedTasksChart = {
             dur: durations,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -195,14 +195,14 @@ const completedTasksChart = {
 const roundedLineChart = {
   data: {
     labels: ["M", "T", "W", "T", "F", "S", "S"],
-    series: [[12, 17, 7, 17, 23, 18, 38]]
+    series: [[12, 17, 7, 17, 23, 18, 38]],
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 10
+      tension: 10,
     }),
     axisX: {
-      showGrid: false
+      showGrid: false,
     },
     low: 0,
     high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
@@ -210,12 +210,12 @@ const roundedLineChart = {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
+      left: 0,
     },
-    showPoint: false
+    showPoint: false,
   },
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "line" || data.type === "area") {
         data.element.animate({
           d: {
@@ -227,8 +227,8 @@ const roundedLineChart = {
               .translate(0, data.chartRect.height())
               .stringify(),
             to: data.path.clone().stringify(),
-            easing: Chartist.Svg.Easing.easeOutQuint
-          }
+            easing: Chartist.Svg.Easing.easeOutQuint,
+          },
         });
       } else if (data.type === "point") {
         data.element.animate({
@@ -237,12 +237,12 @@ const roundedLineChart = {
             dur: durations,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -252,11 +252,11 @@ const roundedLineChart = {
 const straightLinesChart = {
   data: {
     labels: ["'07", "'08", "'09", "'10", "'11", "'12", "'13", "'14", "'15"],
-    series: [[10, 16, 8, 13, 20, 15, 20, 34, 30]]
+    series: [[10, 16, 8, 13, 20, 15, 20, 34, 30]],
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 0
+      tension: 0,
     }),
     low: 0,
     high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
@@ -264,15 +264,15 @@ const straightLinesChart = {
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
+      left: 0,
     },
     classNames: {
       point: "ct-point ct-white",
-      line: "ct-line ct-white"
-    }
+      line: "ct-line ct-white",
+    },
   },
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "line" || data.type === "area") {
         data.element.animate({
           d: {
@@ -284,8 +284,8 @@ const straightLinesChart = {
               .translate(0, data.chartRect.height())
               .stringify(),
             to: data.path.clone().stringify(),
-            easing: Chartist.Svg.Easing.easeOutQuint
-          }
+            easing: Chartist.Svg.Easing.easeOutQuint,
+          },
         });
       } else if (data.type === "point") {
         data.element.animate({
@@ -294,12 +294,12 @@ const straightLinesChart = {
             dur: durations,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -320,15 +320,15 @@ const simpleBarChart = {
       "Sep",
       "Oct",
       "Nov",
-      "Dec"
+      "Dec",
     ],
-    series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+    series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]],
   },
   options: {
     seriesBarDistance: 10,
     axisX: {
-      showGrid: false
-    }
+      showGrid: false,
+    },
   },
   responsiveOptions: [
     [
@@ -336,15 +336,15 @@ const simpleBarChart = {
       {
         seriesBarDistance: 5,
         axisX: {
-          labelInterpolationFnc: function(value) {
+          labelInterpolationFnc: function (value) {
             return value[0];
-          }
-        }
-      }
-    ]
+          },
+        },
+      },
+    ],
   ],
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "bar") {
         data.element.animate({
           opacity: {
@@ -352,12 +352,12 @@ const simpleBarChart = {
             dur: durations2,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -376,28 +376,28 @@ const colouredLineChart = {
       "'12",
       "'13",
       "'14",
-      "'15"
+      "'15",
     ],
-    series: [[287, 480, 290, 554, 690, 690, 500, 752, 650, 900, 944]]
+    series: [[287, 480, 290, 554, 690, 690, 500, 752, 650, 900, 944]],
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 10
+      tension: 10,
     }),
     axisY: {
       showGrid: true,
-      offset: 40
+      offset: 40,
     },
     axisX: {
-      showGrid: false
+      showGrid: false,
     },
     low: 0,
     high: 1000,
     showPoint: true,
-    height: "300px"
+    height: "300px",
   },
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "line" || data.type === "area") {
         data.element.animate({
           d: {
@@ -409,8 +409,8 @@ const colouredLineChart = {
               .translate(0, data.chartRect.height())
               .stringify(),
             to: data.path.clone().stringify(),
-            easing: Chartist.Svg.Easing.easeOutQuint
-          }
+            easing: Chartist.Svg.Easing.easeOutQuint,
+          },
         });
       } else if (data.type === "point") {
         data.element.animate({
@@ -419,12 +419,12 @@ const colouredLineChart = {
             dur: durations,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -445,19 +445,19 @@ const multipleBarsChart = {
       "Sep",
       "Oct",
       "Nov",
-      "Dec"
+      "Dec",
     ],
     series: [
       [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
-      [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
-    ]
+      [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695],
+    ],
   },
   options: {
     seriesBarDistance: 10,
     axisX: {
-      showGrid: false
+      showGrid: false,
     },
-    height: "300px"
+    height: "300px",
   },
   responsiveOptions: [
     [
@@ -465,15 +465,15 @@ const multipleBarsChart = {
       {
         seriesBarDistance: 5,
         axisX: {
-          labelInterpolationFnc: function(value) {
+          labelInterpolationFnc: function (value) {
             return value[0];
-          }
-        }
-      }
-    ]
+          },
+        },
+      },
+    ],
   ],
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "bar") {
         data.element.animate({
           opacity: {
@@ -481,12 +481,12 @@ const multipleBarsChart = {
             dur: durations2,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -505,32 +505,32 @@ const colouredLinesChart = {
       "'12",
       "'13",
       "'14",
-      "'15"
+      "'15",
     ],
     series: [
       [287, 385, 490, 554, 586, 698, 695, 752, 788, 846, 944],
       [67, 152, 143, 287, 335, 435, 437, 539, 542, 544, 647],
-      [23, 113, 67, 190, 239, 307, 308, 439, 410, 410, 509]
-    ]
+      [23, 113, 67, 190, 239, 307, 308, 439, 410, 410, 509],
+    ],
   },
   options: {
     lineSmooth: Chartist.Interpolation.cardinal({
-      tension: 10
+      tension: 10,
     }),
     axisY: {
       showGrid: true,
-      offset: 40
+      offset: 40,
     },
     axisX: {
-      showGrid: false
+      showGrid: false,
     },
     low: 0,
     high: 1000,
     showPoint: true,
-    height: "300px"
+    height: "300px",
   },
   animation: {
-    draw: function(data) {
+    draw: function (data) {
       if (data.type === "line" || data.type === "area") {
         data.element.animate({
           d: {
@@ -542,8 +542,8 @@ const colouredLinesChart = {
               .translate(0, data.chartRect.height())
               .stringify(),
             to: data.path.clone().stringify(),
-            easing: Chartist.Svg.Easing.easeOutQuint
-          }
+            easing: Chartist.Svg.Easing.easeOutQuint,
+          },
         });
       } else if (data.type === "point") {
         data.element.animate({
@@ -552,12 +552,12 @@ const colouredLinesChart = {
             dur: durations,
             from: 0,
             to: 1,
-            easing: "ease"
-          }
+            easing: "ease",
+          },
         });
       }
-    }
-  }
+    },
+  },
 };
 
 // ##############################
@@ -567,11 +567,11 @@ const colouredLinesChart = {
 const pieChart = {
   data: {
     labels: ["62%", "32%", "6%"],
-    series: [62, 32, 6]
+    series: [62, 32, 6],
   },
   options: {
-    height: "230px"
-  }
+    height: "230px",
+  },
 };
 
 module.exports = {
@@ -586,5 +586,5 @@ module.exports = {
   colouredLineChart,
   multipleBarsChart,
   colouredLinesChart,
-  pieChart
+  pieChart,
 };

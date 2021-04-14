@@ -1,4 +1,3 @@
-
 import Dashboard from "views/Dashboard/Dashboard.js";
 import Home from "views/Home/Home.js";
 import NewRecord from "views/Forms/NewRecord.js";
@@ -31,55 +30,54 @@ import SearchIcon from "@material-ui/icons/Search";
 import NewRecordIcon from "@material-ui/icons/LibraryAddOutlined";
 import NodeManagerIcon from "@material-ui/icons/AccountBalance";
 
-
 var dashRoutes = [
   {
     path: "/home",
     name: "Home",
     icon: HomeIcon,
     component: Home,
-    layout: "/user"
+    layout: "/user",
   },
   {
     path: "/dashboard",
     name: "Asset Dashboard",
     icon: DashboardIcon,
     component: Dashboard,
-    layout: "/user"
+    layout: "/user",
   },
   {
     path: "/search",
     name: "Search",
     icon: SearchIcon,
     component: Search,
-    layout: "/user"
+    layout: "/user",
   },
   {
     path: "/new-asset",
     name: "New Asset",
     icon: NewRecordIcon,
     component: NewRecord,
-    layout: "/user"
+    layout: "/user",
   },
   {
     path: "/node-manager",
     name: "Node Manager",
     icon: NodeManagerIcon,
     component: NodeManager,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Recycle Asset",
     path: "/recycle-asset",
     component: Recycle,
-    layout: "/user"
+    layout: "/user",
   },
 
   {
     name: "Discard Asset",
     path: "/discard-asset",
     component: Discard,
-    layout: "/user"
+    layout: "/user",
   },
   // {
   //   name: "New Asset",
@@ -91,91 +89,91 @@ var dashRoutes = [
     name: "Export Asset",
     path: "/export-asset",
     component: Export,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Import Asset",
     path: "/import-asset",
     component: Import,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Update Asset Info",
     path: "/modify-description",
     component: ModifyDescription,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Set For Sale",
     path: "/set-for-sale",
     component: SetForSale,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Update Status",
     path: "/modify-status",
     component: ModifyStatus,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Update Owner",
     path: "/modify-rightsholder",
     component: ModifyRGT,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Transfer Asset",
     path: "/transfer-asset",
     component: Transfer,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Verify Asset",
     path: "/verify-asset",
     component: Verify,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Change Node Name",
     path: "/change-name",
     component: ChangeNodeName,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Change Data",
     path: "/change-data",
     component: ChangeNodeData,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Change Costs",
     path: "/change-costs",
     component: ChangeNodeCosts,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Finalize Node",
     path: "/finalize-node",
     component: FinalizeNode,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Create Node",
     path: "/create-node",
     component: CreateNode,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Transfer Node",
     path: "/transfer-node",
     component: TransferNode,
-    layout: "/user"
+    layout: "/user",
   },
   {
     name: "Authorize User",
     path: "/authorize-user",
     component: AuthorizeUser,
-    layout: "/user"
+    layout: "/user",
   },
 ];
 export default dashRoutes;

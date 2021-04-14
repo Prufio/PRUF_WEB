@@ -12,8 +12,8 @@ const hoverCardStyle = {
       "& $cardHeaderHoverJdenticon": {
         transform: "translate3d(0, -10px, 0)",
         cursor: "pointer",
-      }
-    }
+      },
+    },
   },
   cardHeaderHover: {
     transition: "all 300ms cubic-bezier(0.34, 1.61, 0.7, 1)",
@@ -30,7 +30,8 @@ const hoverCardStyle = {
     transition: "all 300ms cubic-bezier(0.34, 1.61, 0.7, 1)",
     width: "100% !important",
     height: "100% !important",
-    boxShadow: "0 10px 30px -12px rgb(0 0 0 / 32%), 0 4px 25px 0px rgb(0 0 0 / 8%), 0 8px 10px -5px rgb(0 0 0 / 12%) !important",
+    boxShadow:
+      "0 10px 30px -12px rgb(0 0 0 / 32%), 0 4px 25px 0px rgb(0 0 0 / 8%), 0 8px 10px -5px rgb(0 0 0 / 12%) !important",
     border: "none !important",
     borderRadius: "3px !important",
   },
@@ -45,8 +46,8 @@ const hoverCardStyle = {
     width: "calc(100% - 30px)",
     left: "17px",
     right: "17px",
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 };
 
 export default hoverCardStyle;

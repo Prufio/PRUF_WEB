@@ -1,7 +1,7 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import "../../assets/css/custom.css";
-import swalReact from '@sweetalert/with-react';
+import swalReact from "@sweetalert/with-react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
@@ -29,7 +29,23 @@ import TextField from "@material-ui/core/TextField";
 import { dataTable } from "variables/general.js";
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.js";
-import { AccountBalance, AccountBalanceOutlined, AccountBalanceWallet, AccountBalanceWalletOutlined, BarChartRounded, ContactSupportOutlined, Dashboard, FiberManualRecordTwoTone, HdrWeakTwoTone, ListAltRounded, MultilineChart, Settings, ShowChart, Timeline, VpnKey } from "@material-ui/icons";
+import {
+  AccountBalance,
+  AccountBalanceOutlined,
+  AccountBalanceWallet,
+  AccountBalanceWalletOutlined,
+  BarChartRounded,
+  ContactSupportOutlined,
+  Dashboard,
+  FiberManualRecordTwoTone,
+  HdrWeakTwoTone,
+  ListAltRounded,
+  MultilineChart,
+  Settings,
+  ShowChart,
+  Timeline,
+  VpnKey,
+} from "@material-ui/icons";
 import { List } from "@material-ui/core";
 import Danger from "components/Typography/Danger";
 import Pruf from "../../assets/img/pruftoken.png";
@@ -40,12 +56,11 @@ import {
   colouredLineChart,
   multipleBarsChart,
   colouredLinesChart,
-  pieChart
+  pieChart,
 } from "variables/charts.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import chartStyles from "assets/jss/material-dashboard-pro-react/views/chartsStyle.js";
 import swal from "sweetalert";
-
 
 // const styles = {
 //   cardIconTitle: {
@@ -60,70 +75,70 @@ const useChartStyles = makeStyles(chartStyles);
 
 export default function NodeManager(props) {
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [dash, setDash] = React.useState(true)
-  const [delegation, setDelegation] = React.useState(false)
-  const [analytics, setAnalytics] = React.useState(false)
-  const [rewards, setRewards] = React.useState(true)
+  const [dash, setDash] = React.useState(true);
+  const [delegation, setDelegation] = React.useState(false);
+  const [analytics, setAnalytics] = React.useState(false);
+  const [rewards, setRewards] = React.useState(true);
   const [selectedNodeObj, setSelectedNodeObj] = React.useState({});
-  const [totalRewards, setTotalRewards] = React.useState(false)
-  const [delegationAmount, setDelegationAmount] = React.useState("")
-  const [extDataArr, setExtDataArr] = React.useState([])
-  const [forceReload,] = React.useState(true);
+  const [totalRewards, setTotalRewards] = React.useState(false);
+  const [delegationAmount, setDelegationAmount] = React.useState("");
+  const [extDataArr, setExtDataArr] = React.useState([]);
+  const [forceReload] = React.useState(true);
 
   const classes = useStyles();
   const chartClasses = useChartStyles();
 
-  const [nodeData, setNodeData] = React.useState(
-    [["Loading Nodes...", "~", "~", "~"]],
-  );
+  const [nodeData, setNodeData] = React.useState([
+    ["Loading Nodes...", "~", "~", "~"],
+  ]);
 
-  const [delegationList, setDelegationList] = React.useState(
-    [["Loading Nodes...", "~", "~", "~"]],
-  );
+  const [delegationList, setDelegationList] = React.useState([
+    ["Loading Nodes...", "~", "~", "~"],
+  ]);
 
   const thousandHashesOf = (varToHash) => {
-    if (!window.web3.utils) return window.location.href = "/#/user/home"
+    if (!window.web3.utils) return (window.location.href = "/#/user/home");
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
       //console.log(tempHash);
     }
     return tempHash;
-  }
+  };
 
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-
     }
     //getNodesInWallet()
-  }, [])
+  }, []);
 
   React.useEffect(() => {
-    if (props.nodeList) console.log(props.nodeList.length, Number(props.nodes) + 1)
-    if (props.nodeList && props.nodeList.length === Number(props.nodes) + 1 && !forceReload) {
-      setNodeData(props.nodeList)
-    }
-    else if (Number(props.nodes) === 0) setNodeData([["No nodes held by user", "~", "~", "~"]])
+    if (props.nodeList)
+      console.log(props.nodeList.length, Number(props.nodes) + 1);
+    if (
+      props.nodeList &&
+      props.nodeList.length === Number(props.nodes) + 1 &&
+      !forceReload
+    ) {
+      setNodeData(props.nodeList);
+    } else if (Number(props.nodes) === 0)
+      setNodeData([["No nodes held by user", "~", "~", "~"]]);
     else {
-      getNodesInWallet(Number(props.nodes))
+      getNodesInWallet(Number(props.nodes));
     }
-
-  }, [props.nodes])
+  }, [props.nodes]);
 
   React.useEffect(() => {
     buildDelegationList();
-
-  }, [props.assetClassSets])
+  }, [props.assetClassSets]);
 
   const getNodesInWallet = async (bal, ids, iteration) => {
-
     /*    window.contracts.AC_MGR.methods
        .updateACImmutable(
          "1000002",
@@ -144,36 +159,41 @@ export default function NodeManager(props) {
      }); */
 
     const pageKey = thousandHashesOf(props.addr, props.winKey);
-    if (!window.contracts || !props.addr) return
+    if (!window.contracts || !props.addr) return;
     if (!iteration) iteration = 0;
     if (!ids) ids = [];
-    if (iteration >= bal) return buildNodesInWallet(ids)
+    if (iteration >= bal) return buildNodesInWallet(ids);
 
     if (!bal) {
-      await window.contracts.AC_TKN.methods.balanceOf(props.addr).call((error, result) => {
-        if (error) { console.log(error) }
-        else if (result > 0) {
-          getNodesInWallet(result)
-        }
-        else {
-          window.replaceAssetData = { key: pageKey, nodeList: [["No nodes held by user", "~", "~", "~"]] }
-          setNodeData([["No nodes held by user", "~", "~", "~"]])
-        }
-      });
-    }
-
-    else {
-      await window.contracts.AC_TKN.methods.tokenOfOwnerByIndex(props.addr, iteration)
+      await window.contracts.AC_TKN.methods
+        .balanceOf(props.addr)
+        .call((error, result) => {
+          if (error) {
+            console.log(error);
+          } else if (result > 0) {
+            getNodesInWallet(result);
+          } else {
+            window.replaceAssetData = {
+              key: pageKey,
+              nodeList: [["No nodes held by user", "~", "~", "~"]],
+            };
+            setNodeData([["No nodes held by user", "~", "~", "~"]]);
+          }
+        });
+    } else {
+      await window.contracts.AC_TKN.methods
+        .tokenOfOwnerByIndex(props.addr, iteration)
         .call((_error, _result) => {
           if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR"); return getNodesInWallet(bal, ids, iteration + 1)
+            console.log("IN ERROR IN ERROR IN ERROR");
+            return getNodesInWallet(bal, ids, iteration + 1);
           } else {
-            ids.push(_result)
-            return getNodesInWallet(bal, ids, iteration + 1)
+            ids.push(_result);
+            return getNodesInWallet(bal, ids, iteration + 1);
           }
         });
     }
-  }
+  };
 
   const buildNodesInWallet = async (ids, _extDataArr, _nodeData, iteration) => {
     if (!ids) return;
@@ -184,36 +204,35 @@ export default function NodeManager(props) {
     let _name, _id, _mType;
 
     if (iteration < ids.length) {
-      props.prufClient.get.nodeData(ids[iteration])
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR")
-            _nodeData.push(
-              ["N/A", String(ids[iteration]), "N/A", "N/A"]
-            )
-            _extDataArr.push({})
-            buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
-            //data.push(obj)
-          } else {
-            _nodeData.push(
-              [_result.name, String(ids[iteration]), "N/A", "N/A"]
-            )
-            _extDataArr.push({
-              id: ids[iteration],
-              name: _result.name.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-              root: _result.assetClassRoot,
-              custodyType: _result.custodyType,
-              managementType: _result.managementType,
-              discount: _result.discount,
-              referenceAddress: _result.referenceAddress,
-              extData: _result["IPFS"],
-              storageProvider: _result.storageProvider,
-              switches: _result.switches
-            })
-            console.log("_result", _result)
-            return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
-          }
-        })
+      props.prufClient.get.nodeData(ids[iteration]).call((_error, _result) => {
+        if (_error) {
+          console.log("IN ERROR IN ERROR IN ERROR");
+          _nodeData.push(["N/A", String(ids[iteration]), "N/A", "N/A"]);
+          _extDataArr.push({});
+          buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1);
+          //data.push(obj)
+        } else {
+          _nodeData.push([_result.name, String(ids[iteration]), "N/A", "N/A"]);
+          _extDataArr.push({
+            id: ids[iteration],
+            name: _result.name
+              .toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              ),
+            root: _result.assetClassRoot,
+            custodyType: _result.custodyType,
+            managementType: _result.managementType,
+            discount: _result.discount,
+            referenceAddress: _result.referenceAddress,
+            extData: _result["IPFS"],
+            storageProvider: _result.storageProvider,
+            switches: _result.switches,
+          });
+          console.log("_result", _result);
+          return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1);
+        }
+      });
 
       /*       await window.contracts.AC_MGR.methods
               .getAC_name(ids[iteration])
@@ -242,34 +261,33 @@ export default function NodeManager(props) {
                     });
                 }
               }); */
+    } else {
+      _nodeData.push(["~", "~", "~", "~"]);
+      window.replaceAssetData = { key: pageKey, nodeList: _nodeData };
+      setNodeData(_nodeData);
+      setExtDataArr(_extDataArr);
+      return console.log(_nodeData);
     }
-
-    else {
-      _nodeData.push(["~", "~", "~", "~"])
-      window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
-      setNodeData(_nodeData)
-      setExtDataArr(_extDataArr)
-      return console.log(_nodeData)
-    }
-  }
-
+  };
 
   const buildDelegationList = () => {
     let _delegationList = [];
-    if (!props.assetClassSets || !props.rootNames) return
+    if (!props.assetClassSets || !props.rootNames) return;
 
     for (let i = 0; i < Object.values(props.assetClassSets).length; i++) {
       for (let x = 0; x < Object.values(props.assetClassSets)[i].length; x++) {
-        _delegationList.push(
-          [props.rootNames[i], Object.values(props.assetClassSets)[i][x].name, Object.values(props.assetClassSets)[i][x].id, "N/A", "N/A"]
-        )
+        _delegationList.push([
+          props.rootNames[i],
+          Object.values(props.assetClassSets)[i][x].name,
+          Object.values(props.assetClassSets)[i][x].id,
+          "N/A",
+          "N/A",
+        ]);
       }
     }
 
-    setDelegationList(_delegationList)
-
-
-  }
+    setDelegationList(_delegationList);
+  };
   // const [delegationData, setDelegationData] = React.useState(
   //   dataTable.dataRowsDelegation.map((prop, key) => {
   //     return {
@@ -312,173 +330,158 @@ export default function NodeManager(props) {
   // );
 
   const setDashButton = () => {
-    setDash(true)
-    setDelegation(false)
-    setAnalytics(false)
-  }
+    setDash(true);
+    setDelegation(false);
+    setAnalytics(false);
+  };
 
   const setDelegationButton = () => {
     // setDash(false)
     // setDelegation(true)
     // setAnalytics(false)
-    swal("Coming Soon!")
-
-  }
+    swal("Coming Soon!");
+  };
 
   const setAnalyticsButton = () => {
     // setDash(false)
     // setDelegation(false)
     // setAnalytics(true)
-    swal("Coming Soon!")
-
-  }
+    swal("Coming Soon!");
+  };
 
   const setRewardsButton = () => {
-    setRewards(true)
-    setTotalRewards(false)
-
-  }
+    setRewards(true);
+    setTotalRewards(false);
+  };
 
   const setTotalRewardsButton = () => {
-    setRewards(false)
-    setTotalRewards(true)
-
-  }
-
-
-
+    setRewards(false);
+    setTotalRewards(true);
+  };
 
   const handleSimple = async (e) => {
     if (e.temp === "view") {
-      let tempObj = {}
-      console.log("root",extDataArr[e.index].root)
+      let tempObj = {};
+      console.log("root", extDataArr[e.index].root);
 
-      props.prufClient.get.nodeName(extDataArr[e.index].root)
-      .call((_error, _result) => {
-        if (_error) {
-          console.log("IN ERROR IN ERROR IN ERROR")
-        } else {
+      props.prufClient.get
+        .nodeName(extDataArr[e.index].root)
+        .call((_error, _result) => {
+          if (_error) {
+            console.log("IN ERROR IN ERROR IN ERROR");
+          } else {
+            tempObj.name = extDataArr[e.index].name;
+            tempObj.id = extDataArr[e.index].id;
+            tempObj.rootName = _result
+              .toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              );
+            tempObj.root = extDataArr[e.index].root;
+            tempObj.managementType = extDataArr[e.index].managementType;
+            tempObj.storageProvider = extDataArr[e.index].storageProvider;
+            console.log("tempObj", tempObj);
 
-          tempObj.name = extDataArr[e.index].name;
-          tempObj.id = extDataArr[e.index].id;
-          tempObj.rootName = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
-          tempObj.root = extDataArr[e.index].root;
-          tempObj.managementType = extDataArr[e.index].managementType;
-          tempObj.storageProvider = extDataArr[e.index].storageProvider;
-          console.log("tempObj",tempObj)
+            swalReact({
+              content: (
+                <Card className="delegationCard">
+                  <h4 className="delegationTitle">Node Information</h4>
+                  <div className="delegationTips">
+                    <FiberManualRecordTwoTone className="delegationPin" />
+                    <h5 className="delegationTipsContent">
+                      Name: &nbsp; {tempObj.name} ID:({tempObj.id})
+                    </h5>
+                  </div>
+                  <div className="delegationTips">
+                    <FiberManualRecordTwoTone className="delegationPin" />
+                    <h5 className="delegationTipsContent">
+                      Asset Class: &nbsp; {tempObj.rootName} ID:({tempObj.root})
+                    </h5>
+                  </div>
+                  <div className="delegationTips">
+                    <FiberManualRecordTwoTone className="delegationPin" />
+                    <h5 className="delegationTipsContent">
+                      Management Type: &nbsp; {tempObj.managementType}
+                    </h5>
+                  </div>
+                  <div className="delegationTips">
+                    <FiberManualRecordTwoTone className="delegationPin" />
+                    <h5 className="delegationTipsContent">
+                      Storage Provider: &nbsp; {tempObj.storageProvider}
+                    </h5>
+                  </div>
+                </Card>
+              ),
+              buttons: {
+                close: {
+                  text: "Close",
+                  className: "delegationButtonBack",
+                },
+              },
+            });
+          }
+        });
+    } else {
+      document.body.style.cursor = "wait";
+      if (props.ps) {
+        props.ps.element.scrollTop = 0;
+        //console.log(props.ps.element.scrollTop)
+      }
+      let tempObj = JSON.parse(JSON.stringify(e));
 
-          swalReact({
-            content: <Card className="delegationCard">
-              <h4 className="delegationTitle">Node Information</h4>
-              <div className="delegationTips">
-                <FiberManualRecordTwoTone className="delegationPin" />
-                <h5 className="delegationTipsContent">
-                  Name: &nbsp; {tempObj.name} ID:({tempObj.id})
-                 </h5>
-              </div>
-              <div className="delegationTips">
-                <FiberManualRecordTwoTone className="delegationPin" />
-                <h5 className="delegationTipsContent">
-                  Asset Class: &nbsp; {tempObj.rootName} ID:({tempObj.root})
-                 </h5>
-              </div>
-              <div className="delegationTips">
-                <FiberManualRecordTwoTone className="delegationPin" />
-                <h5 className="delegationTipsContent">
-                  Management Type: &nbsp; {tempObj.managementType}
-                </h5>
-              </div>
-              <div className="delegationTips">
-                <FiberManualRecordTwoTone className="delegationPin" />
-                <h5 className="delegationTipsContent">
-                  Storage Provider: &nbsp; {tempObj.storageProvider}
-                </h5>
-              </div>
-            </Card>,
-            buttons: {
-              close: {
-                text: "Close",
-                className: "delegationButtonBack"
-              }
-            },
-          })
-        }
-      })
+      window.utils.retreiveCosts(8, e.id).then((x) => {
+        tempObj.costs = x;
+        tempObj.lastRef = "/#/user/node-manager";
+        tempObj.root = extDataArr[e.index].root;
+        tempObj.custodyType = extDataArr[e.index].custodyType;
+        tempObj.managementType = extDataArr[e.index].managementType;
+        tempObj.discount = extDataArr[e.index].discount;
+        tempObj.referenceAddress = extDataArr[e.index].referenceAddress;
+        window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+
+        console.log(tempObj);
+        console.log(window.sentPacket);
+        setSimpleSelect(e);
+        return (window.location.href = e.href);
+      });
     }
-
-    else {
-    document.body.style.cursor = 'wait';
-    if (props.ps) {
-      props.ps.element.scrollTop = 0
-      //console.log(props.ps.element.scrollTop)
-    }
-    let tempObj = JSON.parse(JSON.stringify(e))
-
-    window.utils.retreiveCosts(8, e.id).then((x) => {
-
-      tempObj.costs = x
-      tempObj.lastRef = "/#/user/node-manager";
-      tempObj.root = extDataArr[e.index].root;
-      tempObj.custodyType = extDataArr[e.index].custodyType;
-      tempObj.managementType = extDataArr[e.index].managementType;
-      tempObj.discount = extDataArr[e.index].discount;
-      tempObj.referenceAddress = extDataArr[e.index].referenceAddress;
-      window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-
-      console.log(tempObj)
-      console.log(window.sentPacket)
-      setSimpleSelect(e);
-      return window.location.href = e.href;
-
-    })
-  }
   };
-
 
   const handleDelegation = (e) => {
     if (props.ps) {
-      props.ps.element.scrollTop = 0
+      props.ps.element.scrollTop = 0;
       //console.log(props.ps.element.scrollTop)
     }
 
-
-
-
     swalReact({
-      content:
+      content: (
         <Card className="delegationCard">
           <h4 className="delegationTitle">Delegation Confirmation</h4>
           <div className="delegationTips">
             <FiberManualRecordTwoTone className="delegationPin" />
             <h5 className="delegationTipsContent">
               You can delegate to as many nodes as you please.
-             </h5>
+            </h5>
           </div>
           <div className="delegationTips">
             <FiberManualRecordTwoTone className="delegationPin" />
             <h5 className="delegationTipsContent">
               You can un-delegate at any time.
-             </h5>
+            </h5>
           </div>
           <div className="delegationInfoSec">
-            <h4 className="delegationInfo">
-              Node Name :
-            </h4>
-            <h4>
-              {e.name}
-            </h4>
+            <h4 className="delegationInfo">Node Name :</h4>
+            <h4>{e.name}</h4>
           </div>
           <div className="delegationInfoSec">
-            <h4 className="delegationInfo">
-              Node ID :
-            </h4>
-            <h4>
-              {e.id}
-            </h4>
+            <h4 className="delegationInfo">Node ID :</h4>
+            <h4>{e.id}</h4>
           </div>
           <span className="currencyDignifier"> = PRüF</span>
           <TextField
-            onChange={(e) => { setDelegationAmount(e.target.value) }}
+            onChange={(e) => {
+              setDelegationAmount(e.target.value);
+            }}
             id="outlined-full-width"
             label="Amount"
             defaultValue={Number(props.pruf).toFixed(2)}
@@ -501,38 +504,36 @@ export default function NodeManager(props) {
             }}
             variant="outlined"
           />
-        </Card>,
+        </Card>
+      ),
       buttons: {
         back: {
           text: "Back",
           value: "back",
-          className: "delegationButtonBack"
+          className: "delegationButtonBack",
         },
         delete: {
           text: "Delegate",
           value: "delegate",
-          className: "delegationButtonDelegate"
+          className: "delegationButtonDelegate",
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case "delegate":
+          if (delegationAmount > props.pruf) {
+            return swal("Insufficient Balance.");
+          }
+          swal("Delegation Set!");
+          break;
 
-        }
+        case "back":
+          break;
+
+        default:
+          return;
       }
-    })
-      .then((value) => {
-        switch (value) {
-
-          case "delegate":
-            if (delegationAmount > props.pruf) {
-              return swal("Insufficient Balance.")
-            }
-            swal("Delegation Set!");
-            break;
-
-          case "back":
-            break;
-
-          default:
-            return;
-        }
-      })
+    });
   };
   return (
     <GridContainer>
@@ -544,54 +545,54 @@ export default function NodeManager(props) {
             </CardIcon>
             <h4 className={classes.cardIconTitle}>Node Manager</h4>
             {dash && (
-              <Button
-                className="nodeButtonActive"
-              >
+              <Button className="nodeButtonActive">
                 <Dashboard />
-              Dashboard
+                Dashboard
               </Button>
             )}
             {!dash && (
               <Button
                 className="nodeButton"
-                onClick={() => { setDashButton(true) }}
+                onClick={() => {
+                  setDashButton(true);
+                }}
               >
                 <Dashboard />
-              Dashboard
+                Dashboard
               </Button>
             )}
             {analytics && (
-              <Button
-                className="nodeButtonActive"
-              >
+              <Button className="nodeButtonActive">
                 <BarChartRounded />
-              Analytics
+                Analytics
               </Button>
             )}
             {!analytics && (
               <Button
                 className="nodeButton"
-                onClick={() => { setAnalyticsButton(true) }}
+                onClick={() => {
+                  setAnalyticsButton(true);
+                }}
               >
                 <BarChartRounded />
-              Analytics
+                Analytics
               </Button>
             )}
             {delegation && (
-              <Button
-                className="nodeButtonActive"
-              >
+              <Button className="nodeButtonActive">
                 <ListAltRounded />
-              Delegation List
+                Delegation List
               </Button>
             )}
             {!delegation && (
               <Button
                 className="nodeButton"
-                onClick={() => { setDelegationButton(true) }}
+                onClick={() => {
+                  setDelegationButton(true);
+                }}
               >
                 <ListAltRounded />
-              Delegation List
+                Delegation List
               </Button>
             )}
           </CardHeader>
@@ -604,219 +605,224 @@ export default function NodeManager(props) {
                 columns={[
                   {
                     Header: "Name",
-                    accessor: "name"
+                    accessor: "name",
                   },
                   {
                     Header: "Node ID",
-                    accessor: "nodeId"
+                    accessor: "nodeId",
                   },
                   {
                     Header: "Total Delegated",
-                    accessor: "totalDelegated"
+                    accessor: "totalDelegated",
                   },
                   {
                     Header: "Transaction Count",
-                    accessor: "transactionsPerEpoch"
+                    accessor: "transactionsPerEpoch",
                   },
                   {
                     Header: "Actions",
-                    accessor: "actions"
-                  }
+                    accessor: "actions",
+                  },
                 ]}
-                data={
-                  nodeData.map((prop, key) => {
-                    return {
-                      id: key,
-                      name: prop[0],
-                      nodeId: prop[1],
-                      totalDelegated: prop[2],
-                      transactionsPerEpoch: prop[3],
-                      actions: (
-                        // we've added some custom button actions
-                        <div className="actions-right">
-                          {/* use this button to add a like kind of action */}
+                data={nodeData.map((prop, key) => {
+                  return {
+                    id: key,
+                    name: prop[0],
+                    nodeId: prop[1],
+                    totalDelegated: prop[2],
+                    transactionsPerEpoch: prop[3],
+                    actions: (
+                      // we've added some custom button actions
+                      <div className="actions-right">
+                        {/* use this button to add a like kind of action */}
 
-                          {prop[0] === "No nodes held by user" && (
-                            <Button
-                              simple
-                              onClick={() => {
-                                window.location.href = "/#/user/create-node"
-                              }}
-                              color="info"
-                              className="like"
-                            >
-                              Create Node
-                            </Button>
-                          )}
-                          {prop[0] === "Loading Nodes..." && (
-                            <Button
-                              disabled
-                              simple
-                              onClick={() => {
-                                window.location.href = "/#/user/create-node"
-                              }}
-                              color="info"
-                              className="like"
-                            >
-                              Create Node
-                            </Button>
-                          )}
-                          {prop[0] === "~" && (
-                            <Button
-                              simple
-                              onClick={() => {
-                                window.location.href = "/#/user/create-node"
-                              }}
-                              color="info"
-                              className="like"
-                            >
-                              Create Node
-                            </Button>
-                          )}
-                          {prop[0] !== "No nodes held by user" && prop[0] !== "Loading Nodes..." && prop[0] !== "~" && (
-
+                        {prop[0] === "No nodes held by user" && (
+                          <Button
+                            simple
+                            onClick={() => {
+                              window.location.href = "/#/user/create-node";
+                            }}
+                            color="info"
+                            className="like"
+                          >
+                            Create Node
+                          </Button>
+                        )}
+                        {prop[0] === "Loading Nodes..." && (
+                          <Button
+                            disabled
+                            simple
+                            onClick={() => {
+                              window.location.href = "/#/user/create-node";
+                            }}
+                            color="info"
+                            className="like"
+                          >
+                            Create Node
+                          </Button>
+                        )}
+                        {prop[0] === "~" && (
+                          <Button
+                            simple
+                            onClick={() => {
+                              window.location.href = "/#/user/create-node";
+                            }}
+                            color="info"
+                            className="like"
+                          >
+                            Create Node
+                          </Button>
+                        )}
+                        {prop[0] !== "No nodes held by user" &&
+                          prop[0] !== "Loading Nodes..." &&
+                          prop[0] !== "~" && (
                             <form>
-                              <FormControl
-                                className="nodeOptions"
-                              >
+                              <FormControl className="nodeOptions">
                                 <InputLabel className="functionSelectorText">
                                   <Danger>
                                     <Settings className="functionSelectorIcon" />
                                   </Danger>
-                                Options
-                                    </InputLabel>
+                                  Options
+                                </InputLabel>
                                 <Select
                                   MenuProps={{
-                                    className: classes.selectMenu
+                                    className: classes.selectMenu,
                                   }}
                                   classes={{
-                                    select: classes.select
+                                    select: classes.select,
                                   }}
                                   onChange={(e) => handleSimple(e.target.value)}
                                   inputProps={{
                                     name: "simpleSelect",
-                                    id: ""
+                                    id: "",
                                   }}
                                 >
                                   <MenuItem
                                     disabled
                                     classes={{
-                                      root: classes.selectMenuItem
+                                      root: classes.selectMenuItem,
                                     }}
                                   >
                                     Select an option from the list
-                                        </MenuItem>
+                                  </MenuItem>
                                   <MenuItem
                                     classes={{
                                       root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected
+                                      selected: classes.selectMenuItemSelected,
                                     }}
                                     value={{
                                       href: "/#/user/change-name",
                                       name: prop[0],
                                       id: prop[1],
-                                      index: key
+                                      index: key,
                                     }}
                                   >
                                     Change Name
-                            </MenuItem>
+                                  </MenuItem>
                                   <MenuItem
                                     classes={{
                                       root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected
+                                      selected: classes.selectMenuItemSelected,
                                     }}
                                     value={{
                                       href: "/#/user/change-data",
                                       name: prop[0],
                                       id: prop[1],
-                                      index: key
+                                      index: key,
                                     }}
                                   >
                                     Update Data
-                            </MenuItem>
+                                  </MenuItem>
                                   <MenuItem
                                     classes={{
                                       root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected
+                                      selected: classes.selectMenuItemSelected,
                                     }}
                                     value={{
                                       href: "/#/user/change-costs",
                                       name: prop[0],
                                       id: prop[1],
-                                      index: key
+                                      index: key,
                                     }}
                                   >
                                     Update Operation Costs
-                                        </MenuItem>
-                                  {extDataArr[key] && extDataArr[key].managementType === "3" && (
-                                    <MenuItem
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected: classes.selectMenuItemSelected
-                                      }}
-                                      value={{
-                                        href: "/#/user/authorize-user",
-                                        name: prop[0],
-                                        id: prop[1],
-                                        index: key
-                                      }}
-                                    >
-                                      Authorize User
-                                    </MenuItem>
-                                  )}
+                                  </MenuItem>
+                                  {extDataArr[key] &&
+                                    extDataArr[key].managementType === "3" && (
+                                      <MenuItem
+                                        classes={{
+                                          root: classes.selectMenuItem,
+                                          selected:
+                                            classes.selectMenuItemSelected,
+                                        }}
+                                        value={{
+                                          href: "/#/user/authorize-user",
+                                          name: prop[0],
+                                          id: prop[1],
+                                          index: key,
+                                        }}
+                                      >
+                                        Authorize User
+                                      </MenuItem>
+                                    )}
                                   <MenuItem
                                     classes={{
                                       root: classes.selectMenuItem,
-                                      selected: classes.selectMenuItemSelected
+                                      selected: classes.selectMenuItemSelected,
                                     }}
                                     value={{
                                       href: "/#/user/transfer-node",
                                       name: prop[0],
                                       id: prop[1],
-                                      index: key
+                                      index: key,
                                     }}
                                   >
                                     Transfer
-                                        </MenuItem>
-                                  {extDataArr[key] && extDataArr[key].managementType !== "255" && (
-                                    <MenuItem
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected: classes.selectMenuItemSelected
-                                      }}
-                                      value={{
-                                        temp: "view",
-                                        index: key
-                                      }}
-                                    >
-                                      View
-                                    </MenuItem>
-                                  )}
-                                  {extDataArr[key] && extDataArr[key].managementType === "255" && (
-                                    <MenuItem
-                                      classes={{
-                                        root: classes.selectMenuItem,
-                                        selected: classes.selectMenuItemSelected
-                                      }}
-                                      value={{
-                                        href: "/#/user/finalize-node",
-                                        name: prop[0],
-                                        id: prop[1],
-                                        index: key
-                                      }}
-                                    >
-                                      Finalize
-                                    </MenuItem>
-                                  )}
+                                  </MenuItem>
+                                  {extDataArr[key] &&
+                                    extDataArr[key].managementType !==
+                                      "255" && (
+                                      <MenuItem
+                                        classes={{
+                                          root: classes.selectMenuItem,
+                                          selected:
+                                            classes.selectMenuItemSelected,
+                                        }}
+                                        value={{
+                                          temp: "view",
+                                          index: key,
+                                        }}
+                                      >
+                                        View
+                                      </MenuItem>
+                                    )}
+                                  {extDataArr[key] &&
+                                    extDataArr[key].managementType ===
+                                      "255" && (
+                                      <MenuItem
+                                        classes={{
+                                          root: classes.selectMenuItem,
+                                          selected:
+                                            classes.selectMenuItemSelected,
+                                        }}
+                                        value={{
+                                          href: "/#/user/finalize-node",
+                                          name: prop[0],
+                                          id: prop[1],
+                                          index: key,
+                                        }}
+                                      >
+                                        Finalize
+                                      </MenuItem>
+                                    )}
                                 </Select>
                               </FormControl>
                             </form>
                           )}
-                        </div>
-                      )
-                    };
-                  })
-                }
+                      </div>
+                    ),
+                  };
+                })}
               />
             )}
             {!dash && delegation && !analytics && (
@@ -824,28 +830,28 @@ export default function NodeManager(props) {
                 columns={[
                   {
                     Header: "Root",
-                    accessor: "root"
+                    accessor: "root",
                   },
                   {
                     Header: "Name",
-                    accessor: "name"
+                    accessor: "name",
                   },
                   {
                     Header: "Node ID",
-                    accessor: "nodeId"
+                    accessor: "nodeId",
                   },
                   {
                     Header: "Total Delegated",
-                    accessor: "totalStaked"
+                    accessor: "totalStaked",
                   },
                   {
                     Header: "Transaction Count",
-                    accessor: "transactionsPerEpoch"
+                    accessor: "transactionsPerEpoch",
                   },
                   {
                     Header: "Actions",
-                    accessor: "actions"
-                  }
+                    accessor: "actions",
+                  },
                 ]}
                 data={delegationList.map((prop, key) => {
                   return {
@@ -868,8 +874,8 @@ export default function NodeManager(props) {
                               handleDelegation({
                                 name: prop[1],
                                 id: prop[2],
-                                totalDelegated: prop[3]
-                              })
+                                totalDelegated: prop[3],
+                              });
                             }}
                             color="info"
                             className="delegateButton"
@@ -884,8 +890,8 @@ export default function NodeManager(props) {
                               handleDelegation({
                                 name: prop[1],
                                 id: prop[2],
-                                totalDelegated: prop[3]
-                              })
+                                totalDelegated: prop[3],
+                              });
                             }}
                             color="info"
                             className="delegateButton"
@@ -894,10 +900,9 @@ export default function NodeManager(props) {
                           </Button>
                         )}
                       </div>
-                    )
+                    ),
                   };
-                })
-                }
+                })}
               />
             )}
             {!dash && !delegation && analytics && (
@@ -911,9 +916,18 @@ export default function NodeManager(props) {
                         </CardIcon>
                         <p className={classes.cardCategory}>PRüF Balance</p>
                         <h3 className={classes.cardTitle}>
-                          {props.pruf !== "~"
-                            ? <>{String(Math.round(Number(props.pruf) * 100) / 100)} <small>PRüF</small></>
-                            : <>{props.pruf} <small>PRüF</small></>}
+                          {props.pruf !== "~" ? (
+                            <>
+                              {String(
+                                Math.round(Number(props.pruf) * 100) / 100
+                              )}{" "}
+                              <small>PRüF</small>
+                            </>
+                          ) : (
+                            <>
+                              {props.pruf} <small>PRüF</small>
+                            </>
+                          )}
                         </h3>
                         {/* <h3 className={classes.cardTitle}>
                         <small>PRüF</small>
@@ -1081,37 +1095,37 @@ export default function NodeManager(props) {
                 </GridContainer>
                 {/* </Card> */}
                 {rewards && (
-                  <Button
-                    className="nodeButtonSmActive"
-                  >
+                  <Button className="nodeButtonSmActive">
                     <ShowChart />
-              Rewards
+                    Rewards
                   </Button>
                 )}
                 {!rewards && (
                   <Button
                     className="nodeButtonSm"
-                    onClick={() => { setRewardsButton(true) }}
+                    onClick={() => {
+                      setRewardsButton(true);
+                    }}
                   >
                     <ShowChart />
-            Rewards
+                    Rewards
                   </Button>
                 )}
                 {totalRewards && (
-                  <Button
-                    className="nodeButtonSmActive"
-                  >
+                  <Button className="nodeButtonSmActive">
                     <MultilineChart />
-              Total Rewards
+                    Total Rewards
                   </Button>
                 )}
                 {!totalRewards && (
                   <Button
                     className="nodeButtonSm"
-                    onClick={() => { setTotalRewardsButton(true) }}
+                    onClick={() => {
+                      setTotalRewardsButton(true);
+                    }}
                   >
                     <MultilineChart />
-                Total Rewards
+                    Total Rewards
                   </Button>
                 )}
                 <GridContainer>
@@ -1133,7 +1147,9 @@ export default function NodeManager(props) {
                   <GridItem xs={12} sm={12} md={5}>
                     <Card>
                       <CardHeader>
-                        <h4 className={chartClasses.cardIconTitle}>Total Delegation Distribution</h4>
+                        <h4 className={chartClasses.cardIconTitle}>
+                          Total Delegation Distribution
+                        </h4>
                       </CardHeader>
                       <CardBody>
                         <ChartistGraph
@@ -1144,16 +1160,24 @@ export default function NodeManager(props) {
                       </CardBody>
                       <CardFooter stats className={chartClasses.cardFooter}>
                         <h6 className={chartClasses.legendTitle}>Legend</h6>
-                        <i className={"fas fa-circle " + chartClasses.info} /> Transportation(Sporting){` `}
-                        <i className={"fas fa-circle " + chartClasses.warning} /> Collectables(Art)
-              {` `}
-                        <i className={"fas fa-circle " + chartClasses.danger} /> Apparel(Shoes)
-              {` `}
+                        <i
+                          className={"fas fa-circle " + chartClasses.info}
+                        />{" "}
+                        Transportation(Sporting){` `}
+                        <i
+                          className={"fas fa-circle " + chartClasses.warning}
+                        />{" "}
+                        Collectables(Art)
+                        {` `}
+                        <i
+                          className={"fas fa-circle " + chartClasses.danger}
+                        />{" "}
+                        Apparel(Shoes)
+                        {` `}
                       </CardFooter>
                     </Card>
                   </GridItem>
                 </GridContainer>
-
               </>
             )}
           </CardBody>

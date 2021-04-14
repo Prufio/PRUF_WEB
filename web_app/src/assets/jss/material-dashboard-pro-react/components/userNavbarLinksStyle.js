@@ -1,12 +1,12 @@
 import {
   defaultFont,
   dangerColor,
-  whiteColor
+  whiteColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 import customDropdownStyle from "assets/jss/material-dashboard-pro-react/components/customDropdownStyle.js";
 
-const adminNavbarLinksStyle = theme => ({
+const adminNavbarLinksStyle = (theme) => ({
   ...customDropdownStyle(theme),
   search: {
     margin: "0",
@@ -18,26 +18,26 @@ const adminNavbarLinksStyle = theme => ({
       paddingTop: "1px",
       paddingBottom: "1px",
       padding: "10px 15px",
-      width: "auto"
-    }
+      width: "auto",
+    },
   },
   searchInput: {
-    paddingTop: "2px"
+    paddingTop: "2px",
   },
   searchRTL: {
     [theme.breakpoints.down("sm")]: {
-      marginRight: "18px !important"
+      marginRight: "18px !important",
     },
     [theme.breakpoints.up("md")]: {
-      marginLeft: "12px"
-    }
+      marginLeft: "12px",
+    },
   },
   linkText: {
     zIndex: "4",
     ...defaultFont,
     fontSize: "14px",
     margin: "0!important",
-    textTransform: "none"
+    textTransform: "none",
   },
   buttonLink: {
     [theme.breakpoints.down("sm")]: {
@@ -49,30 +49,30 @@ const adminNavbarLinksStyle = theme => ({
         width: "30px",
         height: "24px",
         marginRight: "19px",
-        marginLeft: "3px"
+        marginLeft: "3px",
       },
       "& .fab,& .fas,& .far,& .fal,& .material-icons": {
         width: "30px",
         fontSize: "24px",
         lineHeight: "30px",
         marginRight: "19px",
-        marginLeft: "3px"
-      }
-    }
+        marginLeft: "3px",
+      },
+    },
   },
   searchButton: {
     [theme.breakpoints.down("sm")]: {
       top: "-50px !important",
       marginRight: "38px",
-      float: "right"
-    }
+      float: "right",
+    },
   },
   top: {
-    zIndex: "4"
+    zIndex: "4",
   },
   searchIcon: {
     width: "17px",
-    zIndex: "4"
+    zIndex: "4",
   },
   links: {
     width: "20px",
@@ -85,8 +85,8 @@ const adminNavbarLinksStyle = theme => ({
       color: "inherit",
       opacity: "0.8",
       marginRight: "16px",
-      marginLeft: "-5px"
-    }
+      marginLeft: "-5px",
+    },
   },
   notifications: {
     zIndex: "4",
@@ -104,18 +104,18 @@ const adminNavbarLinksStyle = theme => ({
       textAlign: "center",
       lineHeight: "14px",
       verticalAlign: "middle",
-      display: "block"
+      display: "block",
     },
     [theme.breakpoints.down("sm")]: {
       ...defaultFont,
       fontSize: "14px",
-      marginRight: "8px"
-    }
+      marginRight: "8px",
+    },
   },
   wrapperRTL: {
     [theme.breakpoints.up("md")]: {
-      paddingLeft: "16px"
-    }
+      paddingLeft: "16px",
+    },
   },
   buttonLinkRTL: {
     [theme.breakpoints.down("sm")]: {
@@ -125,31 +125,31 @@ const adminNavbarLinksStyle = theme => ({
       margin: "10px 15px 0",
       padding: "10px 15px",
       display: "block",
-      position: "relative"
-    }
+      position: "relative",
+    },
   },
   labelRTL: {
     [theme.breakpoints.down("sm")]: {
       flexDirection: "row-reverse",
       justifyContent: "initial",
-      display: "flex"
-    }
+      display: "flex",
+    },
   },
   linksRTL: {
     [theme.breakpoints.down("sm")]: {
       marginRight: "-5px !important",
-      marginLeft: "16px !important"
-    }
+      marginLeft: "16px !important",
+    },
   },
   managerClasses: {
     [theme.breakpoints.up("md")]: {
-      display: "inline-block"
-    }
+      display: "inline-block",
+    },
   },
   headerLinksSvg: {
     width: "20px !important",
-    height: "20px !important"
-  }
+    height: "20px !important",
+  },
 });
 
 export default adminNavbarLinksStyle;

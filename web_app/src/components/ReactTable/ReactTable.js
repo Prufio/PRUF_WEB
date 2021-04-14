@@ -5,7 +5,7 @@ import {
   useFilters,
   useAsyncDebounce,
   useSortBy,
-  usePagination
+  usePagination,
 } from "react-table";
 import classnames from "classnames";
 // A great library for fuzzy filtering/sorting items
@@ -28,43 +28,43 @@ import styles from "assets/jss/material-dashboard-pro-react/customSelectStyle.js
 const newStyles = {
   ...styles,
   formControlMargins: {
-    margin: "3px 0 !important"
+    margin: "3px 0 !important",
   },
   gridContainer: {
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 };
 
 const useStyles = makeStyles(newStyles);
 
 // Define a default UI for filtering
 function DefaultColumnFilter({
-  column: { filterValue, preFilteredRows, setFilter }
+  column: { filterValue, preFilteredRows, setFilter },
 }) {
   const count = preFilteredRows.length;
 
   return (
     <CustomInput
       formControlProps={{
-        fullWidth: true
+        fullWidth: true,
       }}
       inputProps={{
         value: filterValue || "",
-        onChange: e => {
+        onChange: (e) => {
           setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
         },
-        placeholder: `Search ${count} records...`
+        placeholder: `Search ${count} records...`,
       }}
     />
   );
 }
 
 function fuzzyTextFilterFn(rows, id, filterValue) {
-  return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
+  return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] });
 }
 
 // Let the table remove the filter if the string is empty
-fuzzyTextFilterFn.autoRemove = val => !val;
+fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
 function Table({ columns, data }) {
@@ -78,15 +78,15 @@ function Table({ columns, data }) {
       // Or, override the default text filter to use
       // "startWith"
       text: (rows, id, filterValue) => {
-        return rows.filter(row => {
+        return rows.filter((row) => {
           const rowValue = row.values[id];
           return rowValue !== undefined
             ? String(rowValue)
-              .toLowerCase()
-              .startsWith(String(filterValue).toLowerCase())
+                .toLowerCase()
+                .startsWith(String(filterValue).toLowerCase())
             : true;
         });
-      }
+      },
     }),
     []
   );
@@ -94,7 +94,7 @@ function Table({ columns, data }) {
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter
+      Filter: DefaultColumnFilter,
     }),
     []
   );
@@ -114,14 +114,14 @@ function Table({ columns, data }) {
     canPreviousPage,
     canNextPage,
     setPageSize,
-    gotoPage
+    gotoPage,
   } = useTable(
     {
       columns,
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
-      initialState: { pageSize: 10, pageIndex: 0 }
+      initialState: { pageSize: 10, pageIndex: 0 },
     },
     useFilters, // useFilters!
     useSortBy,
@@ -131,18 +131,18 @@ function Table({ columns, data }) {
   // We don't want to render all of the rows for this example, so cap
   // it for this use case
   // const firstPageRows = rows.slice(0, 10);
-  let pageSelectData = Array.apply(null, Array(pageOptions.length)).map(
-    function () { }
-  );
+  let pageSelectData = Array.apply(
+    null,
+    Array(pageOptions.length)
+  ).map(function () {});
   let numberOfRowsData = [5, 10, 20, 25, 50, 100];
   return (
     <>
       <div className="ReactTable -striped -highlight">
-        <div className="pagination-top">
-        </div>
+        <div className="pagination-top"></div>
         <table {...getTableProps()} className="rt-table">
           <thead className="rt-thead -header">
-            {headerGroups.map(headerGroup => (
+            {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()} className="rt-tr">
                 {headerGroup.headers.map((column, key) => (
                   <th
@@ -150,7 +150,7 @@ function Table({ columns, data }) {
                     className={classnames("rt-th rt-resizable-header", {
                       "-cursor-pointer": headerGroup.headers.length - 1 !== key,
                       "-sort-asc": column.isSorted && !column.isSortedDesc,
-                      "-sort-desc": column.isSorted && column.isSortedDesc
+                      "-sort-desc": column.isSorted && column.isSortedDesc,
                     })}
                   >
                     <div className="rt-resizable-header-content">
@@ -161,8 +161,8 @@ function Table({ columns, data }) {
                       {headerGroup.headers.length - 1 === key
                         ? null
                         : column.canFilter
-                          ? column.render("Filter")
-                          : null}
+                        ? column.render("Filter")
+                        : null}
                     </div>
                   </th>
                 ))}
@@ -181,7 +181,7 @@ function Table({ columns, data }) {
                     { " -even": i % 2 === 1 }
                   )}
                 >
-                  {row.cells.map(cell => {
+                  {row.cells.map((cell) => {
                     return (
                       <td {...cell.getCellProps()} className="rt-td">
                         {cell.render("Cell")}
@@ -203,7 +203,7 @@ function Table({ columns, data }) {
               className="-btn"
             >
               Previous
-              </button>
+            </button>
           </div>
           <div className="-center">
             <GridContainer className={classes.gridContainer}>
@@ -211,26 +211,24 @@ function Table({ columns, data }) {
                 <FormControl
                   fullWidth
                   className={
-                    classes.selectFormControl +
-                    " " +
-                    classes.formControlMargins
+                    classes.selectFormControl + " " + classes.formControlMargins
                   }
                 >
                   <Select
                     MenuProps={{
-                      className: classes.selectMenu
+                      className: classes.selectMenu,
                     }}
                     classes={{
-                      select: classes.select
+                      select: classes.select,
                     }}
                     value={pageSelect}
-                    onChange={event => {
+                    onChange={(event) => {
                       gotoPage(event.target.value);
                       handlePageSelect(event.target.value);
                     }}
                     inputProps={{
                       name: "pageSelect",
-                      id: "page-select"
+                      id: "page-select",
                     }}
                   >
                     {pageSelectData.map((prop, key) => {
@@ -239,7 +237,7 @@ function Table({ columns, data }) {
                           key={key}
                           classes={{
                             root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
+                            selected: classes.selectMenuItemSelected,
                           }}
                           value={key}
                         >
@@ -254,35 +252,33 @@ function Table({ columns, data }) {
                 <FormControl
                   fullWidth
                   className={
-                    classes.selectFormControl +
-                    " " +
-                    classes.formControlMargins
+                    classes.selectFormControl + " " + classes.formControlMargins
                   }
                 >
                   <Select
                     MenuProps={{
-                      className: classes.selectMenu
+                      className: classes.selectMenu,
                     }}
                     classes={{
-                      select: classes.select
+                      select: classes.select,
                     }}
                     value={numberOfRows}
-                    onChange={event => {
+                    onChange={(event) => {
                       setPageSize(event.target.value);
                       setNumberOfRows(event.target.value);
                     }}
                     inputProps={{
                       name: "numberOfRows",
-                      id: "number-of-rows"
+                      id: "number-of-rows",
                     }}
                   >
-                    {numberOfRowsData.map(prop => {
+                    {numberOfRowsData.map((prop) => {
                       return (
                         <MenuItem
                           key={prop}
                           classes={{
                             root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
+                            selected: classes.selectMenuItemSelected,
                           }}
                           value={prop}
                         >
@@ -303,7 +299,7 @@ function Table({ columns, data }) {
               className="-btn"
             >
               Next
-              </button>
+            </button>
           </div>
         </div>
         <div className="pagination-bottom"></div>
@@ -314,7 +310,7 @@ function Table({ columns, data }) {
 
 // Define a custom filter filter function!
 function filterGreaterThan(rows, id, filterValue) {
-  return rows.filter(row => {
+  return rows.filter((row) => {
     const rowValue = row.values[id];
     return rowValue >= filterValue;
   });
@@ -324,6 +320,6 @@ function filterGreaterThan(rows, id, filterValue) {
 // when given the new filter value and returns true, the filter
 // will be automatically removed. Normally this is just an undefined
 // check, but here, we want to remove the filter if it's not a number
-filterGreaterThan.autoRemove = val => typeof val !== "number";
+filterGreaterThan.autoRemove = (val) => typeof val !== "number";
 
 export default Table;

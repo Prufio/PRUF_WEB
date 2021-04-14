@@ -6,8 +6,8 @@ const instructionStyle = {
     height: "auto",
     borderRadius: "6px",
     display: "block",
-    maxWidth: "100%"
-  }
+    maxWidth: "100%",
+  },
 };
 
 export default instructionStyle;

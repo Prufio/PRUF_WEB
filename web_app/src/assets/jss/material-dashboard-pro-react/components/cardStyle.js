@@ -8,7 +8,7 @@ import {
   whiteColor,
   blackColor,
   grayColor,
-  hexToRgb
+  hexToRgb,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const cardStyle = {
@@ -26,18 +26,18 @@ const cardStyle = {
     flexDirection: "column",
     minWidth: "0",
     wordWrap: "break-word",
-    fontSize: ".875rem"
+    fontSize: ".875rem",
   },
   cardPlain: {
     background: "transparent",
-    boxShadow: "none"
+    boxShadow: "none",
   },
   cardProfile: {
     marginTop: "30px",
-    textAlign: "center"
+    textAlign: "center",
   },
   cardBlog: {
-    marginTop: "60px"
+    marginTop: "60px",
   },
   cardRaised: {
     boxShadow:
@@ -47,7 +47,7 @@ const cardStyle = {
       hexToRgb(blackColor) +
       ", 0.12), 0 8px 10px -5px rgba(" +
       hexToRgb(blackColor) +
-      ", 0.2)"
+      ", 0.2)",
   },
   cardBackground: {
     backgroundPosition: "center center",
@@ -63,52 +63,52 @@ const cardStyle = {
       top: "0",
       content: '""',
       backgroundColor: "rgba(" + hexToRgb(blackColor) + ", 0.56)",
-      borderRadius: "6px"
+      borderRadius: "6px",
     },
     "& small": {
-      color: "rgba(" + hexToRgb(whiteColor) + ", 0.7) !important"
-    }
+      color: "rgba(" + hexToRgb(whiteColor) + ", 0.7) !important",
+    },
   },
   cardPricing: {
     textAlign: "center",
     "&:after": {
-      backgroundColor: "rgba(" + hexToRgb(blackColor) + ", 0.7) !important"
+      backgroundColor: "rgba(" + hexToRgb(blackColor) + ", 0.7) !important",
     },
     "& ul": {
       listStyle: "none",
       padding: 0,
       maxWidth: "240px",
-      margin: "10px auto"
+      margin: "10px auto",
     },
     "& ul li": {
       color: grayColor[0],
       textAlign: "center",
       padding: "12px 0px",
-      borderBottom: "1px solid rgba(" + hexToRgb(grayColor[0]) + ",0.3)"
+      borderBottom: "1px solid rgba(" + hexToRgb(grayColor[0]) + ",0.3)",
     },
     "& ul li:last-child": {
-      border: 0
+      border: 0,
     },
     "& ul li b": {
-      color: grayColor[2]
+      color: grayColor[2],
     },
     "& h1": {
-      marginTop: "30px"
+      marginTop: "30px",
     },
     "& h1 small": {
       display: "inline-flex",
       height: 0,
-      fontSize: "18px"
+      fontSize: "18px",
     },
     "& h1 small:first-child": {
       position: "relative",
       top: "-17px",
-      fontSize: "26px"
+      fontSize: "26px",
     },
     "& ul li svg, & ul li .fab,& ul li .fas,& ul li .far,& ul li .fal,& ul li .material-icons": {
       position: "relative",
-      top: "7px"
-    }
+      top: "7px",
+    },
   },
   cardPricingColor: {
     "& ul li": {
@@ -116,71 +116,71 @@ const cardStyle = {
       borderColor: "rgba(" + hexToRgb(whiteColor) + ",0.3)",
       "& b, & svg,& .fab,& .fas,& .far,& .fal,& .material-icons": {
         color: whiteColor,
-        fontWeight: "700"
-      }
-    }
+        fontWeight: "700",
+      },
+    },
   },
   cardProduct: {
-    marginTop: "30px"
+    marginTop: "30px",
   },
   primary: {
     background:
       "linear-gradient(60deg," + primaryColor[1] + "," + primaryColor[4] + ")",
     "& h1 small": {
-      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
+      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)",
     },
-    color: whiteColor
+    color: whiteColor,
   },
   info: {
     background:
       "linear-gradient(60deg," + infoColor[1] + "," + infoColor[4] + ")",
     "& h1 small": {
-      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
+      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)",
     },
-    color: whiteColor
+    color: whiteColor,
   },
   success: {
     background:
       "linear-gradient(60deg," + successColor[1] + "," + successColor[4] + ")",
     "& h1 small": {
-      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
+      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)",
     },
-    color: whiteColor
+    color: whiteColor,
   },
   warning: {
     background:
       "linear-gradient(60deg," + warningColor[1] + "," + warningColor[4] + ")",
     "& h1 small": {
-      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
+      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)",
     },
-    color: whiteColor
+    color: whiteColor,
   },
   danger: {
     background:
       "linear-gradient(60deg," + dangerColor[1] + "," + dangerColor[4] + ")",
     "& h1 small": {
-      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
+      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)",
     },
-    color: whiteColor
+    color: whiteColor,
   },
   rose: {
     background:
       "linear-gradient(60deg," + roseColor[1] + "," + roseColor[4] + ")",
     "& h1 small": {
-      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
+      color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)",
     },
-    color: whiteColor
+    color: whiteColor,
   },
   cardChart: {
     "& p": {
       marginTop: "0px",
-      paddingTop: "0px"
-    }
+      paddingTop: "0px",
+    },
   },
   cardLogin: {
     transform: "translate3d(" + hexToRgb(blackColor) + ")",
-    transition: "all 300ms linear"
-  }
+    transition: "all 300ms linear",
+  },
 };
 
 export default cardStyle;

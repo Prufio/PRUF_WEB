@@ -1,6 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -18,7 +18,6 @@ import { SwapHoriz } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Transfer(props) {
-
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
   const [address, setAddress] = React.useState("");
@@ -30,9 +29,9 @@ export default function Transfer(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo,] = React.useState(window.sentPacket);
+  const [assetInfo] = React.useState(window.sentPacket);
 
-  const link = document.createElement('div');
+  const link = document.createElement("div");
 
   window.sentPacket = null;
 
@@ -40,13 +39,12 @@ export default function Transfer(props) {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop);
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-  }, [])
+  }, []);
 
   const clearForms = () => {
     setAddress("");
@@ -59,59 +57,76 @@ export default function Transfer(props) {
   if (assetInfo === undefined || assetInfo === null) {
     console.log("No asset found. Rerouting...");
     window.location.href = "/#/user/home";
-    window.location.reload()
+    window.location.reload();
   }
 
   if (assetInfo.statusNum !== "51") {
     swal({
       title: "Asset not in correct status!",
-      text: "This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.",
+      text:
+        "This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.",
       icon: "warning",
       button: "Close",
-    }).then(() => { goBack() });
+    }).then(() => {
+      goBack();
+    });
     if (assetInfo === undefined || assetInfo === null) {
-      console.log("No asset found. Rerouting...")
-      window.location.href = "/#/user/home"
-      window.location.reload()
+      console.log("No asset found. Rerouting...");
+      window.location.href = "/#/user/home";
+      window.location.reload();
     }
   }
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;
     window.location.href = assetInfo.lastRef;
-  }
+  };
 
   const thousandHashesOf = (varToHash) => {
-    if (!window.web3) return window.location.href = "/#/user/home"
+    if (!window.web3) return (window.location.href = "/#/user/home");
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
       //console.log(tempHash);
     }
     return tempHash;
-  }
+  };
 
   const refreshBalances = async () => {
-    if (!window.web3.eth) return
+    if (!window.web3.eth) return;
 
     let pruf, ether;
 
-    console.log("Refreshing ether bal")
+    console.log("Refreshing ether bal");
     await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) }
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = { assets: result, ether, pruf } }
+      if (err) {
+        console.log(err);
+      } else {
+        ether = window.web3.utils.fromWei(result, "ether");
+      }
+      window.contracts.UTIL_TKN.methods
+        .balanceOf(props.addr)
+        .call((err, result) => {
+          if (err) {
+            console.log(err);
+          } else {
+            pruf = window.web3.utils.fromWei(result, "ether");
+          }
+          window.contracts.A_TKN.methods
+            .balanceOf(props.addr)
+            .call((err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                window.replaceAssetData = { assets: result, ether, pruf };
+              }
+            });
         });
-      });
     });
-  }
+  };
 
-  const transferAsset = async () => { //transfer held asset
+  const transferAsset = async () => {
+    //transfer held asset
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     if (!window.web3.utils.isAddress(address)) {
@@ -137,11 +152,7 @@ export default function Transfer(props) {
     setTransactionActive(true);
 
     await window.contracts.A_TKN.methods
-      .safeTransferFrom(
-        props.addr,
-        address,
-        assetInfo.idxHash
-      )
+      .safeTransferFrom(props.addr, address, assetInfo.idxHash)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
@@ -186,11 +197,13 @@ export default function Transfer(props) {
           //refreshBalances()
           //window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
-          window.replaceAssetData = { key: pageKey, dBIndex: assetInfo.dBIndex }
-        })
+          window.replaceAssetData = {
+            key: pageKey,
+            dBIndex: assetInfo.dBIndex,
+          };
+        });
       });
-
-  }
+  };
 
   return (
     <Card>
@@ -198,7 +211,9 @@ export default function Transfer(props) {
         <CardIcon className="headerIconBack">
           <SwapHoriz />
         </CardIcon>
-        <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+        <Button color="info" className="MLBGradient" onClick={() => goBack()}>
+          Go Back
+        </Button>
         <h4 className={classes.cardIconTitle}>Transfer Asset</h4>
       </CardHeader>
       <CardBody>
@@ -212,11 +227,11 @@ export default function Transfer(props) {
                 labelText="Recieving Address *"
                 id="address"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
-                  onChange: event => {
-                    setAddress(event.target.value.trim())
+                  onChange: (event) => {
+                    setAddress(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginAddressState("success");
                     } else {
@@ -236,21 +251,32 @@ export default function Transfer(props) {
               labelText={address}
               id="middle"
               formControlProps={{
-                fullWidth: true
+                fullWidth: true,
               }}
               inputProps={{
-                disabled: true
+                disabled: true,
               }}
             />
           )}
           {!transactionActive && (
             <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => transferAsset()}>Transfer Asset</Button>
+              <Button
+                color="info"
+                className="MLBGradient"
+                onClick={() => transferAsset()}
+              >
+                Transfer Asset
+              </Button>
             </div>
           )}
           {transactionActive && (
             <h3>
-              Transferring Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Transferring Asset
+              <div className="lds-ellipsisIF">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </h3>
           )}
         </form>

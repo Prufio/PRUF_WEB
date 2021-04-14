@@ -1,6 +1,6 @@
 import React from "react";
 import "../../../assets/css/custom.css";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -30,7 +30,6 @@ const useStyles = makeStyles(styles);
 const useCardStyles = makeStyles(cardStyles);
 
 export default function CreateNode(props) {
-
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
@@ -45,7 +44,7 @@ export default function CreateNode(props) {
   const [name, setName] = React.useState("");
   const [root, setRoot] = React.useState("");
   const [rootName, setRootName] = React.useState("");
-  const [pricingObj, setPricingObj] = React.useState({})
+  const [pricingObj, setPricingObj] = React.useState({});
 
   const [loginName, setloginName] = React.useState("");
   const [loginIPFS, setloginIPFS] = React.useState("");
@@ -74,14 +73,30 @@ export default function CreateNode(props) {
   const [operation6, setOperation6] = React.useState("0");
   const [operation7, setOperation7] = React.useState("0");
   const [operation8, setOperation8] = React.useState("0");
-  const [beneficiaryAddress1, setBeneficiaryAddress1] = React.useState(props.addr);
-  const [beneficiaryAddress2, setBeneficiaryAddress2] = React.useState(props.addr);
-  const [beneficiaryAddress3, setBeneficiaryAddress3] = React.useState(props.addr);
-  const [beneficiaryAddress4, setBeneficiaryAddress4] = React.useState(props.addr);
-  const [beneficiaryAddress5, setBeneficiaryAddress5] = React.useState(props.addr);
-  const [beneficiaryAddress6, setBeneficiaryAddress6] = React.useState(props.addr);
-  const [beneficiaryAddress7, setBeneficiaryAddress7] = React.useState(props.addr);
-  const [beneficiaryAddress8, setBeneficiaryAddress8] = React.useState(props.addr);
+  const [beneficiaryAddress1, setBeneficiaryAddress1] = React.useState(
+    props.addr
+  );
+  const [beneficiaryAddress2, setBeneficiaryAddress2] = React.useState(
+    props.addr
+  );
+  const [beneficiaryAddress3, setBeneficiaryAddress3] = React.useState(
+    props.addr
+  );
+  const [beneficiaryAddress4, setBeneficiaryAddress4] = React.useState(
+    props.addr
+  );
+  const [beneficiaryAddress5, setBeneficiaryAddress5] = React.useState(
+    props.addr
+  );
+  const [beneficiaryAddress6, setBeneficiaryAddress6] = React.useState(
+    props.addr
+  );
+  const [beneficiaryAddress7, setBeneficiaryAddress7] = React.useState(
+    props.addr
+  );
+  const [beneficiaryAddress8, setBeneficiaryAddress8] = React.useState(
+    props.addr
+  );
 
   const [loginOperation1, setloginOperation1] = React.useState("");
   const [loginOperation2, setloginOperation2] = React.useState("");
@@ -92,14 +107,38 @@ export default function CreateNode(props) {
   const [loginOperation7, setloginOperation7] = React.useState("");
   const [loginOperation8, setloginOperation8] = React.useState("");
 
-  const [loginBeneficiaryAddress1, setloginBeneficiaryAddress1] = React.useState("");
-  const [loginBeneficiaryAddress2, setloginBeneficiaryAddress2] = React.useState("");
-  const [loginBeneficiaryAddress3, setloginBeneficiaryAddress3] = React.useState("");
-  const [loginBeneficiaryAddress4, setloginBeneficiaryAddress4] = React.useState("");
-  const [loginBeneficiaryAddress5, setloginBeneficiaryAddress5] = React.useState("");
-  const [loginBeneficiaryAddress6, setloginBeneficiaryAddress6] = React.useState("");
-  const [loginBeneficiaryAddress7, setloginBeneficiaryAddress7] = React.useState("");
-  const [loginBeneficiaryAddress8, setloginBeneficiaryAddress8] = React.useState("");
+  const [
+    loginBeneficiaryAddress1,
+    setloginBeneficiaryAddress1,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress2,
+    setloginBeneficiaryAddress2,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress3,
+    setloginBeneficiaryAddress3,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress4,
+    setloginBeneficiaryAddress4,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress5,
+    setloginBeneficiaryAddress5,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress6,
+    setloginBeneficiaryAddress6,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress7,
+    setloginBeneficiaryAddress7,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress8,
+    setloginBeneficiaryAddress8,
+  ] = React.useState("");
 
   const [loginOperation1State, setloginOperation1State] = React.useState("");
   const [loginOperation2State, setloginOperation2State] = React.useState("");
@@ -110,23 +149,54 @@ export default function CreateNode(props) {
   const [loginOperation7State, setloginOperation7State] = React.useState("");
   const [loginOperation8State, setloginOperation8State] = React.useState("");
 
-  const [loginBeneficiaryAddress1State, setloginBeneficiaryAddress1State] = React.useState("");
-  const [loginBeneficiaryAddress2State, setloginBeneficiaryAddress2State] = React.useState("");
-  const [loginBeneficiaryAddress3State, setloginBeneficiaryAddress3State] = React.useState("");
-  const [loginBeneficiaryAddress4State, setloginBeneficiaryAddress4State] = React.useState("");
-  const [loginBeneficiaryAddress5State, setloginBeneficiaryAddress5State] = React.useState("");
-  const [loginBeneficiaryAddress6State, setloginBeneficiaryAddress6State] = React.useState("");
-  const [loginBeneficiaryAddress7State, setloginBeneficiaryAddress7State] = React.useState("");
-  const [loginBeneficiaryAddress8State, setloginBeneficiaryAddress8State] = React.useState("");
+  const [
+    loginBeneficiaryAddress1State,
+    setloginBeneficiaryAddress1State,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress2State,
+    setloginBeneficiaryAddress2State,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress3State,
+    setloginBeneficiaryAddress3State,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress4State,
+    setloginBeneficiaryAddress4State,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress5State,
+    setloginBeneficiaryAddress5State,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress6State,
+    setloginBeneficiaryAddress6State,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress7State,
+    setloginBeneficiaryAddress7State,
+  ] = React.useState("");
+  const [
+    loginBeneficiaryAddress8State,
+    setloginBeneficiaryAddress8State,
+  ] = React.useState("");
 
-
-  const link = document.createElement('div')
+  const link = document.createElement("div");
   const sampleIpfs = {
-    idHashFields: [["Field 1", "field 1 placeholder"], ["Field 2", "field 2 placeholder"], ["Field 3", "field 3 placeholder"], ["Field 4", "field 4 placeholder"]], ownerHashFields: [], landingConfig: { url: "", DBref: "" }, nodeAssets: { photo: {}, text: {} }
-  }
+    idHashFields: [
+      ["Field 1", "field 1 placeholder"],
+      ["Field 2", "field 2 placeholder"],
+      ["Field 3", "field 3 placeholder"],
+      ["Field 4", "field 4 placeholder"],
+    ],
+    ownerHashFields: [],
+    landingConfig: { url: "", DBref: "" },
+    nodeAssets: { photo: {}, text: {} },
+  };
 
-  window.sentPacket = null
-  document.body.style.cursor = 'default';
+  window.sentPacket = null;
+  document.body.style.cursor = "default";
 
   const classes = useStyles();
   const cardClasses = useCardStyles();
@@ -135,28 +205,26 @@ export default function CreateNode(props) {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-
-  }, [])
+  }, []);
 
   const generateRootList = (arr) => {
-    let rootNames = props.rootNames
-    if (!arr || !rootNames) return
+    let rootNames = props.rootNames;
+    if (!arr || !rootNames) return;
     let rootSelection = [
       <MenuItem
         disabled
         key={"keySelClass"}
         classes={{
-          root: classes.selectMenuItem
+          root: classes.selectMenuItem,
         }}
       >
         Select a Class
-      </MenuItem>
+      </MenuItem>,
     ];
 
     for (let i = 0; i < arr.length; i++) {
@@ -165,7 +233,7 @@ export default function CreateNode(props) {
           key={"key" + String(arr[i])}
           classes={{
             root: classes.selectMenuItem,
-            selected: classes.selectMenuItemSelected
+            selected: classes.selectMenuItemSelected,
           }}
           value={String(arr[i])}
         >
@@ -175,52 +243,40 @@ export default function CreateNode(props) {
     }
 
     return rootSelection;
-
-  }
+  };
 
   const rootLogin = (e) => {
-
-    if (!e.target.value) return setRoot("")
+    if (!e.target.value) return setRoot("");
     if (!props.IDHolder && !mintedID) {
-      IDHolderPrompt()
-    }
-
-    else {
+      IDHolderPrompt();
+    } else {
       if (e.target.value === "1") {
-        setRootName("Art")
+        setRootName("Art");
       }
       if (e.target.value === "2") {
-        setRootName("Digital Art")
-
+        setRootName("Digital Art");
       }
       if (e.target.value === "3") {
-        setRootName("Trinkets")
-
+        setRootName("Trinkets");
       }
       if (e.target.value === "4") {
-        setRootName("Musical instrumnts")
-
+        setRootName("Musical instrumnts");
       }
       if (e.target.value === "5") {
-        setRootName("Apparel")
-
+        setRootName("Apparel");
       }
       if (e.target.value === "6") {
-        setRootName("Mobile Electronics")
-
+        setRootName("Mobile Electronics");
       }
       if (e.target.value === "7") {
-        setRootName("Non-motor Vehicles")
-
+        setRootName("Non-motor Vehicles");
       }
-      setRoot(e.target.value)
-      setSelectedRootID(e.target.value)
+      setRoot(e.target.value);
+      setSelectedRootID(e.target.value);
     }
-  }
-
+  };
 
   const IDHolderPrompt = () => {
-
     if (!props.addr) {
       return swal({
         title: "Could not get user address",
@@ -229,145 +285,143 @@ export default function CreateNode(props) {
         buttons: {
           close: {
             text: "close",
-            value: "close"
-          }
+            value: "close",
+          },
         },
-      })
+      });
     }
     let tempTxHash;
 
     swal({
-      title: "In order to purchase a node token, you must first have an ID token.",
+      title:
+        "In order to purchase a node token, you must first have an ID token.",
       icon: "warning",
       text: "If you would like to mint an ID token, please select Yes",
       buttons: {
         yes: {
           text: "Yes",
-          value: "yes"
+          value: "yes",
         },
         no: {
           text: "No",
-          value: "no"
-        }
+          value: "no",
+        },
       },
-    })
-      .then((value) => {
-        switch (value) {
+    }).then((value) => {
+      switch (value) {
+        case "yes":
+          setTransactionActive(true);
 
-          case "yes":
-            setTransactionActive(true)
+          const pageKey = thousandHashesOf(props.addr, props.winKey);
 
-            const pageKey = thousandHashesOf(props.addr, props.winKey)
-
-            window.contracts.PARTY.methods
-              .GET_ID()
-              .send({ from: props.addr })
-              .on("error", function (_error) {
-                setTransactionActive(false);
-                setTxStatus(false);
-                setTxHash(Object.values(_error)[0].transactionHash);
-                tempTxHash = Object.values(_error)[0].transactionHash;
-                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-                let str2 = "' target='_blank'>here</a>";
-                link.innerHTML = String(str1 + tempTxHash + str2);
-                if (tempTxHash !== undefined) {
-                  swal({
-                    title: "Something went wrong!",
-                    content: link,
-                    icon: "warning",
-                    button: "Close",
-                  });
-                }
-                if (tempTxHash === undefined) {
-                  swal({
-                    title: "Something went wrong!",
-                    icon: "warning",
-                    button: "Close",
-                  });
-                }
-              })
-              .on("receipt", (receipt) => {
-                setTransactionActive(false);
-                setTxStatus(receipt.status);
-                tempTxHash = receipt.transactionHash;
-                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-                let str2 = "' target='_blank'>here</a>";
-                link.innerHTML = String(str1 + tempTxHash + str2);
+          window.contracts.PARTY.methods
+            .GET_ID()
+            .send({ from: props.addr })
+            .on("error", function (_error) {
+              setTransactionActive(false);
+              setTxStatus(false);
+              setTxHash(Object.values(_error)[0].transactionHash);
+              tempTxHash = Object.values(_error)[0].transactionHash;
+              let str1 =
+                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+              let str2 = "' target='_blank'>here</a>";
+              link.innerHTML = String(str1 + tempTxHash + str2);
+              if (tempTxHash !== undefined) {
                 swal({
-                  title: "ID Token Minted!",
+                  title: "Something went wrong!",
                   content: link,
-                  icon: "success",
-                  button: "Close"
-                }).then(() => {
-                  window.replaceAssetData = { IDHolder: true }
-                  setMintedID(true)
-                })
-              })
+                  icon: "warning",
+                  button: "Close",
+                });
+              }
+              if (tempTxHash === undefined) {
+                swal({
+                  title: "Something went wrong!",
+                  icon: "warning",
+                  button: "Close",
+                });
+              }
+            })
+            .on("receipt", (receipt) => {
+              setTransactionActive(false);
+              setTxStatus(receipt.status);
+              tempTxHash = receipt.transactionHash;
+              let str1 =
+                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+              let str2 = "' target='_blank'>here</a>";
+              link.innerHTML = String(str1 + tempTxHash + str2);
+              swal({
+                title: "ID Token Minted!",
+                content: link,
+                icon: "success",
+                button: "Close",
+              }).then(() => {
+                window.replaceAssetData = { IDHolder: true };
+                setMintedID(true);
+              });
+            });
 
-            break;
+          break;
 
-          case "no":
-            break;
+        case "no":
+          break;
 
-          default:
-            break;
-        }
-      });
-
-
-  }
+        default:
+          break;
+      }
+    });
+  };
 
   const thousandHashesOf = (varToHash) => {
-    if (!window.web3) return window.location.href = "/#/user/home"
+    if (!window.web3) return (window.location.href = "/#/user/home");
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
       //console.log(tempHash);
     }
     return tempHash;
-  }
+  };
 
   const setStandard = (standard) => {
     switch (standard) {
-      case ("1"): {
+      case "1": {
         setStandard1(true);
         setStandard2(false);
         setStandard3(false);
-        break
+        break;
       }
-      case ("2"): {
+      case "2": {
         setStandard1(false);
         setStandard2(true);
         setStandard3(false);
-        break
+        break;
       }
-      case ("3"): {
+      case "3": {
         setStandard1(false);
         setStandard2(false);
         setStandard3(true);
-        break
+        break;
       }
       default: {
-        console.log("Error in standard switch")
+        console.log("Error in standard switch");
       }
     }
-  }
+  };
 
   const setPrices = () => {
-    console.log(pricingObj)
-  }
+    console.log(pricingObj);
+  };
 
   const handlePriceAdjustment = (job, val) => {
-    let tempObj = JSON.parse(JSON.stringify(pricingObj))
+    let tempObj = JSON.parse(JSON.stringify(pricingObj));
     if (!val || val < 0) {
-      delete tempObj[job]
-      setPricingObj(tempObj)
+      delete tempObj[job];
+      setPricingObj(tempObj);
+    } else {
+      tempObj[job] = String(val);
+      setPricingObj(tempObj);
     }
-    else {
-      tempObj[job] = String(val)
-      setPricingObj(tempObj)
-    }
-  }
+  };
 
   const handleNewAssetClass = async () => {
     const pageKey = thousandHashesOf(props.addr, props.winKey);
@@ -376,26 +430,37 @@ export default function CreateNode(props) {
       .resolveAssetClass(name)
       .call(function (_error, _result) {
         if (_error) {
-          return (console.log("IN ERROR IN ERROR IN ERROR"))
+          return console.log("IN ERROR IN ERROR IN ERROR");
         } else {
-          id = _result
+          id = _result;
           let tempArr = props.nodeList;
-          tempArr.push([name, id, "N/A", "N/A"])
-          window.replaceAssetData = { key: pageKey, refreshBals:true, nodeList: tempArr }
+          tempArr.push([name, id, "N/A", "N/A"]);
+          window.replaceAssetData = {
+            key: pageKey,
+            refreshBals: true,
+            nodeList: tempArr,
+          };
           window.location.href = "/#/user/node-manager";
           //window.location.reload();
         }
       });
-
-  }
+  };
 
   const setLayout = () => {
     let component = [];
     component.push(
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
-          <Card chart className={cardClasses.cardHover} onClick={() => setStandard("1")}>
-            <CardHeader image icon className={cardClasses.cardHeaderHoverDashboard}>
+          <Card
+            chart
+            className={cardClasses.cardHover}
+            onClick={() => setStandard("1")}
+          >
+            <CardHeader
+              image
+              icon
+              className={cardClasses.cardHeaderHoverDashboard}
+            >
               {/* {standard1 && (
                 <img title="View Asset" src={placeholderCheck} alt="" />
               )} */}
@@ -442,18 +507,15 @@ export default function CreateNode(props) {
         </GridItem> */}
       </GridContainer>
     );
-    return component
-  }
+    return component;
+  };
 
   const setPricing = () => {
     let component = [];
     component.push(
       <Card className="pricingCard">
         <Card className="pricingCard">
-          <Tooltip
-            title="New Asset, Recycle, Import"
-            arrow
-          >
+          <Tooltip title="New Asset, Recycle, Import" arrow>
             <Button className="operationButton">Operation 1 :</Button>
           </Tooltip>
           <CustomInput
@@ -462,14 +524,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation1"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation1),
-              onChange: event => {
-                handlePriceAdjustment("1", Number(event.target.value).toFixed(3))
-                setOperation1(event.target.value.trim())
+              value: operation1,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "1",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation1(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation1State("success");
                 } else {
@@ -480,10 +545,7 @@ export default function CreateNode(props) {
             }}
           />
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -493,13 +555,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -511,7 +573,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 1"
                 id="beneficiaryAddress1"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -526,12 +588,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 1"
                 id="beneficiaryAddress1"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress1,
-                  onChange: event => {
-                    setBeneficiaryAddress1(event.target.value.trim())
+                  onChange: (event) => {
+                    setBeneficiaryAddress1(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress1State("success");
                     } else {
@@ -546,10 +608,7 @@ export default function CreateNode(props) {
         </Card>
 
         <Card className="pricingCard">
-          <Tooltip
-            title="Unused in current application"
-            arrow
-          >
+          <Tooltip title="Unused in current application" arrow>
             <Button className="operationButton">Operation 2 :</Button>
           </Tooltip>
           <CustomInput
@@ -558,14 +617,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation2"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation2),
-              onChange: event => {
-                handlePriceAdjustment("2", Number(event.target.value).toFixed(3))
-                setOperation2(event.target.value.trim())
+              value: operation2,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "2",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation2(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation2State("success");
                 } else {
@@ -577,10 +639,7 @@ export default function CreateNode(props) {
           />
 
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -590,13 +649,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -608,7 +667,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 2"
                 id="beneficiaryAddress2"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -623,12 +682,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 2"
                 id="beneficiaryAddress2"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress2,
-                  onChange: event => {
-                    setBeneficiaryAddress2(event.target.value.trim())
+                  onChange: (event) => {
+                    setBeneficiaryAddress2(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress2State("success");
                     } else {
@@ -642,10 +701,7 @@ export default function CreateNode(props) {
           </div>
         </Card>
         <Card className="pricingCard">
-          <Tooltip
-            title="Unused in current application"
-            arrow
-          >
+          <Tooltip title="Unused in current application" arrow>
             <Button className="operationButton">Operation 3 :</Button>
           </Tooltip>
           <CustomInput
@@ -654,14 +710,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation3"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation3),
-              onChange: event => {
-                handlePriceAdjustment("3", Number(event.target.value).toFixed(3))
-                setOperation3(event.target.value.trim())
+              value: operation3,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "3",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation3(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation3State("success");
                 } else {
@@ -673,10 +732,7 @@ export default function CreateNode(props) {
           />
 
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -686,13 +742,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -704,7 +760,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 3"
                 id="beneficiaryAddress3"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -719,12 +775,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 3"
                 id="beneficiaryAddress3"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress3,
-                  onChange: event => {
-                    setBeneficiaryAddress3(event.target.value.trim())
+                  onChange: (event) => {
+                    setBeneficiaryAddress3(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress3State("success");
                     } else {
@@ -739,10 +795,7 @@ export default function CreateNode(props) {
         </Card>
 
         <Card className="pricingCard">
-          <Tooltip
-            title="Unused in current application"
-            arrow
-          >
+          <Tooltip title="Unused in current application" arrow>
             <Button className="operationButton">Operation 4 :</Button>
           </Tooltip>
           <CustomInput
@@ -751,14 +804,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation4"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation4),
-              onChange: event => {
-                handlePriceAdjustment("4", Number(event.target.value).toFixed(3))
-                setOperation4(event.target.value.trim())
+              value: operation4,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "4",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation4(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation4State("success");
                 } else {
@@ -770,10 +826,7 @@ export default function CreateNode(props) {
           />
 
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -783,13 +836,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -801,7 +854,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 4"
                 id="beneficiaryAddress4"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -816,12 +869,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 4"
                 id="beneficiaryAddress4"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress4,
-                  onChange: event => {
-                    setloginBeneficiaryAddress4(event.target.value.trim())
+                  onChange: (event) => {
+                    setloginBeneficiaryAddress4(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress4State("success");
                     } else {
@@ -836,10 +889,7 @@ export default function CreateNode(props) {
         </Card>
 
         <Card className="pricingCard">
-          <Tooltip
-            title="Change Status"
-            arrow
-          >
+          <Tooltip title="Change Status" arrow>
             <Button className="operationButton">Operation 5 :</Button>
           </Tooltip>
           <CustomInput
@@ -848,14 +898,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation5"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation5),
-              onChange: event => {
-                handlePriceAdjustment("5", Number(event.target.value).toFixed(3))
-                setOperation5(event.target.value.trim())
+              value: operation5,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "5",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation5(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation5State("success");
                 } else {
@@ -867,10 +920,7 @@ export default function CreateNode(props) {
           />
 
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -880,13 +930,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -898,7 +948,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 5"
                 id="beneficiaryAddress5"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -913,12 +963,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 5"
                 id="beneficiaryAddress5"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress5,
-                  onChange: event => {
-                    setBeneficiaryAddress5(event.target.value.trim())
+                  onChange: (event) => {
+                    setBeneficiaryAddress5(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress5State("success");
                     } else {
@@ -933,10 +983,7 @@ export default function CreateNode(props) {
         </Card>
 
         <Card className="pricingCard">
-          <Tooltip
-            title="Change Owner Info"
-            arrow
-          >
+          <Tooltip title="Change Owner Info" arrow>
             <Button className="operationButton">Operation 6 :</Button>
           </Tooltip>
           <CustomInput
@@ -945,14 +992,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation6"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation6),
-              onChange: event => {
-                handlePriceAdjustment("6", Number(event.target.value).toFixed(3))
-                setOperation6(event.target.value.trim())
+              value: operation6,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "6",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation6(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation6State("success");
                 } else {
@@ -964,10 +1014,7 @@ export default function CreateNode(props) {
           />
 
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -977,13 +1024,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -995,7 +1042,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 6"
                 id="beneficiaryAddress6"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -1010,12 +1057,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 6"
                 id="beneficiaryAddress6"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress6,
-                  onChange: event => {
-                    setBeneficiaryAddress6(event.target.value.trim())
+                  onChange: (event) => {
+                    setBeneficiaryAddress6(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress6State("success");
                     } else {
@@ -1030,10 +1077,7 @@ export default function CreateNode(props) {
         </Card>
 
         <Card className="pricingCard">
-          <Tooltip
-            title="Unused in current application"
-            arrow
-          >
+          <Tooltip title="Unused in current application" arrow>
             <Button className="operationButton">Operation 7 :</Button>
           </Tooltip>
           <CustomInput
@@ -1042,14 +1086,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation7"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation7),
-              onChange: event => {
-                handlePriceAdjustment("7", Number(event.target.value).toFixed(3))
-                setOperation7(event.target.value.trim())
+              value: operation7,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "7",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation7(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation7State("success");
                 } else {
@@ -1061,10 +1108,7 @@ export default function CreateNode(props) {
           />
 
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -1074,13 +1118,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -1092,7 +1136,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 7"
                 id="beneficiaryAddress7"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -1107,12 +1151,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 7"
                 id="beneficiaryAddress7"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress7,
-                  onChange: event => {
-                    setBeneficiaryAddress7(event.target.value.trim())
+                  onChange: (event) => {
+                    setBeneficiaryAddress7(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress7State("success");
                     } else {
@@ -1127,10 +1171,7 @@ export default function CreateNode(props) {
         </Card>
 
         <Card className="pricingCard">
-          <Tooltip
-            title="Change Asset Info"
-            arrow
-          >
+          <Tooltip title="Change Asset Info" arrow>
             <Button className="operationButton">Operation 8 :</Button>
           </Tooltip>
           <CustomInput
@@ -1139,14 +1180,17 @@ export default function CreateNode(props) {
             labelText="In PRüF (ü)"
             id="operation8"
             formControlProps={{
-              fullWidth: true
+              fullWidth: true,
             }}
             inputProps={{
               type: "number",
-              value: (operation8),
-              onChange: event => {
-                handlePriceAdjustment("8", Number(event.target.value).toFixed(3))
-                setOperation8(event.target.value.trim())
+              value: operation8,
+              onChange: (event) => {
+                handlePriceAdjustment(
+                  "8",
+                  Number(event.target.value).toFixed(3)
+                );
+                setOperation8(event.target.value.trim());
                 if (event.target.value !== "") {
                   setloginOperation8State("success");
                 } else {
@@ -1158,10 +1202,7 @@ export default function CreateNode(props) {
           />
 
           <div className="beneficiaryAddressCheckbox">
-
-            <Tooltip
-              title="Change node action rewards address."
-            >
+            <Tooltip title="Change node action rewards address.">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -1171,13 +1212,13 @@ export default function CreateNode(props) {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: classes.label,
-                  root: classes.labelRoot
+                  root: classes.labelRoot,
                 }}
                 label="Edit Beneficiary"
               />
@@ -1189,7 +1230,7 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 8"
                 id="beneficiaryAddress8"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   disabled: "true",
@@ -1204,12 +1245,12 @@ export default function CreateNode(props) {
                 labelText="Beneficiary Address 8"
                 id="beneficiaryAddress8"
                 formControlProps={{
-                  fullWidth: true
+                  fullWidth: true,
                 }}
                 inputProps={{
                   defaultValue: beneficiaryAddress8,
-                  onChange: event => {
-                    setBeneficiaryAddress8(event.target.value.trim())
+                  onChange: (event) => {
+                    setBeneficiaryAddress8(event.target.value.trim());
                     if (event.target.value !== "") {
                       setloginBeneficiaryAddress8State("success");
                     } else {
@@ -1224,8 +1265,8 @@ export default function CreateNode(props) {
         </Card>
       </Card>
     );
-    return component
-  }
+    return component;
+  };
 
   const checkForAC = async () => {
     setTransactionActive(true);
@@ -1233,31 +1274,34 @@ export default function CreateNode(props) {
     await window.contracts.AC_MGR.methods
       .resolveAssetClass(name)
       .call(function (_error, _result) {
-        console.log(_result)
+        console.log(_result);
         if (_error || _result === "0") {
           window.ipfs.add(JSON.stringify(sampleIpfs)).then((hash) => {
             if (!hash) {
-              console.error("error sending to ipfs")
+              console.error("error sending to ipfs");
               //return setIpfsActive(false);
-            }
-            else {
-              let url = `https://ipfs.io/ipfs/${hash.cid}`
-              console.log(`Url --> ${url}`)
-              let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid))
+            } else {
+              let url = `https://ipfs.io/ipfs/${hash.cid}`;
+              console.log(`Url --> ${url}`);
+              let b32Hash = window.utils.getBytes32FromIPFSHash(
+                String(hash.cid)
+              );
               //setIpfsActive(false);
-              purchaseNode(b32Hash)
+              purchaseNode(b32Hash);
             }
-          })
+          });
         } else {
           swal({
-            title: "That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io",
+            title:
+              "That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io",
             button: "Okay",
           });
         }
       });
-  }
+  };
 
-  const purchaseNode = async (extendedDataHash) => { //import held asset
+  const purchaseNode = async (extendedDataHash) => {
+    //import held asset
 
     let tempTxHash;
     setShowHelp(false);
@@ -1266,21 +1310,16 @@ export default function CreateNode(props) {
     setError(undefined);
 
     await window.contracts.AC_MGR.methods
-      .purchaseACnode(
-        name,
-        root,
-        2,
-        extendedDataHash,
-      )
+      .purchaseACnode(name, root, 2, extendedDataHash)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
           swal({
@@ -1301,10 +1340,10 @@ export default function CreateNode(props) {
       .on("receipt", (receipt) => {
         setTransactionActive(false);
         setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
         swal({
           title: "Node Minting Successul!",
@@ -1313,21 +1352,24 @@ export default function CreateNode(props) {
           button: "Close",
         }).then(() => {
           //refreshBalances()
-          handleNewAssetClass()
-        })
+          handleNewAssetClass();
+        });
       });
-
-  }
+  };
 
   return (
     <Card>
       <CardHeader icon>
         <CardIcon className="headerIconBack">
-          <span class="material-icons">
-            dashboard_customize
-</span>
+          <span class="material-icons">dashboard_customize</span>
         </CardIcon>
-        <Button color="info" className="MLBGradient" onClick={() => window.location.href = "/#/user/node-manager"}>Go Back</Button>
+        <Button
+          color="info"
+          className="MLBGradient"
+          onClick={() => (window.location.href = "/#/user/node-manager")}
+        >
+          Go Back
+        </Button>
         <h3 className={classes.cardIconTitle}>Configure New Node</h3>
       </CardHeader>
       <CardBody>
@@ -1342,11 +1384,11 @@ export default function CreateNode(props) {
                   labelText="Name *"
                   id="name"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    onChange: event => {
-                      setName(event.target.value.trim())
+                    onChange: (event) => {
+                      setName(event.target.value.trim());
                       if (event.target.value !== "") {
                         setloginNameState("success");
                       } else {
@@ -1356,37 +1398,31 @@ export default function CreateNode(props) {
                     },
                   }}
                 />
-                <FormControl
-                  fullWidth
-                  className={classes.selectFormControl}
-                >
-                  <InputLabel
-                  >
-                    Select Asset Class *
-                  </InputLabel>
+                <FormControl fullWidth className={classes.selectFormControl}>
+                  <InputLabel>Select Asset Class *</InputLabel>
                   <Select
                     MenuProps={{
-                      className: classes.selectMenu
+                      className: classes.selectMenu,
                     }}
                     classes={{
-                      select: classes.select
+                      select: classes.select,
                     }}
                     value={root}
-                    onChange={(e) => { rootLogin(e) }}
+                    onChange={(e) => {
+                      rootLogin(e);
+                    }}
                     inputProps={{
                       name: "rootSelect",
-                      id: "root-select"
+                      id: "root-select",
                     }}
                   >
-                    {props.roots !== undefined && (
-                      generateRootList(props.roots)
-                    )}
+                    {props.roots !== undefined && generateRootList(props.roots)}
                   </Select>
                 </FormControl>
                 <br />
                 <div className={classes.formCategory}>
                   <small>*</small> Required fields
-                    </div>
+                </div>
 
                 {/* <div className={classes.checkboxAndRadio}>
                   <FormControlLabel
@@ -1441,20 +1477,20 @@ export default function CreateNode(props) {
                   labelText={name}
                   id="name"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    disabled: true
+                    disabled: true,
                   }}
                 />
                 <CustomInput
                   labelText={rootName}
                   id="root"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    disabled: true
+                    disabled: true,
                   }}
                 />
                 {/* <CustomInput
@@ -1472,12 +1508,23 @@ export default function CreateNode(props) {
           </>
           {!transactionActive && (
             <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => checkForAC()}>Purchase AC Node</Button>
+              <Button
+                color="info"
+                className="MLBGradient"
+                onClick={() => checkForAC()}
+              >
+                Purchase AC Node
+              </Button>
             </div>
           )}
           {transactionActive && (
             <h3>
-              Purchasing Node<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Purchasing Node
+              <div className="lds-ellipsisIF">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </h3>
           )}
         </form>

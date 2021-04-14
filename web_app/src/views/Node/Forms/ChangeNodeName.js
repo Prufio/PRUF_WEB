@@ -1,6 +1,6 @@
 import React from "react";
 import "../../../assets/css/custom.css";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -18,7 +18,6 @@ import { StoreMallDirectory } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function ChangeNodeName(props) {
-
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
@@ -28,46 +27,44 @@ export default function ChangeNodeName(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
 
-  const [nodeInfo,] = React.useState(window.sentPacket)
+  const [nodeInfo] = React.useState(window.sentPacket);
 
   const [name, setName] = React.useState("");
   const [loginName, setloginName] = React.useState("");
   const [loginNameState, setloginNameState] = React.useState("");
 
-  const link = document.createElement('div')
+  const link = document.createElement("div");
 
-  window.sentPacket = null
-  document.body.style.cursor='default';
+  window.sentPacket = null;
+  document.body.style.cursor = "default";
 
   const classes = useStyles();
 
   React.useEffect(() => {
     if (props.ps) {
       props.ps.element.scrollTop = 0;
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
     if (nodeInfo === undefined || nodeInfo === null) {
-      console.log("No asset found. Rerouting...")
-      window.location.href = "/#/user/home"
-      window.location.reload()
+      console.log("No asset found. Rerouting...");
+      window.location.href = "/#/user/home";
+      window.location.reload();
     }
-
-  }, [])
+  }, []);
 
   const goBack = () => {
     window.backIndex = nodeInfo.dBIndex;
     window.location.href = nodeInfo.lastRef;
-  }
+  };
 
-  const changeName = async () => { //import held asset
-    let nameExists = await window.utils.checkACName(loginName)
+  const changeName = async () => {
+    //import held asset
+    let nameExists = await window.utils.checkACName(loginName);
 
     if (nameExists === false) {
-
       let tempTxHash;
       setShowHelp(false);
       setTxStatus(false);
@@ -77,19 +74,17 @@ export default function ChangeNodeName(props) {
       setTransactionActive(true);
 
       await window.contracts.AC_MGR.methods
-        .updateACname(
-          nodeInfo.id,
-          name,
-        )
+        .updateACname(nodeInfo.id, name)
         .send({ from: props.addr })
         .on("error", function (_error) {
           setTransactionActive(false);
           setTxStatus(false);
           setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
+          tempTxHash = Object.values(_error)[0].transactionHash;
+          let str1 =
+            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+          let str2 = "' target='_blank'>here</a>";
+          link.innerHTML = String(str1 + tempTxHash + str2);
           setError(Object.values(_error)[0]);
           if (tempTxHash !== undefined) {
             swal({
@@ -110,10 +105,11 @@ export default function ChangeNodeName(props) {
         .on("receipt", (receipt) => {
           setTransactionActive(false);
           setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-          let str2 = "' target='_blank'>here</a>"
-          link.innerHTML = String(str1 + tempTxHash + str2)
+          tempTxHash = receipt.transactionHash;
+          let str1 =
+            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+          let str2 = "' target='_blank'>here</a>";
+          link.innerHTML = String(str1 + tempTxHash + str2);
           setTxHash(receipt.transactionHash);
           swal({
             title: "Name Change Successful!",
@@ -124,23 +120,17 @@ export default function ChangeNodeName(props) {
             //refreshBalances()
             window.backIndex = nodeInfo.dBIndex;
             window.location.href = nodeInfo.lastRef;
-          })
+          });
         });
-
-
-    }
-
-    else if ((loginName === nodeInfo.name) || (loginName === "")) {
-      console.log("error2")
+    } else if (loginName === nodeInfo.name || loginName === "") {
+      console.log("error2");
       setloginNameState("error");
-      swal("Node name has not changed.")
-    }
-    else if (nameExists === true) {
-      swal("Node name is already recorded in the system.")
+      swal("Node name has not changed.");
+    } else if (nameExists === true) {
+      swal("Node name is already recorded in the system.");
       return;
     }
-
-  }
+  };
 
   return (
     <Card>
@@ -148,13 +138,17 @@ export default function ChangeNodeName(props) {
         <CardIcon className="headerIconBack">
           <StoreMallDirectory />
         </CardIcon>
-        <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+        <Button color="info" className="MLBGradient" onClick={() => goBack()}>
+          Go Back
+        </Button>
         <h4 className={classes.cardIconTitle}>Change Node Name</h4>
       </CardHeader>
       <CardBody>
         <form>
           {nodeInfo.name !== "" && (
-            <h4>Node Selected: {nodeInfo.name}, ({nodeInfo.id})</h4>
+            <h4>
+              Node Selected: {nodeInfo.name}, ({nodeInfo.id})
+            </h4>
           )}
           <>
             {!transactionActive && (
@@ -164,13 +158,16 @@ export default function ChangeNodeName(props) {
                   error={loginNameState === "error"}
                   labelText="Node Name *"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
                     defaultValue: nodeInfo.name,
-                    onChange: event => {
-                      setName(event.target.value.toUpperCase().trim())
-                      if (event.target.value !== "" || event.target.value !== nodeInfo.name) {
+                    onChange: (event) => {
+                      setName(event.target.value.toUpperCase().trim());
+                      if (
+                        event.target.value !== "" ||
+                        event.target.value !== nodeInfo.name
+                      ) {
                         setloginNameState("success");
                       } else {
                         setloginNameState("error");
@@ -181,7 +178,7 @@ export default function ChangeNodeName(props) {
                 />
                 <div className={classes.formCategory}>
                   <small>*</small> Required fields
-                    </div>
+                </div>
               </>
             )}
             {transactionActive && (
@@ -190,10 +187,10 @@ export default function ChangeNodeName(props) {
                   labelText={name}
                   id="name"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    disabled: true
+                    disabled: true,
                   }}
                 />
               </>
@@ -201,12 +198,23 @@ export default function ChangeNodeName(props) {
           </>
           {!transactionActive && (
             <div className="MLBGradientSubmit">
-              <Button color="info" className="MLBGradient" onClick={() => changeName()}>Submit Name</Button>
+              <Button
+                color="info"
+                className="MLBGradient"
+                onClick={() => changeName()}
+              >
+                Submit Name
+              </Button>
             </div>
           )}
           {transactionActive && (
             <h3>
-              Changing Node Name<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Changing Node Name
+              <div className="lds-ellipsisIF">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </h3>
           )}
         </form>

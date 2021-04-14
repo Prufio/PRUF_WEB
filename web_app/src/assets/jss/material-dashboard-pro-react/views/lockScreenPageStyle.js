@@ -3,17 +3,17 @@ import {
   container,
   whiteColor,
   blackColor,
-  hexToRgb
+  hexToRgb,
 } from "assets/jss/material-dashboard-pro-react.js";
 
-const lockScreenPageStyle = theme => ({
+const lockScreenPageStyle = (theme) => ({
   cardTitle,
   container: {
     ...container,
     zIndex: "4",
     [theme.breakpoints.down("sm")]: {
-      paddingBottom: "100px"
-    }
+      paddingBottom: "100px",
+    },
   },
   customCardClass: {
     width: "240px",
@@ -21,24 +21,24 @@ const lockScreenPageStyle = theme => ({
     color: whiteColor,
     display: "block",
     transform: "translate3d(" + hexToRgb(blackColor) + ")",
-    transition: "all 300ms linear"
+    transition: "all 300ms linear",
   },
   cardHidden: {
     opacity: "0",
-    transform: "translate3d(0, -60px, 0)"
+    transform: "translate3d(0, -60px, 0)",
   },
   cardAvatar: {
     maxWidth: "90px",
     maxHeight: "90px",
-    marginTop: "-45px"
+    marginTop: "-45px",
   },
   customCardFooterClass: {
     border: "none",
-    paddingTop: "0"
+    paddingTop: "0",
   },
   justifyContentCenter: {
-    justifyContent: "center !important"
-  }
+    justifyContent: "center !important",
+  },
 });
 
 export default lockScreenPageStyle;
