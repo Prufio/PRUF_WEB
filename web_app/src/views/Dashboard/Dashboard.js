@@ -36,6 +36,7 @@ import { ArrowBackIos, ArrowForwardIos, DashboardOutlined, KeyboardArrowLeft, Se
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print"
 import ARweavePNG from "../../assets/img/arweave.png";
+import IPFSPNG from "../../assets/img/ipfs.png";
 import swal from "sweetalert";
 
 const useStyles = makeStyles(styles);
@@ -77,18 +78,28 @@ export default function Dashboard(props) {
     console.log(e);
     if (props.ps) {
       //console.log(props.ps)
-      props.ps.element.scrollTop = 0
+      props.ps.element.scrollTop = 124
     }
     else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
+      window.scrollTo({ bottom: -124, behavior: 'smooth' })
+      document.documentElement.scrollTop = 124;
+      document.scrollingElement.scrollTop = 124;
 
     }
     //console.log(props.ps.element.scrollTop)
     const url = String(baseURL) + String(e.idxHash)
 
     if (e === "back") {
+      if (props.ps) {
+        //console.log(props.ps)
+        props.ps.element.scrollTop = 0
+      }
+      else {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        document.documentElement.scrollTop = 0;
+        document.scrollingElement.scrollTop = 0;
+  
+      }
       let _pageNum = pageNum;
 
       const getRightPage = () => {
@@ -241,6 +252,7 @@ export default function Dashboard(props) {
                       photoUrls: arr[i].photoUrls,
                       identicon: arr[i].identicon,
                       price: arr[i].price,
+                      storageProvider: arr[i].assetClassData.storageProvider,
                       currency: arr[i].currency
                     })}>
 
@@ -255,7 +267,7 @@ export default function Dashboard(props) {
                       )}
                       {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
                         <>
-                        <Jdenticon value={arr[i].id}/>
+                          <Jdenticon value={arr[i].id} />
                         </>
                       )}
                     </button>
@@ -318,6 +330,7 @@ export default function Dashboard(props) {
                         photoUrls: arr[i].photoUrls,
                         identicon: arr[i].identicon,
                         price: arr[i].price,
+                        storageProvider: arr[i].assetClassData.storageProvider,
                         currency: arr[i].currency
                       })}>
                         <Icon>
@@ -1770,35 +1783,37 @@ export default function Dashboard(props) {
   const classes = useStyles();
   return (
     <div>
-      <GridContainer>
-        <GridItem xs={12}>
+      {/* <GridContainer> */}
+        {/* <GridItem xs={12}> */}
+            {!viewAsset && (
           <Card>
-            <CardHeader icon >
-              <CardIcon className="headerIconBack" onClick={() => { moreInfo("back") }}>
-                <DashboardOutlined />
-              </CardIcon>
-              <div className="dashboardHeader">
-                <div className="flexRowWithGap">
-                  <h4 className={classes.cardIconTitle}>
-                    Asset Dashboard
+              <CardHeader icon >
+                <CardIcon className="headerIconBack" onClick={() => { moreInfo("back") }}>
+                  <DashboardOutlined />
+                </CardIcon>
+                <div className="dashboardHeader">
+                  <div className="flexRowWithGap">
+                    <h4 className={classes.cardIconTitle}>
+                      Asset Dashboard
               </h4>
-                  <Tooltip
-                    title="Refresh"
-                  >
-                    <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
-                      <Refresh />
-                    </Icon>
-                  </Tooltip>
+                    <Tooltip
+                      title="Refresh"
+                    >
+                      <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
+                        <Refresh />
+                      </Icon>
+                    </Tooltip>
+                  </div>
                 </div>
-              </div>
-              <br />
-            </CardHeader>
+                <br />
+              </CardHeader>
             {!props.addr && props.isMounted && (
               <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
             )}
           </Card>
-        </GridItem>
-      </GridContainer>
+            )}
+        {/* </GridItem> */}
+      {/* </GridContainer> */}
       {props.addr && props.isMounted && props.assets === "~" && (
         <GridContainer>
           <><h3>Getting Token Balances</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
@@ -1832,13 +1847,18 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <Tooltip
-                        title="See it on ARweave"
-                      >
-                        <a href={`${selectedAssetObj.ContentUrl}`} target='_blank' rel="noopener noreferrer">
-                          <img src={selectedImage} alt="" />
-                        </a>
-                      </Tooltip>
+                      {selectedAssetObj.storageProvider === "2" && (
+                        <Tooltip
+                          title="See it on ARweave"
+                        >
+                          <a href={`${selectedAssetObj.ContentUrl}`} target='_blank' rel="noopener noreferrer">
+                            <img src={selectedImage} alt="" />
+                          </a>
+                        </Tooltip>
+                      )}
+                      {selectedAssetObj.storageProvider === "1" && (
+                        <img src={selectedImage} alt="" />
+                      )}
                     </>
                   )}
                   {selectedAssetObj.DisplayImage === "" && (
@@ -1935,7 +1955,21 @@ export default function Dashboard(props) {
                   disabled
                 />
               )}
-              <h6 className="storageProviderText">See it on <a href={`${selectedAssetObj.ContentUrl}`} target='_blank' rel="noopener noreferrer"><img src={ARweavePNG} className="ARweave" alt=""></img></a></h6>
+              {selectedAssetObj.storageProvider === "2" && (
+                <h6 className="storageProviderText">
+                  See it on
+                  <a href={`${selectedAssetObj.ContentUrl}`} target='_blank' rel="noopener noreferrer">
+                    <img src={ARweavePNG} className="ARweave" alt="">
+                    </img>
+                  </a>
+                </h6>
+              )}
+              {selectedAssetObj.storageProvider === "1" && (
+                <h6 className="storageProviderText">
+                  Built using
+                  <img src={IPFSPNG} className="IPFS" alt="" />
+                </h6>
+              )}
               {/*@dev URLs go here*/}
               <br />
               <div>
