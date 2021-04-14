@@ -1110,7 +1110,7 @@ export default function Dashboard(props) {
           console.log("Using cached mutable data:", cookies[e])
           obj.mutableData = cookies[e]
           assetsWithMutableData.push(obj)
-          //console.log("EXIT")
+          console.log("EXIT")
           return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
         }
   
@@ -1357,7 +1357,7 @@ export default function Dashboard(props) {
         req.responseType = "text";
 
         req.onload = function () {
-          //console.log("in onload")
+          console.log("response", this.response)
           if (this.response.includes("base64")) {
             obj.DisplayImage = this.response;
             finalizedAssets.push(obj)
