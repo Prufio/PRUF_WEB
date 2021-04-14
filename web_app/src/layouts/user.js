@@ -1032,8 +1032,8 @@ export default function Dashboard(props) {
               numberOfTransfers: _result["9"]
             }
 
-            obj.identicon = <Jdenticon value={obj.id} size="1000"/>;
-            obj.identiconLG = <Jdenticon value={obj.id} size="1000"/>;
+            obj.identicon = <Jdenticon value={obj.id} width="1000"/>;
+            obj.identiconLG = <Jdenticon value={obj.id} width="1000"/>;
 
             _prufClient.utils.stringifyStatus(_result[0]).then(e => {
               obj.status = e
@@ -1392,6 +1392,7 @@ export default function Dashboard(props) {
     }
 
     else if (keys.length > 0) {
+      
     for (let i = 0; i < keys.length; i++) {
       const get = () => {
         if (vals[i].includes("data") && vals[i].includes("base64")) {
