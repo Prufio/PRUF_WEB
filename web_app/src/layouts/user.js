@@ -1104,10 +1104,10 @@ export default function Dashboard(props) {
 
         //console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
         //engravingQuery = await _prufClient.utils.ipfsFromB32(obj.engravingA);
-            console.log("MDQ", e)
+        console.log("MDQ", e)
   
         if (cookies[e]) {
-          //console.log("Using cached mutable data:", cookies[mutableDataQuery])
+          console.log("Using cached mutable data:", cookies[e])
           obj.mutableData = cookies[e]
           assetsWithMutableData.push(obj)
           //console.log("EXIT")
@@ -1392,7 +1392,7 @@ export default function Dashboard(props) {
     }
 
     else if (keys.length > 0) {
-      
+
     for (let i = 0; i < keys.length; i++) {
       const get = () => {
         if (vals[i].includes("data") && vals[i].includes("base64")) {
