@@ -797,6 +797,7 @@ export default function NewRecord(props) {
       let newAsset = {
         root: selectedRootID,
         idxHash: idx,
+        currency: "0",
         id: idx,
         storageProvider: "1",
         ipfs: extendedDataHash,
@@ -854,7 +855,7 @@ export default function NewRecord(props) {
       }) */
   
       await window.contracts.APP_NC.methods
-        .newRecordWithDescription(
+        .newRecordWithNote(
           idxHash,
           rgtHash,
           assetClass,
@@ -921,6 +922,7 @@ export default function NewRecord(props) {
         root: selectedRootID,
         idxHash: idx,
         id: idx,
+        currency: "0",
         storageProvider: "2",
         ipfs: extendedDataHash,
         photo:  ipfsObj.photo,
