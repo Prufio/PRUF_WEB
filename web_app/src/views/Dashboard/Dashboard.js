@@ -263,7 +263,7 @@ export default function Dashboard(props) {
                 )}
                 {isMobile && (
                   <CardHeader image className={classes.cardHeaderHover}>
-                    <Button>
+                    <button>
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
                         <img title="View Asset" src={arr[i].DisplayImage} alt="" />
@@ -279,7 +279,7 @@ export default function Dashboard(props) {
                           <Jdenticon value={arr[i].id} />
                         </>
                       )}
-                    </Button>
+                    </button>
                   </CardHeader>
                 )}
               </>
@@ -2055,7 +2055,7 @@ export default function Dashboard(props) {
         </div>
       )}
 
-      {!viewAsset && props.addr && props.assets !== "0" && props.assets !== "~" && (
+      {!viewAsset && (
         <Card className="dashboardFooter" >
           <h4>Assets Per Page: </h4>
           <br />
