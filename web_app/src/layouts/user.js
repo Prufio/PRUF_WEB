@@ -1184,7 +1184,7 @@ export default function Dashboard(props) {
           }
         }
 
-        xhr.open('GET', `http://localhost:1984/tx/${mutableDataQuery}`, false);
+        xhr.open('GET', `http://localhost:1984/tx/${mutableDataQuery}`, true);
         xhr.send(null);
       }
     }
@@ -1293,7 +1293,7 @@ export default function Dashboard(props) {
           }
         }
 
-        xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, false);
+        xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, true);
         try {
           xhr.send(null);
         }

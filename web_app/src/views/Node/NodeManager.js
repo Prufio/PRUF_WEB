@@ -123,26 +123,7 @@ export default function NodeManager(props) {
   }, [props.assetClassSets])
 
   const getNodesInWallet = async (bal, ids, iteration) => {
-
-    /*    window.contracts.AC_MGR.methods
-       .updateACImmutable(
-         "1000002",
-         "2",
-         "2",
-         "0xBef3b0b67061CACD4E10968d8Ba23A1c864c8049"
-     )
-     .send({ from: props.addr })
-     .on("error", function (_error) {
-             swal({
-                 title: "Something went wrong!",
-                 icon: "warning",
-                 button: "Close",
-             });
-     })
-     .on("receipt", (receipt) => {
-       console.log("Success")
-     }); */
-
+    
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     if (!window.contracts || !props.addr) return
     if (!iteration) iteration = 0;
@@ -210,7 +191,7 @@ export default function NodeManager(props) {
               storageProvider: _result.storageProvider,
               switches: _result.switches
             })
-            console.log("_result", _result)
+            //console.log("_result", _result)
             return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
           }
         })
