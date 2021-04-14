@@ -220,7 +220,7 @@ export default function Dashboard(props) {
               <>
                 {!isMobile && (
                   <CardHeader image className={classes.cardHeaderHoverDashboard}>
-                    <button className="dashboardAssetImage" onClick={() => moreInfo({
+                    <button className={classes.cardHeaderHoverJdenticon} onClick={() => moreInfo({
                       dBIndex: i,
                       id: arr[i].id,
                       countPair: arr[i].countPair,
@@ -255,7 +255,7 @@ export default function Dashboard(props) {
                       )}
                       {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
                         <>
-                          <Jdenticon value={arr[i].id} />
+                        <Jdenticon value={arr[i].id}/>
                         </>
                       )}
                     </button>
@@ -263,7 +263,7 @@ export default function Dashboard(props) {
                 )}
                 {isMobile && (
                   <CardHeader image className={classes.cardHeaderHover}>
-                    <button>
+                    <button className={classes.cardHeaderHoverJdenticon}>
 
                       {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
                         <img title="View Asset" src={arr[i].DisplayImage} alt="" />
