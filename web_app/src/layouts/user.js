@@ -1032,8 +1032,8 @@ export default function Dashboard(props) {
               numberOfTransfers: _result["9"]
             }
 
-            obj.identicon = <Jdenticon value={obj.id} width="1000"/>;
-            obj.identiconLG = <Jdenticon value={obj.id} width="1000"/>;
+            obj.identicon = <Jdenticon value={obj.id} width="1000" />;
+            obj.identiconLG = <Jdenticon value={obj.id} width="1000" />;
 
             _prufClient.utils.stringifyStatus(_result[0]).then(e => {
               obj.status = e
@@ -1105,15 +1105,15 @@ export default function Dashboard(props) {
         //console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
         //engravingQuery = await _prufClient.utils.ipfsFromB32(obj.engravingA);
         console.log("MDQ", e)
-  
-        if (cookies[e]) {
+
+        if (cookies[window.web3.utils.soliditySha3(e)]) {
           console.log("Using cached mutable data:", cookies[e])
-          obj.mutableData = cookies[e]
+          obj.mutableData = cookies[window.web3.utils.soliditySha3(e)]
           assetsWithMutableData.push(obj)
           console.log("EXIT")
           return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
         }
-  
+
         else {
           for await (const chunk of window.ipfs.cat(e)) {
             let str = new TextDecoder("utf-8").decode(chunk);
@@ -1125,8 +1125,8 @@ export default function Dashboard(props) {
               obj.mutableData = str;
             }
             assetsWithMutableData.push(obj)
-            setCookieTo(e, JSON.parse(str))
-            console.log("EXIT")
+            setCookieTo(window.web3.utils.soliditySha3(e), JSON.parse(str))
+            //console.log("EXIT")
             return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
           }
         }
@@ -1210,34 +1210,36 @@ export default function Dashboard(props) {
     }
 
     else if (storageType === "1") {
-      engravingQuery = _prufClient.utils.ipfsFromB32(obj.engravingA);
-      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
+      _prufClient.utils.ipfsFromB32(obj.engravingA).then(e => {
+        engravingQuery = e
+        console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
 
-      if (cookies[engravingQuery]) {
-        //console.log("Using cached engraving:", cookies[engravingQuery])
-        obj.engraving = cookies[engravingQuery]
-        //console.log("EXIT")
-        assetsWithEngravings.push(obj)
-        return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
-      }
-
-      else {
-        for (const chunk of window.ipfs.cat(engravingQuery)) {
-          let str = new TextDecoder("utf-8").decode(chunk);
-          console.log(str)
-          try {
-            obj.engraving = JSON.parse(str)
-          }
-          catch {
-            obj.engraving = str;
-          }
-
-          assetsWithEngravings.push(obj)
-          setCookieTo(engravingQuery, obj)
+        if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
+          //console.log("Using cached engraving:", cookies[engravingQuery])
+          obj.engraving = cookies[window.web3.utils.soliditySha3(engravingQuery)]
           //console.log("EXIT")
+          assetsWithEngravings.push(obj)
           return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
         }
-      }
+
+        else {
+          for (const chunk of window.ipfs.cat(engravingQuery)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            console.log(str)
+            try {
+              obj.engraving = JSON.parse(str)
+            }
+            catch {
+              obj.engraving = str;
+            }
+
+            assetsWithEngravings.push(obj)
+            setCookieTo(window.web3.utils.soliditySha3(engravingQuery), JSON.parse(str))
+            //console.log("EXIT")
+            return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
+          }
+        }
+      })
     }
 
     else if (storageType === "2") {
@@ -1330,25 +1332,25 @@ export default function Dashboard(props) {
 
     if (obj.assetClassData.storageProvider === "2") {
 
-        console.log("detected storageProvider 2")
+      console.log("detected storageProvider 2")
 
-        if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
-          obj.DisplayImage = obj.engraving.contentUrl
-          finalizedAssets.push(obj)
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        }
-  
-        else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")) {
-          obj.DisplayImage = obj.mutableData.contentUrl
-          finalizedAssets.push(obj)
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        }
-      
-        else if (keys.length === 0) {
-          obj.DisplayImage = "";
-          finalizedAssets.push(obj)
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        }
+      if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
+        obj.DisplayImage = obj.engraving.contentUrl
+        finalizedAssets.push(obj)
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      }
+
+      else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")) {
+        obj.DisplayImage = obj.mutableData.contentUrl
+        finalizedAssets.push(obj)
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      }
+
+      else if (keys.length === 0) {
+        obj.DisplayImage = "";
+        finalizedAssets.push(obj)
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      }
     }
 
     else if (obj.assetClassData.storageProvider === "1") {
@@ -1370,12 +1372,12 @@ export default function Dashboard(props) {
           obj.DisplayImage = ""
           finalizedAssets.push(obj)
           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-          }
+        }
         req.open('GET', url, true);
-        try{
+        try {
           req.send();
-        } 
-        catch{
+        }
+        catch {
           obj.DisplayImage = ""
           finalizedAssets.push(obj)
           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
@@ -1393,84 +1395,84 @@ export default function Dashboard(props) {
 
     else if (keys.length > 0) {
 
-    for (let i = 0; i < keys.length; i++) {
-      const get = () => {
-        if (vals[i].includes("data") && vals[i].includes("base64")) {
-          obj.photo[keys[i]] = vals[i];
-          if (keys[i] === "DisplayImage") {
-            obj.DisplayImage = (obj.photo[keys[i]])
-          }
-          else if (i === keys.length - 1) {
-            //console.log("Setting Display Image")
-            obj.DisplayImage = (obj.photo[keys[0]])
-          }
-          forceUpdate();
-          finalizedAssets.push(obj)
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        }
-
-        else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-          obj.photo[keys[i]] = vals[i];
-          if (keys[i] === "DisplayImage") {
-            //console.log("Setting Display Image")
-            obj.DisplayImage = (obj.photo[keys[i]])
-          }
-          else if (i === keys.length - 1) {
-            //console.log("Setting Display Image")
-            obj.DisplayImage = (obj.photo[keys[0]])
-          }
-          forceUpdate();
-          finalizedAssets.push(obj)
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        }
-
-        else {
-          const req = new XMLHttpRequest();
-          req.responseType = "text";
-
-          req.onload = function (e) {
-            //console.log("in onload")
-            if (this.response.includes("base64")) {
-              obj.photo[keys[i]] = this.response;
-              if (keys[i] === "DisplayImage") {
-                //console.log("Setting Display Image")
-                obj.DisplayImage = (obj.photo[keys[i]])
-              }
-              else if (i === keys.length - 1) {
-                //console.log("Setting Display Image")
-                obj.DisplayImage = (obj.photo[keys[0]])
-              }
-              forceUpdate();
-              finalizedAssets.push(obj)
-              finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      for (let i = 0; i < keys.length; i++) {
+        const get = () => {
+          if (vals[i].includes("data") && vals[i].includes("base64")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              obj.DisplayImage = (obj.photo[keys[i]])
             }
+            else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[0]])
+            }
+            forceUpdate();
+            finalizedAssets.push(obj)
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
           }
 
-          req.onerror = function (e) {
-            //console.log("http request error")
-            if (vals[i].includes("http")) {
-              obj.photo[keys[i]] = vals[i];
-              if (keys[i] === "DisplayImage") {
-                //console.log("Setting Display Image")
-                obj.DisplayImage = (obj.photo[keys[i]])
-              }
-              else if (i === keys.length - 1) {
-                //console.log("Setting Display Image")
-                obj.DisplayImage = (obj.photo[keys[0]])
-              }
-              forceUpdate();
-              finalizedAssets.push(obj)
-              finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+          else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[i]])
             }
+            else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[0]])
+            }
+            forceUpdate();
+            finalizedAssets.push(obj)
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
           }
-          req.open('GET', vals[i], true);
-          req.send();
+
+          else {
+            const req = new XMLHttpRequest();
+            req.responseType = "text";
+
+            req.onload = function (e) {
+              //console.log("in onload")
+              if (this.response.includes("base64")) {
+                obj.photo[keys[i]] = this.response;
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[0]])
+                }
+                forceUpdate();
+                finalizedAssets.push(obj)
+                finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+              }
+            }
+
+            req.onerror = function (e) {
+              //console.log("http request error")
+              if (vals[i].includes("http")) {
+                obj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[0]])
+                }
+                forceUpdate();
+                finalizedAssets.push(obj)
+                finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+              }
+            }
+            req.open('GET', vals[i], true);
+            req.send();
+          }
         }
+        get()
       }
-      get()
     }
-  }
-  else {console.log("No conditions met")}
+    else { console.log("No conditions met") }
   }
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
