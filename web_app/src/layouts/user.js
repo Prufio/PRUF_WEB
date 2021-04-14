@@ -1384,11 +1384,11 @@ export default function Dashboard(props) {
         }
       }
 
-      if (obj.engraving.DisplayImage !== "") {
+      if (obj.engraving !== "" && obj.engraving.DisplayImage !== "" && obj.engraving.DisplayImage !== undefined) {
         getAndSet(obj.engraving.DisplayImage)
       }
 
-      else if (obj.mutableData.DisplayImage !== "") {
+      else if (obj.mutableData !== "" && obj.mutableData.DisplayImage !== "" && obj.mutableData.DisplayImage !== undefined) {
         getAndSet(obj.mutableData.DisplayImage)
       }
     }
