@@ -1,10 +1,10 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import { RWebShare } from "react-web-share";
-import swal from "sweetalert";
-import swalReact from "@sweetalert/with-react";
+import swal from 'sweetalert';
+import swalReact from '@sweetalert/with-react';
 import { isAndroid, isMobile } from "react-device-detect";
-import { QRCode } from "react-qrcode-logo";
+import { QRCode } from 'react-qrcode-logo';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -14,19 +14,16 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Danger from "components/Typography/Danger.js";
 import Checkbox from "@material-ui/core/Checkbox";
-import Icon from "@material-ui/core/Icon";
+import Icon from '@material-ui/core/Icon';
 
 // @material-ui/icons
 import Check from "@material-ui/icons/Check";
 import Share from "@material-ui/icons/Share";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import {
-  DashboardOutlined,
-  KeyboardArrowLeft,
-  Settings,
-} from "@material-ui/icons";
+import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
 import Category from "@material-ui/icons/Category";
 import AccountBox from "@material-ui/icons/AccountBox";
+
 
 // core components
 import CustomInput from "components/CustomInput/CustomInput.js";
@@ -38,52 +35,51 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import QrReader from "react-qr-reader";
-import Jdenticon from "react-jdenticon";
+import QrReader from 'react-qr-reader'
+import Jdenticon from 'react-jdenticon';
 
 import imgStyles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import placeholder from "../../assets/img/placeholder.jpg";
 import TextField from "@material-ui/core/TextField";
-import Printer from "../../Resources/print";
+import Printer from "../../Resources/print"
+
 
 const useStyles = makeStyles(styles);
 const useImgStyles = makeStyles(imgStyles);
 
 export default function Search(props) {
+
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   const [selectedValue, setSelectedValue] = React.useState(null);
-  const [query, setQuery] = React.useState(null);
-  const [scanQR, setScanQR] = React.useState(false);
+  const [query, setQuery] = React.useState(null)
+  const [scanQR, setScanQR] = React.useState(false)
   const [data, setData] = React.useState("");
   const [result, setResult] = React.useState("");
   const [error, setError] = React.useState("");
   const [inscription, setInscription] = React.useState("");
   const [moreInfo, setMoreInfo] = React.useState(false);
   const [authLevel, setAuthLevel] = React.useState("");
-  const [ipfsObject, setIpfsObject] = React.useState({});
   const [asset, setAsset] = React.useState({});
   const [dBIndex, setDBIndex] = React.useState(null);
   const [price, setPrice] = React.useState("");
-  const [currency, setCurrency] = React.useState("0");
+  const [currency, setCurrency] = React.useState("");
   const [recycled, setRecycled] = React.useState(false);
   const [transaction, setTransaction] = React.useState(false);
   const [retrieving, setRetrieving] = React.useState(false);
   const [ownerOf, setOwnerOf] = React.useState(false);
   const [assetURL, setURL] = React.useState("");
-  const [baseURL, setBaseURL] = React.useState(
-    "https://app.pruf.io/#/user/search/"
-  );
-  const [isVerifying, setIsVerifying] = React.useState(false);
-  const [isRecycling, setIsRecycling] = React.useState(false);
-  const [txHash, setTxHash] = React.useState("");
-  const [verifyResult, setVerifyResult] = React.useState("");
+  const [baseURL, setBaseURL] = React.useState("https://app.pruf.io/#/user/search/");
+  const [isVerifying, setIsVerifying] = React.useState(false)
+  const [isRecycling, setIsRecycling] = React.useState(false)
+  const [txHash, setTxHash] = React.useState("")
+  const [verifyResult, setVerifyResult] = React.useState("")
   const [assetClass, setAssetClass] = React.useState("");
   const [assetClassName, setAssetClassName] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
-  const [copyText, setCopyText] = React.useState(false);
+  const [copyText, setCopyText] = React.useState(false)
   const [rootSelect, setRootSelect] = React.useState("");
   const [classSelect, setClassSelect] = React.useState("");
   const [selectedRootID, setSelectedRootID] = React.useState("");
@@ -119,57 +115,44 @@ export default function Search(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
-  const [loginManufacturerState, setloginManufacturerState] = React.useState(
-    ""
-  );
+  const [loginManufacturerState, setloginManufacturerState] = React.useState("");
   const [loginTypeState, setloginTypeState] = React.useState("");
   const [loginModelState, setloginModelState] = React.useState("");
   const [loginSerialState, setloginSerialState] = React.useState("");
   const [loginIDXState, setloginIDXState] = React.useState("");
-  const [selectedImage, setSelectedImage] = React.useState("");
+  const [selectedImage, setSelectedImage] = React.useState("")
 
-  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
-  const link = document.createElement("div");
+  const link = document.createElement('div');
 
   React.useEffect(() => {
-    if (
-      !window.idxQuery &&
-      window.location.href.includes("0x") &&
-      window.location.href.substring(
-        window.location.href.indexOf("0x"),
-        window.location.href.length
-      ).length === 66
-    ) {
-      setQuery(
-        window.location.href.substring(
-          window.location.href.indexOf("0x"),
-          window.location.href.length
-        )
-      );
-    } else if (window.idxQuery) {
+    if (!window.idxQuery && window.location.href.includes("0x") && window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length).length === 66) {
+      setQuery(window.location.href.substring(window.location.href.indexOf('0x'), window.location.href.length));
+    }
+    else if (window.idxQuery) {
       setQuery(window.idxQuery);
       window.idxQuery = null;
     }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
+
     }
     if (window.backIndex) {
       window.backIndex = undefined;
     }
-  }, []);
+  }, [])
 
   React.useEffect(() => {
-    if (window.contracts !== undefined && query) {
-      retrieveRecord(query);
-      setQuery(null);
-    }
-  }, [window.contracts, query]);
+    if (window.contracts !== undefined && query) { checkInputs(query); setQuery(null); }
+  }, [window.contracts, query])
+
 
   // const refreshBalances = async () => {
   //   if (!window.web3.eth) return
@@ -205,21 +188,21 @@ export default function Search(props) {
 
   const ACLogin = (event) => {
     if (!props.IDHolder) {
-      IDHolderPrompt();
-    } else {
+      IDHolderPrompt()
+    }
+    else {
       setAssetClass(event.target.value);
       setClassSelect(event.target.value);
       try {
         window.utils.resolveACFromID(event.target.value).then((e) => {
-          let str = e
-            .toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
-          setAssetClassName(str);
+          let str = e.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+          setAssetClassName(str)
           window.utils.getCosts(6, event.target.value).then((e) => {
-            setRecycleCost(window.web3.utils.fromWei(e.newAsset));
-          });
-        });
-      } catch {
+            setRecycleCost(window.web3.utils.fromWei(e.newAsset))
+          })
+        })
+      }
+      catch {
         swal({
           title: "Could not find asset class",
           icon: "warning",
@@ -227,10 +210,12 @@ export default function Search(props) {
           buttons: {
             close: {
               text: "close",
-            },
+            }
           },
-        });
+        })
       }
+
+
     }
   };
 
@@ -240,172 +225,172 @@ export default function Search(props) {
     swal({
       title: "In order to mint asset tokens, you must first have an ID token.",
       icon: "warning",
-      text:
-        "If you would like to mint asset tokens, please select Yes, it will mint you an ID token",
+      text: "If you would like to mint asset tokens, please select Yes, it will mint you an ID token",
       buttons: {
         yes: {
           text: "Yes",
-          value: "yes",
+          value: "yes"
         },
         no: {
           text: "No",
-          value: "no",
-        },
+          value: "no"
+        }
       },
-    }).then((value) => {
-      switch (value) {
-        case "yes":
-          setTransactionActive(true);
-          window.contracts.PARTY.methods
-            .GET_ID()
-            .send({ from: props.addr })
-            .on("error", function (_error) {
-              setTransactionActive(false);
-              setTxStatus(false);
-              setTxHash(Object.values(_error)[0].transactionHash);
-              tempTxHash = Object.values(_error)[0].transactionHash;
-              let str1 =
-                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-              let str2 = "' target='_blank'>here</a>";
-              link.innerHTML = String(str1 + tempTxHash + str2);
-              swal({
-                title: "Something went wrong!",
-                content: link,
-                icon: "warning",
-                button: "Close",
-              });
-            })
-            .on("receipt", (receipt) => {
-              setTransactionActive(false);
-              setTxStatus(receipt.status);
-              tempTxHash = receipt.transactionHash;
-              let str1 =
-                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-              let str2 = "' target='_blank'>here</a>";
-              link.innerHTML = String(str1 + tempTxHash + str2);
-              swal({
-                title: "ID Token Minted!",
-                content: link,
-                icon: "success",
-                button: "Close",
-              });
-              window.replaceAssetData = { IDHolder: true };
-            });
-          break;
+    })
+      .then((value) => {
+        switch (value) {
 
-        case "no":
-          break;
+          case "yes":
+            setTransactionActive(true)
+            window.contracts.PARTY.methods
+              .GET_ID()
+              .send({ from: props.addr })
+              .on("error", function (_error) {
+                setTransactionActive(false);
+                setTxStatus(false);
+                setTxHash(Object.values(_error)[0].transactionHash);
+                tempTxHash = Object.values(_error)[0].transactionHash;
+                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+                let str2 = "' target='_blank'>here</a>";
+                link.innerHTML = String(str1 + tempTxHash + str2);
+                swal({
+                  title: "Something went wrong!",
+                  content: link,
+                  icon: "warning",
+                  button: "Close",
+                });
+              })
+              .on("receipt", (receipt) => {
+                setTransactionActive(false);
+                setTxStatus(receipt.status);
+                tempTxHash = receipt.transactionHash;
+                let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+                let str2 = "' target='_blank'>here</a>";
+                link.innerHTML = String(str1 + tempTxHash + str2);
+                swal({
+                  title: "ID Token Minted!",
+                  content: link,
+                  icon: "success",
+                  button: "Close"
+                });
+                window.replaceAssetData = { IDHolder: true }
+              })
+            break;
 
-        default:
-          break;
-      }
-    });
-  };
+          case "no":
+            break;
+
+          default:
+            break;
+        }
+      });
+
+
+  }
 
   const showImage = (e) => {
-    setSelectedImage(e);
-  };
+    setSelectedImage(e)
+  }
 
-  const renderOptions = (status) => {
-    // @dev add new status cases as they arise
+  const renderOptions = (status) => { // @dev add new status cases as they arise
     let component = [];
-    if (!status || !asset.statusNum) return;
+    if (!status || !asset.statusNum) return
     switch (status) {
-      case "50": {
+      case ("50"): {
         component.push(
           <Select
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               disabled
               key="SelItem1"
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem4"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
@@ -416,120 +401,120 @@ export default function Search(props) {
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem5"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "51": {
+      case ("51"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               disabled
               key="SelItem1"
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
@@ -539,7 +524,7 @@ export default function Search(props) {
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
@@ -549,483 +534,483 @@ export default function Search(props) {
               key="SelItem7"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info
             </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "52": {
+      case ("52"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               key="SelItem1"
               disabled
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
               Change Status
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info
-            </MenuItem>
+                          </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "53": {
+      case ("53"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               key="SelItem1"
               disabled
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
               Change Status
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info
-            </MenuItem>
+                          </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "54": {
+      case ("54"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               key="SelItem1"
               disabled
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
               Change Status
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info
-            </MenuItem>
+                          </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "56": {
+      case ("56"): {
         component.push(
           <Select
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               disabled
               key="SelItem1"
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem4"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
@@ -1036,122 +1021,122 @@ export default function Search(props) {
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem5"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
           </Select>
-        );
-        break;
-      } // @dev rework when escrow released
-      case "57": {
+        )
+        break
+      }// @dev rework when escrow released
+      case ("57"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               disabled
               key="SelItem9"
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem1"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
@@ -1161,7 +1146,7 @@ export default function Search(props) {
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
@@ -1171,111 +1156,111 @@ export default function Search(props) {
               key="SelItem7"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info
             </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "58": {
+      case ("58"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               disabled
               key="SelItem1"
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
@@ -1285,7 +1270,7 @@ export default function Search(props) {
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
@@ -1295,110 +1280,110 @@ export default function Search(props) {
               key="SelItem7"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info
             </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "59": {
+      case ("59"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               key="SelItem1"
               disabled
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem6"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem5"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
@@ -1408,7 +1393,7 @@ export default function Search(props) {
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
@@ -1418,111 +1403,111 @@ export default function Search(props) {
               key="SelItem7"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info
             </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
-      case "70": {
+      case ("70"): {
         component.push(
           <Select
             key="Sel1"
             MenuProps={{
-              className: classes.selectMenu,
+              className: classes.selectMenu
             }}
             classes={{
-              select: classes.select,
+              select: classes.select
             }}
             value={simpleSelect}
             onChange={(e) => handleSimple(e)}
             inputProps={{
               name: "simpleSelect",
-              id: "simple-select",
+              id: "simple-select"
             }}
           >
             <MenuItem
               key="SelItem1"
               disabled
               classes={{
-                root: classes.selectMenuItem,
+                root: classes.selectMenuItem
               }}
             >
               Select an option from the list
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="sell"
             >
               Set for sale
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="DisabledItem0"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="transfer"
             >
               Transfer (Not Available in this Status)
-            </MenuItem>
+              </MenuItem>
             <MenuItem
               key="SelItem2"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="verify"
             >
               Verify
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem1"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="discard"
             >
               Discard (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="SelItem3"
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="import"
             >
               Import
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem2"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="export"
             >
               Export (Not Available in this Status)
-            </MenuItem>
+             </MenuItem>
             <MenuItem
               key="DisabledItem4"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="modify-status"
             >
@@ -1533,197 +1518,203 @@ export default function Search(props) {
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
             <MenuItem
               key="DisabledItem5"
               disabled
               classes={{
                 root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
+                selected: classes.selectMenuItemSelected
               }}
               value="edit-rightsholder"
             >
               Update Owner Info (Not Available in this Status)
-            </MenuItem>
+                          </MenuItem>
           </Select>
-        );
-        break;
+        )
+        break
       }
       default: {
-        console.log("Error in option switch");
+        console.log("Error in option switch")
       }
     }
 
-    return component;
-  };
+    return component
+  }
 
   const getDBIndexOf = (e) => {
-    if (!e) {
-      return console.log("No ID given!");
-    }
+
+    if (!e) { return console.log("No ID given!") }
     let temp;
 
     for (let i = 0; i < props.assetArr.length; i++) {
       if (props.assetArr[i].id.toLowerCase() === e.toLowerCase()) {
-        temp = i;
+
+        temp = i
       }
     }
 
     if (temp) return setDBIndex(temp);
-    else return console.log("Could not locate ID in dash!");
-  };
 
-  const handleSimple = (event) => {
+    else return console.log("Could not locate ID in dash!")
+  }
+
+  const handleSimple = event => {
     if (props.ps) {
       //console.log(props.ps)
-      props.ps.element.scrollTop = 0;
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      props.ps.element.scrollTop = 0
+    }
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
+
     }
 
-    let temp = Object.assign(asset, ipfsObject);
-    let tempObj = JSON.parse(JSON.stringify(temp));
+    let tempObj = JSON.parse(JSON.stringify(asset))
 
     tempObj.dBIndex = dBIndex;
     tempObj.lastRef = "/#/user/search";
     tempObj.root = selectedRootID;
 
-    let e = event.target.value,
-      href,
-      costId = null;
+
+    let e = event.target.value, href, costId = null;
     window.backIndex = null;
 
     switch (e) {
       case "transfer": {
         href = "/#/user/transfer-asset";
         costId = null;
-        break;
+        break
       }
       case "sell": {
         href = "/#/user/set-for-sale";
         costId = null;
-        break;
+        break
       }
       case "escrow": {
         href = "/#/user/escrow-manager";
         costId = null;
-        break;
+        break
       }
       case "import": {
         href = "/#/user/import-asset";
         costId = 1;
-        break;
+        break
       }
       case "export": {
         href = "/#/user/export-asset";
         costId = null;
-        break;
+        break
       }
       case "discard": {
         href = "/#/user/discard-asset";
         costId = null;
-        break;
+        break
       }
       case "modify-status": {
         href = "/#/user/modify-status";
         costId = 5;
-        break;
+        break
       }
       case "edit-information": {
         href = "/#/user/modify-description";
         costId = 8;
-        break;
+        break
       }
       case "edit-rightsholder": {
         href = "/#/user/modify-rightsholder";
         costId = 6;
-        break;
+        break
       }
       case "verify": {
         verify();
-        break;
+        break
       }
       default: {
         console.log("Invalid menu selection: '", e, "'");
         href = "/#/user/home";
-        break;
+        break
       }
     }
     if (costId !== null) {
       window.contracts.AC_MGR.methods
         .getServiceCosts(asset.assetClass, costId)
         .call((_error, _result) => {
-          if (_error) {
-            console.log("Error: ", _error);
-          } else {
+          if (_error) { console.log("Error: ", _error) }
+          else {
             let root = window.web3.utils.fromWei(Object.values(_result)[1]);
             let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
             tempObj.opCost = String(Number(root) + Number(acth));
 
-            console.log(tempObj);
+            console.log(tempObj)
 
             window.sentPacket = tempObj;
             setSimpleSelect(event.target.value);
-            return (window.location.href = href);
+            return window.location.href = href;
           }
-        });
-    } else {
-      console.log(tempObj);
+        })
+    }
+
+    else {
+      console.log(tempObj)
 
       window.sentPacket = tempObj;
       setSimpleSelect(event.target.value);
-      return (window.location.href = href);
+      return window.location.href = href;
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setSelectedValue(event.target.value);
   };
 
-  const handleChangeEnabled = (event) => {
+  const handleChangeEnabled = event => {
     setSelectedEnabled(event.target.value);
   };
 
-  const handleScanQR = (event) => {
+  const handleScanQR = event => {
     setScanQR(!scanQR);
-    setData();
-    console.log("new value", !scanQR);
+    setData()
+    console.log("new value", !scanQR)
   };
 
   const verify = () => {
-    setIsVerifying(true);
+    setIsVerifying(true)
     if (props.ps) {
-      console.log(props.ps);
-      props.ps.element.scrollTop = 0;
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
+
     }
   };
 
   const recycle = () => {
     setIsRecycling(true);
     if (props.ps) {
-      console.log(props.ps);
-      props.ps.element.scrollTop = 0;
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
+
     }
   };
 
   const setIsNotVerifying = () => {
-    setSimpleSelect("");
-    setIsVerifying(false);
+    setSimpleSelect("")
+    setIsVerifying(false)
     setloginManufacturerState("");
     setloginTypeState("");
     setloginModelState("");
@@ -1733,371 +1724,22 @@ export default function Search(props) {
     setloginLastState("");
     setloginIDState("");
     setloginPasswordState("");
-  };
+  }
 
   const setIsNotRecycling = () => {
-    setSimpleSelect("");
-    setIsRecycling(false);
+    setSimpleSelect("")
+    setIsRecycling(false)
     setloginFirstState("");
     setloginLastState("");
     setloginIDState("");
     setloginPasswordState("");
-  };
-
-  const getIPFSJSONObject = async (lookup) => {
-    //console.log(lookup)
-    if (typeof lookup !== "string") {
-      lookup.then(async (_lookup) => {
-        for await (const chunk of window.ipfs.cat(_lookup)) {
-          let result = new TextDecoder("utf-8").decode(chunk);
-          if (!result) {
-            console.log(
-              lookup,
-              "Something went wrong. Unable to find file on IPFS"
-            );
-            setRetrieving(false);
-            setSelectedImage("");
-            setMoreInfo(true);
-            return setIpfsObject({
-              text: {},
-              photo: {},
-              urls: {},
-              name: "",
-              displayImage: "",
-            });
-          } else {
-            //console.log(lookup, "Here's what we found for asset description: ", result);
-            let assetObj = JSON.parse(result);
-            assetObj.photoUrls = JSON.parse(result).photo;
-            let vals = Object.values(assetObj.photo),
-              keys = Object.keys(assetObj.photo);
-
-            if (keys.length < 1) {
-              setIpfsObject(assetObj);
-              setSelectedImage("");
-              setMoreInfo(true);
-              setRetrieving(false);
-              return console.log(assetObj);
-            }
-
-            for (let i = 0; i < keys.length; i++) {
-              const get = () => {
-                if (vals[i].includes("data") && vals[i].includes("base64")) {
-                  assetObj.photo[keys[i]] = vals[i];
-                  console.log(assetObj.photo[keys[i]]);
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image");
-                    assetObj.DisplayImage = assetObj.photo[keys[i]];
-                  } else if (i === keys.length - 1) {
-                    console.log("Setting Display Image");
-                    assetObj.DisplayImage = assetObj.photo[keys[0]];
-                  }
-
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj);
-                    setSelectedImage(assetObj.DisplayImage);
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    console.log(assetObj.DisplayImage);
-                  }
-
-                  forceUpdate();
-                } else if (
-                  !vals[i].includes("ipfs") &&
-                  vals[i].includes("http")
-                ) {
-                  assetObj.photo[keys[i]] = vals[i];
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image");
-                    assetObj.DisplayImage = assetObj.photo[keys[i]];
-                  } else if (i === keys.length - 1) {
-                    console.log("Setting Display Image");
-                    assetObj.DisplayImage = assetObj.photo[keys[0]];
-                  }
-
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj);
-                    setSelectedImage(assetObj.DisplayImage);
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    console.log(assetObj.DisplayImage);
-                  }
-
-                  forceUpdate();
-                } else {
-                  const req = new XMLHttpRequest();
-                  req.responseType = "text";
-
-                  req.onload = function (e) {
-                    console.log("in onload");
-                    if (this.response.includes("base64")) {
-                      assetObj.photo[keys[i]] = this.response;
-                      //console.log(assetObj.photo[keys[i]]);
-
-                      if (keys[i] === "DisplayImage") {
-                        console.log("Setting Display Image");
-                        assetObj.DisplayImage = assetObj.photo[keys[i]];
-                      } else if (i === keys.length - 1) {
-                        console.log("Setting Display Image");
-                        assetObj.DisplayImage = assetObj.photo[keys[0]];
-                      }
-                      forceUpdate();
-                    }
-
-                    if (i + 1 === keys.length) {
-                      setIpfsObject(assetObj);
-                      setSelectedImage(assetObj.DisplayImage);
-                      setMoreInfo(true);
-                      setRetrieving(false);
-                      console.log(assetObj);
-                      //console.log(assetObj.DisplayImage);
-                    }
-                  };
-
-                  req.onerror = function (e) {
-                    console.log("http request error");
-                    if (vals[i].includes("http")) {
-                      assetObj.photo[keys[i]] = vals[i];
-                      if (keys[i] === "DisplayImage") {
-                        console.log("Setting Display Image");
-                        assetObj.DisplayImage = assetObj.photo[keys[i]];
-                      } else if (i === keys.length - 1) {
-                        console.log("Setting Display Image");
-                        assetObj.DisplayImage = assetObj.photo[keys[0]];
-                      }
-                      forceUpdate();
-                    }
-
-                    if (i + 1 === keys.length) {
-                      setIpfsObject(assetObj);
-                      setSelectedImage(assetObj.DisplayImage);
-                      setMoreInfo(true);
-                      setRetrieving(false);
-                      console.log(assetObj);
-                      console.log(assetObj.DisplayImage);
-                    }
-                  };
-
-                  req.open("GET", vals[i], true);
-                  req.send();
-                }
-              };
-              await get();
-            }
-          }
-        }
-      });
-    } else {
-      for await (const chunk of window.ipfs.cat(lookup)) {
-        let result = new TextDecoder("utf-8").decode(chunk);
-        if (!result) {
-          console.log(
-            lookup,
-            "Something went wrong. Unable to find file on IPFS"
-          );
-          setRetrieving(false);
-          setSelectedImage("");
-          setMoreInfo(true);
-          return setIpfsObject({
-            text: {},
-            photo: {},
-            urls: {},
-            name: "",
-            displayImage: "",
-          });
-        } else {
-          //console.log(lookup, "Here's what we found for asset description: ", result);
-          let assetObj = JSON.parse(result);
-          assetObj.photoUrls = JSON.parse(result).photo;
-          let vals = Object.values(assetObj.photo),
-            keys = Object.keys(assetObj.photo);
-
-          if (keys.length < 1) {
-            setIpfsObject(assetObj);
-            setSelectedImage("");
-            setMoreInfo(true);
-            setRetrieving(false);
-            return console.log(assetObj);
-          }
-
-          for (let i = 0; i < keys.length; i++) {
-            const get = () => {
-              if (vals[i].includes("data") && vals[i].includes("base64")) {
-                assetObj.photo[keys[i]] = vals[i];
-                console.log(assetObj.photo[keys[i]]);
-                if (keys[i] === "DisplayImage") {
-                  console.log("Setting Display Image");
-                  assetObj.DisplayImage = assetObj.photo[keys[i]];
-                } else if (i === keys.length - 1) {
-                  console.log("Setting Display Image");
-                  assetObj.DisplayImage = assetObj.photo[keys[0]];
-                }
-
-                if (i + 1 === keys.length) {
-                  setIpfsObject(assetObj);
-                  setSelectedImage(assetObj.DisplayImage);
-                  setMoreInfo(true);
-                  setRetrieving(false);
-                  console.log(assetObj);
-                  console.log(assetObj.DisplayImage);
-                }
-
-                forceUpdate();
-              } else if (
-                !vals[i].includes("ipfs") &&
-                vals[i].includes("http")
-              ) {
-                assetObj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
-                  console.log("Setting Display Image");
-                  assetObj.DisplayImage = assetObj.photo[keys[i]];
-                } else if (i === keys.length - 1) {
-                  console.log("Setting Display Image");
-                  assetObj.DisplayImage = assetObj.photo[keys[0]];
-                }
-
-                if (i + 1 === keys.length) {
-                  setIpfsObject(assetObj);
-                  setSelectedImage(assetObj.DisplayImage);
-                  setMoreInfo(true);
-                  setRetrieving(false);
-                  console.log(assetObj);
-                  console.log(assetObj.DisplayImage);
-                }
-
-                forceUpdate();
-              } else {
-                const req = new XMLHttpRequest();
-                req.responseType = "text";
-
-                req.onload = function (e) {
-                  console.log("in onload");
-                  if (this.response.includes("base64")) {
-                    assetObj.photo[keys[i]] = this.response;
-                    //console.log(assetObj.photo[keys[i]]);
-
-                    if (keys[i] === "DisplayImage") {
-                      console.log("Setting Display Image");
-                      assetObj.DisplayImage = assetObj.photo[keys[i]];
-                    } else if (i === keys.length - 1) {
-                      console.log("Setting Display Image");
-                      assetObj.DisplayImage = assetObj.photo[keys[0]];
-                    }
-                    forceUpdate();
-                  }
-
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj);
-                    setSelectedImage(assetObj.DisplayImage);
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    //console.log(assetObj.DisplayImage);
-                  }
-                };
-
-                req.onerror = function (e) {
-                  console.log("http request error");
-                  if (vals[i].includes("http")) {
-                    assetObj.photo[keys[i]] = vals[i];
-                    if (keys[i] === "DisplayImage") {
-                      console.log("Setting Display Image");
-                      assetObj.DisplayImage = assetObj.photo[keys[i]];
-                    } else if (i === keys.length - 1) {
-                      console.log("Setting Display Image");
-                      assetObj.DisplayImage = assetObj.photo[keys[0]];
-                    }
-                    forceUpdate();
-                  }
-
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj);
-                    setSelectedImage(assetObj.DisplayImage);
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    console.log(assetObj.DisplayImage);
-                  }
-                };
-
-                req.open("GET", vals[i], true);
-                req.send();
-              }
-            };
-            await get();
-          }
-        }
-      }
-    }
-  };
-
-  const getACData = async (ref, ac) => {
-    let tempData;
-    let tempAC;
-
-    if (window.contracts !== undefined) {
-      if (ref === "name") {
-        console.log("Using name ref");
-        await window.contracts.AC_MGR.methods
-          .resolveAssetClass(ac)
-          .call((_error, _result) => {
-            if (_error) {
-              console.log("Error: ", _error);
-            } else {
-              if (Number(_result) > 0) {
-                tempAC = Number(_result);
-              } else {
-                return 0;
-              }
-            }
-          });
-      } else if (ref === "id") {
-        tempAC = ac;
-      }
-
-      await window.contracts.AC_MGR.methods
-        .getAC_data(tempAC)
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("Error: ", _error);
-          } else {
-            /* @dev
-            0 AC_data[_assetClass].assetClassRoot,
-            1 AC_data[_assetClass].custodyType,
-            2 AC_data[_assetClass].discount,
-            3 AC_data[_assetClass].referenceAddress 
-            */
-
-            let _custodyType;
-
-            if (Object.values(_result)[1] === "1") {
-              _custodyType = "Custodial";
-            } else {
-              _custodyType = "Non-Custodial";
-            }
-
-            tempData = {
-              root: Object.values(_result)[0],
-              custodyType: _custodyType,
-              discount: Object.values(_result)[2],
-              exData: Object.values(_result)[3],
-              AC: tempAC,
-            };
-            setSelectedRootID(Object.values(_result)[0]);
-          }
-        });
-      return tempData;
-    }
-  };
+  }
 
   const purchaseAsset = async () => {
-    let temp = Object.assign(asset, ipfsObject);
-    let newAsset = JSON.parse(JSON.stringify(temp));
+    let newAsset = JSON.parse(JSON.stringify(asset))
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
     let tempTxHash;
-    console.log("Purchasing Asset");
+    console.log("Purchasing Asset")
 
     if (Number(props.pruf) < Number(price)) {
       swal({
@@ -2105,18 +1747,19 @@ export default function Search(props) {
         icon: "warning",
         button: "Close",
       });
-      return console.log(price), console.log(props.pruf);
+      return console.log(price),
+        console.log(props.pruf)
     }
-    setTransaction(true);
+    setTransaction(true)
     await window.contracts.PURCHASE.methods
-      .purchaseWithPRUF(asset.idxHash)
+      .purchaseWithPRUF(asset.id)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
         if (tempTxHash !== undefined) {
           swal({
             title: "Something went wrong!",
@@ -2132,10 +1775,10 @@ export default function Search(props) {
             button: "Close",
           });
         }
-        console.log("Verification conf");
+        console.log("Verification conf")
         setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
-        console.log(_error);
+        console.log(_error)
         setError(_error);
       })
       .on("receipt", (receipt) => {
@@ -2149,21 +1792,17 @@ export default function Search(props) {
           title: "Purchase Success!",
           content: link,
           icon: "success",
-          button: "Close",
+          button: "Close"
         }).then(() => {
           window.location.href = "/#/user/dashboard";
-          window.replaceAssetData = { key: pageKey, newAsset: newAsset };
-        });
+          window.replaceAssetData = { key: pageKey, newAsset: newAsset }
+        })
       });
-  };
+  }
 
   const recycleAsset = async () => {
-    if (
-      loginFirst === "" ||
-      loginLast === "" ||
-      loginID === "" ||
-      loginPassword === ""
-    ) {
+    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+
       if (loginFirst === "") {
         setloginFirstState("error");
       }
@@ -2181,45 +1820,44 @@ export default function Search(props) {
 
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
-    console.log("in RA");
-    let idxHash = asset.idxHash;
+    console.log("in RA")
+    let idxHash = asset.id;
     let rgtHash;
     let rgtHashRaw;
-    let receiptVal;
     let tempTxHash;
 
-    let temp = Object.assign(asset, ipfsObject);
-    let newAsset = JSON.parse(JSON.stringify(temp));
-    newAsset.status = "Out of Escrow";
-    newAsset.statusNum = "58";
+    let newAsset = JSON.parse(JSON.stringify(asset))
+    newAsset.status = "Out of Escrow"
+    newAsset.statusNum = "58"
 
     if (middle === "") {
       rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
-      );
-    } else if (middle !== "") {
-      rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(middle).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
-      );
+        String(first).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, '')
+      )
     }
 
-    rgtHash = window.web3.utils.soliditySha3(
-      String(idxHash),
-      String(rgtHashRaw)
-    );
+
+    else if (middle !== "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
+      )
+    }
+
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", window.addr);
-    setTransaction(true);
+    setTransaction(true)
 
     await window.contracts.RCLR.methods
       .recycle(idxHash, rgtHash, asset.assetClass)
@@ -2227,9 +1865,9 @@ export default function Search(props) {
       .on("error", function (_error) {
         setTransaction(false);
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
         if (tempTxHash !== undefined) {
           swal({
             title: "Something went wrong!",
@@ -2245,10 +1883,10 @@ export default function Search(props) {
             button: "Close",
           });
         }
-        console.log("Verification conf");
+        console.log("Verification conf")
         setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
-        console.log(_error);
+        console.log(_error)
         setError(_error);
       })
       .on("receipt", (receipt) => {
@@ -2262,47 +1900,42 @@ export default function Search(props) {
           title: "Recycle Success!",
           content: link,
           icon: "success",
-          button: "Close",
+          button: "Close"
         }).then(() => {
           window.newStat = { num: "58", str: "Out of Escrow" };
           window.location.href = "/#/user/dashboard";
-          window.replaceAssetData = { key: pageKey, newAsset: newAsset };
-        });
+          window.replaceAssetData = { key: pageKey, newAsset: newAsset }
+        })
       });
     return;
-  };
+  }
 
   const thousandHashesOf = (varToHash) => {
-    if (!window.web3) return (window.location.href = "/#/user/home");
+    if (!window.web3) return window.location.href = "/#/user/home"
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
       //console.log(tempHash);
     }
     return tempHash;
-  };
+  }
 
   const copyTextSnippet = (temp) => {
+
     if (isMobile) {
-      navigator.clipboard.writeText(temp);
-      swal("Asset ID Copied to Clipboard!");
+      navigator.clipboard.writeText(temp)
+      swal("Asset ID Copied to Clipboard!")
     }
 
     if (!isMobile) {
-      setCopyText(true);
-      setTimeout(() => {
-        setCopyText(false);
-      }, 1000);
+      setCopyText(true)
+      setTimeout(() => { setCopyText(false) }, 1000);
     }
-  };
+
+  }
 
   const verifyAsset = async () => {
-    if (
-      loginFirst === "" ||
-      loginLast === "" ||
-      loginID === "" ||
-      loginPassword === ""
-    ) {
+    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
       if (loginFirst === "") {
         setloginFirstState("error");
       }
@@ -2318,108 +1951,101 @@ export default function Search(props) {
       return;
     }
 
-    console.log("in vr");
+    console.log("in vr")
     let extendedDataHash;
     let tempResult;
-    let idxHash = asset.idxHash;
+    let idxHash = asset.id;
     let rgtHashRaw;
-    let rgtHash;
+    let rgtHash
 
     if (middle === "") {
       rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
-      );
-    } else if (middle !== "") {
-      rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(middle).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
-      );
+        String(first).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
+      )
     }
 
-    rgtHash = window.web3.utils.soliditySha3(
-      String(idxHash),
-      String(rgtHashRaw)
-    );
+
+    else if (middle !== "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
+      )
+    }
+
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", window.addr);
-    setTransaction(true);
+    setTransaction(true)
     await window.contracts.STOR.methods
       ._verifyRightsHolder(idxHash, rgtHash)
-      .call(function (_error, _result) {
-        if (_error) {
-          console.log(_error);
-          setError(_error);
-          setResult("");
-          setTransaction(false);
-        } else if (_result === "0") {
-          console.log("Verification not Confirmed");
-          swal({
-            title: "Match Failed!",
-            text: "Please make sure forms are filled out correctly.",
-            icon: "warning",
-            button: "Close",
-          });
-          setTransaction(false);
-          setIsVerifying(false);
-        } else {
-          console.log("Verification Confirmed");
-          swal({
-            title: "Match Confirmed!",
-            icon: "success",
-            button: "Close",
-          });
-          setError("");
-          setTransaction(false);
-          setIsVerifying(false);
-        }
-      });
+      .call(
+        function (_error, _result) {
+          if (_error) {
+            console.log(_error)
+            setError(_error);
+            setResult("");
+            setTransaction(false)
+          }
+          else if (_result === "0") {
+            console.log("Verification not Confirmed");
+            swal({
+              title: "Match Failed!",
+              text: "Please make sure forms are filled out correctly.",
+              icon: "warning",
+              button: "Close",
+            });
+            setTransaction(false)
+            setIsVerifying(false)
+          }
+          else {
+            console.log("Verification Confirmed");
+            swal({
+              title: "Match Confirmed!",
+              icon: "success",
+              button: "Close",
+            });
+            setError("");
+            setTransaction(false)
+            setIsVerifying(false)
+          }
+        });
     return;
-  };
+  }
 
   const handleOnScan = (e) => {
     if (!e) {
-      return;
+      return
     }
     //console.log(e)
-    if (
-      e.includes("0x") &&
-      e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
-    ) {
+    if (e.includes("0x") && e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)) {
       setScanQR(!scanQR);
-      let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66);
-      console.log("Here is what we got in the scanner: ", scanQuery);
-      retrieveRecord(scanQuery, true);
-    } else {
+      let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
+      console.log("Here is what we got in the scanner: ", scanQuery)
+      checkInputs(scanQuery);
+    }
+    else {
       swal({
         title: "QR code does not contain a valid asset ID.",
         icon: "warning",
         button: "Close",
       });
     }
-  };
+  }
 
   const blockchainVerifyAsset = async () => {
-    if (!window.ethereum) {
-      return swal({
-        title: "Connect to an ethereum provider to use this functionality!",
-        button: "Close",
-      });
-    }
-    if (
-      loginFirst === "" ||
-      loginLast === "" ||
-      loginID === "" ||
-      loginPassword === ""
-    ) {
+    if (!window.ethereum) { return swal({ title: "Connect to an ethereum provider to use this functionality!", button: "Close", }) }
+    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+
       if (loginFirst === "") {
         setloginFirstState("error");
       }
@@ -2435,8 +2061,8 @@ export default function Search(props) {
       return;
     }
 
-    console.log("in bvr");
-    let idxHash = asset.idxHash;
+    console.log("in bvr")
+    let idxHash = asset.id;
     let rgtHash;
     let rgtHashRaw;
     let receiptVal;
@@ -2444,59 +2070,61 @@ export default function Search(props) {
 
     if (middle === "") {
       rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
-      );
-    } else if (middle !== "") {
-      rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(middle).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
-      );
+        String(first).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
+      )
     }
 
-    rgtHash = window.web3.utils.soliditySha3(
-      String(idxHash),
-      String(rgtHashRaw)
-    );
+
+    else if (middle !== "") {
+      rgtHashRaw = window.web3.utils.soliditySha3(
+        String(first).replace(/\s/g, ''),
+        String(middle).replace(/\s/g, ''),
+        String(last).replace(/\s/g, ''),
+        String(ID).replace(/\s/g, ''),
+        String(password).replace(/\s/g, ''),
+      )
+    }
+
+
+    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", props.addr);
-    setTransaction(true);
+    setTransaction(true)
 
     await window.contracts.STOR.methods
       .blockchainVerifyRightsHolder(idxHash, rgtHash)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
-        setIsVerifying(false);
+        setIsVerifying(false)
         tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
         setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
-        console.log(_error);
+        console.log(_error)
         setError(_error);
       })
       .on("receipt", (receipt) => {
         receiptVal = receipt.events.REPORT.returnValues._msg;
-        setTransaction(false);
-        setIsVerifying(false);
-        setTxHash(receipt.transactionHash);
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setVerifyResult(receiptVal);
+        setTransaction(false)
+        setIsVerifying(false)
+        setTxHash(receipt.transactionHash)
+        tempTxHash = receipt.transactionHash
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+        let str2 = "' target='_blank'>here</a>"
+        link.innerHTML = String(str1 + tempTxHash + str2)
+        setVerifyResult(receiptVal)
         console.log("Verification Result :", receiptVal);
       });
+
 
     if (receiptVal === "Match confirmed") {
       swal({
@@ -2505,7 +2133,7 @@ export default function Search(props) {
         icon: "success",
         button: "Close",
       });
-      console.log("Verification conf");
+      console.log("Verification conf")
     }
 
     if (receiptVal !== "Match confirmed") {
@@ -2524,215 +2152,23 @@ export default function Search(props) {
           button: "Close",
         });
       }
-      console.log("Verification not conf");
+      console.log("Verification not conf")
     }
 
     return;
-  };
+  }
 
-  // const retrieveRecord = async () => {
-  //   else {
-  //     setRetrieving(true)
-  //     console.log("idxHash", idxHash);
-  //     console.log("addr: ", props.addr);
+  const checkInputs = (fromQR) => {
+    let id;
 
-  //     await window.contracts.STOR.methods
-  //       .retrieveShortRecord(idxHash)
-  //       .call(
-  //         function (_error, _result) {
-  //           if (_error) {
-  //             setRetrieving(false);
-  //             setError(_error);
-  //             setResult("");
-  //             setIDXRaw("")
-  //             setIDXRawInput(false)
-  //             swal({
-  //               title: "Asset not found!",
-  //               icon: "warning",
-  //               button: "Close",
-  //             });
-  //           }
-  //           else {
-
-  //             /* @dev
-  //             0 rec.assetStatus,
-  //             1 rec.forceModCount,
-  //             2 rec.assetClass,
-  //             3 rec.countDown,
-  //             4 rec.countDownStart,
-  //             5 rec.Ipfs1,
-  //             6 rec.Ipfs2,
-  //             7 rec.numberOfTransfers
-  //             */
-
-  //             setIDXRaw("")
-  //             setIDXRawInput(false)
-  //             setloginIDXState("")
-  //             setManufacturer("")
-  //             setloginManufacturer("")
-  //             setloginManufacturerState("")
-  //             setType("")
-  //             setloginType("")
-  //             setloginTypeState("")
-  //             setModel("")
-  //             setloginModel("")
-  //             setloginModelState("")
-  //             setSerial("")
-  //             setloginSerial("")
-  //             setloginSerialState("")
-  //             console.log("rr conf");
-  //             setResult(Object.values(_result));
-  //             setError("");
-  //             tempResult = Object.values(_result);
-  //             if (Object.values(_result)[5] > 0) { extendedDataHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-  //             console.log("ipfs data in promise", extendedDataHash)
-  //             if (Object.values(_result)[6] > 0) {
-  //               console.log("Getting ipfs2 set up...")
-  //               let knownUrl = "https://ipfs.io/ipfs/";
-  //               let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
-  //               let fullUrl = knownUrl + hash;
-  //               console.log(fullUrl);
-  //               setInscription(fullUrl)
-  //             }
-  //           }
-  //         });
-
-  //     await window.contracts.STOR.methods.getPriceData(idxHash)
-  //       .call((_error, _result) => {
-  //         if (_error) {
-  //           console.log("IN ERROR IN ERROR IN ERROR")
-  //         } else {
-  //           if (Object.values(_result)[1] !== "2") {
-  //             return
-  //           }
-  //           else {
-  //             setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
-  //             setCurrency("ü")
-  //           }
-  //         }
-  //       })
-
-  //     setURL(String(baseURL) + String(idxHash))
-
-  //     window.assetClass = tempResult[2]
-  //     let assetClassName = await window.utils.getACName(tempResult[2])
-
-  //     window.assetInfo = {
-  //       assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-  //       assetClass: tempResult[2],
-  //       status: await window.utils.getStatusString(String(tempResult[0])),
-  //       statusNum: String(tempResult[0]),
-  //       idx: idxHash
-  //     }
-
-  //     await window.utils.resolveACFromID(tempResult[2])
-  //     await getACData("id", window.assetClass)
-
-  //     console.log(window.authLevel);
-
-  //     await getIPFSJSONObject(extendedDataHash);
-  //     setAuthLevel(window.authLevel);
-  //     setScanQR(false);
-  //     setAsset({
-  //       assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-  //       assetClass: tempResult[2],
-  //       status: window.assetInfo.status,
-  //       statusNum: String(tempResult[0]),
-  //       idxHash: idxHash,
-  //     })
-
-  //     if (tempResult[0] === "60") {
-  //       setRecycled(true)
-  //     }
-  //     else if (tempResult[0] !== "60") {
-  //       await window.utils.checkHoldsToken("asset", idxHash, props.addr)
-  //         .then((e) => {
-  //           console.log("is Owner Of? ", e)
-  //           if (e) {
-  //             getDBIndexOf(idxHash)
-  //             setOwnerOf(true)
-  //           }
-  //         })
-  //     }
-  //   }
-  // }
-
-  const generateSubCatList = (arr) => {
-    let subCatSelection = [
-      <MenuItem
-        disabled
-        classes={{
-          root: classes.selectMenuItem,
-        }}
-      >
-        Select Subclass
-      </MenuItem>,
-    ];
-    for (let i = 0; i < arr.length; i++) {
-      subCatSelection.push(
-        <MenuItem
-          classes={{
-            root: classes.selectMenuItem,
-            selected: classes.selectMenuItemSelected,
-          }}
-          key={"key" + arr[i].name}
-          value={String(arr[i].id)}
-        >
-          {arr[i].name}
-        </MenuItem>
-      );
-    }
-    console.log(arr);
-    return subCatSelection;
-  };
-
-  const generateRootList = (arr) => {
-    let rootNames = props.rootNames;
-    let rootSelection = [
-      <MenuItem
-        disabled
-        classes={{
-          root: classes.selectMenuItem,
-        }}
-      >
-        Select Class
-      </MenuItem>,
-    ];
-
-    for (let i = 0; i < arr.length; i++) {
-      rootSelection.push(
-        <MenuItem
-          classes={{
-            root: classes.selectMenuItem,
-            selected: classes.selectMenuItemSelected,
-          }}
-          value={String(arr[i])}
-        >
-          {rootNames[i]}
-        </MenuItem>
-      );
+    if (fromQR) {
+      id = fromQR
     }
 
-    return rootSelection;
-  };
+    else if (IDXRawInput === true) {
 
-  const retrieveRecord = async (query, isScanQR) => {
-    if (props.ps) {
-      //console.log(props.ps)
-      props.ps.element.scrollTop = 0;
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-    }
+      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
 
-    if (IDXRawInput && !isScanQR) {
-      if (
-        loginType === "" ||
-        loginManufacturer === "" ||
-        loginModel === "" ||
-        loginSerial === ""
-      ) {
         if (loginType === "") {
           setloginTypeState("error");
         }
@@ -2745,200 +2181,600 @@ export default function Search(props) {
         if (loginSerial === "") {
           setloginSerialState("error");
         }
-        console.log("error");
+        console.log("Error in inputs")
         return;
       }
-    }
-    let extendedDataHash;
-    let tempResult;
-    let idxHash;
 
-    if (!IDXRawInput && !isScanQR) {
-      if (loginIDX === "") {
-        console.log("error2");
-        setloginIDXState("error");
-        return;
-      } else {
-        idxHash = IDXRaw;
-      }
-    } else if (IDXRawInput === true && !isScanQR) {
-      idxHash = window.web3.utils.soliditySha3(
-        String(type).replace(/\s/g, ""),
-        String(manufacturer).replace(/\s/g, ""),
-        String(model).replace(/\s/g, ""),
-        String(serial).replace(/\s/g, "")
-      );
+      id = window.web3.utils.soliditySha3(
+        String(type).replace(/\s/g, ''),
+        String(manufacturer).replace(/\s/g, ''),
+        String(model).replace(/\s/g, ''),
+        String(serial).replace(/\s/g, ''),
+      )
+      setIDXRawInput(false)
+      setIDXRaw(id)
+
     }
 
-    if (isScanQR) {
-      idxHash = query;
+    else {
+      id = IDXRaw
     }
 
-    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+    props.prufClient.utils.isValidId(id).then(e => {
+      if (!e) return
 
-    if (!doesExist) {
-      swal({
-        title: "Asset does not exist!",
-        icon: "warning",
-        button: "Close",
-      });
-      setIDXRaw("");
-      setIDXRawInput(false);
-    } else {
-      setRetrieving(true);
-      console.log("in rr");
-
-      console.log("idxHash", idxHash);
-      console.log("addr: ", props.addr);
-
-      await window.contracts.STOR.methods
-        .retrieveShortRecord(idxHash)
-        .call(function (_error, _result) {
-          if (_error) {
-            console.log(_error);
-            setError(_error);
-            setResult("");
-            setScanQR(false);
-            setRetrieving(false);
+      props.prufClient.get.assetExists(id)
+        .call((error, result) => {
+          if (error) {
             swal({
-              title: "Asset not found!",
+              title: "Asset does not exist!",
               icon: "warning",
               button: "Close",
-            });
-          } else {
-            setScanQR(false);
-            console.log("rr conf");
-            setResult(Object.values(_result));
-            setError("");
-            tempResult = Object.values(_result);
-            window.printObj = Object.values(_result);
-            if (Object.values(_result)[5] > 0) {
-              extendedDataHash = window.utils.getIpfsHashFromBytes32(
-                Object.values(_result)[5]
-              );
-            }
-            console.log("ipfs data in promise", extendedDataHash);
-            if (Object.values(_result)[6] > 0);
-            {
-              console.log("Getting ipfs2 set up...");
-              let knownUrl = "https://ipfs.io/ipfs/";
-              let hash = String(
-                window.utils.getIpfsHashFromBytes32(Object.values(_result)[6])
-              );
-              let fullUrl = knownUrl + hash;
-              console.log(fullUrl);
-              setInscription(fullUrl);
-            }
+            })
+            setIDXRaw("")
+            setIDXRawInput(false)
           }
-        });
-
-      setURL(String(baseURL) + String(idxHash));
-
-      await window.contracts.STOR.methods
-        .getPriceData(idxHash)
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR");
-          } else {
-            if (Object.values(_result)[1] !== "2") {
-              return;
-            } else {
-              setPrice(window.web3.utils.fromWei(Object.values(_result)[0]));
-              setCurrency("ü");
-            }
+          else if (result = "170") {
+            buildAsset(id)
           }
-        });
+          else {
+            swal({
+              title: "Asset does not exist!",
+              icon: "warning",
+              button: "Close",
+            })
+            setIDXRaw("")
+            setIDXRawInput(false)
+          }
+        })
+    })
 
-      window.assetClass = tempResult[2];
-      let assetClassName = await window.utils.getACName(tempResult[2]);
+  }
 
-      window.assetInfo = {
-        assetClassName: assetClassName
-          .toLowerCase()
-          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase()),
-        assetClass: tempResult[2],
-        status: await window.utils.getStatusString(String(tempResult[0])),
-        statusNum: String(tempResult[0]),
-        idx: idxHash,
-      };
-
-      await window.utils.resolveACFromID(tempResult[2]);
-      await getACData("id", window.assetClass);
-
-      console.log(window.authLevel);
-
-      await getIPFSJSONObject(extendedDataHash);
-      setAuthLevel(window.authLevel);
-      setAsset({
-        assetClassName: assetClassName
-          .toLowerCase()
-          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase()),
-        assetClass: tempResult[2],
-        status: window.assetInfo.status,
-        statusNum: String(tempResult[0]),
-        idxHash: idxHash,
-      });
-
-      if (tempResult[0] === "60") {
-        setRecycled(true);
-      } else if (tempResult[0] !== "60") {
-        await window.utils
-          .checkHoldsToken("asset", idxHash, props.addr)
-          .then((e) => {
-            console.log("is Owner Of? ", e);
-            if (e) {
-              setOwnerOf(true);
-            }
-          });
+  const checkIsHolder = async (id) => {
+    if (!id) return
+    props.prufClient.get.ownerOfAsset(id).call((error, result) => {
+      if (error) return
+      else {
+        window.web3.utils.toChecksumAddress(result) === window.web3.utils.toChecksumAddress(props.addr) ? setOwnerOf(true) : setOwnerOf(false)
       }
+    })
+  }
+
+  const buildAsset = (id) => {
+    if (!id) return
+
+    setURL(`${baseURL}${id}`)
+
+    if (props.ps) {
+      //console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
+
+
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+    }
+
+    setRetrieving(true)
+
+    props.prufClient.get.assetRecord(id)
+      .call((_error, _result) => {
+        if (_error) {
+          console.log("IN ERROR IN ERROR IN ERROR")
+          setError(_error);
+          setResult("");
+          setScanQR(false);
+          setRetrieving(false);
+          swal({
+            title: "Asset not found!",
+            icon: "warning",
+            button: "Close",
+          });
+
+        } else {
+
+          setScanQR(false);
+          setResult(Object.values(_result));
+          setError("");
+
+          _result["0"] === "60" ? setRecycled(true) : checkIsHolder(id)
+
+          let obj = {
+            id: id,
+            statusNum: _result["0"],
+            forceModCount: _result["1"],
+            assetClass: _result["2"],
+            countPair: [_result["3"], _result["4"]],
+            mutableDataA: _result["5"],
+            mutableDataB: _result["6"],
+            engravingA: _result["7"],
+            engravingB: _result["8"],
+            numberOfTransfers: _result["9"]
+          }
+
+          obj.identicon = <Jdenticon value={id} />;
+          obj.identiconLG = <Jdenticon value={id} />;
+
+          props.prufClient.utils.stringifyStatus(_result[0]).then(e => {
+            obj.status = e
+          })
+
+          props.prufClient.get.assetPriceData(id)
+            .call((_error, _result) => {
+              if (_error) {
+                console.log("IN ERROR IN ERROR IN ERROR")
+              } else {
+                obj.price = _result["0"]
+                obj.currency = _result["1"]
+
+                _result["0"] !== "0" ? setPrice(window.web3.utils.fromWei(_result["0"])) : setPrice("")
+                _result["1"] === "2" ? setCurrency("ü") : setCurrency("")
+
+                props.prufClient.get.nodeData(obj.assetClass)
+                  .call((_error, _result) => {
+                    if (_error) {
+                      console.log("IN ERROR IN ERROR IN ERROR")
+                    } else {
+                      obj.assetClassName = _result.name
+                      obj.assetClassData = {
+                        name: _result.name,
+                        root: _result.assetClassRoot,
+                        custodyType: _result.custodyType,
+                        managementType: _result.managementType,
+                        discount: _result.discount,
+                        referenceAddress: _result.referenceAddress,
+                        extData: _result["IPFS"],
+                        storageProvider: _result.storageProvider,
+                        switches: _result.switches
+                      }
+                      setSelectedRootID(_result.assetClassRoot)
+                      return getMutableData(obj)
+                    }
+                  })
+              }
+            })
+        }
+      })
+  }
+
+  const getMutableData = (asset) => {
+    if (!asset) return console.log("Failed upon reception of:", asset)
+
+    let obj = JSON.parse(JSON.stringify(asset))
+    let storageProvider = obj.assetClassData.storageProvider;
+    let mutableDataQuery;
+
+    if (obj.mutableDataA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      obj.mutableData = ""
+      return getEngraving(obj)
+    }
+
+    else if (storageProvider === "1") {
+      props.prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
+        let mutableDataQuery = e;
+        console.log("MDQ", e)
+
+        for await (const chunk of window.ipfs.cat(mutableDataQuery)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          console.log(str)
+          try {
+            obj.mutableData = JSON.parse(str)
+          }
+          catch {
+            obj.mutableData = str;
+          }
+          return getEngraving(obj)
+        }
+      })
+    }
+
+    else if (storageProvider === "2") {
+      console.log(obj.mutableDataA, obj.mutableDataB)
+      mutableDataQuery = window.web3.utils.hexToUtf8(obj.mutableDataA + obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000")))
+
+      let xhr = new XMLHttpRequest();
+
+      xhr.onload = () => {
+        if (xhr.status !== 404) {
+          try {
+            props.arweaveClient.transactions.get(mutableDataQuery).then(e => {
+              let tempObj = {};
+              e.get('tags').forEach(tag => {
+                let key = tag.get('name', { decode: true, string: true });
+                let value = tag.get('value', { decode: true, string: true });
+                tempObj[key] = value;
+                //console.log(`${key} : ${value}`);
+              })
+              //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
+              tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`
+              obj.mutableData = tempObj;
+              return getEngraving(obj)
+            })
+          }
+          catch {
+            obj.mutableData = "";
+            return getEngraving(obj)
+          }
+        }
+        else {
+          console.log("Id returned 404")
+          obj.mutableData = "";
+          return getEngraving(obj)
+        }
+      }
+
+      xhr.open('GET', `http://localhost:1984/tx/${mutableDataQuery}`, true);
+      xhr.send(null);
     }
   };
+
+  const getEngraving = (asset) => {
+    if (!asset) return console.log("Failed upon reception of:", asset)
+
+    let obj = JSON.parse(JSON.stringify(asset))
+    let storageProvider = obj.assetClassData.storageProvider;
+    let engravingQuery;
+
+    if (obj.engravingA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      obj.engraving = ""
+      return finalizeAsset(obj)
+    }
+
+    else if (storageProvider === "1") {
+      props.prufClient.utils.ipfsFromB32(obj.engravingA).then(e => {
+        engravingQuery = e
+        for (const chunk of window.ipfs.cat(engravingQuery)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          console.log(str)
+          try {
+            obj.engraving = JSON.parse(str)
+          }
+          catch {
+            obj.engraving = str;
+          }
+          //console.log("EXIT")
+          return finalizeAsset(obj)
+        }
+      })
+    }
+
+    else if (storageProvider === "2") {
+      console.log(obj.engravingB.indexOf("0000000000000000000000"))
+      engravingQuery = window.web3.utils.hexToUtf8(obj.engravingA + obj.engravingB.substring(2, obj.engravingB.indexOf("0000000000000000000000") + 1))
+
+      let xhr = new XMLHttpRequest();
+
+      xhr.onload = () => {
+        if (xhr.status !== 404) {
+          try {
+            props.arweaveClient.transactions.get(engravingQuery).then(e => {
+              if (!e) throw "Thrown";
+              let tempObj = {};
+              e.get('tags').forEach(tag => {
+                let key = tag.get('name', { decode: true, string: true });
+                let value = tag.get('value', { decode: true, string: true });
+                tempObj[key] = value;
+                //console.log(`${key} : ${value}`);
+              })
+              //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
+              tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`
+              obj.engraving = tempObj;
+              return finalizeAsset(obj)
+            })
+          }
+          catch {
+            console.log("In arweave catch clause")
+            obj.engraving = "";
+            return finalizeAsset(obj)
+          }
+        }
+        else {
+          console.log("Id returned 404")
+          obj.engraving = "";
+          obj.contentUrl = `http://localhost:1984/${engravingQuery}`
+          return finalizeAsset(obj)
+        }
+      }
+
+      xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, true);
+      try {
+        xhr.send(null);
+      }
+      catch {
+        console.log("Gateway returned 404")
+        obj.engraving = "";
+        obj.contentUrl = `http://localhost:1984/${engravingQuery}`
+        return finalizeAsset(obj)
+      }
+    }
+  }
+
+  const finalizeAsset = (asset) => {
+    if (!asset) return console.log("Failed upon reception of:", asset)
+
+    let obj = JSON.parse(JSON.stringify(asset))
+
+    obj.photo = (obj.engraving.photo || obj.mutableData.photo || {});
+    obj.text = (obj.engraving.text || obj.mutableData.text || {});
+    obj.urls = (obj.engraving.urls || obj.mutableData.urls || {});
+    obj.name = (obj.engraving.name || obj.mutableData.name || "Name Unavailable");
+    obj.photoUrls = (obj.engraving.photo || obj.mutableData.photo || {});
+    obj.Description = (obj.engraving.Description || obj.mutableData.Description || "");
+    obj.ContentUrl = (obj.engraving.contentUrl || obj.mutableData.contentUrl || "");
+
+    let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
+
+    console.log("Finalizing", obj)
+
+    if (obj.assetClassData.storageProvider === "2") {
+
+      console.log("detected storageProvider 2")
+
+      if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
+        obj.DisplayImage = obj.engraving.contentUrl
+        setAsset(obj)
+        setSelectedImage(obj.DisplayImage)
+        setRetrieving(false);
+        setMoreInfo(true);
+        return
+      }
+
+      else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")) {
+        obj.DisplayImage = obj.mutableData.contentUrl
+        setAsset(obj)
+        setSelectedImage(obj.DisplayImage)
+        setRetrieving(false);
+        setMoreInfo(true);
+        return
+      }
+
+      else if (keys.length === 0) {
+        obj.DisplayImage = "";
+        setAsset(obj)
+        setSelectedImage(obj.DisplayImage)
+        setRetrieving(false);
+        setMoreInfo(true);
+        return
+      }
+    }
+
+    else if (obj.assetClassData.storageProvider === "1") {
+      const getAndSet = (url) => {
+        const req = new XMLHttpRequest();
+        req.responseType = "text";
+
+        req.onload = function () {
+          console.log("response", this.response)
+          if (this.response.includes("base64")) {
+            obj.DisplayImage = this.response;
+            setAsset(obj)
+            setSelectedImage(obj.DisplayImage)
+            setRetrieving(false);
+            setMoreInfo(true);
+            return
+          }
+        }
+
+        req.onerror = function (e) {
+          //console.log("http request error")
+          obj.DisplayImage = ""
+          setAsset(obj)
+          setSelectedImage(obj.DisplayImage)
+          setRetrieving(false);
+          setMoreInfo(true);
+          return
+        }
+        req.open('GET', url, true);
+        try {
+          req.send();
+        }
+        catch {
+          obj.DisplayImage = ""
+          setAsset(obj)
+          setSelectedImage(obj.DisplayImage)
+          setRetrieving(false);
+          setMoreInfo(true);
+          return
+        }
+      }
+
+      if (obj.engraving !== "" && obj.engraving.DisplayImage !== "" && obj.engraving.DisplayImage !== undefined) {
+        getAndSet(obj.engraving.DisplayImage)
+      }
+
+      else if (obj.mutableData !== "" && obj.mutableData.DisplayImage !== "" && obj.mutableData.DisplayImage !== undefined) {
+        getAndSet(obj.mutableData.DisplayImage)
+      }
+    }
+
+    else if (keys.length > 0) {
+
+      for (let i = 0; i < keys.length; i++) {
+        const get = () => {
+          if (vals[i].includes("data") && vals[i].includes("base64")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              obj.DisplayImage = (obj.photo[keys[i]])
+            }
+            else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[0]])
+            }
+            setAsset(obj)
+            setSelectedImage(obj.DisplayImage)
+            forceUpdate();
+            setRetrieving(false);
+            setMoreInfo(true);
+            return
+          }
+
+          else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[i]])
+            }
+            else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[0]])
+            }
+            setAsset(obj)
+            setSelectedImage(obj.DisplayImage)
+            forceUpdate();
+            setRetrieving(false);
+            setMoreInfo(true);
+            return
+          }
+
+          else {
+            const req = new XMLHttpRequest();
+            req.responseType = "text";
+
+            req.onload = function (e) {
+              //console.log("in onload")
+              if (this.response.includes("base64")) {
+                obj.photo[keys[i]] = this.response;
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[0]])
+                }
+                setAsset(obj)
+                setSelectedImage(obj.DisplayImage)
+                forceUpdate();
+                setRetrieving(false);
+                setMoreInfo(true);
+                return
+              }
+            }
+
+            req.onerror = function (e) {
+              //console.log("http request error")
+              if (vals[i].includes("http")) {
+                obj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[0]])
+                }
+                setAsset(obj)
+                setSelectedImage(obj.DisplayImage)
+                forceUpdate();
+                setRetrieving(false);
+                setMoreInfo(true);
+                return
+              }
+            }
+            req.open('GET', vals[i], true);
+            req.send();
+          }
+        }
+        get()
+      }
+    }
+    else { console.log("No conditions met") }
+  }
+
+  const generateSubCatList = (arr) => {
+    let subCatSelection = [
+      <MenuItem
+        disabled
+
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select Subclass
+      </MenuItem>
+    ];
+    for (let i = 0; i < arr.length; i++) {
+      subCatSelection.push(
+        <MenuItem
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          key={"key" + arr[i].name}
+          value={String(arr[i].id)}
+        >
+          {arr[i].name}
+        </MenuItem>
+      );
+    }
+    console.log(arr)
+    return subCatSelection
+  }
+
+  const generateRootList = (arr) => {
+    let rootNames = props.rootNames
+    let rootSelection = [
+      <MenuItem
+        disabled
+        classes={{
+          root: classes.selectMenuItem
+        }}
+      >
+        Select Class
+      </MenuItem>
+    ];
+
+    for (let i = 0; i < arr.length; i++) {
+      rootSelection.push(
+        <MenuItem
+          classes={{
+            root: classes.selectMenuItem,
+            selected: classes.selectMenuItemSelected
+          }}
+          value={String(arr[i])}
+        >
+          {rootNames[i]}
+        </MenuItem>
+      );
+
+    }
+
+    return rootSelection;
+
+  }
 
   const back = () => {
     window.location.href = "/#/user/search";
-    setMoreInfo(false);
-  };
+    setMoreInfo(false)
+
+  }
 
   const generateThumbs = (obj) => {
-    console.log("obj", obj);
+    console.log("obj", obj)
     if (!obj.photo) {
-      return [];
-    } else if (Object.values(obj.photo).length === 0) {
+      return []
+    }
+    else if (Object.values(obj.photo).length === 0) {
       return (
         <div className="assetImageSelectorButton">
-          <img
-            title="View Image"
-            src={placeholder}
-            className="imageSelectorImage"
-            alt=""
-          />
+          <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
         </div>
-      );
+      )
     }
-    let component = [],
-      photos = Object.values(obj.photo);
+    let component = [], photos = Object.values(obj.photo);
     //console.log("photos", photos)
     for (let i = 0; i < photos.length; i++) {
       component.push(
-        <div
-          key={"thumb" + String(i)}
-          value={photos[i]}
-          className="assetImageSelectorButton"
-          onClick={() => {
-            showImage(photos[i]);
-          }}
-        >
-          <img
-            title="View Image"
-            src={photos[i]}
-            className="imageSelectorImage"
-            alt=""
-          />
+        <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
+          <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
         </div>
-      );
+      )
     }
-    return component;
-  };
+    return component
+  }
 
   const classes = useStyles();
   const imgClasses = useImgStyles();
@@ -2955,12 +2791,7 @@ export default function Search(props) {
           <CardBody>
             <form>
               <h3>
-                Connecting to the blockchain
-                <div className="lds-ellipsisIF">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
+                Connecting to the blockchain<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
               </h3>
             </form>
           </CardBody>
@@ -2987,11 +2818,11 @@ export default function Search(props) {
                         labelText="Manufacturer *"
                         id="manufacturer"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          onChange: (event) => {
-                            setManufacturer(event.target.value.trim());
+                          onChange: event => {
+                            setManufacturer(event.target.value.trim())
                             if (event.target.value !== "") {
                               setloginManufacturerState("success");
                             } else {
@@ -3007,11 +2838,11 @@ export default function Search(props) {
                         labelText="Type *"
                         id="type"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          onChange: (event) => {
-                            setType(event.target.value.trim());
+                          onChange: event => {
+                            setType(event.target.value.trim())
                             if (event.target.value !== "") {
                               setloginTypeState("success");
                             } else {
@@ -3027,11 +2858,11 @@ export default function Search(props) {
                         labelText="Model *"
                         id="model"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          onChange: (event) => {
-                            setModel(event.target.value.trim());
+                          onChange: event => {
+                            setModel(event.target.value.trim())
                             if (event.target.value !== "") {
                               setloginModelState("success");
                             } else {
@@ -3047,11 +2878,11 @@ export default function Search(props) {
                         labelText="Serial *"
                         id="serial"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          onChange: (event) => {
-                            setSerial(event.target.value.trim());
+                          onChange: event => {
+                            setSerial(event.target.value.trim())
                             if (event.target.value !== "") {
                               setloginSerialState("success");
                             } else {
@@ -3063,7 +2894,7 @@ export default function Search(props) {
                       />
                       <div className={classes.formCategory}>
                         <small>*</small> Required fields
-                      </div>
+              </div>
                     </>
                   )}
                   {IDXRawInput === true && retrieving && (
@@ -3072,40 +2903,40 @@ export default function Search(props) {
                         labelText={manufacturer}
                         id="manufacturer"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          disabled: true,
+                          disabled: true
                         }}
                       />
                       <CustomInput
                         labelText={type}
                         id="type"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          disabled: true,
+                          disabled: true
                         }}
                       />
                       <CustomInput
                         labelText={model}
                         id="model"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          disabled: true,
+                          disabled: true
                         }}
                       />
                       <CustomInput
                         labelText={serial}
                         id="serial"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          disabled: true,
+                          disabled: true
                         }}
                       />
                     </>
@@ -3118,17 +2949,12 @@ export default function Search(props) {
                         labelText="Asset ID *"
                         id="IDX"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          onChange: (event) => {
-                            setIDXRaw(event.target.value.trim());
-                            if (
-                              event.target.value !== "" &&
-                              event.target.value.trim().substring(0, 2) ===
-                                "0x" &&
-                              event.target.value.trim().length === 66
-                            ) {
+                          onChange: event => {
+                            setIDXRaw(event.target.value.trim())
+                            if (event.target.value !== "" && event.target.value.trim().substring(0, 2) === "0x" && event.target.value.trim().length === 66) {
                               setloginIDXState("success");
                             } else {
                               setloginIDXState("error");
@@ -3139,7 +2965,7 @@ export default function Search(props) {
                       />
                       <div className={classes.formCategory}>
                         <small>*</small> Required fields
-                      </div>
+                  </div>
                     </>
                   )}
                   {IDXRawInput === false && retrieving && (
@@ -3148,23 +2974,23 @@ export default function Search(props) {
                         labelText={IDXRaw}
                         id="IDX"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          disabled: true,
+                          disabled: true
                         }}
                       />
                     </>
                   )}
                   {!retrieving && (
                     <>
-                      <div
-                        className="QRScanner"
-                        value={scanQR}
-                        onClick={(e) => handleScanQR(e)}
-                      >
-                        <Tooltip title="Scan QR">
-                          <Icon fontSize="large">qr_code_scanner</Icon>
+                      <div className="QRScanner" value={scanQR} onClick={(e) => handleScanQR(e)}>
+                        <Tooltip
+                          title="Scan QR"
+                        >
+                          <Icon fontSize="large">
+                            qr_code_scanner
+                  </Icon>
                         </Tooltip>
                       </div>
                       <div className={classes.checkboxAndRadio}>
@@ -3173,19 +2999,17 @@ export default function Search(props) {
                             <Checkbox
                               tabIndex={-1}
                               onClick={() => setIDXRawInput(!IDXRawInput)}
-                              checkedIcon={
-                                <Check className={classes.checkedIcon} />
-                              }
+                              checkedIcon={<Check className={classes.checkedIcon} />}
                               icon={<Check className={classes.uncheckedIcon} />}
                               classes={{
                                 checked: classes.checked,
-                                root: classes.checkRoot,
+                                root: classes.checkRoot
                               }}
                             />
                           }
                           classes={{
                             label: classes.label,
-                            root: classes.labelRoot,
+                            root: classes.labelRoot
                           }}
                           label="Search via asset data fields"
                         />
@@ -3194,23 +3018,12 @@ export default function Search(props) {
                   )}
                   {!retrieving && (
                     <div className="MLBGradientSubmit">
-                      <Button
-                        color="info"
-                        className="MLBGradient"
-                        onClick={(e) => retrieveRecord()}
-                      >
-                        Search Asset
-                      </Button>
+                      <Button color="info" className="MLBGradient" onClick={(e) => checkInputs()} >Search Asset</Button>
                     </div>
                   )}
                   {retrieving && (
                     <h3>
-                      Retrieving Asset
-                      <div className="lds-ellipsisIF">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
+                      Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                     </h3>
                   )}
                 </form>
@@ -3236,27 +3049,15 @@ export default function Search(props) {
                         console.info(err);
                       }
                     }}
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                   />
                 )}
                 {retrieving && (
                   <h3>
-                    Retrieving Asset
-                    <div className="lds-ellipsisIF">
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                    </div>
+                    Retrieving Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                   </h3>
                 )}
-                <Button
-                  value={scanQR}
-                  onClick={(e) => handleScanQR(e)}
-                  color="info"
-                  className="MLBGradient"
-                >
-                  Back
-                </Button>
+                <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
               </CardBody>
             </Card>
           )}
@@ -3265,59 +3066,10 @@ export default function Search(props) {
               {!isVerifying && !isRecycling && (
                 <>
                   {!isMobile && (
-                    <CardHeader
-                      image
-                      className={imgClasses.cardHeaderHoverCustom}
-                    >
-                      {ipfsObject.photo !== undefined && (
+                    <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
+                      {asset.photo !== undefined && (
                         <>
-                          {Object.values(ipfsObject.photo).length > 0 && (
-                            <>
-                              {ipfsObject.DisplayImage !== "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button
-                                      onClick={() => back()}
-                                      large
-                                      color="info"
-                                      justIcon
-                                      className="back"
-                                    >
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                              {ipfsObject.DisplayImage === "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button
-                                      onClick={() => back()}
-                                      large
-                                      color="info"
-                                      justIcon
-                                      className="back"
-                                    >
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                            </>
-                          )}
-                          {Object.values(ipfsObject.photo).length === 0 && (
+                          {asset.DisplayImage !== "" && (
                             <>
                               <Tooltip
                                 id="tooltip-top"
@@ -3325,17 +3077,41 @@ export default function Search(props) {
                                 placement="bottom"
                                 classes={{ tooltip: classes.tooltip }}
                               >
-                                <Button
-                                  onClick={() => back()}
-                                  large
-                                  color="info"
-                                  justIcon
-                                  className="back"
-                                >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
-                              <Jdenticon value={asset.idxHash} />
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {Object.values(asset.photo).length === 0 && asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <Jdenticon value={asset.id} />
                             </>
                           )}
                         </>
@@ -3344,55 +3120,9 @@ export default function Search(props) {
                   )}
                   {isMobile && (
                     <CardHeader image className={imgClasses.cardHeaderHover}>
-                      {ipfsObject.photo !== undefined && (
+                      {asset.photo !== undefined && (
                         <>
-                          {Object.values(ipfsObject.photo).length > 0 && (
-                            <>
-                              {ipfsObject.DisplayImage !== "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button
-                                      onClick={() => back()}
-                                      large
-                                      color="info"
-                                      justIcon
-                                      className="back"
-                                    >
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                              {ipfsObject.DisplayImage === "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button
-                                      onClick={() => back()}
-                                      large
-                                      color="info"
-                                      justIcon
-                                      className="back"
-                                    >
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                            </>
-                          )}
-                          {Object.values(ipfsObject.photo).length === 0 && (
+                          {asset.DisplayImage !== "" && (
                             <>
                               <Tooltip
                                 id="tooltip-top"
@@ -3400,17 +3130,41 @@ export default function Search(props) {
                                 placement="bottom"
                                 classes={{ tooltip: classes.tooltip }}
                               >
-                                <Button
-                                  onClick={() => back()}
-                                  large
-                                  color="info"
-                                  justIcon
-                                  className="back"
-                                >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
-                              <Jdenticon value={asset.idxHash} />
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {Object.values(asset.photo).length === 0 && asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <Jdenticon value={asset.id} />
                             </>
                           )}
                         </>
@@ -3422,52 +3176,38 @@ export default function Search(props) {
               <CardBody>
                 {!isVerifying && !isRecycling && (
                   <>
-                    {Object.values(ipfsObject.photo).length > 1 && (
+                    {Object.values(asset.photo).length > 1 && (
                       <div className="imageSelector">
-                        {generateThumbs(ipfsObject)}
+                        {generateThumbs(asset)}
                       </div>
                     )}
-                    <h4 className={classes.cardTitle}>
-                      Name: {ipfsObject.name}
-                    </h4>
-                    <h4 className={classes.cardTitle}>
-                      Class:{" "}
-                      {asset.assetClassName
-                        .toLowerCase()
-                        .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                          letter.toUpperCase()
-                        )}{" "}
-                      (Node ID:{asset.assetClass})
-                    </h4>
-                    {currency === "0" && (
-                      <h4 className={classes.cardTitle}>
-                        Status: {asset.status}{" "}
-                      </h4>
-                    )}
-                    {currency !== "0" && (
+                    <h4 className={classes.cardTitle}>Name: {asset.name}</h4>
+                    <h4 className={classes.cardTitle}>Node: {asset.assetClassName} (ID:{asset.assetClass})</h4>
+                    {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
+                    {currency !== "" && (
                       <>
                         <h4 className={classes.cardTitle}>Status: For Sale </h4>
-                        <h4 className={classes.cardTitle}>
-                          Price: {currency} {price}{" "}
-                        </h4>
+                        <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
                       </>
                     )}
-                    {ipfsObject.text !== undefined && (
+                    {asset.text !== undefined && (
                       <>
                         <br />
-                        {ipfsObject.text.Description !== undefined && (
-                          <TextField
-                            id="outlined-multiline-static"
-                            label="Description"
-                            multiline
-                            rows={4}
-                            defaultValue={ipfsObject.text.Description}
-                            variant="outlined"
-                            fullWidth
-                            disabled
-                          />
-                        )}
-                        {ipfsObject.text.Description === undefined && (
+                        {
+                          asset.Description !== undefined && (
+                            <TextField
+                              id="outlined-multiline-static"
+                              label="Description"
+                              multiline
+                              rows={4}
+                              defaultValue={asset.Description}
+                              variant="outlined"
+                              fullWidth
+                              disabled
+                            />
+                          )
+                        }
+                        {asset.Description === undefined && (
                           <TextField
                             id="outlined-multiline-static"
                             label="Description: None"
@@ -3487,69 +3227,31 @@ export default function Search(props) {
                 )}
                 {!ownerOf && (
                   <div>
+
                     {/* {!transaction && (
                   <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify</Button>
                 )} */}
                     {recycled && !transaction && !isRecycling && props.addr && (
                       <>
                         {/* <h3>This asset has been discarded, to claim it, press "Recycle Asset" below!</h3> */}
-                        <Button
-                          onClick={() => {
-                            recycle();
-                          }}
-                          color="info"
-                          className="MLBGradient"
-                        >
-                          Recycle Asset
-                        </Button>
+                        <Button onClick={() => { recycle() }} color="info" className="MLBGradient">Recycle Asset</Button>
                       </>
                     )}
                     {!transaction && isRecycling && (
-                      <Button
-                        color="info"
-                        className="MLBGradient"
-                        onClick={() => setIsNotRecycling()}
-                      >
-                        Back
-                      </Button>
+                      <Button color="info" className="MLBGradient" onClick={() => setIsNotRecycling()}>Back</Button>
                     )}
                     {!transaction && !isVerifying && !recycled && (
-                      <Button
-                        color="info"
-                        className="MLBGradient"
-                        onClick={() => verify()}
-                      >
-                        Verify Owner
-                      </Button>
+                      <Button color="info" className="MLBGradient" onClick={() => verify()}>Verify Owner</Button>
                     )}
                     {!transaction && isVerifying && (
-                      <Button
-                        color="info"
-                        className="MLBGradient"
-                        onClick={() => setIsNotVerifying()}
-                      >
-                        Back
-                      </Button>
+                      <Button color="info" className="MLBGradient" onClick={() => setIsNotVerifying()}>Back</Button>
                     )}
                     {currency !== "" && !transaction && (
-                      <Button
-                        onClick={() => {
-                          purchaseAsset();
-                        }}
-                        color="info"
-                        className="MLBGradient"
-                      >
-                        Purchase Item
-                      </Button>
+                      <Button onClick={() => { purchaseAsset() }} color="info" className="MLBGradient">Purchase Item</Button>
                     )}
                     {currency !== "" && transaction && (
                       <h3>
-                        Purchasing Asset
-                        <div className="lds-ellipsisIF">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                        </div>
+                        Purchasing Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                       </h3>
                     )}
                     {isRecycling && (
@@ -3562,19 +3264,12 @@ export default function Search(props) {
                                   <CardIcon className="headerIconBack">
                                     <Category />
                                   </CardIcon>
-                                  <h4 className={classes.cardIconTitle}>
-                                    Select Asset Subclass
-                                  </h4>
+                                  <h4 className={classes.cardIconTitle}>Select Asset Subclass</h4>
                                 </CardHeader>
                                 <CardBody>
                                   <form>
                                     <h3>
-                                      Creating ID
-                                      <div className="lds-ellipsisIF">
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                      </div>
+                                      Creating ID<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                                     </h3>
                                   </form>
                                 </CardBody>
@@ -3587,9 +3282,7 @@ export default function Search(props) {
                                   <CardIcon className="headerIconBack">
                                     <Category />
                                   </CardIcon>
-                                  <h4 className={classes.cardIconTitle}>
-                                    Select Asset Subclass
-                                  </h4>
+                                  <h4 className={classes.cardIconTitle}>Select Asset Subclass</h4>
                                 </CardHeader>
                                 <CardBody>
                                   <form>
@@ -3597,56 +3290,53 @@ export default function Search(props) {
                                       fullWidth
                                       className={classes.selectFormControl}
                                     >
-                                      {selectedRootID === "" ? (
-                                        <>
-                                          <InputLabel>
+                                      {selectedRootID === ""
+                                        ? <>
+                                          <InputLabel
+                                          >
                                             Select Asset Subclass
                                           </InputLabel>
                                           <Select
                                             disabled
                                             MenuProps={{
-                                              className: classes.selectMenu,
+                                              className: classes.selectMenu
                                             }}
                                             classes={{
-                                              select: classes.select,
+                                              select: classes.select
                                             }}
                                             value={classSelect}
-                                            onChange={() => {}}
+                                            onChange={() => { }}
                                             inputProps={{
                                               name: "classSelect",
-                                              id: "class-select",
+                                              id: "class-select"
                                             }}
-                                          ></Select>
+                                          >
+                                          </Select>
                                         </>
-                                      ) : (
+                                        :
                                         <>
-                                          <InputLabel>
+                                          <InputLabel
+                                          >
                                             Select Asset Subclass
                                           </InputLabel>
                                           <Select
                                             MenuProps={{
-                                              className: classes.selectMenu,
+                                              className: classes.selectMenu
                                             }}
                                             classes={{
-                                              select: classes.select,
+                                              select: classes.select
                                             }}
                                             value={classSelect}
-                                            onChange={(e) => {
-                                              ACLogin(e);
-                                            }}
+                                            onChange={(e) => { ACLogin(e) }}
                                             inputProps={{
                                               name: "classSelect",
-                                              id: "class-select",
+                                              id: "class-select"
                                             }}
                                           >
-                                            {generateSubCatList(
-                                              props.assetClassSets[
-                                                selectedRootID
-                                              ]
-                                            )}
+                                            {generateSubCatList(props.assetClassSets[selectedRootID])}
                                           </Select>
                                         </>
-                                      )}
+                                      }
                                     </FormControl>
                                   </form>
                                 </CardBody>
@@ -3661,13 +3351,11 @@ export default function Search(props) {
                               <CardIcon className="headerIconBack">
                                 <AccountBox />
                               </CardIcon>
-                              <h4 className={classes.cardIconTitle}>
-                                New Owner Info
-                              </h4>
+                              <h4 className={classes.cardIconTitle}>New Owner Info</h4>
                             </CardHeader>
                             <CardBody>
                               <form>
-                                <h5>Asset Selected: {ipfsObject.name}</h5>
+                                <h5>Asset Selected: {asset.name}</h5>
                                 <>
                                   {!transaction && (
                                     <>
@@ -3677,11 +3365,11 @@ export default function Search(props) {
                                         labelText="First Name *"
                                         id="firstName"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          onChange: (event) => {
-                                            setFirst(event.target.value.trim());
+                                          onChange: event => {
+                                            setFirst(event.target.value.trim())
                                             if (event.target.value !== "") {
                                               setloginFirstState("success");
                                             } else {
@@ -3695,13 +3383,11 @@ export default function Search(props) {
                                         labelText="Middle Name"
                                         id="middleName"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          onChange: (event) => {
-                                            setMiddle(
-                                              event.target.value.trim()
-                                            );
+                                          onChange: event => {
+                                            setMiddle(event.target.value.trim())
                                           },
                                         }}
                                       />
@@ -3711,11 +3397,11 @@ export default function Search(props) {
                                         labelText="Last Name *"
                                         id="lastName"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          onChange: (event) => {
-                                            setLast(event.target.value.trim());
+                                          onChange: event => {
+                                            setLast(event.target.value.trim())
                                             if (event.target.value !== "") {
                                               setloginLastState("success");
                                             } else {
@@ -3731,11 +3417,11 @@ export default function Search(props) {
                                         labelText="ID Number *"
                                         id="idNumber"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          onChange: (event) => {
-                                            setID(event.target.value.trim());
+                                          onChange: event => {
+                                            setID(event.target.value.trim())
                                             if (event.target.value !== "") {
                                               setloginIDState("success");
                                             } else {
@@ -3746,35 +3432,29 @@ export default function Search(props) {
                                         }}
                                       />
                                       <CustomInput
-                                        success={
-                                          loginPasswordState === "success"
-                                        }
+                                        success={loginPasswordState === "success"}
                                         error={loginPasswordState === "error"}
                                         labelText="Password *"
                                         id="ownerpassword"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
                                           type: "password",
-                                          onChange: (event) => {
-                                            setPassword(
-                                              event.target.value.trim()
-                                            );
+                                          onChange: event => {
+                                            setPassword(event.target.value.trim())
                                             if (event.target.value !== "") {
                                               setloginPasswordState("success");
                                             } else {
                                               setloginPasswordState("error");
                                             }
-                                            setloginPassword(
-                                              event.target.value
-                                            );
+                                            setloginPassword(event.target.value);
                                           },
                                         }}
                                       />
                                       <div className={classes.formCategory}>
                                         <small>*</small> Required fields
-                                      </div>
+                    </div>
                                     </>
                                   )}
                                   {transaction && (
@@ -3783,51 +3463,51 @@ export default function Search(props) {
                                         labelText={first}
                                         id="first"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          disabled: true,
+                                          disabled: true
                                         }}
                                       />
                                       <CustomInput
                                         labelText={middle}
                                         id="middle"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          disabled: true,
+                                          disabled: true
                                         }}
                                       />
                                       <CustomInput
                                         labelText={last}
                                         id="last"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          disabled: true,
+                                          disabled: true
                                         }}
                                       />
                                       <CustomInput
                                         labelText={ID}
                                         id="ID"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
-                                          disabled: true,
+                                          disabled: true
                                         }}
                                       />
                                       <CustomInput
                                         labelText={password}
                                         id="ownerpassword"
                                         formControlProps={{
-                                          fullWidth: true,
+                                          fullWidth: true
                                         }}
                                         inputProps={{
                                           type: "password",
-                                          disabled: true,
+                                          disabled: true
                                         }}
                                       />
                                     </>
@@ -3835,31 +3515,16 @@ export default function Search(props) {
                                 </>
                                 {!transaction && (
                                   <>
-                                    {recycleCost > 0 ? (
-                                      <h4>
-                                        Cost to modify asset info: ü
-                                        {recycleCost}
-                                      </h4>
-                                    ) : (
-                                      <></>
-                                    )}
-                                    <Button
-                                      color="info"
-                                      className="MLBGradient"
-                                      onClick={(e) => recycleAsset()}
-                                    >
-                                      Recycle Asset
-                                    </Button>
+                                    {recycleCost > 0
+                                      ? <h4>Cost to modify asset info: ü{recycleCost}</h4>
+                                      : <></>
+                                    }
+                                    <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
                                   </>
                                 )}
                                 {transaction && (
                                   <h3>
-                                    Recycling Asset
-                                    <div className="lds-ellipsisIF">
-                                      <div></div>
-                                      <div></div>
-                                      <div></div>
-                                    </div>
+                                    Recycling Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                                   </h3>
                                 )}
                               </form>
@@ -3874,13 +3539,11 @@ export default function Search(props) {
                           <CardIcon className="headerIconBack">
                             <AccountBox />
                           </CardIcon>
-                          <h4 className={classes.cardIconTitle}>
-                            Verify Owner Info
-                          </h4>
+                          <h4 className={classes.cardIconTitle}>Verify Owner Info</h4>
                         </CardHeader>
                         <CardBody>
                           <form>
-                            <h5>Asset Selected: {ipfsObject.name}</h5>
+                            <h5>Asset Selected: {asset.name}</h5>
                             <>
                               {!transaction && (
                                 <>
@@ -3890,11 +3553,11 @@ export default function Search(props) {
                                     labelText="First Name *"
                                     id="firstName"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      onChange: (event) => {
-                                        setFirst(event.target.value.trim());
+                                      onChange: event => {
+                                        setFirst(event.target.value.trim())
                                         if (event.target.value !== "") {
                                           setloginFirstState("success");
                                         } else {
@@ -3908,11 +3571,11 @@ export default function Search(props) {
                                     labelText="Middle Name"
                                     id="middleName"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      onChange: (event) => {
-                                        setMiddle(event.target.value.trim());
+                                      onChange: event => {
+                                        setMiddle(event.target.value.trim())
                                       },
                                     }}
                                   />
@@ -3922,11 +3585,11 @@ export default function Search(props) {
                                     labelText="Last Name *"
                                     id="lastName"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      onChange: (event) => {
-                                        setLast(event.target.value.trim());
+                                      onChange: event => {
+                                        setLast(event.target.value.trim())
                                         if (event.target.value !== "") {
                                           setloginLastState("success");
                                         } else {
@@ -3942,11 +3605,11 @@ export default function Search(props) {
                                     labelText="ID Number *"
                                     id="idNumber"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      onChange: (event) => {
-                                        setID(event.target.value.trim());
+                                      onChange: event => {
+                                        setID(event.target.value.trim())
                                         if (event.target.value !== "") {
                                           setloginIDState("success");
                                         } else {
@@ -3962,12 +3625,12 @@ export default function Search(props) {
                                     labelText="Password *"
                                     id="ownerpassword"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
                                       type: "password",
-                                      onChange: (event) => {
-                                        setPassword(event.target.value.trim());
+                                      onChange: event => {
+                                        setPassword(event.target.value.trim())
                                         if (event.target.value !== "") {
                                           setloginPasswordState("success");
                                         } else {
@@ -3979,7 +3642,7 @@ export default function Search(props) {
                                   />
                                   <div className={classes.formCategory}>
                                     <small>*</small> Required fields
-                                  </div>
+                      </div>
                                 </>
                               )}
                               {transaction && (
@@ -3988,82 +3651,65 @@ export default function Search(props) {
                                     labelText={first}
                                     id="first"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      disabled: true,
+                                      disabled: true
                                     }}
                                   />
                                   <CustomInput
                                     labelText={middle}
                                     id="middle"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      disabled: true,
+                                      disabled: true
                                     }}
                                   />
                                   <CustomInput
                                     labelText={last}
                                     id="last"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      disabled: true,
+                                      disabled: true
                                     }}
                                   />
                                   <CustomInput
                                     labelText={ID}
                                     id="ID"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
-                                      disabled: true,
+                                      disabled: true
                                     }}
                                   />
                                   <CustomInput
                                     labelText={password}
                                     id="ownerpassword"
                                     formControlProps={{
-                                      fullWidth: true,
+                                      fullWidth: true
                                     }}
                                     inputProps={{
                                       type: "password",
-                                      disabled: true,
+                                      disabled: true
                                     }}
                                   />
                                 </>
                               )}
                             </>
                             {!transaction && props.addr && (
-                              <Button
-                                color="info"
-                                className="MLBGradient"
-                                onClick={(e) => blockchainVerifyAsset()}
-                              >
-                                Blockchain Verify Owner
-                              </Button>
+                              <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Owner</Button>
                             )}
                             {!transaction && (
-                              <Button
-                                color="info"
-                                className="MLBGradient"
-                                onClick={(e) => verifyAsset()}
-                              >
-                                Verify Owner
-                              </Button>
+                              <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Owner</Button>
                             )}
                             {transaction && (
                               <h3>
-                                Verifying Asset
-                                <div className="lds-ellipsisIF">
-                                  <div></div>
-                                  <div></div>
-                                  <div></div>
-                                </div>
+                                Verifying Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                               </h3>
                             )}
                           </form>
@@ -4082,8 +3728,8 @@ export default function Search(props) {
                         <Danger>
                           <Settings className="functionSelectorIcon" />
                         </Danger>
-                        Options
-                      </InputLabel>
+                    Options
+                        </InputLabel>
                       {renderOptions(asset.statusNum)}
                     </FormControl>
                   </div>
@@ -4094,13 +3740,11 @@ export default function Search(props) {
                       <CardIcon className="headerIconBack">
                         <AccountBox />
                       </CardIcon>
-                      <h4 className={classes.cardIconTitle}>
-                        Verify Owner Info
-                      </h4>
+                      <h4 className={classes.cardIconTitle}>Verify Owner Info</h4>
                     </CardHeader>
                     <CardBody>
                       <form>
-                        <h5>Asset Selected: {ipfsObject.name}</h5>
+                        <h5>Asset Selected: {asset.name}</h5>
                         <>
                           {!transaction && (
                             <>
@@ -4110,11 +3754,11 @@ export default function Search(props) {
                                 labelText="First Name *"
                                 id="firstName"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  onChange: (event) => {
-                                    setFirst(event.target.value.trim());
+                                  onChange: event => {
+                                    setFirst(event.target.value.trim())
                                     if (event.target.value !== "") {
                                       setloginFirstState("success");
                                     } else {
@@ -4128,11 +3772,11 @@ export default function Search(props) {
                                 labelText="Middle Name"
                                 id="middleName"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  onChange: (event) => {
-                                    setMiddle(event.target.value.trim());
+                                  onChange: event => {
+                                    setMiddle(event.target.value.trim())
                                   },
                                 }}
                               />
@@ -4142,11 +3786,11 @@ export default function Search(props) {
                                 labelText="Last Name *"
                                 id="lastName"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  onChange: (event) => {
-                                    setLast(event.target.value.trim());
+                                  onChange: event => {
+                                    setLast(event.target.value.trim())
                                     if (event.target.value !== "") {
                                       setloginLastState("success");
                                     } else {
@@ -4162,11 +3806,11 @@ export default function Search(props) {
                                 labelText="ID Number *"
                                 id="idNumber"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  onChange: (event) => {
-                                    setID(event.target.value.trim());
+                                  onChange: event => {
+                                    setID(event.target.value.trim())
                                     if (event.target.value !== "") {
                                       setloginIDState("success");
                                     } else {
@@ -4182,12 +3826,12 @@ export default function Search(props) {
                                 labelText="Password *"
                                 id="ownerpassword"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
                                   type: "password",
-                                  onChange: (event) => {
-                                    setPassword(event.target.value.trim());
+                                  onChange: event => {
+                                    setPassword(event.target.value.trim())
                                     if (event.target.value !== "") {
                                       setloginPasswordState("success");
                                     } else {
@@ -4199,7 +3843,7 @@ export default function Search(props) {
                               />
                               <div className={classes.formCategory}>
                                 <small>*</small> Required fields
-                              </div>
+                      </div>
                             </>
                           )}
                           {transaction && (
@@ -4208,82 +3852,65 @@ export default function Search(props) {
                                 labelText={first}
                                 id="first"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  disabled: true,
+                                  disabled: true
                                 }}
                               />
                               <CustomInput
                                 labelText={middle}
                                 id="middle"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  disabled: true,
+                                  disabled: true
                                 }}
                               />
                               <CustomInput
                                 labelText={last}
                                 id="last"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  disabled: true,
+                                  disabled: true
                                 }}
                               />
                               <CustomInput
                                 labelText={ID}
                                 id="ID"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
-                                  disabled: true,
+                                  disabled: true
                                 }}
                               />
                               <CustomInput
                                 labelText={password}
                                 id="ownerpassword"
                                 formControlProps={{
-                                  fullWidth: true,
+                                  fullWidth: true
                                 }}
                                 inputProps={{
                                   type: "password",
-                                  disabled: true,
+                                  disabled: true
                                 }}
                               />
                             </>
                           )}
                         </>
                         {!transaction && props.addr && (
-                          <Button
-                            color="info"
-                            className="MLBGradient"
-                            onClick={(e) => blockchainVerifyAsset()}
-                          >
-                            Blockchain Verify Owner
-                          </Button>
+                          <Button color="info" className="MLBGradient" onClick={(e) => blockchainVerifyAsset()}>Blockchain Verify Owner</Button>
                         )}
                         {!transaction && (
-                          <Button
-                            color="info"
-                            className="MLBGradient"
-                            onClick={(e) => verifyAsset()}
-                          >
-                            Verify Owner
-                          </Button>
+                          <Button color="info" className="MLBGradient" onClick={(e) => verifyAsset()}>Verify Owner</Button>
                         )}
                         {transaction && (
                           <h3>
-                            Verifying Asset
-                            <div className="lds-ellipsisIF">
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                            </div>
+                            Verifying Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
                           </h3>
                         )}
                       </form>
@@ -4295,32 +3922,20 @@ export default function Search(props) {
                 {!isMobile && (
                   <>
                     {!copyText && (
-                      <Tooltip title="Copy to Clipboard">
+                      <Tooltip
+                        title="Copy to Clipboard"
+                      >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
-                            className="IDText"
-                            onClick={() => {
-                              copyTextSnippet(asset.idxHash);
-                            }}
-                          >
-                            {asset.idxHash}
-                          </Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id}</Button>
                         </div>
                       </Tooltip>
                     )}
                     {copyText && (
-                      <Tooltip title="Copied to Clipboard">
+                      <Tooltip
+                        title="Copied to Clipboard"
+                      >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
-                            className="IDText"
-                            onClick={() => {
-                              copyTextSnippet(asset.idxHash);
-                            }}
-                          >
-                            {asset.idxHash}
-                          </Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4329,55 +3944,32 @@ export default function Search(props) {
                 {isMobile && !isAndroid && (
                   <>
                     {!copyText && (
-                      <Tooltip title="Copy to Clipboard">
+                      <Tooltip
+                        title="Copy to Clipboard"
+                      >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
-                            className="IDText"
-                            onClick={() => {
-                              copyTextSnippet(asset.idxHash);
-                            }}
-                          >
-                            {asset.idxHash.substring(0, 10) +
-                              "..." +
-                              asset.idxHash.substring(56, 66)}
-                          </Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id.substring(0, 10) + "..." + asset.id.substring(56, 66)}</Button>
                         </div>
                       </Tooltip>
                     )}
                     {copyText && (
-                      <Tooltip title="Copied to Clipboard">
+                      <Tooltip
+                        title="Copied to Clipboard"
+                      >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
-                            className="IDText"
-                            onClick={() => {
-                              copyTextSnippet(asset.idxHash);
-                            }}
-                          >
-                            {asset.idxHash.substring(0, 10) +
-                              "..." +
-                              asset.idxHash.substring(56, 66)}
-                          </Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id.substring(0, 10) + "..." + asset.id.substring(56, 66)}</Button>
                         </div>
                       </Tooltip>
                     )}
                   </>
                 )}
                 {isMobile && isAndroid && (
-                  <Tooltip title="Copy to Clipboard">
-                    <CopyToClipboard
-                      text={asset.idxHash}
-                      onCopy={() => {
-                        swal("Asset ID Copied to Clipboard!");
-                      }}
-                    >
-                      <span>
-                        Asset ID: &nbsp;{" "}
-                        {asset.idxHash.substring(0, 10) +
-                          "..." +
-                          asset.idxHash.substring(56, 66)}
-                      </span>
+                  <Tooltip
+                    title="Copy to Clipboard"
+                  >
+                    <CopyToClipboard text={asset.id}
+                      onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
+                      <span>Asset ID: &nbsp; {asset.id.substring(0, 10) + "..." + asset.id.substring(56, 66)}</span>
                     </CopyToClipboard>
                   </Tooltip>
                 )}
@@ -4390,41 +3982,37 @@ export default function Search(props) {
                       title: "Share Asset Link",
                     }}
                   >
-                    <Tooltip title="Share Asset URL">
+
+                    <Tooltip
+                      title="Share Asset URL"
+                    >
                       <Icon className="footerIcon">
                         <Share />
                       </Icon>
                     </Tooltip>
                   </RWebShare>
                   {!isMobile && (
-                    <Printer
-                      obj={{
-                        name: ipfsObject.name,
-                        idxHash: asset.idxHash,
-                        assetClassName: asset.assetClassName,
-                      }}
-                    />
+                    <Printer obj={{ name: asset.name, idxHash: asset.id, assetClassName: asset.assetClassName }} />
                   )}
-                  <Tooltip title="View QR">
+                  <Tooltip
+                    title="View QR"
+                  >
                     <Icon
                       className="footerIcon"
                       onClick={() => {
                         swalReact({
-                          content: (
-                            <QRCode
-                              value={assetURL}
-                              size="160"
-                              fgColor="#002a40"
-                              quietZone="2"
-                              ecLevel="M"
-                            />
-                          ),
-                          buttons: "close",
-                        });
-                      }}
-                    >
+                          content: <QRCode
+                            value={assetURL}
+                            size="160"
+                            fgColor="#002a40"
+                            quietZone="2"
+                            ecLevel="M"
+                          />,
+                          buttons: "close"
+                        })
+                      }}>
                       qr_code
-                    </Icon>
+                  </Icon>
                   </Tooltip>
                 </div>
               </CardFooter>
