@@ -34,7 +34,7 @@ export default function CardFooter(props) {
     [classes.cardFooterTestimonial]: testimonial,
     [classes.cardFooterStats]: stats,
     [classes.cardFooterChart]: chart || product,
-    [className]: className !== undefined
+    [className]: className !== undefined,
   });
   return (
     <div className={cardFooterClasses} {...rest}>
@@ -52,5 +52,5 @@ CardFooter.propTypes = {
   stats: PropTypes.bool,
   chart: PropTypes.bool,
   product: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.node,
 };

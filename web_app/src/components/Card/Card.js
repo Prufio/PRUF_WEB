@@ -44,7 +44,7 @@ export default function Card(props) {
     [classes.cardProduct]: product,
     [classes.cardChart]: chart,
     [classes.cardLogin]: login,
-    [className]: className !== undefined
+    [className]: className !== undefined,
   });
   return (
     <div className={cardClasses} {...rest}>
@@ -68,10 +68,10 @@ Card.propTypes = {
     "success",
     "warning",
     "danger",
-    "rose"
+    "rose",
   ]),
   product: PropTypes.bool,
   chart: PropTypes.bool,
   login: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.node,
 };

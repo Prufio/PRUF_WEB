@@ -10,21 +10,21 @@ const cardFooterStyle = {
     alignItems: "center",
     display: "flex",
     backgroundColor: "transparent",
-    border: "0"
+    border: "0",
   },
   cardFooterProfile: {
-    marginTop: "-15px"
+    marginTop: "-15px",
   },
   cardFooterPlain: {
     paddingLeft: "5px",
     paddingRight: "5px",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
   },
   cardFooterPricing: {
-    zIndex: "2"
+    zIndex: "2",
   },
   cardFooterTestimonial: {
-    display: "block"
+    display: "block",
   },
   cardFooterStats: {
     borderTop: "1px solid" + grayColor[8],
@@ -35,7 +35,7 @@ const cardFooterStyle = {
       marginRight: "3px",
       marginLeft: "3px",
       width: "16px",
-      height: "16px"
+      height: "16px",
     },
     "& .fab,& .fas,& .far,& .fal,& .material-icons": {
       position: "relative",
@@ -43,12 +43,12 @@ const cardFooterStyle = {
       marginRight: "3px",
       marginLeft: "3px",
       fontSize: "16px",
-      lineHeight: "16px"
-    }
+      lineHeight: "16px",
+    },
   },
   cardFooterChart: {
-    borderTop: "1px solid" + grayColor[8]
-  }
+    borderTop: "1px solid" + grayColor[8],
+  },
 };
 
 export default cardFooterStyle;

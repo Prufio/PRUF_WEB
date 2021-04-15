@@ -1,7 +1,6 @@
 import returnABIs from "./returnABIs";
 
 async function resolveContracts(_web3) {
-
   const abis = returnABIs();
 
   const ID_TKN_ABI = abis.ID_TKN;
@@ -59,8 +58,8 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         NP = new _web3.eth.Contract(NP_ABI, _result);
       }
-    }
-    ).then(async () => {
+    })
+    .then(async () => {
       await STOR.methods
         .resolveContractAddress("NP_NC")
         .call(function (_error, _result) {
@@ -70,8 +69,7 @@ async function resolveContracts(_web3) {
             //console.log(_result);
             NP_NC = new _web3.eth.Contract(NP_NC_ABI, _result);
           }
-        }
-        );
+        });
     });
 
   await STOR.methods
@@ -83,10 +81,9 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         APP = new _web3.eth.Contract(APP_ABI, _result);
       }
-    }
-    );
+    });
 
-    await STOR.methods
+  await STOR.methods
     .resolveContractAddress("PURCHASE")
     .call(function (_error, _result) {
       if (_error) {
@@ -95,10 +92,9 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         PURCHASE = new _web3.eth.Contract(PURCHASE_ABI, _result);
       }
-    }
-    );
+    });
 
-    await STOR.methods
+  await STOR.methods
     .resolveContractAddress("WRAP")
     .call(function (_error, _result) {
       if (_error) {
@@ -107,10 +103,9 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         WRAP = new _web3.eth.Contract(WRAP_ABI, _result);
       }
-    }
-    );
+    });
 
-    await STOR.methods
+  await STOR.methods
     .resolveContractAddress("DECORATE")
     .call(function (_error, _result) {
       if (_error) {
@@ -119,8 +114,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         DECORATE = new _web3.eth.Contract(DECORATE_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("APP_NC")
@@ -131,8 +125,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         APP_NC = new _web3.eth.Contract(APP_NC_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("AC_MGR")
@@ -143,8 +136,7 @@ async function resolveContracts(_web3) {
         //console.log(_result)
         AC_MGR = new _web3.eth.Contract(AC_MGR_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("AC_TKN")
@@ -155,8 +147,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         AC_TKN = new _web3.eth.Contract(AC_TKN_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("ECR")
@@ -167,8 +158,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         ECR = new _web3.eth.Contract(ECR_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("ECR_NC")
@@ -179,8 +169,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         ECR_NC = new _web3.eth.Contract(ECR_NC_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("ECR_MGR")
@@ -191,8 +180,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         ECR_MGR = new _web3.eth.Contract(ECR_MGR_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("A_TKN")
@@ -203,8 +191,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         A_TKN = new _web3.eth.Contract(A_TKN_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("RCLR")
@@ -215,8 +202,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         RCLR = new _web3.eth.Contract(RCLR_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("ID_TKN")
@@ -227,8 +213,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         ID_TKN = new _web3.eth.Contract(ID_TKN_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("UTIL_TKN")
@@ -239,8 +224,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         UTIL_TKN = new _web3.eth.Contract(UTIL_TKN_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("PIP")
@@ -251,8 +235,7 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         PIP = new _web3.eth.Contract(PIP_ABI, _result);
       }
-    }
-    );
+    });
 
   await STOR.methods
     .resolveContractAddress("VERIFY")
@@ -263,33 +246,32 @@ async function resolveContracts(_web3) {
         //console.log(_result);
         VERIFY = new _web3.eth.Contract(VERIFY_ABI, _result);
       }
-    }
-    );
+    });
 
-    window.contracts = {
-      STOR: STOR,
-      APP: APP,
-      NP: NP,
-      AC_MGR: AC_MGR,
-      AC_TKN: AC_TKN,
-      A_TKN: A_TKN,
-      ECR_MGR: ECR_MGR,
-      ECR: ECR,
-      VERIFY: VERIFY,
-      ECR_NC: ECR_NC,
-      APP_NC: APP_NC,
-      NP_NC: NP_NC,
-      RCLR: RCLR,
-      PIP: PIP,
-      ID_TKN: ID_TKN,
-      UTIL_TKN: UTIL_TKN,
-      PARTY: PARTY,
-      PURCHASE: PURCHASE,
-      WRAP: WRAP,
-      DECORATE: DECORATE
-    }
-    
-  return window.contracts
+  window.contracts = {
+    STOR: STOR,
+    APP: APP,
+    NP: NP,
+    AC_MGR: AC_MGR,
+    AC_TKN: AC_TKN,
+    A_TKN: A_TKN,
+    ECR_MGR: ECR_MGR,
+    ECR: ECR,
+    VERIFY: VERIFY,
+    ECR_NC: ECR_NC,
+    APP_NC: APP_NC,
+    NP_NC: NP_NC,
+    RCLR: RCLR,
+    PIP: PIP,
+    ID_TKN: ID_TKN,
+    UTIL_TKN: UTIL_TKN,
+    PARTY: PARTY,
+    PURCHASE: PURCHASE,
+    WRAP: WRAP,
+    DECORATE: DECORATE,
+  };
+
+  return window.contracts;
 }
 
 export default resolveContracts;

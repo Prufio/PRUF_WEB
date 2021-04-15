@@ -1,39 +1,38 @@
 import {
-  primaryColor,
   dangerColor,
   successColor,
   defaultFont,
   whiteColor,
-  grayColor
+  grayColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const customInputStyle = {
   disabled: {
     "&:before": {
-      borderColor: "transparent !important"
-    }
+      borderColor: "transparent !important",
+    },
   },
   underline: {
     "&:hover:not($disabled):before,&:before": {
       borderColor: grayColor[4] + "!important",
-      borderWidth: "1px !important"
+      borderWidth: "1px !important",
     },
     "&:after": {
-      borderColor: "#00a8ff"
+      borderColor: "#00a8ff",
     },
     "& + p": {
-      fontWeight: "300"
-    }
+      fontWeight: "300",
+    },
   },
   underlineError: {
     "&:after": {
-      borderColor: dangerColor[0]
-    }
+      borderColor: dangerColor[0],
+    },
   },
   underlineSuccess: {
     "&:after": {
-      borderColor: successColor[0]
-    }
+      borderColor: successColor[0],
+    },
   },
   labelRoot: {
     ...defaultFont,
@@ -44,14 +43,14 @@ const customInputStyle = {
     top: "10px",
     letterSpacing: "unset",
     "& + $underline": {
-      marginTop: "0px"
-    }
+      marginTop: "0px",
+    },
   },
   labelRootError: {
-    color: dangerColor[0] + " !important"
+    color: dangerColor[0] + " !important",
   },
   labelRootSuccess: {
-    color: successColor[0] + " !important"
+    color: successColor[0] + " !important",
   },
   formControl: {
     margin: "0 0 17px 0",
@@ -59,16 +58,16 @@ const customInputStyle = {
     position: "relative",
     verticalAlign: "unset",
     "& svg,& .fab,& .far,& .fal,& .fas,& .material-icons": {
-      color: grayColor[14]
-    }
+      color: grayColor[14],
+    },
   },
   whiteUnderline: {
     "&:hover:not($disabled):before,&:before": {
-      backgroundColor: whiteColor
+      backgroundColor: whiteColor,
     },
     "&:after": {
-      backgroundColor: whiteColor
-    }
+      backgroundColor: whiteColor,
+    },
   },
   input: {
     color: grayColor[14],
@@ -78,18 +77,18 @@ const customInputStyle = {
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       fontWeight: "400",
       lineHeight: "1.42857",
-      opacity: "1"
+      opacity: "1",
     },
     "&::placeholder": {
-      color: grayColor[3]
-    }
+      color: grayColor[3],
+    },
   },
   whiteInput: {
     "&,&::placeholder": {
       color: whiteColor,
-      opacity: "1"
-    }
-  }
+      opacity: "1",
+    },
+  },
 };
 
 export default customInputStyle;

@@ -19,13 +19,13 @@ import { cardTitle } from "assets/jss/material-dashboard-pro-react.js";
 const styles = {
   customCardContentClass: {
     paddingLeft: "0",
-    paddingRight: "0"
+    paddingRight: "0",
   },
   cardIconTitle: {
     ...cardTitle,
     marginTop: "15px",
-    marginBottom: "0px"
-  }
+    marginBottom: "0px",
+  },
 };
 
 const useStyles = makeStyles(styles);
@@ -52,7 +52,7 @@ export default function RegularTables() {
                 ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
                 ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
                 ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-                ["Mason Porter", "Chile", "Gloucester", "$78,615"]
+                ["Mason Porter", "Chile", "Gloucester", "$78,615"],
               ]}
               coloredColls={[3]}
               colorsColls={["primary"]}
@@ -84,16 +84,16 @@ export default function RegularTables() {
                   "Philip Chaney",
                   "$38,735",
                   "Korea, South",
-                  "Overland Park"
+                  "Overland Park",
                 ],
                 [
                   "5",
                   "Doris Greene",
                   "$63,542",
                   "Malawi",
-                  "Feldkirchen in Kärnten"
+                  "Feldkirchen in Kärnten",
                 ],
-                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
+                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"],
               ]}
             />
           </CardBody>
@@ -119,8 +119,8 @@ export default function RegularTables() {
                     "Dakota Rice (Success)",
                     "$36,738",
                     "Niger",
-                    "Oud-Turnhout"
-                  ]
+                    "Oud-Turnhout",
+                  ],
                 },
                 ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
                 {
@@ -130,15 +130,15 @@ export default function RegularTables() {
                     "Sage Rodriguez (Info)",
                     "$56,142",
                     "Netherlands",
-                    "Baileux"
-                  ]
+                    "Baileux",
+                  ],
                 },
                 [
                   "4",
                   "Philip Chaney",
                   "$38,735",
                   "Korea, South",
-                  "Overland Park"
+                  "Overland Park",
                 ],
                 {
                   color: "danger",
@@ -147,8 +147,8 @@ export default function RegularTables() {
                     "Doris Greene (Danger)",
                     "$63,542",
                     "Malawi",
-                    "Feldkirchen in Kärnten"
-                  ]
+                    "Feldkirchen in Kärnten",
+                  ],
                 },
                 ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"],
                 {
@@ -158,9 +158,9 @@ export default function RegularTables() {
                     "Mike Chaney (Warning)",
                     "$38,735",
                     "Romania",
-                    "Bucharest"
-                  ]
-                }
+                    "Bucharest",
+                  ],
+                },
               ]}
             />
           </CardBody>

@@ -1,6 +1,6 @@
 import {
   cardTitle,
-  grayColor
+  grayColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const userProfileStyles = {
@@ -11,19 +11,19 @@ const userProfileStyles = {
     marginBottom: "0px",
     "& small": {
       fontSize: "80%",
-      fontWeight: "400"
-    }
+      fontWeight: "400",
+    },
   },
   cardCategory: {
     marginTop: "10px",
     color: grayColor[0] + " !important",
-    textAlign: "center"
+    textAlign: "center",
   },
   description: {
-    color: grayColor[0]
+    color: grayColor[0],
   },
   updateProfileButton: {
-    float: "right"
-  }
+    float: "right",
+  },
 };
 export default userProfileStyles;

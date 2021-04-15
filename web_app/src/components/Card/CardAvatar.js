@@ -29,7 +29,7 @@ export default function CardAvatar(props) {
     [classes.cardAvatarPlain]: plain,
     [classes.cardAvatarTestimonial]: testimonial,
     [classes.cardAvatarTestimonialFooter]: testimonialFooter,
-    [className]: className !== undefined
+    [className]: className !== undefined,
   });
   return (
     <div className={cardAvatarClasses} {...rest}>
@@ -44,5 +44,5 @@ CardAvatar.propTypes = {
   profile: PropTypes.bool,
   plain: PropTypes.bool,
   testimonial: PropTypes.bool,
-  testimonialFooter: PropTypes.bool
+  testimonialFooter: PropTypes.bool,
 };

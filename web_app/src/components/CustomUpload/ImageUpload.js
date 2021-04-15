@@ -14,7 +14,7 @@ export default function ImageUpload(props) {
     props.avatar ? defaultAvatar : defaultImage
   );
   let fileInput = React.createRef();
-  const handleImageChange = e => {
+  const handleImageChange = (e) => {
     e.preventDefault();
     let reader = new FileReader();
     let file = e.target.files[0];
@@ -27,7 +27,7 @@ export default function ImageUpload(props) {
     }
   };
   // eslint-disable-next-line
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // file is the file/image uploaded
     // in this function you can save the image (file) on form submit
@@ -73,5 +73,5 @@ ImageUpload.propTypes = {
   avatar: PropTypes.bool,
   addButtonProps: PropTypes.object,
   changeButtonProps: PropTypes.object,
-  removeButtonProps: PropTypes.object
+  removeButtonProps: PropTypes.object,
 };

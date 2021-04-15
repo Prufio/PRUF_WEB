@@ -1,6 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -24,114 +24,134 @@ import { FlightLand } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Import(props) {
-
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
   const [assetClass, setAssetClass] = React.useState("");
-  const [simpleSelect, setSimpleSelect] = React.useState("");
+  // const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [selectedRootID, setSelectedRootID] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [classSelect, setClassSelect] = React.useState("");
 
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [showHelp, setShowHelp] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo, ] = React.useState(window.sentPacket)
+  const [assetInfo] = React.useState(window.sentPacket);
 
-  const link = document.createElement('div')
+  const link = document.createElement("div");
 
-  window.sentPacket = null
+  window.sentPacket = null;
 
   const classes = useStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
-    }
-    else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-  }, [])
+  }, []);
 
   if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...")
-    return window.location.href = "/#/user/home"
+    console.log("No asset found. Rerouting...");
+    return (window.location.href = "/#/user/home");
   }
 
   if (assetInfo.statusNum !== "70") {
     swal({
       title: "Asset not in correct status!",
-      text: "This asset is not in exported status, please export asset before attempting to import it.",
+      text:
+        "This asset is not in exported status, please export asset before attempting to import it.",
       icon: "warning",
       button: "Close",
-    }).then(()=>{
+    }).then(() => {
       window.backIndex = assetInfo.dBIndex;
       window.location.href = assetInfo.lastRef;
     });
   }
 
-  const ACLogin = event => {
+  const ACLogin = (event) => {
     setAssetClass(event.target.value);
   };
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;
-    window.location.href=assetInfo.lastRef;
-  }
+    window.location.href = assetInfo.lastRef;
+  };
 
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return;
 
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
-  }
+  //   let pruf, ether;
+
+  //   console.log("Refreshing ether bal");
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       ether = window.web3.utils.fromWei(result, "ether");
+  //     }
+  //     window.contracts.UTIL_TKN.methods
+  //       .balanceOf(props.addr)
+  //       .call((err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           pruf = window.web3.utils.fromWei(result, "ether");
+  //         }
+  //         window.contracts.A_TKN.methods
+  //           .balanceOf(props.addr)
+  //           .call((err, result) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               window.replaceAssetData = { assets: result, ether, pruf };
+  //             }
+  //           });
+  //       });
+  //   });
+  // };
 
   const thousandHashesOf = (varToHash) => {
-    if(!window.web3) return window.location.href = "/#/user/home"
+    if (!window.web3) return (window.location.href = "/#/user/home");
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
       //console.log(tempHash);
     }
     return tempHash;
-  }
+  };
 
   const generateSubCatList = (arr) => {
     let subCatSelection = [
       <MenuItem
+      key=""
         disabled
-
         classes={{
-          root: classes.selectMenuItem
+          root: classes.selectMenuItem,
         }}
       >
         Select Subclass
-      </MenuItem>
+      </MenuItem>,
     ];
     for (let i = 0; i < arr.length; i++) {
       subCatSelection.push(
         <MenuItem
           classes={{
             root: classes.selectMenuItem,
-            selected: classes.selectMenuItemSelected
+            selected: classes.selectMenuItemSelected,
           }}
           key={"key" + arr[i].name}
           value={String(arr[i].id)}
@@ -140,12 +160,14 @@ export default function Import(props) {
         </MenuItem>
       );
     }
-    console.log(arr)
-    return subCatSelection
-  }
+    console.log(arr);
+    return subCatSelection;
+  };
 
-  const importAsset = async () => { //import held asset
+  const importAsset = async () => {
+    //import held asset
 
+    // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     let tempTxHash;
@@ -157,19 +179,17 @@ export default function Import(props) {
     setTransactionActive(true);
 
     await window.contracts.APP_NC.methods
-      .$importAsset(
-        assetInfo.idxHash,
-        assetClass,
-      )
+      .$importAsset(assetInfo.idxHash, assetClass)
+      // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
           swal({
@@ -186,34 +206,37 @@ export default function Import(props) {
             button: "Close",
           });
         }
-        setAssetClass("")
+        setAssetClass("");
       })
       .on("receipt", (receipt) => {
         setTransactionActive(false);
         setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
         swal({
           title: "Import Successful!",
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
+        }).then(() => {
           //refreshBalances()
           let newAsset = JSON.parse(JSON.stringify(assetInfo));
-          newAsset.status = "Non-Transferable"
-          newAsset.statusNum = "58"
-          window.newStat = {num:"58", str:"Non-Transferable"}
+          newAsset.status = "Non-Transferable";
+          newAsset.statusNum = "58";
+          window.newStat = { num: "58", str: "Non-Transferable" };
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
-          window.replaceAssetData = {key: pageKey, dBIndex: assetInfo.dBIndex, newAsset: newAsset}
-        })
+          window.replaceAssetData = {
+            key: pageKey,
+            dBIndex: assetInfo.dBIndex,
+            newAsset: newAsset,
+          };
+        });
       });
-
-  }
+  };
 
   return (
     <>
@@ -223,63 +246,62 @@ export default function Import(props) {
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
-            <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+            <Button
+              color="info"
+              className="MLBGradient"
+              onClick={() => goBack()}
+            >
+              Go Back
+            </Button>
             <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
           </CardHeader>
           <CardBody>
             <form>
-            <FormControl
-                      fullWidth
-                      className={classes.selectFormControl}
+              <FormControl fullWidth className={classes.selectFormControl}>
+                {selectedRootID === "" ? (
+                  <>
+                    <InputLabel>Select Asset Subclass</InputLabel>
+                    <Select
+                      disabled
+                      MenuProps={{
+                        className: classes.selectMenu,
+                      }}
+                      classes={{
+                        select: classes.select,
+                      }}
+                      value={classSelect}
+                      onChange={() => {}}
+                      inputProps={{
+                        name: "classSelect",
+                        id: "class-select",
+                      }}
+                    ></Select>
+                  </>
+                ) : (
+                  <>
+                    <InputLabel>Select Asset Subclass</InputLabel>
+                    <Select
+                      MenuProps={{
+                        className: classes.selectMenu,
+                      }}
+                      classes={{
+                        select: classes.select,
+                      }}
+                      value={classSelect}
+                      onChange={(e) => {
+                        ACLogin(e);
+                      }}
+                      inputProps={{
+                        name: "classSelect",
+                        id: "class-select",
+                      }}
                     >
-                      {selectedRootID === ""
-                        ? <>
-                          <InputLabel
-                          >
-                            Select Asset Subclass
-                      </InputLabel>
-                          <Select
-                            disabled
-                            MenuProps={{
-                              className: classes.selectMenu
-                            }}
-                            classes={{
-                              select: classes.select
-                            }}
-                            value={classSelect}
-                            onChange={() => { }}
-                            inputProps={{
-                              name: "classSelect",
-                              id: "class-select"
-                            }}
-                          >
-                          </Select>
-                        </>
-                        :
-                        <>
-                          <InputLabel
-                          >
-                            Select Asset Subclass
-                      </InputLabel>
-                          <Select
-                            MenuProps={{
-                              className: classes.selectMenu
-                            }}
-                            classes={{
-                              select: classes.select
-                            }}
-                            value={classSelect}
-                            onChange={(e) => { ACLogin(e) }}
-                            inputProps={{
-                              name: "classSelect",
-                              id: "class-select"
-                            }}
-                          >
-                            {generateSubCatList(props.assetClassSets[assetInfo.root])}
-                          </Select>
-                        </>
-                      }
-                    </FormControl>
+                    {/* eslint-disable-next-line react/prop-types */}
+                      {generateSubCatList(props.assetClassSets[assetInfo.root])}
+                    </Select>
+                  </>
+                )}
+              </FormControl>
             </form>
           </CardBody>
           <br />
@@ -300,23 +322,38 @@ export default function Import(props) {
                   <h4>AssetClass Selected: {assetClass} </h4>
                   <h4>Asset Selected: {assetInfo.name}</h4>
                   <br />
-                  <h5>You are attempting to import {assetInfo.name} into asset class {assetClass}.</h5>
+                  <h5>
+                    You are attempting to import {assetInfo.name} into asset
+                    class {assetClass}.
+                  </h5>
                 </>
               )}
               {!transactionActive && (
                 <>
-                {assetInfo.opCost > 0
-                ?<h4 className="costsText">Cost: ü{assetInfo.opCost}</h4>
-                :<></>
-                }
-                <div className="MLBGradientSubmit">
-                  <Button color="info" className="MLBGradient" onClick={() => importAsset()}>Import Asset</Button>
-                </div>
+                  {assetInfo.opCost > 0 ? (
+                    <h4 className="costsText">Cost: ü{assetInfo.opCost}</h4>
+                  ) : (
+                    <></>
+                  )}
+                  <div className="MLBGradientSubmit">
+                    <Button
+                      color="info"
+                      className="MLBGradient"
+                      onClick={() => importAsset()}
+                    >
+                      Import Asset
+                    </Button>
+                  </div>
                 </>
               )}
               {transactionActive && (
                 <h3>
-                  Importing Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                  Importing Asset
+                  <div className="lds-ellipsisIF">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
                 </h3>
               )}
             </form>

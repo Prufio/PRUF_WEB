@@ -5,40 +5,40 @@ import {
   roseColor,
   whiteColor,
   grayColor,
-  hexToRgb
+  hexToRgb,
 } from "assets/jss/material-dashboard-pro-react.js";
 
-const pricingPageStyle = theme => ({
+const pricingPageStyle = (theme) => ({
   container: {
     ...container,
     zIndex: "4",
     [theme.breakpoints.down("sm")]: {
-      paddingBottom: "100px"
-    }
+      paddingBottom: "100px",
+    },
   },
   title: {
     ...defaultFont,
     color: whiteColor,
     marginTop: "5vh",
     marginBottom: "30px",
-    textAlign: "center"
+    textAlign: "center",
   },
   description: {
     fontSize: "18px",
     color: whiteColor,
-    textAlign: "center"
+    textAlign: "center",
   },
   cardTitleWhite: {
     ...cardTitle,
-    color: whiteColor + " !important"
+    color: whiteColor + " !important",
   },
   cardCategory: {
     color: grayColor[0],
-    marginTop: "10px"
+    marginTop: "10px",
   },
   cardCategoryWhite: {
     color: whiteColor,
-    marginTop: "10px"
+    marginTop: "10px",
   },
   icon: {
     color: "rgba(" + hexToRgb(whiteColor) + ", 0.76)",
@@ -50,22 +50,22 @@ const pricingPageStyle = theme => ({
     lineHeight: "174px",
     "& svg": {
       width: "55px",
-      height: "55px"
+      height: "55px",
     },
     "& .fab,& .fas,& .far,& .fal,& .material-icons": {
       width: "55px",
-      fontSize: "55px"
-    }
+      fontSize: "55px",
+    },
   },
   iconWhite: {
-    color: whiteColor
+    color: whiteColor,
   },
   iconRose: {
-    color: roseColor[0]
+    color: roseColor[0],
   },
   marginTop30: {
-    marginTop: "30px"
-  }
+    marginTop: "30px",
+  },
 });
 
 export default pricingPageStyle;

@@ -23,16 +23,16 @@ export default function Footer(props) {
   var container = cx({
     [classes.container]: !fluid,
     [classes.containerFluid]: fluid,
-    [classes.whiteColor]: white
+    [classes.whiteColor]: white,
   });
   var anchor =
     classes.a +
     cx({
-      [" " + classes.whiteColor]: white
+      [" " + classes.whiteColor]: white,
     });
   var block = cx({
     [classes.block]: true,
-    [classes.whiteColor]: white
+    [classes.whiteColor]: white,
   });
   return (
     <footer className={classes.footer}>
@@ -78,11 +78,7 @@ export default function Footer(props) {
         </div>
         <p className={classes.right}>
           &copy; {1900 + new Date().getYear()}{" "}
-          <a
-            href="https://pruf.io/"
-            className="lightBlue"
-            target="_blank"
-          >
+          <a href="https://pruf.io/" className="lightBlue" target="_blank">
             {rtlActive ? "توقيت الإبداعية" : "PRüF"}
           </a>
         </p>
@@ -94,5 +90,5 @@ export default function Footer(props) {
 Footer.propTypes = {
   fluid: PropTypes.bool,
   white: PropTypes.bool,
-  rtlActive: PropTypes.bool
+  rtlActive: PropTypes.bool,
 };

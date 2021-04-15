@@ -1,14 +1,14 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import { isMobile, isAndroid } from "react-device-detect";
-import swal from 'sweetalert';
-import base64 from 'base64-arraybuffer';
-import validator from 'validator'
+import swal from "sweetalert";
+import base64 from "base64-arraybuffer";
+import validator from "validator";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import Jdenticon from 'react-jdenticon';
+import Jdenticon from "react-jdenticon";
 
 // @material-ui/icons
 
@@ -19,7 +19,11 @@ import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
-import { AddPhotoAlternateOutlined, DeleteForever, Settings } from "@material-ui/icons";
+import {
+  AddPhotoAlternateOutlined,
+  DeleteForever,
+  Settings,
+} from "@material-ui/icons";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import placeholder from "../../assets/img/placeholder.jpg";
@@ -34,73 +38,112 @@ const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription(props) {
+  if (window.contracts === undefined || !window.sentPacket) {
+    window.location.href = "/#/user/home";
+    window.location.reload();
+  }
 
-  if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
-  
-  const [asset,] = React.useState(window.sentPacket);
-  const [assetInfo,] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
-  const [newAssetInfo, setNewAssetInfo] = React.useState(JSON.parse(JSON.stringify({ photoUrls: window.sentPacket.photoUrls || {}, photo: window.sentPacket.photo || {}, text: window.sentPacket.text || {}, name: window.sentPacket.name || "", urls: window.sentPacket.urls || {} })));
-  const [idxHash,] = React.useState(window.sentPacket.idxHash);
+  const [asset] = React.useState(window.sentPacket);
+  const [assetInfo] = React.useState(
+    JSON.parse(
+      JSON.stringify({
+        photoUrls: window.sentPacket.photoUrls || {},
+        photo: window.sentPacket.photo || {},
+        text: window.sentPacket.text || {},
+        name: window.sentPacket.name || "",
+        urls: window.sentPacket.urls || {},
+      })
+    )
+  );
+  const [newAssetInfo, setNewAssetInfo] = React.useState(
+    JSON.parse(
+      JSON.stringify({
+        photoUrls: window.sentPacket.photoUrls || {},
+        photo: window.sentPacket.photo || {},
+        text: window.sentPacket.text || {},
+        name: window.sentPacket.name || "",
+        urls: window.sentPacket.urls || {},
+      })
+    )
+  );
+  const [idxHash] = React.useState(window.sentPacket.idxHash);
 
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
   const [advancedInput, setAdvancedInput] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [showHelp, setShowHelp] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [help, setHelp] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
   const [hasMounted, setHasMounted] = React.useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
   // const [customJSON, setCustomJSON] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
   const [selectedKey, setSelectedKey] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
   const [assetURL, setAssetURL] = React.useState("");
   const [URLTitle, setURLTitle] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [loginURL, setloginURL] = React.useState("");
   const [loginURLState, setloginURLState] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [loginURLTitle, setloginURLTitle] = React.useState("");
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
   // const [downloadName, setDownloadName] = React.useState("");
   // const [downloadLink, setDownloadLink] = React.useState("");
-  const [copyText, setCopyText] = React.useState(false)
+  const [copyText, setCopyText] = React.useState(false);
 
   // const [additionalImages, setAdditionalImages] = React.useState([]);
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
-  const link = document.createElement('div');
-  const image = "photo", text = "text", url = "urls";
+  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
+  const link = document.createElement("div");
+  const image = "photo",
+  // eslint-disable-next-line no-unused-vars
+    text = "text",
+    url = "urls";
   const maxImageSize = 1000;
-  const resizeImg = require('resize-img');
+  const resizeImg = require("resize-img");
   // const fs = require('fs');
 
   const classes = useStyles();
   const formClasses = useFormStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
-    }
-    else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
     }
     if (!hasMounted && assetInfo !== undefined) {
-      if (asset.statusNum === "50" || asset.statusNum === "56" || asset.statusNum === "70") {
+      if (
+        asset.statusNum === "50" ||
+        asset.statusNum === "56" ||
+        asset.statusNum === "70"
+      ) {
         swal({
           title: "Asset not in correct status!",
-          text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
+          text:
+            "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
           icon: "warning",
           button: "Close",
-        }).then(()=>{
+        }).then(() => {
           window.backIndex = asset.dBIndex;
-          window.location.href = asset.lastRef
-        })
+          window.location.href = asset.lastRef;
+        });
       }
-      setSelectedImage(assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || "")
+      setSelectedImage(
+        assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || ""
+      );
       if (assetInfo.photo.DisplayImage) {
         setSelectedKey("DisplayImage");
       } else if (Object.values(assetInfo.photo)[0] !== undefined) {
@@ -109,14 +152,14 @@ export default function ModifyDescription(props) {
         setSelectedKey("");
       }
       window.sentPacket = {};
-      setHasMounted(true)
+      setHasMounted(true);
     }
-  },[])
+  }, []);
 
   if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...")
-    window.location.href = "/#/user/home"
-    window.location.reload()
+    console.log("No asset found. Rerouting...");
+    window.location.href = "/#/user/home";
+    window.location.reload();
   }
 
   let fileInput = React.createRef();
@@ -125,28 +168,27 @@ export default function ModifyDescription(props) {
   const handleClick = () => {
     fileInput.current.value = "";
     fileInput.current.click();
-  }
+  };
 
   const handleJSON = () => {
     fileInputJSON.current.value = "";
     fileInputJSON.current.click();
-  }
+  };
 
   const getRandomInt = () => {
     return Math.floor(Math.random() * Math.floor(99999));
-  }
+  };
 
   const generateNewKey = (obj) => {
-    let key = "PRAT_Image_" + String(Object.values(obj.photo).length + getRandomInt())
+    let key =
+      "PRAT_Image_" + String(Object.values(obj.photo).length + getRandomInt());
 
     if (obj.photo[key]) {
-      return generateNewKey(obj)
+      return generateNewKey(obj);
+    } else {
+      return key;
     }
-
-    else {
-      return key
-    }
-  }
+  };
 
   const removeElement = (type, rem) => {
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
@@ -157,114 +199,112 @@ export default function ModifyDescription(props) {
       //console.log(rem)
       //console.log(tempObj)
       if (rem === "DisplayImage" && Object.values(tempObj.photo)[0]) {
-        setSelectedImage(Object.values(tempObj.photo)[0])
-        setSelectedKey(Object.keys(tempObj.photo)[0])
-      }
-      else if (rem !== "DisplayImage" && tempObj.photo.DisplayImage) {
-        setSelectedImage(tempObj.photo.DisplayImage)
-        setSelectedKey("DisplayImage")
-      }
-      else if (rem !== "DisplayImage" && Object.values(tempObj.photo)[0]) {
-        setSelectedImage(Object.values(tempObj.photo)[0])
-        setSelectedKey(Object.keys(tempObj.photo)[0])
-      }
-      else {
-        setSelectedImage("")
-        setSelectedKey("")
+        setSelectedImage(Object.values(tempObj.photo)[0]);
+        setSelectedKey(Object.keys(tempObj.photo)[0]);
+      } else if (rem !== "DisplayImage" && tempObj.photo.DisplayImage) {
+        setSelectedImage(tempObj.photo.DisplayImage);
+        setSelectedKey("DisplayImage");
+      } else if (rem !== "DisplayImage" && Object.values(tempObj.photo)[0]) {
+        setSelectedImage(Object.values(tempObj.photo)[0]);
+        setSelectedKey(Object.keys(tempObj.photo)[0]);
+      } else {
+        setSelectedImage("");
+        setSelectedKey("");
       }
     }
     setNewAssetInfo(tempObj);
-    return forceUpdate()
-  }
+    return forceUpdate();
+  };
 
   const setDisplayImage = (img, key) => {
-    console.log("Deleting: ", key)
+    console.log("Deleting: ", key);
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
-    if (key === "DisplayImage") { return console.log("Nothing was done. Already set.") }
-    let newKey = generateNewKey(tempObj)
+    if (key === "DisplayImage") {
+      return console.log("Nothing was done. Already set.");
+    }
+    let newKey = generateNewKey(tempObj);
     if (tempObj.photo.DisplayImage) {
-      tempObj.photo[newKey] = tempObj.photo.DisplayImage
-      tempObj.photoUrls[newKey] = tempObj.photoUrls.DisplayImage
+      tempObj.photo[newKey] = tempObj.photo.DisplayImage;
+      tempObj.photoUrls[newKey] = tempObj.photoUrls.DisplayImage;
     }
     tempObj.photo.DisplayImage = img;
-    tempObj.photoUrls.DisplayImage = tempObj.photoUrls[key]
+    tempObj.photoUrls.DisplayImage = tempObj.photoUrls[key];
     delete tempObj.photo[key];
-    delete tempObj.photoUrls[key]
+    delete tempObj.photoUrls[key];
     //console.log(tempObj);
     setNewAssetInfo(tempObj);
     setSelectedImage(tempObj.photo.DisplayImage);
     setSelectedKey("DisplayImage");
-    return forceUpdate()
-  }
+    return forceUpdate();
+  };
 
-  const resetChanges = () => {
-    setNewAssetInfo(assetInfo)
-    return forceUpdate()
-  }
+  // const resetChanges = () => {
+  //   setNewAssetInfo(assetInfo);
+  //   return forceUpdate();
+  // };
 
   const submitChanges = async () => {
     if (JSON.stringify(newAssetInfo) === JSON.stringify(assetInfo)) {
-      return (
-        swal({
-          title: "New data matches old! No changes made.",
-          icon: "warning",
-          button: "Close",
-        })
-      )
+      return swal({
+        title: "New data matches old! No changes made.",
+        icon: "warning",
+        button: "Close",
+      });
     }
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
-    tempObj.photo = tempObj.photoUrls
+    tempObj.photo = tempObj.photoUrls;
     delete tempObj.photoUrls;
 
-    let payload = JSON.stringify(tempObj, null, 5)
-    let fileSize = Buffer.byteLength(payload, 'utf8')
+    let payload = JSON.stringify(tempObj, null, 5);
+    let fileSize = Buffer.byteLength(payload, "utf8");
 
     if (fileSize > 1000000) {
-      return (
-        swal({
-          title: "Document size exceeds 1 MB limit! (" + String(fileSize) + "Bytes)",
-          icon: "warning",
-          button: "Close",
-        })
-      )
+      return swal({
+        title:
+          "Document size exceeds 1 MB limit! (" + String(fileSize) + "Bytes)",
+        icon: "warning",
+        button: "Close",
+      });
     }
 
     setIpfsActive(true);
-    console.log("Submitting changes. Parsed Payload: ", tempObj)
+    console.log("Submitting changes. Parsed Payload: ", tempObj);
 
-    window.ipfs.add(payload).then((hash)=>{
+    window.ipfs.add(payload).then((hash) => {
       if (!hash) {
-        console.error("error sending to ipfs")
+        console.error("error sending to ipfs");
         return setIpfsActive(false);
-      }
-      else{
-        let url = `https://ipfs.io/ipfs/${hash.cid}`
-        console.log(`Url --> ${url}`)
-        let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid))
+      } else {
+        let url = `https://ipfs.io/ipfs/${hash.cid}`;
+        console.log(`Url --> ${url}`);
+        let b32Hash = window.utils.getBytes32FromIPFSHash(String(hash.cid));
         setIpfsActive(false);
         updateAssetInfo(b32Hash, tempObj);
-      } 
-    })
-  }
+      }
+    });
+  };
 
   const thousandHashesOf = (varToHash) => {
-    if(!window.web3) return window.location.href = "/#/user/home"
+    if (!window.web3) return (window.location.href = "/#/user/home");
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
       //console.log(tempHash);
     }
     return tempHash;
-  }
+  };
 
   const updateAssetInfo = async (hash, newAsset) => {
-    
-    setHelp(false)
-    if (!hash || !idxHash) { return }
+    setHelp(false);
+    if (!hash || !idxHash) {
+      return;
+    }
 
+      // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     console.log("idxHash", idxHash);
+    // eslint-disable-next-line react/prop-types
     console.log("addr: ", props.addr);
     let tempTxHash;
     setShowHelp(false);
@@ -275,15 +315,16 @@ export default function ModifyDescription(props) {
     setTransactionActive(true);
     await window.contracts.NP_NC.methods
       ._modIpfs1(idxHash, hash)
+      // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
           swal({
@@ -304,109 +345,146 @@ export default function ModifyDescription(props) {
       .on("receipt", (receipt) => {
         setTransactionActive(false);
         setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
         swal({
           title: "Information Successfully Updated!",
           content: link,
           icon: "success",
           button: "Close",
-        }).then(()=>{
+        }).then(() => {
           //refreshBalances()
-          window.newDescObj = JSON.parse(JSON.stringify(newAssetInfo))
+          window.newDescObj = JSON.parse(JSON.stringify(newAssetInfo));
           window.backIndex = asset.dBIndex;
           window.location.href = asset.lastRef;
-          window.replaceAssetData = {key: pageKey, dBIndex: asset.dBIndex, newAsset: newAsset}
-        })
+          window.replaceAssetData = {
+            key: pageKey,
+            dBIndex: asset.dBIndex,
+            newAsset: newAsset,
+          };
+        });
       });
-  }
+  };
 
   const urlKeyIsGood = (e) => {
     if (newAssetInfo.urls) {
       if (newAssetInfo.urls[e] || e === "") {
-        return false
+        return false;
       }
     }
-    return true
-  }
+    return true;
+  };
 
   const submitCurrentUrl = () => {
-    let url = assetURL, key = URLTitle, tempObj = JSON.parse(JSON.stringify(newAssetInfo));
+    let url = assetURL,
+      key = URLTitle,
+      tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     if ((url === "" && key !== "") || (url !== "" && key === "")) {
       if (url === "") {
-        return setloginURLState("error")
+        return setloginURLState("error");
       }
       if (key === "") {
-        return setloginURLTitleState("error")
+        return setloginURLTitleState("error");
       }
     }
-    if (!tempObj.urls) { tempObj.urls = {} }
+    if (!tempObj.urls) {
+      tempObj.urls = {};
+    }
     if (!url.includes("http")) {
-      url = "http://" + url
+      url = "http://" + url;
     }
     tempObj.urls[key] = url;
-    console.log(tempObj)
+    console.log(tempObj);
     setNewAssetInfo(tempObj);
-    setAssetURL("")
-    setURLTitle("")
-    setloginURLState("")
-    setloginURLTitleState("")
-    return forceUpdate()
-  }
+    setAssetURL("");
+    setURLTitle("");
+    setloginURLState("");
+    setloginURLTitleState("");
+    return forceUpdate();
+  };
 
   const handleName = (e) => {
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     tempObj.name = e;
     setNewAssetInfo(tempObj);
-  }
-
+  };
 
   const handleDescription = (e) => {
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     tempObj.text.Description = e;
     setNewAssetInfo(tempObj);
-  }
+  };
 
   const renderImage = (mobile) => {
     //console.log("AI", assetInfo)
     //console.log("NAI", newAssetInfo)
     if (!mobile) {
-      if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
+      if (
+        newAssetInfo.photo.DisplayImage !== undefined ||
+        Object.values(newAssetInfo.photo).length > 0
+      ) {
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
-
-            <Button color="info" justIcon className="back" onClick={() => { settings() }}>
+            <Button
+              color="info"
+              justIcon
+              className="back"
+              onClick={() => {
+                settings();
+              }}
+            >
               <Settings />
             </Button>
             <img src={selectedImage} alt="..." />
           </CardHeader>
-        )
-      } else if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+        );
+      } else if (
+        newAssetInfo.photo.DisplayImage === undefined &&
+        Object.values(newAssetInfo.photo).length === 0
+      ) {
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
-            <Button color="info" justIcon className="back" onClick={() => { settings() }}>
+            <Button
+              color="info"
+              justIcon
+              className="back"
+              onClick={() => {
+                settings();
+              }}
+            >
               <Settings />
             </Button>
             <Jdenticon value={asset.idxHash} />
           </CardHeader>
-        )
+        );
       }
-    }
-    else if (mobile) {
-      if (newAssetInfo.photo.DisplayImage !== undefined || Object.values(newAssetInfo.photo).length > 0) {
+    } else if (mobile) {
+      if (
+        newAssetInfo.photo.DisplayImage !== undefined ||
+        Object.values(newAssetInfo.photo).length > 0
+      ) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
-
-            <Button color="info" justIcon className="back" onClick={() => { settings() }}>
+            <Button
+              color="info"
+              justIcon
+              className="back"
+              onClick={() => {
+                settings();
+              }}
+            >
               <Settings />
             </Button>
             <img src={selectedImage} alt="..." />
           </CardHeader>
-        )
-      } else if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
+        );
+      } else if (
+        newAssetInfo.photo.DisplayImage === undefined &&
+        Object.values(newAssetInfo.photo).length === 0
+      ) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
             {/* <Tooltip
@@ -418,10 +496,10 @@ export default function ModifyDescription(props) {
             </Tooltip> */}
             {asset.identicon}
           </CardHeader>
-        )
+        );
       }
     }
-  }
+  };
 
   const addImage = async (prefix, buffer, fileName, iteration) => {
     if (!buffer) return;
@@ -433,13 +511,12 @@ export default function ModifyDescription(props) {
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     if (tempObj.photo[fileName]) {
       //console.log("Already exists, adding copy")
-      let tempFN = fileName
-      tempFN += "_(" + iteration + ")"
+      let tempFN = fileName;
+      tempFN += "_(" + iteration + ")";
       if (tempObj.photo[tempFN]) {
-        return addImage(buffer, fileName, iteration + 1)
-      }
-      else {
-        fileName = tempFN
+        return addImage(buffer, fileName, iteration + 1);
+      } else {
+        fileName = tempFN;
       }
     }
 
@@ -455,113 +532,116 @@ export default function ModifyDescription(props) {
           ar = i.height / i.width;
           newW = maxImageSize;
           newH = ar * newW;
-        }
-        else {
+        } else {
           ar = i.width / i.height;
           newH = maxImageSize;
           newW = ar * newH;
         }
         console.log("Resizing image... ");
-        resizeImg(tempBuffer, { height: newH, width: newW, format: "jpg" }).then((e) => {
+        resizeImg(tempBuffer, {
+          height: newH,
+          width: newW,
+          format: "jpg",
+        }).then((e) => {
           console.log("Resized to ", newH, "x", newW);
           tempObj.photo[fileName] = prefix + base64.encode(e);
 
-          window.ipfs.add(prefix + base64.encode(e)).then((hash)=>{
+          window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
             if (!hash) {
               //console.error(err)
               return setIsUploading(false);
-            }
-            else{
-              let url = `https://ipfs.io/ipfs/${hash.cid}`
-              console.log(`Url --> ${url}`)
+            } else {
+              let url = `https://ipfs.io/ipfs/${hash.cid}`;
+              console.log(`Url --> ${url}`);
               tempObj.photoUrls[fileName] = url;
               setNewAssetInfo(tempObj);
               if (selectedImage === "") {
-                setSelectedImage(tempObj.photo[fileName])
-                setSelectedKey(fileName)
+                setSelectedImage(tempObj.photo[fileName]);
+                setSelectedKey(fileName);
               }
-              setIsUploading(false)
+              setIsUploading(false);
               return forceUpdate();
-            } 
-          })
-        })
-      }
-
-      else {
-        resizeImg(tempBuffer, { height: i.height, width: i.width, format: "jpg" }).then((e) => {
+            }
+          });
+        });
+      } else {
+        resizeImg(tempBuffer, {
+          height: i.height,
+          width: i.width,
+          format: "jpg",
+        }).then((e) => {
           console.log("Converted to .JPG");
           tempObj.photo[fileName] = prefix + base64.encode(e);
 
-          window.ipfs.add(prefix + base64.encode(e)).then((hash)=>{
+          window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
             if (!hash) {
               //console.error(err)
               return setIsUploading(false);
-            }
-            else{
-              let url = `https://ipfs.io/ipfs/${hash.cid}`
-              console.log(`Url --> ${url}`)
+            } else {
+              let url = `https://ipfs.io/ipfs/${hash.cid}`;
+              console.log(`Url --> ${url}`);
               tempObj.photoUrls[fileName] = url;
               setNewAssetInfo(tempObj);
               if (selectedImage === "") {
-                setSelectedImage(tempObj.photo[fileName])
-                setSelectedKey(fileName)
+                setSelectedImage(tempObj.photo[fileName]);
+                setSelectedKey(fileName);
               }
-              setIsUploading(false)
+              setIsUploading(false);
               return forceUpdate();
-            } 
-          })
-        })
-      };
-    }
+            }
+          });
+        });
+      }
+    };
 
-    i.src = prefix + base64.encode(tempBuffer)
-
-  }
+    i.src = prefix + base64.encode(tempBuffer);
+  };
 
   const uploadImage = (e) => {
-    e.preventDefault()
-    if (!e.target.files[0]) return
+    e.preventDefault();
+    if (!e.target.files[0]) return;
     let file;
     //console.log(e.target.files[0]);
-    file = e.target.files[0]
+    file = e.target.files[0];
     const reader = new FileReader();
-    reader.onloadend = (e) => {
+    reader.onloadend = () => {
       if (!file.type.includes("image")) {
         //setIsUploading(false)
         return swal({
           title: "Unsupported File Type",
-          button: "Close"
-        })
+          button: "Close",
+        });
       }
-      setIsUploading(true)
+      setIsUploading(true);
       const fileType = file.type;
       const fileName = file.name;
       const prefix = `data:${fileType};base64,`;
       const buf = Buffer(reader.result);
       //const base64buf = prefix + base64.encode(buf);
-      addImage(prefix, buf, fileName)
-    }
+      addImage(prefix, buf, fileName);
+    };
     //const photo = document.getElementById("photo");
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
-  }
+  };
 
   const copyTextSnippet = (temp) => {
-    navigator.clipboard.writeText(temp)
+    navigator.clipboard.writeText(temp);
     if (isMobile && !isAndroid) {
-      swal("Asset ID Copied to Clipboard!")
+      swal("Asset ID Copied to Clipboard!");
+    } else if (!isMobile) {
+      setCopyText(true);
+      setTimeout(() => {
+        setCopyText(false);
+      }, 1000);
     }
-    else if (!isMobile) {
-      setCopyText(true)
-      setTimeout(() => { setCopyText(false) }, 1000);
-    }
-  }
+  };
 
   const useCustomJSON = (e) => {
-    if (!e.target.files[0]) return
+    if (!e.target.files[0]) return;
     let newObj;
     const reader = new FileReader();
-    reader.onloadend = (e) => {
-      const str = reader.result
+    reader.onloadend = () => {
+      const str = reader.result;
       try {
         newObj = JSON.parse(str);
       } catch (file) {
@@ -572,271 +652,371 @@ export default function ModifyDescription(props) {
         newObj.photoUrls = newAssetInfo.photoUrls;
         console.log(newObj);
         if (newObj.name && newObj.text && newObj.photo && newObj.urls) {
-          console.log("Setting new JSON config into state")
+          console.log("Setting new JSON config into state");
           setNewAssetInfo(newObj);
           forceUpdate();
-        }
-
-        else {
-          return console.log("Does not contain the requisite keys")
+        } else {
+          return console.log("Does not contain the requisite keys");
         }
         // forceUpdate()
         // return e.target.value = null;
       }
-    }
+    };
     //const photo = document.getElementById("photo");
     reader.readAsText(e.target.files[0]); // Read Provided File
-
-  }
+  };
 
   const createBackupJSON = () => {
     let filename;
     if (newAssetInfo.name !== "") {
-      filename = newAssetInfo.name.replace(/ /g, "_") + '_Backup.json';
+      filename = newAssetInfo.name.replace(/ /g, "_") + "_Backup.json";
     } else {
-      filename = 'unnamed_asset_backup.json';
+      filename = "unnamed_asset_backup.json";
     }
 
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
     tempObj.photo = tempObj.photoUrls;
     delete tempObj.photoUrls;
 
-    const data = new Blob([JSON.stringify(tempObj, null, 5)], { type: 'application/json' })
+    const data = new Blob([JSON.stringify(tempObj, null, 5)], {
+      type: "application/json",
+    });
     const fileURL = URL.createObjectURL(data);
-    const anchorTag = document.createElement('a');
-    anchorTag.href = fileURL; anchorTag.target = '_blank'; anchorTag.className = 'imageInput';
+    const anchorTag = document.createElement("a");
+    anchorTag.href = fileURL;
+    anchorTag.target = "_blank";
+    anchorTag.className = "imageInput";
     anchorTag.download = filename;
     document.body.appendChild(anchorTag);
     anchorTag.click();
     document.body.removeChild(anchorTag);
-  }
+  };
 
   const settings = () => {
     swal("What would you like to do with this image?", {
       buttons: {
         delete: {
           text: "Delete",
-          value: "delete"
+          value: "delete",
         },
         profile: {
           text: "Set Default",
-          value: "default"
+          value: "default",
         },
         back: {
           text: "Cancel",
-          value: "back"
-        }
+          value: "back",
+        },
       },
-    })
-      .then((value) => {
-        let imgStat;
-        switch (value) {
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          if (
+            newAssetInfo.photo.DisplayImage === undefined &&
+            Object.values(newAssetInfo.photo).length === 0
+          ) {
+            return swal("Cannot delete asset identicon.");
+          }
+          swal("Are you sure you want to delete this image?", {
+            buttons: {
+              yes: {
+                text: "Delete",
+                value: "yes",
+              },
+              no: {
+                text: "Cancel",
+                value: "no",
+              },
+            },
+          }).then((value) => {
+            switch (value) {
+              case "yes":
+                removeElement(image, selectedKey);
+                swal("Image Deleted!");
+                break;
 
-          case "delete":
-            if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
-              return swal("Cannot delete asset identicon.")
+              case "no":
+                swal("Image not Deleted");
+                break;
+
+              default:
+                return;
             }
-            swal("Are you sure you want to delete this image?", {
-              buttons: {
-                yes: {
-                  text: "Delete",
-                  value: "yes"
-                },
-                no: {
-                  text: "Cancel",
-                  value: "no"
-                }
-              }
-            })
-              .then((value) => {
-                switch (value) {
-                  case "yes":
-                    removeElement(image, selectedKey)
-                    swal("Image Deleted!")
-                    break;
+          });
+          break;
 
-                  case "no":
-                    swal("Image not Deleted")
-                    break;
+        case "default":
+          if (
+            newAssetInfo.photo.DisplayImage === undefined &&
+            Object.values(newAssetInfo.photo).length === 0
+          ) {
+            return swal("Cannot set asset identicon as default image.");
+          }
+          setDisplayImage(selectedImage, selectedKey);
+          swal("Default image set!");
+          break;
 
-                  default:
-                    return;
-                }
-              })
-            break;
+        case "back":
+          break;
 
-          case "default":
-            if (newAssetInfo.photo.DisplayImage === undefined && Object.values(newAssetInfo.photo).length === 0) {
-              return swal("Cannot set asset identicon as default image.")
-            }
-            setDisplayImage(selectedImage, selectedKey)
-            swal("Default image set!");
-            break;
-
-          case "back":
-            break;
-
-          default:
-            return;
-        }
-      });
-  }
+        default:
+          return;
+      }
+    });
+  };
 
   const deleteURL = (key) => {
     swal("Delete this URL?", {
       buttons: {
         delete: {
           text: "delete",
-          value: "delete"
+          value: "delete",
         },
         back: {
           text: "Cancel",
-          value: "back"
-        }
+          value: "back",
+        },
       },
-    })
-      .then((value) => {
-        switch (value) {
+    }).then((value) => {
+      switch (value) {
+        case "delete":
+          swal("Are you sure you want to delete this URL?", {
+            buttons: {
+              yes: {
+                text: "Delete",
+                value: "yes",
+              },
+              no: {
+                text: "No",
+                value: "no",
+              },
+            },
+          }).then((value) => {
+            switch (value) {
+              case "yes":
+                removeElement(url, key);
+                break;
 
-          case "delete":
-            swal("Are you sure you want to delete this URL?", {
-              buttons: {
-                yes: {
-                  text: "Delete",
-                  value: "yes"
-                },
-                no: {
-                  text: "No",
-                  value: "no"
-                }
-              }
-            })
-              .then((value) => {
-                switch (value) {
-                  case "yes":
-                    removeElement(url, key)
-                    break;
+              case "no":
+                break;
 
-                  case "no":
-                    break;
+              default:
+                return;
+            }
+          });
+          break;
 
-                  default:
-                    return;
-                }
-              })
-            break;
+        case "back":
+          break;
 
-          case "back":
-            break;
-
-          default:
-            return;
-        }
-      });
-  }
+        default:
+          return;
+      }
+    });
+  };
 
   const generateUrls = (obj) => {
-    if (!obj.urls) { return }
-    else if (Object.values(obj.urls).length === 0) { return }
-    let urls = Object.values(obj.urls), keys = Object.keys(obj.urls), component = [<div key="UrlHeader"><h4 className="bold_h4"> Attatched Links</h4><hr className="bold_hr" /></div>];
+    if (!obj.urls) {
+      return;
+    } else if (Object.values(obj.urls).length === 0) {
+      return;
+    }
+    let urls = Object.values(obj.urls),
+      keys = Object.keys(obj.urls),
+      component = [
+        <div key="UrlHeader">
+          <h4 className="bold_h4"> Attatched Links</h4>
+          <hr className="bold_hr" />
+        </div>,
+      ];
     for (let i = 0; i < urls.length; i++) {
       component.push(
         <div className="inlineDelete" key={"url" + i}>
-          <div className="deleteURL" onClick={() => { deleteURL(keys[i]) }}>
+          <div
+            className="deleteURL"
+            onClick={() => {
+              deleteURL(keys[i]);
+            }}
+          >
             <Danger>
               <DeleteForever />
             </Danger>
           </div>
-          <h4 className={classes.cardTitle}> {keys[i]}: <a href={urls[i]} rel="noopener noreferrer" target='_blank'>{urls[i]}</a></h4>
+          <h4 className={classes.cardTitle}>
+            {" "}
+            {keys[i]}:{" "}
+            <a href={urls[i]} rel="noopener noreferrer" target="_blank">
+              {urls[i]}
+            </a>
+          </h4>
           <hr />
         </div>
-      )
+      );
     }
-    return component
-  }
+    return component;
+  };
 
-  const refreshBalances = async () => {
-    if(!window.web3.eth) return
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return;
 
-    let pruf, ether;
-    
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) } 
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = {assets: result, ether, pruf} }
-        });
-      });
-    });
-  }
+  //   let pruf, ether;
+
+  //   console.log("Refreshing ether bal");
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       ether = window.web3.utils.fromWei(result, "ether");
+  //     }
+  //     window.contracts.UTIL_TKN.methods
+  //       .balanceOf(props.addr)
+  //       .call((err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           pruf = window.web3.utils.fromWei(result, "ether");
+  //         }
+  //         window.contracts.A_TKN.methods
+  //           .balanceOf(props.addr)
+  //           .call((err, result) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               window.replaceAssetData = { assets: result, ether, pruf };
+  //             }
+  //           });
+  //       });
+  //   });
+  // };
 
   const generateThumbs = (obj) => {
     //console.log(obj);
-    let component = [], photos = Object.values(obj.photo), keys = Object.keys(obj.photo);
+    let component = [],
+      photos = Object.values(obj.photo),
+      keys = Object.keys(obj.photo);
     //console.log("photos", photos)
 
     if (photos.length === 0 && !isUploading) {
       return (
         <div className="assetImageSelectorButton">
-          <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
+          <img
+            title="View Image"
+            src={placeholder}
+            className="imageSelectorImage"
+            alt=""
+          />
         </div>
-      )
+      );
     }
     if (photos.length === 0 && isUploading) {
       return (
         <>
           <div className="assetImageSelectorButton">
-            <div className="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <div className="lds-default">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
         </>
-      )
+      );
     }
     for (let i = 0; i < photos.length; i++) {
       component.push(
-        <div key={"thumb" + String(i)} value={keys[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i], keys[i]) }}>
-          <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
+        <div
+          key={"thumb" + String(i)}
+          value={keys[i]}
+          className="assetImageSelectorButton"
+          onClick={() => {
+            showImage(photos[i], keys[i]);
+          }}
+        >
+          <img
+            title="View Image"
+            src={photos[i]}
+            className="imageSelectorImage"
+            alt=""
+          />
         </div>
-      )
+      );
     }
     if (isUploading === true) {
-      component.push (
+      component.push(
         <div className="assetImageSelectorButton">
-          <div className="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div className="lds-default">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
-      )
+      );
     }
-    return component
-  }
+    return component;
+  };
 
   const goBack = () => {
     window.backIndex = asset.dBIndex;
     window.location.href = asset.lastRef;
-  }
+  };
 
   const showImage = (img, key) => {
-    setSelectedImage(img)
-    setSelectedKey(key)
-  }
+    setSelectedImage(img);
+    setSelectedKey(key);
+  };
 
   return (
     <div>
-      <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+      <Button color="info" className="MLBGradient" onClick={() => goBack()}>
+        Go Back
+      </Button>
       <Card>
         {renderImage(isMobile)}
         <CardBody>
           <div className="imageSelector">
-            <input type="file" onChange={uploadImage} ref={fileInput} className="imageInput" />
-            <input type="file" onChange={useCustomJSON} ref={fileInputJSON} className="imageInput" />
+            <input
+              type="file"
+              onChange={uploadImage}
+              ref={fileInput}
+              className="imageInput"
+            />
+            <input
+              type="file"
+              onChange={useCustomJSON}
+              ref={fileInputJSON}
+              className="imageInput"
+            />
             {!isUploading && (
-            <div className="imageSelectorPlus" onClick={(e) => { handleClick() }}><AddPhotoAlternateOutlined /></div>
+              <div
+                className="imageSelectorPlus"
+                onClick={() => {
+                  handleClick();
+                }}
+              >
+                <AddPhotoAlternateOutlined />
+              </div>
             )}
             {isUploading && (
-            <div className="imageSelectorPlus"><AddPhotoAlternateOutlined /></div>
+              <div className="imageSelectorPlus">
+                <AddPhotoAlternateOutlined />
+              </div>
             )}
             {generateThumbs(newAssetInfo)}
           </div>
@@ -844,7 +1024,9 @@ export default function ModifyDescription(props) {
           {!transactionActive && (
             <>
               <TextField
-                onChange={(e) => { handleName(e.target.value) }}
+                onChange={(e) => {
+                  handleName(e.target.value);
+                }}
                 id="outlined-full-width"
                 label="Name"
                 defaultValue={newAssetInfo.name}
@@ -856,7 +1038,9 @@ export default function ModifyDescription(props) {
                 variant="outlined"
               />
               <TextField
-                onChange={(e) => { handleDescription(e.target.value) }}
+                onChange={(e) => {
+                  handleDescription(e.target.value);
+                }}
                 id="outlined-multiline-static"
                 label="Description:"
                 multiline
@@ -905,13 +1089,13 @@ export default function ModifyDescription(props) {
                     icon={<Check className={formClasses.uncheckedIcon} />}
                     classes={{
                       checked: formClasses.checked,
-                      root: formClasses.checkRoot
+                      root: formClasses.checkRoot,
                     }}
                   />
                 }
                 classes={{
                   label: formClasses.label,
-                  root: formClasses.labelRoot
+                  root: formClasses.labelRoot,
                 }}
                 label="Advanced Options"
               />
@@ -921,7 +1105,8 @@ export default function ModifyDescription(props) {
             <div>
               <div>
                 {generateUrls(newAssetInfo)}
-                <h4 className="bold_h4"> New Link </h4><hr className="bold_hr" />
+                <h4 className="bold_h4"> New Link </h4>
+                <hr className="bold_hr" />
                 <CustomInput
                   success={loginURLTitleState === "success"}
                   error={loginURLTitleState === "error"}
@@ -929,8 +1114,8 @@ export default function ModifyDescription(props) {
                   id="urlKey"
                   inputProps={{
                     value: URLTitle,
-                    onChange: e => {
-                      setURLTitle(e.target.value.trim())
+                    onChange: (e) => {
+                      setURLTitle(e.target.value.trim());
                       if (urlKeyIsGood(e.target.value)) {
                         setloginURLTitleState("success");
                       } else {
@@ -945,7 +1130,7 @@ export default function ModifyDescription(props) {
                   success={loginURLState === "success"}
                   error={loginURLState === "error"}
                   onChange={(e) => {
-                    setAssetURL(e.target.value.trim())
+                    setAssetURL(e.target.value.trim());
                     if (validator.isURL(e.target.value)) {
                       setloginURLState("success");
                     } else {
@@ -964,45 +1149,87 @@ export default function ModifyDescription(props) {
                   }}
                   variant="outlined"
                 />
-                <Button onClick={() => { submitCurrentUrl() }} color="info" className="advancedJSONButton">Add Link</Button>
+                <Button
+                  onClick={() => {
+                    submitCurrentUrl();
+                  }}
+                  color="info"
+                  className="advancedJSONButton"
+                >
+                  Add Link
+                </Button>
               </div>
               <br />
-              <h4 className="bold_h4"> Advanced JSON Options </h4><hr className="bold_hr" />
-              <div className="URL">
-              </div>
+              <h4 className="bold_h4"> Advanced JSON Options </h4>
+              <hr className="bold_hr" />
+              <div className="URL"></div>
               {!isMobile && (
                 <>
-                  <Button onClick={(e) => { handleJSON() }} className="advancedJSONButton">Upload Custom IPFS Data</Button>
+                  <Button
+                    onClick={() => {
+                      handleJSON();
+                    }}
+                    className="advancedJSONButton"
+                  >
+                    Upload Custom IPFS Data
+                  </Button>
                   <br />
-                  <Button onClick={() => createBackupJSON()} color="info" className="advancedJSONButton">Download Asset IPFS Data</Button>
+                  <Button
+                    onClick={() => createBackupJSON()}
+                    color="info"
+                    className="advancedJSONButton"
+                  >
+                    Download Asset IPFS Data
+                  </Button>
                 </>
               )}
             </div>
           )}
-          {!transactionActive && !isUploading &&(
+          {!transactionActive && !isUploading && (
             <div className="MLBGradientSubmit">
               <hr className="medium_hr" />
-              <Button onClick={() => { submitChanges() }} color="info" className="MLBGradient">Submit Changes</Button>
+              <Button
+                onClick={() => {
+                  submitChanges();
+                }}
+                color="info"
+                className="MLBGradient"
+              >
+                Submit Changes
+              </Button>
             </div>
           )}
-          {asset.opCost > 0
-          ?<h4 className="costsText">Cost: ü{asset.opCost}</h4>
-          :<></>
-          }
-          {!transactionActive && isUploading &&(
+          {asset.opCost > 0 ? (
+            <h4 className="costsText">Cost: ü{asset.opCost}</h4>
+          ) : (
+            <></>
+          )}
+          {!transactionActive && isUploading && (
             <div className="MLBGradientSubmit">
               <hr className="medium_hr" />
-              <Button disabled color="info" className="MLBGradient">Submit Changes</Button>
+              <Button disabled color="info" className="MLBGradient">
+                Submit Changes
+              </Button>
             </div>
           )}
           {!transactionActive && ipfsActive && (
             <h3>
-              Uploading Extended Data<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Uploading Extended Data
+              <div className="lds-ellipsisIF">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </h3>
           )}
           {!ipfsActive && transactionActive && (
             <h3>
-              Updating Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Updating Asset
+              <div className="lds-ellipsisIF">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </h3>
           )}
         </CardBody>
@@ -1010,20 +1237,32 @@ export default function ModifyDescription(props) {
           {!isMobile && (
             <>
               {!copyText && (
-                <Tooltip
-                  title="Copy to Clipboard"
-                >
+                <Tooltip title="Copy to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</Button>
+                    Asset ID: &nbsp;{" "}
+                    <Button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(idxHash);
+                      }}
+                    >
+                      {idxHash}
+                    </Button>
                   </div>
                 </Tooltip>
               )}
               {copyText && (
-                <Tooltip
-                  title="Copied to Clipboard"
-                >
+                <Tooltip title="Copied to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash}</Button>
+                    Asset ID: &nbsp;{" "}
+                    <Button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(idxHash);
+                      }}
+                    >
+                      {idxHash}
+                    </Button>
                   </div>
                 </Tooltip>
               )}
@@ -1032,34 +1271,57 @@ export default function ModifyDescription(props) {
           {isMobile && !isAndroid && (
             <>
               {!copyText && (
-                <Tooltip
-                  title="Copy to Clipboard"
-                >
+                <Tooltip title="Copy to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 10) + "..." + idxHash.substring(56, 66)}</Button>
+                    Asset ID: &nbsp;{" "}
+                    <Button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(idxHash);
+                      }}
+                    >
+                      {idxHash.substring(0, 10) +
+                        "..." +
+                        idxHash.substring(56, 66)}
+                    </Button>
                   </div>
                 </Tooltip>
               )}
               {copyText && (
-                <Tooltip
-                  title="Copied to Clipboard"
-                >
+                <Tooltip title="Copied to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(idxHash) }}>{idxHash.substring(0, 10) + "..." + idxHash.substring(56, 66)}</Button>
+                    Asset ID: &nbsp;{" "}
+                    <Button
+                      className="IDText"
+                      onClick={() => {
+                        copyTextSnippet(idxHash);
+                      }}
+                    >
+                      {idxHash.substring(0, 10) +
+                        "..." +
+                        idxHash.substring(56, 66)}
+                    </Button>
                   </div>
                 </Tooltip>
               )}
             </>
           )}
           {isMobile && isAndroid && (
-            <Tooltip
-            title="Copy to Clipboard"
-          >
-            <CopyToClipboard text={asset.idxHash}
-              onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
-              <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 14) + "..." + asset.idxHash.substring(52, 66)}</span>
-            </CopyToClipboard>
-          </Tooltip>
+            <Tooltip title="Copy to Clipboard">
+              <CopyToClipboard
+                text={asset.idxHash}
+                onCopy={() => {
+                  swal("Asset ID Copied to Clipboard!");
+                }}
+              >
+                <span>
+                  Asset ID: &nbsp;{" "}
+                  {asset.idxHash.substring(0, 14) +
+                    "..." +
+                    asset.idxHash.substring(52, 66)}
+                </span>
+              </CopyToClipboard>
+            </Tooltip>
           )}
         </CardFooter>
       </Card>

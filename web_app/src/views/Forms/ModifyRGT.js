@@ -1,6 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -18,14 +18,17 @@ import { GroupAdd } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function ModifyRGT(props) {
-
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [showHelp, setShowHelp] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
   const [first, setFirst] = React.useState("");
@@ -44,33 +47,39 @@ export default function ModifyRGT(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
-  const [assetInfo,] = React.useState(window.sentPacket)
+  const [assetInfo] = React.useState(window.sentPacket);
 
-  const link = document.createElement('div')
+  const link = document.createElement("div");
 
-  window.sentPacket = null
+  window.sentPacket = null;
 
   const classes = useStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
     if (assetInfo === undefined || assetInfo === null) {
-      console.log("No asset found. Rerouting...")
-      window.location.href = "/#/user/home"
-      window.location.reload()
+      console.log("No asset found. Rerouting...");
+      window.location.href = "/#/user/home";
+      window.location.reload();
     }
-    if (assetInfo.statusNum === "50" || assetInfo.statusNum === "56" || assetInfo.statusNum === "70") {
+    if (
+      assetInfo.statusNum === "50" ||
+      assetInfo.statusNum === "56" ||
+      assetInfo.statusNum === "70"
+    ) {
       swal({
         title: "Asset not in correct status!",
-        text: "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
+        text:
+          "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
         icon: "warning",
         button: "Close",
       }).then(() => {
@@ -90,37 +99,55 @@ export default function ModifyRGT(props) {
         window.location.href = assetInfo.lastRef;
       });
     } */
-
-  }, [])
+  }, []);
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;
     window.location.href = assetInfo.lastRef;
-  }
+  };
 
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return;
 
-    let pruf, ether;
+  //   let pruf, ether;
 
-    console.log("Refreshing ether bal")
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) { console.log(err) }
-      else { ether = window.web3.utils.fromWei(result, 'ether') }
-      window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-        if (err) { console.log(err) }
-        else { pruf = window.web3.utils.fromWei(result, 'ether') }
-        window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-          if (err) { console.log(err) }
-          else { window.replaceAssetData = { assets: result, ether, pruf } }
-        });
-      });
-    });
-  }
+  //   console.log("Refreshing ether bal");
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       ether = window.web3.utils.fromWei(result, "ether");
+  //     }
+  //     window.contracts.UTIL_TKN.methods
+  //       .balanceOf(props.addr)
+  //       .call((err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           pruf = window.web3.utils.fromWei(result, "ether");
+  //         }
+  //         window.contracts.A_TKN.methods
+  //           .balanceOf(props.addr)
+  //           .call((err, result) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               window.replaceAssetData = { assets: result, ether, pruf };
+  //             }
+  //           });
+  //       });
+  //   });
+  // };
 
-  const modifyRGT = async () => { //import held asset
+  const modifyRGT = async () => {
+    //import held asset
 
-    if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
+    if (
+      loginFirst === "" ||
+      loginLast === "" ||
+      loginID === "" ||
+      loginPassword === ""
+    ) {
       if (loginFirst === "") {
         setloginFirstState("error");
       }
@@ -139,12 +166,12 @@ export default function ModifyRGT(props) {
     var rgtHashRaw;
 
     rgtHashRaw = window.web3.utils.soliditySha3(
-      String(first).replace(/\s/g, ''),
-      String(middle).replace(/\s/g, ''),
-      String(last).replace(/\s/g, ''),
-      String(ID).replace(/\s/g, ''),
-      String(password).replace(/\s/g, ''),
-    )
+      String(first).replace(/\s/g, ""),
+      String(middle).replace(/\s/g, ""),
+      String(last).replace(/\s/g, ""),
+      String(ID).replace(/\s/g, ""),
+      String(password).replace(/\s/g, "")
+    );
 
     var rgtHash = window.web3.utils.soliditySha3(assetInfo.idxHash, rgtHashRaw);
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
@@ -158,19 +185,17 @@ export default function ModifyRGT(props) {
     setTransactionActive(true);
 
     await window.contracts.NP_NC.methods
-      ._changeRgt(
-        assetInfo.idxHash,
-        rgtHash,
-      )
+      ._changeRgt(assetInfo.idxHash, rgtHash)
+      // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
         setTxStatus(false);
         setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = Object.values(_error)[0].transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setError(Object.values(_error)[0]);
         if (tempTxHash !== undefined) {
           swal({
@@ -191,10 +216,10 @@ export default function ModifyRGT(props) {
       .on("receipt", (receipt) => {
         setTransactionActive(false);
         setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-        let str2 = "' target='_blank'>here</a>"
-        link.innerHTML = String(str1 + tempTxHash + str2)
+        tempTxHash = receipt.transactionHash;
+        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+        let str2 = "' target='_blank'>here</a>";
+        link.innerHTML = String(str1 + tempTxHash + str2);
         setTxHash(receipt.transactionHash);
         swal({
           title: "Owner Change Successful!",
@@ -205,10 +230,9 @@ export default function ModifyRGT(props) {
           //refreshBalances()
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
-        })
+        });
       });
-
-  }
+  };
 
   return (
     <Card>
@@ -216,14 +240,14 @@ export default function ModifyRGT(props) {
         <CardIcon className="headerIconBack">
           <GroupAdd />
         </CardIcon>
-        <Button color="info" className="MLBGradient" onClick={() => goBack()}>Go Back</Button>
+        <Button color="info" className="MLBGradient" onClick={() => goBack()}>
+          Go Back
+        </Button>
         <h4 className={classes.cardIconTitle}>Change Owner Information</h4>
       </CardHeader>
       <CardBody>
         <form>
-          {assetInfo && (
-            <h4>Asset Selected: {assetInfo.name}</h4>
-          )}
+          {assetInfo && <h4>Asset Selected: {assetInfo.name}</h4>}
           <>
             {!transactionActive && (
               <>
@@ -233,11 +257,11 @@ export default function ModifyRGT(props) {
                   labelText="First Name *"
                   id="firstName"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    onChange: event => {
-                      setFirst(event.target.value.trim())
+                    onChange: (event) => {
+                      setFirst(event.target.value.trim());
                       if (event.target.value !== "") {
                         setloginFirstState("success");
                       } else {
@@ -251,11 +275,11 @@ export default function ModifyRGT(props) {
                   labelText="Middle Name"
                   id="middleName"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    onChange: event => {
-                      setMiddle(event.target.value.trim())
+                    onChange: (event) => {
+                      setMiddle(event.target.value.trim());
                     },
                   }}
                 />
@@ -265,11 +289,11 @@ export default function ModifyRGT(props) {
                   labelText="Last Name *"
                   id="lastName"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    onChange: event => {
-                      setLast(event.target.value.trim())
+                    onChange: (event) => {
+                      setLast(event.target.value.trim());
                       if (event.target.value !== "") {
                         setloginLastState("success");
                       } else {
@@ -285,11 +309,11 @@ export default function ModifyRGT(props) {
                   labelText="ID Number *"
                   id="idNumber"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    onChange: event => {
-                      setID(event.target.value.trim())
+                    onChange: (event) => {
+                      setID(event.target.value.trim());
                       if (event.target.value !== "") {
                         setloginIDState("success");
                       } else {
@@ -305,12 +329,12 @@ export default function ModifyRGT(props) {
                   labelText="Password *"
                   id="ownerpassword"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
                     type: "password",
-                    onChange: event => {
-                      setPassword(event.target.value.trim())
+                    onChange: (event) => {
+                      setPassword(event.target.value.trim());
                       if (event.target.value !== "") {
                         setloginPasswordState("success");
                       } else {
@@ -322,7 +346,7 @@ export default function ModifyRGT(props) {
                 />
                 <div className={classes.formCategory}>
                   <small>*</small> Required fields
-                    </div>
+                </div>
               </>
             )}
             {transactionActive && (
@@ -331,51 +355,51 @@ export default function ModifyRGT(props) {
                   labelText={first}
                   id="first"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    disabled: true
+                    disabled: true,
                   }}
                 />
                 <CustomInput
                   labelText={middle}
                   id="middle"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    disabled: true
+                    disabled: true,
                   }}
                 />
                 <CustomInput
                   labelText={last}
                   id="last"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    disabled: true
+                    disabled: true,
                   }}
                 />
                 <CustomInput
                   labelText={ID}
                   id="ID"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
-                    disabled: true
+                    disabled: true,
                   }}
                 />
                 <CustomInput
                   labelText={password}
                   id="ownerpassword"
                   formControlProps={{
-                    fullWidth: true
+                    fullWidth: true,
                   }}
                   inputProps={{
                     type: "password",
-                    disabled: true
+                    disabled: true,
                   }}
                 />
               </>
@@ -383,19 +407,30 @@ export default function ModifyRGT(props) {
           </>
           {!transactionActive && (
             <>
-
-              {assetInfo.opCost > 0
-                ? <h4 className="costsText">Cost: ü{assetInfo.opCost}</h4>
-                : <></>
-              }
+              {assetInfo.opCost > 0 ? (
+                <h4 className="costsText">Cost: ü{assetInfo.opCost}</h4>
+              ) : (
+                <></>
+              )}
               <div className="MLBGradientSubmit">
-                <Button color="info" className="MLBGradient" onClick={() => modifyRGT()}>Submit New Owner Information</Button>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => modifyRGT()}
+                >
+                  Submit New Owner Information
+                </Button>
               </div>
             </>
           )}
           {transactionActive && (
             <h3>
-              Changing Owner Information<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+              Changing Owner Information
+              <div className="lds-ellipsisIF">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </h3>
           )}
         </form>

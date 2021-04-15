@@ -8,7 +8,7 @@ import {
   whiteColor,
   blackColor,
   grayColor,
-  hexToRgb
+  hexToRgb,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const wizardStyle = {
@@ -23,20 +23,20 @@ const wizardStyle = {
     color: "rgba(" + hexToRgb(blackColor) + ", 0.87)",
     background: whiteColor,
     transition: "all 300ms linear",
-    minHeight: "410px"
+    minHeight: "410px",
   },
   wizardHeader: {
     textAlign: "center",
-    padding: "25px 0 35px"
+    padding: "25px 0 35px",
   },
   title: {
-    margin: "0"
+    margin: "0",
   },
   subtitle: {
-    margin: "5px 0 0"
+    margin: "5px 0 0",
   },
   wizardNavigation: {
-    position: "relative"
+    position: "relative",
   },
   nav: {
     marginTop: "20px",
@@ -46,11 +46,11 @@ const wizardStyle = {
     backgroundColor: "rgba(" + hexToRgb(grayColor[17]) + ", 0.2)",
     "&:after,&:before": {
       display: "table",
-      content: '" "'
+      content: '" "',
     },
     "&:after": {
-      boxSizing: "border-box"
-    }
+      boxSizing: "border-box",
+    },
   },
   steps: {
     marginLeft: "0",
@@ -58,7 +58,7 @@ const wizardStyle = {
     // float: "left",
     // display: "block",
     position: "relative",
-    display: "inline-block"
+    display: "inline-block",
   },
   stepsAnchor: {
     cursor: "pointer",
@@ -75,18 +75,18 @@ const wizardStyle = {
     fontWeight: "500",
     minWidth: "100px",
     textAlign: "center",
-    color: grayColor[6] + " !important"
+    color: grayColor[6] + " !important",
   },
   content: {
     marginTop: "20px",
     minHeight: "340px",
-    padding: "20px 15px"
+    padding: "20px 15px",
   },
   stepContent: {
-    display: "none"
+    display: "none",
   },
   stepContentActive: {
-    display: "block"
+    display: "block",
   },
   movingTab: {
     position: "absolute",
@@ -100,7 +100,7 @@ const wizardStyle = {
     borderRadius: "4px",
     color: whiteColor,
     cursor: "pointer",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   primary: {
     backgroundColor: primaryColor[0],
@@ -109,7 +109,7 @@ const wizardStyle = {
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(primaryColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   warning: {
     backgroundColor: warningColor[0],
@@ -118,7 +118,7 @@ const wizardStyle = {
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(warningColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   danger: {
     backgroundColor: dangerColor[0],
@@ -127,7 +127,7 @@ const wizardStyle = {
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(dangerColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   success: {
     backgroundColor: successColor[0],
@@ -136,7 +136,7 @@ const wizardStyle = {
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(successColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   info: {
     backgroundColor: infoColor[0],
@@ -145,7 +145,7 @@ const wizardStyle = {
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(infoColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   rose: {
     backgroundColor: roseColor[0],
@@ -154,24 +154,24 @@ const wizardStyle = {
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(roseColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   footer: {
-    padding: "0 15px"
+    padding: "0 15px",
   },
   left: {
-    float: "left!important"
+    float: "left!important",
   },
   right: {
-    float: "right!important"
+    float: "right!important",
   },
   clearfix: {
     "&:after,&:before": {
       display: "table",
-      content: '" "'
+      content: '" "',
     },
-    clear: "both"
-  }
+    clear: "both",
+  },
 };
 
 export default wizardStyle;

@@ -33,7 +33,7 @@ const useStyles = makeStyles(styles);
 
 export default function ExtendedTables() {
   const [checked, setChecked] = React.useState([]);
-  const handleToggle = value => {
+  const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -48,7 +48,7 @@ export default function ExtendedTables() {
   const fillButtons = [
     { color: "info", icon: Person },
     { color: "success", icon: Edit },
-    { color: "danger", icon: Close }
+    { color: "danger", icon: Close },
   ].map((prop, key) => {
     return (
       <Button color={prop.color} className={classes.actionButton} key={key}>
@@ -59,7 +59,7 @@ export default function ExtendedTables() {
   const simpleButtons = [
     { color: "info", icon: Person },
     { color: "success", icon: Edit },
-    { color: "danger", icon: Close }
+    { color: "danger", icon: Close },
   ].map((prop, key) => {
     return (
       <Button
@@ -75,7 +75,7 @@ export default function ExtendedTables() {
   const roundButtons = [
     { color: "info", icon: Person },
     { color: "success", icon: Edit },
-    { color: "danger", icon: Close }
+    { color: "danger", icon: Close },
   ].map((prop, key) => {
     return (
       <Button
@@ -106,7 +106,7 @@ export default function ExtendedTables() {
                 "Job Position",
                 "Since",
                 "Salary",
-                "Actions"
+                "Actions",
               ]}
               tableData={[
                 [
@@ -115,7 +115,7 @@ export default function ExtendedTables() {
                   "Develop",
                   "2013",
                   "€ 99,225",
-                  fillButtons
+                  fillButtons,
                 ],
                 ["2", "John Doe", "Design", "2012", "€ 89,241", roundButtons],
                 ["3", "Alex Mike", "Design", "2010", "€ 92,144", simpleButtons],
@@ -125,7 +125,7 @@ export default function ExtendedTables() {
                   "Marketing",
                   "2013",
                   "€ 49,990",
-                  roundButtons
+                  roundButtons,
                 ],
                 [
                   "5",
@@ -133,15 +133,15 @@ export default function ExtendedTables() {
                   "Communication",
                   "2015",
                   "€ 69,201",
-                  fillButtons
-                ]
+                  fillButtons,
+                ],
               ]}
               customCellClasses={[classes.center, classes.right, classes.right]}
               customClassesForCells={[0, 4, 5]}
               customHeadCellClasses={[
                 classes.center,
                 classes.right,
-                classes.right
+                classes.right,
               ]}
               customHeadClassesForCells={[0, 4, 5]}
             />
@@ -166,7 +166,7 @@ export default function ExtendedTables() {
                 "Type",
                 "Qty",
                 "Price",
-                "Amount"
+                "Amount",
               ]}
               tableData={[
                 [
@@ -180,14 +180,14 @@ export default function ExtendedTables() {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />,
                   "Moleskine Agenda",
                   "Office",
                   "25",
                   "€ 49",
-                  "€ 1,225"
+                  "€ 1,225",
                 ],
                 [
                   "2",
@@ -200,14 +200,14 @@ export default function ExtendedTables() {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />,
                   "Stabilo Pen",
                   "Office",
                   "30",
                   "€ 10",
-                  "€ 300"
+                  "€ 300",
                 ],
                 [
                   "3",
@@ -220,14 +220,14 @@ export default function ExtendedTables() {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />,
                   "A4 Paper Pack",
                   "Office",
                   "50",
                   "€ 10.99",
-                  "€ 109"
+                  "€ 109",
                 ],
                 [
                   "4",
@@ -240,14 +240,14 @@ export default function ExtendedTables() {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />,
                   "Apple iPad",
                   "Communication",
                   "10",
                   "€ 499.00",
-                  "€ 4,990"
+                  "€ 4,990",
                 ],
                 [
                   "5",
@@ -260,23 +260,23 @@ export default function ExtendedTables() {
                     icon={<Check className={classes.uncheckedIcon} />}
                     classes={{
                       checked: classes.checked,
-                      root: classes.checkRoot
+                      root: classes.checkRoot,
                     }}
                   />,
                   "Apple iPhone",
                   "Communication",
                   "10",
                   "€ 599.00",
-                  "€ 5,999"
+                  "€ 5,999",
                 ],
-                { total: true, colspan: "5", amount: "€12,999" }
+                { total: true, colspan: "5", amount: "€12,999" },
               ]}
               customCellClasses={[classes.center, classes.right, classes.right]}
               customClassesForCells={[0, 5, 6]}
               customHeadCellClasses={[
                 classes.center,
                 classes.right,
-                classes.right
+                classes.right,
               ]}
               customHeadClassesForCells={[0, 5, 6]}
             />
@@ -301,7 +301,7 @@ export default function ExtendedTables() {
                 "PRICE",
                 "QTY",
                 "AMOUNT",
-                ""
+                "",
               ]}
               tableData={[
                 [
@@ -348,7 +348,7 @@ export default function ExtendedTables() {
                   </span>,
                   <Button simple className={classes.actionButton} key="key">
                     <Close className={classes.icon} />
-                  </Button>
+                  </Button>,
                 ],
                 [
                   <div className={classes.imgContainer} key="key">
@@ -392,7 +392,7 @@ export default function ExtendedTables() {
                   </span>,
                   <Button simple className={classes.actionButton} key="key">
                     <Close className={classes.icon} />
-                  </Button>
+                  </Button>,
                 ],
                 [
                   <div className={classes.imgContainer} key="key">
@@ -436,7 +436,7 @@ export default function ExtendedTables() {
                   </span>,
                   <Button simple className={classes.actionButton} key="key">
                     <Close className={classes.icon} />
-                  </Button>
+                  </Button>,
                 ],
                 {
                   total: true,
@@ -445,7 +445,7 @@ export default function ExtendedTables() {
                     <span key="key">
                       <small>€</small>2,346
                     </span>
-                  )
+                  ),
                 },
                 {
                   purchase: true,
@@ -457,9 +457,9 @@ export default function ExtendedTables() {
                         Complete Purchase{" "}
                         <KeyboardArrowRight className={classes.icon} />
                       </Button>
-                    )
-                  }
-                }
+                    ),
+                  },
+                },
               ]}
               tableShopping
               customHeadCellClasses={[
@@ -468,7 +468,7 @@ export default function ExtendedTables() {
                 classes.description,
                 classes.right,
                 classes.right,
-                classes.right
+                classes.right,
               ]}
               customHeadClassesForCells={[0, 2, 3, 4, 5, 6]}
               customCellClasses={[
@@ -477,7 +477,7 @@ export default function ExtendedTables() {
                 classes.customFont,
                 classes.tdNumber,
                 classes.tdNumber + " " + classes.tdNumberAndButtonGroup,
-                classes.tdNumber
+                classes.tdNumber,
               ]}
               customClassesForCells={[1, 2, 3, 4, 5, 6]}
             />

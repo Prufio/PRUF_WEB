@@ -22,16 +22,16 @@ export default function NavPills(props) {
   const [active, setActive] = React.useState(props.active);
   const handleChange = (event, active) => {
     setActive(active);
-    console.log(active)
+    console.log(active);
   };
-  const handleChangeIndex = index => {
+  const handleChangeIndex = (index) => {
     setActive(index);
   };
   const classes = useStyles();
   const { tabs, direction, color, horizontal, alignCenter } = props;
   const flexContainerClasses = classNames({
     [classes.flexContainer]: true,
-    [classes.horizontalDisplay]: horizontal !== undefined
+    [classes.horizontalDisplay]: horizontal !== undefined,
   });
   const tabButtons = (
     <Tabs
@@ -39,7 +39,7 @@ export default function NavPills(props) {
         root: classes.root,
         fixed: classes.fixed,
         flexContainer: flexContainerClasses,
-        indicator: classes.displayNone
+        indicator: classes.displayNone,
       }}
       value={active}
       onChange={handleChange}
@@ -53,7 +53,7 @@ export default function NavPills(props) {
         const pillsClasses = classNames({
           [classes.pills]: true,
           [classes.horizontalPills]: horizontal !== undefined,
-          [classes.pillsWithIcons]: prop.tabIcon !== undefined
+          [classes.pillsWithIcons]: prop.tabIcon !== undefined,
         });
         return (
           <Tab
@@ -62,7 +62,7 @@ export default function NavPills(props) {
             {...icon}
             classes={{
               root: pillsClasses,
-              selected: classes[color]
+              selected: classes[color],
             }}
           />
         );
@@ -102,7 +102,7 @@ export default function NavPills(props) {
 
 NavPills.defaultProps = {
   active: 0,
-  color: "primary"
+  color: "primary",
 };
 
 NavPills.propTypes = {
@@ -121,12 +121,12 @@ NavPills.propTypes = {
     "danger",
     "success",
     "info",
-    "rose"
+    "rose",
   ]),
   direction: PropTypes.string,
   horizontal: PropTypes.shape({
     tabsGrid: PropTypes.object,
-    contentGrid: PropTypes.object
+    contentGrid: PropTypes.object,
   }),
-  alignCenter: PropTypes.bool
+  alignCenter: PropTypes.bool,
 };

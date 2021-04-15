@@ -2,7 +2,7 @@ import {
   cardTitle,
   dangerColor,
   whiteColor,
-  grayColor
+  grayColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 import customCheckboxRadioSwitch from "assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.js";
 
@@ -10,31 +10,31 @@ const validationFormsStyle = {
   ...customCheckboxRadioSwitch,
   cardTitle: {
     ...cardTitle,
-    color: whiteColor
+    color: whiteColor,
   },
   cardIconTitle: {
     ...cardTitle,
     marginTop: "15px",
-    marginBottom: "0px"
+    marginBottom: "0px",
   },
   formCategory: {
     marginBottom: "0",
     color: grayColor[0],
     fontSize: "14px",
-    padding: "10px 0 10px"
+    padding: "10px 0 10px",
   },
   center: {
-    textAlign: "center"
+    textAlign: "center",
   },
   justifyContentCenter: {
-    justifyContent: "center"
+    justifyContent: "center",
   },
   registerButton: {
-    float: "right"
+    float: "right",
   },
   danger: {
-    color: dangerColor[0] + "!important"
-  }
+    color: dangerColor[0] + "!important",
+  },
 };
 
 export default validationFormsStyle;

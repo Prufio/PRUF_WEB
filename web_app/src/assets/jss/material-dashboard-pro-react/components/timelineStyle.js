@@ -7,14 +7,14 @@ import {
   whiteColor,
   blackColor,
   grayColor,
-  hexToRgb
+  hexToRgb,
 } from "assets/jss/material-dashboard-pro-react.js";
-const timelineStyle = theme => ({
+const timelineStyle = (theme) => ({
   timeline: {
     [theme.breakpoints.down("sm")]: {
       "&:before": {
-        left: "5% !important"
-      }
+        left: "5% !important",
+      },
     },
     listStyle: "none",
     padding: "20px 0 20px",
@@ -28,30 +28,30 @@ const timelineStyle = theme => ({
       width: "3px",
       backgroundColor: grayColor[11],
       left: "50%",
-      marginLeft: "-1px"
-    }
+      marginLeft: "-1px",
+    },
   },
   timelineSimple: {
     marginTop: "30px",
     padding: "0 0 20px",
     "&:before": {
-      left: "5%"
-    }
+      left: "5%",
+    },
   },
   item: {
     marginBottom: "20px",
     position: "relative",
     "&:before,&:after": {
       content: '" "',
-      display: "table"
+      display: "table",
     },
     "&:after": {
-      clear: "both"
-    }
+      clear: "both",
+    },
   },
   timelineBadge: {
     [theme.breakpoints.down("sm")]: {
-      left: "5% !important"
+      left: "5% !important",
     },
     color: whiteColor,
     width: "50px",
@@ -67,10 +67,10 @@ const timelineStyle = theme => ({
     borderTopRightRadius: "50%",
     borderTopLeftRadius: "50%",
     borderBottomRightRadius: "50%",
-    borderBottomLeftRadius: "50%"
+    borderBottomLeftRadius: "50%",
   },
   timelineSimpleBadge: {
-    left: "5%"
+    left: "5%",
   },
   info: {
     backgroundColor: infoColor[0],
@@ -79,7 +79,7 @@ const timelineStyle = theme => ({
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(infoColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   success: {
     backgroundColor: successColor[0],
@@ -88,7 +88,7 @@ const timelineStyle = theme => ({
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(successColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   danger: {
     backgroundColor: dangerColor[0],
@@ -97,7 +97,7 @@ const timelineStyle = theme => ({
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(dangerColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   warning: {
     backgroundColor: warningColor[0],
@@ -106,7 +106,7 @@ const timelineStyle = theme => ({
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(warningColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   primary: {
     backgroundColor: primaryColor[0],
@@ -115,11 +115,11 @@ const timelineStyle = theme => ({
       hexToRgb(blackColor) +
       ", 0.14), 0 7px 10px -5px rgba(" +
       hexToRgb(primaryColor[0]) +
-      ", 0.4)"
+      ", 0.4)",
   },
   badgeIcon: {
     width: "24px",
-    height: "51px"
+    height: "51px",
   },
   timelinePanel: {
     [theme.breakpoints.down("sm")]: {
@@ -129,14 +129,14 @@ const timelineStyle = theme => ({
         borderLeftWidth: "0 !important",
         borderRightWidth: "15px !important",
         left: "-15px !important",
-        right: "auto !important"
+        right: "auto !important",
       },
       "&:after": {
         borderLeftWidth: "0 !important",
         borderRightWidth: "14px !important",
         left: "-14px !important",
-        right: "auto !important"
-      }
+        right: "auto !important",
+      },
     },
     width: "45%",
     float: "left",
@@ -156,7 +156,7 @@ const timelineStyle = theme => ({
       borderLeft: "15px solid " + grayColor[10],
       borderRight: "0 solid " + grayColor[10],
       borderBottom: "15px solid transparent",
-      content: '" "'
+      content: '" "',
     },
     "&:after": {
       position: "absolute",
@@ -167,11 +167,11 @@ const timelineStyle = theme => ({
       borderLeft: "14px solid " + whiteColor,
       borderRight: "0 solid " + whiteColor,
       borderBottom: "14px solid transparent",
-      content: '" "'
-    }
+      content: '" "',
+    },
   },
   timelineSimplePanel: {
-    width: "86%"
+    width: "86%",
   },
   timelinePanelInverted: {
     [theme.breakpoints.up("sm")]: {
@@ -181,37 +181,37 @@ const timelineStyle = theme => ({
         borderLeftWidth: "0",
         borderRightWidth: "15px",
         left: "-15px",
-        right: "auto"
+        right: "auto",
       },
       "&:after": {
         borderLeftWidth: "0",
         borderRightWidth: "14px",
         left: "-14px",
-        right: "auto"
-      }
-    }
+        right: "auto",
+      },
+    },
   },
   timelineHeading: {
-    marginBottom: "15px"
+    marginBottom: "15px",
   },
   timelineBody: {
     fontSize: "14px",
-    lineHeight: "21px"
+    lineHeight: "21px",
   },
   timelineFooter: {
     zIndex: "1000",
     position: "relative",
-    float: "left"
+    float: "left",
   },
   footerTitle: {
     color: grayColor[7],
     fontWeight: "400",
-    margin: "10px 0px 0px"
+    margin: "10px 0px 0px",
   },
   footerLine: {
     marginTop: "10px",
-    marginBottom: "5px"
-  }
+    marginBottom: "5px",
+  },
 });
 
 export default timelineStyle;

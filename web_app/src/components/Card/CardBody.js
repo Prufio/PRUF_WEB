@@ -37,7 +37,7 @@ export default function CardBody(props) {
     [classes.cardBodyColor]: color,
     [classes.cardBodyProfile]: profile,
     [classes.cardBodyCalendar]: calendar,
-    [className]: className !== undefined
+    [className]: className !== undefined,
   });
   return (
     <div className={cardBodyClasses} {...rest}>
@@ -56,5 +56,5 @@ CardBody.propTypes = {
   color: PropTypes.bool,
   profile: PropTypes.bool,
   calendar: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
