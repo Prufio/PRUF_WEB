@@ -61,11 +61,10 @@ export default function Search(props) {
   const [inscription, setInscription] = React.useState("");
   const [moreInfo, setMoreInfo] = React.useState(false);
   const [authLevel, setAuthLevel] = React.useState("");
-  const [ipfsObject, setIpfsObject] = React.useState({});
   const [asset, setAsset] = React.useState({});
   const [dBIndex, setDBIndex] = React.useState(null);
   const [price, setPrice] = React.useState("");
-  const [currency, setCurrency] = React.useState("0");
+  const [currency, setCurrency] = React.useState("");
   const [recycled, setRecycled] = React.useState(false);
   const [transaction, setTransaction] = React.useState(false);
   const [retrieving, setRetrieving] = React.useState(false);
@@ -151,7 +150,7 @@ export default function Search(props) {
   }, [])
 
   React.useEffect(() => {
-    if (window.contracts !== undefined && query) { retrieveRecord(query); setQuery(null); }
+    if (window.contracts !== undefined && query) { checkInputs(query); setQuery(null); }
   }, [window.contracts, query])
 
 
@@ -1577,8 +1576,7 @@ export default function Search(props) {
 
     }
 
-    let temp = Object.assign(asset, ipfsObject)
-    let tempObj = JSON.parse(JSON.stringify(temp))
+    let tempObj = JSON.parse(JSON.stringify(asset))
 
     tempObj.dBIndex = dBIndex;
     tempObj.lastRef = "/#/user/search";
@@ -1737,360 +1735,8 @@ export default function Search(props) {
     setloginPasswordState("");
   }
 
-  const getIPFSJSONObject = async (lookup) => {
-    //console.log(lookup)
-    if (typeof lookup !== "string") {
-      lookup.then(async (_lookup)=>{
-        for await (const chunk of window.ipfs.cat(_lookup)) {
-          let result = new TextDecoder("utf-8").decode(chunk);
-          if (!result) {
-            console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-            setRetrieving(false);
-            setSelectedImage("")
-            setMoreInfo(true);
-            return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
-          }
-    
-          else {
-            //console.log(lookup, "Here's what we found for asset description: ", result);
-            let assetObj = JSON.parse(result)
-            assetObj.photoUrls = JSON.parse(result).photo;
-            let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-    
-            if (keys.length < 1) {
-              setIpfsObject(assetObj)
-              setSelectedImage("")
-              setMoreInfo(true);
-              setRetrieving(false);
-              return console.log(assetObj);
-            }
-    
-            for (let i = 0; i < keys.length; i++) {
-              const get = () => {
-                if (vals[i].includes("data") && vals[i].includes("base64")) {
-                  assetObj.photo[keys[i]] = vals[i];
-                  console.log(assetObj.photo[keys[i]]);
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                  }
-                  else if (i === keys.length - 1) {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                  }
-    
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj)
-                    setSelectedImage(assetObj.DisplayImage)
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    console.log(assetObj.DisplayImage);
-                  }
-    
-                  forceUpdate();
-                }
-    
-                else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                  assetObj.photo[keys[i]] = vals[i];
-                  if (keys[i] === "DisplayImage") {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                  }
-                  else if (i === keys.length - 1) {
-                    console.log("Setting Display Image")
-                    assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                  }
-    
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj)
-                    setSelectedImage(assetObj.DisplayImage)
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    console.log(assetObj.DisplayImage);
-                  }
-    
-                  forceUpdate();
-                }
-    
-                else {
-                  const req = new XMLHttpRequest();
-                  req.responseType = "text";
-    
-                  req.onload = function (e) {
-                    console.log("in onload")
-                    if (this.response.includes("base64")) {
-                      assetObj.photo[keys[i]] = this.response;
-                      //console.log(assetObj.photo[keys[i]]);
-    
-                      if (keys[i] === "DisplayImage") {
-                        console.log("Setting Display Image")
-                        assetObj.DisplayImage = assetObj.photo[keys[i]]
-                      }
-    
-                      else if (i === keys.length - 1) {
-                        console.log("Setting Display Image")
-                        assetObj.DisplayImage = assetObj.photo[keys[0]]
-                      }
-                      forceUpdate();
-                    }
-    
-                    if (i + 1 === keys.length) {
-                      setIpfsObject(assetObj)
-                      setSelectedImage(assetObj.DisplayImage)
-                      setMoreInfo(true);
-                      setRetrieving(false);
-                      console.log(assetObj);
-                      //console.log(assetObj.DisplayImage);
-                    }
-                  }
-    
-                  req.onerror = function (e) {
-                    console.log("http request error")
-                    if (vals[i].includes("http")) {
-                      assetObj.photo[keys[i]] = vals[i];
-                      if (keys[i] === "DisplayImage") {
-                        console.log("Setting Display Image")
-                        assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                      }
-                      else if (i === keys.length - 1) {
-                        console.log("Setting Display Image")
-                        assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                      }
-                      forceUpdate();
-                    }
-    
-                    if (i + 1 === keys.length) {
-                      setIpfsObject(assetObj)
-                      setSelectedImage(assetObj.DisplayImage)
-                      setMoreInfo(true);
-                      setRetrieving(false);
-                      console.log(assetObj);
-                      console.log(assetObj.DisplayImage);
-                    }
-                  }
-    
-                  req.open('GET', vals[i], true);
-                  req.send();
-                }
-    
-              }
-              await get()
-            }
-    
-          }
-        };
-      })
-    }
-    else{
-      for await (const chunk of window.ipfs.cat(lookup)) {
-        let result = new TextDecoder("utf-8").decode(chunk);
-        if (!result) {
-          console.log(lookup, "Something went wrong. Unable to find file on IPFS");
-          setRetrieving(false);
-          setSelectedImage("")
-          setMoreInfo(true);
-          return setIpfsObject({ text: {}, photo: {}, urls: {}, name: "", displayImage: "" })
-        }
-  
-        else {
-          //console.log(lookup, "Here's what we found for asset description: ", result);
-          let assetObj = JSON.parse(result)
-          assetObj.photoUrls = JSON.parse(result).photo;
-          let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-  
-          if (keys.length < 1) {
-            setIpfsObject(assetObj)
-            setSelectedImage("")
-            setMoreInfo(true);
-            setRetrieving(false);
-            return console.log(assetObj);
-          }
-  
-          for (let i = 0; i < keys.length; i++) {
-            const get = () => {
-              if (vals[i].includes("data") && vals[i].includes("base64")) {
-                assetObj.photo[keys[i]] = vals[i];
-                console.log(assetObj.photo[keys[i]]);
-                if (keys[i] === "DisplayImage") {
-                  console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-  
-                if (i + 1 === keys.length) {
-                  setIpfsObject(assetObj)
-                  setSelectedImage(assetObj.DisplayImage)
-                  setMoreInfo(true);
-                  setRetrieving(false);
-                  console.log(assetObj);
-                  console.log(assetObj.DisplayImage);
-                }
-  
-                forceUpdate();
-              }
-  
-              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                assetObj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
-                  console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-  
-                if (i + 1 === keys.length) {
-                  setIpfsObject(assetObj)
-                  setSelectedImage(assetObj.DisplayImage)
-                  setMoreInfo(true);
-                  setRetrieving(false);
-                  console.log(assetObj);
-                  console.log(assetObj.DisplayImage);
-                }
-  
-                forceUpdate();
-              }
-  
-              else {
-                const req = new XMLHttpRequest();
-                req.responseType = "text";
-  
-                req.onload = function (e) {
-                  console.log("in onload")
-                  if (this.response.includes("base64")) {
-                    assetObj.photo[keys[i]] = this.response;
-                    //console.log(assetObj.photo[keys[i]]);
-  
-                    if (keys[i] === "DisplayImage") {
-                      console.log("Setting Display Image")
-                      assetObj.DisplayImage = assetObj.photo[keys[i]]
-                    }
-  
-                    else if (i === keys.length - 1) {
-                      console.log("Setting Display Image")
-                      assetObj.DisplayImage = assetObj.photo[keys[0]]
-                    }
-                    forceUpdate();
-                  }
-  
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj)
-                    setSelectedImage(assetObj.DisplayImage)
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    //console.log(assetObj.DisplayImage);
-                  }
-                }
-  
-                req.onerror = function (e) {
-                  console.log("http request error")
-                  if (vals[i].includes("http")) {
-                    assetObj.photo[keys[i]] = vals[i];
-                    if (keys[i] === "DisplayImage") {
-                      console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                    }
-                    else if (i === keys.length - 1) {
-                      console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                    }
-                    forceUpdate();
-                  }
-  
-                  if (i + 1 === keys.length) {
-                    setIpfsObject(assetObj)
-                    setSelectedImage(assetObj.DisplayImage)
-                    setMoreInfo(true);
-                    setRetrieving(false);
-                    console.log(assetObj);
-                    console.log(assetObj.DisplayImage);
-                  }
-                }
-  
-                req.open('GET', vals[i], true);
-                req.send();
-              }
-  
-            }
-            await get()
-          }
-  
-        }
-  
-      };
-    }
-
-
-  };
-
-  const getACData = async (ref, ac) => {
-    let tempData;
-    let tempAC;
-
-    if (window.contracts !== undefined) {
-
-      if (ref === "name") {
-        console.log("Using name ref")
-        await window.contracts.AC_MGR.methods
-          .resolveAssetClass(ac)
-          .call((_error, _result) => {
-            if (_error) { console.log("Error: ", _error) }
-            else {
-              if (Number(_result) > 0) { tempAC = Number(_result) }
-              else { return 0 }
-            }
-          });
-      }
-
-      else if (ref === "id") { tempAC = ac; }
-
-      await window.contracts.AC_MGR.methods
-        .getAC_data(tempAC)
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-
-            /* @dev
-            0 AC_data[_assetClass].assetClassRoot,
-            1 AC_data[_assetClass].custodyType,
-            2 AC_data[_assetClass].discount,
-            3 AC_data[_assetClass].referenceAddress 
-            */
-
-            let _custodyType;
-
-            if (Object.values(_result)[1] === "1") {
-              _custodyType = "Custodial"
-            }
-
-            else {
-              _custodyType = "Non-Custodial"
-            }
-
-            tempData = {
-              root: Object.values(_result)[0],
-              custodyType: _custodyType,
-              discount: Object.values(_result)[2],
-              exData: Object.values(_result)[3],
-              AC: tempAC
-            }
-            setSelectedRootID(Object.values(_result)[0])
-          }
-        });
-      return tempData;
-    }
-  }
-
   const purchaseAsset = async () => {
-    let temp = Object.assign(asset, ipfsObject)
-    let newAsset = JSON.parse(JSON.stringify(temp))
+    let newAsset = JSON.parse(JSON.stringify(asset))
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
     let tempTxHash;
     console.log("Purchasing Asset")
@@ -2106,7 +1752,7 @@ export default function Search(props) {
     }
     setTransaction(true)
     await window.contracts.PURCHASE.methods
-      .purchaseWithPRUF(asset.idxHash)
+      .purchaseWithPRUF(asset.id)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
@@ -2154,7 +1800,6 @@ export default function Search(props) {
       });
   }
 
-
   const recycleAsset = async () => {
     if (loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
 
@@ -2176,14 +1821,12 @@ export default function Search(props) {
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     console.log("in RA")
-    let idxHash = asset.idxHash;
+    let idxHash = asset.id;
     let rgtHash;
     let rgtHashRaw;
-    let receiptVal;
     let tempTxHash;
 
-    let temp = Object.assign(asset, ipfsObject)
-    let newAsset = JSON.parse(JSON.stringify(temp))
+    let newAsset = JSON.parse(JSON.stringify(asset))
     newAsset.status = "Out of Escrow"
     newAsset.statusNum = "58"
 
@@ -2311,7 +1954,7 @@ export default function Search(props) {
     console.log("in vr")
     let extendedDataHash;
     let tempResult;
-    let idxHash = asset.idxHash;
+    let idxHash = asset.id;
     let rgtHashRaw;
     let rgtHash
 
@@ -2388,7 +2031,7 @@ export default function Search(props) {
       setScanQR(!scanQR);
       let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
       console.log("Here is what we got in the scanner: ", scanQuery)
-      retrieveRecord(scanQuery, true);
+      checkInputs(scanQuery);
     }
     else {
       swal({
@@ -2419,7 +2062,7 @@ export default function Search(props) {
     }
 
     console.log("in bvr")
-    let idxHash = asset.idxHash;
+    let idxHash = asset.id;
     let rgtHash;
     let rgtHashRaw;
     let receiptVal;
@@ -2515,133 +2158,531 @@ export default function Search(props) {
     return;
   }
 
-  // const retrieveRecord = async () => {
-  //   else {
-  //     setRetrieving(true)
-  //     console.log("idxHash", idxHash);
-  //     console.log("addr: ", props.addr);
+  const checkInputs = (fromQR) => {
+    let id;
 
-  //     await window.contracts.STOR.methods
-  //       .retrieveShortRecord(idxHash)
-  //       .call(
-  //         function (_error, _result) {
-  //           if (_error) {
-  //             setRetrieving(false);
-  //             setError(_error);
-  //             setResult("");
-  //             setIDXRaw("")
-  //             setIDXRawInput(false)
-  //             swal({
-  //               title: "Asset not found!",
-  //               icon: "warning",
-  //               button: "Close",
-  //             });
-  //           }
-  //           else {
+    if (fromQR) {
+      id = fromQR
+    }
 
-  //             /* @dev
-  //             0 rec.assetStatus,
-  //             1 rec.forceModCount,
-  //             2 rec.assetClass,
-  //             3 rec.countDown,
-  //             4 rec.countDownStart,
-  //             5 rec.Ipfs1,
-  //             6 rec.Ipfs2,
-  //             7 rec.numberOfTransfers 
-  //             */
+    else if (IDXRawInput === true) {
 
-  //             setIDXRaw("")
-  //             setIDXRawInput(false)
-  //             setloginIDXState("")
-  //             setManufacturer("")
-  //             setloginManufacturer("")
-  //             setloginManufacturerState("")
-  //             setType("")
-  //             setloginType("")
-  //             setloginTypeState("")
-  //             setModel("")
-  //             setloginModel("")
-  //             setloginModelState("")
-  //             setSerial("")
-  //             setloginSerial("")
-  //             setloginSerialState("")
-  //             console.log("rr conf");
-  //             setResult(Object.values(_result));
-  //             setError("");
-  //             tempResult = Object.values(_result);
-  //             if (Object.values(_result)[5] > 0) { extendedDataHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-  //             console.log("ipfs data in promise", extendedDataHash)
-  //             if (Object.values(_result)[6] > 0) {
-  //               console.log("Getting ipfs2 set up...")
-  //               let knownUrl = "https://ipfs.io/ipfs/";
-  //               let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
-  //               let fullUrl = knownUrl + hash;
-  //               console.log(fullUrl);
-  //               setInscription(fullUrl)
-  //             }
-  //           }
-  //         });
+      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
+
+        if (loginType === "") {
+          setloginTypeState("error");
+        }
+        if (loginManufacturer === "") {
+          setloginManufacturerState("error");
+        }
+        if (loginModel === "") {
+          setloginModelState("error");
+        }
+        if (loginSerial === "") {
+          setloginSerialState("error");
+        }
+        console.log("Error in inputs")
+        return;
+      }
+
+      id = window.web3.utils.soliditySha3(
+        String(type).replace(/\s/g, ''),
+        String(manufacturer).replace(/\s/g, ''),
+        String(model).replace(/\s/g, ''),
+        String(serial).replace(/\s/g, ''),
+      )
+      setIDXRawInput(false)
+      setIDXRaw(id)
+
+    }
+
+    else {
+      id = IDXRaw
+    }
+
+    props.prufClient.utils.isValidId(id).then(e => {
+      if (!e) return
+
+      props.prufClient.get.assetExists(id)
+        .call((error, result) => {
+          if (error) {
+            swal({
+              title: "Asset does not exist!",
+              icon: "warning",
+              button: "Close",
+            })
+            setIDXRaw("")
+            setIDXRawInput(false)
+          }
+          else if (result = "170") {
+            buildAsset(id)
+          }
+          else {
+            swal({
+              title: "Asset does not exist!",
+              icon: "warning",
+              button: "Close",
+            })
+            setIDXRaw("")
+            setIDXRawInput(false)
+          }
+        })
+    })
+
+  }
+
+  const checkIsHolder = async (id) => {
+    if (!id) return
+    props.prufClient.get.ownerOfAsset(id).call((error, result) => {
+      if (error) return
+      else {
+        window.web3.utils.toChecksumAddress(result) === window.web3.utils.toChecksumAddress(props.addr) ? setOwnerOf(true) : setOwnerOf(false)
+      }
+    })
+  }
+
+  const buildAsset = (id) => {
+    if (!id) return
+
+    setURL(`${baseURL}${id}`)
+
+    if (props.ps) {
+      //console.log(props.ps)
+      props.ps.element.scrollTop = 0
+    }
 
 
-  //     await window.contracts.STOR.methods.getPriceData(idxHash)
-  //       .call((_error, _result) => {
-  //         if (_error) {
-  //           console.log("IN ERROR IN ERROR IN ERROR")
-  //         } else {
-  //           if (Object.values(_result)[1] !== "2") {
-  //             return
-  //           }
-  //           else {
-  //             setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
-  //             setCurrency("ü")
-  //           }
-  //         }
-  //       })
+    else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      document.documentElement.scrollTop = 0;
+      document.scrollingElement.scrollTop = 0;
+    }
 
-  //     setURL(String(baseURL) + String(idxHash))
+    setRetrieving(true)
 
-  //     window.assetClass = tempResult[2]
-  //     let assetClassName = await window.utils.getACName(tempResult[2])
+    props.prufClient.get.assetRecord(id)
+      .call((_error, _result) => {
+        if (_error) {
+          console.log("IN ERROR IN ERROR IN ERROR")
+          setError(_error);
+          setResult("");
+          setScanQR(false);
+          setRetrieving(false);
+          swal({
+            title: "Asset not found!",
+            icon: "warning",
+            button: "Close",
+          });
 
-  //     window.assetInfo = {
-  //       assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-  //       assetClass: tempResult[2],
-  //       status: await window.utils.getStatusString(String(tempResult[0])),
-  //       statusNum: String(tempResult[0]),
-  //       idx: idxHash
-  //     }
+        } else {
 
-  //     await window.utils.resolveACFromID(tempResult[2])
-  //     await getACData("id", window.assetClass)
+          setScanQR(false);
+          setResult(Object.values(_result));
+          setError("");
 
-  //     console.log(window.authLevel);
+          _result["0"] === "60" ? setRecycled(true) : checkIsHolder(id)
 
-  //     await getIPFSJSONObject(extendedDataHash);
-  //     setAuthLevel(window.authLevel);
-  //     setScanQR(false);
-  //     setAsset({
-  //       assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-  //       assetClass: tempResult[2],
-  //       status: window.assetInfo.status,
-  //       statusNum: String(tempResult[0]),
-  //       idxHash: idxHash,
-  //     })
+          let obj = {
+            id: id,
+            statusNum: _result["0"],
+            forceModCount: _result["1"],
+            assetClass: _result["2"],
+            countPair: [_result["3"], _result["4"]],
+            mutableDataA: _result["5"],
+            mutableDataB: _result["6"],
+            engravingA: _result["7"],
+            engravingB: _result["8"],
+            numberOfTransfers: _result["9"]
+          }
 
-  //     if (tempResult[0] === "60") {
-  //       setRecycled(true)
-  //     }
-  //     else if (tempResult[0] !== "60") {
-  //       await window.utils.checkHoldsToken("asset", idxHash, props.addr)
-  //         .then((e) => {
-  //           console.log("is Owner Of? ", e)
-  //           if (e) {
-  //             getDBIndexOf(idxHash)
-  //             setOwnerOf(true)
-  //           }
-  //         })
-  //     }
-  //   }
-  // }
+          obj.identicon = <Jdenticon value={id} />;
+          obj.identiconLG = <Jdenticon value={id} />;
+
+          props.prufClient.utils.stringifyStatus(_result[0]).then(e => {
+            obj.status = e
+          })
+
+          props.prufClient.get.assetPriceData(id)
+            .call((_error, _result) => {
+              if (_error) {
+                console.log("IN ERROR IN ERROR IN ERROR")
+              } else {
+                obj.price = _result["0"]
+                obj.currency = _result["1"]
+
+                _result["0"] !== "0" ? setPrice(window.web3.utils.fromWei(_result["0"])) : setPrice("")
+                _result["1"] === "2" ? setCurrency("ü") : setCurrency("")
+
+                props.prufClient.get.nodeData(obj.assetClass)
+                  .call((_error, _result) => {
+                    if (_error) {
+                      console.log("IN ERROR IN ERROR IN ERROR")
+                    } else {
+                      obj.assetClassName = _result.name
+                      obj.assetClassData = {
+                        name: _result.name,
+                        root: _result.assetClassRoot,
+                        custodyType: _result.custodyType,
+                        managementType: _result.managementType,
+                        discount: _result.discount,
+                        referenceAddress: _result.referenceAddress,
+                        extData: _result["IPFS"],
+                        storageProvider: _result.storageProvider,
+                        switches: _result.switches
+                      }
+                      setSelectedRootID(_result.assetClassRoot)
+                      return getMutableData(obj)
+                    }
+                  })
+              }
+            })
+        }
+      })
+  }
+
+  const getMutableData = (asset) => {
+    if (!asset) return console.log("Failed upon reception of:", asset)
+
+    let obj = JSON.parse(JSON.stringify(asset))
+    let storageProvider = obj.assetClassData.storageProvider;
+    let mutableDataQuery;
+
+    if (obj.mutableDataA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      obj.mutableData = ""
+      return getEngraving(obj)
+    }
+
+    else if (storageProvider === "1") {
+      props.prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
+        let mutableDataQuery = e;
+        console.log("MDQ", e)
+
+        for await (const chunk of window.ipfs.cat(mutableDataQuery)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          console.log(str)
+          try {
+            obj.mutableData = JSON.parse(str)
+          }
+          catch {
+            obj.mutableData = str;
+          }
+          return getEngraving(obj)
+        }
+      })
+    }
+
+    else if (storageProvider === "2") {
+      console.log(obj.mutableDataA, obj.mutableDataB)
+      mutableDataQuery = window.web3.utils.hexToUtf8(obj.mutableDataA + obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000")))
+
+      let xhr = new XMLHttpRequest();
+
+      xhr.onload = () => {
+        if (xhr.status !== 404) {
+          try {
+            props.arweaveClient.transactions.get(mutableDataQuery).then(e => {
+              let tempObj = {};
+              e.get('tags').forEach(tag => {
+                let key = tag.get('name', { decode: true, string: true });
+                let value = tag.get('value', { decode: true, string: true });
+                tempObj[key] = value;
+                //console.log(`${key} : ${value}`);
+              })
+              //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
+              tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`
+              obj.mutableData = tempObj;
+              return getEngraving(obj)
+            })
+          }
+          catch {
+            obj.mutableData = "";
+            return getEngraving(obj)
+          }
+        }
+        else {
+          console.log("Id returned 404")
+          obj.mutableData = "";
+          return getEngraving(obj)
+        }
+      }
+
+      xhr.open('GET', `http://localhost:1984/tx/${mutableDataQuery}`, true);
+      xhr.send(null);
+    }
+  };
+
+  const getEngraving = (asset) => {
+    if (!asset) return console.log("Failed upon reception of:", asset)
+
+    let obj = JSON.parse(JSON.stringify(asset))
+    let storageProvider = obj.assetClassData.storageProvider;
+    let engravingQuery;
+
+    if (obj.engravingA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
+      obj.engraving = ""
+      return finalizeAsset(obj)
+    }
+
+    else if (storageProvider === "1") {
+      props.prufClient.utils.ipfsFromB32(obj.engravingA).then(e => {
+        engravingQuery = e
+        for (const chunk of window.ipfs.cat(engravingQuery)) {
+          let str = new TextDecoder("utf-8").decode(chunk);
+          console.log(str)
+          try {
+            obj.engraving = JSON.parse(str)
+          }
+          catch {
+            obj.engraving = str;
+          }
+          //console.log("EXIT")
+          return finalizeAsset(obj)
+        }
+      })
+    }
+
+    else if (storageProvider === "2") {
+      console.log(obj.engravingB.indexOf("0000000000000000000000"))
+      engravingQuery = window.web3.utils.hexToUtf8(obj.engravingA + obj.engravingB.substring(2, obj.engravingB.indexOf("0000000000000000000000") + 1))
+
+      let xhr = new XMLHttpRequest();
+
+      xhr.onload = () => {
+        if (xhr.status !== 404) {
+          try {
+            props.arweaveClient.transactions.get(engravingQuery).then(e => {
+              if (!e) throw "Thrown";
+              let tempObj = {};
+              e.get('tags').forEach(tag => {
+                let key = tag.get('name', { decode: true, string: true });
+                let value = tag.get('value', { decode: true, string: true });
+                tempObj[key] = value;
+                //console.log(`${key} : ${value}`);
+              })
+              //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
+              tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`
+              obj.engraving = tempObj;
+              return finalizeAsset(obj)
+            })
+          }
+          catch {
+            console.log("In arweave catch clause")
+            obj.engraving = "";
+            return finalizeAsset(obj)
+          }
+        }
+        else {
+          console.log("Id returned 404")
+          obj.engraving = "";
+          obj.contentUrl = `http://localhost:1984/${engravingQuery}`
+          return finalizeAsset(obj)
+        }
+      }
+
+      xhr.open('GET', `http://localhost:1984/tx/${engravingQuery}`, true);
+      try {
+        xhr.send(null);
+      }
+      catch {
+        console.log("Gateway returned 404")
+        obj.engraving = "";
+        obj.contentUrl = `http://localhost:1984/${engravingQuery}`
+        return finalizeAsset(obj)
+      }
+    }
+  }
+
+  const finalizeAsset = (asset) => {
+    if (!asset) return console.log("Failed upon reception of:", asset)
+
+    let obj = JSON.parse(JSON.stringify(asset))
+
+    obj.photo = (obj.engraving.photo || obj.mutableData.photo || {});
+    obj.text = (obj.engraving.text || obj.mutableData.text || {});
+    obj.urls = (obj.engraving.urls || obj.mutableData.urls || {});
+    obj.name = (obj.engraving.name || obj.mutableData.name || "Name Unavailable");
+    obj.photoUrls = (obj.engraving.photo || obj.mutableData.photo || {});
+    obj.Description = (obj.engraving.Description || obj.mutableData.Description || "");
+    obj.ContentUrl = (obj.engraving.contentUrl || obj.mutableData.contentUrl || "");
+
+    let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
+
+    console.log("Finalizing", obj)
+
+    if (obj.assetClassData.storageProvider === "2") {
+
+      console.log("detected storageProvider 2")
+
+      if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
+        obj.DisplayImage = obj.engraving.contentUrl
+        setAsset(obj)
+        setSelectedImage(obj.DisplayImage)
+        setRetrieving(false);
+        setMoreInfo(true);
+        return
+      }
+
+      else if (obj.mutableData.contentUrl && obj.mutableData["Content-Type"].includes("image")) {
+        obj.DisplayImage = obj.mutableData.contentUrl
+        setAsset(obj)
+        setSelectedImage(obj.DisplayImage)
+        setRetrieving(false);
+        setMoreInfo(true);
+        return
+      }
+
+      else if (keys.length === 0) {
+        obj.DisplayImage = "";
+        setAsset(obj)
+        setSelectedImage(obj.DisplayImage)
+        setRetrieving(false);
+        setMoreInfo(true);
+        return
+      }
+    }
+
+    else if (obj.assetClassData.storageProvider === "1") {
+      const getAndSet = (url) => {
+        const req = new XMLHttpRequest();
+        req.responseType = "text";
+
+        req.onload = function () {
+          console.log("response", this.response)
+          if (this.response.includes("base64")) {
+            obj.DisplayImage = this.response;
+            setAsset(obj)
+            setSelectedImage(obj.DisplayImage)
+            setRetrieving(false);
+            setMoreInfo(true);
+            return
+          }
+        }
+
+        req.onerror = function (e) {
+          //console.log("http request error")
+          obj.DisplayImage = ""
+          setAsset(obj)
+          setSelectedImage(obj.DisplayImage)
+          setRetrieving(false);
+          setMoreInfo(true);
+          return
+        }
+        req.open('GET', url, true);
+        try {
+          req.send();
+        }
+        catch {
+          obj.DisplayImage = ""
+          setAsset(obj)
+          setSelectedImage(obj.DisplayImage)
+          setRetrieving(false);
+          setMoreInfo(true);
+          return
+        }
+      }
+
+      if (obj.engraving !== "" && obj.engraving.DisplayImage !== "" && obj.engraving.DisplayImage !== undefined) {
+        getAndSet(obj.engraving.DisplayImage)
+      }
+
+      else if (obj.mutableData !== "" && obj.mutableData.DisplayImage !== "" && obj.mutableData.DisplayImage !== undefined) {
+        getAndSet(obj.mutableData.DisplayImage)
+      }
+    }
+
+    else if (keys.length > 0) {
+
+      for (let i = 0; i < keys.length; i++) {
+        const get = () => {
+          if (vals[i].includes("data") && vals[i].includes("base64")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              obj.DisplayImage = (obj.photo[keys[i]])
+            }
+            else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[0]])
+            }
+            setAsset(obj)
+            setSelectedImage(obj.DisplayImage)
+            forceUpdate();
+            setRetrieving(false);
+            setMoreInfo(true);
+            return
+          }
+
+          else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[i]])
+            }
+            else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = (obj.photo[keys[0]])
+            }
+            setAsset(obj)
+            setSelectedImage(obj.DisplayImage)
+            forceUpdate();
+            setRetrieving(false);
+            setMoreInfo(true);
+            return
+          }
+
+          else {
+            const req = new XMLHttpRequest();
+            req.responseType = "text";
+
+            req.onload = function (e) {
+              //console.log("in onload")
+              if (this.response.includes("base64")) {
+                obj.photo[keys[i]] = this.response;
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[0]])
+                }
+                setAsset(obj)
+                setSelectedImage(obj.DisplayImage)
+                forceUpdate();
+                setRetrieving(false);
+                setMoreInfo(true);
+                return
+              }
+            }
+
+            req.onerror = function (e) {
+              //console.log("http request error")
+              if (vals[i].includes("http")) {
+                obj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[i]])
+                }
+                else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = (obj.photo[keys[0]])
+                }
+                setAsset(obj)
+                setSelectedImage(obj.DisplayImage)
+                forceUpdate();
+                setRetrieving(false);
+                setMoreInfo(true);
+                return
+              }
+            }
+            req.open('GET', vals[i], true);
+            req.send();
+          }
+        }
+        get()
+      }
+    }
+    else { console.log("No conditions met") }
+  }
 
   const generateSubCatList = (arr) => {
     let subCatSelection = [
@@ -2702,180 +2743,6 @@ export default function Search(props) {
     }
 
     return rootSelection;
-
-  }
-
-  const retrieveRecord = async (query, isScanQR) => {
-    if (props.ps) {
-      //console.log(props.ps)
-      props.ps.element.scrollTop = 0
-    }
-    else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-
-    }
-
-    if (IDXRawInput && !isScanQR) {
-      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "") {
-
-        if (loginType === "") {
-          setloginTypeState("error");
-        }
-        if (loginManufacturer === "") {
-          setloginManufacturerState("error");
-        }
-        if (loginModel === "") {
-          setloginModelState("error");
-        }
-        if (loginSerial === "") {
-          setloginSerialState("error");
-        }
-        console.log("error")
-        return;
-      }
-    }
-    let extendedDataHash;
-    let tempResult;
-    let idxHash;
-
-    if (!IDXRawInput && !isScanQR) {
-      if (loginIDX === "") {
-        console.log("error2")
-        setloginIDXState("error");
-        return;
-      }
-      else {
-        idxHash = IDXRaw
-      }
-    }
-
-    else if (IDXRawInput === true && !isScanQR) {
-      idxHash = window.web3.utils.soliditySha3(
-        String(type).replace(/\s/g, ''),
-        String(manufacturer).replace(/\s/g, ''),
-        String(model).replace(/\s/g, ''),
-        String(serial).replace(/\s/g, ''),
-      )
-    }
-
-    if (isScanQR) {
-      idxHash = query
-    }
-
-    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
-
-    if (!doesExist) {
-      swal({
-        title: "Asset does not exist!",
-        icon: "warning",
-        button: "Close",
-      })
-      setIDXRaw("")
-      setIDXRawInput(false)
-    }
-    else {
-      setRetrieving(true)
-      console.log("in rr")
-
-      console.log("idxHash", idxHash);
-      console.log("addr: ", props.addr);
-
-      await window.contracts.STOR.methods
-        .retrieveShortRecord(idxHash)
-        .call(
-          function (_error, _result) {
-            if (_error) {
-              console.log(_error);
-              setError(_error);
-              setResult("");
-              setScanQR(false);
-              setRetrieving(false);
-              swal({
-                title: "Asset not found!",
-                icon: "warning",
-                button: "Close",
-              });
-            }
-            else {
-              setScanQR(false);
-              console.log("rr conf");
-              setResult(Object.values(_result));
-              setError("");
-              tempResult = Object.values(_result);
-              window.printObj = Object.values(_result);
-              if (Object.values(_result)[5] > 0) { extendedDataHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-              console.log("ipfs data in promise", extendedDataHash);
-              if (Object.values(_result)[6] > 0); {
-                console.log("Getting ipfs2 set up...");
-                let knownUrl = "https://ipfs.io/ipfs/";
-                let hash = String(window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]));
-                let fullUrl = knownUrl + hash;
-                console.log(fullUrl);
-                setInscription(fullUrl);
-              }
-            }
-          });
-
-      setURL(String(baseURL) + String(idxHash))
-
-
-      await window.contracts.STOR.methods.getPriceData(idxHash)
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR")
-          } else {
-            if (Object.values(_result)[1] !== "2") {
-              return
-            }
-            else {
-              setPrice(window.web3.utils.fromWei(Object.values(_result)[0]))
-              setCurrency("ü")
-            }
-          }
-        })
-
-
-      window.assetClass = tempResult[2]
-      let assetClassName = await window.utils.getACName(tempResult[2])
-
-      window.assetInfo = {
-        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-        assetClass: tempResult[2],
-        status: await window.utils.getStatusString(String(tempResult[0])),
-        statusNum: String(tempResult[0]),
-        idx: idxHash
-      }
-
-      await window.utils.resolveACFromID(tempResult[2])
-      await getACData("id", window.assetClass)
-
-      console.log(window.authLevel);
-
-      await getIPFSJSONObject(extendedDataHash);
-      setAuthLevel(window.authLevel);
-      setAsset({
-        assetClassName: assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
-        assetClass: tempResult[2],
-        status: window.assetInfo.status,
-        statusNum: String(tempResult[0]),
-        idxHash: idxHash,
-      })
-
-      if (tempResult[0] === "60") {
-        setRecycled(true)
-      }
-      else if (tempResult[0] !== "60") {
-        await window.utils.checkHoldsToken("asset", idxHash, props.addr)
-          .then((e) => {
-            console.log("is Owner Of? ", e)
-            if (e) {
-              setOwnerOf(true)
-            }
-          })
-      }
-    }
 
   }
 
@@ -3151,7 +3018,7 @@ export default function Search(props) {
                   )}
                   {!retrieving && (
                     <div className="MLBGradientSubmit">
-                      <Button color="info" className="MLBGradient" onClick={(e) => retrieveRecord()} >Search Asset</Button>
+                      <Button color="info" className="MLBGradient" onClick={(e) => checkInputs()} >Search Asset</Button>
                     </div>
                   )}
                   {retrieving && (
@@ -3200,43 +3067,9 @@ export default function Search(props) {
                 <>
                   {!isMobile && (
                     <CardHeader image className={imgClasses.cardHeaderHoverCustom}>
-                      {ipfsObject.photo !== undefined && (
+                      {asset.photo !== undefined && (
                         <>
-                          {Object.values(ipfsObject.photo).length > 0 && (
-                            <>
-                              {ipfsObject.DisplayImage !== "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button onClick={() => back()} large color="info" justIcon className="back">
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                              {ipfsObject.DisplayImage === "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button onClick={() => back()} large color="info" justIcon className="back">
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                            </>
-                          )}
-                          {Object.values(ipfsObject.photo).length === 0 && (
+                          {asset.DisplayImage !== "" && (
                             <>
                               <Tooltip
                                 id="tooltip-top"
@@ -3248,7 +3081,37 @@ export default function Search(props) {
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
-                              <Jdenticon value={asset.idxHash} />
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {Object.values(asset.photo).length === 0 && asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <Jdenticon value={asset.id} />
                             </>
                           )}
                         </>
@@ -3257,43 +3120,9 @@ export default function Search(props) {
                   )}
                   {isMobile && (
                     <CardHeader image className={imgClasses.cardHeaderHover}>
-                      {ipfsObject.photo !== undefined && (
+                      {asset.photo !== undefined && (
                         <>
-                          {Object.values(ipfsObject.photo).length > 0 && (
-                            <>
-                              {ipfsObject.DisplayImage !== "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button onClick={() => back()} large color="info" justIcon className="back">
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                              {ipfsObject.DisplayImage === "" && (
-                                <>
-                                  <Tooltip
-                                    id="tooltip-top"
-                                    title="Back"
-                                    placement="bottom"
-                                    classes={{ tooltip: classes.tooltip }}
-                                  >
-                                    <Button onClick={() => back()} large color="info" justIcon className="back">
-                                      <KeyboardArrowLeft />
-                                    </Button>
-                                  </Tooltip>
-                                  <img src={selectedImage} alt="..." />
-                                </>
-                              )}
-                            </>
-                          )}
-                          {Object.values(ipfsObject.photo).length === 0 && (
+                          {asset.DisplayImage !== "" && (
                             <>
                               <Tooltip
                                 id="tooltip-top"
@@ -3305,7 +3134,37 @@ export default function Search(props) {
                                   <KeyboardArrowLeft />
                                 </Button>
                               </Tooltip>
-                              <Jdenticon value={asset.idxHash} />
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <img src={selectedImage} alt="..." />
+                            </>
+                          )}
+                          {Object.values(asset.photo).length === 0 && asset.DisplayImage === "" && (
+                            <>
+                              <Tooltip
+                                id="tooltip-top"
+                                title="Back"
+                                placement="bottom"
+                                classes={{ tooltip: classes.tooltip }}
+                              >
+                                <Button onClick={() => back()} large color="info" justIcon className="back">
+                                  <KeyboardArrowLeft />
+                                </Button>
+                              </Tooltip>
+                              <Jdenticon value={asset.id} />
                             </>
                           )}
                         </>
@@ -3317,38 +3176,38 @@ export default function Search(props) {
               <CardBody>
                 {!isVerifying && !isRecycling && (
                   <>
-                    {Object.values(ipfsObject.photo).length > 1 && (
+                    {Object.values(asset.photo).length > 1 && (
                       <div className="imageSelector">
-                        {generateThumbs(ipfsObject)}
+                        {generateThumbs(asset)}
                       </div>
                     )}
-                    <h4 className={classes.cardTitle}>Name: {ipfsObject.name}</h4>
-                    <h4 className={classes.cardTitle}>Class: {asset.assetClassName.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())} (Node ID:{asset.assetClass})</h4>
-                    {currency === "0" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
-                    {currency !== "0" && (
+                    <h4 className={classes.cardTitle}>Name: {asset.name}</h4>
+                    <h4 className={classes.cardTitle}>Node: {asset.assetClassName} (ID:{asset.assetClass})</h4>
+                    {currency === "" && (<h4 className={classes.cardTitle}>Status: {asset.status} </h4>)}
+                    {currency !== "" && (
                       <>
                         <h4 className={classes.cardTitle}>Status: For Sale </h4>
                         <h4 className={classes.cardTitle}>Price: {currency} {price} </h4>
                       </>
                     )}
-                    {ipfsObject.text !== undefined && (
+                    {asset.text !== undefined && (
                       <>
                         <br />
                         {
-                          ipfsObject.text.Description !== undefined && (
+                          asset.Description !== undefined && (
                             <TextField
                               id="outlined-multiline-static"
                               label="Description"
                               multiline
                               rows={4}
-                              defaultValue={ipfsObject.text.Description}
+                              defaultValue={asset.Description}
                               variant="outlined"
                               fullWidth
                               disabled
                             />
                           )
                         }
-                        {ipfsObject.text.Description === undefined && (
+                        {asset.Description === undefined && (
                           <TextField
                             id="outlined-multiline-static"
                             label="Description: None"
@@ -3496,7 +3355,7 @@ export default function Search(props) {
                             </CardHeader>
                             <CardBody>
                               <form>
-                                <h5>Asset Selected: {ipfsObject.name}</h5>
+                                <h5>Asset Selected: {asset.name}</h5>
                                 <>
                                   {!transaction && (
                                     <>
@@ -3684,7 +3543,7 @@ export default function Search(props) {
                         </CardHeader>
                         <CardBody>
                           <form>
-                            <h5>Asset Selected: {ipfsObject.name}</h5>
+                            <h5>Asset Selected: {asset.name}</h5>
                             <>
                               {!transaction && (
                                 <>
@@ -3885,7 +3744,7 @@ export default function Search(props) {
                     </CardHeader>
                     <CardBody>
                       <form>
-                        <h5>Asset Selected: {ipfsObject.name}</h5>
+                        <h5>Asset Selected: {asset.name}</h5>
                         <>
                           {!transaction && (
                             <>
@@ -4067,7 +3926,7 @@ export default function Search(props) {
                         title="Copy to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4076,7 +3935,7 @@ export default function Search(props) {
                         title="Copied to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash}</Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4089,7 +3948,7 @@ export default function Search(props) {
                         title="Copy to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id.substring(0, 10) + "..." + asset.id.substring(56, 66)}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4098,7 +3957,7 @@ export default function Search(props) {
                         title="Copied to Clipboard"
                       >
                         <div className={classes.stats}>
-                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.idxHash) }}>{asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</Button>
+                          Asset ID: &nbsp; <Button className="IDText" onClick={() => { copyTextSnippet(asset.id) }}>{asset.id.substring(0, 10) + "..." + asset.id.substring(56, 66)}</Button>
                         </div>
                       </Tooltip>
                     )}
@@ -4108,9 +3967,9 @@ export default function Search(props) {
                   <Tooltip
                     title="Copy to Clipboard"
                   >
-                    <CopyToClipboard text={asset.idxHash}
+                    <CopyToClipboard text={asset.id}
                       onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
-                      <span>Asset ID: &nbsp; {asset.idxHash.substring(0, 10) + "..." + asset.idxHash.substring(56, 66)}</span>
+                      <span>Asset ID: &nbsp; {asset.id.substring(0, 10) + "..." + asset.id.substring(56, 66)}</span>
                     </CopyToClipboard>
                   </Tooltip>
                 )}
@@ -4133,7 +3992,7 @@ export default function Search(props) {
                     </Tooltip>
                   </RWebShare>
                   {!isMobile && (
-                    <Printer obj={{ name: ipfsObject.name, idxHash: asset.idxHash, assetClassName: asset.assetClassName }} />
+                    <Printer obj={{ name: asset.name, idxHash: asset.id, assetClassName: asset.assetClassName }} />
                   )}
                   <Tooltip
                     title="View QR"

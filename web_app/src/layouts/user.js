@@ -1032,8 +1032,8 @@ export default function Dashboard(props) {
               numberOfTransfers: _result["9"]
             }
 
-            obj.identicon = <Jdenticon value={obj.id} width="1000" />;
-            obj.identiconLG = <Jdenticon value={obj.id} width="1000" />;
+            obj.identicon = <Jdenticon value={ids[iteration]} />;
+            obj.identiconLG = <Jdenticon value={ids[iteration]} />;
 
             _prufClient.utils.stringifyStatus(_result[0]).then(e => {
               obj.status = e
@@ -1089,7 +1089,7 @@ export default function Dashboard(props) {
     let _arweave = window.arweave;
 
     let obj = assetHeap[iteration]
-    let storageType = obj.assetClassData.storageProvider;
+    let storageProvider = obj.assetClassData.storageProvider;
     let mutableDataQuery;
 
     if (obj.mutableDataA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
@@ -1099,7 +1099,7 @@ export default function Dashboard(props) {
       return getMutableData(assetHeap, _prufClient, assetsWithMutableData, iteration + 1)
     }
 
-    else if (storageType === "1") {
+    else if (storageProvider === "1") {
       _prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
 
         //console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
@@ -1134,9 +1134,9 @@ export default function Dashboard(props) {
       })
     }
 
-    else if (storageType === "2") {
+    else if (storageProvider === "2") {
       console.log(obj.mutableDataA, obj.mutableDataB)
-      mutableDataQuery = window.web3.utils.hexToUtf8(obj.mutableDataA + obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000")))
+      mutableDataQuery = window.web3.utils.hexToUtf8(obj.mutableDataA + obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("000000000000000") + 1))
       console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
       //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
       if (cookies[window.web3.utils.soliditySha3(mutableDataQuery)]) {
@@ -1199,7 +1199,7 @@ export default function Dashboard(props) {
     let _arweave = window.arweave;
 
     let obj = assetHeap[iteration]
-    let storageType = obj.assetClassData.storageProvider;
+    let storageProvider = obj.assetClassData.storageProvider;
     let engravingQuery;
 
     if (obj.engravingA === "0x0000000000000000000000000000000000000000000000000000000000000000") {
@@ -1209,7 +1209,7 @@ export default function Dashboard(props) {
       return getEngravings(assetHeap, _prufClient, assetsWithEngravings, iteration + 1)
     }
 
-    else if (storageType === "1") {
+    else if (storageProvider === "1") {
       _prufClient.utils.ipfsFromB32(obj.engravingA).then(e => {
         engravingQuery = e
         console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
@@ -1242,7 +1242,7 @@ export default function Dashboard(props) {
       })
     }
 
-    else if (storageType === "2") {
+    else if (storageProvider === "2") {
       engravingQuery = window.web3.utils.hexToUtf8(obj.engravingA + obj.engravingB.substring(2, obj.engravingB.indexOf("0000000000000000000000") + 1))
       //console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
       if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
@@ -1331,8 +1331,6 @@ export default function Dashboard(props) {
     let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
     if (obj.assetClassData.storageProvider === "2") {
-
-      console.log("detected storageProvider 2")
 
       if (obj.engraving.contentUrl && obj.engraving["Content-Type"].includes("image")) {
         obj.DisplayImage = obj.engraving.contentUrl
@@ -1486,7 +1484,8 @@ export default function Dashboard(props) {
       }
     });
 
-    await pruf.get.nodeBalance(_addr).call((error, result) => {
+    await pruf.get.nodeBalance(_addr)
+    .call((error, result) => {
       if (error) { console.log(error) }
       else {
         setAssetClassBalance(result);
@@ -1498,7 +1497,8 @@ export default function Dashboard(props) {
       }
     });
 
-    window.contracts.ID_TKN.methods.balanceOf(_addr).call((error, result) => {
+    window.contracts.ID_TKN.methods.balanceOf(_addr)
+    .call((error, result) => {
       if (error) { console.log(error) }
       else {
         setIDBalance(result);
@@ -1510,7 +1510,8 @@ export default function Dashboard(props) {
       }
     });
 
-    await pruf.get.assetBalance(_addr).call((error, result) => {
+    await pruf.get.assetBalance(_addr)
+    .call((error, result) => {
       if (error) { console.log(error) }
       else {
         setAssetBalance(result);
@@ -1526,14 +1527,16 @@ export default function Dashboard(props) {
       }
     })
 
-    await pruf.get.prufBalance(_addr).call((error, result) => {
+    await pruf.get.prufBalance(_addr)
+    .call((error, result) => {
       if (error) { console.log(error) }
       else {
         setPrufBalance(window.web3.utils.fromWei(result, 'ether'));
       }
     });
 
-    await pruf.get.nodePricing().call((error, result) => {
+    await pruf.get.nodePricing()
+    .call((error, result) => {
       if (error) {
         return (console.log("IN ERROR IN ERROR IN ERROR"))
       }
