@@ -32,6 +32,7 @@ import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import { AirlineSeatLegroomExtraSharp, IndeterminateCheckBox } from "@material-ui/icons";
+import defaultBGImage from "../assets/img/Sidebar Backgrounds/TracesWB.jpg";
 
 var ps;
 
@@ -47,7 +48,7 @@ export default function Dashboard(props) {
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [miniActive, setMiniActive] = React.useState(true);
-  const [image, setImage] = React.useState(require("assets/img/Sidebar Backgrounds/TracesWB.jpg"));
+  const [image, setImage] = React.useState(defaultBGImage);
   const [color, setColor] = React.useState("blue");
   const [bgColor, setBgColor] = React.useState("darkBlue");
   const [isKovan, setIsKovan] = React.useState(true);
