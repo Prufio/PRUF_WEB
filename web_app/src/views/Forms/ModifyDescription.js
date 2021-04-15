@@ -71,21 +71,28 @@ export default function ModifyDescription(props) {
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
   const [advancedInput, setAdvancedInput] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [showHelp, setShowHelp] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [help, setHelp] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
   const [hasMounted, setHasMounted] = React.useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
   // const [customJSON, setCustomJSON] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
   const [selectedKey, setSelectedKey] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
   const [assetURL, setAssetURL] = React.useState("");
   const [URLTitle, setURLTitle] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [loginURL, setloginURL] = React.useState("");
   const [loginURLState, setloginURLState] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [loginURLTitle, setloginURLTitle] = React.useState("");
   const [loginURLTitleState, setloginURLTitleState] = React.useState("");
   // const [downloadName, setDownloadName] = React.useState("");
@@ -96,6 +103,7 @@ export default function ModifyDescription(props) {
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
   const link = document.createElement("div");
   const image = "photo",
+  // eslint-disable-next-line no-unused-vars
     text = "text",
     url = "urls";
   const maxImageSize = 1000;
@@ -106,7 +114,9 @@ export default function ModifyDescription(props) {
   const formClasses = useFormStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     } else {
@@ -228,10 +238,10 @@ export default function ModifyDescription(props) {
     return forceUpdate();
   };
 
-  const resetChanges = () => {
-    setNewAssetInfo(assetInfo);
-    return forceUpdate();
-  };
+  // const resetChanges = () => {
+  //   setNewAssetInfo(assetInfo);
+  //   return forceUpdate();
+  // };
 
   const submitChanges = async () => {
     if (JSON.stringify(newAssetInfo) === JSON.stringify(assetInfo)) {
@@ -290,9 +300,11 @@ export default function ModifyDescription(props) {
       return;
     }
 
+      // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     console.log("idxHash", idxHash);
+    // eslint-disable-next-line react/prop-types
     console.log("addr: ", props.addr);
     let tempTxHash;
     setShowHelp(false);
@@ -303,6 +315,7 @@ export default function ModifyDescription(props) {
     setTransactionActive(true);
     await window.contracts.NP_NC.methods
       ._modIpfs1(idxHash, hash)
+      // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
@@ -591,7 +604,7 @@ export default function ModifyDescription(props) {
     //console.log(e.target.files[0]);
     file = e.target.files[0];
     const reader = new FileReader();
-    reader.onloadend = (e) => {
+    reader.onloadend = () => {
       if (!file.type.includes("image")) {
         //setIsUploading(false)
         return swal({
@@ -627,7 +640,7 @@ export default function ModifyDescription(props) {
     if (!e.target.files[0]) return;
     let newObj;
     const reader = new FileReader();
-    reader.onloadend = (e) => {
+    reader.onloadend = () => {
       const str = reader.result;
       try {
         newObj = JSON.parse(str);
@@ -696,7 +709,6 @@ export default function ModifyDescription(props) {
         },
       },
     }).then((value) => {
-      let imgStat;
       switch (value) {
         case "delete":
           if (
@@ -844,38 +856,38 @@ export default function ModifyDescription(props) {
     return component;
   };
 
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return;
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return;
 
-    let pruf, ether;
+  //   let pruf, ether;
 
-    console.log("Refreshing ether bal");
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        ether = window.web3.utils.fromWei(result, "ether");
-      }
-      window.contracts.UTIL_TKN.methods
-        .balanceOf(props.addr)
-        .call((err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            pruf = window.web3.utils.fromWei(result, "ether");
-          }
-          window.contracts.A_TKN.methods
-            .balanceOf(props.addr)
-            .call((err, result) => {
-              if (err) {
-                console.log(err);
-              } else {
-                window.replaceAssetData = { assets: result, ether, pruf };
-              }
-            });
-        });
-    });
-  };
+  //   console.log("Refreshing ether bal");
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       ether = window.web3.utils.fromWei(result, "ether");
+  //     }
+  //     window.contracts.UTIL_TKN.methods
+  //       .balanceOf(props.addr)
+  //       .call((err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           pruf = window.web3.utils.fromWei(result, "ether");
+  //         }
+  //         window.contracts.A_TKN.methods
+  //           .balanceOf(props.addr)
+  //           .call((err, result) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               window.replaceAssetData = { assets: result, ether, pruf };
+  //             }
+  //           });
+  //       });
+  //   });
+  // };
 
   const generateThumbs = (obj) => {
     //console.log(obj);
@@ -994,7 +1006,7 @@ export default function ModifyDescription(props) {
             {!isUploading && (
               <div
                 className="imageSelectorPlus"
-                onClick={(e) => {
+                onClick={() => {
                   handleClick();
                 }}
               >
@@ -1154,7 +1166,7 @@ export default function ModifyDescription(props) {
               {!isMobile && (
                 <>
                   <Button
-                    onClick={(e) => {
+                    onClick={() => {
                       handleJSON();
                     }}
                     className="advancedJSONButton"

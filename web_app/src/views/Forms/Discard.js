@@ -3,7 +3,6 @@ import "../../assets/css/custom.css";
 import swal from "sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import Jdenticon from "react-jdenticon";
 
 // core components
 import Button from "components/CustomButtons/Button.js";
@@ -21,9 +20,13 @@ export default function Discard(props) {
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [showHelp, setShowHelp] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
   const [assetInfo] = React.useState(window.sentPacket);
@@ -35,7 +38,9 @@ export default function Discard(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     } else {
@@ -69,38 +74,38 @@ export default function Discard(props) {
     window.location.href = assetInfo.lastRef;
   };
 
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return;
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return;
 
-    let pruf, ether;
+  //   let pruf, ether;
 
-    console.log("Refreshing ether bal");
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        ether = window.web3.utils.fromWei(result, "ether");
-      }
-      window.contracts.UTIL_TKN.methods
-        .balanceOf(props.addr)
-        .call((err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            pruf = window.web3.utils.fromWei(result, "ether");
-          }
-          window.contracts.A_TKN.methods
-            .balanceOf(props.addr)
-            .call((err, result) => {
-              if (err) {
-                console.log(err);
-              } else {
-                window.replaceAssetData = { assets: result, ether, pruf };
-              }
-            });
-        });
-    });
-  };
+  //   console.log("Refreshing ether bal");
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       ether = window.web3.utils.fromWei(result, "ether");
+  //     }
+  //     window.contracts.UTIL_TKN.methods
+  //       .balanceOf(props.addr)
+  //       .call((err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           pruf = window.web3.utils.fromWei(result, "ether");
+  //         }
+  //         window.contracts.A_TKN.methods
+  //           .balanceOf(props.addr)
+  //           .call((err, result) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               window.replaceAssetData = { assets: result, ether, pruf };
+  //             }
+  //           });
+  //       });
+  //   });
+  // };
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -115,6 +120,7 @@ export default function Discard(props) {
   const discardAsset = async () => {
     //export held asset
 
+    // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     let tempTxHash;
@@ -127,6 +133,7 @@ export default function Discard(props) {
 
     await window.contracts.A_TKN.methods
       .discard(assetInfo.idxHash)
+      // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);

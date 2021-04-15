@@ -27,14 +27,20 @@ export default function Import(props) {
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
 
   const [assetClass, setAssetClass] = React.useState("");
-  const [simpleSelect, setSimpleSelect] = React.useState("");
+  // const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [selectedRootID, setSelectedRootID] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [classSelect, setClassSelect] = React.useState("");
 
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [showHelp, setShowHelp] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
   const [assetInfo] = React.useState(window.sentPacket);
@@ -46,7 +52,9 @@ export default function Import(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     } else {
@@ -83,38 +91,38 @@ export default function Import(props) {
     window.location.href = assetInfo.lastRef;
   };
 
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return;
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return;
 
-    let pruf, ether;
+  //   let pruf, ether;
 
-    console.log("Refreshing ether bal");
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        ether = window.web3.utils.fromWei(result, "ether");
-      }
-      window.contracts.UTIL_TKN.methods
-        .balanceOf(props.addr)
-        .call((err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            pruf = window.web3.utils.fromWei(result, "ether");
-          }
-          window.contracts.A_TKN.methods
-            .balanceOf(props.addr)
-            .call((err, result) => {
-              if (err) {
-                console.log(err);
-              } else {
-                window.replaceAssetData = { assets: result, ether, pruf };
-              }
-            });
-        });
-    });
-  };
+  //   console.log("Refreshing ether bal");
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       ether = window.web3.utils.fromWei(result, "ether");
+  //     }
+  //     window.contracts.UTIL_TKN.methods
+  //       .balanceOf(props.addr)
+  //       .call((err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           pruf = window.web3.utils.fromWei(result, "ether");
+  //         }
+  //         window.contracts.A_TKN.methods
+  //           .balanceOf(props.addr)
+  //           .call((err, result) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               window.replaceAssetData = { assets: result, ether, pruf };
+  //             }
+  //           });
+  //       });
+  //   });
+  // };
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -129,6 +137,7 @@ export default function Import(props) {
   const generateSubCatList = (arr) => {
     let subCatSelection = [
       <MenuItem
+      key=""
         disabled
         classes={{
           root: classes.selectMenuItem,
@@ -158,6 +167,7 @@ export default function Import(props) {
   const importAsset = async () => {
     //import held asset
 
+    // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
     let tempTxHash;
@@ -170,6 +180,7 @@ export default function Import(props) {
 
     await window.contracts.APP_NC.methods
       .$importAsset(assetInfo.idxHash, assetClass)
+      // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
@@ -285,6 +296,7 @@ export default function Import(props) {
                         id: "class-select",
                       }}
                     >
+                    {/* eslint-disable-next-line react/prop-types */}
                       {generateSubCatList(props.assetClassSets[assetInfo.root])}
                     </Select>
                   </>

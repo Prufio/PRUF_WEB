@@ -33,11 +33,14 @@ import { DashboardOutlined, DashboardRounded } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Recycle(props) {
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
+  // const [checked, setChecked] = React.useState([24, 22]);
+  // const [selectedEnabled, setSelectedEnabled] = React.useState("b");
+  // eslint-disable-next-line no-unused-vars
   const [selectedValue, setSelectedValue] = React.useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [scanQR, setScanQR] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
   const [QRValue, setQRValue] = React.useState("");
   const [recycling, setRecycling] = React.useState(false);
@@ -55,6 +58,7 @@ export default function Recycle(props) {
   const [loginType, setloginType] = React.useState("");
   const [loginModel, setloginModel] = React.useState("");
   const [loginSerial, setloginSerial] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [loginIDX, setloginIDX] = React.useState("");
 
   const [loginManufacturerState, setloginManufacturerState] = React.useState(
@@ -81,11 +85,14 @@ export default function Recycle(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
+    // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [verifyResult, setVerifyResult] = React.useState("");
 
   const [assetInfo] = React.useState(window.sentPacket);
 
+    // eslint-disable-next-line no-unused-vars
   const link = document.createElement("div");
 
   window.sentPacket = null;
@@ -93,8 +100,11 @@ export default function Recycle(props) {
   const classes = useStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
+      // eslint-disable-next-line react/prop-types
       console.log("Scrolled to ", props.ps.element.scrollTop);
     }
   }, []);
@@ -116,69 +126,72 @@ export default function Recycle(props) {
     return (window.location.href = "/#/user/search");
   }
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
+  // const handleChange = (event) => {
+  //   setSelectedValue(event.target.value);
+  // };
 
-  const refreshBalances = async () => {
-    if (!window.web3.eth) return;
+  // const refreshBalances = async () => {
+  //   if (!window.web3.eth) return;
 
-    let pruf, ether;
+  //   let pruf, ether;
 
-    console.log("Refreshing ether bal");
-    await window.web3.eth.getBalance(props.addr, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        ether = window.web3.utils.fromWei(result, "ether");
-      }
-      window.contracts.UTIL_TKN.methods
-        .balanceOf(props.addr)
-        .call((err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            pruf = window.web3.utils.fromWei(result, "ether");
-          }
-          window.contracts.A_TKN.methods
-            .balanceOf(props.addr)
-            .call((err, result) => {
-              if (err) {
-                console.log(err);
-              } else {
-                window.replaceAssetData = { assets: result, ether, pruf };
-              }
-            });
-        });
-    });
-  };
+  //   console.log("Refreshing ether bal");
+  //   // eslint-disable-next-line react/prop-types
+  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       ether = window.web3.utils.fromWei(result, "ether");
+  //     }
+  //     window.contracts.UTIL_TKN.methods
+  //     // eslint-disable-next-line react/prop-types
+  //       .balanceOf(props.addr)
+  //       .call((err, result) => {
+  //         if (err) {
+  //           console.log(err);
+  //         } else {
+  //           pruf = window.web3.utils.fromWei(result, "ether");
+  //         }
+  //         window.contracts.A_TKN.methods
+  //         // eslint-disable-next-line react/prop-types
+  //           .balanceOf(props.addr)
+  //           .call((err, result) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               window.replaceAssetData = { assets: result, ether, pruf };
+  //             }
+  //           });
+  //       });
+  //   });
+  // };
 
-  const handleChangeEnabled = (event) => {
-    setSelectedEnabled(event.target.value);
-  };
+  // const handleChangeEnabled = (event) => {
+  //   setSelectedEnabled(event.target.value);
+  // };
 
-  const handleToggle = (value) => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  // const handleToggle = (value) => {
+  //   const currentIndex = checked.indexOf(value);
+  //   const newChecked = [...checked];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
+  //   if (currentIndex === -1) {
+  //     newChecked.push(value);
+  //   } else {
+  //     newChecked.splice(currentIndex, 1);
+  //   }
+  //   setChecked(newChecked);
+  // };
 
   const ACLogin = (event) => {
     setAssetClass(event.target.value);
   };
 
-  const handleScanQR = (event) => {
+  const handleScanQR = () => {
     setScanQR(!scanQR);
     console.log("new value", !scanQR);
   };
 
-  const clearForms = (event) => {
+  const clearForms = () => {
     setManufacturer("");
     setType("");
     setModel("");
@@ -304,12 +317,14 @@ export default function Recycle(props) {
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
-    console.log("addr: ", window.addr);
+    // eslint-disable-next-line react/prop-types
+    console.log("addr: ", props.addr);
     setRecycling(true);
 
     await window.contracts.RCLR.methods
       .recycle(idxHash, rgtHash, assetClass)
-      .send({ from: window.addr })
+      // eslint-disable-next-line react/prop-types
+      .send({ from: props.addr })
       .on("error", function (_error) {
         setRecycling(false);
         tempTxHash = Object.values(_error)[0].transactionHash;
@@ -952,7 +967,7 @@ export default function Recycle(props) {
                       <Button
                         color="info"
                         className="MLBGradient"
-                        onClick={(e) => recycleAsset()}
+                        onClick={() => recycleAsset()}
                       >
                         Recycle Asset
                       </Button>

@@ -49,7 +49,9 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
     } else {
@@ -65,7 +67,9 @@ export default function Dashboard(props) {
   const [viewAsset, setViewAsset] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
+  // eslint-disable-next-line no-unused-vars
   const [identicon, setIdenticon] = React.useState(<></>);
+  // eslint-disable-next-line no-unused-vars
   const [baseURL, setBaseURL] = React.useState(
     "https://app.pruf.io/#/user/search/"
   );
@@ -74,14 +78,18 @@ export default function Dashboard(props) {
   const [copyText, setCopyText] = React.useState(false);
   const [pageNum, setPageNum] = React.useState(1);
   const [assetsPerPage, setAssetsPerPage] = React.useState(8);
+  // eslint-disable-next-line no-unused-vars
   const [currency, setCurrency] = React.useState("ü");
 
+      // eslint-disable-next-line react/prop-types
   const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage);
 
   const moreInfo = (e) => {
     console.log(e);
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
       //console.log(props.ps)
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 124;
     } else {
       window.scrollTo({ bottom: -124, behavior: "smooth" });
@@ -92,8 +100,10 @@ export default function Dashboard(props) {
     const url = String(baseURL) + String(e.idxHash);
 
     if (e === "back") {
+      // eslint-disable-next-line react/prop-types
       if (props.ps) {
         //console.log(props.ps)
+      // eslint-disable-next-line react/prop-types
         props.ps.element.scrollTop = 0;
       } else {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -401,6 +411,7 @@ export default function Dashboard(props) {
       }
 
       return component;
+      // eslint-disable-next-line react/prop-types
     } else if (props.assets === "0") {
       return (
         <h2>
@@ -478,6 +489,7 @@ export default function Dashboard(props) {
     let _pageNum = pageNum;
 
     const getNewNum = () => {
+      // eslint-disable-next-line react/prop-types
       if (_pageNum * e > props.assetArr.length && _pageNum !== 1) {
         _pageNum--;
         return getNewNum();
@@ -1747,7 +1759,9 @@ export default function Dashboard(props) {
   };
 
   const handleSimple = (event) => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log(props.ps.element.scrollTop)
     }
@@ -1881,6 +1895,7 @@ export default function Dashboard(props) {
             </div>
             <br />
           </CardHeader>
+      {/* eslint-disable-next-line react/prop-types*/}
           {!props.addr && props.isMounted && (
             <h3 className="bump">
               <br />
@@ -1891,6 +1906,7 @@ export default function Dashboard(props) {
       )}
       {/* </GridItem> */}
       {/* </GridContainer> */}
+      {/* eslint-disable-next-line react/prop-types */}
       {props.addr && props.isMounted && props.assets === "~" && (
         <GridContainer>
           <>
@@ -1903,6 +1919,7 @@ export default function Dashboard(props) {
           </>
         </GridContainer>
       )}
+      {/* eslint-disable-next-line react/prop-types */}
       {!props.addr && !props.isMounted && props.assets === "~" && (
         <GridContainer>
           <>
@@ -1915,7 +1932,9 @@ export default function Dashboard(props) {
           </>
         </GridContainer>
       )}
+      {/* eslint-disable-next-line react/prop-types */}
       {!viewAsset && props.addr && props.assets !== "~" && (
+      // eslint-disable-next-line react/prop-types
         <GridContainer>{generateAssetDash(props.assetArr || [])}</GridContainer>
       )}
       {viewAsset && (
@@ -1933,7 +1952,7 @@ export default function Dashboard(props) {
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <Button
-                          onClick={(e) => moreInfo("back")}
+                          onClick={() => moreInfo("back")}
                           color="info"
                           justIcon
                           className="back"
@@ -1966,7 +1985,7 @@ export default function Dashboard(props) {
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <Button
-                          onClick={(e) => moreInfo("back")}
+                          onClick={() => moreInfo("back")}
                           color="info"
                           justIcon
                           className="back"
@@ -1982,7 +2001,7 @@ export default function Dashboard(props) {
               {isMobile && (
                 <CardHeader
                   image
-                  onClick={(e) => moreInfo("back")}
+                  onClick={() => moreInfo("back")}
                   className={classes.cardHeaderHover}
                 >
                   {selectedAssetObj.DisplayImage !== "" && (
@@ -1994,7 +2013,7 @@ export default function Dashboard(props) {
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <Button
-                          onClick={(e) => moreInfo("back")}
+                          onClick={() => moreInfo("back")}
                           color="info"
                           justIcon
                           className="back"
@@ -2014,7 +2033,7 @@ export default function Dashboard(props) {
                         classes={{ tooltip: classes.tooltip }}
                       >
                         <Button
-                          onClick={(e) => moreInfo("back")}
+                          onClick={() => moreInfo("back")}
                           color="info"
                           justIcon
                           className="back"
