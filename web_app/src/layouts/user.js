@@ -1210,7 +1210,7 @@ export default function Dashboard(props) {
     }
 
     else if (storageProvider === "1") {
-      _prufClient.utils.ipfsFromB32(obj.engravingA).then(e => {
+      _prufClient.utils.ipfsFromB32(obj.engravingA).then(async (e) => {
         engravingQuery = e
         console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
 
@@ -1223,7 +1223,7 @@ export default function Dashboard(props) {
         }
 
         else {
-          for (const chunk of window.ipfs.cat(engravingQuery)) {
+          for await (const chunk of window.ipfs.cat(engravingQuery)) {
             let str = new TextDecoder("utf-8").decode(chunk);
             console.log(str)
             try {
