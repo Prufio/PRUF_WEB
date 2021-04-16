@@ -1296,3 +1296,8 @@ max-width: 80px !important;
 .bottomSpace {
   margin-top: 15px !important;
 }
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}

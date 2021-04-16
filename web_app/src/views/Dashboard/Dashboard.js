@@ -81,7 +81,7 @@ export default function Dashboard(props) {
   // eslint-disable-next-line no-unused-vars
   const [currency, setCurrency] = React.useState("ü");
 
-      // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage);
 
   const moreInfo = (e) => {
@@ -103,7 +103,7 @@ export default function Dashboard(props) {
       // eslint-disable-next-line react/prop-types
       if (props.ps) {
         //console.log(props.ps)
-      // eslint-disable-next-line react/prop-types
+        // eslint-disable-next-line react/prop-types
         props.ps.element.scrollTop = 0;
       } else {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1895,7 +1895,7 @@ export default function Dashboard(props) {
             </div>
             <br />
           </CardHeader>
-      {/* eslint-disable-next-line react/prop-types*/}
+          {/* eslint-disable-next-line react/prop-types*/}
           {!props.addr && props.isMounted && (
             <h3 className="bump">
               <br />
@@ -1934,7 +1934,7 @@ export default function Dashboard(props) {
       )}
       {/* eslint-disable-next-line react/prop-types */}
       {!viewAsset && props.addr && props.assets !== "~" && (
-      // eslint-disable-next-line react/prop-types
+        // eslint-disable-next-line react/prop-types
         <GridContainer>{generateAssetDash(props.assetArr || [])}</GridContainer>
       )}
       {viewAsset && (
@@ -2053,46 +2053,84 @@ export default function Dashboard(props) {
                   {generateThumbs(selectedAssetObj)}
                 </div>
               )}
-              <br />
-              <h4 className={classes.cardTitle}>
-                Name: {selectedAssetObj.name}
-              </h4>
-              <h4 className={classes.cardTitle}>
-                Class: {selectedAssetObj.assetClassName} (NODE ID:{" "}
-                {selectedAssetObj.assetClass})
-              </h4>
+              <div className="horizontal">
+                <h4 className={classes.cardTitleContent}>
+                  Name:&nbsp;
+            </h4>
+                <h4 className={classes.cardTitle}>
+                  {selectedAssetObj.name}
+                </h4>
+              </div>
+              <div className="horizontal">
+                <h4 className={classes.cardTitleContent}>
+                  Node:&nbsp;
+            </h4>
+                <h4 className={classes.cardTitle}>
+                  {selectedAssetObj.assetClassName} (
+            </h4>
+                <h4 className={classes.cardTitleContent}>
+                  ID:&nbsp;
+            </h4>
+                <h4 className={classes.cardTitle}>
+                  {selectedAssetObj.assetClass})
+            </h4>
+              </div>
 
               {selectedAssetObj.currency === "0" && (
-                <h4 className={classes.cardTitle}>
-                  Status: {selectedAssetObj.status}{" "}
-                </h4>
+                <div className="horizontal">
+                  <h4 className={classes.cardTitleContent}>
+                    Status:&nbsp;
+              </h4>
+                  <h4 className={classes.cardTitle}>
+                    {selectedAssetObj.status}
+                  </h4>
+                </div>
               )}
               {selectedAssetObj.currency === undefined && (
-                <h4 className={classes.cardTitle}>
-                  Status: {selectedAssetObj.status}{" "}
-                </h4>
+                <div className="horizontal">
+                  <h4 className={classes.cardTitleContent}>
+                    Status:&nbsp;
+              </h4>
+                  <h4 className={classes.cardTitle}>
+                    {selectedAssetObj.status}
+                  </h4>
+                </div>
               )}
               {selectedAssetObj.currency !== "0" &&
                 selectedAssetObj.currency !== undefined && (
                   <>
-                    <h4 className={classes.cardTitle}>Status: For Sale </h4>
-                    <h4 className={classes.cardTitle}>
-                      Price: {currency} {selectedAssetObj.price}{" "}
-                    </h4>
+                    <div className="horizontal">
+                      <h4 className={classes.cardTitleContent}>
+                        Status:&nbsp;
+                </h4>
+                      <h4 className={classes.cardTitle}>
+                        For Sale
+                </h4>
+                    </div>
+                    <div className="horizontal">
+                      <h4 className={classes.cardTitleContent}>
+                        Price:&nbsp;
+                </h4>
+                      <h4 className={classes.cardTitle}>
+                        {currency} {selectedAssetObj.price}
+                      </h4>
+                    </div>
                   </>
                 )}
-              <br />
               {selectedAssetObj.Description !== undefined && (
-                <TextField
-                  id="outlined-multiline-static"
-                  label="Description"
-                  multiline
-                  rows={4}
-                  defaultValue="None"
-                  variant="outlined"
-                  fullWidth
-                  disabled
-                />
+                <>
+                  <br />
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Description"
+                    multiline
+                    rows={4}
+                    defaultValue="None"
+                    variant="outlined"
+                    fullWidth
+                    disabled
+                  />
+                </>
               )}
               {selectedAssetObj.Description === undefined && (
                 <TextField

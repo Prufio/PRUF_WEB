@@ -189,7 +189,7 @@ export default function NodeManager(props) {
         if (iteration < ids.length) {
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
-            // eslint-disable-next-line react/prop-types
+                // eslint-disable-next-line react/prop-types
                 .nodeData(ids[iteration])
                 .call((_error, _result) => {
                     if (_error) {
@@ -362,7 +362,6 @@ export default function NodeManager(props) {
     const setAnalyticsButton = () => {
         // setDash(false)
         // setDelegation(false)
-        // setAnalytics(true)
         swal('Coming Soon!')
     }
 
@@ -383,11 +382,12 @@ export default function NodeManager(props) {
 
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
-            // eslint-disable-next-line react/prop-types
+                // eslint-disable-next-line react/prop-types
                 .nodeName(extDataArr[e.index].root)
-                .call((_error, _result) => {
+                .call((_error, _result)  => {
                     if (_error) {
                         console.log('IN ERROR IN ERROR IN ERROR')
+                        return (window.location.href = e.href)
                     } else {
                         tempObj.name = extDataArr[e.index].name
                         tempObj.id = extDataArr[e.index].id
@@ -446,6 +446,15 @@ export default function NodeManager(props) {
                                     className: 'delegationButtonBack',
                                 },
                             },
+                        }).then((value) => {
+                            switch (value) {
+                                case 'close':
+                                    location.reload()
+                                    break;
+                
+                                default:
+                                    break
+                            }
                         })
                     }
                 })
@@ -672,33 +681,33 @@ export default function NodeManager(props) {
 
                                                 {prop[0] ===
                                                     'No nodes held by user' && (
-                                                    <Button
-                                                        simple
-                                                        onClick={() => {
-                                                            window.location.href =
-                                                                '/#/user/create-node'
-                                                        }}
-                                                        color="info"
-                                                        className="like"
-                                                    >
-                                                        Create Node
-                                                    </Button>
-                                                )}
+                                                        <Button
+                                                            simple
+                                                            onClick={() => {
+                                                                window.location.href =
+                                                                    '/#/user/create-node'
+                                                            }}
+                                                            color="info"
+                                                            className="like"
+                                                        >
+                                                            Create Node
+                                                        </Button>
+                                                    )}
                                                 {prop[0] ===
                                                     'Loading Nodes...' && (
-                                                    <Button
-                                                        disabled
-                                                        simple
-                                                        onClick={() => {
-                                                            window.location.href =
-                                                                '/#/user/create-node'
-                                                        }}
-                                                        color="info"
-                                                        className="like"
-                                                    >
-                                                        Create Node
-                                                    </Button>
-                                                )}
+                                                        <Button
+                                                            disabled
+                                                            simple
+                                                            onClick={() => {
+                                                                window.location.href =
+                                                                    '/#/user/create-node'
+                                                            }}
+                                                            color="info"
+                                                            className="like"
+                                                        >
+                                                            Create Node
+                                                        </Button>
+                                                    )}
                                                 {prop[0] === '~' && (
                                                     <Button
                                                         simple
@@ -715,7 +724,7 @@ export default function NodeManager(props) {
                                                 {prop[0] !==
                                                     'No nodes held by user' &&
                                                     prop[0] !==
-                                                        'Loading Nodes...' &&
+                                                    'Loading Nodes...' &&
                                                     prop[0] !== '~' && (
                                                         <form>
                                                             <FormControl className="nodeOptions">
@@ -830,7 +839,7 @@ export default function NodeManager(props) {
                                                                             key
                                                                         ]
                                                                             .managementType ===
-                                                                            '3' && (
+                                                                        '3' && (
                                                                             <MenuItem
                                                                                 classes={{
                                                                                     root:
@@ -878,7 +887,7 @@ export default function NodeManager(props) {
                                                                             key
                                                                         ]
                                                                             .managementType !==
-                                                                            '255' && (
+                                                                        '255' && (
                                                                             <MenuItem
                                                                                 classes={{
                                                                                     root:
@@ -902,7 +911,7 @@ export default function NodeManager(props) {
                                                                             key
                                                                         ]
                                                                             .managementType ===
-                                                                            '255' && (
+                                                                        '255' && (
                                                                             <MenuItem
                                                                                 classes={{
                                                                                     root:
@@ -975,42 +984,42 @@ export default function NodeManager(props) {
                                                 {/* use this button to add a like kind of action */}
                                                 {prop[0] !==
                                                     'Loading Nodes...' && (
-                                                    <Button
-                                                        // justIcon
-                                                        // round
-                                                        // simple
-                                                        onClick={() => {
-                                                            handleDelegation({
-                                                                name: prop[1],
-                                                                id: prop[2],
-                                                                totalDelegated:
-                                                                    prop[3],
-                                                            })
-                                                        }}
-                                                        color="info"
-                                                        className="delegateButton"
-                                                    >
-                                                        Delegate
-                                                    </Button>
-                                                )}
+                                                        <Button
+                                                            // justIcon
+                                                            // round
+                                                            // simple
+                                                            onClick={() => {
+                                                                handleDelegation({
+                                                                    name: prop[1],
+                                                                    id: prop[2],
+                                                                    totalDelegated:
+                                                                        prop[3],
+                                                                })
+                                                            }}
+                                                            color="info"
+                                                            className="delegateButton"
+                                                        >
+                                                            Delegate
+                                                        </Button>
+                                                    )}
                                                 {prop[0] ===
                                                     'Loading Nodes...' && (
-                                                    <Button
-                                                        disabled
-                                                        onClick={() => {
-                                                            handleDelegation({
-                                                                name: prop[1],
-                                                                id: prop[2],
-                                                                totalDelegated:
-                                                                    prop[3],
-                                                            })
-                                                        }}
-                                                        color="info"
-                                                        className="delegateButton"
-                                                    >
-                                                        Delegate
-                                                    </Button>
-                                                )}
+                                                        <Button
+                                                            disabled
+                                                            onClick={() => {
+                                                                handleDelegation({
+                                                                    name: prop[1],
+                                                                    id: prop[2],
+                                                                    totalDelegated:
+                                                                        prop[3],
+                                                                })
+                                                            }}
+                                                            color="info"
+                                                            className="delegateButton"
+                                                        >
+                                                            Delegate
+                                                        </Button>
+                                                    )}
                                             </div>
                                         ),
                                     }
