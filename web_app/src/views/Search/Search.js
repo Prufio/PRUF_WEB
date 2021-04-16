@@ -2454,9 +2454,9 @@ export default function Search(props) {
       obj.engraving = "";
       return finalizeAsset(obj);
     } else if (storageProvider === "1") {
-      props.prufClient.utils.ipfsFromB32(obj.engravingA).then((e) => {
+      props.prufClient.utils.ipfsFromB32(obj.engravingA).then(async (e) => {
         engravingQuery = e;
-        for (const chunk of window.ipfs.cat(engravingQuery)) {
+        for await (const chunk of window.ipfs.cat(engravingQuery)) {
           let str = new TextDecoder("utf-8").decode(chunk);
           console.log(str);
           try {
@@ -2586,7 +2586,7 @@ export default function Search(props) {
         req.responseType = "text";
 
         req.onload = function () {
-          console.log("response", this.response);
+          //console.log("response", this.response);
           if (this.response.includes("base64")) {
             obj.DisplayImage = this.response;
             setAsset(obj);

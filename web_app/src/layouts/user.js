@@ -1641,7 +1641,7 @@ export default function Dashboard(props) {
         req.responseType = "text";
 
         req.onload = function () {
-          console.log("response", this.response);
+          //console.log("response", this.response);
           if (this.response.includes("base64")) {
             obj.DisplayImage = this.response;
             finalizedAssets.push(obj);
