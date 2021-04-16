@@ -2066,13 +2066,7 @@ export default function Dashboard(props) {
                   Node:&nbsp;
             </h4>
                 <h4 className={classes.cardTitle}>
-                  {selectedAssetObj.assetClassName} (
-            </h4>
-                <h4 className={classes.cardTitleContent}>
-                  ID:&nbsp;
-            </h4>
-                <h4 className={classes.cardTitle}>
-                  {selectedAssetObj.assetClass})
+                  {selectedAssetObj.assetClassName}
             </h4>
               </div>
 

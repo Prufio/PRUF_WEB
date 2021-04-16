@@ -32,7 +32,6 @@ export default function SetForSale(props) {
     // eslint-disable-next-line no-unused-vars
     const [txHash, setTxHash] = React.useState('')
     const [price, setPrice] = React.useState('')
-    // eslint-disable-next-line no-unused-vars
     const [currency, setCurrency] = React.useState('2')
     const [loginPrice, setloginPrice] = React.useState('')
     const [loginPriceState, setloginPriceState] = React.useState('')

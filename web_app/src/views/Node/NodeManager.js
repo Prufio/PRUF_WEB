@@ -951,10 +951,6 @@ export default function NodeManager(props) {
                                         accessor: 'name',
                                     },
                                     {
-                                        Header: 'Node ID',
-                                        accessor: 'nodeId',
-                                    },
-                                    {
                                         Header: 'Actions',
                                         accessor: 'actions',
                                     },
@@ -963,7 +959,6 @@ export default function NodeManager(props) {
                                     return {
                                         id: key,
                                         name: prop[0],
-                                        nodeId: prop[1],
                                         actions: (
                                             // we've added some custom button actions
                                             <div className="actions-right">
