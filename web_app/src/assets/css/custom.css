@@ -780,12 +780,15 @@ cursor:pointer;
 }
 
 .homeCardText {
+  background-color: transparent !important;
+  border: none !important;
   color: rgb(0, 0, 0);
 }
 
 
 .homeCardText:hover {
   color: rgb(78, 78, 78);
+  cursor: pointer;
 }
 
 .IDText {

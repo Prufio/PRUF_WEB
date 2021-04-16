@@ -39,6 +39,7 @@ import { simpleBarChart, pieChart } from 'variables/charts.js'
 import styles from 'assets/jss/material-dashboard-pro-react/views/dashboardStyle.js'
 import chartStyles from 'assets/jss/material-dashboard-pro-react/views/chartsStyle.js'
 import swal from 'sweetalert'
+import { isMobile } from 'react-device-detect'
 
 // const styles = {
 //   cardIconTitle: {
@@ -643,7 +644,7 @@ export default function NodeManager(props) {
                 </Card>
                 <Card>
                     <CardBody>
-                        {dash && !delegation && !analytics && (
+                        {dash && !delegation && !analytics && !isMobile && (
                             <ReactTableSimple
                                 columns={[
                                     {
@@ -674,6 +675,295 @@ export default function NodeManager(props) {
                                         nodeId: prop[1],
                                         totalDelegated: prop[2],
                                         transactionsPerEpoch: prop[3],
+                                        actions: (
+                                            // we've added some custom button actions
+                                            <div className="actions-right">
+                                                {/* use this button to add a like kind of action */}
+
+                                                {prop[0] ===
+                                                    'No nodes held by user' && (
+                                                        <Button
+                                                            simple
+                                                            onClick={() => {
+                                                                window.location.href =
+                                                                    '/#/user/create-node'
+                                                            }}
+                                                            color="info"
+                                                            className="like"
+                                                        >
+                                                            Create Node
+                                                        </Button>
+                                                    )}
+                                                {prop[0] ===
+                                                    'Loading Nodes...' && (
+                                                        <Button
+                                                            disabled
+                                                            simple
+                                                            onClick={() => {
+                                                                window.location.href =
+                                                                    '/#/user/create-node'
+                                                            }}
+                                                            color="info"
+                                                            className="like"
+                                                        >
+                                                            Create Node
+                                                        </Button>
+                                                    )}
+                                                {prop[0] === '~' && (
+                                                    <Button
+                                                        simple
+                                                        onClick={() => {
+                                                            window.location.href =
+                                                                '/#/user/create-node'
+                                                        }}
+                                                        color="info"
+                                                        className="like"
+                                                    >
+                                                        Create Node
+                                                    </Button>
+                                                )}
+                                                {prop[0] !==
+                                                    'No nodes held by user' &&
+                                                    prop[0] !==
+                                                    'Loading Nodes...' &&
+                                                    prop[0] !== '~' && (
+                                                        <form>
+                                                            <FormControl className="nodeOptions">
+                                                                <InputLabel className="functionSelectorText">
+                                                                    <Danger>
+                                                                        <Settings className="functionSelectorIcon" />
+                                                                    </Danger>
+                                                                    Options
+                                                                </InputLabel>
+                                                                <Select
+                                                                    MenuProps={{
+                                                                        className:
+                                                                            classes.selectMenu,
+                                                                    }}
+                                                                    classes={{
+                                                                        select:
+                                                                            classes.select,
+                                                                    }}
+                                                                    onChange={(
+                                                                        e
+                                                                    ) =>
+                                                                        handleSimple(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        )
+                                                                    }
+                                                                    inputProps={{
+                                                                        name:
+                                                                            'simpleSelect',
+                                                                        id: '',
+                                                                    }}
+                                                                >
+                                                                    <MenuItem
+                                                                        disabled
+                                                                        classes={{
+                                                                            root:
+                                                                                classes.selectMenuItem,
+                                                                        }}
+                                                                    >
+                                                                        Select
+                                                                        an
+                                                                        option
+                                                                        from the
+                                                                        list
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        classes={{
+                                                                            root:
+                                                                                classes.selectMenuItem,
+                                                                            selected:
+                                                                                classes.selectMenuItemSelected,
+                                                                        }}
+                                                                        value={{
+                                                                            href:
+                                                                                '/#/user/change-name',
+                                                                            name:
+                                                                                prop[0],
+                                                                            id:
+                                                                                prop[1],
+                                                                            index: key,
+                                                                        }}
+                                                                    >
+                                                                        Change
+                                                                        Name
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        classes={{
+                                                                            root:
+                                                                                classes.selectMenuItem,
+                                                                            selected:
+                                                                                classes.selectMenuItemSelected,
+                                                                        }}
+                                                                        value={{
+                                                                            href:
+                                                                                '/#/user/change-data',
+                                                                            name:
+                                                                                prop[0],
+                                                                            id:
+                                                                                prop[1],
+                                                                            index: key,
+                                                                        }}
+                                                                    >
+                                                                        Update
+                                                                        Data
+                                                                    </MenuItem>
+                                                                    <MenuItem
+                                                                        classes={{
+                                                                            root:
+                                                                                classes.selectMenuItem,
+                                                                            selected:
+                                                                                classes.selectMenuItemSelected,
+                                                                        }}
+                                                                        value={{
+                                                                            href:
+                                                                                '/#/user/change-costs',
+                                                                            name:
+                                                                                prop[0],
+                                                                            id:
+                                                                                prop[1],
+                                                                            index: key,
+                                                                        }}
+                                                                    >
+                                                                        Update
+                                                                        Operation
+                                                                        Costs
+                                                                    </MenuItem>
+                                                                    {extDataArr[
+                                                                        key
+                                                                    ] &&
+                                                                        extDataArr[
+                                                                            key
+                                                                        ]
+                                                                            .managementType ===
+                                                                        '3' && (
+                                                                            <MenuItem
+                                                                                classes={{
+                                                                                    root:
+                                                                                        classes.selectMenuItem,
+                                                                                    selected:
+                                                                                        classes.selectMenuItemSelected,
+                                                                                }}
+                                                                                value={{
+                                                                                    href:
+                                                                                        '/#/user/authorize-user',
+                                                                                    name:
+                                                                                        prop[0],
+                                                                                    id:
+                                                                                        prop[1],
+                                                                                    index: key,
+                                                                                }}
+                                                                            >
+                                                                                Authorize
+                                                                                User
+                                                                            </MenuItem>
+                                                                        )}
+                                                                    <MenuItem
+                                                                        classes={{
+                                                                            root:
+                                                                                classes.selectMenuItem,
+                                                                            selected:
+                                                                                classes.selectMenuItemSelected,
+                                                                        }}
+                                                                        value={{
+                                                                            href:
+                                                                                '/#/user/transfer-node',
+                                                                            name:
+                                                                                prop[0],
+                                                                            id:
+                                                                                prop[1],
+                                                                            index: key,
+                                                                        }}
+                                                                    >
+                                                                        Transfer
+                                                                    </MenuItem>
+                                                                    {extDataArr[
+                                                                        key
+                                                                    ] &&
+                                                                        extDataArr[
+                                                                            key
+                                                                        ]
+                                                                            .managementType !==
+                                                                        '255' && (
+                                                                            <MenuItem
+                                                                                classes={{
+                                                                                    root:
+                                                                                        classes.selectMenuItem,
+                                                                                    selected:
+                                                                                        classes.selectMenuItemSelected,
+                                                                                }}
+                                                                                value={{
+                                                                                    temp:
+                                                                                        'view',
+                                                                                    index: key,
+                                                                                }}
+                                                                            >
+                                                                                View
+                                                                            </MenuItem>
+                                                                        )}
+                                                                    {extDataArr[
+                                                                        key
+                                                                    ] &&
+                                                                        extDataArr[
+                                                                            key
+                                                                        ]
+                                                                            .managementType ===
+                                                                        '255' && (
+                                                                            <MenuItem
+                                                                                classes={{
+                                                                                    root:
+                                                                                        classes.selectMenuItem,
+                                                                                    selected:
+                                                                                        classes.selectMenuItemSelected,
+                                                                                }}
+                                                                                value={{
+                                                                                    href:
+                                                                                        '/#/user/finalize-node',
+                                                                                    name:
+                                                                                        prop[0],
+                                                                                    id:
+                                                                                        prop[1],
+                                                                                    index: key,
+                                                                                }}
+                                                                            >
+                                                                                Finalize
+                                                                            </MenuItem>
+                                                                        )}
+                                                                </Select>
+                                                            </FormControl>
+                                                        </form>
+                                                    )}
+                                            </div>
+                                        ),
+                                    }
+                                })}
+                            />
+                        )}
+                        {dash && !delegation && !analytics && isMobile && (
+                            <ReactTableSimple
+                                columns={[
+                                    {
+                                        Header: 'Name',
+                                        accessor: 'name',
+                                    },
+                                    {
+                                        Header: 'Node ID',
+                                        accessor: 'nodeId',
+                                    },
+                                    {
+                                        Header: 'Actions',
+                                        accessor: 'actions',
+                                    },
+                                ]}
+                                data={nodeData.map((prop, key) => {
+                                    return {
+                                        id: key,
+                                        name: prop[0],
+                                        nodeId: prop[1],
                                         actions: (
                                             // we've added some custom button actions
                                             <div className="actions-right">

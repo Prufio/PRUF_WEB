@@ -2182,7 +2182,7 @@ export default function Dashboard(props) {
                   {!copyText && (
                     <Tooltip title="Copy to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp;{" "}
+                        Asset ID:
                         <button
                           className="IDText"
                           onClick={() => {
@@ -2197,7 +2197,7 @@ export default function Dashboard(props) {
                   {copyText && (
                     <Tooltip title="Copied to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp;{" "}
+                        Asset ID:
                         <button
                           className="IDText"
                           onClick={() => {
@@ -2216,7 +2216,7 @@ export default function Dashboard(props) {
                   {!copyText && (
                     <Tooltip title="Copy to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp;{" "}
+                        Asset ID:
                         <button
                           className="IDText"
                           onClick={() => {
@@ -2233,7 +2233,7 @@ export default function Dashboard(props) {
                   {copyText && (
                     <Tooltip title="Copied to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp;{" "}
+                        Asset ID:
                         <button
                           className="IDText"
                           onClick={() => {
@@ -2258,7 +2258,7 @@ export default function Dashboard(props) {
                     }}
                   >
                     <span>
-                      Asset ID: &nbsp;{" "}
+                      Asset ID:
                       {selectedAssetObj.idxHash.substring(0, 10) +
                         "..." +
                         selectedAssetObj.idxHash.substring(56, 66)}
@@ -2319,7 +2319,12 @@ export default function Dashboard(props) {
 
       {!viewAsset && (
         <Card className="dashboardFooter">
-          <h4>Assets Per Page: </h4>
+          {isMobile && (
+            <h6>Assets Per Page: </h6>
+          )}
+          {!isMobile && (
+            <h4>Assets Per Page: </h4>
+          )}
           <br />
           <Select
             MenuProps={{
@@ -2423,10 +2428,16 @@ export default function Dashboard(props) {
               </Button>
             )}
 
-            {numOfPages > 0 && (
+            {numOfPages > 0 && !isMobile && (
               <h4>
                 Page {pageNum} / {numOfPages}
               </h4>
+            )}
+
+            {numOfPages > 0 && isMobile && (
+              <h6>
+                Page {pageNum} / {numOfPages}
+              </h6>
             )}
 
             {numOfPages > 0 && pageNum !== numOfPages && (

@@ -468,12 +468,12 @@ export default function Home(props) {
                             props.IDHolder === false ? (
                                 !isMinting ? (
                                     <>
-                                        <Button
+                                        <button
                                             className="homeCardText"
                                             onClick={() => mintID}
                                         >
                                             No ID held by user
-                                        </Button>
+                                        </button>
                                     </>
                                 ) : (
                                     <>

@@ -2,6 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import '../../assets/css/custom.css'
+import { isMobile } from "react-device-detect";
 // import { Manager, Target, Popper } from "react-popper";
 
 // @material-ui/core components
@@ -75,36 +76,40 @@ export default function HeaderLinks(props) {
     //   [classes.managerClasses]: true,
     // });
     return (
-        <div className={wrapper}>
-            <CustomInput
-                rtlActive={rtlActive}
-                formControlProps={{
-                    className: classes.top + ' ' + classes.search,
-                }}
-                inputProps={{
-                    onChange: (e) => setSearchBarVal(e.target.value),
-                    placeholder: 'Search Asset ID',
-                    inputProps: {
-                        'aria-label': 'Search Asset ID',
-                        className: classes.searchInput,
-                    },
-                }}
-            />
-            <Button
-                color="white"
-                onClick={() => handleSearch()}
-                aria-label="edit"
-                justIcon
-                round
-                className={searchButton}
-            >
-                <Search
-                    className={
-                        classes.headerLinksSvg + ' ' + classes.searchIcon
-                    }
-                />
-            </Button>
-        </div>
+        <>
+            {!isMobile && (
+                <div className={wrapper}>
+                    <CustomInput
+                        rtlActive={rtlActive}
+                        formControlProps={{
+                            className: classes.top + ' ' + classes.search,
+                        }}
+                        inputProps={{
+                            onChange: (e) => setSearchBarVal(e.target.value),
+                            placeholder: 'Search Asset ID',
+                            inputProps: {
+                                'aria-label': 'Search Asset ID',
+                                className: classes.searchInput,
+                            },
+                        }}
+                    />
+                    <Button
+                        color="white"
+                        onClick={() => handleSearch()}
+                        aria-label="edit"
+                        justIcon
+                        round
+                        className={searchButton}
+                    >
+                        <Search
+                            className={
+                                classes.headerLinksSvg + ' ' + classes.searchIcon
+                            }
+                        />
+                    </Button>
+                </div>
+            )}
+        </>
     )
 }
 

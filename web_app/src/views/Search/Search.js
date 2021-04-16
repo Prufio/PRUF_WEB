@@ -3319,13 +3319,7 @@ export default function Search(props) {
                         Node:&nbsp;
                     </h4>
                       <h4 className={imgClasses.cardTitle}>
-                        {asset.assetClassName} (
-                    </h4>
-                      <h4 className={imgClasses.cardTitleContent}>
-                        ID: &nbsp;
-                    </h4>
-                      <h4 className={imgClasses.cardTitle}>
-                        {asset.assetClass})
+                        {asset.assetClassName}
                     </h4>
                     </div>
 
@@ -4233,7 +4227,7 @@ export default function Search(props) {
                     {!copyText && (
                       <Tooltip title="Copy to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
+                          Asset ID:
                           <button
                             className="IDText"
                             onClick={() => {
@@ -4248,7 +4242,7 @@ export default function Search(props) {
                     {copyText && (
                       <Tooltip title="Copied to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
+                          Asset ID:
                           <button
                             className="IDText"
                             onClick={() => {
@@ -4267,7 +4261,7 @@ export default function Search(props) {
                     {!copyText && (
                       <Tooltip title="Copy to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
+                          Asset ID:
                           <button
                             className="IDText"
                             onClick={() => {
@@ -4284,7 +4278,7 @@ export default function Search(props) {
                     {copyText && (
                       <Tooltip title="Copied to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
+                          Asset ID:
                           <button
                             className="IDText"
                             onClick={() => {
@@ -4309,7 +4303,7 @@ export default function Search(props) {
                       }}
                     >
                       <span>
-                        Asset ID: &nbsp;{" "}
+                        Asset ID:
                         {asset.id.substring(0, 10) +
                           "..." +
                           asset.id.substring(56, 66)}
