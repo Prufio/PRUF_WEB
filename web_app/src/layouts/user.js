@@ -63,9 +63,10 @@ export default function Dashboard(props) {
   const [isIDHolder, setIsIDHolder] = React.useState();
   const [sidebarRoutes, setSidebarRoutes] = React.useState([
     routes[0],
-    routes[2],
     routes[1],
+    routes[2],
     routes[3],
+    routes[4],
   ]);
   const [sps, setSps] = React.useState(undefined);
   const [assetIds, setAssetIds] = React.useState([]);
@@ -420,8 +421,8 @@ export default function Dashboard(props) {
       hrefStr !== "/#/user/dashboard" &&
       hrefStr !== "/#/user/home" &&
       hrefStr !== "/#/user/search" &&
-      hrefStr !== "/#/user/new-asset" &&
-      hrefStr !== "/#/user/node-manager"
+      hrefStr !== "/#/user/node-manager" &&
+      hrefStr !== "/#/user/new-asset"
     ) {
       console.log("Rerouting...");
       window.location.href = "/#/user/home";

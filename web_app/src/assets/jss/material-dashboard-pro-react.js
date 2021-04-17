@@ -380,6 +380,14 @@ const cardTitle = {
   },
 };
 
+const cardText = {
+  ...title,
+  marginTop: "0",
+  marginBottom: "3px",
+  minHeight: "auto",
+  fontWeight: "bold",
+};
+
 const cardSubtitle = {
   marginTop: "-.375rem",
 };
@@ -439,6 +447,7 @@ export {
   tooltip,
   title,
   cardTitle,
+  cardText,
   cardSubtitle,
   cardLink,
 };

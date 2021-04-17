@@ -2,6 +2,7 @@ import {
   successColor,
   tooltip,
   cardTitle,
+  cardText,
   grayColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 
@@ -30,6 +31,9 @@ const dashboardStyle = {
     marginTop: "0px",
     marginBottom: "3px",
     textAlign: "center",
+  },
+  cardTitleContent: {
+    ...cardText,
   },
   cardCategory: {
     color: grayColor[0],

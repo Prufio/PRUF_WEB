@@ -46,6 +46,8 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 import placeholder from "../../assets/img/placeholder.jpg";
 import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print";
+import ARweavePNG from "../../assets/img/arweave.png";
+import IPFSPNG from "../../assets/img/ipfs.png";
 
 const useStyles = makeStyles(styles);
 const useImgStyles = makeStyles(imgStyles);
@@ -1930,11 +1932,10 @@ export default function Search(props) {
   };
 
   const copyTextSnippet = (temp) => {
+    navigator.clipboard.writeText(temp);
     if (isMobile) {
-      navigator.clipboard.writeText(temp);
       swal("Asset ID Copied to Clipboard!");
     }
-
     if (!isMobile) {
       setCopyText(true);
       setTimeout(() => {
@@ -2250,7 +2251,7 @@ export default function Search(props) {
       if (error) return;
       else {
         window.web3.utils.toChecksumAddress(result) ===
-        window.web3.utils.toChecksumAddress(props.addr)
+          window.web3.utils.toChecksumAddress(props.addr)
           ? setOwnerOf(true)
           : setOwnerOf(false);
       }
@@ -2385,7 +2386,7 @@ export default function Search(props) {
       console.log(obj.mutableDataA, obj.mutableDataB);
       mutableDataQuery = window.web3.utils.hexToUtf8(
         obj.mutableDataA +
-          obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000"))
+        obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000"))
       );
 
       let xhr = new XMLHttpRequest();
@@ -2472,10 +2473,10 @@ export default function Search(props) {
       console.log(obj.engravingB.indexOf("0000000000000000000000"));
       engravingQuery = window.web3.utils.hexToUtf8(
         obj.engravingA +
-          obj.engravingB.substring(
-            2,
-            obj.engravingB.indexOf("0000000000000000000000") + 1
-          )
+        obj.engravingB.substring(
+          2,
+          obj.engravingB.indexOf("0000000000000000000000") + 1
+        )
       );
 
       let xhr = new XMLHttpRequest();
@@ -2543,6 +2544,7 @@ export default function Search(props) {
       obj.engraving.Description || obj.mutableData.Description || "";
     obj.ContentUrl =
       obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
+    obj.storageProvider = obj.assetClassData.storageProvider;
 
     let vals = Object.values(obj.photo),
       keys = Object.keys(obj.photo);
@@ -3009,7 +3011,7 @@ export default function Search(props) {
                             if (
                               event.target.value !== "" &&
                               event.target.value.trim().substring(0, 2) ===
-                                "0x" &&
+                              "0x" &&
                               event.target.value.trim().length === 66
                             ) {
                               setloginIDXState("success");
@@ -3304,23 +3306,64 @@ export default function Search(props) {
                         {generateThumbs(asset)}
                       </div>
                     )}
-                    <h4 className={classes.cardTitle}>Name: {asset.name}</h4>
-                    <h4 className={classes.cardTitle}>
-                      Node: {asset.assetClassName} (ID:{asset.assetClass})
+                    <div className="horizontal">
+                      <h4 className={imgClasses.cardTitleContent}>
+                        Name:&nbsp;
                     </h4>
-                    {currency === "" && (
-                      <h4 className={classes.cardTitle}>
-                        Status: {asset.status}{" "}
+                      <h4 className={imgClasses.cardTitle}>
+                        {asset.name}
                       </h4>
-                    )}
-                    {currency !== "" && (
-                      <>
-                        <h4 className={classes.cardTitle}>Status: For Sale </h4>
-                        <h4 className={classes.cardTitle}>
-                          Price: {currency} {price}{" "}
+                    </div>
+                    <div className="horizontal">
+                      <h4 className={imgClasses.cardTitleContent}>
+                        Node:&nbsp;
+                    </h4>
+                      <h4 className={imgClasses.cardTitle}>
+                        {asset.assetClassName}
+                    </h4>
+                    </div>
+
+                    {asset.currency === "0" && (
+                      <div className="horizontal">
+                        <h4 className={imgClasses.cardTitleContent}>
+                          Status: &nbsp;
+                      </h4>
+                        <h4 className={imgClasses.cardTitle}>
+                          {asset.status}
                         </h4>
-                      </>
+                      </div>
                     )}
+                    {asset.currency === undefined && (
+                      <div className="horizontal">
+                        <h4 className={imgClasses.cardTitleContent}>
+                          Status: &nbsp;
+                      </h4>
+                        <h4 className={imgClasses.cardTitle}>
+                          {asset.status}
+                        </h4>
+                      </div>
+                    )}
+                    {asset.currency !== "0" &&
+                      asset.currency !== undefined && (
+                        <>
+                          <div className="horizontal">
+                            <h4 className={imgClasses.cardTitleContent}>
+                              Status: &nbsp;
+                        </h4>
+                            <h4 className={imgClasses.cardTitle}>
+                              For Sale
+                        </h4>
+                          </div>
+                          <div className="horizontal">
+                            <h4 className={imgClasses.cardTitleContent}>
+                              Price: &nbsp;
+                        </h4>
+                            <h4 className={imgClasses.cardTitle}>
+                              {currency} {asset.price}
+                            </h4>
+                          </div>
+                        </>
+                      )}
                     {asset.text !== undefined && (
                       <>
                         <br />
@@ -3349,6 +3392,24 @@ export default function Search(props) {
                           />
                         )}
                       </>
+                    )}
+                    {asset.storageProvider === "2" && (
+                      <h6 className="storageProviderText">
+                        See it on
+                        <a
+                          href={`${asset.ContentUrl}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img src={ARweavePNG} className="ARweave" alt=""></img>
+                        </a>
+                      </h6>
+                    )}
+                    {asset.storageProvider === "1" && (
+                      <h6 className="storageProviderText">
+                        Built using
+                        <img src={IPFSPNG} className="IPFS" alt="" />
+                      </h6>
                     )}
                     {/*@dev URLs go here*/}
                     <br />
@@ -3480,7 +3541,7 @@ export default function Search(props) {
                                               select: classes.select,
                                             }}
                                             value={classSelect}
-                                            onChange={() => {}}
+                                            onChange={() => { }}
                                             inputProps={{
                                               name: "classSelect",
                                               id: "class-select",
@@ -3510,7 +3571,7 @@ export default function Search(props) {
                                           >
                                             {generateSubCatList(
                                               props.assetClassSets[
-                                                selectedRootID
+                                              selectedRootID
                                               ]
                                             )}
                                           </Select>
@@ -4166,30 +4227,30 @@ export default function Search(props) {
                     {!copyText && (
                       <Tooltip title="Copy to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
+                          Asset ID:
+                          <button
                             className="IDText"
                             onClick={() => {
                               copyTextSnippet(asset.id);
                             }}
                           >
                             {asset.id}
-                          </Button>
+                          </button>
                         </div>
                       </Tooltip>
                     )}
                     {copyText && (
                       <Tooltip title="Copied to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
+                          Asset ID:
+                          <button
                             className="IDText"
                             onClick={() => {
                               copyTextSnippet(asset.id);
                             }}
                           >
                             {asset.id}
-                          </Button>
+                          </button>
                         </div>
                       </Tooltip>
                     )}
@@ -4200,8 +4261,8 @@ export default function Search(props) {
                     {!copyText && (
                       <Tooltip title="Copy to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
+                          Asset ID:
+                          <button
                             className="IDText"
                             onClick={() => {
                               copyTextSnippet(asset.id);
@@ -4210,15 +4271,15 @@ export default function Search(props) {
                             {asset.id.substring(0, 10) +
                               "..." +
                               asset.id.substring(56, 66)}
-                          </Button>
+                          </button>
                         </div>
                       </Tooltip>
                     )}
                     {copyText && (
                       <Tooltip title="Copied to Clipboard">
                         <div className={classes.stats}>
-                          Asset ID: &nbsp;{" "}
-                          <Button
+                          Asset ID:
+                          <button
                             className="IDText"
                             onClick={() => {
                               copyTextSnippet(asset.id);
@@ -4227,7 +4288,7 @@ export default function Search(props) {
                             {asset.id.substring(0, 10) +
                               "..." +
                               asset.id.substring(56, 66)}
-                          </Button>
+                          </button>
                         </div>
                       </Tooltip>
                     )}
@@ -4242,7 +4303,7 @@ export default function Search(props) {
                       }}
                     >
                       <span>
-                        Asset ID: &nbsp;{" "}
+                        Asset ID:
                         {asset.id.substring(0, 10) +
                           "..." +
                           asset.id.substring(56, 66)}

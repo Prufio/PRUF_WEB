@@ -780,12 +780,15 @@ cursor:pointer;
 }
 
 .homeCardText {
+  background-color: transparent !important;
+  border: none !important;
   color: rgb(0, 0, 0);
 }
 
 
 .homeCardText:hover {
   color: rgb(78, 78, 78);
+  cursor: pointer;
 }
 
 .IDText {
@@ -1205,7 +1208,7 @@ max-width: 80px !important;
  width: 250px;
  height: 80px;
  margin-top: 20px !important;
- margin-left: 50px !important;
+ margin-left: 5px !important;
 }
 
 .managementType:hover {
@@ -1218,7 +1221,7 @@ max-width: 80px !important;
  width: 260px;
  height: 80px;
  margin-top: 20px !important;
- margin-left: 50px !important;
+ margin-left: 5px !important;
  transition: opacity.3s ease-in-out !important;
 }
 
@@ -1295,4 +1298,9 @@ max-width: 80px !important;
 
 .bottomSpace {
   margin-top: 15px !important;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
 }
