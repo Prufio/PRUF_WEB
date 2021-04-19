@@ -239,15 +239,58 @@ export default function NewRecord(props) {
       props.prufClient.get
         // eslint-disable-next-line react/prop-types
         .nodeData(event.target.value)
-        .call((_error, _result) => {
+        .call(async (_error, _result) => {
           if (_error) {
             console.log("IN ERROR IN ERROR IN ERROR");
           } else {
-            if(isMobile && _result.storageProvider === "2") {
-              return swal("This asset class is configured for Awreave storage, and is currently disabled for usage on mobile devices. Please use a non-mobile device to mint using this asset class.")
+            if (isMobile && _result.storageProvider === "2") {
+              return swal("This node is configured for Awreave storage, and is currently disabled for usage on mobile devices. Please use a non-mobile device to mint using this asset class.")
             }
-            if(_result.managementType === "255") {
-              return swal("This asset class is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard.")
+            if (_result.managementType === "1") {
+              await props.prufClient.get.ownerOfNode(event.target.value).call((_error, _result) => {
+                if (_error) {
+                  console.log("Error: ", _error);
+                } else {
+                  if (_result === props.addr) {
+                    console.log("Access Granted")
+                  }
+                  else {
+                    return swal("This node is in a private management type. Only the node holder has access to asset creation.")
+                  }
+                }
+              })
+            }
+            if (!isMobile && _result.managementType === "2") {
+              await props.prufClient.get.ownerOfNode(event.target.value).call((_error, _result) => {
+                if (_error) {
+                  console.log("Error: ", _error);
+                } else {
+                  if (_result === props.addr) {
+                    console.log("Access Granted")
+                  }
+                  else {
+                    return swal("This node is in a permissive management type. Only the node holder has access to asset creation.")
+                  }
+                }
+              })
+            }
+            if (!isMobile && _result.managementType === "3") {
+              let addrHash = await window.web3.utils.soliditySha3(props.addr)
+              await props.prufClient.get.userType(addrHash, event.target.value).call((_error, _result) => {
+                if (_error) {
+                  console.log("Error: ", _error);
+                } else {
+                  if (_result === "1") {
+                    console.log("Access Granted")
+                  }
+                  else {
+                    return swal("This node is in an authorized management type. Only the node holder and node-authorized users have access to asset creation.")
+                  }
+                }
+              })
+            }
+            if (_result.managementType === "255") {
+              return swal("This node is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard.")
             }
             setAssetClassName(
               _result.name
@@ -2051,8 +2094,8 @@ export default function NewRecord(props) {
                               {storageProvider === "2"
                                 ? ` Arweave`
                                 : storageProvider === "1"
-                                ? ` IPFS`
-                                : ` Unknown Client`}
+                                  ? ` IPFS`
+                                  : ` Unknown Client`}
                               <div className="lds-ellipsisIF">
                                 <div></div>
                                 <div></div>

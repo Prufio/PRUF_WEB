@@ -164,7 +164,7 @@ export default function FinalizeNode(props) {
                             {managementType === '1' && <>Private</>}
                             {managementType === '2' && <>Permissive</>}
                             {managementType === '3' && <>Authorized</>}
-                            {managementType === '4' && <>Trusted</>}
+                            {/* {managementType === '4' && <>Trusted</>} */}
                         </h4>
                     </div>
                     <div className="delegationTips">
@@ -346,7 +346,7 @@ export default function FinalizeNode(props) {
                                     Authorized
                                 </Button>
                             )}
-                            {!managementType4 && (
+                            {/* {!managementType4 && (
                                 <Button
                                     className="managementType"
                                     color="info"
@@ -355,8 +355,8 @@ export default function FinalizeNode(props) {
                                     <VerifiedUser />
                                     Trusted
                                 </Button>
-                            )}
-                            {managementType4 && (
+                            )} */}
+                            {/* {managementType4 && (
                                 <Button
                                     className="managementTypeSelected"
                                     onClick={() => setManagementType4Button()}
@@ -364,7 +364,7 @@ export default function FinalizeNode(props) {
                                     <VerifiedUser />
                                     Trusted
                                 </Button>
-                            )}
+                            )} */}
                         </GridItem>
                         <GridItem xs={12} sm={8}>
                             <Card className="slide-right">
@@ -418,9 +418,9 @@ export default function FinalizeNode(props) {
                                         </p>
                                     </>
                                 )}
-                                {managementType4 && (
+                                {/* {managementType4 && (
                                     <>
-                                        <h3>Public</h3>
+                                        <h3>Trusted</h3>
                                         <p>User-First</p>
                                         <p>
                                             Public management is the
@@ -431,7 +431,7 @@ export default function FinalizeNode(props) {
                                             common goods or services.
                                         </p>
                                     </>
-                                )}
+                                )} */}
                             </Card>
                         </GridItem>
                     </GridContainer>
