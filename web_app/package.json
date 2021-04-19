@@ -38,6 +38,7 @@
     "react-qrcode-logo": "^2.2.1",
     "react-router-dom": "5.2.0",
     "react-scripts": "^4.0.3",
+    "react-simple-snake": "^0.2.2",
     "react-swipeable-views": "0.13.9",
     "react-table": "7.1.0",
     "react-tagsinput": "3.19.0",

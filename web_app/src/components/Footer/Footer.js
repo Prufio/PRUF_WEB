@@ -3,6 +3,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
 import "../../assets/css/custom.css";
+import swalReact from "@sweetalert/with-react";
+import Copyright from 'react-simple-snake'
+import { isMobile } from "react-device-detect";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -76,12 +79,39 @@ export default function Footer(props) {
             </ListItem>
           </List>
         </div>
-        <p className={classes.right}>
-          &copy; {1900 + new Date().getYear()}{" "}
-          <a href="https://pruf.io/" className="lightBlue" target="_blank">
-            {rtlActive ? "توقيت الإبداعية" : "PRüF"}
-          </a>
-        </p>
+        {isMobile && (
+          <p className={classes.right}>
+            &copy;
+            {1900 + new Date().getYear()
+            }
+            {" "}
+            <a href="https://pruf.io/" className="lightBlue" target="_blank">
+            PRüF
+            </a>
+          </p>
+        )}
+        {!isMobile && (
+          <p className={classes.right}>
+            <button
+              className="clearButton"
+              onClick={() => {
+                swalReact({
+                  content: (
+                    <Copyright />
+                  ),
+                  buttons: "close",
+                });
+              }}>
+              &copy;
+                      </button>
+            {1900 + new Date().getYear()
+            }
+            {" "}
+            <a href="https://pruf.io/" className="lightBlue" target="_blank">
+            PRüF
+            </a>
+          </p>
+        )}
       </div>
     </footer>
   );

@@ -1,7 +1,6 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import swal from "sweetalert";
-import swalReact from "@sweetalert/with-react";
 import base64 from "base64-arraybuffer";
 import Jdenticon from "react-jdenticon";
 import { isMobile } from "react-device-detect";
@@ -260,7 +259,7 @@ export default function NewRecord(props) {
                 }
               })
             }
-            if (!isMobile && _result.managementType === "2") {
+            if (_result.managementType === "2") {
               await props.prufClient.get.ownerOfNode(event.target.value).call((_error, _result) => {
                 if (_error) {
                   console.log("Error: ", _error);
@@ -274,7 +273,7 @@ export default function NewRecord(props) {
                 }
               })
             }
-            if (!isMobile && _result.managementType === "3") {
+            if (_result.managementType === "3") {
               let addrHash = await window.web3.utils.soliditySha3(props.addr)
               await props.prufClient.get.userType(addrHash, event.target.value).call((_error, _result) => {
                 if (_error) {

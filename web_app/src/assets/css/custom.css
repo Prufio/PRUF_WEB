@@ -1304,3 +1304,8 @@ max-width: 80px !important;
   display: flex;
   flex-direction: row;
 }
+
+.clearButton {
+  background: transparent !important;
+  border: none !important;
+}

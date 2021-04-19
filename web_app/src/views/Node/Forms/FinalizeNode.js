@@ -164,7 +164,7 @@ export default function FinalizeNode(props) {
                             {managementType === '1' && <>Private</>}
                             {managementType === '2' && <>Permissive</>}
                             {managementType === '3' && <>Authorized</>}
-                            {/* {managementType === '4' && <>Trusted</>} */}
+                            {managementType === '4' && <>Public</>}
                         </h4>
                     </div>
                     <div className="delegationTips">
@@ -346,25 +346,25 @@ export default function FinalizeNode(props) {
                                     Authorized
                                 </Button>
                             )}
-                            {/* {!managementType4 && (
+                            {!managementType4 && (
                                 <Button
                                     className="managementType"
                                     color="info"
                                     onClick={() => setManagementType4Button()}
                                 >
                                     <VerifiedUser />
-                                    Trusted
+                                    Public
                                 </Button>
-                            )} */}
-                            {/* {managementType4 && (
+                            )}
+                            {managementType4 && (
                                 <Button
                                     className="managementTypeSelected"
                                     onClick={() => setManagementType4Button()}
                                 >
                                     <VerifiedUser />
-                                    Trusted
+                                    Public
                                 </Button>
-                            )} */}
+                            )}
                         </GridItem>
                         <GridItem xs={12} sm={8}>
                             <Card className="slide-right">
@@ -418,20 +418,20 @@ export default function FinalizeNode(props) {
                                         </p>
                                     </>
                                 )}
-                                {/* {managementType4 && (
+                                {managementType4 && (
                                     <>
-                                        <h3>Trusted</h3>
+                                        <h3>Public</h3>
                                         <p>User-First</p>
                                         <p>
                                             Public management is the
                                             user-sovereign approach. Any user
                                             who holds a verified ID Token may
-                                            mint, import, and export assets. May
+                                            mint, import, and export assets. Could
                                             apply to the management of any
                                             common goods or services.
                                         </p>
                                     </>
-                                )} */}
+                                )}
                             </Card>
                         </GridItem>
                     </GridContainer>
