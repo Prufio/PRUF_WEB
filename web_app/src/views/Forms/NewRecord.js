@@ -1,8 +1,10 @@
 import React from "react";
 import "../../assets/css/custom.css";
 import swal from "sweetalert";
+import swalReact from "@sweetalert/with-react";
 import base64 from "base64-arraybuffer";
 import Jdenticon from "react-jdenticon";
+import { isMobile } from "react-device-detect";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -231,8 +233,6 @@ export default function NewRecord(props) {
   };
 
   const ACLogin = (event) => {
-    setAssetClass(event.target.value);
-    setClassSelect(event.target.value);
     console.log(event.target.value);
     try {
       // eslint-disable-next-line react/prop-types
@@ -243,6 +243,12 @@ export default function NewRecord(props) {
           if (_error) {
             console.log("IN ERROR IN ERROR IN ERROR");
           } else {
+            if(isMobile && _result.storageProvider === "2") {
+              return swal("This asset class is configured for Awreave storage, and is currently disabled for usage on mobile devices. Please use a non-mobile device to mint using this asset class.")
+            }
+            if(_result.managementType === "255") {
+              return swal("This asset class is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard.")
+            }
             setAssetClassName(
               _result.name
                 .toLowerCase()
@@ -283,6 +289,8 @@ export default function NewRecord(props) {
                 }
               });
           }
+          setAssetClass(event.target.value);
+          setClassSelect(event.target.value);
         });
     } catch {
       swal({

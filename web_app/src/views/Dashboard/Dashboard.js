@@ -3,6 +3,7 @@ import "../../assets/css/custom.css";
 import { isMobile, isAndroid } from "react-device-detect";
 import { RWebShare } from "react-web-share";
 import swalReact from "@sweetalert/with-react";
+import swal from "sweetalert";
 import Jdenticon from "react-jdenticon";
 import { QRCode } from "react-qrcode-logo";
 // @material-ui/core components
@@ -43,7 +44,6 @@ import TextField from "@material-ui/core/TextField";
 import Printer from "../../Resources/print";
 import ARweavePNG from "../../assets/img/arweave.png";
 import IPFSPNG from "../../assets/img/ipfs.png";
-import swal from "sweetalert";
 
 const useStyles = makeStyles(styles);
 
@@ -2140,7 +2140,7 @@ export default function Dashboard(props) {
               )}
               {selectedAssetObj.storageProvider === "2" && (
                 <h6 className="storageProviderText">
-                  See it on
+                  See it on&nbsp;
                   <a
                     href={`${selectedAssetObj.ContentUrl}`}
                     target="_blank"
@@ -2152,7 +2152,7 @@ export default function Dashboard(props) {
               )}
               {selectedAssetObj.storageProvider === "1" && (
                 <h6 className="storageProviderText">
-                  Built using
+                  Built using&nbsp;
                   <img src={IPFSPNG} className="IPFS" alt="" />
                 </h6>
               )}
