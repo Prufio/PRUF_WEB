@@ -97,9 +97,12 @@ export default function Footer(props) {
               onClick={() => {
                 swalReact({
                   content: (
-                    <Copyright />
+                    <div>
+                      <h5 className="someText">;)</h5>
+                    <Copyright percentageWidth="80" className="Copyright"/>
+                    </div>
                   ),
-                  buttons: "close",
+                  buttons: "Close",
                 });
               }}>
               &copy;
