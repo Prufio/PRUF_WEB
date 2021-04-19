@@ -1170,7 +1170,7 @@ export default function Dashboard(props) {
                   iteration + 1
                 );
               } else {
-                obj.price = _result["0"];
+                obj.price = window.web3.utils.fromWei(_result["0"]);
                 obj.currency = _result["1"];
                 _prufClient.get
                   .nodeData(obj.assetClass)
