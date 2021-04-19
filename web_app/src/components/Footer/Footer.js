@@ -98,8 +98,8 @@ export default function Footer(props) {
                 swalReact({
                   content: (
                     <div>
-                      <h5 className="someText">;)</h5>
-                    <Copyright percentageWidth="80" className="Copyright"/>
+                      <h5>;)</h5>
+                    <Copyright percentageWidth="80"/>
                     </div>
                   ),
                   buttons: "Close",
