@@ -2317,7 +2317,7 @@ export default function Search(props) {
           if (_error) {
             console.log("IN ERROR IN ERROR IN ERROR");
           } else {
-            obj.price = _result["0"];
+            obj.price = window.web3.utils.fromWei(_result["0"]);
             obj.currency = _result["1"];
 
             _result["0"] !== "0"

@@ -40,7 +40,7 @@ export default function SetForSale(props) {
 
     const link = document.createElement('div')
 
-    window.sentPacket = null
+    //window.sentPacket = null
 
     const classes = useStyles()
 
@@ -91,6 +91,7 @@ export default function SetForSale(props) {
     }, [])
 
     const goBack = () => {
+        //window.sentPacket = null
         if (assetInfo.lastRef === '/#/user/dashboard')
             window.backIndex = assetInfo.dBIndex
         window.location.href = assetInfo.lastRef
@@ -550,6 +551,7 @@ export default function SetForSale(props) {
                     })
                 })
         } else {
+            console.log(props.addr)
             await window.contracts.PURCHASE.methods
                 ._setPrice(
                     assetInfo.idxHash,
@@ -702,7 +704,7 @@ export default function SetForSale(props) {
                     )}
                     {!transactionActive &&
                         price ===
-                            '0'(
+                            '0'&& (
                                 <div className="MLBGradientSubmit">
                                     <Button
                                         color="info"
