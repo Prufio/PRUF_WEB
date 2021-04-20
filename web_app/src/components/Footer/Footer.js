@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import cx from "classnames";
 import "../../assets/css/custom.css";
 import swalReact from "@sweetalert/with-react";
-import Copyright from 'react-simple-snake'
 import { isMobile } from "react-device-detect";
 
 // @material-ui/core components
@@ -23,6 +22,27 @@ const useStyles = makeStyles(styles);
 export default function Footer(props) {
   const classes = useStyles();
   const { fluid, white, rtlActive } = props;
+  const [counter, setCounter] = React.useState(0);
+
+  const copy = () => {
+    document.body.style.cursor = 'help'
+    swalReact({
+      content: (
+        <>
+          <button onClick={() => { setCounter(1) }}><span className="bug">&#128128;</span></button>
+        </>
+      ),
+      buttons: "Close",
+    })
+  }
+
+  const copy2 = () => {
+    document.body.style.cursor = 'auto'
+    window.location.href = "/#/user/counter"
+    setCounter(0)
+  }
+
+
   var container = cx({
     [classes.container]: !fluid,
     [classes.containerFluid]: fluid,
@@ -37,6 +57,7 @@ export default function Footer(props) {
     [classes.block]: true,
     [classes.whiteColor]: white,
   });
+
   return (
     <footer className={classes.footer}>
       <div className={container}>
@@ -86,7 +107,7 @@ export default function Footer(props) {
             }
             {" "}
             <a href="https://pruf.io/" className="lightBlue" target="_blank">
-            PRüF
+              PRüF
             </a>
           </p>
         )}
@@ -94,25 +115,48 @@ export default function Footer(props) {
           <p className={classes.right}>
             <button
               className="clearButton"
-              onClick={() => {
-                swalReact({
-                  content: (
-                    <div>
-                      <h5>;)</h5>
-                    <Copyright percentageWidth="80"/>
-                    </div>
-                  ),
-                  buttons: "Close",
-                });
-              }}>
+              onClick={() => { copy() }}>
               &copy;
                       </button>
-            {1900 + new Date().getYear()
-            }
-            {" "}
-            <a href="https://pruf.io/" className="lightBlue" target="_blank">
-            PRüF
-            </a>
+            {counter === 0 && (
+              <>
+                {1900 + new Date().getYear()
+                }
+                {" "}
+              </>
+            )}
+            {counter === 1 && (
+              <button onClick={() => {
+                swalReact({
+                  content: (
+                    <button onClick={() => { setCounter(2) }}><span className="bug">&#128125;</span></button>
+                  ),
+                  buttons: "Close",
+                })
+              }} className="clearButton">2021</button>
+            )}
+            {counter === 2 && (
+              <>
+                {1900 + new Date().getYear()
+                }
+                {" "}
+              </>
+            )}
+            {counter === 0 && (
+              <a href="https://pruf.io/" className="lightBlue" target="_blank">
+                PRüF
+              </a>
+            )}
+            {counter === 1 && (
+              <a href="https://pruf.io/" className="lightBlue" target="_blank">
+                PRüF
+              </a>
+            )}
+            {counter === 2 && (
+              <button onClick={() => { copy2() }} className="clearButtonRed">
+                PRüF
+              </button>
+            )}
           </p>
         )}
       </div>

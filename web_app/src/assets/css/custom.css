@@ -6,6 +6,10 @@ body {
     background: linear-gradient(0deg, rgba(0, 83, 128, 0.212), #015f9218) !important;
     /* overflow-x: hidden !important; */
 }
+.CopyrightBackground {
+    background-image: url('../img/Sidebar Backgrounds/TracesWB.jpg') !important;
+    padding: 15px;
+}
 
 /* body {
     background: linear-gradient(0deg, rgba(0, 83, 128, 0.514), #015f923b) !important;
@@ -1310,6 +1314,16 @@ max-width: 80px !important;
   border: none !important;
 }
 
+.clearButtonRed {
+  background: transparent !important;
+  border: none !important;
+  color: red;
+}
+
 .jdenticonMoreInfo {
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
+ box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
+}
+
+.bug{
+  font-size: 40px !important;
 }
