@@ -3284,7 +3284,7 @@ export default function Search(props) {
                     {asset.currency === "0" && (
                       <div className="horizontal">
                         <h4 className={imgClasses.cardTitleContent}>
-                          Status: &nbsp;
+                          Status:&nbsp;
                       </h4>
                         <h4 className={imgClasses.cardTitle}>
                           {asset.status}
@@ -3294,7 +3294,7 @@ export default function Search(props) {
                     {asset.currency === undefined && (
                       <div className="horizontal">
                         <h4 className={imgClasses.cardTitleContent}>
-                          Status: &nbsp;
+                          Status:&nbsp;
                       </h4>
                         <h4 className={imgClasses.cardTitle}>
                           {asset.status}
@@ -3306,15 +3306,15 @@ export default function Search(props) {
                         <>
                           <div className="horizontal">
                             <h4 className={imgClasses.cardTitleContent}>
-                              Status: &nbsp;
+                              Status:&nbsp;
                         </h4>
                             <h4 className={imgClasses.cardTitle}>
-                              For Sale
+                            {asset.status}
                         </h4>
                           </div>
                           <div className="horizontal">
                             <h4 className={imgClasses.cardTitleContent}>
-                              Price: &nbsp;
+                              Sale Price:&nbsp;
                         </h4>
                             <h4 className={imgClasses.cardTitle}>
                               {currency} {asset.price}

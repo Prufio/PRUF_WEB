@@ -2011,12 +2011,12 @@ export default function Dashboard(props) {
                         Status:&nbsp;
                 </h4>
                       <h4 className={classes.cardTitle}>
-                        For Sale
-                </h4>
+                        {selectedAssetObj.status}
+                      </h4>
                     </div>
                     <div className="horizontal">
                       <h4 className={classes.cardTitleContent}>
-                        Price:&nbsp;
+                        Sale Price:&nbsp;
                 </h4>
                       <h4 className={classes.cardTitle}>
                         {currency} {selectedAssetObj.price}
