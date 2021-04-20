@@ -125,7 +125,6 @@ export default function Dashboard(props) {
       setSelectedAssetObj({});
       return setViewAsset(false);
     }
-
     if (e.DisplayImage !== undefined && e.DisplayImage !== "") {
       setSelectedImage(e.DisplayImage);
     } else {
@@ -177,12 +176,12 @@ export default function Dashboard(props) {
         }
       } else if (arr[backIndex]) {
         newObj = JSON.parse(JSON.stringify(arr[backIndex]));
-      } 
+      }
 
       if (window.newStat) {
         newObj.statusNum = window.newStat.num;
         newObj.status = window.newStat.str;
-      } 
+      }
 
       newObj.dBIndex = backIndex
 
@@ -221,7 +220,7 @@ export default function Dashboard(props) {
                     <button
                       className={classes.cardHeaderHoverJdenticon}
                       onClick={() =>
-                        moreInfo(Object.assign(arr[i], {dBIndex: i}))
+                        moreInfo(Object.assign(arr[i], { dBIndex: i }))
                       }
                     >
                       {arr[i].DisplayImage !== "" &&
@@ -235,15 +234,15 @@ export default function Dashboard(props) {
 
                       {arr[i].DisplayImage !== "" &&
                         arr[i].DisplayImage === undefined && (
-                          <>
+                          <div className="jdenticonMoreInfo">
                             <Jdenticon value={arr[i].id} />
-                          </>
+                          </div>
                         )}
                       {arr[i].DisplayImage === "" &&
                         arr[i].DisplayImage !== undefined && (
-                          <>
+                          <div className="jdenticonMoreInfo">
                             <Jdenticon value={arr[i].id} />
-                          </>
+                          </div>
                         )}
                     </button>
                   </CardHeader>
@@ -292,7 +291,7 @@ export default function Dashboard(props) {
                         simple
                         justIcon
                         onClick={() =>
-                          moreInfo(Object.assign(arr[i], {dBIndex: i}))
+                          moreInfo(Object.assign(arr[i], { dBIndex: i }))
                         }
                       >
                         <Icon>login</Icon>
@@ -1873,7 +1872,7 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      {selectedAssetObj.storageProvider === "2" && (
+                      {selectedAssetObj.nodeData.storageProvider === "2" && (
                         <Tooltip title="See it on ARweave">
                           <a
                             href={`${selectedAssetObj.ContentUrl}`}
@@ -1884,7 +1883,7 @@ export default function Dashboard(props) {
                           </a>
                         </Tooltip>
                       )}
-                      {selectedAssetObj.storageProvider === "1" && (
+                      {selectedAssetObj.nodeData.storageProvider === "1" && (
                         <img src={selectedImage} alt="" />
                       )}
                     </>
@@ -1906,7 +1905,9 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <Jdenticon value={selectedAssetObj.id} />
+                      <div className="jdenticonMoreInfo">
+                        <Jdenticon value={selectedAssetObj.id} />
+                      </div>
                     </>
                   )}
                 </CardHeader>
@@ -1954,7 +1955,9 @@ export default function Dashboard(props) {
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <Jdenticon value={selectedAssetObj.id} />
+                      <div className="jdenticonMoreInfo">
+                        <Jdenticon className="jdenticonMoreInfo" value={selectedAssetObj.id} />
+                      </div>
                     </>
                   )}
                 </CardHeader>
@@ -1980,7 +1983,7 @@ export default function Dashboard(props) {
             </h4>
                 <h4 className={classes.cardTitle}>
                   {selectedAssetObj.nodeName}
-            </h4>
+                </h4>
               </div>
 
               {selectedAssetObj.currency === "0" && (
@@ -2051,7 +2054,7 @@ export default function Dashboard(props) {
                   disabled
                 />
               )}
-              {selectedAssetObj.storageProvider === "2" && (
+              {selectedAssetObj.nodeData.storageProvider === "2" && (
                 <h6 className="storageProviderText">
                   See it on&nbsp;
                   <a
@@ -2063,7 +2066,7 @@ export default function Dashboard(props) {
                   </a>
                 </h6>
               )}
-              {selectedAssetObj.storageProvider === "1" && (
+              {selectedAssetObj.nodeData.storageProvider === "1" && (
                 <h6 className="storageProviderText">
                   Built using&nbsp;
                   <img src={IPFSPNG} className="IPFS" alt="" />
