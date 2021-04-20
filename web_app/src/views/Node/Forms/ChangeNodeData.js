@@ -21,6 +21,7 @@ const useStyles = makeStyles(styles)
 export default function ChangeNodeData(props) {
     //ipfs: {idHashFields: [["Artist", "text"], ["Series", "text"], ["Piece x", "number"], ["Out of y", "number"]], ownerHashFields: [["Name", "text"], ["Password", "text"]], landingConfig: { url: "https://pruf.io", DBref: "ipfs.io" }, nodeAssets: { photo: {}, text: {} }}
     //if(!window.sentPacket) { window.location.href = "/#/user/node-manager"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
 
@@ -217,6 +218,30 @@ export default function ChangeNodeData(props) {
             }
             return component
         }
+
+        if(!props.prufClient){
+            return <>
+              <Card>
+                  <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+                      
+                    </CardIcon>
+                    <Button
+                      color="info"
+                      className="MLBGradient"
+                      onClick={() => goBack()}
+                    >
+                      Go Back
+                    </Button>
+                    
+                  </CardHeader>
+                  <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                  </CardBody>
+                  <br />
+                </Card>
+            </>
+          }
 
         return (
             <>

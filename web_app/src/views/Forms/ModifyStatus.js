@@ -24,6 +24,7 @@ const useStyles = makeStyles(styles)
 
 export default function ModifyStatus(props) {
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     // eslint-disable-next-line no-unused-vars
     const [simpleSelect, setSimpleSelect] = React.useState('')
@@ -41,11 +42,11 @@ export default function ModifyStatus(props) {
     const [status, setStatus] = React.useState('')
     const [statusName, setStatusName] = React.useState('')
 
-    const [assetInfo] = React.useState(window.sentPacket)
+    const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
 
     const link = document.createElement('div')
 
-    window.sentPacket = null
+    //window.sentPacket = null
 
     const classes = useStyles()
 
@@ -60,29 +61,29 @@ export default function ModifyStatus(props) {
             document.documentElement.scrollTop = 0
             document.scrollingElement.scrollTop = 0
         }
+
+        if (assetInfo === undefined || assetInfo === null || assetInfo === {}) {
+            console.log('No asset found. Rerouting...')
+            window.location.href = '/#/user/home'
+            window.location.reload()
+        }
+    
+        else if (
+            assetInfo.statusNum === '50' ||
+            assetInfo.statusNum === '56' ||
+            assetInfo.statusNum === '70'
+        ) {
+            swal({
+                title: 'Asset not in correct status!',
+                text:
+                    'This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.',
+                icon: 'warning',
+                button: 'Close',
+            })
+            window.backIndex = assetInfo.dBIndex
+            window.location.href = assetInfo.lastRef
+        }
     }, [])
-
-    if (assetInfo === undefined || assetInfo === null) {
-        console.log('No asset found. Rerouting...')
-        window.location.href = '/#/user/home'
-        window.location.reload()
-    }
-
-    if (
-        assetInfo.statusNum === '50' ||
-        assetInfo.statusNum === '56' ||
-        assetInfo.statusNum === '70'
-    ) {
-        swal({
-            title: 'Asset not in correct status!',
-            text:
-                'This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.',
-            icon: 'warning',
-            button: 'Close',
-        })
-        window.backIndex = assetInfo.dBIndex
-        window.location.href = assetInfo.lastRef
-    }
 
     const handleSimple = (event) => {
         let status = ''
@@ -141,15 +142,15 @@ export default function ModifyStatus(props) {
         setTransactionActive(true)
 
         let newAsset = await JSON.parse(JSON.stringify(assetInfo))
-        window.utils.getStatusString(String(status)).then((e) => {
+        props.prufClient.utils.stringifyStatus(String(status)).then((e) => {
             newAsset.status = e
             newAsset.statusNum = String(status)
 
             console.log('Got past the json stuff')
-            console.log(assetInfo.idxHash)
+            console.log(assetInfo.id)
 
             window.contracts.NP_NC.methods
-                ._modStatus(assetInfo.idxHash, String(status))
+                ._modStatus(assetInfo.id, String(status))
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })
                 .on('error', function (_error) {
@@ -274,7 +275,7 @@ export default function ModifyStatus(props) {
             newAsset.statusNum = status
 
             window.contracts.NP_NC.methods
-                ._setLostOrStolen(assetInfo.idxHash, String(status))
+                ._setLostOrStolen(assetInfo.id, String(status))
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })
                 .on('error', function (_error) {
@@ -331,6 +332,30 @@ export default function ModifyStatus(props) {
                 })
         })
     }
+
+    if(!props.prufClient){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      }
 
     return (
         <Card>

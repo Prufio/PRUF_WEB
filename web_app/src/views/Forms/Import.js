@@ -25,8 +25,9 @@ const useStyles = makeStyles(styles);
 
 export default function Import(props) {
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+  if(!window.sentPacket) window.sentPacket = {}
 
-  const [assetClass, setAssetClass] = React.useState("");
+  const [nodeId, setAssetClass] = React.useState("");
   // const [simpleSelect, setSimpleSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -43,11 +44,11 @@ export default function Import(props) {
   // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo] = React.useState(window.sentPacket);
+  const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
 
   const link = document.createElement("div");
 
-  window.sentPacket = null;
+ 
 
   const classes = useStyles();
 
@@ -62,28 +63,86 @@ export default function Import(props) {
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-  }, []);
 
-  if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...");
-    return (window.location.href = "/#/user/home");
-  }
-
-  if (assetInfo.statusNum !== "70") {
-    swal({
-      title: "Asset not in correct status!",
-      text:
-        "This asset is not in exported status, please export asset before attempting to import it.",
-      icon: "warning",
-      button: "Close",
-    }).then(() => {
+    if (assetInfo === undefined || assetInfo === null || assetInfo === {}) {
+      console.log("No asset found. Rerouting...");
+      window.location.href = "/#/user/home";
+    }
+  
+    else if (assetInfo.statusNum && assetInfo.statusNum !== "70") {
+      swal({
+        title: "Asset not in correct status!",
+        text:
+          "This asset is not in exported status, please export asset before attempting to import it.",
+        icon: "warning",
+        button: "Close",
+      })
       window.backIndex = assetInfo.dBIndex;
       window.location.href = assetInfo.lastRef;
-    });
+    }
+
+  }, []);
+
+  const checkCreds = async (e) => {
+    let nodeId = e.target.value;
+    let nodeManagement;
+
+    console.log({nodeId, nodeManagement})
+
+    props.prufClient.get.nodeData(nodeId).call((_error, _result)=>{
+      if(_error){
+        console.log(_error)
+      } else {
+
+        nodeManagement = _result.managementType
+
+        if (Number(nodeManagement) < 4) {
+
+          switch(nodeManagement) {
+            
+            case("1") : {
+              if (window.web3.utils.toChecksumAddress(assetInfo.nodeAdmin) !== window.web3.utils.toChecksumAddress(props.addr)){
+                console.log(assetInfo.nodeAdmin, props.addr)
+                return console.log("Must be node admin to import into this node.")
+              } else {
+                return ACLogin(nodeId)
+              }
+            }
+    
+            case("2") : {
+              if (window.web3.utils.toChecksumAddress(assetInfo.nodeAdmin) !== window.web3.utils.toChecksumAddress(props.addr)) {
+                console.log(assetInfo.nodeAdmin, props.addr)
+                return console.log("Must be node admin to import into this node.")
+              } else {
+                return ACLogin(nodeId)
+              }
+              
+            }
+    
+            case("3") : {
+              if(!assetInfo.userAuthLevel || assetInfo.userAuthLevel !== "1") {
+                return console.log("User address not authorized to import into node.")
+              } else {
+                return ACLogin(nodeId)
+              }
+            }
+    
+            default : break
+          }
+    
+        }
+    
+        else {
+          return ACLogin(nodeId)
+        }
+      }
+    })
   }
 
-  const ACLogin = (event) => {
-    setAssetClass(event.target.value);
+
+  const ACLogin = (nodeId) => {
+    console.log(nodeId)
+    setAssetClass(nodeId);
   };
 
   const goBack = () => {
@@ -146,6 +205,7 @@ export default function Import(props) {
         Select Subclass
       </MenuItem>,
     ];
+
     for (let i = 0; i < arr.length; i++) {
       subCatSelection.push(
         <MenuItem
@@ -160,7 +220,8 @@ export default function Import(props) {
         </MenuItem>
       );
     }
-    console.log(arr);
+
+    //console.log(arr);
     return subCatSelection;
   };
 
@@ -179,7 +240,7 @@ export default function Import(props) {
     setTransactionActive(true);
 
     await window.contracts.APP_NC.methods
-      .$importAsset(assetInfo.idxHash, assetClass)
+      .$importAsset(assetInfo.id, nodeId)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -238,9 +299,33 @@ export default function Import(props) {
       });
   };
 
+  if(!props.prufClient){
+    return <>
+      <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              
+            </CardIcon>
+            <Button
+              color="info"
+              className="MLBGradient"
+              onClick={() => goBack()}
+            >
+              Go Back
+            </Button>
+            
+          </CardHeader>
+          <CardBody>
+            <h2>Oops, something went wrong...</h2>
+          </CardBody>
+          <br />
+        </Card>
+    </>
+  }
+
   return (
     <>
-      {assetClass === "" && (
+      {nodeId === "" && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
@@ -253,33 +338,14 @@ export default function Import(props) {
             >
               Go Back
             </Button>
-            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+            
           </CardHeader>
           <CardBody>
             <form>
               <FormControl fullWidth className={classes.selectFormControl}>
-                {selectedRootID === "" ? (
                   <>
                     <InputLabel>Select Asset Subclass</InputLabel>
-                    <Select
-                      disabled
-                      MenuProps={{
-                        className: classes.selectMenu,
-                      }}
-                      classes={{
-                        select: classes.select,
-                      }}
-                      value={classSelect}
-                      onChange={() => {}}
-                      inputProps={{
-                        name: "classSelect",
-                        id: "class-select",
-                      }}
-                    ></Select>
-                  </>
-                ) : (
-                  <>
-                    <InputLabel>Select Asset Subclass</InputLabel>
+                    {assetInfo.nodeData && props.nodeIdSets ? 
                     <Select
                       MenuProps={{
                         className: classes.selectMenu,
@@ -289,25 +355,43 @@ export default function Import(props) {
                       }}
                       value={classSelect}
                       onChange={(e) => {
-                        ACLogin(e);
+                        checkCreds(e);
                       }}
                       inputProps={{
                         name: "classSelect",
                         id: "class-select",
                       }}
                     >
-                    {/* eslint-disable-next-line react/prop-types */}
-                      {generateSubCatList(props.assetClassSets[assetInfo.root])}
+                      {generateSubCatList(props.nodeIdSets[assetInfo.nodeData.root])}
                     </Select>
+                    :
+                    <Select
+                      MenuProps={{
+                        className: classes.selectMenu,
+                      }}
+                      classes={{
+                        select: classes.select,
+                      }}
+                      disabled
+                      value={classSelect}
+                      onChange={(e) => {
+                        checkCreds(e);
+                      }}
+                      inputProps={{
+                        name: "classSelect",
+                        id: "class-select",
+                      }}
+                    />
+                    }
+                    {/* eslint-disable-next-line react/prop-types */}
                   </>
-                )}
               </FormControl>
             </form>
           </CardBody>
           <br />
         </Card>
       )}
-      {assetClass !== "" && (
+      {nodeId !== "" && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
@@ -319,12 +403,12 @@ export default function Import(props) {
             <form>
               {!transactionActive && (
                 <>
-                  <h4>AssetClass Selected: {assetClass} </h4>
+                  <h4>AssetClass Selected: {nodeId} </h4>
                   <h4>Asset Selected: {assetInfo.name}</h4>
                   <br />
                   <h5>
                     You are attempting to import {assetInfo.name} into asset
-                    class {assetClass}.
+                    class {nodeId}.
                   </h5>
                 </>
               )}

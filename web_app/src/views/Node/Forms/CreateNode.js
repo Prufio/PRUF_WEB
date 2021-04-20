@@ -31,6 +31,7 @@ const useStyles = makeStyles(styles)
 
 export default function CreateNode(props) {
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
 
@@ -67,133 +68,6 @@ export default function CreateNode(props) {
     // eslint-disable-next-line no-unused-vars
     const [standard3, setStandard3] = React.useState(false)
 
-    // const [locked1, setLocked1] = React.useState(true)
-    // const [locked2, setLocked2] = React.useState(true)
-    // const [locked3, setLocked3] = React.useState(true)
-    // const [locked4, setLocked4] = React.useState(true)
-    // const [locked5, setLocked5] = React.useState(true)
-    // const [locked6, setLocked6] = React.useState(true)
-    // const [locked7, setLocked7] = React.useState(true)
-    // const [locked8, setLocked8] = React.useState(true)
-
-    // const [operation1, setOperation1] = React.useState('0')
-    // const [operation2, setOperation2] = React.useState('0')
-    // const [operation3, setOperation3] = React.useState('0')
-    // const [operation4, setOperation4] = React.useState('0')
-    // const [operation5, setOperation5] = React.useState('0')
-    // const [operation6, setOperation6] = React.useState('0')
-    // const [operation7, setOperation7] = React.useState('0')
-    // const [operation8, setOperation8] = React.useState('0')
-    // const [beneficiaryAddress1, setBeneficiaryAddress1] = React.useState(
-    //     props.addr
-    // )
-    // const [beneficiaryAddress2, setBeneficiaryAddress2] = React.useState(
-    //     props.addr
-    // )
-    // const [beneficiaryAddress3, setBeneficiaryAddress3] = React.useState(
-    //     props.addr
-    // )
-    // // eslint-disable-next-line no-unused-vars
-    // const [beneficiaryAddress4, setBeneficiaryAddress4] = React.useState(
-    //     props.addr
-    // )
-    // const [beneficiaryAddress5, setBeneficiaryAddress5] = React.useState(
-    //     props.addr
-    // )
-    // const [beneficiaryAddress6, setBeneficiaryAddress6] = React.useState(
-    //     props.addr
-    // )
-    // const [beneficiaryAddress7, setBeneficiaryAddress7] = React.useState(
-    //     props.addr
-    // )
-    // const [beneficiaryAddress8, setBeneficiaryAddress8] = React.useState(
-    //     props.addr
-    // )
-
-    // const [loginOperation1, setloginOperation1] = React.useState('')
-    // const [loginOperation2, setloginOperation2] = React.useState('')
-    // const [loginOperation3, setloginOperation3] = React.useState('')
-    // const [loginOperation4, setloginOperation4] = React.useState('')
-    // const [loginOperation5, setloginOperation5] = React.useState('')
-    // const [loginOperation6, setloginOperation6] = React.useState('')
-    // const [loginOperation7, setloginOperation7] = React.useState('')
-    // const [loginOperation8, setloginOperation8] = React.useState('')
-
-    // const [
-    //     loginBeneficiaryAddress1,
-    //     setloginBeneficiaryAddress1,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress2,
-    //     setloginBeneficiaryAddress2,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress3,
-    //     setloginBeneficiaryAddress3,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress4,
-    //     setloginBeneficiaryAddress4,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress5,
-    //     setloginBeneficiaryAddress5,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress6,
-    //     setloginBeneficiaryAddress6,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress7,
-    //     setloginBeneficiaryAddress7,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress8,
-    //     setloginBeneficiaryAddress8,
-    // ] = React.useState('')
-
-    // const [loginOperation1State, setloginOperation1State] = React.useState('')
-    // const [loginOperation2State, setloginOperation2State] = React.useState('')
-    // const [loginOperation3State, setloginOperation3State] = React.useState('')
-    // const [loginOperation4State, setloginOperation4State] = React.useState('')
-    // const [loginOperation5State, setloginOperation5State] = React.useState('')
-    // const [loginOperation6State, setloginOperation6State] = React.useState('')
-    // const [loginOperation7State, setloginOperation7State] = React.useState('')
-    // const [loginOperation8State, setloginOperation8State] = React.useState('')
-
-    // const [
-    //     loginBeneficiaryAddress1State,
-    //     setloginBeneficiaryAddress1State,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress2State,
-    //     setloginBeneficiaryAddress2State,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress3State,
-    //     setloginBeneficiaryAddress3State,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress4State,
-    //     setloginBeneficiaryAddress4State,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress5State,
-    //     setloginBeneficiaryAddress5State,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress6State,
-    //     setloginBeneficiaryAddress6State,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress7State,
-    //     setloginBeneficiaryAddress7State,
-    // ] = React.useState('')
-    // const [
-    //     loginBeneficiaryAddress8State,
-    //     setloginBeneficiaryAddress8State,
-    // ] = React.useState('')
-
     const link = document.createElement('div')
     const sampleIpfs = {
         idHashFields: [
@@ -206,8 +80,7 @@ export default function CreateNode(props) {
         landingConfig: { url: '', DBref: '' },
         nodeAssets: { photo: {}, text: {} },
     }
-
-    window.sentPacket = null
+    
     document.body.style.cursor = 'default'
 
     const classes = useStyles()

@@ -18,6 +18,7 @@ import { TransferWithinAStation } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function EscrowManager(props) {
+  if(!window.sentPacket) window.sentPacket = {}
   const [address, setAddress] = React.useState("");
   const [loginAddress, setloginAddress] = React.useState("");
   const [loginAddressState, setloginAddressState] = React.useState("");
@@ -26,7 +27,7 @@ export default function EscrowManager(props) {
   const [showHelp, setShowHelp] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
-  const [assetInfo, setAssetInfo] = React.useState(window.sentPacket);
+  const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
   const [isSettingEscrow, setIsSettingEscrow] = React.useState(undefined);
   const [escrowOwner, setEscrowOwner] = React.useState("");
   const [escrowTime, setEscrowTime] = React.useState("");
@@ -39,8 +40,6 @@ export default function EscrowManager(props) {
 
   const link = document.createElement("div");
 
-  window.sentPacket = null;
-
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -48,12 +47,11 @@ export default function EscrowManager(props) {
       props.ps.element.scrollTop = 0;
       console.log("Scrolled to ", props.ps.element.scrollTop);
     }
+    if (assetInfo === undefined || assetInfo === null || assetInfo === {}) {
+      console.log("No asset found. Rerouting...");
+      return (window.location.href = "/#/user/home");
+    }
   }, []);
-
-  if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...");
-    return (window.location.href = "/#/user/home");
-  }
 
   const setEscrow = async () => {
     //transfer held asset
@@ -72,7 +70,7 @@ export default function EscrowManager(props) {
     setTransactionActive(true);
 
     await window.contracts.ECR.methods
-      .setEscrow(assetInfo.idxHash, address, assetInfo.idxHash)
+      .setEscrow(assetInfo.id, address, assetInfo.id)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
@@ -128,7 +126,7 @@ export default function EscrowManager(props) {
     setTransactionActive(true);
 
     await window.contracts.A_TKN.methods
-      .safeTransferFrom(props.addr, address, assetInfo.idxHash)
+      .safeTransferFrom(props.addr, address, assetInfo.id)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);
@@ -172,6 +170,30 @@ export default function EscrowManager(props) {
     setloginAddressState("");
     console.log("clearing forms");
   };
+
+  if(!props.prufClient){
+    return <>
+      <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              
+            </CardIcon>
+            <Button
+              color="info"
+              className="MLBGradient"
+              onClick={() => goBack()}
+            >
+              Go Back
+            </Button>
+            
+          </CardHeader>
+          <CardBody>
+            <h2>Oops, something went wrong...</h2>
+          </CardBody>
+          <br />
+        </Card>
+    </>
+  }
 
   return (
     <Card>

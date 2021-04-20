@@ -80,8 +80,8 @@ export default function Search(props) {
   const [isRecycling, setIsRecycling] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
   const [verifyResult, setVerifyResult] = React.useState("");
-  const [assetClass, setAssetClass] = React.useState("");
-  const [assetClassName, setAssetClassName] = React.useState("");
+  const [nodeId, setAssetClass] = React.useState("");
+  const [nodeName, setAssetClassName] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [copyText, setCopyText] = React.useState(false);
@@ -1658,7 +1658,7 @@ export default function Search(props) {
     }
     if (costId !== null) {
       window.contracts.AC_MGR.methods
-        .getServiceCosts(asset.assetClass, costId)
+        .getServiceCosts(asset.nodeId, costId)
         .call((_error, _result) => {
           if (_error) {
             console.log("Error: ", _error);
@@ -1871,7 +1871,7 @@ export default function Search(props) {
     setTransaction(true);
 
     await window.contracts.RCLR.methods
-      .recycle(idxHash, rgtHash, asset.assetClass)
+      .recycle(idxHash, rgtHash, asset.nodeId)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
@@ -2297,7 +2297,7 @@ export default function Search(props) {
           id: id,
           statusNum: _result["0"],
           forceModCount: _result["1"],
-          assetClass: _result["2"],
+          nodeId: _result["2"],
           countPair: [_result["3"], _result["4"]],
           mutableDataA: _result["5"],
           mutableDataB: _result["6"],
@@ -2326,13 +2326,13 @@ export default function Search(props) {
             _result["1"] === "2" ? setCurrency("ü") : setCurrency("");
 
             props.prufClient.get
-              .nodeData(obj.assetClass)
+              .nodeData(obj.nodeId)
               .call((_error, _result) => {
                 if (_error) {
                   console.log("IN ERROR IN ERROR IN ERROR");
                 } else {
-                  obj.assetClassName = _result.name;
-                  obj.assetClassData = {
+                  obj.nodeName = _result.name;
+                  obj.nodeData = {
                     name: _result.name,
                     root: _result.assetClassRoot,
                     custodyType: _result.custodyType,
@@ -2357,7 +2357,7 @@ export default function Search(props) {
     if (!asset) return console.log("Failed upon reception of:", asset);
 
     let obj = JSON.parse(JSON.stringify(asset));
-    let storageProvider = obj.assetClassData.storageProvider;
+    let storageProvider = obj.nodeData.storageProvider;
     let mutableDataQuery;
 
     if (
@@ -2445,7 +2445,7 @@ export default function Search(props) {
     if (!asset) return console.log("Failed upon reception of:", asset);
 
     let obj = JSON.parse(JSON.stringify(asset));
-    let storageProvider = obj.assetClassData.storageProvider;
+    let storageProvider = obj.nodeData.storageProvider;
     let engravingQuery;
 
     if (
@@ -2544,14 +2544,14 @@ export default function Search(props) {
       obj.engraving.Description || obj.mutableData.Description || "";
     obj.ContentUrl =
       obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
-    obj.storageProvider = obj.assetClassData.storageProvider;
+    obj.storageProvider = obj.nodeData.storageProvider;
 
     let vals = Object.values(obj.photo),
       keys = Object.keys(obj.photo);
 
     console.log("Finalizing", obj);
 
-    if (obj.assetClassData.storageProvider === "2") {
+    if (obj.nodeData.storageProvider === "2") {
       console.log("detected storageProvider 2");
 
       if (
@@ -2582,7 +2582,7 @@ export default function Search(props) {
         setMoreInfo(true);
         return;
       }
-    } else if (obj.assetClassData.storageProvider === "1") {
+    } else if (obj.nodeData.storageProvider === "1") {
       const getAndSet = (url) => {
         const req = new XMLHttpRequest();
         req.responseType = "text";
@@ -3177,27 +3177,6 @@ export default function Search(props) {
                               <img src={selectedImage} alt="..." />
                             </>
                           )}
-                          {asset.DisplayImage === "" && (
-                            <>
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Back"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <Button
-                                  onClick={() => back()}
-                                  large
-                                  color="info"
-                                  justIcon
-                                  className="back"
-                                >
-                                  <KeyboardArrowLeft />
-                                </Button>
-                              </Tooltip>
-                              <img src={selectedImage} alt="..." />
-                            </>
-                          )}
                           {Object.values(asset.photo).length === 0 &&
                             asset.DisplayImage === "" && (
                               <>
@@ -3229,27 +3208,6 @@ export default function Search(props) {
                       {asset.photo !== undefined && (
                         <>
                           {asset.DisplayImage !== "" && (
-                            <>
-                              <Tooltip
-                                id="tooltip-top"
-                                title="Back"
-                                placement="bottom"
-                                classes={{ tooltip: classes.tooltip }}
-                              >
-                                <Button
-                                  onClick={() => back()}
-                                  large
-                                  color="info"
-                                  justIcon
-                                  className="back"
-                                >
-                                  <KeyboardArrowLeft />
-                                </Button>
-                              </Tooltip>
-                              <img src={selectedImage} alt="..." />
-                            </>
-                          )}
-                          {asset.DisplayImage === "" && (
                             <>
                               <Tooltip
                                 id="tooltip-top"
@@ -3319,7 +3277,7 @@ export default function Search(props) {
                         Node:&nbsp;
                     </h4>
                       <h4 className={imgClasses.cardTitle}>
-                        {asset.assetClassName}
+                        {asset.nodeName}
                     </h4>
                     </div>
 
@@ -3486,7 +3444,7 @@ export default function Search(props) {
                       <>
                         {props.IDHolder === false && (
                           <>
-                            {assetClass === "" && transactionActive && (
+                            {nodeId === "" && transactionActive && (
                               <Card>
                                 <CardHeader icon>
                                   <CardIcon className="headerIconBack">
@@ -3511,7 +3469,7 @@ export default function Search(props) {
                                 <br />
                               </Card>
                             )}
-                            {assetClass === "" && !transactionActive && (
+                            {nodeId === "" && !transactionActive && (
                               <Card>
                                 <CardHeader icon>
                                   <CardIcon className="headerIconBack">
@@ -3570,7 +3528,7 @@ export default function Search(props) {
                                             }}
                                           >
                                             {generateSubCatList(
-                                              props.assetClassSets[
+                                              props.nodeIdSets[
                                               selectedRootID
                                               ]
                                             )}
@@ -4331,7 +4289,7 @@ export default function Search(props) {
                       obj={{
                         name: asset.name,
                         idxHash: asset.id,
-                        assetClassName: asset.assetClassName,
+                        nodeName: asset.nodeName,
                       }}
                     />
                   )}

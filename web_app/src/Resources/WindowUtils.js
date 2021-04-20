@@ -201,18 +201,18 @@ function buildWindowUtils() {
     return tempBool;
   };
 
-  const _getACNames = async (assetClasses) => {
+  const _getACNames = async (nodeIdes) => {
     if (window.contracts !== undefined) {
       let tempArr = [];
 
-      for (let i = 0; i < assetClasses.length; i++) {
+      for (let i = 0; i < nodeIdes.length; i++) {
         await window.contracts.AC_MGR.methods
-          .getAC_name(assetClasses[i])
+          .getAC_name(nodeIdes[i])
           .call((_error, _result) => {
             if (_error) {
               console.log("Error: ", _error);
             } else {
-              //console.log("resolved AC name ", _result, " from AC index ", assetClasses[i]);
+              //console.log("resolved AC name ", _result, " from AC index ", nodeIdes[i]);
               tempArr.push(_result);
             }
           });
@@ -263,7 +263,7 @@ function buildWindowUtils() {
     }
 
     //await console.log("User authLevel: ", window.authLevel);
-    window.assetClassName = temp; //DEV REMOVE ALL window. REFS
+    window.nodeName = temp; //DEV REMOVE ALL window. REFS
     return temp;
   };
 
@@ -525,17 +525,17 @@ function buildWindowUtils() {
         if (_error) {
           return console.log("IN ERROR IN ERROR IN ERROR");
         } else {
-          window.assetClass = Object.values(_result)[2];
-          console.log("Now operating in AC: ", window.assetClass);
+          window.nodeId = Object.values(_result)[2];
+          console.log("Now operating in AC: ", window.nodeId);
         }
       });
 
-    await window.utils.getCosts(6, window.assetClass);
+    await window.utils.getCosts(6, window.nodeId);
   };
 
   const _determineTokenBalance = async (addr) => {
     if (window.contracts !== undefined && addr !== undefined) {
-      let _assetClassBal, _assetBal, _IDTokenBal, _prufTokenBal;
+      let _nodeIdBal, _assetBal, _IDTokenBal, _prufTokenBal;
       //console.log("getting balance info from token contracts...")
       await window.contracts.A_TKN.methods
         .balanceOf(addr)
@@ -553,7 +553,7 @@ function buildWindowUtils() {
           if (error) {
             console.log(error);
           } else {
-            _assetClassBal = result; /* console.log("assetClassBal", _assetClassBal); */
+            _nodeIdBal = result; /* console.log("nodeIdBal", _nodeIdBal); */
           }
         });
 
@@ -586,10 +586,10 @@ function buildWindowUtils() {
         window.assetHolderBool = false;
       }
 
-      if (Number(_assetClassBal) > 0) {
-        window.assetClassHolderBool = true;
-      } else if (Number(_assetClassBal) === 0 || _assetClassBal === undefined) {
-        window.assetClassHolderBool = false;
+      if (Number(_nodeIdBal) > 0) {
+        window.nodeIdHolderBool = true;
+      } else if (Number(_nodeIdBal) === 0 || _nodeIdBal === undefined) {
+        window.nodeIdHolderBool = false;
       }
 
       if (Number(_IDTokenBal) > 0 && Number(_IDTokenBal) < 2) {
@@ -603,7 +603,7 @@ function buildWindowUtils() {
       }
       window.balances = {
         prufTokenBalance: _prufTokenBal,
-        assetClassBalance: _assetClassBal,
+        nodeIdBalance: _nodeIdBal,
         assetBalance: _assetBal,
         IDTokenBalance: _IDTokenBal,
       };
@@ -624,8 +624,8 @@ function buildWindowUtils() {
       names = [];
     //console.log("GACTI: In _getAssetClassTokenInfo")
 
-    if (Number(window.balances.assetClassBalance) > 0) {
-      for (let i = 0; i < window.balances.assetClassBalance; i++) {
+    if (Number(window.balances.nodeIdBalance) > 0) {
+      for (let i = 0; i < window.balances.nodeIdBalance; i++) {
         await window.contracts.AC_TKN.methods
           .tokenOfOwnerByIndex(addr, i)
           .call((_error, _result) => {
@@ -696,7 +696,7 @@ function buildWindowUtils() {
       }
     } else {
       console.log("No asset classes held by user");
-      window.assetClasses = {
+      window.nodeIdes = {
         names: [],
         exData: [],
         discounts: [],
@@ -728,7 +728,7 @@ function buildWindowUtils() {
         noteArray = [],
         statuses = [],
         countPairs = [],
-        assetClasses = [],
+        nodeIdes = [],
         statusNums = [],
         prices = [];
 
@@ -789,7 +789,7 @@ function buildWindowUtils() {
               else if (_result[0] === "70") { statuses.push("Ready for Import") }
               else if (_result[0] === "0") { statuses.push("Status Not Set") } */
             statusNums.push(_result[0]);
-            assetClasses.push(Object.values(_result)[2]);
+            nodeIdes.push(Object.values(_result)[2]);
             countPairs.push([
               Object.values(_result)[3],
               Object.values(_result)[4],
@@ -814,18 +814,18 @@ function buildWindowUtils() {
       obj.ids = tknIDArray;
       obj.ipfs = ipfsHashArray;
       obj.countPairs = countPairs;
-      obj.assetClasses = assetClasses;
+      obj.nodeIdes = nodeIdes;
       obj.statuses = statuses;
       obj.statusNums = statusNums;
       obj.notes = noteArray;
       obj.prices = prices;
 
-      await window.utils.getACNames(assetClasses).then((e) => {
-        obj.assetClassNames = e;
+      await window.utils.getACNames(nodeIdes).then((e) => {
+        obj.nodeNames = e;
       });
 
       for (let i = 0; i < tknIDArray.length; i++) {
-        await window.utils.getACData("id", assetClasses[i]).then((e) => {
+        await window.utils.getACData("id", nodeIdes[i]).then((e) => {
           roots.push(e.root);
         });
       }
@@ -875,7 +875,7 @@ function buildWindowUtils() {
                 />
               </div>
               <p className="cardNamePrint">Name : {obj.name}</p>
-              <p className="cardAcPrint">Asset Class : {obj.assetClassName}</p>
+              <p className="cardAcPrint">Asset Class : {obj.nodeName}</p>
               <h4 className="cardIdxPrint">Asset ID : {obj.idxHash}</h4>
             </div>
           </>

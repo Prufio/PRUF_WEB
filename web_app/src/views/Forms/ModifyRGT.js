@@ -19,6 +19,7 @@ const useStyles = makeStyles(styles);
 
 export default function ModifyRGT(props) {
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+  if(!window.sentPacket) window.sentPacket = {}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
 
@@ -47,11 +48,9 @@ export default function ModifyRGT(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
-  const [assetInfo] = React.useState(window.sentPacket);
+  const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
 
   const link = document.createElement("div");
-
-  window.sentPacket = null;
 
   const classes = useStyles();
 
@@ -66,12 +65,12 @@ export default function ModifyRGT(props) {
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-    if (assetInfo === undefined || assetInfo === null) {
+    if (assetInfo === undefined || assetInfo === null || assetInfo === {}) {
       console.log("No asset found. Rerouting...");
       window.location.href = "/#/user/home";
       window.location.reload();
     }
-    if (
+    else if (
       assetInfo.statusNum === "50" ||
       assetInfo.statusNum === "56" ||
       assetInfo.statusNum === "70"
@@ -87,57 +86,12 @@ export default function ModifyRGT(props) {
         window.location.href = assetInfo.lastRef;
       });
     }
-
-    /* else if (assetInfo.statusNum === "53" || assetInfo.statusNum === "54") {
-      swal({
-        title: "Asset not in correct status!",
-        text: "This asset is in a lost or stolen status, please set asset to a non lost or stolen status before attempting to modify.",
-        icon: "warning",
-        button: "Close",
-      }).then(()=>{
-        window.backIndex = assetInfo.dBIndex;
-        window.location.href = assetInfo.lastRef;
-      });
-    } */
   }, []);
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;
     window.location.href = assetInfo.lastRef;
   };
-
-  // const refreshBalances = async () => {
-  //   if (!window.web3.eth) return;
-
-  //   let pruf, ether;
-
-  //   console.log("Refreshing ether bal");
-  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       ether = window.web3.utils.fromWei(result, "ether");
-  //     }
-  //     window.contracts.UTIL_TKN.methods
-  //       .balanceOf(props.addr)
-  //       .call((err, result) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           pruf = window.web3.utils.fromWei(result, "ether");
-  //         }
-  //         window.contracts.A_TKN.methods
-  //           .balanceOf(props.addr)
-  //           .call((err, result) => {
-  //             if (err) {
-  //               console.log(err);
-  //             } else {
-  //               window.replaceAssetData = { assets: result, ether, pruf };
-  //             }
-  //           });
-  //       });
-  //   });
-  // };
 
   const modifyRGT = async () => {
     //import held asset
@@ -173,7 +127,7 @@ export default function ModifyRGT(props) {
       String(password).replace(/\s/g, "")
     );
 
-    var rgtHash = window.web3.utils.soliditySha3(assetInfo.idxHash, rgtHashRaw);
+    var rgtHash = window.web3.utils.soliditySha3(assetInfo.id, rgtHashRaw);
     rgtHash = window.utils.tenThousandHashesOf(rgtHash);
 
     let tempTxHash;
@@ -185,7 +139,7 @@ export default function ModifyRGT(props) {
     setTransactionActive(true);
 
     await window.contracts.NP_NC.methods
-      ._changeRgt(assetInfo.idxHash, rgtHash)
+      ._changeRgt(assetInfo.id, rgtHash)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -233,6 +187,30 @@ export default function ModifyRGT(props) {
         });
       });
   };
+
+  if(!props.prufClient){
+    return <>
+      <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              
+            </CardIcon>
+            <Button
+              color="info"
+              className="MLBGradient"
+              onClick={() => goBack()}
+            >
+              Go Back
+            </Button>
+            
+          </CardHeader>
+          <CardBody>
+            <h2>Oops, something went wrong...</h2>
+          </CardBody>
+          <br />
+        </Card>
+    </>
+  }
 
   return (
     <Card>

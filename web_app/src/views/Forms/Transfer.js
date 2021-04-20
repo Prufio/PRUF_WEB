@@ -19,6 +19,7 @@ const useStyles = makeStyles(styles)
 
 export default function Transfer(props) {
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     const [address, setAddress] = React.useState('')
     const [loginAddress, setloginAddress] = React.useState('')
@@ -33,11 +34,9 @@ export default function Transfer(props) {
     // eslint-disable-next-line no-unused-vars
     const [txHash, setTxHash] = React.useState('')
 
-    const [assetInfo] = React.useState(window.sentPacket)
+    const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
 
     const link = document.createElement('div')
-
-    window.sentPacket = null
 
     React.useEffect(() => {
       // eslint-disable-next-line react/prop-types
@@ -50,6 +49,23 @@ export default function Transfer(props) {
             document.documentElement.scrollTop = 0
             document.scrollingElement.scrollTop = 0
         }
+        if (assetInfo === undefined || assetInfo === null || assetInfo === {}) {
+            console.log('No asset found. Rerouting...')
+            window.location.href = '/#/user/home'
+            //window.location.reload()
+        }
+        else if (assetInfo.statusNum && assetInfo.statusNum !== '51') {
+            swal({
+                title: 'Asset not in correct status!',
+                text:
+                    'This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.',
+                icon: 'warning',
+                button: 'Close',
+            }).then(() => {
+                goBack()
+            })
+            
+        }
     }, [])
 
     const clearForms = () => {
@@ -60,28 +76,6 @@ export default function Transfer(props) {
 
     const classes = useStyles()
 
-    if (assetInfo === undefined || assetInfo === null) {
-        console.log('No asset found. Rerouting...')
-        window.location.href = '/#/user/home'
-        window.location.reload()
-    }
-
-    if (assetInfo.statusNum !== '51') {
-        swal({
-            title: 'Asset not in correct status!',
-            text:
-                'This asset is not in a transferable status, please set asset into transferable status before attempting to transfer.',
-            icon: 'warning',
-            button: 'Close',
-        }).then(() => {
-            goBack()
-        })
-        if (assetInfo === undefined || assetInfo === null) {
-            console.log('No asset found. Rerouting...')
-            window.location.href = '/#/user/home'
-            window.location.reload()
-        }
-    }
 
     const goBack = () => {
         window.backIndex = assetInfo.dBIndex
@@ -165,7 +159,7 @@ export default function Transfer(props) {
 
         await window.contracts.A_TKN.methods
         // eslint-disable-next-line react/prop-types
-            .safeTransferFrom(props.addr, address, assetInfo.idxHash)
+            .safeTransferFrom(props.addr, address, assetInfo.id)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {
@@ -220,6 +214,30 @@ export default function Transfer(props) {
                 })
             })
     }
+
+    if(!props.prufClient){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      }
 
     return (
         <Card>

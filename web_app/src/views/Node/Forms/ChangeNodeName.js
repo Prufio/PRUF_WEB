@@ -19,6 +19,7 @@ const useStyles = makeStyles(styles)
 
 export default function ChangeNodeName(props) {
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
 
@@ -31,7 +32,7 @@ export default function ChangeNodeName(props) {
     // eslint-disable-next-line no-unused-vars
     const [txHash, setTxHash] = React.useState('')
 
-    const [nodeInfo] = React.useState(window.sentPacket)
+    const [nodeInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
 
     const [name, setName] = React.useState('')
     const [loginName, setloginName] = React.useState('')
@@ -39,7 +40,7 @@ export default function ChangeNodeName(props) {
 
     const link = document.createElement('div')
 
-    window.sentPacket = null
+    
     document.body.style.cursor = 'default'
 
     const classes = useStyles()
@@ -59,6 +60,7 @@ export default function ChangeNodeName(props) {
             window.location.href = '/#/user/home'
             window.location.reload()
         }
+        window.sentPacket = null
     }, [])
 
     const goBack = () => {
@@ -138,6 +140,30 @@ export default function ChangeNodeName(props) {
             return
         }
     }
+
+    if(!props.prufClient){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      }
 
     return (
         <Card>

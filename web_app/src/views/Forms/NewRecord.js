@@ -39,6 +39,7 @@ const useStyles = makeStyles(styles);
 
 export default function NewRecord(props) {
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+  if(!window.sentPacket) window.sentPacket = {}
 
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
@@ -50,8 +51,8 @@ export default function NewRecord(props) {
   const [ipfsActive, setIpfsActive] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
-  const [assetClass, setAssetClass] = React.useState("");
-  const [assetClassName, setAssetClassName] = React.useState("");
+  const [nodeId, setAssetClass] = React.useState("");
+  const [nodeName, setAssetClassName] = React.useState("");
   // eslint-disable-next-line no-unused-vars
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("");
   const [isUploading, setIsUploading] = React.useState(false);
@@ -766,7 +767,7 @@ export default function NewRecord(props) {
         type: type,
         series: model,
         serial: serial,
-        nodeKey: assetClassName,
+        nodeKey: nodeName,
         Description: ipfsObj.Description,
         name: ipfsObj.name,
       };
@@ -889,7 +890,7 @@ export default function NewRecord(props) {
   const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => {
     var extendedDataHash, rgtHashRaw, idxHash;
     //create a new asset record
-    //console.log("assetClass: ", assetClass)
+    //console.log("nodeId: ", nodeId)
     // swalReact({
     //   content:
     //     <div className="picture-container">
@@ -930,10 +931,10 @@ export default function NewRecord(props) {
         text: ipfsObj.text,
         urls: ipfsObj.urls,
         name: ipfsObj.name,
-        assetClass: assetClass,
-        assetClassName:
-          assetClassName.substring(0, 1).toUpperCase() +
-          assetClassName.substring(1, assetClassName.length).toLowerCase(),
+        nodeId: nodeId,
+        nodeName:
+          nodeName.substring(0, 1).toUpperCase() +
+          nodeName.substring(1, nodeName.length).toLowerCase(),
         // eslint-disable-next-line react/prop-types
         dBIndex: props.assetArr.length,
         countPair: [100000, 100000],
@@ -969,14 +970,14 @@ export default function NewRecord(props) {
       console.log("New rgtHash", rgtHash);
       // eslint-disable-next-line react/prop-types
       console.log("addr: ", props.addr);
-      console.log("AC: ", assetClass);
+      console.log("AC: ", nodeId);
 
       //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
       console.log("IPFS bytes32: ", extendedDataHash);
 
       /* swal({
         title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
         button: "Okay",
       }) */
 
@@ -984,7 +985,7 @@ export default function NewRecord(props) {
         .newRecordWithNote(
           idxHash,
           rgtHash,
-          assetClass,
+          nodeId,
           "1000000",
           extendedDataHash,
           extDataB
@@ -1060,10 +1061,10 @@ export default function NewRecord(props) {
         urls: ipfsObj.urls,
         name: ipfsObj.name,
         DisplayImage: `http://localhost:1984/${extendedDataHash}`,
-        assetClass: assetClass,
-        assetClassName:
-          assetClassName.substring(0, 1).toUpperCase() +
-          assetClassName.substring(1, assetClassName.length).toLowerCase(),
+        nodeId: nodeId,
+        nodeName:
+          nodeName.substring(0, 1).toUpperCase() +
+          nodeName.substring(1, nodeName.length).toLowerCase(),
         // eslint-disable-next-line react/prop-types
         dBIndex: props.assetArr.length,
         countPair: [100000, 100000],
@@ -1104,14 +1105,14 @@ export default function NewRecord(props) {
       console.log("New rgtHash", rgtHash);
       // eslint-disable-next-line react/prop-types
       console.log("addr: ", props.addr);
-      console.log("AC: ", assetClass);
+      console.log("AC: ", nodeId);
 
       //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
       console.log("IPFS bytes32: ", extendedDataHash);
 
       /* swal({
         title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+assetClass,
+        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
         button: "Okay",
       }) */
 
@@ -1119,7 +1120,7 @@ export default function NewRecord(props) {
         .newRecordWithNote(
           idxHash,
           rgtHash,
-          assetClass,
+          nodeId,
           "1000000",
           extDataA,
           extDataB
@@ -1188,6 +1189,7 @@ export default function NewRecord(props) {
 
   const classes = useStyles();
   // const extClasses = useExtStyles()
+
   return (
     <>
       {window.contracts === undefined && (
@@ -1241,7 +1243,7 @@ export default function NewRecord(props) {
       {props.IDHolder !== undefined &&
         window.contracts !== undefined &&
         // eslint-disable-next-line react/prop-types
-        props.assetClassSets === undefined && (
+        props.nodeIdSets === undefined && (
           <Card>
             <CardHeader icon>
               <CardIcon className="headerIconBack">
@@ -1268,7 +1270,7 @@ export default function NewRecord(props) {
         // eslint-disable-next-line react/prop-types
         props.IDHolder !== undefined &&
         // eslint-disable-next-line react/prop-types
-        props.assetClassSets !== undefined && (
+        props.nodeIdSets !== undefined && (
           <GridContainer>
             <>
               <input
@@ -1277,7 +1279,7 @@ export default function NewRecord(props) {
                 ref={fileInput}
                 className="imageInput"
               />
-              {assetClass === "" && !transactionActive && (
+              {nodeId === "" && !transactionActive && (
                 <Card>
                   <CardHeader icon>
                     <CardIcon className="headerIconBack">
@@ -1379,7 +1381,7 @@ export default function NewRecord(props) {
                             >
                               {generateSubCatList(
                                 // eslint-disable-next-line react/prop-types
-                                props.assetClassSets[selectedRootID]
+                                props.nodeIdSets[selectedRootID]
                               )}
                             </Select>
                           </>
@@ -1413,7 +1415,7 @@ export default function NewRecord(props) {
                   <br />
                 </Card>
               )}
-              {assetClass === "" && transactionActive && (
+              {nodeId === "" && transactionActive && (
                 <Card>
                   <CardHeader icon>
                     <CardIcon className="headerIconBack">
@@ -1438,7 +1440,7 @@ export default function NewRecord(props) {
                   <br />
                 </Card>
               )}
-              {assetClass !== "" && (
+              {nodeId !== "" && (
                 <>
                   <GridItem xs={12} sm={12} md={6}>
                     <Card>
@@ -1812,7 +1814,7 @@ export default function NewRecord(props) {
                             </>
                           )}
                           <h4>
-                            AC Selected: {assetClassName} (ID: {assetClass})
+                            AC Selected: {nodeName} (ID: {nodeId})
                           </h4>
                           {storageProvider === "2" ? (
                             <h6 className="storageProviderText">

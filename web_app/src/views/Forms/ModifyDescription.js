@@ -19,6 +19,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
+import CardIcon from "components/Card/CardIcon.js";
 import {
   AddPhotoAlternateOutlined,
   DeleteForever,
@@ -38,12 +39,9 @@ const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
 
 export default function ModifyDescription(props) {
-  if (window.contracts === undefined || !window.sentPacket) {
-    window.location.href = "/#/user/home";
-    window.location.reload();
-  }
+  if(!window.sentPacket) window.sentPacket = {}
 
-  const [asset] = React.useState(window.sentPacket);
+  const [asset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
   const [assetInfo] = React.useState(
     JSON.parse(
       JSON.stringify({
@@ -66,7 +64,7 @@ export default function ModifyDescription(props) {
       })
     )
   );
-  const [idxHash] = React.useState(window.sentPacket.idxHash);
+  const [id] = React.useState(window.sentPacket.id);
 
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
@@ -124,7 +122,14 @@ export default function ModifyDescription(props) {
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-    if (!hasMounted && assetInfo !== undefined) {
+
+    if (asset === undefined || asset === null || asset === {}) {
+      console.log("No asset found. Rerouting...");
+      window.location.href = "/#/user/home";
+      window.location.reload();
+    }
+
+    else if (assetInfo.statusNum && !hasMounted && assetInfo !== undefined) {
       if (
         asset.statusNum === "50" ||
         asset.statusNum === "56" ||
@@ -151,16 +156,10 @@ export default function ModifyDescription(props) {
       } else {
         setSelectedKey("");
       }
-      window.sentPacket = {};
       setHasMounted(true);
     }
   }, []);
 
-  if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...");
-    window.location.href = "/#/user/home";
-    window.location.reload();
-  }
 
   let fileInput = React.createRef();
   let fileInputJSON = React.createRef();
@@ -296,14 +295,14 @@ export default function ModifyDescription(props) {
 
   const updateAssetInfo = async (hash, newAsset) => {
     setHelp(false);
-    if (!hash || !idxHash) {
+    if (!hash || !id) {
       return;
     }
 
       // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
-    console.log("idxHash", idxHash);
+    console.log("id", id);
     // eslint-disable-next-line react/prop-types
     console.log("addr: ", props.addr);
     let tempTxHash;
@@ -314,7 +313,7 @@ export default function ModifyDescription(props) {
 
     setTransactionActive(true);
     await window.contracts.NP_NC.methods
-      ._modIpfs1(idxHash, hash)
+      ._modIpfs1(id, hash)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -457,7 +456,7 @@ export default function ModifyDescription(props) {
             >
               <Settings />
             </Button>
-            <Jdenticon value={asset.idxHash} />
+            <Jdenticon value={asset.id} />
           </CardHeader>
         );
       }
@@ -856,39 +855,6 @@ export default function ModifyDescription(props) {
     return component;
   };
 
-  // const refreshBalances = async () => {
-  //   if (!window.web3.eth) return;
-
-  //   let pruf, ether;
-
-  //   console.log("Refreshing ether bal");
-  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       ether = window.web3.utils.fromWei(result, "ether");
-  //     }
-  //     window.contracts.UTIL_TKN.methods
-  //       .balanceOf(props.addr)
-  //       .call((err, result) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           pruf = window.web3.utils.fromWei(result, "ether");
-  //         }
-  //         window.contracts.A_TKN.methods
-  //           .balanceOf(props.addr)
-  //           .call((err, result) => {
-  //             if (err) {
-  //               console.log(err);
-  //             } else {
-  //               window.replaceAssetData = { assets: result, ether, pruf };
-  //             }
-  //           });
-  //       });
-  //   });
-  // };
-
   const generateThumbs = (obj) => {
     //console.log(obj);
     let component = [],
@@ -981,6 +947,30 @@ export default function ModifyDescription(props) {
     setSelectedImage(img);
     setSelectedKey(key);
   };
+
+  if(!props.prufClient){
+    return <>
+      <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              
+            </CardIcon>
+            <Button
+              color="info"
+              className="MLBGradient"
+              onClick={() => goBack()}
+            >
+              Go Back
+            </Button>
+            
+          </CardHeader>
+          <CardBody>
+            <h2>Oops, something went wrong...</h2>
+          </CardBody>
+          <br />
+        </Card>
+    </>
+  }
 
   return (
     <div>
@@ -1243,10 +1233,10 @@ export default function ModifyDescription(props) {
                     <Button
                       className="IDText"
                       onClick={() => {
-                        copyTextSnippet(idxHash);
+                        copyTextSnippet(id);
                       }}
                     >
-                      {idxHash}
+                      {id}
                     </Button>
                   </div>
                 </Tooltip>
@@ -1258,10 +1248,10 @@ export default function ModifyDescription(props) {
                     <Button
                       className="IDText"
                       onClick={() => {
-                        copyTextSnippet(idxHash);
+                        copyTextSnippet(id);
                       }}
                     >
-                      {idxHash}
+                      {id}
                     </Button>
                   </div>
                 </Tooltip>
@@ -1277,12 +1267,12 @@ export default function ModifyDescription(props) {
                     <Button
                       className="IDText"
                       onClick={() => {
-                        copyTextSnippet(idxHash);
+                        copyTextSnippet(id);
                       }}
                     >
-                      {idxHash.substring(0, 10) +
+                      {id.substring(0, 10) +
                         "..." +
-                        idxHash.substring(56, 66)}
+                        id.substring(56, 66)}
                     </Button>
                   </div>
                 </Tooltip>
@@ -1294,12 +1284,12 @@ export default function ModifyDescription(props) {
                     <Button
                       className="IDText"
                       onClick={() => {
-                        copyTextSnippet(idxHash);
+                        copyTextSnippet(id);
                       }}
                     >
-                      {idxHash.substring(0, 10) +
+                      {id.substring(0, 10) +
                         "..." +
-                        idxHash.substring(56, 66)}
+                        id.substring(56, 66)}
                     </Button>
                   </div>
                 </Tooltip>
@@ -1309,16 +1299,16 @@ export default function ModifyDescription(props) {
           {isMobile && isAndroid && (
             <Tooltip title="Copy to Clipboard">
               <CopyToClipboard
-                text={asset.idxHash}
+                text={asset.id}
                 onCopy={() => {
                   swal("Asset ID Copied to Clipboard!");
                 }}
               >
                 <span>
                   Asset ID: &nbsp;{" "}
-                  {asset.idxHash.substring(0, 14) +
+                  {asset.id.substring(0, 14) +
                     "..." +
-                    asset.idxHash.substring(52, 66)}
+                    asset.id.substring(52, 66)}
                 </span>
               </CopyToClipboard>
             </Tooltip>

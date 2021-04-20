@@ -19,6 +19,7 @@ const useStyles = makeStyles(styles)
 
 export default function TransferNode(props) {
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     const [address, setAddress] = React.useState('')
     const [loginAddress, setloginAddress] = React.useState('')
@@ -33,11 +34,11 @@ export default function TransferNode(props) {
     // eslint-disable-next-line no-unused-vars
     const [txHash, setTxHash] = React.useState('')
 
-    const [nodeInfo] = React.useState(window.sentPacket)
+    const [nodeInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
 
     const link = document.createElement('div')
 
-    window.sentPacket = null
+    //window.sentPacket = null
     document.body.style.cursor = 'default'
 
     React.useEffect(() => {
@@ -180,6 +181,30 @@ export default function TransferNode(props) {
                 })
             })
     }
+
+    if(!props.prufClient){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      }
 
     return (
         <Card>

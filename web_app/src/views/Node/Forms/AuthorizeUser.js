@@ -22,6 +22,7 @@ const useStyles = makeStyles(styles)
 
 export default function AuthorizeUser(props) {
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
     // eslint-disable-next-line no-unused-vars
@@ -40,7 +41,7 @@ export default function AuthorizeUser(props) {
     // const [card1, setCard1] = React.useState(true);
     // const [card2, setCard2] = React.useState(false);
 
-    const [nodeInfo] = React.useState(window.sentPacket)
+    const [nodeInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
 
     const link = document.createElement('div')
     document.body.style.cursor = 'default'
@@ -219,6 +220,30 @@ export default function AuthorizeUser(props) {
             }
         })
     }
+
+    if(!props.prufClient){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  <Category />
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      }
 
     return (
         <Card className="finalizeNode">

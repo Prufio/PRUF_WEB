@@ -185,7 +185,7 @@ export default function Verify(props) {
         console.log('in vr')
         // let extendedDataHash
         // let tempResult
-        let idxHash = assetInfo.idxHash
+        let idxHash = assetInfo.id
         let rgtHashRaw
         let rgtHash
 
@@ -287,7 +287,7 @@ export default function Verify(props) {
         }
 
         console.log('in bvr')
-        let idxHash = assetInfo.idxHash
+        let idxHash = assetInfo.id
         let rgtHash
         let rgtHashRaw
         let receiptVal

@@ -18,6 +18,7 @@ const useStyles = makeStyles(styles);
 
 export default function Discard(props) {
   //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+  if(!window.sentPacket) window.sentPacket = {}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
@@ -29,11 +30,11 @@ export default function Discard(props) {
   // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
-  const [assetInfo] = React.useState(window.sentPacket);
+  const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
 
   const link = document.createElement("div");
 
-  window.sentPacket = null;
+  //window.sentPacket = null;
 
   const classes = useStyles();
 
@@ -48,64 +49,30 @@ export default function Discard(props) {
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
+    if (assetInfo === undefined || assetInfo === null || assetInfo === {}) {
+      console.log("No asset found. Rerouting...");
+      window.location.href = "/#/user/home";
+      window.location.reload();
+    }
+  
+    else if (assetInfo.statusNum && assetInfo.statusNum !== "59") {
+      swal({
+        title: "Asset not in correct status!",
+        text:
+          "This asset is not in discardable status, please set asset into discardable status before attempting to discard.",
+        icon: "warning",
+        button: "Close",
+      }).then(() => {
+        window.backIndex = assetInfo.dBIndex;
+        window.location.href = assetInfo.lastRef;
+      });
+    }
   }, []);
-
-  if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...");
-    window.location.href = "/#/user/home";
-    window.location.reload();
-  }
-
-  if (assetInfo.statusNum !== "59") {
-    swal({
-      title: "Asset not in correct status!",
-      text:
-        "This asset is not in discardable status, please set asset into discardable status before attempting to discard.",
-      icon: "warning",
-      button: "Close",
-    }).then(() => {
-      window.backIndex = assetInfo.dBIndex;
-      window.location.href = assetInfo.lastRef;
-    });
-  }
 
   const goBack = () => {
     window.backIndex = assetInfo.dBIndex;
     window.location.href = assetInfo.lastRef;
   };
-
-  // const refreshBalances = async () => {
-  //   if (!window.web3.eth) return;
-
-  //   let pruf, ether;
-
-  //   console.log("Refreshing ether bal");
-  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       ether = window.web3.utils.fromWei(result, "ether");
-  //     }
-  //     window.contracts.UTIL_TKN.methods
-  //       .balanceOf(props.addr)
-  //       .call((err, result) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           pruf = window.web3.utils.fromWei(result, "ether");
-  //         }
-  //         window.contracts.A_TKN.methods
-  //           .balanceOf(props.addr)
-  //           .call((err, result) => {
-  //             if (err) {
-  //               console.log(err);
-  //             } else {
-  //               window.replaceAssetData = { assets: result, ether, pruf };
-  //             }
-  //           });
-  //       });
-  //   });
-  // };
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -132,7 +99,7 @@ export default function Discard(props) {
     setTransactionActive(true);
 
     await window.contracts.A_TKN.methods
-      .discard(assetInfo.idxHash)
+      .discard(assetInfo.id)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -185,6 +152,30 @@ export default function Discard(props) {
         });
       });
   };
+
+  if(!props.prufClient){
+    return <>
+      <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              
+            </CardIcon>
+            <Button
+              color="info"
+              className="MLBGradient"
+              onClick={() => goBack()}
+            >
+              Go Back
+            </Button>
+            
+          </CardHeader>
+          <CardBody>
+            <h2>Oops, something went wrong...</h2>
+          </CardBody>
+          <br />
+        </Card>
+    </>
+  }
 
   return (
     <Card>

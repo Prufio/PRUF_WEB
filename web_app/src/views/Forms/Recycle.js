@@ -36,6 +36,7 @@ export default function Recycle(props) {
   // const [checked, setChecked] = React.useState([24, 22]);
   // const [selectedEnabled, setSelectedEnabled] = React.useState("b");
   // eslint-disable-next-line no-unused-vars
+  if(!window.sentPacket) window.sentPacket = {}
   const [selectedValue, setSelectedValue] = React.useState(null);
   // eslint-disable-next-line no-unused-vars
   const [simpleSelect, setSimpleSelect] = React.useState("");
@@ -44,7 +45,7 @@ export default function Recycle(props) {
   const [error, setError] = React.useState("");
   const [QRValue, setQRValue] = React.useState("");
   const [recycling, setRecycling] = React.useState(false);
-  const [assetClass, setAssetClass] = React.useState("");
+  const [nodeId, setAssetClass] = React.useState("");
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
@@ -90,12 +91,12 @@ export default function Recycle(props) {
   // eslint-disable-next-line no-unused-vars
   const [verifyResult, setVerifyResult] = React.useState("");
 
-  const [assetInfo] = React.useState(window.sentPacket);
+  const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
 
     // eslint-disable-next-line no-unused-vars
   const link = document.createElement("div");
 
-  window.sentPacket = null;
+  //window.sentPacket = null;
 
   const classes = useStyles();
 
@@ -322,7 +323,7 @@ export default function Recycle(props) {
     setRecycling(true);
 
     await window.contracts.RCLR.methods
-      .recycle(idxHash, rgtHash, assetClass)
+      .recycle(idxHash, rgtHash, nodeId)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -371,7 +372,7 @@ export default function Recycle(props) {
 
   return (
     <GridContainer>
-      {assetClass === "" && (
+      {nodeId === "" && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
@@ -430,7 +431,7 @@ export default function Recycle(props) {
           <br />
         </Card>
       )}
-      {assetClass !== "" && (
+      {nodeId !== "" && (
         <>
           <GridItem xs={12} sm={12} md={6}>
             {!scanQR && QRValue === "" && (

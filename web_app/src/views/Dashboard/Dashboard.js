@@ -97,7 +97,7 @@ export default function Dashboard(props) {
       document.scrollingElement.scrollTop = 124;
     }
     //console.log(props.ps.element.scrollTop)
-    const url = String(baseURL) + String(e.idxHash);
+    const url = String(baseURL) + String(e.id);
 
     if (e === "back") {
       // eslint-disable-next-line react/prop-types
@@ -162,7 +162,7 @@ export default function Dashboard(props) {
       window.backIndex !== undefined
     ) {
       let backIndex = window.backIndex,
-        newObj,
+        newObj = {},
         newStat,
         newStatNum;
 
@@ -176,50 +176,20 @@ export default function Dashboard(props) {
           newObj.DisplayImage = "";
         }
       } else if (arr[backIndex]) {
-        newObj = {
-          text: arr[backIndex].text,
-          photo: arr[backIndex].photo,
-          urls: arr[backIndex].urls,
-          name: arr[backIndex].name,
-        };
-        newObj.DisplayImage = arr[backIndex].DisplayImage;
-      }
+        newObj = JSON.parse(JSON.stringify(arr[backIndex]));
+      } 
 
       if (window.newStat) {
-        newStatNum = window.newStat.num;
-        newStat = window.newStat.str;
-      } else {
-        newStatNum = arr[backIndex].statusNum;
-        newStat = arr[backIndex].status;
-      }
+        newObj.statusNum = window.newStat.num;
+        newObj.status = window.newStat.str;
+      } 
+
+      newObj.dBIndex = backIndex
 
       window.newStat = null;
       window.newDescObj = null;
 
-      moreInfo({
-        dBIndex: backIndex,
-        id: arr[backIndex].id,
-        countPair: arr[backIndex].countPair,
-        idxHash: arr[backIndex].id,
-        descriptionObj: newObj,
-        DisplayImage: newObj.DisplayImage,
-        name: arr[backIndex].name,
-        assetClass: arr[backIndex].assetClass,
-        assetClassName: arr[backIndex].assetClassName,
-        status: newStat,
-        statusNum: newStatNum,
-        Description: newObj.Description,
-        note: arr[backIndex].note,
-        text: newObj.text,
-        urls: newObj.urls,
-        photo: newObj.photo,
-        ContentUrl: newObj.ContentUrl,
-        photoUrls: newObj.photoUrls,
-        identicon: arr[backIndex].identicon,
-        price: newObj.price,
-        currency: newObj.currency,
-        storageHash: "placeholder",
-      });
+      moreInfo(newObj);
 
       window.backIndex = undefined;
     }
@@ -251,36 +221,7 @@ export default function Dashboard(props) {
                     <button
                       className={classes.cardHeaderHoverJdenticon}
                       onClick={() =>
-                        moreInfo({
-                          dBIndex: i,
-                          id: arr[i].id,
-                          countPair: arr[i].countPair,
-                          idxHash: arr[i].id,
-                          descriptionObj: {
-                            text: arr[i].text,
-                            photo: arr[i].photo,
-                            urls: arr[i].urls,
-                            name: arr[i].name,
-                          },
-                          DisplayImage: arr[i].DisplayImage,
-                          ContentUrl: arr[i].ContentUrl,
-                          name: arr[i].name,
-                          assetClass: arr[i].assetClass,
-                          assetClassName: arr[i].assetClassName,
-                          status: arr[i].status,
-                          statusNum: arr[i].statusNum,
-                          Description: arr[i].Description,
-                          note: arr[i].note,
-                          text: arr[i].text,
-                          urls: arr[i].urls,
-                          photo: arr[i].photo,
-                          photoUrls: arr[i].photoUrls,
-                          identicon: arr[i].identicon,
-                          price: arr[i].price,
-                          storageProvider:
-                            arr[i].assetClassData.storageProvider,
-                          currency: arr[i].currency,
-                        })
+                        moreInfo(Object.assign(arr[i], {dBIndex: i}))
                       }
                     >
                       {arr[i].DisplayImage !== "" &&
@@ -351,36 +292,7 @@ export default function Dashboard(props) {
                         simple
                         justIcon
                         onClick={() =>
-                          moreInfo({
-                            dBIndex: i,
-                            id: arr[i].id,
-                            countPair: arr[i].countPair,
-                            idxHash: arr[i].id,
-                            descriptionObj: {
-                              text: arr[i].text,
-                              photo: arr[i].photo,
-                              urls: arr[i].urls,
-                              name: arr[i].name,
-                            },
-                            DisplayImage: arr[i].DisplayImage,
-                            name: arr[i].name,
-                            ContentUrl: arr[i].ContentUrl,
-                            assetClass: arr[i].assetClass,
-                            assetClassName: arr[i].assetClassName,
-                            status: arr[i].status,
-                            statusNum: arr[i].statusNum,
-                            Description: arr[i].Description,
-                            note: arr[i].note,
-                            text: arr[i].text,
-                            urls: arr[i].urls,
-                            photo: arr[i].photo,
-                            photoUrls: arr[i].photoUrls,
-                            identicon: arr[i].identicon,
-                            price: arr[i].price,
-                            storageProvider:
-                              arr[i].assetClassData.storageProvider,
-                            currency: arr[i].currency,
-                          })
+                          moreInfo(Object.assign(arr[i], {dBIndex: i}))
                         }
                       >
                         <Icon>login</Icon>
@@ -1833,13 +1745,14 @@ export default function Dashboard(props) {
     }
     if (costId !== null) {
       window.contracts.AC_MGR.methods
-        .getServiceCosts(selectedAssetObj.assetClass, costId)
+        .getServiceCosts(selectedAssetObj.nodeId, costId)
         .call((_error, _result) => {
           if (_error) {
             console.log("Error: ", _error);
           } else {
-            let root = window.web3.utils.fromWei(Object.values(_result)[1]);
-            let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
+            let root = window.web3.utils.fromWei(_result.rootPrice);
+            let acth = window.web3.utils.fromWei(_result.ACTHprice);
+
             tempObj.opCost = String(Number(root) + Number(acth));
 
             window.sentPacket = JSON.parse(JSON.stringify(tempObj));
@@ -2066,7 +1979,7 @@ export default function Dashboard(props) {
                   Node:&nbsp;
             </h4>
                 <h4 className={classes.cardTitle}>
-                  {selectedAssetObj.assetClassName}
+                  {selectedAssetObj.nodeName}
             </h4>
               </div>
 
@@ -2180,10 +2093,10 @@ export default function Dashboard(props) {
                         <button
                           className="IDText"
                           onClick={() => {
-                            copyTextSnippet(selectedAssetObj.idxHash);
+                            copyTextSnippet(selectedAssetObj.id);
                           }}
                         >
-                          {selectedAssetObj.idxHash}
+                          {selectedAssetObj.id}
                         </button>
                       </div>
                     </Tooltip>
@@ -2195,10 +2108,10 @@ export default function Dashboard(props) {
                         <button
                           className="IDText"
                           onClick={() => {
-                            copyTextSnippet(selectedAssetObj.idxHash);
+                            copyTextSnippet(selectedAssetObj.id);
                           }}
                         >
-                          {selectedAssetObj.idxHash}
+                          {selectedAssetObj.id}
                         </button>
                       </div>
                     </Tooltip>
@@ -2214,12 +2127,12 @@ export default function Dashboard(props) {
                         <button
                           className="IDText"
                           onClick={() => {
-                            copyTextSnippet(selectedAssetObj.idxHash);
+                            copyTextSnippet(selectedAssetObj.id);
                           }}
                         >
-                          {selectedAssetObj.idxHash.substring(0, 10) +
+                          {selectedAssetObj.id.substring(0, 10) +
                             "..." +
-                            selectedAssetObj.idxHash.substring(56, 66)}
+                            selectedAssetObj.id.substring(56, 66)}
                         </button>
                       </div>
                     </Tooltip>
@@ -2231,12 +2144,12 @@ export default function Dashboard(props) {
                         <button
                           className="IDText"
                           onClick={() => {
-                            copyTextSnippet(selectedAssetObj.idxHash);
+                            copyTextSnippet(selectedAssetObj.id);
                           }}
                         >
-                          {selectedAssetObj.idxHash.substring(0, 10) +
+                          {selectedAssetObj.id.substring(0, 10) +
                             "..." +
-                            selectedAssetObj.idxHash.substring(56, 66)}
+                            selectedAssetObj.id.substring(56, 66)}
                         </button>
                       </div>
                     </Tooltip>
@@ -2246,16 +2159,16 @@ export default function Dashboard(props) {
               {isMobile && isAndroid && (
                 <Tooltip title="Copy to Clipboard">
                   <CopyToClipboard
-                    text={selectedAssetObj.idxHash}
+                    text={selectedAssetObj.id}
                     onCopy={() => {
                       swal("Asset ID Copied to Clipboard!");
                     }}
                   >
                     <span>
                       Asset ID:
-                      {selectedAssetObj.idxHash.substring(0, 10) +
+                      {selectedAssetObj.id.substring(0, 10) +
                         "..." +
-                        selectedAssetObj.idxHash.substring(56, 66)}
+                        selectedAssetObj.id.substring(56, 66)}
                     </span>
                   </CopyToClipboard>
                 </Tooltip>
@@ -2279,8 +2192,8 @@ export default function Dashboard(props) {
                   <Printer
                     obj={{
                       name: selectedAssetObj.name,
-                      idxHash: selectedAssetObj.idxHash,
-                      assetClassName: selectedAssetObj.assetClassName,
+                      id: selectedAssetObj.id,
+                      nodeName: selectedAssetObj.nodeName,
                     }}
                   />
                 )}

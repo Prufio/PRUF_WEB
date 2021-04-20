@@ -75,11 +75,11 @@ export default function Dashboard(props) {
   const [prufClient, setPrufClient] = React.useState();
   const [roots, setRoots] = React.useState(undefined);
   const [rootNames, setRootNames] = React.useState(undefined);
-  const [assetClassSets, setAssetClassSets] = React.useState(undefined);
+  const [nodeIdSets, setAssetClassSets] = React.useState(undefined);
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
-  const [assetClassBalance, setAssetClassBalance] = React.useState("~");
+  const [nodeIdBalance, setAssetClassBalance] = React.useState("~");
   const [IDBalance, setIDBalance] = React.useState("0");
   const [cookies, setCookie, removeCookie] = useCookies(["nodeList"]);
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
@@ -162,7 +162,7 @@ export default function Dashboard(props) {
     const _prufClient = new PRUF(web3);
     console.log(_prufClient);
     setPrufClient(_prufClient);
-    setUpContractEnvironment(_prufClient, web3).then(() => {});
+    setUpContractEnvironment(_prufClient, web3).then(() => { });
 
     window.web3 = web3;
     window.isKovan = true;
@@ -338,8 +338,8 @@ export default function Dashboard(props) {
 
       //More globals (eth-is-connected specific)
       window.assetTokenInfo = {
-        assetClass: undefined,
-        idxHash: undefined,
+        nodeId: undefined,
+        id: undefined,
         name: undefined,
         photos: undefined,
         text: undefined,
@@ -349,8 +349,8 @@ export default function Dashboard(props) {
       window.assets = {
         descriptions: [],
         ids: [],
-        assetClassNames: [],
-        assetClasses: [],
+        nodeNames: [],
+        nodeIdes: [],
         countPairs: [],
         statuses: [],
         names: [],
@@ -414,7 +414,7 @@ export default function Dashboard(props) {
         );
         window.location.href = String(
           "/#/user/search/" +
-            hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
+          hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
         );
       }
     } else if (
@@ -552,7 +552,7 @@ export default function Dashboard(props) {
         // }
 
         if (newAsset && dBIndex > -1) {
-          newAsset.id = newAsset.idxHash;
+          newAsset.id = newAsset.id;
           idArr.push(newAsset.id);
           //newAsset.lastRef = "/#/user/dashboard"
           newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
@@ -574,7 +574,7 @@ export default function Dashboard(props) {
           getAssetIds(addr, prufClient, idArr.length, idArr);
           window.replaceAssetData = {};
         } else if (newAsset && !dBIndex) {
-          newAsset.id = newAsset.idxHash;
+          newAsset.id = newAsset.id;
           idArr.push(newAsset.id);
           //newAsset.lastRef = "/#/user/dashboard";
           newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
@@ -659,7 +659,7 @@ export default function Dashboard(props) {
               <prop.component
                 roots={roots}
                 rootNames={rootNames}
-                assetClassSets={assetClassSets}
+                nodeIdSets={nodeIdSets}
                 ps={sps}
                 isMounted={isMounted}
                 addr={addr}
@@ -668,7 +668,7 @@ export default function Dashboard(props) {
                 pruf={prufBalance}
                 ether={ETHBalance}
                 assets={assetBalance}
-                nodes={assetClassBalance}
+                nodes={nodeIdBalance}
                 currentACPrice={currentACPrice}
                 IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
@@ -825,7 +825,7 @@ export default function Dashboard(props) {
   const getACsFromDB = async (
     acArray,
     iteration,
-    _assetClassSets,
+    _nodeIdSets,
     rootArray,
     rootNameArray,
     allClasses,
@@ -837,11 +837,11 @@ export default function Dashboard(props) {
     if (!rootNameArray) rootNameArray = [];
     if (!allClasses) allClasses = [];
     if (!allClassNames) allClassNames = [];
-    if (!_assetClassSets) _assetClassSets = {};
+    if (!_nodeIdSets) _nodeIdSets = {};
 
     if (iteration === acArray.length)
       return setUpACInformation({
-        sets: _assetClassSets,
+        sets: _nodeIdSets,
         rArr: rootArray,
         rnArr: rootNameArray,
         allCArr: allClasses,
@@ -856,7 +856,7 @@ export default function Dashboard(props) {
           getACsFromDB(
             acArray,
             iteration + 1,
-            _assetClassSets,
+            _nodeIdSets,
             rootArray,
             rootNameArray,
             allClasses,
@@ -877,11 +877,11 @@ export default function Dashboard(props) {
                       letter.toUpperCase()
                     )
                 );
-                _assetClassSets[String(acArray[iteration])] = [];
+                _nodeIdSets[String(acArray[iteration])] = [];
                 getACsFromDB(
                   acArray,
                   iteration + 1,
-                  _assetClassSets,
+                  _nodeIdSets,
                   rootArray,
                   rootNameArray,
                   allClasses,
@@ -904,7 +904,7 @@ export default function Dashboard(props) {
                 getACsFromDB(
                   acArray,
                   iteration + 1,
-                  _assetClassSets,
+                  _nodeIdSets,
                   rootArray,
                   rootNameArray,
                   allClasses,
@@ -915,13 +915,13 @@ export default function Dashboard(props) {
         }
       });
 
-    //return { sets: _assetClassSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
+    //return { sets: _nodeIdSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
   };
 
   const setUpACInformation = async (obj) => {
     let allClasses = obj.allCArr,
       rootArray = obj.rArr,
-      _assetClassSets = obj.sets,
+      _nodeIdSets = obj.sets,
       rootNameArray = obj.rnArr,
       allClassNames = obj.allCNArr;
 
@@ -938,7 +938,7 @@ export default function Dashboard(props) {
             for (let x = 0; x < rootArray.length; x++) {
               //console.log(resArr[0], rootArray[x])
               if (String(rootArray[x]) === String(resArr[0])) {
-                _assetClassSets[String(rootArray[x])].push({
+                _nodeIdSets[String(rootArray[x])].push({
                   id: allClasses[i],
                   name: allClassNames[i]
                     .toLowerCase()
@@ -953,10 +953,10 @@ export default function Dashboard(props) {
     }
 
     setTimeout(() => {
-      console.log("Class Sets: ", _assetClassSets);
+      console.log("Class Sets: ", _nodeIdSets);
       setRoots(rootArray);
       setRootNames(rootNameArray);
-      setAssetClassSets(_assetClassSets);
+      setAssetClassSets(_nodeIdSets);
     }, 500);
   };
 
@@ -1140,7 +1140,7 @@ export default function Dashboard(props) {
             id: ids[iteration],
             statusNum: _result["0"],
             forceModCount: _result["1"],
-            assetClass: _result["2"],
+            nodeId: _result["2"],
             countPair: [_result["3"], _result["4"]],
             mutableDataA: _result["5"],
             mutableDataB: _result["6"],
@@ -1173,7 +1173,7 @@ export default function Dashboard(props) {
                 obj.price = window.web3.utils.fromWei(_result["0"]);
                 obj.currency = _result["1"];
                 _prufClient.get
-                  .nodeData(obj.assetClass)
+                  .nodeData(obj.nodeId)
                   .call((_error, _result) => {
                     if (_error) {
                       console.log("IN ERROR IN ERROR IN ERROR");
@@ -1186,10 +1186,10 @@ export default function Dashboard(props) {
                         iteration + 1
                       );
                     } else {
-                      obj.assetClassName = _result.name;
+                      obj.nodeName = _result.name;
                       //console.log(_result)
 
-                      obj.assetClassData = {
+                      obj.nodeData = {
                         name: _result.name,
                         root: _result.assetClassRoot,
                         custodyType: _result.custodyType,
@@ -1200,14 +1200,46 @@ export default function Dashboard(props) {
                         storageProvider: _result.storageProvider,
                         switches: _result.switches,
                       };
-                      data.push(obj);
-                      return buildAssetHeap(
-                        _addr,
-                        _prufClient,
-                        ids,
-                        data,
-                        iteration + 1
-                      );
+
+                      _prufClient.get.ownerOfNode(obj.nodeId).call((_error, _result) => {
+                        if (_error) {
+                          console.log("IN ERROR IN ERROR IN ERROR");
+                          data.push(obj);
+                          return buildAssetHeap(
+                            _addr,
+                            _prufClient,
+                            ids,
+                            data,
+                            iteration + 1
+                          );
+                        } else {
+                          obj.nodeAdmin = _result
+                          _prufClient.get.userType(window.web3.utils.soliditySha3(_addr), obj.nodeId).call((_error, _result) => {
+                            if (_error) {
+                              console.log("IN ERROR IN ERROR IN ERROR");
+                              data.push(obj);
+                              return buildAssetHeap(
+                                _addr,
+                                _prufClient,
+                                ids,
+                                data,
+                                iteration + 1
+                              );
+                            } else {
+                              obj.userAuthLevel = _result
+                              data.push(obj);
+                              return buildAssetHeap(
+                                _addr,
+                                _prufClient,
+                                ids,
+                                data,
+                                iteration + 1
+                              );
+                            }
+                          })
+                        }
+                      });
+
                     }
                   });
               }
@@ -1231,20 +1263,21 @@ export default function Dashboard(props) {
     if (!assetsWithMutableData) assetsWithMutableData = [];
     if (iteration >= assetHeap.length) {
       /* console.log("EXIT"); */ return getEngravings(
-        assetsWithMutableData,
-        _prufClient
-      );
+      assetsWithMutableData,
+      _prufClient
+    );
     }
 
     let _arweave = window.arweave;
 
     let obj = assetHeap[iteration];
-    let storageProvider = obj.assetClassData.storageProvider;
+    let storageProvider = obj.nodeData.storageProvider;
     let mutableDataQuery;
 
     if (
       obj.mutableDataA ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
+      || obj.nodeData.root === obj.nodeId
     ) {
       obj.mutableData = "";
       assetsWithMutableData.push(obj);
@@ -1297,10 +1330,10 @@ export default function Dashboard(props) {
       console.log(obj.mutableDataA, obj.mutableDataB);
       mutableDataQuery = window.web3.utils.hexToUtf8(
         obj.mutableDataA +
-          obj.mutableDataB.substring(
-            2,
-            obj.mutableDataB.indexOf("000000000000000") + 1
-          )
+        obj.mutableDataB.substring(
+          2,
+          obj.mutableDataB.indexOf("000000000000000") + 1
+        )
       );
       console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`);
       //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
@@ -1422,12 +1455,13 @@ export default function Dashboard(props) {
     let _arweave = window.arweave;
 
     let obj = assetHeap[iteration];
-    let storageProvider = obj.assetClassData.storageProvider;
+    let storageProvider = obj.nodeData.storageProvider;
     let engravingQuery;
 
     if (
       obj.engravingA ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
+      || obj.nodeData.root === obj.nodeId
     ) {
       obj.engraving = "";
       assetsWithEngravings.push(obj);
@@ -1483,10 +1517,10 @@ export default function Dashboard(props) {
     } else if (storageProvider === "2") {
       engravingQuery = window.web3.utils.hexToUtf8(
         obj.engravingA +
-          obj.engravingB.substring(
-            2,
-            obj.engravingB.indexOf("0000000000000000000000") + 1
-          )
+        obj.engravingB.substring(
+          2,
+          obj.engravingB.indexOf("0000000000000000000000") + 1
+        )
       );
       //console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
       if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
@@ -1616,7 +1650,7 @@ export default function Dashboard(props) {
     let vals = Object.values(obj.photo),
       keys = Object.keys(obj.photo);
 
-    if (obj.assetClassData.storageProvider === "2") {
+    if (obj.nodeData.storageProvider === "2") {
       if (
         obj.engraving.contentUrl &&
         obj.engraving["Content-Type"].includes("image")
@@ -1636,7 +1670,7 @@ export default function Dashboard(props) {
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       }
-    } else if (obj.assetClassData.storageProvider === "1") {
+    } else if (obj.nodeData.storageProvider === "1") {
       const getAndSet = (url) => {
         const req = new XMLHttpRequest();
         req.responseType = "text";
@@ -1749,7 +1783,9 @@ export default function Dashboard(props) {
         get();
       }
     } else {
-      console.log("No conditions met");
+      obj.DisplayImage = "";
+      finalizedAssets.push(obj);
+      finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
     }
   };
 

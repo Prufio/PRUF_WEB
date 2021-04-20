@@ -127,7 +127,7 @@ export default function NodeManager(props) {
     React.useEffect(() => {
         buildDelegationList()
         // eslint-disable-next-line react/prop-types
-    }, [props.assetClassSets])
+    }, [props.nodeIdSets])
 
     const getNodesInWallet = async (bal, ids, iteration) => {
         // eslint-disable-next-line react/prop-types
@@ -281,23 +281,23 @@ export default function NodeManager(props) {
     const buildDelegationList = () => {
         let _delegationList = []
         // eslint-disable-next-line react/prop-types
-        if (!props.assetClassSets || !props.rootNames) return
+        if (!props.nodeIdSets || !props.rootNames) return
 
         // eslint-disable-next-line react/prop-types
-        for (let i = 0; i < Object.values(props.assetClassSets).length; i++) {
+        for (let i = 0; i < Object.values(props.nodeIdSets).length; i++) {
             for (
                 let x = 0;
                 // eslint-disable-next-line react/prop-types
-                x < Object.values(props.assetClassSets)[i].length;
+                x < Object.values(props.nodeIdSets)[i].length;
                 x++
             ) {
                 _delegationList.push([
                     // eslint-disable-next-line react/prop-types
                     props.rootNames[i],
                     // eslint-disable-next-line react/prop-types
-                    Object.values(props.assetClassSets)[i][x].name,
+                    Object.values(props.nodeIdSets)[i][x].name,
                     // eslint-disable-next-line react/prop-types
-                    Object.values(props.assetClassSets)[i][x].id,
+                    Object.values(props.nodeIdSets)[i][x].id,
                     'N/A',
                     'N/A',
                 ])
@@ -579,6 +579,7 @@ export default function NodeManager(props) {
             }
         })
     }
+
     return (
         <GridContainer>
             <GridItem xs={12}>

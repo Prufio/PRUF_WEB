@@ -19,6 +19,7 @@ const useStyles = makeStyles(styles)
 
 export default function ChangeNodeCosts(props) {
     //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
+    if(!window.sentPacket) window.sentPacket = {}
 
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = React.useState('')
@@ -41,7 +42,7 @@ export default function ChangeNodeCosts(props) {
         setloginBeneficiaryAddressState,
     ] = React.useState('')
 
-    const [nodeInfo] = React.useState(window.sentPacket)
+    const [nodeInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
     const [beneficiaryAddress, setBeneficiaryAddress] = React.useState(
         window.sentPacket.costs.cost1.BeneficiaryAddress || {}
     )
@@ -262,6 +263,30 @@ export default function ChangeNodeCosts(props) {
                 )
             })
     }
+
+    if(!props.prufClient){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      }
 
     return (
         <Card>
