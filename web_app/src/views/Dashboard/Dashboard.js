@@ -301,13 +301,16 @@ export default function Dashboard(props) {
                 )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
                 {arr[i].currency === "0" && (
-                  <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
+                  <h5 className={classes.cardTitle}>Status:&nbsp;{arr[i].status}</h5>
                 )}
                 {arr[i].currency === undefined && (
-                  <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
+                  <h5 className={classes.cardTitle}>Status:&nbsp;{arr[i].status}</h5>
                 )}
                 {arr[i].currency !== "0" && (
-                  <h5 className={classes.cardTitle}>Status: For Sale</h5>
+                  <div>
+                  <h5 className={classes.cardTitle}>Status:&nbsp;{arr[i].status}</h5>
+                  <h5 className={classes.cardTitle}>Sale Price:&nbsp;ü{arr[i].price}</h5>
+                  </div>
                 )}
               </CardBody>
               {/* <CardFooter chart>
