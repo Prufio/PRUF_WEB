@@ -64,6 +64,7 @@ export default function NodeManager(props) {
     const [delegationAmount, setDelegationAmount] = React.useState('')
     const [extDataArr, setExtDataArr] = React.useState([])
     const [forceReload] = React.useState(true)
+    const [resetToDefault, setResetToDefault] = React.useState("")
 
     const classes = useStyles()
     const chartClasses = useChartStyles()
@@ -348,14 +349,14 @@ export default function NodeManager(props) {
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Name: &nbsp; {tempObj.name} ID:(
+                                        Name:&nbsp;{tempObj.name} ID:(
                                             {tempObj.id})
                                         </h5>
                                 </div>
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Node: &nbsp;{' '}
+                                        Node:&nbsp;{' '}
                                         {tempObj.rootName} ID:(
                                             {tempObj.root})
                                         </h5>
@@ -363,7 +364,7 @@ export default function NodeManager(props) {
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Management Type: &nbsp;{' '}
+                                        Management Type:&nbsp;{' '}
                                         {tempObj.managementType}
                                     </h5>
                                 </div>
@@ -385,7 +386,7 @@ export default function NodeManager(props) {
                     }).then((value) => {
                         switch (value) {
                             case 'close':
-                                location.reload()
+                                setResetToDefault("")
                                 break;
 
                             default:
@@ -691,9 +692,8 @@ export default function NodeManager(props) {
                                                                         )
                                                                     }
                                                                     inputProps={{
-                                                                        name:
-                                                                            'simpleSelect',
-                                                                        id: '',
+                                                                        name:'simpleSelect',
+                                                                        id: resetToDefault,
                                                                     }}
                                                                 >
                                                                     <MenuItem
