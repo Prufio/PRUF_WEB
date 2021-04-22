@@ -123,13 +123,15 @@ export default function ModifyDescription(props) {
       document.scrollingElement.scrollTop = 0;
     }
 
+    //console.log(asset)
+
     if (asset === undefined || asset === null || asset === {}) {
       console.log("No asset found. Rerouting...");
       window.location.href = "/#/user/home";
       window.location.reload();
     }
 
-    else if (assetInfo.statusNum && !hasMounted && assetInfo !== undefined) {
+    else if (asset.statusNum && !hasMounted && asset !== undefined) {
       if (
         asset.statusNum === "50" ||
         asset.statusNum === "56" ||
@@ -139,6 +141,19 @@ export default function ModifyDescription(props) {
           title: "Asset not in correct status!",
           text:
             "This asset is not in a modifiable status, please set asset into a non-escrow status before attempting to modify.",
+          icon: "warning",
+          button: "Close",
+        }).then(() => {
+          window.backIndex = asset.dBIndex;
+          window.location.href = asset.lastRef;
+        });
+      }
+
+      else if (asset.nodeData.storageProvider === "2") {
+        swal({
+          title: "Oops!",
+          text:
+            "We do not support mutable data modification on arweave yet. This feature is coming in the next release.",
           icon: "warning",
           button: "Close",
         }).then(() => {
