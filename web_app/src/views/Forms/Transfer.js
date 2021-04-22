@@ -18,7 +18,6 @@ import { SwapHoriz } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function Transfer(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     const [address, setAddress] = React.useState('')
@@ -92,44 +91,6 @@ export default function Transfer(props) {
         return tempHash
     }
 
-    // const refreshBalances = async () => {
-    //     if (!window.web3.eth) return
-
-    //     let pruf, ether
-
-    //     console.log('Refreshing ether bal')
-    //     // eslint-disable-next-line react/prop-types
-    //     await window.web3.eth.getBalance(props.addr, (err, result) => {
-    //         if (err) {
-    //             console.log(err)
-    //         } else {
-    //             ether = window.web3.utils.fromWei(result, 'ether')
-    //         }
-    //         window.contracts.UTIL_TKN.methods
-    //             .balanceOf(props.addr)
-    //             .call((err, result) => {
-    //                 if (err) {
-    //                     console.log(err)
-    //                 } else {
-    //                     pruf = window.web3.utils.fromWei(result, 'ether')
-    //                 }
-    //                 window.contracts.A_TKN.methods
-    //                     .balanceOf(props.addr)
-    //                     .call((err, result) => {
-    //                         if (err) {
-    //                             console.log(err)
-    //                         } else {
-    //                             window.replaceAssetData = {
-    //                                 assets: result,
-    //                                 ether,
-    //                                 pruf,
-    //                             }
-    //                         }
-    //                     })
-    //             })
-    //     })
-    // }
-
     const transferAsset = async () => {
         //transfer held asset
     // eslint-disable-next-line react/prop-types
@@ -157,9 +118,9 @@ export default function Transfer(props) {
 
         setTransactionActive(true)
 
-        await window.contracts.A_TKN.methods
+        props.prufClient.do
         // eslint-disable-next-line react/prop-types
-            .safeTransferFrom(props.addr, address, assetInfo.id)
+            .transferAsset(props.addr, address, assetInfo.id)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {

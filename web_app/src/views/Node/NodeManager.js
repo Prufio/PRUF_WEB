@@ -105,24 +105,26 @@ export default function NodeManager(props) {
         if (props.nodeList)
             // eslint-disable-next-line react/prop-types
             console.log(props.nodeList.length, Number(props.nodes) + 1)
-        if (
-            // eslint-disable-next-line react/prop-types
-            props.nodeList &&
-            // eslint-disable-next-line react/prop-types
-            props.nodeList.length === Number(props.nodes) + 1 &&
-            !forceReload
-        ) {
-            // eslint-disable-next-line react/prop-types
-            setNodeData(props.nodeList)
-            // eslint-disable-next-line react/prop-types
-        } else if (Number(props.nodes) === 0)
-            setNodeData([['No nodes held by user', '~', '~', '~']])
-        else {
-            // eslint-disable-next-line react/prop-types
-            getNodesInWallet(Number(props.nodes))
+        if (props.prufClient && props.prufClient.get !== undefined) {
+            if (
+                // eslint-disable-next-line react/prop-types
+                props.nodeList &&
+                // eslint-disable-next-line react/prop-types
+                props.nodeList.length === Number(props.nodes) + 1 &&
+                !forceReload
+            ) {
+                // eslint-disable-next-line react/prop-types
+                setNodeData(props.nodeList)
+                // eslint-disable-next-line react/prop-types
+            } else if (props.nodes === "0")
+                setNodeData([['No nodes held by user', '~', '~', '~']])
+            else {
+                // eslint-disable-next-line react/prop-types
+                getNodesInWallet(Number(props.nodes))
+            }
         }
         // eslint-disable-next-line react/prop-types
-    }, [props.nodes])
+    }, [props.prufClient])
 
     React.useEffect(() => {
         buildDelegationList()
@@ -133,21 +135,21 @@ export default function NodeManager(props) {
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey)
         // eslint-disable-next-line react/prop-types
-        if (!window.contracts || !props.addr) return
+        if (!props.prufClient || !props.addr) return
         if (!iteration) iteration = 0
         if (!ids) ids = []
-        if (iteration >= bal) return buildNodesInWallet(ids)
+        if (iteration >= bal) {console.log(iteration); return buildNodesInWallet(ids)}
 
         if (!bal) {
-            await window.contracts.AC_TKN.methods
+            props.prufClient.get
                 // eslint-disable-next-line react/prop-types
-                .balanceOf(props.addr)
-                .call((error, result) => {
-                    if (error) {
-                        console.log(error)
-                    } else if (result > 0) {
+                .nodeBalance(props.addr)
+                .then(e => {
+                    if (Number(e) > 0) {
                         getNodesInWallet(result)
-                    } else {
+                    }
+
+                    else {
                         window.replaceAssetData = {
                             key: pageKey,
                             nodeList: [
@@ -158,22 +160,17 @@ export default function NodeManager(props) {
                     }
                 })
         } else {
-            await window.contracts.AC_TKN.methods
+            props.prufClient.get
                 // eslint-disable-next-line react/prop-types
-                .tokenOfOwnerByIndex(props.addr, iteration)
-                .call((_error, _result) => {
-                    if (_error) {
-                        console.log('IN ERROR IN ERROR IN ERROR')
-                        return getNodesInWallet(bal, ids, iteration + 1)
-                    } else {
-                        ids.push(_result)
-                        return getNodesInWallet(bal, ids, iteration + 1)
-                    }
+                .heldNodeAtIndex(props.addr, String(iteration))
+                .then(e => {
+                    ids.push(e)
+                    return getNodesInWallet(bal, ids, iteration + 1)
                 })
         }
     }
 
-    const buildNodesInWallet = async (
+    const buildNodesInWallet = (
         ids,
         _extDataArr,
         _nodeData,
@@ -183,6 +180,8 @@ export default function NodeManager(props) {
         if (!iteration) iteration = 0
         if (!_nodeData) _nodeData = []
         if (!_extDataArr) _extDataArr = []
+        //console.log(props.nodes)
+        //console.log(ids)
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey)
         // let _name, _id, _mType
@@ -192,83 +191,23 @@ export default function NodeManager(props) {
             props.prufClient.get
                 // eslint-disable-next-line react/prop-types
                 .nodeData(ids[iteration])
-                .call((_error, _result) => {
-                    if (_error) {
-                        console.log('IN ERROR IN ERROR IN ERROR')
-                        _nodeData.push([
-                            'N/A',
-                            String(ids[iteration]),
-                            'N/A',
-                            'N/A',
-                        ])
-                        _extDataArr.push({})
-                        buildNodesInWallet(
-                            ids,
-                            _extDataArr,
-                            _nodeData,
-                            iteration + 1
-                        )
-                        //data.push(obj)
-                    } else {
-                        _nodeData.push([
-                            _result.name,
-                            String(ids[iteration]),
-                            'N/A',
-                            'N/A',
-                        ])
-                        _extDataArr.push({
-                            id: ids[iteration],
-                            name: _result.name
-                                .toLowerCase()
-                                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                                    letter.toUpperCase()
-                                ),
-                            root: _result.assetClassRoot,
-                            custodyType: _result.custodyType,
-                            managementType: _result.managementType,
-                            discount: _result.discount,
-                            referenceAddress: _result.referenceAddress,
-                            extData: _result['IPFS'],
-                            storageProvider: _result.storageProvider,
-                            switches: _result.switches,
-                        })
-                        //console.log("_result", _result)
-                        return buildNodesInWallet(
-                            ids,
-                            _extDataArr,
-                            _nodeData,
-                            iteration + 1
-                        )
-                    }
+                .then(e => {
+                    console.log(e)
+                    _nodeData.push([
+                        e.name,
+                        String(ids[iteration]),
+                        'N/A',
+                        'N/A',
+                    ])
+                    _extDataArr.push(e)
+                    //console.log("_result", _result)
+                    return buildNodesInWallet(
+                        ids,
+                        _extDataArr,
+                        _nodeData,
+                        iteration + 1
+                    )
                 })
-
-            /*       await window.contracts.AC_MGR.methods
-              .getAC_name(ids[iteration])
-              .call((_error, _result) => {
-                if (_error) { console.log("Error: ", _error) }
-                else {
-                  _name = _result.toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
-                  _id = String(ids[iteration])
-                  window.contracts.AC_MGR.methods
-                    .getAC_data(_id)
-                    .call((_error, _result) => {
-                      if (_error) { console.log("Error: ", _error) }
-                      else {
-                        _nodeData.push(
-                          [_name, _id, "N/A", "N/A"]
-                        )
-                        _extDataArr.push({
-                          root: _result["0"],
-                          custodyType: _result["1"],
-                          managementType: _result["2"],
-                          discount: _result["3"],
-                          referenceAddress: _result["4"]
-                        })
-                        return buildNodesInWallet(ids, _extDataArr, _nodeData, iteration + 1)
-                      }
-                    });
-                }
-              }); */
         } else {
             _nodeData.push(['~', '~', '~', '~'])
             window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
@@ -376,7 +315,7 @@ export default function NodeManager(props) {
         setTotalRewards(true)
     }
 
-    const handleSimple = async (e) => {
+    const handleSimple = (e) => {
         if (e.temp === 'view') {
             let tempObj = {}
             console.log('root', extDataArr[e.index].root)
@@ -385,79 +324,74 @@ export default function NodeManager(props) {
             props.prufClient.get
                 // eslint-disable-next-line react/prop-types
                 .nodeName(extDataArr[e.index].root)
-                .call((_error, _result)  => {
-                    if (_error) {
-                        console.log('IN ERROR IN ERROR IN ERROR')
-                        return (window.location.href = e.href)
-                    } else {
-                        tempObj.name = extDataArr[e.index].name
-                        tempObj.id = extDataArr[e.index].id
-                        tempObj.rootName = _result
-                            .toLowerCase()
-                            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                                letter.toUpperCase()
-                            )
-                        tempObj.root = extDataArr[e.index].root
-                        tempObj.managementType =
-                            extDataArr[e.index].managementType
-                        tempObj.storageProvider =
-                            extDataArr[e.index].storageProvider
-                        console.log('tempObj', tempObj)
+                .then(e => {
+                    tempObj.name = extDataArr[e.index].name
+                    tempObj.id = extDataArr[e.index].id
+                    tempObj.rootName = e
+                        .toLowerCase()
+                        .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                            letter.toUpperCase()
+                        )
+                    tempObj.root = extDataArr[e.index].root
+                    tempObj.managementType =
+                        extDataArr[e.index].managementType
+                    tempObj.storageProvider =
+                        extDataArr[e.index].storageProvider
+                    console.log('tempObj', tempObj)
 
-                        swalReact({
-                            content: (
-                                <Card className="delegationCard">
-                                    <h4 className="delegationTitle">
-                                        Node Information
+                    swalReact({
+                        content: (
+                            <Card className="delegationCard">
+                                <h4 className="delegationTitle">
+                                    Node Information
                                     </h4>
-                                    <div className="delegationTips">
-                                        <FiberManualRecordTwoTone className="delegationPin" />
-                                        <h5 className="delegationTipsContent">
-                                            Name: &nbsp; {tempObj.name} ID:(
+                                <div className="delegationTips">
+                                    <FiberManualRecordTwoTone className="delegationPin" />
+                                    <h5 className="delegationTipsContent">
+                                        Name: &nbsp; {tempObj.name} ID:(
                                             {tempObj.id})
                                         </h5>
-                                    </div>
-                                    <div className="delegationTips">
-                                        <FiberManualRecordTwoTone className="delegationPin" />
-                                        <h5 className="delegationTipsContent">
-                                            Asset Class: &nbsp;{' '}
-                                            {tempObj.rootName} ID:(
+                                </div>
+                                <div className="delegationTips">
+                                    <FiberManualRecordTwoTone className="delegationPin" />
+                                    <h5 className="delegationTipsContent">
+                                        Node: &nbsp;{' '}
+                                        {tempObj.rootName} ID:(
                                             {tempObj.root})
                                         </h5>
-                                    </div>
-                                    <div className="delegationTips">
-                                        <FiberManualRecordTwoTone className="delegationPin" />
-                                        <h5 className="delegationTipsContent">
-                                            Management Type: &nbsp;{' '}
-                                            {tempObj.managementType}
-                                        </h5>
-                                    </div>
-                                    <div className="delegationTips">
-                                        <FiberManualRecordTwoTone className="delegationPin" />
-                                        <h5 className="delegationTipsContent">
-                                            Storage Provider: &nbsp;{' '}
-                                            {tempObj.storageProvider}
-                                        </h5>
-                                    </div>
-                                </Card>
-                            ),
-                            buttons: {
-                                close: {
-                                    text: 'Close',
-                                    className: 'delegationButtonBack',
-                                },
+                                </div>
+                                <div className="delegationTips">
+                                    <FiberManualRecordTwoTone className="delegationPin" />
+                                    <h5 className="delegationTipsContent">
+                                        Management Type: &nbsp;{' '}
+                                        {tempObj.managementType}
+                                    </h5>
+                                </div>
+                                <div className="delegationTips">
+                                    <FiberManualRecordTwoTone className="delegationPin" />
+                                    <h5 className="delegationTipsContent">
+                                        Storage Provider: &nbsp;{' '}
+                                        {tempObj.storageProvider}
+                                    </h5>
+                                </div>
+                            </Card>
+                        ),
+                        buttons: {
+                            close: {
+                                text: 'Close',
+                                className: 'delegationButtonBack',
                             },
-                        }).then((value) => {
-                            switch (value) {
-                                case 'close':
-                                    location.reload()
-                                    break;
-                
-                                default:
-                                    break
-                            }
-                        })
-                    }
+                        },
+                    }).then((value) => {
+                        switch (value) {
+                            case 'close':
+                                location.reload()
+                                break;
+
+                            default:
+                                break
+                        }
+                    })
                 })
         } else {
             document.body.style.cursor = 'wait'
@@ -468,22 +402,24 @@ export default function NodeManager(props) {
                 //console.log(props.ps.element.scrollTop)
             }
             let tempObj = JSON.parse(JSON.stringify(e))
-
-            window.utils.retreiveCosts(8, e.id).then((x) => {
-                tempObj.costs = x
-                tempObj.lastRef = '/#/user/node-manager'
-                tempObj.root = extDataArr[e.index].root
-                tempObj.custodyType = extDataArr[e.index].custodyType
-                tempObj.managementType = extDataArr[e.index].managementType
-                tempObj.discount = extDataArr[e.index].discount
-                tempObj.referenceAddress = extDataArr[e.index].referenceAddress
-                window.sentPacket = JSON.parse(JSON.stringify(tempObj))
-
-                console.log(tempObj)
-                console.log(window.sentPacket)
-                setSimpleSelect(e)
-                return (window.location.href = e.href)
-            })
+            let costs = [];
+            for (let i = 1; i < 9; i++) {
+                props.prufClient.get.operationCost(i, e.id).then((x) => {
+                    costs.push(x)
+                })
+            }
+            tempObj.lastRef = '/#/user/node-manager'
+            tempObj.root = extDataArr[e.index].root
+            tempObj.custodyType = extDataArr[e.index].custodyType
+            tempObj.managementType = extDataArr[e.index].managementType
+            tempObj.discount = extDataArr[e.index].discount
+            tempObj.referenceAddress = extDataArr[e.index].referenceAddress
+            tempObj.costs = costs
+            window.sentPacket = JSON.parse(JSON.stringify(tempObj))
+            console.log(tempObj)
+            console.log(window.sentPacket)
+            setSimpleSelect(e)
+            return (window.location.href = e.href)
         }
     }
 
@@ -502,7 +438,7 @@ export default function NodeManager(props) {
                     <div className="delegationTips">
                         <FiberManualRecordTwoTone className="delegationPin" />
                         <h5 className="delegationTipsContent">
-                            You can delegate to as many nodes as you please.
+                            You can delegate to as many nodes as you want.
                         </h5>
                     </div>
                     <div className="delegationTips">

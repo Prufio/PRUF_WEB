@@ -24,7 +24,6 @@ import { FlightLand } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Import(props) {
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
   if(!window.sentPacket) window.sentPacket = {}
 
   const [nodeId, setAssetClass] = React.useState("");
@@ -89,12 +88,9 @@ export default function Import(props) {
 
     console.log({nodeId, nodeManagement})
 
-    props.prufClient.get.nodeData(nodeId).call((_error, _result)=>{
-      if(_error){
-        console.log(_error)
-      } else {
+    props.prufClient.get.nodeData(nodeId).then(e => {
 
-        nodeManagement = _result.managementType
+        nodeManagement = e.managementType
 
         if (Number(nodeManagement) < 4) {
 
@@ -135,7 +131,6 @@ export default function Import(props) {
         else {
           return ACLogin(nodeId)
         }
-      }
     })
   }
 
@@ -149,39 +144,6 @@ export default function Import(props) {
     window.backIndex = assetInfo.dBIndex;
     window.location.href = assetInfo.lastRef;
   };
-
-  // const refreshBalances = async () => {
-  //   if (!window.web3.eth) return;
-
-  //   let pruf, ether;
-
-  //   console.log("Refreshing ether bal");
-  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       ether = window.web3.utils.fromWei(result, "ether");
-  //     }
-  //     window.contracts.UTIL_TKN.methods
-  //       .balanceOf(props.addr)
-  //       .call((err, result) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           pruf = window.web3.utils.fromWei(result, "ether");
-  //         }
-  //         window.contracts.A_TKN.methods
-  //           .balanceOf(props.addr)
-  //           .call((err, result) => {
-  //             if (err) {
-  //               console.log(err);
-  //             } else {
-  //               window.replaceAssetData = { assets: result, ether, pruf };
-  //             }
-  //           });
-  //       });
-  //   });
-  // };
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -202,7 +164,7 @@ export default function Import(props) {
           root: classes.selectMenuItem,
         }}
       >
-        Select Subclass
+        Select Node
       </MenuItem>,
     ];
 
@@ -239,8 +201,8 @@ export default function Import(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.APP_NC.methods
-      .$importAsset(assetInfo.id, nodeId)
+    await props.prufClient.do
+      .importAsset(assetInfo.id, nodeId)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -344,7 +306,7 @@ export default function Import(props) {
             <form>
               <FormControl fullWidth className={classes.selectFormControl}>
                   <>
-                    <InputLabel>Select Asset Subclass</InputLabel>
+                    <InputLabel>Select Node</InputLabel>
                     {assetInfo.nodeData && props.nodeIdSets ? 
                     <Select
                       MenuProps={{

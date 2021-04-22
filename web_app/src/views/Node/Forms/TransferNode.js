@@ -18,7 +18,6 @@ import { SwapHoriz } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function TransferNode(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     const [address, setAddress] = React.useState('')
@@ -124,9 +123,9 @@ export default function TransferNode(props) {
 
         setTransactionActive(true)
 
-        await window.contracts.AC_TKN.methods
+        props.prufClient.do
             // eslint-disable-next-line react/prop-types
-            .safeTransferFrom(props.addr, address, nodeInfo.id)
+            .transferNode(props.addr, address, nodeInfo.id)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {

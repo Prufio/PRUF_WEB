@@ -38,8 +38,7 @@ const useStyles = makeStyles(styles);
 // const useExtStyles = makeStyles(extStyles)
 
 export default function NewRecord(props) {
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
-  if(!window.sentPacket) window.sentPacket = {}
+  if (!window.sentPacket) window.sentPacket = {}
 
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
@@ -234,110 +233,72 @@ export default function NewRecord(props) {
 
   const ACLogin = (event) => {
     console.log(event.target.value);
+    let nodeId = event.target.value
     try {
       // eslint-disable-next-line react/prop-types
       props.prufClient.get
         // eslint-disable-next-line react/prop-types
         .nodeData(event.target.value)
-        .call(async (_error, _result) => {
-          if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR");
-          } else {
-            if (isMobile && _result.storageProvider === "2") {
-              return swal("This node is configured for Awreave storage, and is currently disabled for usage on mobile devices. Please use a non-mobile device to mint using this asset class.")
-            }
-            if (_result.managementType === "1") {
-              await props.prufClient.get.ownerOfNode(event.target.value).call((_error, _result) => {
-                if (_error) {
-                  console.log("Error: ", _error);
-                } else {
-                  if (_result === props.addr) {
-                    console.log("Access Granted")
-                  }
-                  else {
-                    return swal("This node is in a private management type. Only the node holder has access to asset creation.")
-                  }
-                }
+        .then(e => {
+          let managementType = e.managementType
+          let nodeData = e;
+          if (isMobile && e.storageProvider === "2") {
+            return swal("This node is configured for Awreave storage, and is currently disabled for usage on mobile devices. Please use a non-mobile device to mint using this node.")
+          }
+
+          props.prufClient.get.ownerOfNode(nodeId).then(e => {
+            let isOwner = (e === props.addr)
+            let authorized = false
+            switch (managementType) {
+              case ("255"): swal("This node is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard."); break
+              case ("1"): {
+                if (!isOwner) { swal("This node is in a private management type. Only the node holder has access to asset creation."); break }
+                else { authorized = true }
+              }
+              case ("2"): {
+                if (!isOwner) { swal("This node is in a permissive management type. Only the node holder has access to asset creation."); break }
+                else { authorized = true }
+              }
+              case ("3"): props.prufClient.get.userType(props.addr, nodeId).then(e => {
+                if (e !== "1") {swal("This node is in an authorized management type. Only the node holder and node-authorized users have access to asset creation.")}
+                else { authorized = true}
               })
+              default: break
             }
-            if (_result.managementType === "2") {
-              await props.prufClient.get.ownerOfNode(event.target.value).call((_error, _result) => {
-                if (_error) {
-                  console.log("Error: ", _error);
-                } else {
-                  if (_result === props.addr) {
-                    console.log("Access Granted")
-                  }
-                  else {
-                    return swal("This node is in a permissive management type. Only the node holder has access to asset creation.")
-                  }
-                }
-              })
-            }
-            if (_result.managementType === "3") {
-              let addrHash = await window.web3.utils.soliditySha3(props.addr)
-              await props.prufClient.get.userType(addrHash, event.target.value).call((_error, _result) => {
-                if (_error) {
-                  console.log("Error: ", _error);
-                } else {
-                  if (_result === "1") {
-                    console.log("Access Granted")
-                  }
-                  else {
-                    return swal("This node is in an authorized management type. Only the node holder and node-authorized users have access to asset creation.")
-                  }
-                }
-              })
-            }
-            if (_result.managementType === "255") {
-              return swal("This node is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard.")
-            }
+
+            if (!authorized) return
+
             setAssetClassName(
-              _result.name
+              nodeData.name
                 .toLowerCase()
                 .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                   letter.toUpperCase()
                 )
             );
-            setStorageProvider(_result.storageProvider);
 
-            setNodeExtendedData({
-              name: _result.name
+            setStorageProvider(e.storageProvider);
+            setNodeExtendedData(Object.assign({
+              name: nodeData.name
                 .toLowerCase()
                 .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                   letter.toUpperCase()
-                ),
-              root: _result.assetClassRoot,
-              custodyType: _result.custodyType,
-              managementType: _result.managementType,
-              discount: _result.discount,
-              referenceAddress: _result.referenceAddress,
-              extData: _result["IPFS"],
-              storageProvider: _result.storageProvider,
-              switches: _result.switches,
-            });
-
-            // eslint-disable-next-line react/prop-types
+                )
+            }, nodeData
+            ));
+            setAssetClass(event.target.value);
+            setClassSelect(event.target.value);
             props.prufClient.get
               // eslint-disable-next-line react/prop-types
               .operationCost(event.target.value, "1")
-              .call((_error, _result) => {
-                if (_error) {
-                  console.log("Error: ", _error);
-                  setNRCost("N/A");
-                } else {
-                  let root = window.web3.utils.fromWei(_result.ACTHprice);
-                  let acth = window.web3.utils.fromWei(_result.rootPrice);
-                  setNRCost(String(Number(root) + Number(acth)));
-                }
+              .then(e => {
+                setNRCost(e.total);
               });
-          }
-          setAssetClass(event.target.value);
-          setClassSelect(event.target.value);
+          })
+          // eslint-disable-next-line react/prop-types
         });
     } catch {
       swal({
-        title: "Could not find asset class",
+        title: "Could not find node",
         icon: "warning",
         text: "Please try again.",
         buttons: {
@@ -387,8 +348,8 @@ export default function NewRecord(props) {
 
           // const pageKey = thousandHashesOf(props.addr, props.winKey)
 
-          window.contracts.PARTY.methods
-            .GET_ID()
+          props.prufClient.do
+            .getId()
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on("error", function (_error) {
@@ -451,19 +412,6 @@ export default function NewRecord(props) {
     fileInput.current.value = "";
     fileInput.current.click();
   };
-
-  // const handleFileChange = (e) => {
-  //     // e.preventDefault();
-  //     let reader = new FileReader()
-  //     let newFile = e.target.files[0]
-  //     reader.onloadend = () => {
-  //         setFile(newFile)
-  //     }
-  //     if (newFile) {
-  //         reader.readAsDataURL(newFile)
-  //     }
-  //     console.log('newFile:', e.target.files[0])
-  // }
 
   const clearForms = () => {
     setDisplayImage("");
@@ -603,7 +551,7 @@ export default function NewRecord(props) {
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
   };
 
-  const handleHash = (extendedDataHash, idxHash, ipfsObj) => {
+  const handleHash = async (extendedDataHash, idxHash, ipfsObj) => {
     if (storageProvider === "2") {
       let extDataA = String(extendedDataHash).substring(0, 66);
       let extDataB =
@@ -611,7 +559,7 @@ export default function NewRecord(props) {
         String(extendedDataHash).substring(66, String(extendedDataHash).length);
       _newRecord(extDataA, extDataB, idxHash, ipfsObj);
     } else {
-      let ipfsB32 = window.utils.getBytes32FromIPFSHash(
+      let ipfsB32 = await props.prufClient.utils.ipfsToB32(
         String(extendedDataHash)
       );
       console.log(`b32 of ipfs bs58 hash: ${ipfsB32}\n Asset id: ${idxHash}\n Engraving object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
@@ -626,18 +574,9 @@ export default function NewRecord(props) {
   };
 
   const removeDisplayImage = () => {
-    /*     let i = new Image();
-    
-        i.onload = function () {
-          if (props.ps) {
-            props.ps.element.scrollTop -= i.height
-          } */
     setDisplayImageUrl("");
     setDisplayImage("");
     setRawFile();
-    /*     };
-    
-        i.src = displayImage; */
   };
 
   const checkAsset = async () => {
@@ -719,7 +658,7 @@ export default function NewRecord(props) {
       ipfsObj.photo.DisplayImage = displayImageUrl;
     }
 
-    let doesExist = await window.utils.checkAssetExistsBare(idxHash);
+    let doesExist = await props.prufClient.get.assetRecordExists(idxHash);
 
     if (doesExist) {
       swal({
@@ -735,10 +674,10 @@ export default function NewRecord(props) {
 
     let payload = JSON.stringify(ipfsObj);
     let fileSize = Buffer.byteLength(payload, "utf8");
-    if (fileSize > 1000000) {
+    if (fileSize > 10000000) {
       return swal({
         title:
-          "Document size exceeds 1 MB limit! (" + String(fileSize) + "Bytes)",
+          "Document size exceeds 10 MB limit! (" + String(fileSize) + "Bytes)",
         content: link,
         icon: "warning",
         button: "Close",
@@ -763,11 +702,6 @@ export default function NewRecord(props) {
     } else if (storageProvider === "2") {
       let file = fileMetaData;
       let metaData = {
-        maker: manufacturer,
-        type: type,
-        series: model,
-        serial: serial,
-        nodeKey: nodeName,
         Description: ipfsObj.Description,
         name: ipfsObj.name,
       };
@@ -794,12 +728,12 @@ export default function NewRecord(props) {
     let subCatSelection = [
       <MenuItem
         disabled
-        key={"keySelSubClass"}
+        key={"keySelNode"}
         classes={{
           root: classes.selectMenuItem,
         }}
       >
-        Select a Subclass
+        Select a Node
       </MenuItem>,
     ];
     for (let i = 0; i < arr.length; i++) {
@@ -853,62 +787,8 @@ export default function NewRecord(props) {
     return rootSelection;
   };
 
-  // const generateNodeList = (arr) => {
-  //     if (!arr || arr === null) return
-  //     // eslint-disable-next-line react/prop-types
-  //     let nodeNames = props.rootNames
-  //     let nodeSelection = [
-  //         <MenuItem
-  //             disabled
-  //             key={'keySelClass'}
-  //             classes={{
-  //                 node: classes.selectMenuItem,
-  //             }}
-  //         >
-  //             Select a Class
-  //         </MenuItem>,
-  //     ]
-
-  //     for (let i = 0; i < arr.length; i++) {
-  //         nodeSelection.push(
-  //             <MenuItem
-  //                 key={'key' + String(arr[i])}
-  //                 classes={{
-  //                     node: classes.selectMenuItem,
-  //                     selected: classes.selectMenuItemSelected,
-  //                 }}
-  //                 value={String(arr[i])}
-  //             >
-  //                 {nodeNames[i]}
-  //             </MenuItem>
-  //         )
-  //     }
-
-  //     return nodeSelection
-  // }
-
   const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => {
     var extendedDataHash, rgtHashRaw, idxHash;
-    //create a new asset record
-    //console.log("nodeId: ", nodeId)
-    // swalReact({
-    //   content:
-    //     <div className="picture-container">
-    //       <img src={ARweavePNG} className="ARweave" />
-    //       <h4>Please upload your Arweave key file</h4>
-    //       <div className="picture">
-    //         <img src={fileUpload} className="uploadFile" />
-    //         <input type="file" onChange={e => handleFileChange(e)} />
-    //       </div>
-    //       {file === null && (
-    //         <h6 className="description">Choose File</h6>
-    //       )}
-    //       {file !== null && (
-    //         <h6 className="description">{file}</h6>
-    //       )}
-    //     </div>,
-    //   buttons: "close"
-    // })
 
     // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey);
@@ -957,7 +837,7 @@ export default function NewRecord(props) {
       );
 
       var rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
-      rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+      rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
       setShowHelp(false);
       setTxStatus(false);
@@ -981,8 +861,8 @@ export default function NewRecord(props) {
         button: "Okay",
       }) */
 
-      await window.contracts.APP_NC.methods
-        .newRecordWithNote(
+      props.prufClient.do
+        .mintAsset(
           idxHash,
           rgtHash,
           nodeId,
@@ -1092,7 +972,7 @@ export default function NewRecord(props) {
       );
 
       rgtHash = window.web3.utils.soliditySha3(idxHash, rgtHashRaw);
-      rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+      rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
       setShowHelp(false);
       setTxStatus(false);
@@ -1116,8 +996,8 @@ export default function NewRecord(props) {
         button: "Okay",
       }) */
 
-      await window.contracts.APP_NC.methods
-        .newRecordWithNote(
+      props.prufClient.do
+        .mintAsset(
           idxHash,
           rgtHash,
           nodeId,
@@ -1192,13 +1072,13 @@ export default function NewRecord(props) {
 
   return (
     <>
-      {window.contracts === undefined && (
+      {props.prufClient === undefined && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+            <h4 className={classes.cardIconTitle}>Node Selection</h4>
           </CardHeader>
           <CardBody>
             <form>
@@ -1216,13 +1096,13 @@ export default function NewRecord(props) {
         </Card>
       )}
       {/* eslint-disable-next-line react/prop-types */}
-      {props.IDHolder === undefined && window.contracts !== undefined && (
+      {props.IDHolder === undefined && props.prufClient !== undefined && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+            <h4 className={classes.cardIconTitle}>Node Selection</h4>
           </CardHeader>
           <CardBody>
             <form>
@@ -1241,7 +1121,7 @@ export default function NewRecord(props) {
       )}
       {/* eslint-disable-next-line react/prop-types */}
       {props.IDHolder !== undefined &&
-        window.contracts !== undefined &&
+        props.prufClient !== undefined &&
         // eslint-disable-next-line react/prop-types
         props.nodeIdSets === undefined && (
           <Card>
@@ -1249,12 +1129,12 @@ export default function NewRecord(props) {
               <CardIcon className="headerIconBack">
                 <Category />
               </CardIcon>
-              <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+              <h4 className={classes.cardIconTitle}>Node Selection</h4>
             </CardHeader>
             <CardBody>
               <form>
                 <h3>
-                  Getting Asset Class Data
+                  Getting Node Data
                   <div className="lds-ellipsisIF">
                     <div></div>
                     <div></div>
@@ -1266,7 +1146,7 @@ export default function NewRecord(props) {
             <br />
           </Card>
         )}
-      {window.contracts !== undefined &&
+      {props.prufClient !== undefined &&
         // eslint-disable-next-line react/prop-types
         props.IDHolder !== undefined &&
         // eslint-disable-next-line react/prop-types
@@ -1286,7 +1166,7 @@ export default function NewRecord(props) {
                       <Category />
                     </CardIcon>
                     <h4 className={classes.cardIconTitle}>
-                      Select Asset Class
+                      Select Root Node
                     </h4>
                   </CardHeader>
                   <CardBody>
@@ -1296,7 +1176,7 @@ export default function NewRecord(props) {
                           fullWidth
                           className={classes.selectFormControl}
                         >
-                          <InputLabel>Select Asset Class</InputLabel>
+                          <InputLabel>Select Root Node</InputLabel>
                           <Select
                             MenuProps={{
                               className: classes.selectMenu,
@@ -1326,7 +1206,7 @@ export default function NewRecord(props) {
                           fullWidth
                           className={classes.selectFormControl}
                         >
-                          <InputLabel>Select Asset Class</InputLabel>
+                          <InputLabel>Select Node</InputLabel>
                           <Select
                             MenuProps={{
                               className: classes.selectMenu,
@@ -1362,7 +1242,7 @@ export default function NewRecord(props) {
                           className={classes.selectFormControl}
                         >
                           <>
-                            <InputLabel>Select Asset Subclass</InputLabel>
+                            <InputLabel>Select Node</InputLabel>
                             <Select
                               MenuProps={{
                                 className: classes.selectMenu,
@@ -1422,7 +1302,7 @@ export default function NewRecord(props) {
                       <Category />
                     </CardIcon>
                     <h4 className={classes.cardIconTitle}>
-                      Select Asset Class
+                      Select Node
                     </h4>
                   </CardHeader>
                   <CardBody>

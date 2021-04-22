@@ -127,62 +127,6 @@ export default function Recycle(props) {
     return (window.location.href = "/#/user/search");
   }
 
-  // const handleChange = (event) => {
-  //   setSelectedValue(event.target.value);
-  // };
-
-  // const refreshBalances = async () => {
-  //   if (!window.web3.eth) return;
-
-  //   let pruf, ether;
-
-  //   console.log("Refreshing ether bal");
-  //   // eslint-disable-next-line react/prop-types
-  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       ether = window.web3.utils.fromWei(result, "ether");
-  //     }
-  //     window.contracts.UTIL_TKN.methods
-  //     // eslint-disable-next-line react/prop-types
-  //       .balanceOf(props.addr)
-  //       .call((err, result) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           pruf = window.web3.utils.fromWei(result, "ether");
-  //         }
-  //         window.contracts.A_TKN.methods
-  //         // eslint-disable-next-line react/prop-types
-  //           .balanceOf(props.addr)
-  //           .call((err, result) => {
-  //             if (err) {
-  //               console.log(err);
-  //             } else {
-  //               window.replaceAssetData = { assets: result, ether, pruf };
-  //             }
-  //           });
-  //       });
-  //   });
-  // };
-
-  // const handleChangeEnabled = (event) => {
-  //   setSelectedEnabled(event.target.value);
-  // };
-
-  // const handleToggle = (value) => {
-  //   const currentIndex = checked.indexOf(value);
-  //   const newChecked = [...checked];
-
-  //   if (currentIndex === -1) {
-  //     newChecked.push(value);
-  //   } else {
-  //     newChecked.splice(currentIndex, 1);
-  //   }
-  //   setChecked(newChecked);
-  // };
-
   const ACLogin = (event) => {
     setAssetClass(event.target.value);
   };
@@ -314,7 +258,7 @@ export default function Recycle(props) {
       String(idxHash),
       String(rgtHashRaw)
     );
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
@@ -322,8 +266,8 @@ export default function Recycle(props) {
     console.log("addr: ", props.addr);
     setRecycling(true);
 
-    await window.contracts.RCLR.methods
-      .recycle(idxHash, rgtHash, nodeId)
+    props.prufClient.do
+      .recycleAsset(idxHash, rgtHash, nodeId)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
@@ -378,12 +322,12 @@ export default function Recycle(props) {
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+            <h4 className={classes.cardIconTitle}>Select Root Node</h4>
           </CardHeader>
           <CardBody>
             <form>
               <FormControl fullWidth className={classes.selectFormControl}>
-                <InputLabel>Select Asset Class</InputLabel>
+                <InputLabel>Select Root Node</InputLabel>
                 <Select
                   MenuProps={{
                     className: classes.selectMenu,
@@ -404,7 +348,7 @@ export default function Recycle(props) {
                       root: classes.selectMenuItem,
                     }}
                   >
-                    Select Asset Class
+                    Select Node
                   </MenuItem>
                   <MenuItem
                     classes={{

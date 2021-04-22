@@ -87,37 +87,6 @@ export default function ChangeNodeData(props) {
             window.location.reload()
         }
 
-        /*     if(window.sentPacket.id){
-      let id = window.sentPacket.id;
-      window.sentPacket = null;
-      window.contracts.AC_MGR.methods
-        .getExtAC_data_nostruct(id)
-        .call((_error, _result) => {
-          if (_error) { console.log("Error: ", _error) }
-          else {
-            window.utils.getIpfsHashFromBytes32(Object.values(_result)[4]).then(async (e)=>{
-              for await (const chunk of window.ipfs.cat(e)) {
-                let str = new TextDecoder("utf-8").decode(chunk);
-
-                if(!str){
-                  setIpfs(defaultIpfs)
-                  return setNewIpfs(defaultIpfs)
-                }
-                try {
-                  let obj = JSON.parse(str)
-                  setIpfs(obj)
-                  setNewIpfs(obj)
-                }
-                catch{
-                  setIpfs(defaultIpfs)
-                  return setNewIpfs(defaultIpfs)
-                }
-              }
-            }) 
-          }
-        });
-
-    } */
     }, [])
 
     const goBack = () => {
@@ -152,7 +121,7 @@ export default function ChangeNodeData(props) {
             } else {
                 let url = `https://ipfs.io/ipfs/${hash.cid}`
                 console.log(`Url --> ${url}`)
-                let b32Hash = window.utils.getBytes32FromIPFSHash(
+                let b32Hash = props.prufClient.utils.ipfsToB32(
                     String(hash.cid)
                 )
                 setIpfsActive(false)
@@ -337,8 +306,8 @@ export default function ChangeNodeData(props) {
 
         setTransactionActive(true)
 
-        await window.contracts.AC_MGR.methods
-            .updateACipfs(extendedDataHash, nodeInfo.id)
+        props.prufClient.do
+            .modifyExtendedConfig(extendedDataHash, nodeInfo.id)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {

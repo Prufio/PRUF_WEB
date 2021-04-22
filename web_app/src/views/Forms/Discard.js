@@ -17,7 +17,6 @@ import { DeleteOutline } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Discard(props) {
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
   if(!window.sentPacket) window.sentPacket = {}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
@@ -98,8 +97,8 @@ export default function Discard(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.A_TKN.methods
-      .discard(assetInfo.id)
+    await props.prufClient.do
+      .discardAsset(assetInfo.id)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {

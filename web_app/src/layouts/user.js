@@ -10,7 +10,7 @@ import arconf from "../Resources/arconf";
 import PRUF from "pruf-js";
 import { isMobile } from "react-device-detect";
 //import OrbitDB from 'orbit-db';
-import resolveContracts from "../Resources/Contracts";
+/* import resolveContracts from "../Resources/Contracts"; */
 import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -152,28 +152,22 @@ export default function Dashboard(props) {
     return { testWeave: testWeave, arweave: arweave };
   };
 
-  const handleNoEthereum = () => {
+  const handleNoEthereum = async () => {
     console.log("No ethereum object available");
     let web3;
     web3 = require("web3");
     web3 = new Web3(
       "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
-    const _prufClient = new PRUF(web3);
+    const _prufClient = await new PRUF(web3);
     console.log(_prufClient);
     setPrufClient(_prufClient);
-    setUpContractEnvironment(_prufClient, web3).then(() => { });
-
+    setUpEnvironment(_prufClient)
     window.web3 = web3;
-    window.isKovan = true;
     return setIsMounted(true);
   };
 
   const checkForCookies = () => {
-    //removeCookie("[object Promise]")
-    //let date = new Date()
-    //console.log(Date())
-    //console.log(new Date().addDays(15))
 
     if (!cookies.hasBeenNotified) {
       swal({
@@ -257,7 +251,7 @@ export default function Dashboard(props) {
     console.log("Setting cookie", job, "to", val);
     setCookie(String(job), JSON.stringify(val), {
       path: "/",
-      expires: new Date().addDays(15),
+      expires: new Date().addDays(5),
     });
   };
 
@@ -266,7 +260,14 @@ export default function Dashboard(props) {
     return cookies[job];
   };
 
-  const handleEthereum = () => {
+  const awaitPrufInit = (_prufClient, _addr) => {
+    setTimeout(() => {
+      if (_prufClient.get) { console.log(_prufClient.get); setUpEnvironment(_prufClient, _addr) }
+      else { awaitPrufInit(_prufClient, _addr) }
+    }, 50)
+  }
+
+  const handleEthereum = async () => {
     if (window.ethereum) {
       //console.log("Found ethereum object");
       let web3;
@@ -276,7 +277,7 @@ export default function Dashboard(props) {
 
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
-      const _prufClient = new PRUF(web3);
+      const _prufClient = await new PRUF(web3);
       console.log(_prufClient);
       setPrufClient(_prufClient);
       window.costs = {};
@@ -294,32 +295,10 @@ export default function Dashboard(props) {
               method: "eth_accounts",
               params: {},
             })
-            .then((accounts) => {
-              if (accounts[0] !== undefined) {
-                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-                window.addr = window.web3.utils.toChecksumAddress(accounts[0]);
-                setUpContractEnvironment(
-                  _prufClient,
-                  web3,
-                  window.web3.utils.toChecksumAddress(accounts[0])
-                );
-                setIsMounted(true);
-              } else {
-                ethereum.send("eth_requestAccounts").then((accounts) => {
-                  if (accounts[0] !== undefined) {
-                    setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-                    window.addr = window.web3.utils.toChecksumAddress(
-                      accounts[0]
-                    );
-                    setUpContractEnvironment(
-                      _prufClient,
-                      web3,
-                      window.web3.utils.toChecksumAddress(accounts[0])
-                    );
-                    setIsMounted(true);
-                  }
-                });
-              }
+            .then(async (accounts) => {
+              setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+              setIsMounted(true);
+              awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
             });
 
           return setIsKovan(true);
@@ -446,12 +425,8 @@ export default function Dashboard(props) {
     };
 
     //Declare a few globals
-    window.sentPacket = undefined;
-    window.isSettingUpContracts = false;
+    window.sentPacket = {};
     window.hasLoadedAssets = false;
-
-    window.menuChange = undefined;
-
     window.ipfsCounter = 0;
 
     /* _ipfs = new IPFS({
@@ -483,7 +458,7 @@ export default function Dashboard(props) {
     }
 
     if (navigator.platform.indexOf("Win") > -1) {
-      console.log("*****Using ps*****");
+      //console.log("*****Using ps*****");
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
         suppressScrollY: false,
@@ -518,7 +493,7 @@ export default function Dashboard(props) {
       }
       if (window.replaceAssetData.refreshBals) {
         console.log("Resetting token value");
-        setupTokenVals(false, "refresh", addr, prufClient);
+        setupTokenVals(addr, prufClient);
         window.replaceAssetData = {};
         forceUpdate();
       } else if (
@@ -715,52 +690,32 @@ export default function Dashboard(props) {
     return tempHash;
   };
 
-  const setUpContractEnvironment = async (_prufClient, _web3, _addr) => {
+  const setUpEnvironment = async (_prufClient, _addr) => {
+
+    console.log(_prufClient)
+
     if (window.isKovan === false) {
       return;
     }
-    //console.log("IN SUCE, addr:", _addr)
-    if (window.isSettingUpContracts) {
-      return console.log("Already in the middle of setUp...");
-    }
-    window.isSettingUpContracts = true;
+
     initArweave();
 
-    /* const Arweave = require('arweave');
-
-    Arweave.init({
-      host: 'arweave.net',// Hostname or IP address for a Arweave host
-      port: 443,          // Port
-      protocol: 'https',  // Network protocol http or https
-      timeout: 20000,     // Network request timeouts in milliseconds
-      logging: false,     // Enable network request logging
-    }).then(e=>setArweaveClient(e)) */
+    if (window.idxQuery) {
+      window.location.href = "/#/user/search/" + window.idxQuery;
+    }
 
     if (window.ethereum) {
-      await resolveContracts(_web3).then(() => {
-        window.isSettingUpContracts = false;
-        setWD(true);
-        if (_addr) {
-          setupTokenVals(true, "SetupContractEnvironment", _addr, _prufClient);
-          buildNodeHeap();
-        }
-        if (window.idxQuery) {
-          window.location.href = "/#/user/search/" + window.idxQuery;
-        }
-      });
-    } else {
-      window.isSettingUpContracts = true;
-      await resolveContracts(_web3).then(() => {
-        window.isSettingUpContracts = false;
-        setWD(true);
-      });
+      if (_addr) {
+        setupTokenVals(_addr, _prufClient)
+        buildNodeHeap(_prufClient)
+      }
+
+
     }
   };
 
-  const buildNodeHeap = (iteration, arr, rootsDone, acsDone) => {
-    if (!window.contracts) return;
-    //const acBegin = 1000000
-    //const rootBegin = 1
+  const buildNodeHeap = (_prufClient, iteration, arr, rootsDone, acsDone) => {
+    if (!_prufClient) return;
     if (!rootsDone && !acsDone) rootsDone = false;
     acsDone = false;
     if (!iteration) iteration = 1;
@@ -772,57 +727,45 @@ export default function Dashboard(props) {
     let noMore = false;
 
     if (rootsDone !== true) {
-      //console.log("trying ", iteration);
-      window.contracts.AC_TKN.methods
-        .tokenExists(String(iteration))
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("Error: ", _error);
+      _prufClient.get
+        .nodeExists(String(iteration))
+        .then(e => {
+          if (e) {
+            arr.push(iteration);
+            //console.log("found ", iteration);
             iteration++;
-            return buildNodeHeap(iteration, arr, false, false);
+            return buildNodeHeap(_prufClient, iteration, arr, false, false);
           } else {
-            if (_result === "170") {
-              arr.push(iteration);
-              //console.log("found ", iteration);
-              iteration++;
-              return buildNodeHeap(iteration, arr, false, false);
-            } else {
-              noMore = true;
-              //console.log("There is no root ", iteration);
-              iteration++;
-              return buildNodeHeap(1000001, arr, true, false);
-            }
+            noMore = true;
+            //console.log("There is no root ", iteration);
+            iteration++;
+            return buildNodeHeap(_prufClient, 1000001, arr, true, false);
           }
         });
     } else if (rootsDone === true && acsDone !== true) {
       //console.log("trying ", iteration);
-      window.contracts.AC_TKN.methods
-        .tokenExists(String(iteration))
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("Error: ", _error);
+      _prufClient.get
+        .nodeExists(String(iteration))
+        .then(e => {
+          if (e) {
+            arr.push(iteration);
+            //console.log("found ", iteration);
             iteration++;
-            return buildNodeHeap(iteration, arr, true, false);
+            return buildNodeHeap(_prufClient, iteration, arr, true, false);
           } else {
-            if (_result === "170") {
-              arr.push(iteration);
-              //console.log("found ", iteration);
-              iteration++;
-              return buildNodeHeap(iteration, arr, true, false);
-            } else {
-              noMore = true;
-              //console.log("There is no ac ", iteration);
-              iteration++;
-              console.log("Found all nodes", arr);
-              setAcArr(arr);
-              return getACsFromDB(arr);
-            }
+            noMore = true;
+            //console.log("There is no ac ", iteration);
+            iteration++;
+            console.log("Found all nodes", arr);
+            setAcArr(arr);
+            return getACsFromDB(_prufClient, arr);
           }
         });
     }
   };
 
   const getACsFromDB = async (
+    _prufClient,
     acArray,
     iteration,
     _nodeIdSets,
@@ -840,85 +783,74 @@ export default function Dashboard(props) {
     if (!_nodeIdSets) _nodeIdSets = {};
 
     if (iteration === acArray.length)
-      return setUpACInformation({
-        sets: _nodeIdSets,
-        rArr: rootArray,
-        rnArr: rootNameArray,
-        allCArr: allClasses,
-        allCNArr: allClassNames,
-      });
+      return setUpACInformation(
+        _prufClient,
+        {
+          sets: _nodeIdSets,
+          rArr: rootArray,
+          rnArr: rootNameArray,
+          allCArr: allClasses,
+          allCNArr: allClassNames,
+        });
 
-    await window.contracts.AC_MGR.methods
-      .getAC_data(String(acArray[iteration]))
-      .call((_error, _result) => {
-        if (_error) {
-          console.log("Error: ", _error);
-          getACsFromDB(
-            acArray,
-            iteration + 1,
-            _nodeIdSets,
-            rootArray,
-            rootNameArray,
-            allClasses,
-            allClassNames
-          );
+    await _prufClient.get
+      .nodeData(String(acArray[iteration]))
+      .then(e => {
+        if (String(acArray[iteration]) === e.root) {
+          _prufClient.get
+            .nodeName(String(acArray[iteration]))
+            .then((e) => {
+              rootArray.push(acArray[iteration]);
+              rootNameArray.push(
+                e
+                  .toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  )
+              );
+              _nodeIdSets[String(acArray[iteration])] = [];
+              getACsFromDB(
+                _prufClient,
+                acArray,
+                iteration + 1,
+                _nodeIdSets,
+                rootArray,
+                rootNameArray,
+                allClasses,
+                allClassNames
+              );
+            });
         } else {
-          let resArr = Object.values(_result);
-
-          if (String(acArray[iteration]) === String(resArr[0])) {
-            window.utils
-              .resolveACFromID(String(acArray[iteration]))
-              .then((e) => {
-                rootArray.push(acArray[iteration]);
-                rootNameArray.push(
-                  e
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    )
-                );
-                _nodeIdSets[String(acArray[iteration])] = [];
-                getACsFromDB(
-                  acArray,
-                  iteration + 1,
-                  _nodeIdSets,
-                  rootArray,
-                  rootNameArray,
-                  allClasses,
-                  allClassNames
-                );
-              });
-          } else {
-            //console.log(acArray[i])
-            window.utils
-              .resolveACFromID(String(acArray[iteration]))
-              .then((e) => {
-                allClasses.push(String(acArray[iteration]));
-                allClassNames.push(
-                  e
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    )
-                );
-                getACsFromDB(
-                  acArray,
-                  iteration + 1,
-                  _nodeIdSets,
-                  rootArray,
-                  rootNameArray,
-                  allClasses,
-                  allClassNames
-                );
-              });
-          }
+          //console.log(acArray[i])
+          _prufClient.get
+            .nodeName(String(acArray[iteration]))
+            .then((e) => {
+              allClasses.push(String(acArray[iteration]));
+              allClassNames.push(
+                e
+                  .toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  )
+              );
+              getACsFromDB(
+                _prufClient,
+                acArray,
+                iteration + 1,
+                _nodeIdSets,
+                rootArray,
+                rootNameArray,
+                allClasses,
+                allClassNames
+              );
+            });
         }
       });
 
     //return { sets: _nodeIdSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
   };
 
-  const setUpACInformation = async (obj) => {
+  const setUpACInformation = async (_prufClient, obj) => {
     let allClasses = obj.allCArr,
       rootArray = obj.rArr,
       _nodeIdSets = obj.sets,
@@ -928,25 +860,20 @@ export default function Dashboard(props) {
     //console.log(allClasses, allClassNames, rootArray)
 
     for (let i = 0; i < allClasses.length; i++) {
-      await window.contracts.AC_MGR.methods
-        .getAC_data(String(allClasses[i]))
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("Error: ", _error);
-          } else {
-            let resArr = Object.values(_result);
-            for (let x = 0; x < rootArray.length; x++) {
-              //console.log(resArr[0], rootArray[x])
-              if (String(rootArray[x]) === String(resArr[0])) {
-                _nodeIdSets[String(rootArray[x])].push({
-                  id: allClasses[i],
-                  name: allClassNames[i]
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    ),
-                });
-              }
+      _prufClient.get
+        .nodeData(String(allClasses[i]))
+        .then(e => {
+          for (let x = 0; x < rootArray.length; x++) {
+            //console.log(resArr[0], rootArray[x])
+            if (String(rootArray[x]) === e.root) {
+              _nodeIdSets[String(rootArray[x])].push({
+                id: allClasses[i],
+                name: allClassNames[i]
+                  .toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  ),
+              });
             }
           }
         });
@@ -957,85 +884,12 @@ export default function Dashboard(props) {
       setRoots(rootArray);
       setRootNames(rootNameArray);
       setAssetClassSets(_nodeIdSets);
-    }, 500);
+    }, 200);
   };
 
   const isGenericCall = async (e) => {
     //console.log("Checking call", e)
     let str;
-
-    const genericCalls = [
-      "CONTRACT_ADMIN_ROLE",
-      "B320xF_",
-      "ASSET_TXFR_ROLE",
-      "NODE_MINTER_ROLE",
-      "PAUSER_ROLE",
-      "CONTRACT_ADMIN_ROLE",
-      "acPrice_L1",
-      "DEFAULT_ADMIN_ROLE",
-      "acPrice_L2",
-      "acPrice_L3",
-      "acPrice_L4",
-      "acPrice_L5",
-      "acPrice_L6",
-      "acPrice_L7",
-      "grantRole",
-      "hasRole",
-      "unpause",
-      "upperLimit",
-      "OO_SetACpricing",
-      "OO_SetACupgrade",
-      "OO_resolveContractAddresses",
-      "OO_setStorageContract",
-      "OO_transferACToken",
-      "MINTER_ROLE",
-      "getRoleAdmin",
-      "getApproved",
-      "getRoleMember",
-      "grantRole",
-      "getRoleMemberCount",
-      "name",
-      "ownerOf",
-      "isApprovedForAll",
-      "pause",
-      "paused",
-      "revokeRole",
-      "renounceRole",
-      "safeTransferFrom",
-      "supportsInterface",
-      "symbol",
-      "tokenByIndex",
-      "tokenOfOwnerByIndex",
-      "tokenURI",
-      "totalSupply",
-      "transferFrom",
-      "AdminSetSharesAddress",
-      "burnFrom",
-      "cap",
-      "decimals",
-      "decreaseAllowance",
-      "increaseAllowance",
-      "mint",
-      "payForService",
-      "takeSnapshot",
-      "totalSupply",
-      "totalSupplyAt",
-      "transfer",
-      "trustedAgentBurn",
-      "transferFrom",
-      "trustedAgentTransfer",
-      "unSetColdWallet",
-      "balanceOf",
-      "baseURI",
-      "burn",
-      "approve",
-      "setApprovalForAll",
-      "createAssetClass",
-      "onERC721Received",
-      "DISCARD_ROLE",
-      "",
-      "",
-    ];
 
     if (e.includes("(")) {
       str = e.substring(0, e.indexOf("("));
@@ -1054,41 +908,6 @@ export default function Dashboard(props) {
     }
   };
 
-  const listAllMethods = () => {
-    let allMethods = {};
-
-    for (let i = 0; i < Object.values(window.contracts).length; i++) {
-      let tempArr = [],
-        badBatch = [];
-      let contract = Object.values(window.contracts)[i];
-
-      console.log(contract);
-
-      for (let x = 0; x < Object.values(contract.methods).length; x++) {
-        isGenericCall(Object.keys(contract.methods)[x]).then((e) => {
-          if (
-            e === false &&
-            Object.keys(contract.methods)[x].includes("(") &&
-            Object.keys(contract.methods)[x].includes(")")
-          ) {
-            tempArr.push(Object.keys(contract.methods)[x]);
-            if (x === Object.values(contract.methods).length - 1) {
-              console.log("Good", allMethods);
-              console.log("Bad", badBatch);
-            }
-          } else {
-            badBatch.push(Object.keys(contract.methods)[x]);
-            if (x === Object.values(contract.methods).length - 1) {
-              console.log("Good", allMethods);
-              console.log("Bad", badBatch);
-            }
-          }
-        });
-      }
-      allMethods[Object.keys(window.contracts)[i]] = tempArr;
-    }
-  };
-
   const getAssetIds = (_addr, _prufClient, bal, ids, iteration) => {
     if (!bal) return;
     if (Number(bal) === 0) return console.log("No assets held by user");
@@ -1099,23 +918,10 @@ export default function Dashboard(props) {
       return buildAssetHeap(_addr, _prufClient, ids);
     } else {
       _prufClient.get
-        .heldAssetAtIndex(_addr, iteration)
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR");
-            return getAssetIds(_addr, _prufClient, bal, ids, iteration + 1);
-          } else {
-            let resStr;
-            resStr = window.web3.utils.numberToHex(_result);
-            while (resStr.length < 66) {
-              resStr =
-                resStr.substring(0, 2) +
-                "0" +
-                resStr.substring(2, resStr.length);
-            }
-            ids.push(resStr);
-            getAssetIds(_addr, _prufClient, bal, ids, iteration + 1);
-          }
+        .heldAssetAtIndex(_addr, String(iteration))
+        .then(e => {
+          ids.push(e);
+          getAssetIds(_addr, _prufClient, bal, ids, iteration + 1);
         });
     }
   };
@@ -1130,124 +936,44 @@ export default function Dashboard(props) {
     }
     if (iteration >= ids.length) return getMutableData(data, _prufClient);
     else {
-      _prufClient.get.assetRecord(ids[iteration]).call((_error, _result) => {
-        if (_error) {
-          console.log("IN ERROR IN ERROR IN ERROR");
-          data.push({});
-          return buildAssetHeap(_addr, _prufClient, ids, data, iteration + 1);
-        } else {
-          let obj = {
-            id: ids[iteration],
-            statusNum: _result["0"],
-            forceModCount: _result["1"],
-            nodeId: _result["2"],
-            countPair: [_result["3"], _result["4"]],
-            mutableDataA: _result["5"],
-            mutableDataB: _result["6"],
-            engravingA: _result["7"],
-            engravingB: _result["8"],
-            numberOfTransfers: _result["9"],
-          };
+      _prufClient.get.assetRecord(ids[iteration]).then(e => {
+        let obj = Object.assign({}, e)
 
-          obj.identicon = <Jdenticon value={ids[iteration]} />;
-          obj.identiconLG = <Jdenticon value={ids[iteration]} />;
+        obj.identicon = <Jdenticon value={ids[iteration]} />
+        obj.identiconLG = <Jdenticon value={ids[iteration]} />
 
-          _prufClient.utils.stringifyStatus(_result[0]).then((e) => {
-            obj.status = e;
-          });
+        _prufClient.utils.stringifyStatus(obj.status).then((e) => {
+          obj.status = e
+        });
 
-          _prufClient.get
-            .assetPriceData(ids[iteration])
-            .call((_error, _result) => {
-              if (_error) {
-                console.log("IN ERROR IN ERROR IN ERROR");
-                data.push(obj);
-                return buildAssetHeap(
-                  _addr,
-                  _prufClient,
-                  ids,
-                  data,
-                  iteration + 1
-                );
-              } else {
-                obj.price = window.web3.utils.fromWei(_result["0"]);
-                obj.currency = _result["1"];
-                _prufClient.get
-                  .nodeData(obj.nodeId)
-                  .call((_error, _result) => {
-                    if (_error) {
-                      console.log("IN ERROR IN ERROR IN ERROR");
-                      data.push(obj);
-                      return buildAssetHeap(
-                        _addr,
-                        _prufClient,
-                        ids,
-                        data,
-                        iteration + 1
-                      );
-                    } else {
-                      obj.nodeName = _result.name;
-                      //console.log(_result)
-
-                      obj.nodeData = {
-                        name: _result.name,
-                        root: _result.assetClassRoot,
-                        custodyType: _result.custodyType,
-                        managementType: _result.managementType,
-                        discount: _result.discount,
-                        referenceAddress: _result.referenceAddress,
-                        extData: _result["IPFS"],
-                        storageProvider: _result.storageProvider,
-                        switches: _result.switches,
-                      };
-
-                      _prufClient.get.ownerOfNode(obj.nodeId).call((_error, _result) => {
-                        if (_error) {
-                          console.log("IN ERROR IN ERROR IN ERROR");
-                          data.push(obj);
-                          return buildAssetHeap(
-                            _addr,
-                            _prufClient,
-                            ids,
-                            data,
-                            iteration + 1
-                          );
-                        } else {
-                          obj.nodeAdmin = _result
-                          _prufClient.get.userType(window.web3.utils.soliditySha3(_addr), obj.nodeId).call((_error, _result) => {
-                            if (_error) {
-                              console.log("IN ERROR IN ERROR IN ERROR");
-                              data.push(obj);
-                              return buildAssetHeap(
-                                _addr,
-                                _prufClient,
-                                ids,
-                                data,
-                                iteration + 1
-                              );
-                            } else {
-                              obj.userAuthLevel = _result
-                              data.push(obj);
-                              return buildAssetHeap(
-                                _addr,
-                                _prufClient,
-                                ids,
-                                data,
-                                iteration + 1
-                              );
-                            }
-                          })
-                        }
-                      });
-
-                    }
-                  });
-              }
-            });
-        }
-      });
+        _prufClient.get
+          .assetPriceData(ids[iteration])
+          .then(e => {
+            obj = Object.assign(obj, e)
+            _prufClient.get
+              .nodeData(obj.nodeId)
+              .then(e => {
+                obj.nodeName = e.name;
+                obj.nodeData = Object.assign({}, e)
+                _prufClient.get.ownerOfNode(obj.nodeId).then(e => {
+                  obj.nodeAdmin = e
+                  _prufClient.get.userType(window.web3.utils.soliditySha3(_addr), obj.nodeId).then(e => {
+                    obj.userAuthLevel = e
+                    data.push(obj);
+                    return buildAssetHeap(
+                      _addr,
+                      _prufClient,
+                      ids,
+                      data,
+                      iteration + 1
+                    )
+                  })
+                })
+              })
+          })
+      })
     }
-  };
+  }
 
   const getMutableData = (
     assetHeap,
@@ -1290,8 +1016,6 @@ export default function Dashboard(props) {
       );
     } else if (storageProvider === "1") {
       _prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
-        //console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`)
-        //engravingQuery = await _prufClient.utils.ipfsFromB32(obj.engravingA);
         console.log("MDQ", e);
 
         if (cookies[window.web3.utils.soliditySha3(e)]) {
@@ -1332,7 +1056,7 @@ export default function Dashboard(props) {
         obj.mutableDataA +
         obj.mutableDataB.substring(
           2,
-          obj.mutableDataB.indexOf("000000000000000") + 1
+          24
         )
       );
       console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`);
@@ -1519,7 +1243,7 @@ export default function Dashboard(props) {
         obj.engravingA +
         obj.engravingB.substring(
           2,
-          obj.engravingB.indexOf("0000000000000000000000") + 1
+          24
         )
       );
       //console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
@@ -1790,9 +1514,8 @@ export default function Dashboard(props) {
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const setupTokenVals = async (willSetup, who, _addr, pruf) => {
+  const setupTokenVals = async (_addr, _prufClient) => {
     if (!_addr) return swal("Unable to reach user's wallet.");
-    console.log("STV: Setting up balances, called from ", who);
 
     await window.web3.eth.getBalance(_addr, (error, result) => {
       if (error) {
@@ -1801,64 +1524,40 @@ export default function Dashboard(props) {
       }
     });
 
-    await pruf.get.nodeBalance(_addr).call((error, result) => {
-      if (error) {
-        console.log(error);
+    await _prufClient.get.assetBalance(_addr).then(e => {
+
+      setAssetBalance(e);
+      if (Number(e) > 0) {
+        setIsAssetHolder(true);
+        getAssetIds(_addr, _prufClient, e)
       } else {
-        setAssetClassBalance(result);
-        if (Number(result) > 0) {
-          setIsAssetClassHolder(true);
-        } else {
-          setIsAssetClassHolder(false);
-        }
+        setIsAssetHolder(false);
       }
+
     });
 
-    window.contracts.ID_TKN.methods.balanceOf(_addr).call((error, result) => {
-      if (error) {
-        console.log(error);
+    await _prufClient.get.nodeBalance(_addr).then(e => {
+
+      setAssetClassBalance(e);
+      if (Number(e) > 0) {
+        setIsAssetClassHolder(true);
       } else {
-        setIDBalance(result);
-        if (Number(result) > 0 && Number(result) < 2) {
-          setIsIDHolder(true);
-        } else {
-          setIsIDHolder(false);
-        }
+        setIsAssetClassHolder(false);
       }
+
     });
 
-    await pruf.get.assetBalance(_addr).call((error, result) => {
-      if (error) {
-        console.log(error);
-      } else {
-        setAssetBalance(result);
-        if (Number(result) > 0) {
-          setIsAssetHolder(true);
-        } else {
-          setIsAssetHolder(false);
-        }
-        if (willSetup) {
-          forceUpdate();
-          getAssetIds(_addr, pruf, result);
-        }
-      }
+    await _prufClient.get.holdsId(_addr).then(e => {
+      setIsIDHolder(e);
     });
 
-    await pruf.get.prufBalance(_addr).call((error, result) => {
-      if (error) {
-        console.log(error);
-      } else {
-        setPrufBalance(window.web3.utils.fromWei(result, "ether"));
-      }
+    await _prufClient.get.prufBalance(_addr).then(e => {
+      setPrufBalance(e);
     });
 
-    await pruf.get.nodePricing().call((error, result) => {
-      if (error) {
-        return console.log("IN ERROR IN ERROR IN ERROR");
-      } else {
-        setCurrentACIndex(window.web3.utils.fromWei(result["0"]));
-        setCurrentACPrice(window.web3.utils.fromWei(result["1"]));
-      }
+    await _prufClient.get.nodePricing().then(e => {
+      setCurrentACIndex(e.currentNodeIndex);
+      setCurrentACPrice(e.currentNodePrice);
     });
   };
 

@@ -18,7 +18,6 @@ import { StoreMallDirectory } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function ChangeNodeName(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
@@ -70,7 +69,7 @@ export default function ChangeNodeName(props) {
 
     const changeName = async () => {
         //import held asset
-        let nameExists = await window.utils.checkACName(loginName)
+        let nameExists = await props.prufClient.get.nodeNameAvailable(loginName)
 
         if (nameExists === false) {
             let tempTxHash
@@ -81,8 +80,8 @@ export default function ChangeNodeName(props) {
 
             setTransactionActive(true)
 
-            await window.contracts.AC_MGR.methods
-                .updateACname(nodeInfo.id, name)
+            props.prufClient.do
+                .modifyNodeName(nodeInfo.id, name)
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })
                 .on('error', function (_error) {

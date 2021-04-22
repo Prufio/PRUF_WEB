@@ -19,7 +19,6 @@ import { MonetizationOnOutlined } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function SetForSale(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
@@ -150,8 +149,8 @@ export default function SetForSale(props) {
                     setError(undefined)
 
                     setTransactionActive(true)
-                    await window.contracts.PURCHASE.methods
-                        ._clearPrice(assetInfo.id)
+                    props.prufClient.do
+                        .unSetForSale(assetInfo.id)
                         // eslint-disable-next-line react/prop-types
                         .send({ from: props.addr })
                         .on('error', function (_error) {
@@ -285,8 +284,8 @@ export default function SetForSale(props) {
 
                         setTransactionActive(true)
                         if (assetInfo.statusNum !== '51') {
-                            await window.contracts.PURCHASE.methods
-                                ._setPrice(
+                            props.prufClient.do
+                                .setForSale(
                                     assetInfo.id,
                                     window.web3.utils.toWei(price),
                                     currency,
@@ -356,8 +355,8 @@ export default function SetForSale(props) {
                                     })
                                 })
                         } else {
-                            await window.contracts.PURCHASE.methods
-                                ._setPrice(
+                            props.prufClient.do
+                                .setForSale(
                                     assetInfo.id,
                                     window.web3.utils.toWei(price),
                                     currency,
@@ -456,8 +455,8 @@ export default function SetForSale(props) {
 
         setTransactionActive(true)
         if (assetInfo.statusNum !== '51') {
-            await window.contracts.PURCHASE.methods
-                ._setPrice(
+            props.prufClient.do
+                .setForSale(
                     assetInfo.id,
                     window.web3.utils.toWei(price),
                     currency,
@@ -521,8 +520,8 @@ export default function SetForSale(props) {
                 })
         } else {
             console.log(props.addr)
-            await window.contracts.PURCHASE.methods
-                ._setPrice(
+            props.prufClient.do
+                .setForSale(
                     assetInfo.id,
                     window.web3.utils.toWei(price),
                     currency,

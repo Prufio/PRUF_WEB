@@ -17,7 +17,6 @@ import { FlightTakeoff } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Export(props) {
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
   if(!window.sentPacket) window.sentPacket = {}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
@@ -75,39 +74,6 @@ export default function Export(props) {
     window.backIndex = assetInfo.dBIndex;
     window.location.href = assetInfo.lastRef;
   };
-
-  // const refreshBalances = async () => {
-  //   if (!window.web3.eth) return;
-
-  //   let pruf, ether;
-
-  //   console.log("Refreshing ether bal");
-  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       ether = window.web3.utils.fromWei(result, "ether");
-  //     }
-  //     window.contracts.UTIL_TKN.methods
-  //       .balanceOf(props.addr)
-  //       .call((err, result) => {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           pruf = window.web3.utils.fromWei(result, "ether");
-  //         }
-  //         window.contracts.A_TKN.methods
-  //           .balanceOf(props.addr)
-  //           .call((err, result) => {
-  //             if (err) {
-  //               console.log(err);
-  //             } else {
-  //               window.replaceAssetData = { assets: result, ether, pruf };
-  //             }
-  //           });
-  //       });
-  //   });
-  // };
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -175,8 +141,8 @@ export default function Export(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.NP_NC.methods
-      ._exportNC(assetInfo.id)
+    await props.prufClient.do
+      .exportAsset(assetInfo.id)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {

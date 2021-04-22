@@ -24,7 +24,7 @@ export default function Verify(props) {
     // const [checked, setChecked] = React.useState([24, 22])
     // const [selectedEnabled, setSelectedEnabled] = React.useState('b')
     // const [selectedValue, setSelectedValue] = React.useState(null)
-  // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const [scanQR, setScanQR] = React.useState(false)
     // eslint-disable-next-line no-unused-vars
     const [result, setResult] = React.useState('')
@@ -36,7 +36,7 @@ export default function Verify(props) {
     // eslint-disable-next-line no-unused-vars
     const [IDXRawInput, setIDXRawInput] = React.useState(false)
 
-  // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const [manufacturer, setManufacturer] = React.useState('')
     // eslint-disable-next-line no-unused-vars
     const [type, setType] = React.useState('')
@@ -53,7 +53,7 @@ export default function Verify(props) {
     // const [loginSerial, setloginSerial] = React.useState('')
     // const [loginIDX, setloginIDX] = React.useState('')
 
-  // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const [loginManufacturerState, setloginManufacturerState] = React.useState(
         ''
     )
@@ -82,7 +82,7 @@ export default function Verify(props) {
     const [loginIDState, setloginIDState] = React.useState('')
     const [loginPasswordState, setloginPasswordState] = React.useState('')
 
-  // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const [txHash, setTxHash] = React.useState('')
     // eslint-disable-next-line no-unused-vars
     const [verifyResult, setVerifyResult] = React.useState('')
@@ -210,32 +210,16 @@ export default function Verify(props) {
             String(idxHash),
             String(rgtHashRaw)
         )
-        rgtHash = window.utils.tenThousandHashesOf(rgtHash)
+        rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash)
 
         console.log('idxHash', idxHash)
         console.log('rgtHash', rgtHash)
         console.log('addr: ', window.addr)
         setTransaction(true)
-        await window.contracts.STOR.methods
-            ._verifyRightsHolder(idxHash, rgtHash)
-            .call(function (_error, _result) {
-                if (_error) {
-                    console.log(_error)
-                    setError(_error)
-                    setResult('')
-                    setTransaction(false)
-                } else if (_result === '0') {
-                    console.log('Verification not Confirmed')
-                    swal({
-                        title: 'Match Failed!',
-                        text:
-                            'Please make sure forms are filled out correctly.',
-                        icon: 'warning',
-                        button: 'Close',
-                    })
-                    setTransaction(false)
-                } else {
-                    console.log('Verification Confirmed')
+        props.prufClient.get
+            .isRightsHolder(idxHash, rgtHash)
+            .then(e => {
+                if (e) {
                     swal({
                         title: 'Match Confirmed!',
                         // text: "Check your TX here:" + txHash,
@@ -246,6 +230,16 @@ export default function Verify(props) {
                         window.location.href = assetInfo.lastRef
                     })
                     setError('')
+                    setTransaction(false)
+                } else {
+                    console.log('Verification not Confirmed')
+                    swal({
+                        title: 'Match Failed!',
+                        text:
+                            'Please make sure forms are filled out correctly.',
+                        icon: 'warning',
+                        button: 'Close',
+                    })
                     setTransaction(false)
                 }
             })
@@ -314,7 +308,7 @@ export default function Verify(props) {
             String(idxHash),
             String(rgtHashRaw)
         )
-        rgtHash = window.utils.tenThousandHashesOf(rgtHash)
+        rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash)
 
         console.log('idxHash', idxHash)
         console.log('rgtHash', rgtHash)
@@ -322,8 +316,8 @@ export default function Verify(props) {
         console.log('addr: ', props.addr)
         setTransaction(true)
 
-        await window.contracts.STOR.methods
-            .blockchainVerifyRightsHolder(idxHash, rgtHash)
+        props.prufClient.do
+            .verifyRightsHash(idxHash, rgtHash)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {

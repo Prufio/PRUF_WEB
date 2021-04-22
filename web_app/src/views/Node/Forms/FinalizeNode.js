@@ -33,7 +33,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
 const useStyles = makeStyles(styles)
 
 export default function FinalizeNode(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
@@ -199,8 +198,8 @@ export default function FinalizeNode(props) {
                 case 'finalize':
                     setTransactionActive(true)
 
-                    window.contracts.AC_MGR.methods
-                        .updateACImmutable(
+                    props.prufClient.do
+                        .finalizeNode(
                             nodeInfo.id,
                             managementType,
                             storageType,

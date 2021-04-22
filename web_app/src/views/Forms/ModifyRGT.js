@@ -18,7 +18,6 @@ import { GroupAdd } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function ModifyRGT(props) {
-  //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
   if(!window.sentPacket) window.sentPacket = {}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
@@ -128,7 +127,7 @@ export default function ModifyRGT(props) {
     );
 
     var rgtHash = window.web3.utils.soliditySha3(assetInfo.id, rgtHashRaw);
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
     let tempTxHash;
     setShowHelp(false);
@@ -138,8 +137,8 @@ export default function ModifyRGT(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.NP_NC.methods
-      ._changeRgt(assetInfo.id, rgtHash)
+    await props.prufClient.do
+      .modifyRightsHash(assetInfo.id, rgtHash)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
