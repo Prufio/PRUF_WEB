@@ -411,7 +411,8 @@ export default function NodeManager(props) {
             let tempObj = JSON.parse(JSON.stringify(e))
             let costs = [];
             for (let i = 1; i < 9; i++) {
-                props.prufClient.get.operationCost(String(i), e.id).then((x) => {
+                console.log(String(i), String(e.id))
+                props.prufClient.get.operationCost(String(i), String(e.id)).then((x) => {
                     costs.push(x)
                 })
             }
