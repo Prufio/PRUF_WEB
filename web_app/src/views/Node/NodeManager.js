@@ -77,6 +77,8 @@ export default function NodeManager(props) {
         ['Loading Nodes...', '~', '~', '~'],
     ])
 
+    const actionInput = React.useRef();
+
     const thousandHashesOf = (varToHash) => {
         if (!window.web3.utils) return (window.location.href = '/#/user/home')
         let tempHash = varToHash
@@ -103,9 +105,9 @@ export default function NodeManager(props) {
 
     React.useEffect(() => {
         // eslint-disable-next-line react/prop-types
-        if (props.nodeList)
+        //if (props.nodeList)
             // eslint-disable-next-line react/prop-types
-            console.log(props.nodeList.length, Number(props.nodes) + 1)
+            //console.log(props.nodeList.length, Number(props.nodes) + 1)
         if (props.prufClient && props.prufClient.get !== undefined) {
             if (
                 // eslint-disable-next-line react/prop-types
@@ -125,7 +127,7 @@ export default function NodeManager(props) {
             }
         }
         // eslint-disable-next-line react/prop-types
-    }, [props.prufClient])
+    }, [props.nodes])
 
     React.useEffect(() => {
         buildDelegationList()
@@ -147,7 +149,7 @@ export default function NodeManager(props) {
                 .nodeBalance(props.addr)
                 .then(e => {
                     if (Number(e) > 0) {
-                        getNodesInWallet(result)
+                        getNodesInWallet(Number(e))
                     }
 
                     else {
@@ -316,28 +318,32 @@ export default function NodeManager(props) {
         setTotalRewards(true)
     }
 
+    const clearInput = () => {
+    }
+
     const handleSimple = (e) => {
-        if (e.temp === 'view') {
+        if (e.href === 'view') {
             let tempObj = {}
+            let index = e.index
             console.log('root', extDataArr[e.index].root)
 
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
                 // eslint-disable-next-line react/prop-types
-                .nodeName(extDataArr[e.index].root)
+                .nodeName(extDataArr[index].root)
                 .then(e => {
-                    tempObj.name = extDataArr[e.index].name
-                    tempObj.id = extDataArr[e.index].id
+                    tempObj.name = extDataArr[index].name
+                    tempObj.id = extDataArr[index].id
                     tempObj.rootName = e
                         .toLowerCase()
                         .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                             letter.toUpperCase()
                         )
-                    tempObj.root = extDataArr[e.index].root
+                    tempObj.root = extDataArr[index].root
                     tempObj.managementType =
-                        extDataArr[e.index].managementType
+                        extDataArr[index].managementType
                     tempObj.storageProvider =
-                        extDataArr[e.index].storageProvider
+                        extDataArr[index].storageProvider
                     console.log('tempObj', tempObj)
 
                     swalReact({
@@ -405,7 +411,7 @@ export default function NodeManager(props) {
             let tempObj = JSON.parse(JSON.stringify(e))
             let costs = [];
             for (let i = 1; i < 9; i++) {
-                props.prufClient.get.operationCost(i, e.id).then((x) => {
+                props.prufClient.get.operationCost(String(i), e.id).then((x) => {
                     costs.push(x)
                 })
             }
@@ -674,6 +680,7 @@ export default function NodeManager(props) {
                                                                     Options
                                                                 </InputLabel>
                                                                 <Select
+                                                                    ref = {actionInput}
                                                                     MenuProps={{
                                                                         className:
                                                                             classes.selectMenu,
@@ -685,11 +692,12 @@ export default function NodeManager(props) {
                                                                     onChange={(
                                                                         e
                                                                     ) =>
-                                                                        handleSimple(
-                                                                            e
-                                                                                .target
-                                                                                .value
-                                                                        )
+                                                                        handleSimple({
+                                                                            name: prop[0],
+                                                                            id: prop[1],
+                                                                            index: key,
+                                                                            href: e.target.value
+                                                                        })
                                                                     }
                                                                     inputProps={{
                                                                         name:'simpleSelect',
@@ -716,15 +724,7 @@ export default function NodeManager(props) {
                                                                             selected:
                                                                                 classes.selectMenuItemSelected,
                                                                         }}
-                                                                        value={{
-                                                                            href:
-                                                                                '/#/user/change-name',
-                                                                            name:
-                                                                                prop[0],
-                                                                            id:
-                                                                                prop[1],
-                                                                            index: key,
-                                                                        }}
+                                                                        value={'/#/user/change-name'}
                                                                     >
                                                                         Change
                                                                         Name
@@ -736,15 +736,7 @@ export default function NodeManager(props) {
                                                                             selected:
                                                                                 classes.selectMenuItemSelected,
                                                                         }}
-                                                                        value={{
-                                                                            href:
-                                                                                '/#/user/change-data',
-                                                                            name:
-                                                                                prop[0],
-                                                                            id:
-                                                                                prop[1],
-                                                                            index: key,
-                                                                        }}
+                                                                        value={'/#/user/change-data'}
                                                                     >
                                                                         Update
                                                                         Data
@@ -756,15 +748,7 @@ export default function NodeManager(props) {
                                                                             selected:
                                                                                 classes.selectMenuItemSelected,
                                                                         }}
-                                                                        value={{
-                                                                            href:
-                                                                                '/#/user/change-costs',
-                                                                            name:
-                                                                                prop[0],
-                                                                            id:
-                                                                                prop[1],
-                                                                            index: key,
-                                                                        }}
+                                                                        value={'/#/user/change-costs'}
                                                                     >
                                                                         Update
                                                                         Operation
@@ -785,15 +769,7 @@ export default function NodeManager(props) {
                                                                                     selected:
                                                                                         classes.selectMenuItemSelected,
                                                                                 }}
-                                                                                value={{
-                                                                                    href:
-                                                                                        '/#/user/authorize-user',
-                                                                                    name:
-                                                                                        prop[0],
-                                                                                    id:
-                                                                                        prop[1],
-                                                                                    index: key,
-                                                                                }}
+                                                                                value={'/#/user/authorize-user'}
                                                                             >
                                                                                 Authorize
                                                                                 User
@@ -806,15 +782,7 @@ export default function NodeManager(props) {
                                                                             selected:
                                                                                 classes.selectMenuItemSelected,
                                                                         }}
-                                                                        value={{
-                                                                            href:
-                                                                                '/#/user/transfer-node',
-                                                                            name:
-                                                                                prop[0],
-                                                                            id:
-                                                                                prop[1],
-                                                                            index: key,
-                                                                        }}
+                                                                        value={'/#/user/transfer-node'}
                                                                     >
                                                                         Transfer
                                                                     </MenuItem>
@@ -833,11 +801,7 @@ export default function NodeManager(props) {
                                                                                     selected:
                                                                                         classes.selectMenuItemSelected,
                                                                                 }}
-                                                                                value={{
-                                                                                    temp:
-                                                                                        'view',
-                                                                                    index: key,
-                                                                                }}
+                                                                                value={'view'}
                                                                             >
                                                                                 View
                                                                             </MenuItem>
@@ -857,15 +821,7 @@ export default function NodeManager(props) {
                                                                                     selected:
                                                                                         classes.selectMenuItemSelected,
                                                                                 }}
-                                                                                value={{
-                                                                                    href:
-                                                                                        '/#/user/finalize-node',
-                                                                                    name:
-                                                                                        prop[0],
-                                                                                    id:
-                                                                                        prop[1],
-                                                                                    index: key,
-                                                                                }}
+                                                                                value={'/#/user/finalize-node'}
                                                                             >
                                                                                 Finalize
                                                                             </MenuItem>
