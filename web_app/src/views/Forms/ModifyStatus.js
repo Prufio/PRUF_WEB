@@ -23,7 +23,6 @@ import { ScatterPlot } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function ModifyStatus(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     // eslint-disable-next-line no-unused-vars
@@ -149,8 +148,8 @@ export default function ModifyStatus(props) {
             console.log('Got past the json stuff')
             console.log(assetInfo.id)
 
-            window.contracts.NP_NC.methods
-                ._modStatus(assetInfo.id, String(status))
+            props.prufClient.do
+                .modifyAssetStatus(assetInfo.id, String(status))
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })
                 .on('error', function (_error) {
@@ -213,39 +212,6 @@ export default function ModifyStatus(props) {
         window.location.href = assetInfo.lastRef
     }
 
-    // const refreshBalances = async () => {
-    //   if (!window.web3.eth) return;
-
-    //   let pruf, ether;
-
-    //   console.log("Refreshing ether bal");
-    //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-    //     if (err) {
-    //       console.log(err);
-    //     } else {
-    //       ether = window.web3.utils.fromWei(result, "ether");
-    //     }
-    //     window.contracts.UTIL_TKN.methods
-    //       .balanceOf(props.addr)
-    //       .call((err, result) => {
-    //         if (err) {
-    //           console.log(err);
-    //         } else {
-    //           pruf = window.web3.utils.fromWei(result, "ether");
-    //         }
-    //         window.contracts.A_TKN.methods
-    //           .balanceOf(props.addr)
-    //           .call((err, result) => {
-    //             if (err) {
-    //               console.log(err);
-    //             } else {
-    //               window.replaceAssetData = { assets: result, ether, pruf };
-    //             }
-    //           });
-    //       });
-    //   });
-    // };
-
     const thousandHashesOf = (varToHash) => {
         if (!window.web3) return (window.location.href = '/#/user/home')
         let tempHash = varToHash
@@ -270,12 +236,12 @@ export default function ModifyStatus(props) {
         setTransactionActive(true)
 
         let newAsset = await JSON.parse(JSON.stringify(assetInfo))
-        window.utils.getStatusString(String(status)).then((e) => {
+        props.prufClient.utils.stringifyStatus(String(status)).then((e) => {
             newAsset.status = e
             newAsset.statusNum = status
 
-            window.contracts.NP_NC.methods
-                ._setLostOrStolen(assetInfo.id, String(status))
+            props.prufClient.do
+                .markAssetLostOrStolen(assetInfo.id, String(status))
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })
                 .on('error', function (_error) {

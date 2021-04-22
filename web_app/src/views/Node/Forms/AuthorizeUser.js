@@ -21,7 +21,6 @@ import { Category } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function AuthorizeUser(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
@@ -163,8 +162,8 @@ export default function AuthorizeUser(props) {
                     }
                     setTransactionActive(true)
 
-                    window.contracts.AC_MGR.methods
-                        .addUser(nodeInfo.id, addressHash, '1')
+                    props.prufClient.do
+                        .authorizeUser(nodeInfo.id, addressHash, '1')
                         // eslint-disable-next-line react/prop-types
                         .send({ from: props.addr })
                         .on('error', function (_error) {

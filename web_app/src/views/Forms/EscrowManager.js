@@ -69,64 +69,8 @@ export default function EscrowManager(props) {
 
     setTransactionActive(true);
 
-    await window.contracts.ECR.methods
-      .setEscrow(assetInfo.id, address, assetInfo.id)
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransactionActive(false);
-        setTxStatus(false);
-        setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setError(Object.values(_error)[0]);
-        swal({
-          title: "Transfer Failed!",
-          content: link,
-          icon: "Warning",
-          button: "Close",
-        });
-        clearForms();
-      })
-      .on("receipt", (receipt) => {
-        setTransactionActive(false);
-        setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setTxHash(receipt.transactionHash);
-        swal({
-          title: "Transfer Successful!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        });
-        window.resetInfo = true;
-        window.recount = true;
-        window.location.href = "/#/user/dashboard";
-      });
-  };
-
-  const endEscrow = async () => {
-    //transfer held asset
-
-    if (loginAddress === "") {
-      setloginAddressState("error");
-      return;
-    }
-
-    let tempTxHash;
-    setShowHelp(false);
-    setTxStatus(false);
-    setTxHash("");
-    setError(undefined);
-
-    setTransactionActive(true);
-
-    await window.contracts.A_TKN.methods
-      .safeTransferFrom(props.addr, address, assetInfo.id)
+    await props.prufClient.do
+      .initEscrow(assetInfo.id, address, assetInfo.id)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransactionActive(false);

@@ -221,22 +221,6 @@ export default function Home(props) {
                 forceUpdate()
                 //refreshBalances()
             })
-        /* props.prufClient.get
-    .assetRecord("0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634")
-    .call((error, result)=>{
-      if(result) console.log(result)
-      else console.error(error)
-    })
-
-    props.prufClient.do
-    .verifyRightsHolder("0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d", "0x968a4a295335fa4badbc4746a701d4407a7df7febd489a7de44959358ff5a21d")
-    .send({from: props.addr})
-    .on("error", (error)=>{
-      console.log("PRUF_ERR:",error)
-    })
-    .on("receipt", (receipt)=>{
-      console.log(receipt.events.REPORT.returnValues._msg)
-    }) */
 
         console.log(window.ipfs)
 
@@ -251,14 +235,14 @@ export default function Home(props) {
     }
 
     const mintID = () => {
-        if (!window.contracts) return
+        if (!props.prufClient) return
 
         // const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
         let tempTxHash
         setIsMinting(true)
 
-        window.contracts.PARTY.methods
-            .GET_ID()
+        props.prufClient.do
+            .getId()
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {
@@ -333,27 +317,19 @@ export default function Home(props) {
         })
 
         // eslint-disable-next-line react/prop-types
-        await props.prufClient.get
+        props.prufClient.get
             // eslint-disable-next-line react/prop-types
             .assetBalance(props.addr)
-            .call((error, result) => {
-                if (error) {
-                    console.log(error)
-                } else {
-                    setUpdatedAssets(result)
-                }
+            .then(e => {
+                setUpdatedAssets(e)
             })
 
         // eslint-disable-next-line react/prop-types
-        await props.prufClient.get
+        props.prufClient.get
             // eslint-disable-next-line react/prop-types
             .prufBalance(props.addr)
-            .call((error, result) => {
-                if (error) {
-                    console.log(error)
-                } else {
-                    setUpdatedPruf(window.web3.utils.fromWei(result, 'ether'))
-                }
+            .then(e => {
+                setUpdatedPruf(e)
             })
 
         window.replaceAssetData = { refreshBals: true }
@@ -520,18 +496,16 @@ export default function Home(props) {
                             {updatedEther ? (
                                 <h3 className={classes.cardTitle}>
                                     {updatedEther.substring(0, 7)}{' '}
-                                    <small>Ether</small>
                                 </h3>
                             ) : // eslint-disable-next-line react/prop-types
                             props.ether ? (
                                 <h3 className={classes.cardTitle}>
                                     {/* eslint-disable-next-line react/prop-types */}
                                     {props.ether.substring(0, 7)}{' '}
-                                    <small>Ether</small>
                                 </h3>
                             ) : (
                                 <h3 className={classes.cardTitle}>
-                                    ~ <small>Ether</small>
+                                    ~ 
                                 </h3>
                             )}
                         </CardHeader>
@@ -638,7 +612,7 @@ export default function Home(props) {
                     </CardBody>
                 )}
                 {/* eslint-disable-next-line react/prop-types */}
-                {window.contracts === undefined && props.addr && (
+                {props.prufClient === undefined && props.addr && (
                     <CardBody>
                         <form>
                             <h3>
@@ -654,7 +628,7 @@ export default function Home(props) {
                 )}
 
                 {/* eslint-disable-next-line react/prop-types */}
-                {window.contracts !== undefined && props.addr && (
+                {props.prufClient !== undefined && props.prufClient !== {} && props.addr && (
                     <CardBody>
                         <form>
                             <h4>Conversion Rate: (ü100000/KΞ1)</h4>

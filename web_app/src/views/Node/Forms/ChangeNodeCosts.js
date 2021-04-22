@@ -18,7 +18,6 @@ import { LocalOffer } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function ChangeNodeCosts(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
     if(!window.sentPacket) window.sentPacket = {}
 
     // eslint-disable-next-line no-unused-vars
@@ -201,8 +200,8 @@ export default function ChangeNodeCosts(props) {
         }
         setOperationIndex(index)
         let newCost = obj[index] || nodeInfo.costs[`cost${index}`].acthCost
-        window.contracts.AC_MGR.methods
-            .ACTH_setCosts(
+        props.prufClient.do
+            .setOperationCost(
                 nodeInfo.id,
                 String(index),
                 window.web3.utils.toWei(String(newCost)),

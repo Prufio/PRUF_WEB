@@ -22,6 +22,7 @@ import CardBody from 'components/Card/CardBody.js'
 // import GridItem from 'components/Grid/GridItem.js'
 
 import styles from 'assets/jss/material-dashboard-pro-react/views/regularFormsStyle'
+import PRUF from 'pruf-js'
 // import cardStyles from 'assets/jss/material-dashboard-pro-react/views/dashboardStyle.js'
 // import placeholderComingSoon from '../../../assets/img/placeholderComingSoon.jpg'
 // import { Tooltip } from '@material-ui/core'
@@ -30,8 +31,7 @@ const useStyles = makeStyles(styles)
 // const useCardStyles = makeStyles(cardStyles)
 
 export default function CreateNode(props) {
-    //if (window.contracts === undefined || !window.sentPacket) { window.location.href = "/#/user/home"; window.location.reload();}
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
 
@@ -80,7 +80,7 @@ export default function CreateNode(props) {
         landingConfig: { url: '', DBref: '' },
         nodeAssets: { photo: {}, text: {} },
     }
-    
+
     document.body.style.cursor = 'default'
 
     const classes = useStyles()
@@ -204,8 +204,8 @@ export default function CreateNode(props) {
 
                     // const pageKey = thousandHashesOf(props.addr, props.winKey);
 
-                    window.contracts.PARTY.methods
-                        .GET_ID()
+                    props.prufClient.do
+                        .getId()
                         // eslint-disable-next-line react/prop-types
                         .send({ from: props.addr })
                         .on('error', function (_error) {
@@ -319,25 +319,19 @@ export default function CreateNode(props) {
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey)
         let id
-        await window.contracts.AC_MGR.methods
-            .resolveAssetClass(name)
-            .call(function (_error, _result) {
-                if (_error) {
-                    return console.log('IN ERROR IN ERROR IN ERROR')
-                } else {
-                    id = _result
-                    // eslint-disable-next-line react/prop-types
-                    let tempArr = props.nodeList
-                    // eslint-disable-next-line react/prop-types
-                    tempArr.push([name, id, 'N/A', 'N/A'])
-                    window.replaceAssetData = {
-                        key: pageKey,
-                        refreshBals: true,
-                        nodeList: tempArr,
-                    }
-                    window.location.href = '/#/user/node-manager'
-                    //window.location.reload();
+        props.prufClient.get
+            .nodeId(name)
+            .then(e => {
+                // eslint-disable-next-line react/prop-types
+                let tempArr = props.nodeList
+                // eslint-disable-next-line react/prop-types
+                tempArr.push([name, e, 'N/A', 'N/A'])
+                window.replaceAssetData = {
+                    key: pageKey,
+                    refreshBals: true,
+                    nodeList: tempArr,
                 }
+                window.location.href = '/#/user/node-manager'
             })
     }
 
@@ -1393,23 +1387,19 @@ export default function CreateNode(props) {
 
     const checkForAC = async () => {
         setTransactionActive(true)
-
-        await window.contracts.AC_MGR.methods
-            .resolveAssetClass(name)
-            .call(function (_error, _result) {
-                console.log(_result)
-                if (_error || _result === '0') {
+        props.prufClient.get
+            .nodeNameAvailable(name)
+            .then(e => {
+                if (e) {
                     window.ipfs.add(JSON.stringify(sampleIpfs)).then((hash) => {
                         if (!hash) {
                             console.error('error sending to ipfs')
-                            //return setIpfsActive(false);
                         } else {
                             let url = `https://ipfs.io/ipfs/${hash.cid}`
                             console.log(`Url --> ${url}`)
-                            let b32Hash = window.utils.getBytes32FromIPFSHash(
+                            let b32Hash = props.prufClient.utils.ipfsToB32(
                                 String(hash.cid)
                             )
-                            //setIpfsActive(false);
                             purchaseNode(b32Hash)
                         }
                     })
@@ -1432,8 +1422,8 @@ export default function CreateNode(props) {
         setTxHash('')
         setError(undefined)
 
-        await window.contracts.AC_MGR.methods
-            .purchaseACnode(name, root, 2, extendedDataHash)
+        props.prufClient.do
+            .purchaseNode(name, root, 2, extendedDataHash)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {
@@ -1532,7 +1522,7 @@ export default function CreateNode(props) {
                                     className={classes.selectFormControl}
                                 >
                                     <InputLabel>
-                                        Select Asset Class *
+                                        Select Root Node *
                                     </InputLabel>
                                     <Select
                                         MenuProps={{

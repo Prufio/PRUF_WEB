@@ -166,43 +166,11 @@ export default function Search(props) {
   }, []);
 
   React.useEffect(() => {
-    if (window.contracts !== undefined && query) {
+    if (props.prufClient && query) {
       checkInputs(query);
       setQuery(null);
     }
-  }, [window.contracts, query]);
-
-  // const refreshBalances = async () => {
-  //   if (!window.web3.eth) return
-
-  //   let pruf, ether;
-
-  //   console.log("Refreshing ether bal")
-  //   await window.web3.eth.getBalance(props.addr, (err, result) => {
-  //     if (err) { console.log(err) }
-  //     else { ether = window.web3.utils.fromWei(result, 'ether') }
-  //     window.contracts.UTIL_TKN.methods.balanceOf(props.addr).call((err, result) => {
-  //       if (err) { console.log(err) }
-  //       else { pruf = window.web3.utils.fromWei(result, 'ether') }
-  //       window.contracts.A_TKN.methods.balanceOf(props.addr).call((err, result) => {
-  //         if (err) { console.log(err) }
-  //         else { window.replaceAssetData = { assets: result, ether, pruf } }
-  //       });
-  //     });
-  //   });
-  // }
-
-  // const rootLogin = (e) => {
-
-  //   if (!e.target.value) return setRootSelect("")
-  //   if (!props.IDHolder) {
-  //     IDHolderPrompt()
-  //   }
-
-  //   else {
-  //     setSelectedRootID(e.target.value)
-  //   }
-  // }
+  }, [props.prufClient, query]);
 
   const ACLogin = (event) => {
     if (!props.IDHolder) {
@@ -211,18 +179,18 @@ export default function Search(props) {
       setAssetClass(event.target.value);
       setClassSelect(event.target.value);
       try {
-        window.utils.resolveACFromID(event.target.value).then((e) => {
+        props.prufClient.get.nodeName(event.target.value).then((e) => {
           let str = e
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
           setAssetClassName(str);
-          window.utils.getCosts(6, event.target.value).then((e) => {
-            setRecycleCost(window.web3.utils.fromWei(e.newAsset));
-          });
+            props.prufClient.get.operationCost(1, event.target.value).then((e) => {
+              setRecycleCost(e);
+            })
         });
       } catch {
         swal({
-          title: "Could not find asset class",
+          title: "Could not find node",
           icon: "warning",
           text: "Please try again.",
           buttons: {
@@ -257,8 +225,8 @@ export default function Search(props) {
       switch (value) {
         case "yes":
           setTransactionActive(true);
-          window.contracts.PARTY.methods
-            .GET_ID()
+          props.prufClient.do
+            .getId()
             .send({ from: props.addr })
             .on("error", function (_error) {
               setTransactionActive(false);
@@ -1657,22 +1625,14 @@ export default function Search(props) {
       }
     }
     if (costId !== null) {
-      window.contracts.AC_MGR.methods
-        .getServiceCosts(asset.nodeId, costId)
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("Error: ", _error);
-          } else {
-            let root = window.web3.utils.fromWei(Object.values(_result)[1]);
-            let acth = window.web3.utils.fromWei(Object.values(_result)[3]);
-            tempObj.opCost = String(Number(root) + Number(acth));
-
+      props.prufClient.get
+        .operationCost(asset.nodeId, costId)
+        .then(e => {
+            tempObj.opCost = e.total;
             console.log(tempObj);
-
             window.sentPacket = tempObj;
             setSimpleSelect(event.target.value);
             return (window.location.href = href);
-          }
         });
     } else {
       console.log(tempObj);
@@ -1759,8 +1719,8 @@ export default function Search(props) {
       return console.log(price), console.log(props.pruf);
     }
     setTransaction(true);
-    await window.contracts.PURCHASE.methods
-      .purchaseWithPRUF(asset.id)
+    props.prufClient.do
+      .buyAsset(asset.id)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
@@ -1863,15 +1823,15 @@ export default function Search(props) {
       String(idxHash),
       String(rgtHashRaw)
     );
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", window.addr);
     setTransaction(true);
 
-    await window.contracts.RCLR.methods
-      .recycle(idxHash, rgtHash, asset.nodeId)
+    props.prufClient.do
+      .recycleAsset(idxHash, rgtHash, asset.nodeId)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
@@ -1994,31 +1954,16 @@ export default function Search(props) {
       String(idxHash),
       String(rgtHashRaw)
     );
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", window.addr);
     setTransaction(true);
-    await window.contracts.STOR.methods
-      ._verifyRightsHolder(idxHash, rgtHash)
-      .call(function (_error, _result) {
-        if (_error) {
-          console.log(_error);
-          setError(_error);
-          setResult("");
-          setTransaction(false);
-        } else if (_result === "0") {
-          console.log("Verification not Confirmed");
-          swal({
-            title: "Match Failed!",
-            text: "Please make sure forms are filled out correctly.",
-            icon: "warning",
-            button: "Close",
-          });
-          setTransaction(false);
-          setIsVerifying(false);
-        } else {
+    props.prufClient.get
+      .isRightsHolder(idxHash, rgtHash)
+      .then(e => {
+        if (e) {
           console.log("Verification Confirmed");
           swal({
             title: "Match Confirmed!",
@@ -2026,6 +1971,16 @@ export default function Search(props) {
             button: "Close",
           });
           setError("");
+          setTransaction(false);
+          setIsVerifying(false);
+        } else {
+          console.log("Verification not Confirmed");
+          swal({
+            title: "Match Failed!",
+            text: "Please make sure forms are filled out correctly.",
+            icon: "warning",
+            button: "Close",
+          });
           setTransaction(false);
           setIsVerifying(false);
         }
@@ -2111,15 +2066,15 @@ export default function Search(props) {
       String(idxHash),
       String(rgtHashRaw)
     );
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
     console.log("addr: ", props.addr);
     setTransaction(true);
 
-    await window.contracts.STOR.methods
-      .blockchainVerifyRightsHolder(idxHash, rgtHash)
+    props.prufClient.do
+      .verifyRightsHash(idxHash, rgtHash)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
@@ -2221,16 +2176,8 @@ export default function Search(props) {
     props.prufClient.utils.isValidId(id).then((e) => {
       if (!e) return;
 
-      props.prufClient.get.assetExists(id).call((error, result) => {
-        if (error) {
-          swal({
-            title: "Asset does not exist!",
-            icon: "warning",
-            button: "Close",
-          });
-          setIDXRaw("");
-          setIDXRawInput(false);
-        } else if ((result = "170")) {
+      props.prufClient.get.assetRecordExists(id).then(e => {
+        if (e) {
           buildAsset(id);
         } else {
           swal({
@@ -2247,14 +2194,11 @@ export default function Search(props) {
 
   const checkIsHolder = async (id) => {
     if (!id) return;
-    props.prufClient.get.ownerOfAsset(id).call((error, result) => {
-      if (error) return;
-      else {
-        window.web3.utils.toChecksumAddress(result) ===
+    props.prufClient.get.ownerOfAsset(id).then(e => {
+        window.web3.utils.toChecksumAddress(e) ===
           window.web3.utils.toChecksumAddress(props.addr)
           ? setOwnerOf(true)
           : setOwnerOf(false);
-      }
     });
   };
 
@@ -2274,82 +2218,41 @@ export default function Search(props) {
 
     setRetrieving(true);
 
-    props.prufClient.get.assetRecord(id).call((_error, _result) => {
-      if (_error) {
-        console.log("IN ERROR IN ERROR IN ERROR");
-        setError(_error);
-        setResult("");
+    props.prufClient.get.assetRecord(id).then(e => {
         setScanQR(false);
-        setRetrieving(false);
-        swal({
-          title: "Asset not found!",
-          icon: "warning",
-          button: "Close",
-        });
-      } else {
-        setScanQR(false);
-        setResult(Object.values(_result));
+        setResult(Object.values(e));
         setError("");
 
-        _result["0"] === "60" ? setRecycled(true) : checkIsHolder(id);
+        e.statusNum === "60" ? setRecycled(true) : checkIsHolder(id);
 
-        let obj = {
-          id: id,
-          statusNum: _result["0"],
-          forceModCount: _result["1"],
-          nodeId: _result["2"],
-          countPair: [_result["3"], _result["4"]],
-          mutableDataA: _result["5"],
-          mutableDataB: _result["6"],
-          engravingA: _result["7"],
-          engravingB: _result["8"],
-          numberOfTransfers: _result["9"],
-        };
+        let obj = e;
 
         obj.identicon = <Jdenticon value={id} />;
         obj.identiconLG = <Jdenticon value={id} />;
 
-        props.prufClient.utils.stringifyStatus(_result[0]).then((e) => {
+        props.prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
           obj.status = e;
         });
 
-        props.prufClient.get.assetPriceData(id).call((_error, _result) => {
-          if (_error) {
-            console.log("IN ERROR IN ERROR IN ERROR");
-          } else {
-            obj.price = window.web3.utils.fromWei(_result["0"]);
-            obj.currency = _result["1"];
+        props.prufClient.get.assetPriceData(id).then(e => {
+            obj = Object.assign(obj, e)
 
-            _result["0"] !== "0"
-              ? setPrice(window.web3.utils.fromWei(_result["0"]))
+            e.price !== "0"
+              ? setPrice(e.price)
               : setPrice("");
-            _result["1"] === "2" ? setCurrency("ü") : setCurrency("");
+              e.currency === "2" 
+              ? setCurrency("ü") 
+              : setCurrency("");
 
             props.prufClient.get
               .nodeData(obj.nodeId)
-              .call((_error, _result) => {
-                if (_error) {
-                  console.log("IN ERROR IN ERROR IN ERROR");
-                } else {
-                  obj.nodeName = _result.name;
-                  obj.nodeData = {
-                    name: _result.name,
-                    root: _result.assetClassRoot,
-                    custodyType: _result.custodyType,
-                    managementType: _result.managementType,
-                    discount: _result.discount,
-                    referenceAddress: _result.referenceAddress,
-                    extData: _result["IPFS"],
-                    storageProvider: _result.storageProvider,
-                    switches: _result.switches,
-                  };
-                  setSelectedRootID(_result.assetClassRoot);
+              .then(e => {
+                  obj.nodeName = e.name;
+                  obj.nodeData = e
+                  setSelectedRootID(e.root);
                   return getMutableData(obj);
-                }
               });
-          }
         });
-      }
     });
   };
 
@@ -2386,7 +2289,7 @@ export default function Search(props) {
       console.log(obj.mutableDataA, obj.mutableDataB);
       mutableDataQuery = window.web3.utils.hexToUtf8(
         obj.mutableDataA +
-        obj.mutableDataB.substring(2, obj.mutableDataB.indexOf("0000000000"))
+        obj.mutableDataB.substring(2, 24)
       );
 
       let xhr = new XMLHttpRequest();
@@ -2475,7 +2378,7 @@ export default function Search(props) {
         obj.engravingA +
         obj.engravingB.substring(
           2,
-          obj.engravingB.indexOf("0000000000000000000000") + 1
+          24
         )
       );
 
@@ -2728,7 +2631,7 @@ export default function Search(props) {
           root: classes.selectMenuItem,
         }}
       >
-        Select Subclass
+        Select Node
       </MenuItem>,
     ];
     for (let i = 0; i < arr.length; i++) {
@@ -2829,7 +2732,7 @@ export default function Search(props) {
   const imgClasses = useImgStyles();
   return (
     <>
-      {window.contracts === undefined && (
+      {props.prufClient === undefined && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
@@ -2852,7 +2755,30 @@ export default function Search(props) {
           <br />
         </Card>
       )}
-      {window.contracts !== undefined && (
+      {props.prufClient === {} && (
+        <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              <DashboardOutlined />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>Asset</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h3>
+                Connecting to the blockchain
+                <div className="lds-ellipsisIF">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </h3>
+            </form>
+          </CardBody>
+          <br />
+        </Card>
+      )}
+      {props.prufClient !== undefined &&  props.prufClient !== {} && (
         <>
           {scanQR === false && moreInfo === false && (
             <Card>
@@ -3278,7 +3204,7 @@ export default function Search(props) {
                     </h4>
                       <h4 className={imgClasses.cardTitle}>
                         {asset.nodeName}
-                    </h4>
+                      </h4>
                     </div>
 
                     {asset.currency === "0" && (
@@ -3309,8 +3235,8 @@ export default function Search(props) {
                               Status:&nbsp;
                         </h4>
                             <h4 className={imgClasses.cardTitle}>
-                            {asset.status}
-                        </h4>
+                              {asset.status}
+                            </h4>
                           </div>
                           <div className="horizontal">
                             <h4 className={imgClasses.cardTitleContent}>
@@ -3451,7 +3377,7 @@ export default function Search(props) {
                                     <Category />
                                   </CardIcon>
                                   <h4 className={classes.cardIconTitle}>
-                                    Select Asset Subclass
+                                    Select Node
                                   </h4>
                                 </CardHeader>
                                 <CardBody>
@@ -3476,7 +3402,7 @@ export default function Search(props) {
                                     <Category />
                                   </CardIcon>
                                   <h4 className={classes.cardIconTitle}>
-                                    Select Asset Subclass
+                                    Select Node
                                   </h4>
                                 </CardHeader>
                                 <CardBody>
@@ -3488,7 +3414,7 @@ export default function Search(props) {
                                       {selectedRootID === "" ? (
                                         <>
                                           <InputLabel>
-                                            Select Asset Subclass
+                                            Select Node
                                           </InputLabel>
                                           <Select
                                             disabled
@@ -3509,7 +3435,7 @@ export default function Search(props) {
                                       ) : (
                                         <>
                                           <InputLabel>
-                                            Select Asset Subclass
+                                            Select Node
                                           </InputLabel>
                                           <Select
                                             MenuProps={{

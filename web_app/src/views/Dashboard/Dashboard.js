@@ -1743,25 +1743,16 @@ export default function Dashboard(props) {
       }
     }
     if (costId !== null) {
-      window.contracts.AC_MGR.methods
-        .getServiceCosts(selectedAssetObj.nodeId, costId)
-        .call((_error, _result) => {
-          if (_error) {
-            console.log("Error: ", _error);
-          } else {
-            let root = window.web3.utils.fromWei(_result.rootPrice);
-            let acth = window.web3.utils.fromWei(_result.ACTHprice);
-
-            tempObj.opCost = String(Number(root) + Number(acth));
-
-            window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-            window.assetsPerPage = assetsPerPage;
-
-            console.log(tempObj);
-            console.log(window.sentPacket);
-            setSimpleSelect(event.target.value);
-            return (window.location.href = href);
-          }
+      props.prufClient.get
+        .operationCost(selectedAssetObj.nodeId, costId)
+        .then(e => {
+            tempObj.opCost = e.total
+            window.sentPacket = JSON.parse(JSON.stringify(tempObj))
+            window.assetsPerPage = assetsPerPage
+            console.log(tempObj)
+            console.log(window.sentPacket)
+            setSimpleSelect(event.target.value)
+            return (window.location.href = href)
         });
     } else {
       window.sentPacket = JSON.parse(JSON.stringify(tempObj));
