@@ -63,6 +63,7 @@ export default function NodeManager(props) {
     const [totalRewards, setTotalRewards] = React.useState(false)
     const [delegationAmount, setDelegationAmount] = React.useState('')
     const [extDataArr, setExtDataArr] = React.useState([])
+    const [actionState, setActionState] = React.useState({})
     const [forceReload] = React.useState(true)
     const [resetToDefault, setResetToDefault] = React.useState("")
 
@@ -106,14 +107,14 @@ export default function NodeManager(props) {
     React.useEffect(() => {
         // eslint-disable-next-line react/prop-types
         //if (props.nodeList)
-            // eslint-disable-next-line react/prop-types
-            //console.log(props.nodeList.length, Number(props.nodes) + 1)
+        // eslint-disable-next-line react/prop-types
+        //console.log(props.nodeList.length, Number(props.nodes))
         if (props.prufClient && props.prufClient.get !== undefined) {
             if (
                 // eslint-disable-next-line react/prop-types
                 props.nodeList &&
                 // eslint-disable-next-line react/prop-types
-                props.nodeList.length === Number(props.nodes) + 1 &&
+                props.nodeList.length === Number(props.nodes) &&
                 !forceReload
             ) {
                 // eslint-disable-next-line react/prop-types
@@ -141,7 +142,7 @@ export default function NodeManager(props) {
         if (!props.prufClient || !props.addr) return
         if (!iteration) iteration = 0
         if (!ids) ids = []
-        if (iteration >= bal) {console.log(iteration); return buildNodesInWallet(ids)}
+        if (iteration >= bal) { console.log(iteration); return buildNodesInWallet(ids) }
 
         if (!bal) {
             props.prufClient.get
@@ -212,7 +213,7 @@ export default function NodeManager(props) {
                     )
                 })
         } else {
-            _nodeData.push(['~', '~', '~', '~'])
+            //_nodeData.push(['~', '~', '~', '~'])
             window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
             setNodeData(_nodeData)
             setExtDataArr(_extDataArr)
@@ -322,10 +323,11 @@ export default function NodeManager(props) {
     }
 
     const handleSimple = (e) => {
+        if (!e) return
         if (e.href === 'view') {
             let tempObj = {}
             let index = e.index
-            console.log('root', extDataArr[e.index].root)
+            console.log('root', extDataArr[index].root)
 
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
@@ -616,7 +618,7 @@ export default function NodeManager(props) {
                                 data={nodeData.map((prop, key) => {
                                     return {
                                         id: key,
-                                        name: prop[0],
+                                        name: <Button onClick={() => handleSimple({ name: prop[0], index: key, href: "view", id: prop[1] })}>{prop[0]}</Button>,
                                         nodeId: prop[1],
                                         totalDelegated: prop[2],
                                         transactionsPerEpoch: prop[3],
@@ -681,7 +683,7 @@ export default function NodeManager(props) {
                                                                     Options
                                                                 </InputLabel>
                                                                 <Select
-                                                                    ref = {actionInput}
+                                                                    ref={actionInput}
                                                                     MenuProps={{
                                                                         className:
                                                                             classes.selectMenu,
@@ -701,8 +703,9 @@ export default function NodeManager(props) {
                                                                         })
                                                                     }
                                                                     inputProps={{
-                                                                        name:'simpleSelect',
-                                                                        id: resetToDefault,
+                                                                        name:
+                                                                            'simpleSelect',
+                                                                        id: '',
                                                                     }}
                                                                 >
                                                                     <MenuItem
@@ -793,26 +796,6 @@ export default function NodeManager(props) {
                                                                         extDataArr[
                                                                             key
                                                                         ]
-                                                                            .managementType !==
-                                                                        '255' && (
-                                                                            <MenuItem
-                                                                                classes={{
-                                                                                    root:
-                                                                                        classes.selectMenuItem,
-                                                                                    selected:
-                                                                                        classes.selectMenuItemSelected,
-                                                                                }}
-                                                                                value={'view'}
-                                                                            >
-                                                                                View
-                                                                            </MenuItem>
-                                                                        )}
-                                                                    {extDataArr[
-                                                                        key
-                                                                    ] &&
-                                                                        extDataArr[
-                                                                            key
-                                                                        ]
                                                                             .managementType ===
                                                                         '255' && (
                                                                             <MenuItem
@@ -834,7 +817,8 @@ export default function NodeManager(props) {
                                             </div>
                                         ),
                                     }
-                                })}
+                                })
+                                }
                             />
                         )}
                         {dash && !delegation && !analytics && isMobile && (
@@ -1589,6 +1573,17 @@ export default function NodeManager(props) {
                                 </GridContainer>
                             </>
                         )}
+                        <Button
+                            simple
+                            onClick={() => {
+                                window.location.href =
+                                    '/#/user/create-node'
+                            }}
+                            color="info"
+                            className="like"
+                        >
+                            Create Node
+                        </Button>
                     </CardBody>
                 </Card>
             </GridItem>
