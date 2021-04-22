@@ -352,7 +352,6 @@ export default function CreateNode(props) {
                             ).then(e=> {
                                 purchaseNode(e)
                             })
-                            
                         }
                     })
                 } else {
