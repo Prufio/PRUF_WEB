@@ -12,9 +12,8 @@ import Transfer from "views/Forms/Transfer.js";
 import Search from "views/Search/Search.js";
 import Verify from "views/Forms/Verify.js";
 import SetForSale from "views/Forms/SetForSale.js";
-
+import Counter from "Resources/Counter.js";
 import NodeManager from "views/Node/NodeManager.js";
-
 import ChangeNodeName from "views/Node/Forms/ChangeNodeName.js";
 import AuthorizeUser from "views/Node/Forms/AuthorizeUser.js";
 import ChangeNodeData from "views/Node/Forms/ChangeNodeData.js";
@@ -173,6 +172,11 @@ var dashRoutes = [
     name: "Authorize User",
     path: "/authorize-user",
     component: AuthorizeUser,
+    layout: "/user",
+  },
+  {
+    path: "/counter",
+    component: Counter,
     layout: "/user",
   },
 ];
