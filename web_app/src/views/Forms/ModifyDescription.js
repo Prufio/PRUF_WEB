@@ -151,7 +151,7 @@ export default function ModifyDescription(props) {
 
       else if (asset.nodeData.storageProvider === "2") {
         swal({
-          title: "Oops!",
+          title: "Not yet supported.",
           text:
             "We do not support mutable data modification on arweave yet. This feature is coming in the next release.",
           icon: "warning",
@@ -161,6 +161,7 @@ export default function ModifyDescription(props) {
           window.location.href = asset.lastRef;
         });
       }
+
       setSelectedImage(
         assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || ""
       );

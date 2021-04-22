@@ -195,10 +195,6 @@ export default function SetForSale(props) {
                                 icon: 'success',
                                 button: 'Close',
                             }).then(() => {
-                                window.newStat = {
-                                    num: String(assetInfo.statusNum),
-                                    str: 'For Sale',
-                                }
                                 window.location.href = assetInfo.lastRef
                                 window.backIndex = assetInfo.dBIndex
                                 window.replaceAssetData = {
@@ -342,8 +338,8 @@ export default function SetForSale(props) {
                                         button: 'Close',
                                     }).then(() => {
                                         window.newStat = {
-                                            num: String(assetInfo.statusNum),
-                                            str: 'For Sale',
+                                            num: "51",
+                                            str: 'Transferable',
                                         }
                                         window.location.href = assetInfo.lastRef
                                         window.backIndex = assetInfo.dBIndex
@@ -412,10 +408,6 @@ export default function SetForSale(props) {
                                         icon: 'success',
                                         button: 'Close',
                                     }).then(() => {
-                                        window.newStat = {
-                                            num: String(assetInfo.statusNum),
-                                            str: 'For Sale',
-                                        }
                                         window.location.href = assetInfo.lastRef
                                         window.backIndex = assetInfo.dBIndex
                                         window.replaceAssetData = {
@@ -506,8 +498,8 @@ export default function SetForSale(props) {
                         button: 'Close',
                     }).then(() => {
                         window.newStat = {
-                            num: String(assetInfo.statusNum),
-                            str: 'For Sale',
+                            num: "51",
+                            str: 'Transferable',
                         }
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
@@ -570,10 +562,6 @@ export default function SetForSale(props) {
                         icon: 'success',
                         button: 'Close',
                     }).then(() => {
-                        window.newStat = {
-                            num: String(assetInfo.statusNum),
-                            str: 'For Sale',
-                        }
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
                         window.replaceAssetData = {

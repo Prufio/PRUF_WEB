@@ -938,11 +938,11 @@ export default function Dashboard(props) {
     else {
       _prufClient.get.assetRecord(ids[iteration]).then(e => {
         let obj = Object.assign({}, e)
-
+        console.log(e)
         obj.identicon = <Jdenticon value={ids[iteration]} />
         obj.identiconLG = <Jdenticon value={ids[iteration]} />
 
-        _prufClient.utils.stringifyStatus(obj.status).then((e) => {
+        _prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
           obj.status = e
         });
 
