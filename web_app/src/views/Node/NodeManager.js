@@ -107,13 +107,13 @@ export default function NodeManager(props) {
         // eslint-disable-next-line react/prop-types
         //if (props.nodeList)
         // eslint-disable-next-line react/prop-types
-        //console.log(props.nodeList.length, Number(props.nodes))
+        //console.log(props.nodeList.length, Number(props.nodes) + 1)
         if (props.prufClient && props.prufClient.get !== undefined) {
             if (
                 // eslint-disable-next-line react/prop-types
                 props.nodeList &&
                 // eslint-disable-next-line react/prop-types
-                props.nodeList.length === Number(props.nodes) &&
+                props.nodeList.length === Number(props.nodes) + 1 &&
                 !forceReload
             ) {
                 // eslint-disable-next-line react/prop-types
@@ -197,7 +197,7 @@ export default function NodeManager(props) {
                 .then(e => {
                     console.log(e)
                     _nodeData.push([
-                        e.name,
+                        <Button onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</Button>,
                         String(ids[iteration]),
                         'N/A',
                         'N/A',
@@ -212,7 +212,7 @@ export default function NodeManager(props) {
                     )
                 })
         } else {
-            //_nodeData.push(['~', '~', '~', '~'])
+            _nodeData.push(['', '', '', ''])
             window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
             setNodeData(_nodeData)
             setExtDataArr(_extDataArr)
@@ -235,7 +235,7 @@ export default function NodeManager(props) {
             ) {
                 _delegationList.push([
                     // eslint-disable-next-line react/prop-types
-                    props.rootNames[i],
+                    <Button onClick={() => handleSimple({ name: props.rootNames[i], index: key, href: "view", id: Object.values(props.nodeIdSets)[i][x].id })}>{props.rootNames[i]}</Button>,
                     // eslint-disable-next-line react/prop-types
                     Object.values(props.nodeIdSets)[i][x].name,
                     // eslint-disable-next-line react/prop-types
@@ -363,7 +363,7 @@ export default function NodeManager(props) {
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Node: &nbsp;{' '}
+                                        Root Node: &nbsp;{' '}
                                         {tempObj.rootName} ID:(
                                             {tempObj.root})
                                         </h5>
@@ -616,7 +616,7 @@ export default function NodeManager(props) {
                                 data={nodeData.map((prop, key) => {
                                     return {
                                         id: key,
-                                        name: <Button onClick={() => handleSimple({ name: prop[0], index: key, href: "view", id: prop[1] })}>{prop[0]}</Button>,
+                                        name: prop[0],
                                         nodeId: prop[1],
                                         totalDelegated: prop[2],
                                         transactionsPerEpoch: prop[3],
@@ -654,7 +654,7 @@ export default function NodeManager(props) {
                                                             Create Node
                                                         </Button>
                                                     )}
-                                                {prop[0] === '~' && (
+                                                {prop[0] === '' && (
                                                     <Button
                                                         simple
                                                         onClick={() => {
@@ -671,7 +671,7 @@ export default function NodeManager(props) {
                                                     'No nodes held by user' &&
                                                     prop[0] !==
                                                     'Loading Nodes...' &&
-                                                    prop[0] !== '~' && (
+                                                    prop[0] !== '' && (
                                                         <form>
                                                             <FormControl className="nodeOptions">
                                                                 <InputLabel className="functionSelectorText">
@@ -703,10 +703,11 @@ export default function NodeManager(props) {
                                                                     inputProps={{
                                                                         name:
                                                                             'simpleSelect',
-                                                                        id: '',
+                                                                        id: `simpleSelectDefault${key}`,
                                                                     }}
                                                                 >
                                                                     <MenuItem
+                                                                        id={`selectDefault${key}`}
                                                                         disabled
                                                                         classes={{
                                                                             root:
@@ -720,6 +721,7 @@ export default function NodeManager(props) {
                                                                         list
                                                                     </MenuItem>
                                                                     <MenuItem
+                                                                        id="ChangeName"
                                                                         classes={{
                                                                             root:
                                                                                 classes.selectMenuItem,
@@ -732,6 +734,7 @@ export default function NodeManager(props) {
                                                                         Name
                                                                     </MenuItem>
                                                                     <MenuItem
+                                                                        id={`transfer${key}`}
                                                                         classes={{
                                                                             root:
                                                                                 classes.selectMenuItem,
@@ -744,6 +747,7 @@ export default function NodeManager(props) {
                                                                         Data
                                                                     </MenuItem>
                                                                     <MenuItem
+                                                                        id={`changecosts${key}`}
                                                                         classes={{
                                                                             root:
                                                                                 classes.selectMenuItem,
@@ -765,6 +769,7 @@ export default function NodeManager(props) {
                                                                             .managementType ===
                                                                         '3' && (
                                                                             <MenuItem
+                                                                                id={`authuser${key}`}
                                                                                 classes={{
                                                                                     root:
                                                                                         classes.selectMenuItem,
@@ -778,6 +783,7 @@ export default function NodeManager(props) {
                                                                             </MenuItem>
                                                                         )}
                                                                     <MenuItem
+                                                                        id={`transfer${key}`}
                                                                         classes={{
                                                                             root:
                                                                                 classes.selectMenuItem,
@@ -797,6 +803,7 @@ export default function NodeManager(props) {
                                                                             .managementType ===
                                                                         '255' && (
                                                                             <MenuItem
+                                                                                id={`finalize${key}`}
                                                                                 classes={{
                                                                                     root:
                                                                                         classes.selectMenuItem,
@@ -1571,17 +1578,6 @@ export default function NodeManager(props) {
                                 </GridContainer>
                             </>
                         )}
-                        <Button
-                            simple
-                            onClick={() => {
-                                window.location.href =
-                                    '/#/user/create-node'
-                            }}
-                            color="info"
-                            className="like"
-                        >
-                            Create Node
-                        </Button>
                     </CardBody>
                 </Card>
             </GridItem>

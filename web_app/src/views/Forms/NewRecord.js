@@ -242,8 +242,9 @@ export default function NewRecord(props) {
         .then(e => {
           let managementType = e.managementType
           let nodeData = e;
+          console.log(e)
           if (isMobile && e.storageProvider === "2") {
-            return swal("This node is configured for Awreave storage, and is currently disabled for usage on mobile devices. Please use a non-mobile device to mint using this node.")
+            return swal("This node is configured for Awreave storage, and is currently disabled on mobile devices. Please use a non-mobile device to mint using this node.")
           }
 
           props.prufClient.get.ownerOfNode(nodeId).then(e => {
@@ -252,17 +253,44 @@ export default function NewRecord(props) {
             switch (managementType) {
               case ("255"): swal("This node is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard."); break
               case ("1"): {
-                if (!isOwner) { swal("This node is in a private management type. Only the node holder has access to asset creation."); break }
-                else { authorized = true }
+                if (!isOwner) { swal("This node is in a private management type. Only the node holder has access to asset creation."); break}
+                else { authorized = true; break}
               }
               case ("2"): {
                 if (!isOwner) { swal("This node is in a permissive management type. Only the node holder has access to asset creation."); break }
-                else { authorized = true }
+                else { authorized = true; break}
               }
-              case ("3"): props.prufClient.get.userType(props.addr, nodeId).then(e => {
+              case ("3"): {props.prufClient.get.userType(props.addr, nodeId).then(e => {
+                console.log(e)
                 if (e !== "1") {swal("This node is in an authorized management type. Only the node holder and node-authorized users have access to asset creation.")}
-                else { authorized = true}
-              })
+                else { 
+                  setAssetClassName(
+                    nodeData.name
+                      .toLowerCase()
+                      .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                        letter.toUpperCase()
+                      )
+                  );
+      
+                  setStorageProvider(nodeData.storageProvider);
+                  setNodeExtendedData(Object.assign({
+                    name: nodeData.name
+                      .toLowerCase()
+                      .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                        letter.toUpperCase()
+                      )
+                  }, nodeData
+                  ));
+                  setAssetClass(nodeId);
+                  setClassSelect(nodeId);
+                  props.prufClient.get
+                    // eslint-disable-next-line react/prop-types
+                    .operationCost(nodeId, "1")
+                    .then(e => {
+                      setNRCost(e.total);
+                    });
+                }
+              })}
               default: break
             }
 
@@ -276,7 +304,7 @@ export default function NewRecord(props) {
                 )
             );
 
-            setStorageProvider(e.storageProvider);
+            setStorageProvider(nodeData.storageProvider);
             setNodeExtendedData(Object.assign({
               name: nodeData.name
                 .toLowerCase()
@@ -1166,7 +1194,7 @@ export default function NewRecord(props) {
                       <Category />
                     </CardIcon>
                     <h4 className={classes.cardIconTitle}>
-                      Select Root Node
+                      Node Selection
                     </h4>
                   </CardHeader>
                   <CardBody>
@@ -1176,7 +1204,7 @@ export default function NewRecord(props) {
                           fullWidth
                           className={classes.selectFormControl}
                         >
-                          <InputLabel>Select Root Node</InputLabel>
+                          <InputLabel>Select Root</InputLabel>
                           <Select
                             MenuProps={{
                               className: classes.selectMenu,

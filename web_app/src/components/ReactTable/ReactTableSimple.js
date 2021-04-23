@@ -191,6 +191,22 @@ function Table({ columns, data }) {
                 </tr>
               );
             })}
+            {/* <tr
+                  {...row.getRowProps()}
+                  className={classnames(
+                    "rt-tr",
+                    { " -odd": page.length % 2 === 0 },
+                    { " -even": page.length % 2 === 1 }
+                  )}
+                >
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()} className="rt-td">
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
+                </tr> */}
           </tbody>
         </table>
 
