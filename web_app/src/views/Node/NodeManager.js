@@ -65,6 +65,7 @@ export default function NodeManager(props) {
     const [extDataArr, setExtDataArr] = React.useState([])
     const [actionState, setActionState] = React.useState({})
     const [forceReload] = React.useState(true)
+    const [resetToDefault, setResetToDefault] = React.useState("")
 
     const classes = useStyles()
     const chartClasses = useChartStyles()
@@ -356,7 +357,7 @@ export default function NodeManager(props) {
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Name: &nbsp; {tempObj.name} ID:(
+                                        Name:&nbsp;{tempObj.name} ID:(
                                             {tempObj.id})
                                         </h5>
                                 </div>
@@ -371,7 +372,7 @@ export default function NodeManager(props) {
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Management Type: &nbsp;{' '}
+                                        Management Type:&nbsp;{' '}
                                         {tempObj.managementType}
                                     </h5>
                                 </div>
@@ -393,7 +394,7 @@ export default function NodeManager(props) {
                     }).then((value) => {
                         switch (value) {
                             case 'close':
-                                clearInput()
+                                setResetToDefault("")
                                 break;
 
                             default:
@@ -412,7 +413,8 @@ export default function NodeManager(props) {
             let tempObj = JSON.parse(JSON.stringify(e))
             let costs = [];
             for (let i = 1; i < 9; i++) {
-                props.prufClient.get.operationCost(String(i), e.id).then((x) => {
+                console.log(String(i), String(e.id))
+                props.prufClient.get.operationCost(String(i), String(e.id)).then((x) => {
                     costs.push(x)
                 })
             }
