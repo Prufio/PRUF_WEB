@@ -243,8 +243,9 @@ export default function NewRecord(props) {
         .then(e => {
           let managementType = e.managementType
           let nodeData = e;
+          console.log(e)
           if (isMobile && e.storageProvider === "2") {
-            return swal("This node is configured for Awreave storage, and is currently disabled for usage on mobile devices. Please use a non-mobile device to mint using this node.")
+            return swal("This node is configured for Awreave storage, and is currently disabled on mobile devices. Please use a non-mobile device to mint using this node.")
           }
 
           props.prufClient.get.ownerOfNode(nodeId).then(e => {
@@ -1194,7 +1195,7 @@ export default function NewRecord(props) {
                           fullWidth
                           className={classes.selectFormControl}
                         >
-                          <InputLabel>Select Root Node</InputLabel>
+                          <InputLabel>Select Root</InputLabel>
                           <Select
                             MenuProps={{
                               className: classes.selectMenu,
