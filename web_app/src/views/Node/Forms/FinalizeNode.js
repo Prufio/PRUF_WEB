@@ -210,7 +210,7 @@ export default function FinalizeNode(props) {
                         .on('error', function (_error) {
                             setTransactionActive(false)
                             setTxStatus(false)
-                            setTxHash(Object.values(_error)[0].transactionHash)
+                            // setTxHash(Object.values(_error)[0].transactionHash) BS:EXAMINE
                             tempTxHash = Object.values(_error)[0]
                                 .transactionHash
                             let str1 =

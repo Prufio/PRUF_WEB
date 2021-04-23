@@ -446,6 +446,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -455,7 +456,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -573,6 +586,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -582,7 +596,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="SelItem2"
               classes={{
@@ -695,6 +721,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -704,7 +731,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -819,6 +858,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -828,7 +868,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -954,6 +1006,7 @@ export default function Dashboard(props) {
             >
               Transfer (Not Available in this Status)
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -963,7 +1016,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="SelItem2"
               classes={{
@@ -1066,6 +1131,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -1075,7 +1141,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1193,8 +1271,9 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
-              key="SelItem1"
+              key="SelItem9"
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected,
@@ -1202,7 +1281,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1317,6 +1408,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -1326,7 +1418,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1441,6 +1545,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -1450,7 +1555,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1564,6 +1681,7 @@ export default function Dashboard(props) {
             >
               Select an option from the list
             </MenuItem>
+            {selectedAssetObj.price === "0" && (
             <MenuItem
               key="SelItem9"
               classes={{
@@ -1573,7 +1691,19 @@ export default function Dashboard(props) {
               value="sell"
             >
               Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
             </MenuItem>
+            )}
             <MenuItem
               key="DisabledItem0"
               disabled
@@ -1747,7 +1877,7 @@ export default function Dashboard(props) {
     }
     if (costId !== null) {
       props.prufClient.get
-        .operationCost(selectedAssetObj.nodeId, costId)
+        .operationCost(costId, selectedAssetObj.nodeId)
         .then(e => {
             tempObj.opCost = e.total
             window.sentPacket = JSON.parse(JSON.stringify(tempObj))
@@ -2016,7 +2146,7 @@ export default function Dashboard(props) {
                         Sale Price:&nbsp;
                 </h4>
                       <h4 className={classes.cardTitle}>
-                        {currency} {selectedAssetObj.price}
+                        {currency}{selectedAssetObj.price}
                       </h4>
                     </div>
                   </>
@@ -2029,7 +2159,7 @@ export default function Dashboard(props) {
                     label="Description"
                     multiline
                     rows={4}
-                    defaultValue="None"
+                    defaultValue={selectedAssetObj.Description}
                     variant="outlined"
                     fullWidth
                     disabled
@@ -2042,7 +2172,7 @@ export default function Dashboard(props) {
                   label="Description"
                   multiline
                   rows={4}
-                  defaultValue={selectedAssetObj.Description}
+                  defaultValue="None"
                   variant="outlined"
                   fullWidth
                   disabled

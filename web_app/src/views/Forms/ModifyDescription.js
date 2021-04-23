@@ -42,6 +42,7 @@ export default function ModifyDescription(props) {
   if(!window.sentPacket) window.sentPacket = {}
 
   const [asset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
+  console.log(window.sentPacket)
   const [assetInfo] = React.useState(
     JSON.parse(
       JSON.stringify({
@@ -162,9 +163,10 @@ export default function ModifyDescription(props) {
         });
       }
 
-      setSelectedImage(
-        assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || ""
-      );
+      // setSelectedImage(
+      //   assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || ""
+      // );
+      setSelectedImage(asset.DisplayImage)
       if (assetInfo.photo.DisplayImage) {
         setSelectedKey("DisplayImage");
       } else if (Object.values(assetInfo.photo)[0] !== undefined) {
@@ -441,6 +443,7 @@ export default function ModifyDescription(props) {
         newAssetInfo.photo.DisplayImage !== undefined ||
         Object.values(newAssetInfo.photo).length > 0
       ) {
+        console.log(selectedImage)
         return (
           <CardHeader image className={classes.cardHeaderHoverCustom}>
             <Button
@@ -872,7 +875,7 @@ export default function ModifyDescription(props) {
   };
 
   const generateThumbs = (obj) => {
-    //console.log(obj);
+    console.log(obj);
     let component = [],
       photos = Object.values(obj.photo),
       keys = Object.keys(obj.photo);
@@ -913,6 +916,7 @@ export default function ModifyDescription(props) {
       );
     }
     for (let i = 0; i < photos.length; i++) {
+      console.log(photos)
       component.push(
         <div
           key={"thumb" + String(i)}
@@ -1024,7 +1028,7 @@ export default function ModifyDescription(props) {
                 <AddPhotoAlternateOutlined />
               </div>
             )}
-            {generateThumbs(newAssetInfo)}
+            {generateThumbs(asset)}
           </div>
           <br />
           {!transactionActive && (
@@ -1035,7 +1039,7 @@ export default function ModifyDescription(props) {
                 }}
                 id="outlined-full-width"
                 label="Name"
-                defaultValue={newAssetInfo.name}
+                defaultValue={asset.name}
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
@@ -1051,7 +1055,7 @@ export default function ModifyDescription(props) {
                 label="Description:"
                 multiline
                 rows={4}
-                defaultValue={newAssetInfo.text.Description}
+                defaultValue={asset.Description}
                 variant="outlined"
                 fullWidth
               />
@@ -1063,7 +1067,7 @@ export default function ModifyDescription(props) {
               <TextField
                 id="outlined-full-width"
                 label="Name"
-                defaultValue={newAssetInfo.name}
+                defaultValue={asset.name}
                 fullWidth
                 margin="normal"
                 disabled="true"
@@ -1078,7 +1082,7 @@ export default function ModifyDescription(props) {
                 label="Description:"
                 multiline
                 rows={4}
-                defaultValue={newAssetInfo.text.Description}
+                defaultValue={asset.Description}
                 variant="outlined"
                 fullWidth
               />
@@ -1245,30 +1249,30 @@ export default function ModifyDescription(props) {
               {!copyText && (
                 <Tooltip title="Copy to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp;{" "}
-                    <Button
+                    Asset ID:&nbsp;
+                    <button
                       className="IDText"
                       onClick={() => {
                         copyTextSnippet(id);
                       }}
                     >
                       {id}
-                    </Button>
+                    </button>
                   </div>
                 </Tooltip>
               )}
               {copyText && (
                 <Tooltip title="Copied to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp;{" "}
-                    <Button
+                    Asset ID:&nbsp;
+                    <button
                       className="IDText"
                       onClick={() => {
                         copyTextSnippet(id);
                       }}
                     >
                       {id}
-                    </Button>
+                    </button>
                   </div>
                 </Tooltip>
               )}
@@ -1279,8 +1283,8 @@ export default function ModifyDescription(props) {
               {!copyText && (
                 <Tooltip title="Copy to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp;{" "}
-                    <Button
+                    Asset ID:&nbsp;
+                    <button
                       className="IDText"
                       onClick={() => {
                         copyTextSnippet(id);
@@ -1289,15 +1293,15 @@ export default function ModifyDescription(props) {
                       {id.substring(0, 10) +
                         "..." +
                         id.substring(56, 66)}
-                    </Button>
+                    </button>
                   </div>
                 </Tooltip>
               )}
               {copyText && (
                 <Tooltip title="Copied to Clipboard">
                   <div className={classes.stats}>
-                    Asset ID: &nbsp;{" "}
-                    <Button
+                    Asset ID:&nbsp;
+                    <button
                       className="IDText"
                       onClick={() => {
                         copyTextSnippet(id);
@@ -1306,7 +1310,7 @@ export default function ModifyDescription(props) {
                       {id.substring(0, 10) +
                         "..." +
                         id.substring(56, 66)}
-                    </Button>
+                    </button>
                   </div>
                 </Tooltip>
               )}

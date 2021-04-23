@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
+import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from '@material-ui/core/MenuItem'
 // core components
 import GridContainer from 'components/Grid/GridContainer.js'
@@ -40,6 +41,7 @@ import styles from 'assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import chartStyles from 'assets/jss/material-dashboard-pro-react/views/chartsStyle.js'
 import swal from 'sweetalert'
 import { isMobile } from 'react-device-detect'
+import { tooltip } from 'assets/jss/material-dashboard-pro-react'
 
 // const styles = {
 //   cardIconTitle: {
@@ -213,7 +215,7 @@ export default function NodeManager(props) {
                     )
                 })
         } else {
-            //_nodeData.push(['~', '~', '~', '~'])
+            _nodeData.push(['', '', '', ''])
             window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
             setNodeData(_nodeData)
             setExtDataArr(_extDataArr)
@@ -325,6 +327,8 @@ export default function NodeManager(props) {
     const handleSimple = (e) => {
         if (!e) return
         if (e.href === 'view') {
+            if(e.name === "" || e.name === "Loading Nodes...") return;
+            document.body.style.cursor = 'wait'
             let tempObj = {}
             let index = e.index
             console.log('root', extDataArr[index].root)
@@ -347,7 +351,7 @@ export default function NodeManager(props) {
                     tempObj.storageProvider =
                         extDataArr[index].storageProvider
                     console.log('tempObj', tempObj)
-
+                    document.body.style.cursor = 'auto'
                     swalReact({
                         content: (
                             <Card className="delegationCard">
@@ -618,7 +622,7 @@ export default function NodeManager(props) {
                                 data={nodeData.map((prop, key) => {
                                     return {
                                         id: key,
-                                        name: <Button onClick={() => handleSimple({ name: prop[0], index: key, href: "view", id: prop[1] })}>{prop[0]}</Button>,
+                                        name: <Tooltip title="View Node"><button className="nodeButton2" onClick={() => handleSimple({ name: prop[0], index: key, href: "view", id: prop[1] })}>{prop[0]}</button></Tooltip>,
                                         nodeId: prop[1],
                                         totalDelegated: prop[2],
                                         transactionsPerEpoch: prop[3],
@@ -656,7 +660,7 @@ export default function NodeManager(props) {
                                                             Create Node
                                                         </Button>
                                                     )}
-                                                {prop[0] === '~' && (
+                                                {prop[0] === '' && (
                                                     <Button
                                                         simple
                                                         onClick={() => {
@@ -673,7 +677,7 @@ export default function NodeManager(props) {
                                                     'No nodes held by user' &&
                                                     prop[0] !==
                                                     'Loading Nodes...' &&
-                                                    prop[0] !== '~' && (
+                                                    prop[0] !== '' && (
                                                         <form>
                                                             <FormControl className="nodeOptions">
                                                                 <InputLabel className="functionSelectorText">
@@ -871,7 +875,7 @@ export default function NodeManager(props) {
                                                             Create Node
                                                         </Button>
                                                     )}
-                                                {prop[0] === '~' && (
+                                                {prop[0] === '' && (
                                                     <Button
                                                         simple
                                                         onClick={() => {
@@ -888,7 +892,7 @@ export default function NodeManager(props) {
                                                     'No nodes held by user' &&
                                                     prop[0] !==
                                                     'Loading Nodes...' &&
-                                                    prop[0] !== '~' && (
+                                                    prop[0] !== '' && (
                                                         <form>
                                                             <FormControl className="nodeOptions">
                                                                 <InputLabel className="functionSelectorText">
@@ -1573,7 +1577,7 @@ export default function NodeManager(props) {
                                 </GridContainer>
                             </>
                         )}
-                        <Button
+                        {/* <Button
                             simple
                             onClick={() => {
                                 window.location.href =
@@ -1583,7 +1587,7 @@ export default function NodeManager(props) {
                             className="like"
                         >
                             Create Node
-                        </Button>
+                        </Button> */}
                     </CardBody>
                 </Card>
             </GridItem>

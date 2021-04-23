@@ -18,7 +18,7 @@ import { GroupAdd } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function ModifyRGT(props) {
-  if(!window.sentPacket) window.sentPacket = {}
+  if (!window.sentPacket) window.sentPacket = {}
 
   const [transactionActive, setTransactionActive] = React.useState(false);
 
@@ -127,7 +127,7 @@ export default function ModifyRGT(props) {
     );
 
     var rgtHash = window.web3.utils.soliditySha3(assetInfo.id, rgtHashRaw);
-    rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
+    // rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
     let tempTxHash;
     setShowHelp(false);
@@ -136,7 +136,7 @@ export default function ModifyRGT(props) {
     setError(undefined);
 
     setTransactionActive(true);
-
+    // console.log(assetInfo.id, rgtHash)
     await props.prufClient.do
       .modifyRightsHash(assetInfo.id, rgtHash)
       // eslint-disable-next-line react/prop-types
@@ -187,27 +187,27 @@ export default function ModifyRGT(props) {
       });
   };
 
-  if(!props.prufClient){
+  if (!props.prufClient) {
     return <>
       <Card>
-          <CardHeader icon>
-            <CardIcon className="headerIconBack">
-              
-            </CardIcon>
-            <Button
-              color="info"
-              className="MLBGradient"
-              onClick={() => goBack()}
-            >
-              Go Back
+        <CardHeader icon>
+          <CardIcon className="headerIconBack">
+
+          </CardIcon>
+          <Button
+            color="info"
+            className="MLBGradient"
+            onClick={() => goBack()}
+          >
+            Go Back
             </Button>
-            
-          </CardHeader>
-          <CardBody>
-            <h2>Oops, something went wrong...</h2>
-          </CardBody>
-          <br />
-        </Card>
+
+        </CardHeader>
+        <CardBody>
+          <h2>Oops, something went wrong...</h2>
+        </CardBody>
+        <br />
+      </Card>
     </>
   }
 

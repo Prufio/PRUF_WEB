@@ -190,7 +190,7 @@ export default function SetForSale(props) {
                             link.innerHTML = String(str1 + tempTxHash + str2)
                             setTxHash(receipt.transactionHash)
                             swal({
-                                title: 'Asset set for sale!',
+                                title: 'Asset price has been changed!',
                                 content: link,
                                 icon: 'success',
                                 button: 'Close',
