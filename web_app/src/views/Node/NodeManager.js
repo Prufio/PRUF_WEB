@@ -200,7 +200,7 @@ export default function NodeManager(props) {
                 .then(e => {
                     console.log(e)
                     _nodeData.push([
-                        <Button onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</Button>,
+                        <button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
                         String(ids[iteration]),
                         'N/A',
                         'N/A',
@@ -218,7 +218,9 @@ export default function NodeManager(props) {
             _nodeData.push(['', '', '', ''])
             window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
             setNodeData(_nodeData)
+            console.log("HERE", _extDataArr)
             setExtDataArr(_extDataArr)
+            console.log('extDataArr', extDataArr)
             return console.log(_nodeData)
         }
     }
@@ -238,7 +240,8 @@ export default function NodeManager(props) {
             ) {
                 _delegationList.push([
                     // eslint-disable-next-line react/prop-types
-                    <Button onClick={() => handleSimple({ name: props.rootNames[i], index: key, href: "view", id: Object.values(props.nodeIdSets)[i][x].id })}>{props.rootNames[i]}</Button>,
+                    props.rootNames[i],
+                    // <button onClick={() => handleSimple({ name: props.rootNames[i], index: key, href: "view", id: Object.values(props.nodeIdSets)[i][x].id })}>{props.rootNames[i]}</Button>,
                     // eslint-disable-next-line react/prop-types
                     Object.values(props.nodeIdSets)[i][x].name,
                     // eslint-disable-next-line react/prop-types
@@ -325,13 +328,15 @@ export default function NodeManager(props) {
     }
 
     const handleSimple = (e) => {
+        console.log(e)
         if (!e) return
-        if (e.href === 'view') {
+        if (e.href === "view") {
             if(e.name === "" || e.name === "Loading Nodes...") return;
             document.body.style.cursor = 'wait'
             let tempObj = {}
             let index = e.index
-            console.log('root', extDataArr[index].root)
+            console.log('extDataArr', extDataArr)
+            console.log('root', extDataArr[7])
 
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
@@ -368,7 +373,7 @@ export default function NodeManager(props) {
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Root Node: &nbsp;{' '}
+                                        Root Node:&nbsp;
                                         {tempObj.rootName} ID:(
                                             {tempObj.root})
                                         </h5>
@@ -376,14 +381,14 @@ export default function NodeManager(props) {
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Management Type:&nbsp;{' '}
+                                        Management Type:&nbsp;
                                         {tempObj.managementType}
                                     </h5>
                                 </div>
                                 <div className="delegationTips">
                                     <FiberManualRecordTwoTone className="delegationPin" />
                                     <h5 className="delegationTipsContent">
-                                        Storage Provider: &nbsp;{' '}
+                                        Storage Provider:&nbsp;
                                         {tempObj.storageProvider}
                                     </h5>
                                 </div>
