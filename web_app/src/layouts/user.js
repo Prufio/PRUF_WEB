@@ -182,7 +182,7 @@ export default function Dashboard(props) {
             className: "moreCookieInfo",
           },
           decline: {
-            text: "Decline Cookie Use",
+            text: "Decline Use",
             value: "decline",
             className: "declineCookies",
           },
@@ -201,10 +201,10 @@ export default function Dashboard(props) {
           case "moreInfo":
             swal({
               title: "Cookies on app.pruf.io",
-              text: "Placeholder",
+              text: "Cookies are small packets of user data that are created and stored by your web provider. We use cookes to provide a seamless and fast dApp experiance while simultaneously maintaining the users privacy. We do not store any personally identifiable information. If you prefer to not to use cookies, you can decline this form and your browser will not store any data. please note however, that this will make the application slightly less responsive. The cookies we use on app.pruf.io are JBS:Examine",
               buttons: {
                 decline: {
-                  text: "Decline Cookie Use",
+                  text: "Decline Use",
                   value: "decline",
                   className: "declineCookies",
                 },

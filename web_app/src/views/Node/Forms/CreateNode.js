@@ -34,6 +34,7 @@ export default function CreateNode(props) {
     if (!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
+    const [transactionActiveID, setTransactionIDActive] = React.useState(false)
 
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = React.useState('')
@@ -200,7 +201,8 @@ export default function CreateNode(props) {
         }).then((value) => {
             switch (value) {
                 case 'yes':
-                    setTransactionActive(true)
+                    setTransactionIDActive(true)
+                    setTransactionIDActive(true)
 
                     // const pageKey = thousandHashesOf(props.addr, props.winKey);
 
@@ -209,7 +211,7 @@ export default function CreateNode(props) {
                         // eslint-disable-next-line react/prop-types
                         .send({ from: props.addr })
                         .on('error', function (_error) {
-                            setTransactionActive(false)
+                            setTransactionIDActive(false)
                             setTxStatus(false)
                             setTxHash(Object.values(_error)[0].transactionHash)
                             tempTxHash = Object.values(_error)[0]
@@ -235,7 +237,7 @@ export default function CreateNode(props) {
                             }
                         })
                         .on('receipt', (receipt) => {
-                            setTransactionActive(false)
+                            setTransactionIDActive(false)
                             setTxStatus(receipt.status)
                             tempTxHash = receipt.transactionHash
                             let str1 =
@@ -447,7 +449,7 @@ export default function CreateNode(props) {
                     {/* eslint-disable-next-line react/prop-types */}
                     <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
                     <>
-                        {!transactionActive && (
+                        {!transactionActive && !transactionActiveID && (
                             <>
                                 <CustomInput
                                     success={loginNameState === 'success'}
@@ -550,7 +552,7 @@ export default function CreateNode(props) {
                 )} */}
                             </>
                         )}
-                        {transactionActive && (
+                        {transactionActive && !transactionActiveID && (
                             <>
                                 <CustomInput
                                     labelText={name}
@@ -585,7 +587,7 @@ export default function CreateNode(props) {
                             </>
                         )}
                     </>
-                    {!transactionActive && (
+                    {!transactionActive && !transactionActiveID && (
                         <div className="MLBGradientSubmit">
                             <Button
                                 color="info"
@@ -596,9 +598,19 @@ export default function CreateNode(props) {
                             </Button>
                         </div>
                     )}
-                    {transactionActive && (
+                    {transactionActive && !transactionActiveID && (
                         <h3>
                             Purchasing Node
+                            <div className="lds-ellipsisIF">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </h3>
+                    )}
+                    {transactionActiveID && (
+                        <h3>
+                            Minting ID
                             <div className="lds-ellipsisIF">
                                 <div></div>
                                 <div></div>

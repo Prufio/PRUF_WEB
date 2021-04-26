@@ -41,7 +41,7 @@ import styles from 'assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import chartStyles from 'assets/jss/material-dashboard-pro-react/views/chartsStyle.js'
 import swal from 'sweetalert'
 import { isMobile } from 'react-device-detect'
-import { tooltip } from 'assets/jss/material-dashboard-pro-react'
+// import { tooltip } from 'assets/jss/material-dashboard-pro-react'
 
 // const styles = {
 //   cardIconTitle: {
@@ -65,7 +65,7 @@ export default function NodeManager(props) {
     const [totalRewards, setTotalRewards] = React.useState(false)
     const [delegationAmount, setDelegationAmount] = React.useState('')
     const [extDataArr, setExtDataArr] = React.useState([])
-    const [actionState, setActionState] = React.useState({})
+    // const [actionState, setActionState] = React.useState({})
     const [forceReload] = React.useState(true)
     const [resetToDefault, setResetToDefault] = React.useState("")
 
@@ -324,8 +324,8 @@ export default function NodeManager(props) {
         setTotalRewards(true)
     }
 
-    const clearInput = () => {
-    }
+    // const clearInput = () => {
+    // }
 
     const handleSimple = (e) => {
         console.log(e)
