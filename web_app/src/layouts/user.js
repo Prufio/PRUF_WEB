@@ -505,8 +505,8 @@ export default function Dashboard(props) {
         console.log("Invalid key passed. Aborted call to replace.");
       } else if (window.replaceAssetData.nodeList) {
         //console.log("Setting nodeList");
-        setNodeList(window.replaceAssetData.nodeList);
-        setCookieTo("nodeList", window.replaceAssetData.nodeList);
+        //setNodeList(window.replaceAssetData.nodeList);
+        //setCookieTo("nodeList", window.replaceAssetData.nodeList);
         window.replaceAssetData = {};
       } else {
         setWinKey(String(Math.round(Math.random() * 100000)));

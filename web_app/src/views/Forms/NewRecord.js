@@ -305,7 +305,7 @@ export default function NewRecord(props) {
             document.body.style.cursor = 'auto',
               props.prufClient.get
                 // eslint-disable-next-line react/prop-types
-                .operationCost("1", event.target.value)
+                .operationCost(event.target.value, "1")
                 .then(e => {
                   setNRCost(e.total);
                 });
@@ -819,10 +819,17 @@ export default function NewRecord(props) {
 
       let newAsset = {
         root: selectedRootID,
+        nodeData : {
+          storageProvider: "1",
+          ipfs: extendedDataHash,
+          root: selectedRootID,
+          name: nodeName.substring(0, 1).toUpperCase() +
+            nodeName.substring(1, nodeName.length).toLowerCase(),
+          id: nodeId,
+        },
         idxHash: idx,
         currency: "0",
         id: idx,
-        storageProvider: "1",
         ipfs: extendedDataHash,
         DisplayImage: displayImage,
         photo: ipfsObj.photo,
@@ -838,7 +845,7 @@ export default function NewRecord(props) {
         dBIndex: props.assetArr.length,
         countPair: [100000, 100000],
         status: "Transferable",
-        statusNum: 51,
+        statusNum: "51",
         Description: ipfsObj.Description,
         engraving: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],
@@ -949,6 +956,14 @@ export default function NewRecord(props) {
 
       let newAsset = {
         root: selectedRootID,
+        nodeData : {
+          storageProvider: "1",
+          ipfs: extendedDataHash,
+          root: selectedRootID,
+          name: nodeName.substring(0, 1).toUpperCase() +
+            nodeName.substring(1, nodeName.length).toLowerCase(),
+          id: nodeId,
+        },
         idxHash: idx,
         id: idx,
         currency: "0",
@@ -968,7 +983,7 @@ export default function NewRecord(props) {
         dBIndex: props.assetArr.length,
         countPair: [100000, 100000],
         status: "Transferable",
-        statusNum: 51,
+        statusNum: "51",
         Description: ipfsObj.Description,
         engraving: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],

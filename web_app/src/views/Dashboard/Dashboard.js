@@ -181,6 +181,13 @@ export default function Dashboard(props) {
       if (window.newStat) {
         newObj.statusNum = window.newStat.num;
         newObj.status = window.newStat.str;
+        window.newStat = {}
+      }
+
+      if (window.priceInfo) {
+        newObj.currency = window.priceInfo.currency
+        newObj.price = window.priceInfo.price
+        window.priceInfo = {}
       }
 
       newObj.dBIndex = backIndex
@@ -1877,7 +1884,7 @@ export default function Dashboard(props) {
     }
     if (costId !== null) {
       props.prufClient.get
-        .operationCost(costId, selectedAssetObj.nodeId)
+        .operationCost(selectedAssetObj.nodeId, costId)
         .then(e => {
             tempObj.opCost = e.total
             window.sentPacket = JSON.parse(JSON.stringify(tempObj))

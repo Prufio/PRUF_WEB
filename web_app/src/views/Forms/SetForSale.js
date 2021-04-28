@@ -82,7 +82,7 @@ export default function SetForSale(props) {
         //window.sentPacket = null
         if (assetInfo.lastRef === '/#/user/dashboard')
             window.backIndex = assetInfo.dBIndex
-        window.location.href = assetInfo.lastRef
+            window.location.href = assetInfo.lastRef
     }
 
     const handleSetPrice = (e) => {
@@ -103,6 +103,8 @@ export default function SetForSale(props) {
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey)
         let newAsset = await JSON.parse(JSON.stringify(assetInfo))
+        newAsset.price = "0"
+        newAsset.currency = "0"
 
         let tempTxHash
         swalReact({
@@ -196,6 +198,7 @@ export default function SetForSale(props) {
                                 button: 'Close',
                             }).then(() => {
                                 window.location.href = assetInfo.lastRef
+                                window.replaceAssetData.refreshBals = true
                                 window.backIndex = assetInfo.dBIndex
                                 window.replaceAssetData = {
                                     key: pageKey,
@@ -224,6 +227,7 @@ export default function SetForSale(props) {
             props.winKey
         )
         let newAsset = await JSON.parse(JSON.stringify(assetInfo))
+
         let tempTxHash
 
         if (assetInfo.price !== '0') {
@@ -343,6 +347,8 @@ export default function SetForSale(props) {
                                         }
                                         window.location.href = assetInfo.lastRef
                                         window.backIndex = assetInfo.dBIndex
+                                        window.replaceAssetData.refreshBals = true
+                                        window.costInfo = {price: price, currency: currency}
                                         window.replaceAssetData = {
                                             key: pageKey,
                                             dBIndex: assetInfo.dBIndex,
@@ -410,6 +416,8 @@ export default function SetForSale(props) {
                                     }).then(() => {
                                         window.location.href = assetInfo.lastRef
                                         window.backIndex = assetInfo.dBIndex
+                                        window.replaceAssetData.refreshBals = true
+                                        window.costInfo = {price: price, currency: currency}
                                         window.replaceAssetData = {
                                             key: pageKey,
                                             dBIndex: assetInfo.dBIndex,
@@ -503,6 +511,8 @@ export default function SetForSale(props) {
                         }
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
+                        window.costInfo = {price: price, currency: currency}
+                        window.replaceAssetData.refreshBals = true
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
@@ -564,6 +574,8 @@ export default function SetForSale(props) {
                     }).then(() => {
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
+                        window.costInfo = {price: price, currency: currency}
+                        window.replaceAssetData.refreshBals = true
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
