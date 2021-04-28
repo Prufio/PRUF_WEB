@@ -125,8 +125,7 @@ export default function ChangeNodeName(props) {
                         icon: 'success',
                         button: 'Close',
                     }).then(() => {
-                        //refreshBalances()
-                        window.backIndex = nodeInfo.dBIndex
+                        window.replaceAssetData = { refreshBals: true }
                         window.location.href = nodeInfo.lastRef
                     })
                 })

@@ -80,6 +80,8 @@ export default function Dashboard(props) {
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [nodeIdBalance, setAssetClassBalance] = React.useState("~");
+  const [heldNodeData, setHeldNodeData] = React.useState([['Loading Nodes...', '~', '~', '~']]);
+  const [nodeExtData, setNodeExtData] = React.useState();
   const [IDBalance, setIDBalance] = React.useState("0");
   const [cookies, setCookie, removeCookie] = useCookies(["nodeList"]);
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
@@ -635,6 +637,8 @@ export default function Dashboard(props) {
                 roots={roots}
                 rootNames={rootNames}
                 nodeIdSets={nodeIdSets}
+                heldNodeData={heldNodeData}
+                nodeExtData={nodeExtData}
                 ps={sps}
                 isMounted={isMounted}
                 addr={addr}
@@ -661,13 +665,6 @@ export default function Dashboard(props) {
         return null;
       }
     });
-  };
-
-  const initOrbitDB = async () => {
-    //const orbitdb = await OrbitDB.createInstance(window.ipfs)
-    //const db = await orbitdb.log('hello');
-    //console.log(db)
-    //window.orbitDB = orbitdb;
   };
 
   const sidebarMinimize = () => {
@@ -712,6 +709,55 @@ export default function Dashboard(props) {
 
 
     }
+  };
+
+  //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
+  const setupTokenVals = async (_addr, _prufClient) => {
+    if (!_addr) return swal("Unable to reach user's wallet.");
+
+    await window.web3.eth.getBalance(_addr, (error, result) => {
+      if (error) {
+      } else {
+        setETHBalance(window.web3.utils.fromWei(result, "ether"));
+      }
+    });
+
+    await _prufClient.get.assetBalance(_addr).then(e => {
+
+      setAssetBalance(e);
+      if (Number(e) > 0) {
+        setIsAssetHolder(true);
+        getAssetIds(_addr, _prufClient, e)
+      } else {
+        setIsAssetHolder(false);
+      }
+
+    });
+
+    await _prufClient.get.nodeBalance(_addr).then(e => {
+
+      setAssetClassBalance(e);
+      if (Number(e) > 0) {
+        setIsAssetClassHolder(true);
+        getNodeIds(_addr, _prufClient, e)
+      } else {
+        setIsAssetClassHolder(false);
+      }
+
+    });
+
+    await _prufClient.get.holdsId(_addr).then(e => {
+      setIsIDHolder(e);
+    });
+
+    await _prufClient.get.prufBalance(_addr).then(e => {
+      setPrufBalance(e);
+    });
+
+    await _prufClient.get.nodePricing().then(e => {
+      setCurrentACIndex(e.currentNodeIndex);
+      setCurrentACPrice(e.currentNodePrice);
+    });
   };
 
   const buildNodeHeap = (_prufClient, iteration, arr, rootsDone, acsDone) => {
@@ -763,6 +809,53 @@ export default function Dashboard(props) {
         });
     }
   };
+
+  const getNodeIds = async (_addr, _prufClient, bal, ids, iteration) => {
+    // eslint-disable-next-line react/prop-types
+    if (!iteration) iteration = 0
+    if (!ids) ids = []
+    if (iteration >= bal) { console.log(iteration); return buildNodesInWallet(_prufClient, ids) }
+    _prufClient.get
+      // eslint-disable-next-line react/prop-types
+      .heldNodeAtIndex(_addr, String(iteration))
+      .then(e => {
+        ids.push(e)
+        return getNodeIds(_addr, _prufClient, bal, ids, iteration + 1)
+      })
+  }
+
+  const buildNodesInWallet = (_prufClient, ids, _extDataArr, _nodeData, iteration) => {
+    if (!ids) return
+    if (!iteration) iteration = 0
+    if (!_nodeData) _nodeData = []
+    if (!_extDataArr) _extDataArr = []
+    console.log({ids})
+    if (iteration < ids.length) {
+      // eslint-disable-next-line react/prop-types
+      _prufClient.get
+        // eslint-disable-next-line react/prop-types
+        .nodeData(ids[iteration])
+        .then(e => {
+          console.log(e)
+          _nodeData.push([
+            //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
+            e.name,
+            String(ids[iteration]),
+            'N/A',
+            'N/A',
+          ])
+          e.nodeId = ids[iteration]
+          _extDataArr.push(e)
+          return buildNodesInWallet(_prufClient, ids, _extDataArr, _nodeData, iteration + 1)
+        })
+    } else {
+      _nodeData.push(['', '', '', ''])
+      setNodeExtData(_extDataArr)
+      setHeldNodeData(_nodeData)
+      console.log("HERE", _extDataArr)
+      return console.log(_nodeData)
+    }
+  }
 
   const getACsFromDB = async (
     _prufClient,
@@ -1511,54 +1604,6 @@ export default function Dashboard(props) {
       finalizedAssets.push(obj);
       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
     }
-  };
-
-  //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const setupTokenVals = async (_addr, _prufClient) => {
-    if (!_addr) return swal("Unable to reach user's wallet.");
-
-    await window.web3.eth.getBalance(_addr, (error, result) => {
-      if (error) {
-      } else {
-        setETHBalance(window.web3.utils.fromWei(result, "ether"));
-      }
-    });
-
-    await _prufClient.get.assetBalance(_addr).then(e => {
-
-      setAssetBalance(e);
-      if (Number(e) > 0) {
-        setIsAssetHolder(true);
-        getAssetIds(_addr, _prufClient, e)
-      } else {
-        setIsAssetHolder(false);
-      }
-
-    });
-
-    await _prufClient.get.nodeBalance(_addr).then(e => {
-
-      setAssetClassBalance(e);
-      if (Number(e) > 0) {
-        setIsAssetClassHolder(true);
-      } else {
-        setIsAssetClassHolder(false);
-      }
-
-    });
-
-    await _prufClient.get.holdsId(_addr).then(e => {
-      setIsIDHolder(e);
-    });
-
-    await _prufClient.get.prufBalance(_addr).then(e => {
-      setPrufBalance(e);
-    });
-
-    await _prufClient.get.nodePricing().then(e => {
-      setCurrentACIndex(e.currentNodeIndex);
-      setCurrentACPrice(e.currentNodePrice);
-    });
   };
 
   return (

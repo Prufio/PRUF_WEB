@@ -206,6 +206,7 @@ export default function AuthorizeUser(props) {
                                 icon: 'success',
                                 button: 'Close',
                             })
+                            window.replaceAssetData = { refreshBals: true }
                             window.location.href = nodeInfo.lastRef
                         })
 

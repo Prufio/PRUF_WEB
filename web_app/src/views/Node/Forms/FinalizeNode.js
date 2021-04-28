@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 // core components
 import Card from 'components/Card/Card.js'
 import CardHeader from 'components/Card/CardHeader.js'
+import CardBody from 'components/Card/CardBody.js'
 import CardIcon from 'components/Card/CardIcon.js'
 import Button from 'components/CustomButtons/Button.js'
 import GridContainer from 'components/Grid/GridContainer.js'

@@ -64,17 +64,12 @@ export default function NodeManager(props) {
     // const [selectedNodeObj, setSelectedNodeObj] = React.useState({})
     const [totalRewards, setTotalRewards] = React.useState(false)
     const [delegationAmount, setDelegationAmount] = React.useState('')
-    const [extDataArr, setExtDataArr] = React.useState([])
     // const [actionState, setActionState] = React.useState({})
     const [forceReload] = React.useState(true)
     const [resetToDefault, setResetToDefault] = React.useState("")
 
     const classes = useStyles()
     const chartClasses = useChartStyles()
-
-    const [nodeData, setNodeData] = React.useState([
-        ['Loading Nodes...', '~', '~', '~'],
-    ])
 
     const [delegationList, setDelegationList] = React.useState([
         ['Loading Nodes...', '~', '~', '~'],
@@ -106,124 +101,100 @@ export default function NodeManager(props) {
         //getNodesInWallet()
     }, [])
 
-    React.useEffect(() => {
-        // eslint-disable-next-line react/prop-types
-        //if (props.nodeList)
-        // eslint-disable-next-line react/prop-types
-        //console.log(props.nodeList.length, Number(props.nodes) + 1)
-        if (props.prufClient && props.prufClient.get !== undefined) {
-            if (
-                // eslint-disable-next-line react/prop-types
-                props.nodeList &&
-                // eslint-disable-next-line react/prop-types
-                props.nodeList.length === Number(props.nodes) + 1 &&
-                !forceReload
-            ) {
-                // eslint-disable-next-line react/prop-types
-                setNodeData(props.nodeList)
-                // eslint-disable-next-line react/prop-types
-            } else if (props.nodes === "0")
-                setNodeData([['No nodes held by user', '~', '~', '~']])
-            else {
-                // eslint-disable-next-line react/prop-types
-                getNodesInWallet(Number(props.nodes))
-            }
-        }
-        // eslint-disable-next-line react/prop-types
-    }, [props.nodes])
+    // React.useEffect(() => {
+    //     if (props.prufClient && props.prufClient.get) {
+    //         console.log("Check Check")
+    //         getNodesInWallet()
+    //     }
+    //     // eslint-disable-next-line react/prop-types
+    // }, [props.prufClient])
 
-    React.useEffect(() => {
-        buildDelegationList()
-        // eslint-disable-next-line react/prop-types
-    }, [props.nodeIdSets])
+    // const getNodesInWallet = async (bal, ids, iteration) => {
+    //     // eslint-disable-next-line react/prop-types
+    //     const pageKey = thousandHashesOf(props.addr, props.winKey)
+    //     // eslint-disable-next-line react/prop-types
+    //     if (!props.prufClient || !props.addr) return
+    //     if (!iteration) iteration = 0
+    //     if (!ids) ids = []
+    //     if (iteration >= bal) { console.log(iteration); return buildNodesInWallet(ids) }
 
-    const getNodesInWallet = async (bal, ids, iteration) => {
-        // eslint-disable-next-line react/prop-types
-        const pageKey = thousandHashesOf(props.addr, props.winKey)
-        // eslint-disable-next-line react/prop-types
-        if (!props.prufClient || !props.addr) return
-        if (!iteration) iteration = 0
-        if (!ids) ids = []
-        if (iteration >= bal) { console.log(iteration); return buildNodesInWallet(ids) }
+    //     if (!bal) {
+    //         props.prufClient.get
+    //             // eslint-disable-next-line react/prop-types
+    //             .nodeBalance(props.addr)
+    //             .then(e => {
+    //                 if (Number(e) > 0) {
+    //                     getNodesInWallet(Number(e))
+    //                 }
 
-        if (!bal) {
-            props.prufClient.get
-                // eslint-disable-next-line react/prop-types
-                .nodeBalance(props.addr)
-                .then(e => {
-                    if (Number(e) > 0) {
-                        getNodesInWallet(Number(e))
-                    }
+    //                 else {
+    //                     window.replaceAssetData = {
+    //                         key: pageKey,
+    //                         nodeList: [
+    //                             ['No nodes held by user', '~', '~', '~'],
+    //                         ],
+    //                     }
+    //                     setNodeData([['No nodes held by user', '~', '~', '~']])
+    //                 }
+    //             })
+    //     } else {
+    //         props.prufClient.get
+    //             // eslint-disable-next-line react/prop-types
+    //             .heldNodeAtIndex(props.addr, String(iteration))
+    //             .then(e => {
+    //                 ids.push(e)
+    //                 return getNodesInWallet(bal, ids, iteration + 1)
+    //             })
+    //     }
+    // }
 
-                    else {
-                        window.replaceAssetData = {
-                            key: pageKey,
-                            nodeList: [
-                                ['No nodes held by user', '~', '~', '~'],
-                            ],
-                        }
-                        setNodeData([['No nodes held by user', '~', '~', '~']])
-                    }
-                })
-        } else {
-            props.prufClient.get
-                // eslint-disable-next-line react/prop-types
-                .heldNodeAtIndex(props.addr, String(iteration))
-                .then(e => {
-                    ids.push(e)
-                    return getNodesInWallet(bal, ids, iteration + 1)
-                })
-        }
-    }
+    // const buildNodesInWallet = (
+    //     ids,
+    //     _props.nodeExtData,
+    //     _nodeData,
+    //     iteration
+    // ) => {
+    //     if (!ids) return
+    //     if (!iteration) iteration = 0
+    //     if (!_nodeData) _nodeData = []
+    //     if (!_props.nodeExtData) _props.nodeExtData = []
+    //     //console.log(props.nodes)
+    //     //console.log(ids)
+    //     // eslint-disable-next-line react/prop-types
+    //     const pageKey = thousandHashesOf(props.addr, props.winKey)
+    //     // let _name, _id, _mType
 
-    const buildNodesInWallet = (
-        ids,
-        _extDataArr,
-        _nodeData,
-        iteration
-    ) => {
-        if (!ids) return
-        if (!iteration) iteration = 0
-        if (!_nodeData) _nodeData = []
-        if (!_extDataArr) _extDataArr = []
-        //console.log(props.nodes)
-        //console.log(ids)
-        // eslint-disable-next-line react/prop-types
-        const pageKey = thousandHashesOf(props.addr, props.winKey)
-        // let _name, _id, _mType
-
-        if (iteration < ids.length) {
-            // eslint-disable-next-line react/prop-types
-            props.prufClient.get
-                // eslint-disable-next-line react/prop-types
-                .nodeData(ids[iteration])
-                .then(e => {
-                    console.log(e)
-                    _nodeData.push([
-                        <button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
-                        String(ids[iteration]),
-                        'N/A',
-                        'N/A',
-                    ])
-                    _extDataArr.push(e)
-                    //console.log("_result", _result)
-                    return buildNodesInWallet(
-                        ids,
-                        _extDataArr,
-                        _nodeData,
-                        iteration + 1
-                    )
-                })
-        } else {
-            _nodeData.push(['', '', '', ''])
-            window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
-            setNodeData(_nodeData)
-            console.log("HERE", _extDataArr)
-            setExtDataArr(_extDataArr)
-            console.log('extDataArr', extDataArr)
-            return console.log(_nodeData)
-        }
-    }
+    //     if (iteration < ids.length) {
+    //         // eslint-disable-next-line react/prop-types
+    //         props.prufClient.get
+    //             // eslint-disable-next-line react/prop-types
+    //             .nodeData(ids[iteration])
+    //             .then(e => {
+    //                 console.log(e)
+    //                 _nodeData.push([
+    //                     <button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
+    //                     String(ids[iteration]),
+    //                     'N/A',
+    //                     'N/A',
+    //                 ])
+    //                 _props.nodeExtData.push(e)
+    //                 //console.log("_result", _result)
+    //                 return buildNodesInWallet(
+    //                     ids,
+    //                     _props.nodeExtData,
+    //                     _nodeData,
+    //                     iteration + 1
+    //                 )
+    //             })
+    //     } else {
+    //         _nodeData.push(['', '', '', ''])
+    //         window.replaceAssetData = { key: pageKey, nodeList: _nodeData }
+    //         setNodeData(_nodeData)
+    //         console.log("HERE", _props.nodeExtData)
+    //         setExtDataArr(_props.nodeExtData)
+    //         return console.log(_nodeData)
+    //     }
+    // }
 
     const buildDelegationList = () => {
         let _delegationList = []
@@ -330,31 +301,30 @@ export default function NodeManager(props) {
     const handleSimple = (e) => {
         console.log(e)
         if (!e) return
+        let index = e.index
         if (e.href === "view") {
-            if(e.name === "" || e.name === "Loading Nodes...") return;
+            if (e.name === "" || e.name === "Loading Nodes...") return;
             document.body.style.cursor = 'wait'
             let tempObj = {}
-            let index = e.index
-            console.log('extDataArr', extDataArr)
-            console.log('root', extDataArr[7])
+            console.log('props.nodeExtData', props.nodeExtData)
 
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
                 // eslint-disable-next-line react/prop-types
-                .nodeName(extDataArr[index].root)
+                .nodeName(props.nodeExtData[index].root)
                 .then(e => {
-                    tempObj.name = extDataArr[index].name
-                    tempObj.id = extDataArr[index].id
+                    tempObj.name = props.nodeExtData[index].name
+                    tempObj.id = props.nodeExtData[index].id
                     tempObj.rootName = e
                         .toLowerCase()
                         .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                             letter.toUpperCase()
                         )
-                    tempObj.root = extDataArr[index].root
+                    tempObj.root = props.nodeExtData[index].root
                     tempObj.managementType =
-                        extDataArr[index].managementType
+                        props.nodeExtData[index].managementType
                     tempObj.storageProvider =
-                        extDataArr[index].storageProvider
+                        props.nodeExtData[index].storageProvider
                     console.log('tempObj', tempObj)
                     document.body.style.cursor = 'auto'
                     swalReact({
@@ -421,25 +391,37 @@ export default function NodeManager(props) {
             }
             let tempObj = JSON.parse(JSON.stringify(e))
             let costs = [];
-            for (let i = 1; i < 9; i++) {
-                console.log(String(i), String(e.id))
-                props.prufClient.get.operationCost(String(i), String(e.id)).then((x) => {
-                    costs.push(x)
-                })
-            }
             tempObj.lastRef = '/#/user/node-manager'
-            tempObj.root = extDataArr[e.index].root
-            tempObj.custodyType = extDataArr[e.index].custodyType
-            tempObj.managementType = extDataArr[e.index].managementType
-            tempObj.discount = extDataArr[e.index].discount
-            tempObj.referenceAddress = extDataArr[e.index].referenceAddress
-            tempObj.costs = costs
-            window.sentPacket = JSON.parse(JSON.stringify(tempObj))
-            console.log(tempObj)
-            console.log(window.sentPacket)
-            setSimpleSelect(e)
-            return (window.location.href = e.href)
+            tempObj.root = props.nodeExtData[index].root
+            tempObj.id = props.nodeExtData[index].id
+            tempObj.name = props.nodeExtData[index].name
+            tempObj.custodyType = props.nodeExtData[index].custodyType
+            tempObj.managementType = props.nodeExtData[index].managementType
+            tempObj.discount = props.nodeExtData[index].discount
+            tempObj.referenceAddress = props.nodeExtData[index].referenceAddress
+            getAllCosts(tempObj)
         }
+    }
+
+    const getAllCosts = (obj, costs, iteration) => {
+        if(!obj) return
+        if (!costs) costs = [];
+        if (!iteration) iteration = 1
+
+        if(iteration >= 9) {
+            obj.costs = costs;
+            window.sentPacket = JSON.parse(JSON.stringify(obj))
+            console.log(obj)
+            console.log(window.sentPacket)
+            setSimpleSelect(obj)
+            return (window.location.href = obj.href)
+        }
+        
+        props.prufClient.get.operationCost(String(obj.id), String(iteration)).then((e) => {
+            costs.push(e)
+            return getAllCosts(obj, costs, iteration + 1)
+        })
+
     }
 
     const handleDelegation = (e) => {
@@ -534,7 +516,52 @@ export default function NodeManager(props) {
             }
         })
     }
-
+/*     if(!props.prufClient){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      }
+      if(props.prufClient && !props.prufClient.get){
+        return <>
+          <Card>
+              <CardHeader icon>
+                <CardIcon className="headerIconBack">
+                  
+                </CardIcon>
+                <Button
+                  color="info"
+                  className="MLBGradient"
+                  onClick={() => goBack()}
+                >
+                  Go Back
+                </Button>
+                
+              </CardHeader>
+              <CardBody>
+                <h2>Oops, something went wrong...</h2>
+              </CardBody>
+              <br />
+            </Card>
+        </>
+      } */
     return (
         <GridContainer>
             <GridItem xs={12}>
@@ -624,10 +651,10 @@ export default function NodeManager(props) {
                                         accessor: 'actions',
                                     },
                                 ]}
-                                data={nodeData.map((prop, key) => {
+                                data={props.heldNodeData.map((prop, key) => {
                                     return {
                                         id: key,
-                                        name: prop[0],
+                                        name: prop[0] === '' || prop[0] === 'Loading Nodes...'? prop[0] : <button className="nodeButton2" onClick={() => handleSimple({ name: prop[0], index: key, href: "view" })}>{` ${prop[0]} `}</button>,
                                         nodeId: prop[1],
                                         totalDelegated: prop[2],
                                         transactionsPerEpoch: prop[3],
@@ -771,10 +798,10 @@ export default function NodeManager(props) {
                                                                         Operation
                                                                         Costs
                                                                     </MenuItem>
-                                                                    {extDataArr[
+                                                                    {props.nodeExtData[
                                                                         key
                                                                     ] &&
-                                                                        extDataArr[
+                                                                        props.nodeExtData[
                                                                             key
                                                                         ]
                                                                             .managementType ===
@@ -805,10 +832,10 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Transfer
                                                                     </MenuItem>
-                                                                    {extDataArr[
+                                                                    {props.nodeExtData[
                                                                         key
                                                                     ] &&
-                                                                        extDataArr[
+                                                                        props.nodeExtData[
                                                                             key
                                                                         ]
                                                                             .managementType ===
@@ -1011,10 +1038,10 @@ export default function NodeManager(props) {
                                                                         Operation
                                                                         Costs
                                                                     </MenuItem>
-                                                                    {extDataArr[
+                                                                    {props.nodeExtData[
                                                                         key
                                                                     ] &&
-                                                                        extDataArr[
+                                                                        props.nodeExtData[
                                                                             key
                                                                         ]
                                                                             .managementType ===
@@ -1059,10 +1086,10 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Transfer
                                                                     </MenuItem>
-                                                                    {extDataArr[
+                                                                    {props.nodeExtData[
                                                                         key
                                                                     ] &&
-                                                                        extDataArr[
+                                                                        props.nodeExtData[
                                                                             key
                                                                         ]
                                                                             .managementType !==
@@ -1083,10 +1110,10 @@ export default function NodeManager(props) {
                                                                                 View
                                                                             </MenuItem>
                                                                         )}
-                                                                    {extDataArr[
+                                                                    {props.nodeExtData[
                                                                         key
                                                                     ] &&
-                                                                        extDataArr[
+                                                                        props.nodeExtData[
                                                                             key
                                                                         ]
                                                                             .managementType ===

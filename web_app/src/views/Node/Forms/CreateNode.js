@@ -331,14 +331,13 @@ export default function CreateNode(props) {
                 window.replaceAssetData = {
                     key: pageKey,
                     refreshBals: true,
-                    nodeList: tempArr,
+                    nodeList: ['Loading Nodes...', '~', '~', '~'],
                 }
                 window.location.href = '/#/user/node-manager'
             })
     }
 
     const checkForAC = async () => {
-        setTransactionActive(true)
         props.prufClient.get
             .nodeNameAvailable(name)
             .then(e => {
@@ -370,6 +369,10 @@ export default function CreateNode(props) {
         //import held asset
 
         console.log({name, root, extendedDataHash})
+        if(props.pruf < props.currentACPrice) {
+            return(swal("Insufficient PRUF Balance!"))
+        }
+        setTransactionActive(true)
         let tempTxHash
         setShowHelp(false)
         setTxStatus(false)

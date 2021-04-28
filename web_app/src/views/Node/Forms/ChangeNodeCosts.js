@@ -43,13 +43,13 @@ export default function ChangeNodeCosts(props) {
 
     const [nodeInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
     const [beneficiaryAddress, setBeneficiaryAddress] = React.useState(
-        window.sentPacket.costs.cost1.BeneficiaryAddress || {}
+        window.sentPacket.costs[0].beneficiary || {}
     )
     const [
       // eslint-disable-next-line no-unused-vars
         loginBeneficiaryAddress,
         setloginBeneficiaryAddress,
-    ] = React.useState(window.sentPacket.costs.cost1.BeneficiaryAddress || {})
+    ] = React.useState(window.sentPacket.costs[0].beneficiary || {})
     // const [operation, setOperation] = React.useState(window.sentPacket.costs.cost1.acthCost);
 
     const link = document.createElement('div')
@@ -92,7 +92,7 @@ export default function ChangeNodeCosts(props) {
 
     const generateCostForm = () => {
         return Object.values(nodeInfo.costs).map((prop, key) => {
-            console.log(key, prop)
+            //console.log(key, prop)
             return (
                 <>
                     {!transactionActive ? (
@@ -161,21 +161,20 @@ export default function ChangeNodeCosts(props) {
 
         if (
             Object.values(obj).length < iteration &&
-            nodeInfo.costs[`cost${index}`].BeneficiaryAddress !== undefined &&
-            nodeInfo.costs[`cost${index}`].BeneficiaryAddress ===
+            nodeInfo.costs[`cost${index}`].beneficiary !== undefined &&
+            nodeInfo.costs[`cost${index}`].beneficiary ===
                 _beneficiaryAddress
         ) {
-            swal('Cost updates complete!')
-            return (
-                (window.backIndex = nodeInfo.dBIndex),
-                (window.location.href = nodeInfo.lastRef)
-            )
+            swal('Cost updates complete!').then(()=>{
+                window.replaceAssetData = { refreshBals: true }
+                window.location.href = nodeInfo.lastRef
+            })
         }
 
         if (
             !obj[index] &&
-            nodeInfo.costs[`cost${index}`].BeneficiaryAddress !== undefined &&
-            nodeInfo.costs[`cost${index}`].BeneficiaryAddress ===
+            nodeInfo.costs[`cost${index}`].beneficiary !== undefined &&
+            nodeInfo.costs[`cost${index}`].beneficiary ===
                 _beneficiaryAddress
         ) {
             return changeCosts(obj, _beneficiaryAddress, index + 1, iteration)
@@ -333,8 +332,8 @@ export default function ChangeNodeCosts(props) {
                                             }}
                                             inputProps={{
                                                 defaultValue:
-                                                    nodeInfo.costs.cost1
-                                                        .BeneficiaryAddress,
+                                                    nodeInfo.costs[0]
+                                                        .beneficiary,
                                                 onChange: (event) => {
                                                     setFormChanged(true)
                                                     setBeneficiaryAddress(

@@ -352,7 +352,8 @@ export default function ChangeNodeData(props) {
                     button: 'Close',
                 }).then(() => {
                     //window.backIndex = nodeInfo.dBIndex;
-                    window.location.href = '/#/user/node-manager'
+                    window.replaceAssetData = { refreshBals: true }
+                    window.location.href = nodeInfo.lastRef
                 })
             })
     }

@@ -18,7 +18,7 @@ import { SwapHoriz } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function TransferNode(props) {
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     const [address, setAddress] = React.useState('')
     const [loginAddress, setloginAddress] = React.useState('')
@@ -172,38 +172,35 @@ export default function TransferNode(props) {
                 }).then(() => {
                     //refreshBalances()
                     //window.backIndex = nodeInfo.dBIndex;
-                    window.replaceAssetData = {
-                        key: pageKey,
-                        nodeList: splicedList,
-                    }
+                    window.replaceAssetData = { refreshBals: true }
                     window.location.href = nodeInfo.lastRef
                 })
             })
     }
 
-    if(!props.prufClient){
+    if (!props.prufClient) {
         return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
+            <Card>
+                <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+
+                    </CardIcon>
+                    <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
                 </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
+
+                </CardHeader>
+                <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                </CardBody>
+                <br />
             </Card>
         </>
-      }
+    }
 
     return (
         <Card>
