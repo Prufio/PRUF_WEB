@@ -380,7 +380,7 @@ export default function Search(props) {
             >
               Change Status (Not Available in this Status)
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="DisabledItem3"
               disabled
               classes={{
@@ -390,7 +390,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="DisabledItem5"
               disabled
@@ -504,7 +504,7 @@ export default function Search(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -513,7 +513,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -628,7 +628,7 @@ export default function Search(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
@@ -637,7 +637,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem5"
               classes={{
@@ -752,7 +752,7 @@ export default function Search(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
@@ -761,7 +761,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem5"
               classes={{
@@ -876,7 +876,7 @@ export default function Search(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
@@ -885,7 +885,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem5"
               classes={{
@@ -1000,7 +1000,7 @@ export default function Search(props) {
             >
               Change Status (Not Available in this Status)
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="DisabledItem3"
               disabled
               classes={{
@@ -1010,7 +1010,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="DisabledItem5"
               disabled
@@ -1126,7 +1126,7 @@ export default function Search(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -1135,7 +1135,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -1250,7 +1250,7 @@ export default function Search(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -1259,7 +1259,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -1373,7 +1373,7 @@ export default function Search(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -1382,7 +1382,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -1497,7 +1497,7 @@ export default function Search(props) {
             >
               Change Status (Not Available in this Status)
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="DisabledItem3"
               disabled
               classes={{
@@ -1507,7 +1507,7 @@ export default function Search(props) {
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="DisabledItem5"
               disabled
@@ -2174,7 +2174,7 @@ export default function Search(props) {
     }
 
     props.prufClient.utils.isValidId(id).then((e) => {
-      if (!e) return;
+      if (!e) return console.log("!validID");
 
       props.prufClient.get.assetRecordExists(id).then(e => {
         if (e) {
