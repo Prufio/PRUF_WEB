@@ -186,31 +186,18 @@ export default function Verify(props) {
         // let extendedDataHash
         // let tempResult
         let idxHash = assetInfo.id
-        let rgtHashRaw
         let rgtHash
 
-        if (middle === '') {
-            rgtHashRaw = window.web3.utils.soliditySha3(
-                String(first).replace(/\s/g, ''),
-                String(last).replace(/\s/g, ''),
-                String(ID).replace(/\s/g, ''),
-                String(password).replace(/\s/g, '')
-            )
-        } else if (middle !== '') {
-            rgtHashRaw = window.web3.utils.soliditySha3(
-                String(first).replace(/\s/g, ''),
-                String(middle).replace(/\s/g, ''),
-                String(last).replace(/\s/g, ''),
-                String(ID).replace(/\s/g, ''),
-                String(password).replace(/\s/g, '')
-            )
-        }
-
-        rgtHash = window.web3.utils.soliditySha3(
-            String(idxHash),
-            String(rgtHashRaw)
-        )
-        rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash)
+        rgtHash = await props.prufClient.utils.generateSecureRgt(
+            assetInfo.id,
+            {
+              first: first,
+              middle: middle,
+              last: last,
+              ID: ID,
+              password: password
+            }
+            );
 
         console.log('idxHash', idxHash)
         console.log('rgtHash', rgtHash)
@@ -283,32 +270,19 @@ export default function Verify(props) {
         console.log('in bvr')
         let idxHash = assetInfo.id
         let rgtHash
-        let rgtHashRaw
         let receiptVal
         let tempTxHash
 
-        if (middle === '') {
-            rgtHashRaw = window.web3.utils.soliditySha3(
-                String(first).replace(/\s/g, ''),
-                String(last).replace(/\s/g, ''),
-                String(ID).replace(/\s/g, ''),
-                String(password).replace(/\s/g, '')
-            )
-        } else if (middle !== '') {
-            rgtHashRaw = window.web3.utils.soliditySha3(
-                String(first).replace(/\s/g, ''),
-                String(middle).replace(/\s/g, ''),
-                String(last).replace(/\s/g, ''),
-                String(ID).replace(/\s/g, ''),
-                String(password).replace(/\s/g, '')
-            )
-        }
-
-        rgtHash = window.web3.utils.soliditySha3(
-            String(idxHash),
-            String(rgtHashRaw)
-        )
-        rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash)
+        rgtHash = await props.prufClient.utils.generateSecureRgt(
+            assetInfo.id,
+            {
+              first: first,
+              middle: middle,
+              last: last,
+              ID: ID,
+              password: password
+            }
+            );
 
         console.log('idxHash', idxHash)
         console.log('rgtHash', rgtHash)

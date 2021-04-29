@@ -4,15 +4,10 @@ import { isMobile, isAndroid } from "react-device-detect";
 import swal from "sweetalert";
 import base64 from "base64-arraybuffer";
 import validator from "validator";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Jdenticon from "react-jdenticon";
-
-// @material-ui/icons
-
-// core components
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -20,11 +15,7 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import TextField from "@material-ui/core/TextField";
 import CardBody from "components/Card/CardBody.js";
 import CardIcon from "components/Card/CardIcon.js";
-import {
-  AddPhotoAlternateOutlined,
-  DeleteForever,
-  Settings,
-} from "@material-ui/icons";
+import {AddPhotoAlternateOutlined, DeleteForever, Settings, } from "@material-ui/icons";
 import Check from "@material-ui/icons/Check";
 import CardFooter from "components/Card/CardFooter.js";
 import placeholder from "../../assets/img/placeholder.jpg";
@@ -43,6 +34,7 @@ export default function ModifyDescription(props) {
 
   const [asset] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
   console.log(window.sentPacket)
+  
   const [assetInfo] = React.useState(
     JSON.parse(
       JSON.stringify({
@@ -54,6 +46,7 @@ export default function ModifyDescription(props) {
       })
     )
   );
+
   const [newAssetInfo, setNewAssetInfo] = React.useState(
     JSON.parse(
       JSON.stringify({
@@ -65,6 +58,7 @@ export default function ModifyDescription(props) {
       })
     )
   );
+
   const [id] = React.useState(window.sentPacket.id);
 
   const [transactionActive, setTransactionActive] = React.useState(false);

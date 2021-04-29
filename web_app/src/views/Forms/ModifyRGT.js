@@ -116,18 +116,16 @@ export default function ModifyRGT(props) {
       return;
     }
 
-    var rgtHashRaw;
-
-    rgtHashRaw = window.web3.utils.soliditySha3(
-      String(first).replace(/\s/g, ""),
-      String(middle).replace(/\s/g, ""),
-      String(last).replace(/\s/g, ""),
-      String(ID).replace(/\s/g, ""),
-      String(password).replace(/\s/g, "")
-    );
-
-    var rgtHash = window.web3.utils.soliditySha3(assetInfo.id, rgtHashRaw);
-    // rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
+    let rgtHash = await props.prufClient.utils.generateSecureRgt(
+      assetInfo.id,
+      {
+        first: first,
+        middle: middle,
+        last: last,
+        ID: ID,
+        password: password
+      }
+      );
 
     let tempTxHash;
     setShowHelp(false);

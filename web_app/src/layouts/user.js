@@ -161,10 +161,14 @@ export default function Dashboard(props) {
     web3 = new Web3(
       "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
-    const _prufClient = await new PRUF(web3);
-    console.log(_prufClient);
-    setPrufClient(_prufClient);
-    setUpEnvironment(_prufClient)
+    const _prufClient = new PRUF(web3);
+
+    await _prufClient.then(e=>{
+      console.log(_prufClient);
+      setPrufClient(_prufClient);
+      setUpEnvironment(_prufClient)
+    })
+  
     window.web3 = web3;
     return setIsMounted(true);
   };
@@ -706,13 +710,12 @@ export default function Dashboard(props) {
         setupTokenVals(_addr, _prufClient)
         buildNodeHeap(_prufClient)
       }
-
-
     }
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
   const setupTokenVals = async (_addr, _prufClient) => {
+
     if (!_addr) return swal("Unable to reach user's wallet.");
 
     await window.web3.eth.getBalance(_addr, (error, result) => {
@@ -1013,6 +1016,7 @@ export default function Dashboard(props) {
       _prufClient.get
         .heldAssetAtIndex(_addr, String(iteration))
         .then(e => {
+          //console.log(e)
           ids.push(e);
           getAssetIds(_addr, _prufClient, bal, ids, iteration + 1);
         });
@@ -1020,14 +1024,14 @@ export default function Dashboard(props) {
   };
 
   const buildAssetHeap = (_addr, _prufClient, ids, data, iteration) => {
-    //console.log(_prufClient.get, iteration)
     if (!ids) return;
     if (!data) data = [];
     if (!iteration) {
       console.log("ids: ", ids);
       iteration = 0;
     }
-    if (iteration >= ids.length) return getMutableData(data, _prufClient);
+    
+    if (iteration >= ids.length) return getMutableData(data, _prufClient)
     else {
       _prufClient.get.assetRecord(ids[iteration]).then(e => {
         let obj = Object.assign({}, e)

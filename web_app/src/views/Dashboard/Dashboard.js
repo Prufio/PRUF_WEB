@@ -541,7 +541,7 @@ export default function Dashboard(props) {
             >
               Change Status (Not Available in this Status)
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="DisabledItem3"
               disabled
               classes={{
@@ -551,7 +551,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="DisabledItem5"
               disabled
@@ -678,7 +678,7 @@ export default function Dashboard(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -687,7 +687,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -815,7 +815,7 @@ export default function Dashboard(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
@@ -824,7 +824,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem5"
               classes={{
@@ -952,7 +952,7 @@ export default function Dashboard(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
@@ -961,7 +961,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem5"
               classes={{
@@ -1089,7 +1089,7 @@ export default function Dashboard(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem4"
               classes={{
                 root: classes.selectMenuItem,
@@ -1098,7 +1098,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem5"
               classes={{
@@ -1226,7 +1226,7 @@ export default function Dashboard(props) {
             >
               Change Status (Not Available in this Status)
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="DisabledItem3"
               disabled
               classes={{
@@ -1236,7 +1236,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="DisabledItem5"
               disabled
@@ -1365,7 +1365,7 @@ export default function Dashboard(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -1374,7 +1374,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -1502,7 +1502,7 @@ export default function Dashboard(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -1511,7 +1511,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -1638,7 +1638,7 @@ export default function Dashboard(props) {
             >
               Change Status
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="SelItem6"
               classes={{
                 root: classes.selectMenuItem,
@@ -1647,7 +1647,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="SelItem7"
               classes={{
@@ -1775,7 +1775,7 @@ export default function Dashboard(props) {
             >
               Change Status (Not Available in this Status)
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               key="DisabledItem3"
               disabled
               classes={{
@@ -1785,7 +1785,7 @@ export default function Dashboard(props) {
               value="edit-information"
             >
               Update Asset Info (Not Available in this Status)
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
               key="DisabledItem5"
               disabled
