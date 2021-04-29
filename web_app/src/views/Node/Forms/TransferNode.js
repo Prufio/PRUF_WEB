@@ -172,7 +172,7 @@ export default function TransferNode(props) {
                 }).then(() => {
                     //refreshBalances()
                     //window.backIndex = nodeInfo.dBIndex;
-                    window.replaceAssetData = { refreshBals: true }
+                    window.replaceAssetData.refreshBals = true
                     window.location.href = nodeInfo.lastRef
                 })
             })

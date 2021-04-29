@@ -404,11 +404,11 @@ export default function NodeManager(props) {
     }
 
     const getAllCosts = (obj, costs, iteration) => {
-        if(!obj) return
+        if (!obj) return
         if (!costs) costs = [];
         if (!iteration) iteration = 1
 
-        if(iteration >= 9) {
+        if (iteration >= 9) {
             obj.costs = costs;
             window.sentPacket = JSON.parse(JSON.stringify(obj))
             console.log(obj)
@@ -416,7 +416,7 @@ export default function NodeManager(props) {
             setSimpleSelect(obj)
             return (window.location.href = obj.href)
         }
-        
+
         props.prufClient.get.operationCost(String(obj.id), String(iteration)).then((e) => {
             costs.push(e)
             return getAllCosts(obj, costs, iteration + 1)
@@ -516,52 +516,52 @@ export default function NodeManager(props) {
             }
         })
     }
-/*     if(!props.prufClient){
-        return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
-                </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
-            </Card>
-        </>
-      }
-      if(props.prufClient && !props.prufClient.get){
-        return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
-                </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
-            </Card>
-        </>
-      } */
+    /*     if(!props.prufClient){
+            return <>
+              <Card>
+                  <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+                      
+                    </CardIcon>
+                    <Button
+                      color="info"
+                      className="MLBGradient"
+                      onClick={() => goBack()}
+                    >
+                      Go Back
+                    </Button>
+                    
+                  </CardHeader>
+                  <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                  </CardBody>
+                  <br />
+                </Card>
+            </>
+          }
+          if(props.prufClient && !props.prufClient.get){
+            return <>
+              <Card>
+                  <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+                      
+                    </CardIcon>
+                    <Button
+                      color="info"
+                      className="MLBGradient"
+                      onClick={() => goBack()}
+                    >
+                      Go Back
+                    </Button>
+                    
+                  </CardHeader>
+                  <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                  </CardBody>
+                  <br />
+                </Card>
+            </>
+          } */
     return (
         <GridContainer>
             <GridItem xs={12}>
@@ -654,7 +654,7 @@ export default function NodeManager(props) {
                                 data={props.heldNodeData.map((prop, key) => {
                                     return {
                                         id: key,
-                                        name: prop[0] === '' || prop[0] === 'Loading Nodes...'? prop[0] : <button className="nodeButton2" onClick={() => handleSimple({ name: prop[0], index: key, href: "view" })}>{` ${prop[0]} `}</button>,
+                                        name: prop[0] === '' || prop[0] === 'Loading Nodes...' ? prop[0] : <button className="nodeButton2" onClick={() => handleSimple({ name: prop[0], index: key, href: "view" })}>{` ${prop[0]} `}</button>,
                                         nodeId: prop[1],
                                         totalDelegated: prop[2],
                                         transactionsPerEpoch: prop[3],

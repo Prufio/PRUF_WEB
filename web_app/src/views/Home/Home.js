@@ -332,7 +332,7 @@ export default function Home(props) {
                 setUpdatedPruf(e)
             })
 
-        window.replaceAssetData = { refreshBals: true }
+        window.replaceAssetData.refreshBals = true
         forceUpdate()
     }
 
@@ -406,31 +406,31 @@ export default function Home(props) {
                                     </Tooltip>
                                 </>
                             ) : // eslint-disable-next-line react/prop-types
-                            props.IDHolder === false ? (
-                                <>
-                                    <CardIcon
-                                        className="headerIconBack"
-                                        onClick={() => mintID()}
-                                    >
-                                        <NoAccount />
-                                    </CardIcon>
-                                    <p className={classes.cardCategory}>
-                                        User Status
+                                props.IDHolder === false ? (
+                                    <>
+                                        <CardIcon
+                                            className="headerIconBack"
+                                            onClick={() => mintID()}
+                                        >
+                                            <NoAccount />
+                                        </CardIcon>
+                                        <p className={classes.cardCategory}>
+                                            User Status
                                     </p>
-                                    <h3 className={classes.cardTitle}>
-                                        Not Verified
+                                        <h3 className={classes.cardTitle}>
+                                            Not Verified
                                     </h3>
-                                </>
-                            ) : (
-                                <>
-                                    <CardIcon className="headerIconBack">
-                                        <NoAccount />
-                                    </CardIcon>
-                                    <p className={classes.cardCategory}>
-                                        User Status
+                                    </>
+                                ) : (
+                                    <>
+                                        <CardIcon className="headerIconBack">
+                                            <NoAccount />
+                                        </CardIcon>
+                                        <p className={classes.cardCategory}>
+                                            User Status
                                     </p>
-                                </>
-                            )}
+                                    </>
+                                )}
                         </CardHeader>
                         <CardFooter stats>
                             {/* eslint-disable-next-line react/prop-types */}
@@ -441,43 +441,43 @@ export default function Home(props) {
                                     </div>
                                 </>
                             ) : // eslint-disable-next-line react/prop-types
-                            props.IDHolder === false ? (
-                                !isMinting ? (
-                                    <>
-                                        <button
-                                            className="homeCardText"
-                                            onClick={() => mintID}
-                                        >
-                                            No ID held by user
+                                props.IDHolder === false ? (
+                                    !isMinting ? (
+                                        <>
+                                            <button
+                                                className="homeCardText"
+                                                onClick={() => mintID}
+                                            >
+                                                No ID held by user
                                         </button>
-                                    </>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                className="homeCardText"
+                                                onClick={() => mintID}
+                                            >
+                                                <div className={classes.stats}>
+                                                    <div className="lds-ellipsisCard">
+                                                        <div></div>
+                                                        <div></div>
+                                                        <div></div>
+                                                    </div>
+                                                </div>
+                                            </Button>
+                                        </>
+                                    )
                                 ) : (
                                     <>
-                                        <Button
-                                            className="homeCardText"
-                                            onClick={() => mintID}
-                                        >
-                                            <div className={classes.stats}>
-                                                <div className="lds-ellipsisCard">
-                                                    <div></div>
-                                                    <div></div>
-                                                    <div></div>
-                                                </div>
+                                        <div className={classes.stats}>
+                                            <div className="lds-ellipsisCard">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
                                             </div>
-                                        </Button>
-                                    </>
-                                )
-                            ) : (
-                                <>
-                                    <div className={classes.stats}>
-                                        <div className="lds-ellipsisCard">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
                                         </div>
-                                    </div>
-                                </>
-                            )}
+                                    </>
+                                )}
                         </CardFooter>
                     </Card>
                 </GridItem>
@@ -498,16 +498,16 @@ export default function Home(props) {
                                     {updatedEther.substring(0, 7)}{' '}
                                 </h3>
                             ) : // eslint-disable-next-line react/prop-types
-                            props.ether ? (
-                                <h3 className={classes.cardTitle}>
-                                    {/* eslint-disable-next-line react/prop-types */}
-                                    {props.ether.substring(0, 7)}{' '}
-                                </h3>
-                            ) : (
-                                <h3 className={classes.cardTitle}>
-                                    ~ 
-                                </h3>
-                            )}
+                                props.ether ? (
+                                    <h3 className={classes.cardTitle}>
+                                        {/* eslint-disable-next-line react/prop-types */}
+                                        {props.ether.substring(0, 7)}{' '}
+                                    </h3>
+                                ) : (
+                                    <h3 className={classes.cardTitle}>
+                                        ~
+                                    </h3>
+                                )}
                         </CardHeader>
                         <CardFooter stats>
                             {!isRefreshingEther && (

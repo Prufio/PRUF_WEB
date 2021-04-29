@@ -23,7 +23,7 @@ import { ScatterPlot } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function ModifyStatus(props) {
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     // eslint-disable-next-line no-unused-vars
     const [simpleSelect, setSimpleSelect] = React.useState('')
@@ -66,7 +66,7 @@ export default function ModifyStatus(props) {
             window.location.href = '/#/user/home'
             window.location.reload()
         }
-    
+
         else if (
             assetInfo.statusNum === '50' ||
             assetInfo.statusNum === '56' ||
@@ -197,6 +197,7 @@ export default function ModifyStatus(props) {
                         window.newStat = { num: String(status), str: e }
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
+                        window.replaceAssetData.refreshBals = true
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
@@ -289,6 +290,7 @@ export default function ModifyStatus(props) {
                         window.newStat = { num: String(status), str: e }
                         window.backIndex = assetInfo.dBIndex
                         window.location.href = assetInfo.lastRef
+                        window.replaceAssetData.refreshBals = true
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
@@ -299,29 +301,29 @@ export default function ModifyStatus(props) {
         })
     }
 
-    if(!props.prufClient){
+    if (!props.prufClient) {
         return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
+            <Card>
+                <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+
+                    </CardIcon>
+                    <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
                 </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
+
+                </CardHeader>
+                <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                </CardBody>
+                <br />
             </Card>
         </>
-      }
+    }
 
     return (
         <Card>

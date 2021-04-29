@@ -18,7 +18,7 @@ import { StoreMallDirectory } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function ChangeNodeName(props) {
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
 
@@ -39,7 +39,7 @@ export default function ChangeNodeName(props) {
 
     const link = document.createElement('div')
 
-    
+
     document.body.style.cursor = 'default'
 
     const classes = useStyles()
@@ -125,7 +125,7 @@ export default function ChangeNodeName(props) {
                         icon: 'success',
                         button: 'Close',
                     }).then(() => {
-                        window.replaceAssetData = { refreshBals: true }
+                        window.replaceAssetData.refreshBals = true
                         window.location.href = nodeInfo.lastRef
                     })
                 })
@@ -139,29 +139,29 @@ export default function ChangeNodeName(props) {
         }
     }
 
-    if(!props.prufClient){
+    if (!props.prufClient) {
         return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
+            <Card>
+                <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+
+                    </CardIcon>
+                    <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
                 </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
+
+                </CardHeader>
+                <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                </CardBody>
+                <br />
             </Card>
         </>
-      }
+    }
 
     return (
         <Card>
@@ -206,7 +206,7 @@ export default function ChangeNodeName(props) {
                                             if (
                                                 event.target.value !== '' ||
                                                 event.target.value !==
-                                                    nodeInfo.name
+                                                nodeInfo.name
                                             ) {
                                                 setloginNameState('success')
                                             } else {

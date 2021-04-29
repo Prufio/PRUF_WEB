@@ -21,7 +21,7 @@ import { Category } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function AuthorizeUser(props) {
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
     // eslint-disable-next-line no-unused-vars
@@ -206,7 +206,7 @@ export default function AuthorizeUser(props) {
                                 icon: 'success',
                                 button: 'Close',
                             })
-                            window.replaceAssetData = { refreshBals: true }
+                            window.replaceAssetData.refreshBals = true
                             window.location.href = nodeInfo.lastRef
                         })
 
@@ -221,29 +221,29 @@ export default function AuthorizeUser(props) {
         })
     }
 
-    if(!props.prufClient){
+    if (!props.prufClient) {
         return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  <Category />
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
+            <Card>
+                <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+                        <Category />
+                    </CardIcon>
+                    <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
                 </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
+
+                </CardHeader>
+                <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                </CardBody>
+                <br />
             </Card>
         </>
-      }
+    }
 
     return (
         <Card className="finalizeNode">
