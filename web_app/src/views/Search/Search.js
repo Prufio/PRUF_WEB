@@ -2180,13 +2180,13 @@ export default function Search(props) {
         if (e) {
           buildAsset(id);
         } else {
-          swal({
+          setIDXRaw("");
+          setIDXRawInput(false);
+          return swal({
             title: "Asset does not exist!",
             icon: "warning",
             button: "Close",
           });
-          setIDXRaw("");
-          setIDXRawInput(false);
         }
       });
     });
@@ -2744,7 +2744,7 @@ export default function Search(props) {
             <form>
               <h3>
                 Connecting to the blockchain
-                <div className="lds-ellipsisIF">
+              <div className="lds-ellipsisIF">
                   <div></div>
                   <div></div>
                   <div></div>
@@ -2778,7 +2778,7 @@ export default function Search(props) {
           <br />
         </Card>
       )}
-      {props.prufClient !== undefined && props.prufClient !== {} && (
+      {props.prufClient !== undefined && props.prufClient !== {} && props.prufClient.get !== undefined && (
         <>
           {scanQR === false && moreInfo === false && (
             <Card>

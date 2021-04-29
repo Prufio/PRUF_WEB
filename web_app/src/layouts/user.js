@@ -829,7 +829,7 @@ export default function Dashboard(props) {
     if (!iteration) iteration = 0
     if (!_nodeData) _nodeData = []
     if (!_extDataArr) _extDataArr = []
-    console.log({ids})
+    console.log({ ids })
     if (iteration < ids.length) {
       // eslint-disable-next-line react/prop-types
       _prufClient.get

@@ -18,7 +18,7 @@ import { SwapHoriz } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function Transfer(props) {
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     const [address, setAddress] = React.useState('')
     const [loginAddress, setloginAddress] = React.useState('')
@@ -38,9 +38,9 @@ export default function Transfer(props) {
     const link = document.createElement('div')
 
     React.useEffect(() => {
-      // eslint-disable-next-line react/prop-types
+        // eslint-disable-next-line react/prop-types
         if (props.ps) {
-          // eslint-disable-next-line react/prop-types
+            // eslint-disable-next-line react/prop-types
             props.ps.element.scrollTop = 0
             //console.log("Scrolled to ", props.ps.element.scrollTop);
         } else {
@@ -63,7 +63,7 @@ export default function Transfer(props) {
             }).then(() => {
                 goBack()
             })
-            
+
         }
     }, [])
 
@@ -93,7 +93,7 @@ export default function Transfer(props) {
 
     const transferAsset = async () => {
         //transfer held asset
-    // eslint-disable-next-line react/prop-types
+        // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
 
         if (!window.web3.utils.isAddress(address)) {
@@ -119,7 +119,7 @@ export default function Transfer(props) {
         setTransactionActive(true)
 
         props.prufClient.do
-        // eslint-disable-next-line react/prop-types
+            // eslint-disable-next-line react/prop-types
             .transferAsset(props.addr, address, assetInfo.id)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
@@ -168,6 +168,7 @@ export default function Transfer(props) {
                     //refreshBalances()
                     //window.backIndex = assetInfo.dBIndex;
                     window.location.href = assetInfo.lastRef
+                    window.replaceAssetData.refreshBals = true
                     window.replaceAssetData = {
                         key: pageKey,
                         dBIndex: assetInfo.dBIndex,
@@ -176,29 +177,29 @@ export default function Transfer(props) {
             })
     }
 
-    if(!props.prufClient){
+    if (!props.prufClient) {
         return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
+            <Card>
+                <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+
+                    </CardIcon>
+                    <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
                 </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
+
+                </CardHeader>
+                <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                </CardBody>
+                <br />
             </Card>
         </>
-      }
+    }
 
     return (
         <Card>

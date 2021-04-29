@@ -251,6 +251,7 @@ export default function CreateNode(props) {
                                 button: 'Close',
                             }).then(() => {
                                 window.replaceAssetData = { IDHolder: true }
+                                window.replaceAssetData.refreshBals = true
                                 setMintedID(true)
                             })
                         })
@@ -350,7 +351,7 @@ export default function CreateNode(props) {
                             console.log(`Url --> ${url}`)
                             props.prufClient.utils.ipfsToB32(
                                 String(hash.cid)
-                            ).then(e=> {
+                            ).then(e => {
                                 purchaseNode(e)
                             })
                         }
@@ -368,9 +369,9 @@ export default function CreateNode(props) {
     const purchaseNode = async (extendedDataHash) => {
         //import held asset
 
-        console.log({name, root, extendedDataHash})
-        if(props.pruf < props.currentACPrice) {
-            return(swal("Insufficient PRUF Balance!"))
+        console.log({ name, root, extendedDataHash })
+        if (props.pruf < props.currentACPrice) {
+            return (swal("Insufficient PRUF Balance!"))
         }
         setTransactionActive(true)
         let tempTxHash
@@ -417,6 +418,7 @@ export default function CreateNode(props) {
                     "Check out your TX <a href='https://kovan.etherscan.io/tx/"
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
+                window.replaceAssetData.refreshBals = true
                 setTxHash(receipt.transactionHash)
                 swal({
                     title: 'Node Minting Successul!',

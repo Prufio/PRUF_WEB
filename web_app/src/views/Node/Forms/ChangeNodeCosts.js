@@ -18,7 +18,7 @@ import { LocalOffer } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function ChangeNodeCosts(props) {
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = React.useState('')
@@ -46,7 +46,7 @@ export default function ChangeNodeCosts(props) {
         window.sentPacket.costs[0].beneficiary || {}
     )
     const [
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         loginBeneficiaryAddress,
         setloginBeneficiaryAddress,
     ] = React.useState(window.sentPacket.costs[0].beneficiary || {})
@@ -163,10 +163,9 @@ export default function ChangeNodeCosts(props) {
             Object.values(obj).length < iteration &&
             nodeInfo.costs[`cost${index}`].beneficiary !== undefined &&
             nodeInfo.costs[`cost${index}`].beneficiary ===
-                _beneficiaryAddress
+            _beneficiaryAddress
         ) {
-            swal('Cost updates complete!').then(()=>{
-                window.replaceAssetData = { refreshBals: true }
+            swal('Cost updates complete!').then(() => {
                 window.location.href = nodeInfo.lastRef
             })
         }
@@ -175,7 +174,7 @@ export default function ChangeNodeCosts(props) {
             !obj[index] &&
             nodeInfo.costs[`cost${index}`].beneficiary !== undefined &&
             nodeInfo.costs[`cost${index}`].beneficiary ===
-                _beneficiaryAddress
+            _beneficiaryAddress
         ) {
             return changeCosts(obj, _beneficiaryAddress, index + 1, iteration)
         }
@@ -252,6 +251,7 @@ export default function ChangeNodeCosts(props) {
                     "Check out your TX <a href='https://kovan.etherscan.io/tx/"
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
+                window.replaceAssetData.refreshBals = true
                 setTxHash(receipt.transactionHash)
                 return changeCosts(
                     obj,
@@ -262,29 +262,29 @@ export default function ChangeNodeCosts(props) {
             })
     }
 
-    if(!props.prufClient){
+    if (!props.prufClient) {
         return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
+            <Card>
+                <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+
+                    </CardIcon>
+                    <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
                 </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
+
+                </CardHeader>
+                <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                </CardBody>
+                <br />
             </Card>
         </>
-      }
+    }
 
     return (
         <Card>
