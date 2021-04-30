@@ -1811,7 +1811,7 @@ export default function Search(props) {
         ID: ID,
         password: password
       }
-      );
+    );
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
@@ -1927,7 +1927,7 @@ export default function Search(props) {
         ID: ID,
         password: password
       }
-      );
+    );
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
@@ -2027,7 +2027,7 @@ export default function Search(props) {
         ID: ID,
         password: password
       }
-      );
+    );
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);

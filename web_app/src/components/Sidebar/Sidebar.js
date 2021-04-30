@@ -442,9 +442,9 @@ class Sidebar extends React.Component {
                         onCopy={() => {
                           swal(
                             "Address Copied to Clipboard!\n" +
-                              addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)
+                            addr.substring(0, 8) +
+                            "..." +
+                            addr.substring(34, 42)
                           );
                         }}
                       >
@@ -466,9 +466,9 @@ class Sidebar extends React.Component {
                         onCopy={() => {
                           swal(
                             "Address Copied to Clipboard!\n" +
-                              addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)
+                            addr.substring(0, 8) +
+                            "..." +
+                            addr.substring(34, 42)
                           );
                         }}
                       >
@@ -511,9 +511,9 @@ class Sidebar extends React.Component {
                         onCopy={() => {
                           swal(
                             "Address Copied to Clipboard!\n" +
-                              addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)
+                            addr.substring(0, 8) +
+                            "..." +
+                            addr.substring(34, 42)
                           );
                         }}
                       >
@@ -535,9 +535,9 @@ class Sidebar extends React.Component {
                         onCopy={() => {
                           swal(
                             "Address Copied to Clipboard!\n" +
-                              addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)
+                            addr.substring(0, 8) +
+                            "..." +
+                            addr.substring(34, 42)
                           );
                         }}
                       >
@@ -745,9 +745,9 @@ class Sidebar extends React.Component {
                           onCopy={() => {
                             swal(
                               "Address Copied to Clipboard!\n" +
-                                addr.substring(0, 8) +
-                                "..." +
-                                addr.substring(34, 42)
+                              addr.substring(0, 8) +
+                              "..." +
+                              addr.substring(34, 42)
                             );
                           }}
                         >
@@ -769,9 +769,9 @@ class Sidebar extends React.Component {
                           onCopy={() => {
                             swal(
                               "Address Copied to Clipboard!\n" +
-                                addr.substring(0, 8) +
-                                "..." +
-                                addr.substring(34, 42)
+                              addr.substring(0, 8) +
+                              "..." +
+                              addr.substring(34, 42)
                             );
                           }}
                         >

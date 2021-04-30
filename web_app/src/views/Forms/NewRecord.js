@@ -1214,7 +1214,7 @@ export default function NewRecord(props) {
                           fullWidth
                           className={classes.selectFormControl}
                         >
-                          <InputLabel>Select Root</InputLabel>
+                          <InputLabel>Select Root Node</InputLabel>
                           <Select
                             MenuProps={{
                               className: classes.selectMenu,
