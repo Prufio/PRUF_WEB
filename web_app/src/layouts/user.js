@@ -79,7 +79,7 @@ export default function Dashboard(props) {
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
-  const [nodeIdBalance, setAssetClassBalance] = React.useState("~");
+  const [nodeIdBalance, setNodeBalance] = React.useState("~");
   const [heldNodeData, setHeldNodeData] = React.useState([['Loading Nodes...', '~', '~', '~']]);
   const [nodeExtData, setNodeExtData] = React.useState();
   const [IDBalance, setIDBalance] = React.useState("0");
@@ -654,7 +654,6 @@ export default function Dashboard(props) {
                 IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
-                nodeList={nodeList}
                 prufClient={prufClient}
                 arweaveClient={arweaveClient}
                 testWeave={testWeave}
@@ -884,8 +883,6 @@ export default function Dashboard(props) {
           }
         }
       });
-
-    //return { sets: _nodeIdSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
   };
 
   const setUpNodeInformation = async (_prufClient, obj) => {
