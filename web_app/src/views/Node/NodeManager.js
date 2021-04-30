@@ -654,7 +654,7 @@ export default function NodeManager(props) {
                                 data={props.heldNodeData.map((prop, key) => {
                                     return {
                                         id: key,
-                                        name: prop[0] === '' || prop[0] === 'Loading Nodes...' ? prop[0] : <button className="nodeButton2" onClick={() => handleSimple({ name: prop[0], index: key, href: "view" })}>{` ${prop[0]} `}</button>,
+                                        name: prop[0] === 'No nodes held by user' || prop[0] === '' || prop[0] === 'Loading Nodes...' ? prop[0] : <button className="nodeButton2" onClick={() => handleSimple({ name: prop[0], index: key, href: "view" })}>{` ${prop[0]} `}</button>,
                                         nodeId: prop[1],
                                         totalDelegated: prop[2],
                                         transactionsPerEpoch: prop[3],

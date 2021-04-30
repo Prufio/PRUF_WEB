@@ -744,6 +744,7 @@ export default function Dashboard(props) {
         setIsAssetClassHolder(true);
         getNodeIds(_addr, _prufClient, e)
       } else {
+        setHeldNodeData([['No nodes held by user', '~', '~', '~']])
         setIsAssetClassHolder(false);
       }
 
