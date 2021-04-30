@@ -99,7 +99,7 @@ export default function TransferNode(props) {
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
         // eslint-disable-next-line react/prop-types
-        const splicedList = spliceNodeList(props.nodeList)
+        //const splicedList = spliceNodeList(props.nodeList)
 
         if (!window.web3.utils.isAddress(address)) {
             return swal({
