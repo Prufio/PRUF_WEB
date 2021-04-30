@@ -122,7 +122,7 @@ export default function AuthorizeUser(props) {
                         submitting!
                     </h5>
                     <div className="delegationTips">
-                        <h4 className="alertText">User: &nbsp; {address}</h4>
+                        <h4 className="alertText">User: {` ${address.substring(0,8)}...${address.substring(34)}`}</h4>
                         {/* <h4 className="alertText">
                         User Type: &nbsp;
                     {userType === "1" && (

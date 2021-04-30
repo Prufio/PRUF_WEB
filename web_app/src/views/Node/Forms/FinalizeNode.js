@@ -541,9 +541,7 @@ export default function FinalizeNode(props) {
                                             (IPFS) is a protocol and
                                             peer-to-peer network for storing and
                                             sharing data in a distributed file
-                                            system. IPFS allows users to not
-                                            only receive but host content, in a
-                                            similar manner to BitTorrent.
+                                            system.
                                         </p>
                                     </>
                                 )}
@@ -561,11 +559,9 @@ export default function FinalizeNode(props) {
                                             ></img>
                                         </a>
                                         <p>
-                                            A novel data storage blockchain
-                                            protocol enabling a permanent
-                                            serverless web and creating truly
-                                            permanent data storage for the first
-                                            time.
+                                            A novel blockchain
+                                            protocol enabling truly
+                                            permanent data storage. NOTE: ADVANCED USERS ONLY.
                                         </p>
                                     </>
                                 )}

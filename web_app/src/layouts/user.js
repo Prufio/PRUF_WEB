@@ -246,10 +246,6 @@ export default function Dashboard(props) {
       });
     }
     console.log("Cookies:", cookies);
-    readCookie("nodeList").then((e) => {
-      if (e) setNodeList(e);
-      console.log("Found nodeList: ", e);
-    });
   };
 
   const setCookieTo = (job, val) => {
@@ -266,11 +262,12 @@ export default function Dashboard(props) {
     return cookies[job];
   };
 
-  const awaitPrufInit = (_prufClient, _addr) => {
+  const awaitPrufInit = async (_prufClient, _addr) => {
+    //console.log("Waiting for init...", _prufClient.get)
     setTimeout(() => {
       if (_prufClient.get) { console.log(_prufClient.get); setUpEnvironment(_prufClient, _addr) }
       else { awaitPrufInit(_prufClient, _addr) }
-    }, 50)
+    }, 100)
   }
 
   const handleEthereum = async () => {
@@ -708,7 +705,6 @@ export default function Dashboard(props) {
     if (window.ethereum) {
       if (_addr) {
         setupTokenVals(_addr, _prufClient)
-        buildNodeHeap(_prufClient)
       }
     }
   };
@@ -718,14 +714,15 @@ export default function Dashboard(props) {
 
     if (!_addr) return swal("Unable to reach user's wallet.");
 
-    await window.web3.eth.getBalance(_addr, (error, result) => {
+
+    window.web3.eth.getBalance(_addr, (error, result) => {
       if (error) {
       } else {
         setETHBalance(window.web3.utils.fromWei(result, "ether"));
       }
     });
 
-    await _prufClient.get.assetBalance(_addr).then(e => {
+    _prufClient.get.assetBalance(_addr).then(e => {
 
       setAssetBalance(e);
       if (Number(e) > 0) {
@@ -737,7 +734,7 @@ export default function Dashboard(props) {
 
     });
 
-    await _prufClient.get.nodeBalance(_addr).then(e => {
+    _prufClient.get.nodeBalance(_addr).then(e => {
 
       setAssetClassBalance(e);
       if (Number(e) > 0) {
@@ -750,30 +747,29 @@ export default function Dashboard(props) {
 
     });
 
-    await _prufClient.get.holdsId(_addr).then(e => {
+    _prufClient.get.holdsId(_addr).then(e => {
       setIsIDHolder(e);
     });
 
-    await _prufClient.get.prufBalance(_addr).then(e => {
+    _prufClient.get.prufBalance(_addr).then(e => {
       setPrufBalance(e);
     });
 
-    await _prufClient.get.nodePricing().then(e => {
+    _prufClient.get.nodePricing().then(e => {
       setCurrentACIndex(e.currentNodeIndex);
       setCurrentACPrice(e.currentNodePrice);
     });
+
+    buildNodeHeap(_addr, _prufClient)
   };
 
-  const buildNodeHeap = (_prufClient, iteration, arr, rootsDone, acsDone) => {
+  const buildNodeHeap = async (_addr, _prufClient, iteration, arr, rootsDone, acsDone) => {
     if (!_prufClient) return;
     if (!rootsDone && !acsDone) rootsDone = false;
     acsDone = false;
     if (!iteration) iteration = 1;
     if (!arr) arr = [];
-    if (rootsDone === true && acsDone === true) {
-      setAcArr(arr);
-      getACsFromDB(arr);
-    }
+
     let noMore = false;
 
     if (rootsDone !== true) {
@@ -782,43 +778,154 @@ export default function Dashboard(props) {
         .then(e => {
           if (e) {
             arr.push(iteration);
-            //console.log("found ", iteration);
-            iteration++;
-            return buildNodeHeap(_prufClient, iteration, arr, false, false);
+            return buildNodeHeap(_addr, _prufClient, iteration + 1, arr, false, false);
           } else {
             noMore = true;
-            //console.log("There is no root ", iteration);
-            iteration++;
-            return buildNodeHeap(_prufClient, 1000001, arr, true, false);
+            return buildNodeHeap(_addr, _prufClient, 1000001, arr, true, false);
           }
         });
     } else if (rootsDone === true && acsDone !== true) {
-      //console.log("trying ", iteration);
       _prufClient.get
         .nodeExists(String(iteration))
         .then(e => {
           if (e) {
             arr.push(iteration);
-            //console.log("found ", iteration);
-            iteration++;
-            return buildNodeHeap(_prufClient, iteration, arr, true, false);
+            return buildNodeHeap(_addr, _prufClient, iteration + 1, arr, true, false);
           } else {
             noMore = true;
-            //console.log("There is no ac ", iteration);
-            iteration++;
             console.log("Found all nodes", arr);
             setAcArr(arr);
-            return getACsFromDB(_prufClient, arr);
+            return getACsFromDB(_addr, _prufClient, arr);
           }
         });
     }
+  };
+
+  const getACsFromDB = async (_addr, _prufClient, acArray, iteration, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames) => {
+    //console.log(acArray);
+    if (!iteration) iteration = 0;
+    if (!rootArray) rootArray = [];
+    if (!rootNameArray) rootNameArray = [];
+    if (!allClasses) allClasses = [];
+    if (!allClassNames) allClassNames = [];
+    if (!_nodeIdSets) _nodeIdSets = {};
+    console.log(iteration)
+    if (iteration === acArray.length)
+      return setUpNodeInformation(
+        _prufClient,
+        {
+          sets: _nodeIdSets,
+          rArr: rootArray,
+          rnArr: rootNameArray,
+          allCArr: allClasses,
+          allCNArr: allClassNames,
+        });
+
+    await _prufClient.get
+      .nodeData(String(acArray[iteration]))
+      .then(e => {
+        if (String(acArray[iteration]) === e.root) {
+              rootArray.push(acArray[iteration]);
+              rootNameArray.push(
+                e.name
+                  .toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  )
+              );
+              _nodeIdSets[String(acArray[iteration])] = [];
+              getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+        } else {
+          //console.log(acArray[i])
+          if (e.managementType === "255") {
+            getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+          } else if (e.managementType === "1" || e.managementType === "2") {
+            _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x=>{
+              if (window.web3.utils.toChecksumAddress(x) === window.web3.utils.toChecksumAddress(_addr)){
+                  allClasses.push(String(acArray[iteration]));
+                  allClassNames.push(
+                    e.name
+                      .toLowerCase()
+                      .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                        letter.toUpperCase()
+                      )
+                  );
+                  getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+              } else {
+                getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+              }
+            })
+          } else if (e.managementType === "3") {
+            _prufClient.get.userType(_addr, String(acArray[iteration])).then(x=>{
+              if (x === "1"){
+                  allClasses.push(String(acArray[iteration]));
+                  allClassNames.push(
+                    e.name
+                      .toLowerCase()
+                      .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                        letter.toUpperCase()
+                      )
+                  );
+                  getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+              } else {
+                getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+              }
+            })
+          } else {
+              allClasses.push(String(acArray[iteration]));
+              allClassNames.push(
+                e.name
+                  .toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  )
+              );
+              getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+          }
+        }
+      });
+
+    //return { sets: _nodeIdSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
+  };
+
+  const setUpNodeInformation = async (_prufClient, obj) => {
+    if(!obj) return
+    console.log(obj)
+    let 
+      allClasses = obj.allCArr,
+      rootArray = obj.rArr,
+      _nodeIdSets = obj.sets,
+      rootNameArray = obj.rnArr,
+      allClassNames = obj.allCNArr;
+
+    //console.log(allClasses, allClassNames, rootArray)
+
+    for (let i = 0; i < allClasses.length; i++) {
+      _prufClient.get
+        .nodeData(String(allClasses[i]))
+        .then(e => {
+          _nodeIdSets[String(rootArray[Number(e.root-1)])].push({
+            id: allClasses[i],
+            name: allClassNames[i]
+              .toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              ),
+          });
+        });
+    }
+
+    console.log("Class Sets: ", _nodeIdSets);
+    setRoots(rootArray);
+    setRootNames(rootNameArray);
+    setAssetClassSets(_nodeIdSets);
   };
 
   const getNodeIds = async (_addr, _prufClient, bal, ids, iteration) => {
     // eslint-disable-next-line react/prop-types
     if (!iteration) iteration = 0
     if (!ids) ids = []
-    if (iteration >= bal) { console.log(iteration); return buildNodesInWallet(_prufClient, ids) }
+    if (iteration >= bal) return buildNodesInWallet(_prufClient, ids) 
     _prufClient.get
       // eslint-disable-next-line react/prop-types
       .heldNodeAtIndex(_addr, String(iteration))
@@ -833,14 +940,14 @@ export default function Dashboard(props) {
     if (!iteration) iteration = 0
     if (!_nodeData) _nodeData = []
     if (!_extDataArr) _extDataArr = []
-    console.log({ ids })
+    //console.log({ ids })
     if (iteration < ids.length) {
       // eslint-disable-next-line react/prop-types
       _prufClient.get
         // eslint-disable-next-line react/prop-types
         .nodeData(ids[iteration])
         .then(e => {
-          console.log(e)
+          //console.log(e)
           _nodeData.push([
             //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
             e.name,
@@ -856,154 +963,10 @@ export default function Dashboard(props) {
       _nodeData.push(['', '', '', ''])
       setNodeExtData(_extDataArr)
       setHeldNodeData(_nodeData)
-      console.log("HERE", _extDataArr)
-      return console.log(_nodeData)
+      //console.log("HERE", _extDataArr)
+      return //console.log(_nodeData)
     }
   }
-
-  const getACsFromDB = async (
-    _prufClient,
-    acArray,
-    iteration,
-    _nodeIdSets,
-    rootArray,
-    rootNameArray,
-    allClasses,
-    allClassNames
-  ) => {
-    //console.log(acArray);
-    if (!iteration) iteration = 0;
-    if (!rootArray) rootArray = [];
-    if (!rootNameArray) rootNameArray = [];
-    if (!allClasses) allClasses = [];
-    if (!allClassNames) allClassNames = [];
-    if (!_nodeIdSets) _nodeIdSets = {};
-
-    if (iteration === acArray.length)
-      return setUpACInformation(
-        _prufClient,
-        {
-          sets: _nodeIdSets,
-          rArr: rootArray,
-          rnArr: rootNameArray,
-          allCArr: allClasses,
-          allCNArr: allClassNames,
-        });
-
-    await _prufClient.get
-      .nodeData(String(acArray[iteration]))
-      .then(e => {
-        if (String(acArray[iteration]) === e.root) {
-          _prufClient.get
-            .nodeName(String(acArray[iteration]))
-            .then((e) => {
-              rootArray.push(acArray[iteration]);
-              rootNameArray.push(
-                e
-                  .toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  )
-              );
-              _nodeIdSets[String(acArray[iteration])] = [];
-              getACsFromDB(
-                _prufClient,
-                acArray,
-                iteration + 1,
-                _nodeIdSets,
-                rootArray,
-                rootNameArray,
-                allClasses,
-                allClassNames
-              );
-            });
-        } else {
-          //console.log(acArray[i])
-          _prufClient.get
-            .nodeName(String(acArray[iteration]))
-            .then((e) => {
-              allClasses.push(String(acArray[iteration]));
-              allClassNames.push(
-                e
-                  .toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  )
-              );
-              getACsFromDB(
-                _prufClient,
-                acArray,
-                iteration + 1,
-                _nodeIdSets,
-                rootArray,
-                rootNameArray,
-                allClasses,
-                allClassNames
-              );
-            });
-        }
-      });
-
-    //return { sets: _nodeIdSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
-  };
-
-  const setUpACInformation = async (_prufClient, obj) => {
-    let allClasses = obj.allCArr,
-      rootArray = obj.rArr,
-      _nodeIdSets = obj.sets,
-      rootNameArray = obj.rnArr,
-      allClassNames = obj.allCNArr;
-
-    //console.log(allClasses, allClassNames, rootArray)
-
-    for (let i = 0; i < allClasses.length; i++) {
-      _prufClient.get
-        .nodeData(String(allClasses[i]))
-        .then(e => {
-          for (let x = 0; x < rootArray.length; x++) {
-            //console.log(resArr[0], rootArray[x])
-            if (String(rootArray[x]) === e.root) {
-              _nodeIdSets[String(rootArray[x])].push({
-                id: allClasses[i],
-                name: allClassNames[i]
-                  .toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  ),
-              });
-            }
-          }
-        });
-    }
-
-    setTimeout(() => {
-      console.log("Class Sets: ", _nodeIdSets);
-      setRoots(rootArray);
-      setRootNames(rootNameArray);
-      setAssetClassSets(_nodeIdSets);
-    }, 200);
-  };
-
-  const isGenericCall = async (e) => {
-    //console.log("Checking call", e)
-    let str;
-
-    if (e.includes("(")) {
-      str = e.substring(0, e.indexOf("("));
-    } else {
-      str = e;
-    }
-
-    if (str.substring(0, 2) === "0x" || str.substring(0, 2) === "OO") {
-      //console.log("Caught genCall:", str);
-      return true;
-    } else if (genericCalls.includes(str)) {
-      //console.log("Caught genCall:", str);
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   const getAssetIds = (_addr, _prufClient, bal, ids, iteration) => {
     if (!bal) return;

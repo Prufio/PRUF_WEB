@@ -234,8 +234,14 @@ export default function NewRecord(props) {
   const ACLogin = (event) => {
     document.body.style.cursor = 'wait'
     console.log(event.target.value);
-    let nodeId = event.target.value
-    try {
+    props.prufClient.get
+        // eslint-disable-next-line react/prop-types
+        .nodeData(event.target.value.id)
+        .then(e => {
+          setNodeExtendedData(e);
+          setStorageProvider(e.storageProvider);
+        })
+/*     try {
       // eslint-disable-next-line react/prop-types
       props.prufClient.get
         // eslint-disable-next-line react/prop-types
@@ -324,7 +330,24 @@ export default function NewRecord(props) {
             },
           },
         });
-    }
+    } */
+    setNodeName(
+      event.target.value.name
+        .toLowerCase()
+        .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+          letter.toUpperCase()
+        )
+    );
+    // console.log(nodeData)
+    setNodeId(event.target.value.id);
+    setClassSelect(event.target.value.id);
+    document.body.style.cursor = 'auto',
+      props.prufClient.get
+        // eslint-disable-next-line react/prop-types
+        .operationCost(event.target.value.id, "1")
+        .then(e => {
+          setNRCost(e.total);
+        });
   };
 
   const IDHolderPrompt = () => {
@@ -767,7 +790,7 @@ export default function NewRecord(props) {
             selected: classes.selectMenuItemSelected,
           }}
           key={"key" + arr[i].name}
-          value={String(arr[i].id)}
+          value={{name: arr[i].name, id: String(arr[i].id)}}
         >
           {arr[i].name}
         </MenuItem>

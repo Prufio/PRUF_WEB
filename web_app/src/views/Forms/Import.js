@@ -84,7 +84,7 @@ export default function Import(props) {
 
   const checkCreds = async (e) => {
     let nodeId = e.target.value;
-    let nodeManagement;
+/*     let nodeManagement;
 
     console.log({nodeId, nodeManagement})
 
@@ -131,7 +131,9 @@ export default function Import(props) {
         else {
           return ACLogin(nodeId)
         }
-    })
+    }) */
+
+    return ACLogin(nodeId)
   }
 
 

@@ -771,7 +771,7 @@ export default function NodeManager(props) {
                                                                         Change
                                                                         Name
                                                                     </MenuItem>
-                                                                    <MenuItem
+                                                                    {/* <MenuItem
                                                                         id={`transfer${key}`}
                                                                         classes={{
                                                                             root:
@@ -783,7 +783,7 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Update
                                                                         Data
-                                                                    </MenuItem>
+                                                                    </MenuItem> */}
                                                                     <MenuItem
                                                                         id={`changecosts${key}`}
                                                                         classes={{
@@ -997,7 +997,7 @@ export default function NodeManager(props) {
                                                                         Change
                                                                         Name
                                                                     </MenuItem>
-                                                                    <MenuItem
+                                                                    {/* <MenuItem
                                                                         classes={{
                                                                             root:
                                                                                 classes.selectMenuItem,
@@ -1016,7 +1016,7 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Update
                                                                         Data
-                                                                    </MenuItem>
+                                                                    </MenuItem> */}
                                                                     <MenuItem
                                                                         classes={{
                                                                             root:
