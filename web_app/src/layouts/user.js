@@ -692,6 +692,8 @@ export default function Dashboard(props) {
 
     //console.log(_prufClient)
 
+    console.log("Getting things set up...")
+
     if (window.isKovan === false) {
       return;
     }
@@ -737,7 +739,7 @@ export default function Dashboard(props) {
 
     _prufClient.get.nodeBalance(_addr).then(e => {
 
-      setAssetClassBalance(e);
+      setNodeBalance(e);
       if (Number(e) > 0) {
         setIsAssetClassHolder(true);
         getNodeIds(_addr, _prufClient, e)
@@ -807,7 +809,7 @@ export default function Dashboard(props) {
     if (!allClasses) allClasses = [];
     if (!allClassNames) allClassNames = [];
     if (!_nodeIdSets) _nodeIdSets = {};
-    console.log(iteration)
+    //console.log(iteration)
     if (iteration === acArray.length)
       return setUpNodeInformation(
         _prufClient,
@@ -953,6 +955,10 @@ export default function Dashboard(props) {
             'N/A',
           ])
           e.nodeId = ids[iteration]
+          e.name = e.name.toLowerCase()
+          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+            letter.toUpperCase()
+          )
           _extDataArr.push(e)
           return buildNodesInWallet(_prufClient, ids, _extDataArr, _nodeData, iteration + 1)
         })
