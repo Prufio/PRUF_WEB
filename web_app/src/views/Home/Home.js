@@ -315,7 +315,7 @@ export default function Home(props) {
                     setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
                 }
             })
-    
+
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
                 // eslint-disable-next-line react/prop-types
@@ -323,7 +323,7 @@ export default function Home(props) {
                 .then(e => {
                     setUpdatedAssets(e)
                 })
-    
+
             // eslint-disable-next-line react/prop-types
             props.prufClient.get
                 // eslint-disable-next-line react/prop-types
@@ -331,7 +331,7 @@ export default function Home(props) {
                 .then(e => {
                     setUpdatedPruf(e)
                 })
-    
+
             window.replaceAssetData.refreshBals = true
             forceUpdate()
         } else {
@@ -466,18 +466,13 @@ export default function Home(props) {
                                         </>
                                     ) : (
                                         <>
-                                            <Button
-                                                className="homeCardText"
-                                                onClick={() => mintID}
-                                            >
-                                                <div className={classes.stats}>
-                                                    <div className="lds-ellipsisCard">
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                    </div>
+                                            <div className={classes.stats}>
+                                                <div className="lds-ellipsisCard">
+                                                    <div></div>
+                                                    <div></div>
+                                                    <div></div>
                                                 </div>
-                                            </Button>
+                                            </div>
                                         </>
                                     )
                                 ) : (

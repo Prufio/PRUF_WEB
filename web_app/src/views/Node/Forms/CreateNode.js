@@ -434,83 +434,108 @@ export default function CreateNode(props) {
 
     return (
         <Card>
-            <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                    <span className="material-icons">dashboard_customize</span>
-                </CardIcon>
-                <Button
-                    color="info"
-                    className="MLBGradient"
-                    onClick={() =>
-                        (window.location.href = '/#/user/node-manager')
-                    }
-                >
-                    Go Back
+            {props.roots === undefined && (
+                <>
+                    <CardHeader icon>
+                        <CardIcon className="headerIconBack">
+                            <span className="material-icons">dashboard_customize</span>
+                        </CardIcon>
+                        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
+                    </CardHeader>
+                    <CardBody>
+                        <form>
+                            <h3>
+                                Getting Node Data
+                    <div className="lds-ellipsisIF">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </h3>
+                        </form>
+                    </CardBody>
+                    <br />
+                </>
+            )}
+            {props.roots !== undefined && (
+                <>
+                    <CardHeader icon>
+                        <CardIcon className="headerIconBack">
+                            <span className="material-icons">dashboard_customize</span>
+                        </CardIcon>
+                        <Button
+                            color="info"
+                            className="MLBGradient"
+                            onClick={() =>
+                                (window.location.href = '/#/user/node-manager')
+                            }
+                        >
+                            Go Back
                 </Button>
-                <h3 className={classes.cardIconTitle}>Configure New Node</h3>
-            </CardHeader>
-            <CardBody>
-                <form>
-                    {/* eslint-disable-next-line react/prop-types */}
-                    <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
-                    <>
-                        {!transactionActive && !transactionActiveID && (
+                        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
+                    </CardHeader>
+                    <CardBody>
+                        <form>
+                            {/* eslint-disable-next-line react/prop-types */}
+                            <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
                             <>
-                                <CustomInput
-                                    success={loginNameState === 'success'}
-                                    error={loginNameState === 'error'}
-                                    labelText="Name *"
-                                    id="name"
-                                    formControlProps={{
-                                        fullWidth: true,
-                                    }}
-                                    inputProps={{
-                                        onChange: (event) => {
-                                            setName(event.target.value.trim())
-                                            if (event.target.value !== '') {
-                                                setloginNameState('success')
-                                            } else {
-                                                setloginNameState('error')
-                                            }
-                                            setloginName(event.target.value)
-                                        },
-                                    }}
-                                />
-                                <FormControl
-                                    fullWidth
-                                    className={classes.selectFormControl}
-                                >
-                                    <InputLabel>
-                                        Select Root Node *
+                                {!transactionActive && !transactionActiveID && (
+                                    <>
+                                        <CustomInput
+                                            success={loginNameState === 'success'}
+                                            error={loginNameState === 'error'}
+                                            labelText="Name *"
+                                            id="name"
+                                            formControlProps={{
+                                                fullWidth: true,
+                                            }}
+                                            inputProps={{
+                                                onChange: (event) => {
+                                                    setName(event.target.value.trim())
+                                                    if (event.target.value !== '') {
+                                                        setloginNameState('success')
+                                                    } else {
+                                                        setloginNameState('error')
+                                                    }
+                                                    setloginName(event.target.value)
+                                                },
+                                            }}
+                                        />
+                                        <FormControl
+                                            fullWidth
+                                            className={classes.selectFormControl}
+                                        >
+                                            <InputLabel>
+                                                Select Root Node *
                                     </InputLabel>
-                                    <Select
-                                        MenuProps={{
-                                            className: classes.selectMenu,
-                                        }}
-                                        classes={{
-                                            select: classes.select,
-                                        }}
-                                        value={root}
-                                        onChange={(e) => {
-                                            rootLogin(e)
-                                        }}
-                                        inputProps={{
-                                            name: 'rootSelect',
-                                            id: 'root-select',
-                                        }}
-                                    >
-                                        {/* eslint-disable-next-line react/prop-types */}
-                                        {props.roots !== undefined &&
-                                            // eslint-disable-next-line react/prop-types
-                                            generateRootList(props.roots)}
-                                    </Select>
-                                </FormControl>
-                                <br />
-                                <div className={classes.formCategory}>
-                                    <small>*</small> Required fields
+                                            <Select
+                                                MenuProps={{
+                                                    className: classes.selectMenu,
+                                                }}
+                                                classes={{
+                                                    select: classes.select,
+                                                }}
+                                                value={root}
+                                                onChange={(e) => {
+                                                    rootLogin(e)
+                                                }}
+                                                inputProps={{
+                                                    name: 'rootSelect',
+                                                    id: 'root-select',
+                                                }}
+                                            >
+                                                {/* eslint-disable-next-line react/prop-types */}
+                                                {props.roots !== undefined &&
+                                                    // eslint-disable-next-line react/prop-types
+                                                    generateRootList(props.roots)}
+                                            </Select>
+                                        </FormControl>
+                                        <br />
+                                        <div className={classes.formCategory}>
+                                            <small>*</small> Required fields
                                 </div>
 
-                                {/* <div className={classes.checkboxAndRadio}>
+                                        {/* <div className={classes.checkboxAndRadio}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -555,31 +580,31 @@ export default function CreateNode(props) {
                     </CardBody>
                   </Card>
                 )} */}
-                            </>
-                        )}
-                        {transactionActive && !transactionActiveID && (
-                            <>
-                                <CustomInput
-                                    labelText={name}
-                                    id="name"
-                                    formControlProps={{
-                                        fullWidth: true,
-                                    }}
-                                    inputProps={{
-                                        disabled: true,
-                                    }}
-                                />
-                                <CustomInput
-                                    labelText={rootName}
-                                    id="root"
-                                    formControlProps={{
-                                        fullWidth: true,
-                                    }}
-                                    inputProps={{
-                                        disabled: true,
-                                    }}
-                                />
-                                {/* <CustomInput
+                                    </>
+                                )}
+                                {transactionActive && !transactionActiveID && (
+                                    <>
+                                        <CustomInput
+                                            labelText={name}
+                                            id="name"
+                                            formControlProps={{
+                                                fullWidth: true,
+                                            }}
+                                            inputProps={{
+                                                disabled: true,
+                                            }}
+                                        />
+                                        <CustomInput
+                                            labelText={rootName}
+                                            id="root"
+                                            formControlProps={{
+                                                fullWidth: true,
+                                            }}
+                                            inputProps={{
+                                                disabled: true,
+                                            }}
+                                        />
+                                        {/* <CustomInput
                   labelText={ipfs}
                   id="ipfs"
                   formControlProps={{
@@ -589,42 +614,44 @@ export default function CreateNode(props) {
                     disabled: true
                   }}
                 /> */}
+                                    </>
+                                )}
                             </>
-                        )}
-                    </>
-                    {!transactionActive && !transactionActiveID && (
-                        <div className="MLBGradientSubmit">
-                            <Button
-                                color="info"
-                                className="MLBGradient"
-                                onClick={() => checkForAC()}
-                            >
-                                Purchase AC Node
+                            {!transactionActive && !transactionActiveID && (
+                                <div className="MLBGradientSubmit">
+                                    <Button
+                                        color="info"
+                                        className="MLBGradient"
+                                        onClick={() => checkForAC()}
+                                    >
+                                        Purchase AC Node
                             </Button>
-                        </div>
-                    )}
-                    {transactionActive && !transactionActiveID && (
-                        <h3>
-                            Purchasing Node
-                            <div className="lds-ellipsisIF">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </h3>
-                    )}
-                    {transactionActiveID && (
-                        <h3>
-                            Minting ID
-                            <div className="lds-ellipsisIF">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </h3>
-                    )}
-                </form>
-            </CardBody>
+                                </div>
+                            )}
+                            {transactionActive && !transactionActiveID && (
+                                <h3>
+                                    Purchasing Node
+                                    <div className="lds-ellipsisIF">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </h3>
+                            )}
+                            {transactionActiveID && (
+                                <h3>
+                                    Minting ID
+                                    <div className="lds-ellipsisIF">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </h3>
+                            )}
+                        </form>
+                    </CardBody>
+                </>
+            )}
         </Card>
     )
 }
