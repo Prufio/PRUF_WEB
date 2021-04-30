@@ -92,7 +92,7 @@ export default function ChangeNodeCosts(props) {
 
     const generateCostForm = () => {
         return Object.values(nodeInfo.costs).map((prop, key) => {
-            //console.log(key, prop)
+            // console.log(key, prop)
             return (
                 <>
                     {!transactionActive ? (
@@ -106,7 +106,7 @@ export default function ChangeNodeCosts(props) {
                             }}
                             inputProps={{
                                 type: 'number',
-                                defaultValue: prop.acthCost,
+                                defaultValue: prop.node,
                                 onChange: (e) => {
                                     handleChangeCost(
                                         e.target.id.substring(
@@ -126,7 +126,7 @@ export default function ChangeNodeCosts(props) {
                                 fullWidth: true,
                             }}
                             inputProps={{
-                                defaultValue: prop.acthCost,
+                                defaultValue: prop.node,
                                 disabled: true,
                             }}
                         />
@@ -139,6 +139,9 @@ export default function ChangeNodeCosts(props) {
     const changeCosts = (obj, _beneficiaryAddress, index, iteration) => {
         //import held Node
         console.log(costPacket)
+        console.log(Object.values(costPacket).length)
+        console.log(nodeInfo)
+        console.log(_beneficiaryAddress)
         if (!formChanged) {
             return swal('Costs not changed')
         }
@@ -159,21 +162,22 @@ export default function ChangeNodeCosts(props) {
             _beneficiaryAddress = beneficiaryAddress
         }
 
+        console.log(nodeInfo.costs[index].beneficiary)
+        console.log(_beneficiaryAddress)
         if (
             Object.values(obj).length < iteration &&
-            nodeInfo.costs[`cost${index}`].beneficiary !== undefined &&
-            nodeInfo.costs[`cost${index}`].beneficiary ===
+            nodeInfo.costs[index].beneficiary ===
             _beneficiaryAddress
         ) {
-            swal('Cost updates complete!').then(() => {
+            console.log("here")
+            return swal('Cost updates complete!').then(() => {
                 window.location.href = nodeInfo.lastRef
             })
         }
 
         if (
             !obj[index] &&
-            nodeInfo.costs[`cost${index}`].beneficiary !== undefined &&
-            nodeInfo.costs[`cost${index}`].beneficiary ===
+            nodeInfo.costs[index].beneficiary ===
             _beneficiaryAddress
         ) {
             return changeCosts(obj, _beneficiaryAddress, index + 1, iteration)
@@ -197,7 +201,7 @@ export default function ChangeNodeCosts(props) {
             return
         }
         setOperationIndex(index)
-        let newCost = obj[index] || nodeInfo.costs[`cost${index}`].acthCost
+        let newCost = obj[index] || nodeInfo.costs[index].acthCost
         props.prufClient.do
             .setOperationCost(
                 nodeInfo.id,
@@ -210,7 +214,7 @@ export default function ChangeNodeCosts(props) {
             .on('error', function (_error) {
                 setFormChanged(false)
                 setBeneficiaryAddress('')
-                setloginOperation(nodeInfo.costs[`cost${iteration}`].acthCost)
+                setloginOperation(nodeInfo.costs[iteration].acthCost)
                 // setOperation(nodeInfo.costs[`cost${iteration}`].acthCost)
                 setTransactionActive(false)
                 setTxStatus(false)
