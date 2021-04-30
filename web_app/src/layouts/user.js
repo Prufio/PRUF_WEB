@@ -949,7 +949,10 @@ export default function Dashboard(props) {
           //console.log(e)
           _nodeData.push([
             //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
-            e.name,
+            e.name.toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+              letter.toUpperCase()
+            ),
             String(ids[iteration]),
             'N/A',
             'N/A',
