@@ -583,7 +583,7 @@ class Sidebar extends React.Component {
                       {!this.state.copyText && bgColor !== "white" && (
                         <Tooltip title="Copy to Clipboard" arrow>
                           <h5>
-                            <a
+                            <button
                               className="addressText"
                               onClick={() => {
                                 copyTextSnippet(addr);
@@ -592,7 +592,7 @@ class Sidebar extends React.Component {
                               {addr.substring(0, 8) +
                                 "..." +
                                 addr.substring(34, 42)}
-                            </a>
+                            </button>
                           </h5>
                         </Tooltip>
                       )}
@@ -601,7 +601,7 @@ class Sidebar extends React.Component {
                         (bgColor !== "white" || bgColor === undefined) && (
                           <Tooltip title="Copied to Clipboard" arrow>
                             <h5>
-                              <a
+                              <button
                                 className="addressText"
                                 onClick={() => {
                                   copyTextSnippet(addr);
@@ -610,7 +610,7 @@ class Sidebar extends React.Component {
                                 {addr.substring(0, 8) +
                                   "..." +
                                   addr.substring(34, 42)}
-                              </a>
+                              </button>
                             </h5>
                           </Tooltip>
                         )}
@@ -618,7 +618,7 @@ class Sidebar extends React.Component {
                       {!this.state.copyText && bgColor === "white" && (
                         <Tooltip title="Copy to Clipboard" arrow>
                           <h5>
-                            <a
+                            <button
                               className="addressTextBlack"
                               onClick={() => {
                                 copyTextSnippet(addr);
@@ -627,7 +627,7 @@ class Sidebar extends React.Component {
                               {addr.substring(0, 8) +
                                 "..." +
                                 addr.substring(34, 42)}
-                            </a>
+                            </button>
                           </h5>
                         </Tooltip>
                       )}
@@ -635,7 +635,7 @@ class Sidebar extends React.Component {
                       {this.state.copyText && bgColor === "white" && (
                         <Tooltip title="Copied to Clipboard" arrow>
                           <h5>
-                            <a
+                            <button
                               className="addressTextBlack"
                               onClick={() => {
                                 copyTextSnippet(addr);
@@ -644,7 +644,7 @@ class Sidebar extends React.Component {
                               {addr.substring(0, 8) +
                                 "..." +
                                 addr.substring(34, 42)}
-                            </a>
+                            </button>
                           </h5>
                         </Tooltip>
                       )}
@@ -669,7 +669,7 @@ class Sidebar extends React.Component {
                       {!this.state.copyText && bgColor !== "white" && (
                         <Tooltip title="Copy to Clipboard" arrow>
                           <h5>
-                            <a
+                            <button
                               className="addressText"
                               onClick={() => {
                                 copyTextSnippet(addr);
@@ -678,7 +678,7 @@ class Sidebar extends React.Component {
                               {addr.substring(0, 8) +
                                 "..." +
                                 addr.substring(34, 42)}
-                            </a>
+                            </button>
                           </h5>
                         </Tooltip>
                       )}
@@ -687,7 +687,7 @@ class Sidebar extends React.Component {
                         (bgColor !== "white" || bgColor === undefined) && (
                           <Tooltip title="Copied to Clipboard" arrow>
                             <h5>
-                              <a
+                              <button
                                 className="addressText"
                                 onClick={() => {
                                   copyTextSnippet(addr);
@@ -696,7 +696,7 @@ class Sidebar extends React.Component {
                                 {addr.substring(0, 8) +
                                   "..." +
                                   addr.substring(34, 42)}
-                              </a>
+                              </button>
                             </h5>
                           </Tooltip>
                         )}
@@ -704,7 +704,7 @@ class Sidebar extends React.Component {
                       {!this.state.copyText && bgColor === "white" && (
                         <Tooltip title="Copy to Clipboard" arrow>
                           <h5>
-                            <a
+                            <button
                               className="addressTextBlack"
                               onClick={() => {
                                 copyTextSnippet(addr);
@@ -713,7 +713,7 @@ class Sidebar extends React.Component {
                               {addr.substring(0, 8) +
                                 "..." +
                                 addr.substring(34, 42)}
-                            </a>
+                            </button>
                           </h5>
                         </Tooltip>
                       )}
@@ -721,7 +721,7 @@ class Sidebar extends React.Component {
                       {this.state.copyText && bgColor === "white" && (
                         <Tooltip title="Copied to Clipboard" arrow>
                           <h5>
-                            <a
+                            <button
                               className="addressTextBlack"
                               onClick={() => {
                                 copyTextSnippet(addr);
@@ -730,7 +730,7 @@ class Sidebar extends React.Component {
                               {addr.substring(0, 8) +
                                 "..." +
                                 addr.substring(34, 42)}
-                            </a>
+                            </button>
                           </h5>
                         </Tooltip>
                       )}
@@ -937,7 +937,7 @@ Sidebar.propTypes = {
     "purple",
     "rose",
   ]),
-  logo: PropTypes.string,
+  logo: PropTypes.object,
   logoText: PropTypes.string,
   image: PropTypes.string,
   routes: PropTypes.arrayOf(PropTypes.object),

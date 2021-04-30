@@ -736,6 +736,8 @@ cursor:pointer;
 }
 
 .addressTextAndroid{
+  border: none !important;
+  background-color: transparent !important;
   font-size: 15px;
   margin-top: 0px !important;
   color: white;
@@ -747,6 +749,8 @@ cursor:pointer;
 }
 
 .addressTextBlackAndroid {
+  border: none !important;
+  background-color: transparent !important;
   font-size: 15px;
   top: -15px !important;
   color: rgb(0, 0, 0);
@@ -758,9 +762,12 @@ cursor:pointer;
 }
 
 .addressText {
+  border: none !important;
+  background-color: transparent !important;
+  border: none !important;
   font-size: 16px;
-  top: 24px !important;
-  left: 80px !important;
+  top: 25px !important;
+  left: 75px !important;
   color: white;
   position: absolute;
 }
@@ -771,9 +778,11 @@ cursor:pointer;
 }
 
 .addressTextBlack {
+  border: none !important;
+  background-color: transparent !important;
   font-size: 16px;
-  top: 24px !important;
-  left: 80px !important;
+  top: 25px !important;
+  left: 75px !important;
   color: rgb(0, 0, 0);
   position: absolute;
 }
