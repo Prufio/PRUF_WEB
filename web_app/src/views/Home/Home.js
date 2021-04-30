@@ -307,33 +307,46 @@ export default function Home(props) {
     const refreshBalances = async () => {
         console.log('Refreshing balances')
 
-        // eslint-disable-next-line react/prop-types
-        await window.web3.eth.getBalance(props.addr, (error, result) => {
-            if (error) {
-                console.log('error')
-            } else {
-                setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
-            }
-        })
-
-        // eslint-disable-next-line react/prop-types
-        props.prufClient.get
-            // eslint-disable-next-line react/prop-types
-            .assetBalance(props.addr)
-            .then(e => {
-                setUpdatedAssets(e)
+        if (props.prufClient && props.prufClient.get) {
+            await window.web3.eth.getBalance(props.addr, (error, result) => {
+                if (error) {
+                    console.log('error')
+                } else {
+                    setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
+                }
             })
+    
+            // eslint-disable-next-line react/prop-types
+            props.prufClient.get
+                // eslint-disable-next-line react/prop-types
+                .assetBalance(props.addr)
+                .then(e => {
+                    setUpdatedAssets(e)
+                })
+    
+            // eslint-disable-next-line react/prop-types
+            props.prufClient.get
+                // eslint-disable-next-line react/prop-types
+                .prufBalance(props.addr)
+                .then(e => {
+                    setUpdatedPruf(e)
+                })
+    
+            window.replaceAssetData.refreshBals = true
+            forceUpdate()
+        } else {
+            await window.web3.eth.getBalance(props.addr, (error, result) => {
+                if (error) {
+                    console.log('error')
+                } else {
+                    setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
+                    window.replaceAssetData.refreshBals = true
+                }
+            })
+        }
 
         // eslint-disable-next-line react/prop-types
-        props.prufClient.get
-            // eslint-disable-next-line react/prop-types
-            .prufBalance(props.addr)
-            .then(e => {
-                setUpdatedPruf(e)
-            })
 
-        window.replaceAssetData.refreshBals = true
-        forceUpdate()
     }
 
     return (
