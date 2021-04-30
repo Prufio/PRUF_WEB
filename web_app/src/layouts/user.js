@@ -79,7 +79,7 @@ export default function Dashboard(props) {
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
-  const [nodeIdBalance, setAssetClassBalance] = React.useState("~");
+  const [nodeIdBalance, setNodeBalance] = React.useState("~");
   const [heldNodeData, setHeldNodeData] = React.useState([['Loading Nodes...', '~', '~', '~']]);
   const [nodeExtData, setNodeExtData] = React.useState();
   const [IDBalance, setIDBalance] = React.useState("0");
@@ -654,7 +654,6 @@ export default function Dashboard(props) {
                 IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
-                nodeList={nodeList}
                 prufClient={prufClient}
                 arweaveClient={arweaveClient}
                 testWeave={testWeave}
@@ -692,6 +691,8 @@ export default function Dashboard(props) {
   const setUpEnvironment = async (_prufClient, _addr) => {
 
     //console.log(_prufClient)
+
+    console.log("Getting things set up...")
 
     if (window.isKovan === false) {
       return;
@@ -738,7 +739,7 @@ export default function Dashboard(props) {
 
     _prufClient.get.nodeBalance(_addr).then(e => {
 
-      setAssetClassBalance(e);
+      setNodeBalance(e);
       if (Number(e) > 0) {
         setIsAssetClassHolder(true);
         getNodeIds(_addr, _prufClient, e)
@@ -808,7 +809,7 @@ export default function Dashboard(props) {
     if (!allClasses) allClasses = [];
     if (!allClassNames) allClassNames = [];
     if (!_nodeIdSets) _nodeIdSets = {};
-    console.log(iteration)
+    //console.log(iteration)
     if (iteration === acArray.length)
       return setUpNodeInformation(
         _prufClient,
@@ -884,8 +885,6 @@ export default function Dashboard(props) {
           }
         }
       });
-
-    //return { sets: _nodeIdSets, rArr: rootArray, rnArr: rootNameArray, allCArr: allClasses, allCNArr: allClassNames }
   };
 
   const setUpNodeInformation = async (_prufClient, obj) => {
@@ -950,12 +949,19 @@ export default function Dashboard(props) {
           //console.log(e)
           _nodeData.push([
             //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
-            e.name,
+            e.name.toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+              letter.toUpperCase()
+            ),
             String(ids[iteration]),
             'N/A',
             'N/A',
           ])
           e.nodeId = ids[iteration]
+          e.name = e.name.toLowerCase()
+          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+            letter.toUpperCase()
+          )
           _extDataArr.push(e)
           return buildNodesInWallet(_prufClient, ids, _extDataArr, _nodeData, iteration + 1)
         })
