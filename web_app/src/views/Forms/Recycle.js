@@ -227,38 +227,24 @@ export default function Recycle(props) {
     }
 
     if (IDXRawInput === false && QRValue === "") {
-      idxHash = window.web3.utils.soliditySha3(
-        String(type).replace(/\s/g, ""),
-        String(manufacturer).replace(/\s/g, ""),
-        String(model).replace(/\s/g, ""),
-        String(serial).replace(/\s/g, "")
+      idxHash = await props.prufClient.utils.generateAssetID(
+        type,
+        manufacturer,
+        model,
+        serial
       );
     }
 
-    if (middle === "") {
-      rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
+    rgtHash = await props.prufClient.utils.generateSecureRgt(
+      idxHash,
+      {
+        first: first,
+        middle: middle,
+        last: last,
+        ID: ID,
+        password: password
+      }
       );
-    }
-
-    if (middle !== "") {
-      rgtHashRaw = window.web3.utils.soliditySha3(
-        String(first).replace(/\s/g, ""),
-        String(middle).replace(/\s/g, ""),
-        String(last).replace(/\s/g, ""),
-        String(ID).replace(/\s/g, ""),
-        String(password).replace(/\s/g, "")
-      );
-    }
-
-    rgtHash = window.web3.utils.soliditySha3(
-      String(idxHash),
-      String(rgtHashRaw)
-    );
-    rgtHash = props.prufClient.utils.tenThousandHashesOf(rgtHash);
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
