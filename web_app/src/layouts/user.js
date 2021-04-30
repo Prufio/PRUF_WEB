@@ -75,7 +75,7 @@ export default function Dashboard(props) {
   const [prufClient, setPrufClient] = React.useState();
   const [roots, setRoots] = React.useState(undefined);
   const [rootNames, setRootNames] = React.useState(undefined);
-  const [nodeIdSets, setAssetClassSets] = React.useState(undefined);
+  const [nodeIdSets, setNodeSets] = React.useState(undefined);
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
@@ -245,7 +245,7 @@ export default function Dashboard(props) {
         }
       });
     }
-    console.log("Cookies:", cookies);
+    //console.log("Cookies:", cookies);
   };
 
   const setCookieTo = (job, val) => {
@@ -280,8 +280,8 @@ export default function Dashboard(props) {
 
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
-      const _prufClient = await new PRUF(web3);
-      console.log(_prufClient);
+      const _prufClient = new PRUF(web3);
+      //console.log(_prufClient);
       setPrufClient(_prufClient);
       window.costs = {};
       window.additionalElementArrays = {
@@ -497,6 +497,7 @@ export default function Dashboard(props) {
       if (window.replaceAssetData.refreshBals) {
         console.log("Resetting token value");
         setupTokenVals(addr, prufClient);
+        buildNodeHeap(addr, prufClient)
         window.replaceAssetData = {};
         forceUpdate();
       } else if (
@@ -690,7 +691,7 @@ export default function Dashboard(props) {
 
   const setUpEnvironment = async (_prufClient, _addr) => {
 
-    console.log(_prufClient)
+    //console.log(_prufClient)
 
     if (window.isKovan === false) {
       return;
@@ -705,6 +706,7 @@ export default function Dashboard(props) {
     if (window.ethereum) {
       if (_addr) {
         setupTokenVals(_addr, _prufClient)
+        buildNodeHeap(_addr, _prufClient)
       }
     }
   };
@@ -760,7 +762,6 @@ export default function Dashboard(props) {
       setCurrentACPrice(e.currentNodePrice);
     });
 
-    buildNodeHeap(_addr, _prufClient)
   };
 
   const buildNodeHeap = async (_addr, _prufClient, iteration, arr, rootsDone, acsDone) => {
@@ -770,8 +771,6 @@ export default function Dashboard(props) {
     if (!iteration) iteration = 1;
     if (!arr) arr = [];
 
-    let noMore = false;
-
     if (rootsDone !== true) {
       _prufClient.get
         .nodeExists(String(iteration))
@@ -780,7 +779,7 @@ export default function Dashboard(props) {
             arr.push(iteration);
             return buildNodeHeap(_addr, _prufClient, iteration + 1, arr, false, false);
           } else {
-            noMore = true;
+            //noMore = true;
             return buildNodeHeap(_addr, _prufClient, 1000001, arr, true, false);
           }
         });
@@ -792,7 +791,7 @@ export default function Dashboard(props) {
             arr.push(iteration);
             return buildNodeHeap(_addr, _prufClient, iteration + 1, arr, true, false);
           } else {
-            noMore = true;
+            //noMore = true;
             console.log("Found all nodes", arr);
             setAcArr(arr);
             return getACsFromDB(_addr, _prufClient, arr);
@@ -821,7 +820,7 @@ export default function Dashboard(props) {
           allCNArr: allClassNames,
         });
 
-    await _prufClient.get
+    _prufClient.get
       .nodeData(String(acArray[iteration]))
       .then(e => {
         if (String(acArray[iteration]) === e.root) {
@@ -834,14 +833,14 @@ export default function Dashboard(props) {
                   )
               );
               _nodeIdSets[String(acArray[iteration])] = [];
-              getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+              return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
         } else {
           //console.log(acArray[i])
           if (e.managementType === "255") {
-            getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
           } else if (e.managementType === "1" || e.managementType === "2") {
             _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x=>{
-              if (window.web3.utils.toChecksumAddress(x) === window.web3.utils.toChecksumAddress(_addr)){
+              if (x === _addr){
                   allClasses.push(String(acArray[iteration]));
                   allClassNames.push(
                     e.name
@@ -850,11 +849,12 @@ export default function Dashboard(props) {
                         letter.toUpperCase()
                       )
                   );
-                  getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+                  return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               } else {
-                getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               }
             })
+            //getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
           } else if (e.managementType === "3") {
             _prufClient.get.userType(_addr, String(acArray[iteration])).then(x=>{
               if (x === "1"){
@@ -866,9 +866,9 @@ export default function Dashboard(props) {
                         letter.toUpperCase()
                       )
                   );
-                  getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+                  return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               } else {
-                getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               }
             })
           } else {
@@ -880,7 +880,7 @@ export default function Dashboard(props) {
                     letter.toUpperCase()
                   )
               );
-              getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+              return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
           }
         }
       });
@@ -918,7 +918,7 @@ export default function Dashboard(props) {
     console.log("Class Sets: ", _nodeIdSets);
     setRoots(rootArray);
     setRootNames(rootNameArray);
-    setAssetClassSets(_nodeIdSets);
+    setNodeSets(_nodeIdSets);
   };
 
   const getNodeIds = async (_addr, _prufClient, bal, ids, iteration) => {
