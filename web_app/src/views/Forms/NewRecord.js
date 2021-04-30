@@ -67,7 +67,7 @@ export default function NewRecord(props) {
 
   // eslint-disable-next-line no-unused-vars
   const [assetName, setAssetName] = React.useState("");
-  const [manufacturer, setManufacturer] = React.useState("");
+  const [make, setMake] = React.useState("");
   const [type, setType] = React.useState("");
   const [model, setModel] = React.useState("");
   const [serial, setSerial] = React.useState("");
@@ -81,7 +81,7 @@ export default function NewRecord(props) {
   const [rawFile, setRawFile] = React.useState();
   const [storageProvider, setStorageProvider] = React.useState("");
 
-  const [loginManufacturer, setloginManufacturer] = React.useState("");
+  const [loginMake, setloginMake] = React.useState("");
   const [loginType, setloginType] = React.useState("");
   const [loginModel, setloginModel] = React.useState("");
   const [loginSerial, setloginSerial] = React.useState("");
@@ -89,7 +89,7 @@ export default function NewRecord(props) {
   // const [loginDescriptionName, setloginDescriptionName] = React.useState("");
   // const [loginDescription, setloginDescription] = React.useState("");
 
-  const [loginManufacturerState, setloginManufacturerState] = React.useState(
+  const [loginMakeState, setloginMakeState] = React.useState(
     ""
   );
   const [loginTypeState, setloginTypeState] = React.useState("");
@@ -456,7 +456,7 @@ export default function NewRecord(props) {
   const clearForms = () => {
     setDisplayImage("");
     setDisplayImageUrl("");
-    setManufacturer("");
+    setMake("");
     setType("");
     setModel("");
     setSerial("");
@@ -466,7 +466,7 @@ export default function NewRecord(props) {
     setID("");
     setPassword("");
 
-    setloginManufacturerState("");
+    setloginMakeState("");
     setloginTypeState("");
     setloginModelState("");
     setloginSerialState("");
@@ -628,7 +628,7 @@ export default function NewRecord(props) {
 
     if (
       loginType === "" ||
-      loginManufacturer === "" ||
+      loginMake === "" ||
       loginModel === "" ||
       loginSerial === "" ||
       loginFirst === "" ||
@@ -639,8 +639,8 @@ export default function NewRecord(props) {
       if (loginType === "") {
         setloginTypeState("error");
       }
-      if (loginManufacturer === "") {
-        setloginManufacturerState("error");
+      if (loginMake === "") {
+        setloginMakeState("error");
       }
       if (loginModel === "") {
         setloginModelState("error");
@@ -662,15 +662,17 @@ export default function NewRecord(props) {
       }
       return;
     }
-
-    let idxHash = await props.prufClient.generateAssetID(
+    console.log(type, make, model, serial)
+    let idxHash = await props.prufClient.utils.generateAssetID(
       {
-      type,
-      manufacturer,
-      model,
-      serial
+      type: type,
+      make: make,
+      model: model,
+      serial: serial
       }
-    );
+    ).then((e) => {
+      console.log(e)
+    })
 
     let ipfsObj;
     setShowHelp(false);
@@ -899,7 +901,6 @@ export default function NewRecord(props) {
       //setResult("");
       setTransactionActive(true);
       console.log("idxHash", idxHash);
-      console.log("New rgtRaw", rgtHashRaw);
       console.log("New rgtHash", rgtHash);
       // eslint-disable-next-line react/prop-types
       console.log("addr: ", props.addr);
@@ -1019,7 +1020,7 @@ export default function NewRecord(props) {
 
       idxHash = idx; /* window.web3.utils.soliditySha3(
         String(type).replace(/\s/g, ''),
-        String(manufacturer).replace(/\s/g, ''),
+        String(make).replace(/\s/g, ''),
         String(model).replace(/\s/g, ''),
         String(serial).replace(/\s/g, ''),
       ) */
@@ -1529,7 +1530,7 @@ export default function NewRecord(props) {
                             <>
                               <TextField
                                 id="outlined-multiline-static"
-                                label="Asset Description:"
+                                // label="Asset Description:"
                                 multiline
                                 disabled
                                 placeholder={description}
@@ -1544,7 +1545,7 @@ export default function NewRecord(props) {
                             <>
                               <TextField
                                 id="outlined-multiline-static"
-                                label="Asset Description:"
+                                // label="Asset Description:"
                                 multiline
                                 disabled
                                 placeholder={description}
@@ -1558,22 +1559,22 @@ export default function NewRecord(props) {
                           {!transactionActive && (
                             <>
                               <CustomInput
-                                success={loginManufacturerState === "success"}
-                                error={loginManufacturerState === "error"}
-                                labelText="Manufacturer *"
-                                id="manufacturer"
+                                success={loginMakeState === "success"}
+                                error={loginMakeState === "error"}
+                                labelText="Make *"
+                                id="make"
                                 formControlProps={{
                                   fullWidth: true,
                                 }}
                                 inputProps={{
                                   onChange: (event) => {
-                                    setManufacturer(event.target.value.trim());
+                                    setMake(event.target.value.trim());
                                     if (event.target.value !== "") {
-                                      setloginManufacturerState("success");
+                                      setloginMakeState("success");
                                     } else {
-                                      setloginManufacturerState("error");
+                                      setloginMakeState("error");
                                     }
-                                    setloginManufacturer(event.target.value);
+                                    setloginMake(event.target.value);
                                   },
                                 }}
                               />
@@ -1657,8 +1658,8 @@ export default function NewRecord(props) {
                                 />
                               )}
                               <CustomInput
-                                labelText={manufacturer}
-                                id="manufacturer"
+                                labelText={make}
+                                id="make"
                                 formControlProps={{
                                   fullWidth: true,
                                 }}
@@ -1713,8 +1714,8 @@ export default function NewRecord(props) {
                                 />
                               )}
                               <CustomInput
-                                labelText={manufacturer}
-                                id="manufacturer"
+                                labelText={make}
+                                id="make"
                                 formControlProps={{
                                   fullWidth: true,
                                 }}

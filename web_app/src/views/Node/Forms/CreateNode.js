@@ -326,7 +326,7 @@ export default function CreateNode(props) {
             .nodeId(name)
             .then(e => {
                 // eslint-disable-next-line react/prop-types
-                let tempArr = props.nodeList
+                let tempArr = props.heldNodeData
                 // eslint-disable-next-line react/prop-types
                 tempArr.push([name, e, 'N/A', 'N/A'])
                 window.replaceAssetData = {

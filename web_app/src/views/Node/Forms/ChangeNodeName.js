@@ -69,9 +69,12 @@ export default function ChangeNodeName(props) {
 
     const changeName = async () => {
         //import held asset
-        let nameExists = await props.prufClient.get.nodeNameAvailable(loginName)
-
-        if (nameExists === false) {
+        console.log(nameAvailable)
+        console.log(loginName)
+        let nameAvailable = await props.prufClient.get.nodeNameAvailable(loginName)
+        console.log(nameAvailable)
+        console.log(loginName)
+        if (nameAvailable) {
             let tempTxHash
             setShowHelp(false)
             setTxStatus(false)
@@ -125,15 +128,18 @@ export default function ChangeNodeName(props) {
                         icon: 'success',
                         button: 'Close',
                     }).then(() => {
-                        window.replaceAssetData.refreshBals = true
                         window.location.href = nodeInfo.lastRef
+                        window.replaceAssetData = {
+                            refreshBals: true,
+                            nodeList: ['Loading Nodes...', '~', '~', '~'],
+                        }
                     })
                 })
         } else if (loginName === nodeInfo.name || loginName === '') {
             console.log('error2')
             setloginNameState('error')
             swal('Node name has not changed.')
-        } else if (nameExists === true) {
+        } else if (nameAvailable === true) {
             swal('Node name is already recorded in the system.')
             return
         }
