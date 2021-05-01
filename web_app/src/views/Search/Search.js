@@ -1752,6 +1752,8 @@ export default function Search(props) {
       .on("receipt", (receipt) => {
         setTransactionActive(false);
         setTxStatus(receipt.status);
+        newAsset.currency = "0"
+        newAsset.price = "0"
         tempTxHash = receipt.transactionHash;
         let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
         let str2 = "' target='_blank'>here</a>";
@@ -1924,7 +1926,7 @@ export default function Search(props) {
         first: first,
         middle: middle,
         last: last,
-        ID: ID,
+        id: ID,
         password: password
       }
     );
@@ -2024,7 +2026,7 @@ export default function Search(props) {
         first: first,
         middle: middle,
         last: last,
-        ID: ID,
+        id: ID,
         password: password
       }
     );

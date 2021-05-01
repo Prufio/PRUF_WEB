@@ -497,7 +497,7 @@ export default function Dashboard(props) {
       if (window.replaceAssetData.refreshBals) {
         console.log("Resetting token value");
         //document.body.style.cursor = 'wait'
-        setupTokenVals(addr, prufClient);
+        setupTokenVals(addr, prufClient, true);
         buildNodeHeap(addr, prufClient)
         window.replaceAssetData = {};
         forceUpdate();
@@ -523,6 +523,7 @@ export default function Dashboard(props) {
         let dBIndex = window.replaceAssetData.dBIndex;
         let tempArr = JSON.parse(JSON.stringify(assetArr));
         let idArr = JSON.parse(JSON.stringify(assetIds));
+        setupTokenVals(addr, prufClient, true);
         // if (!assetArr || assetArr.length < 1) {
         //   tempArr = [];
         // }
@@ -712,7 +713,7 @@ export default function Dashboard(props) {
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const setupTokenVals = async (_addr, _prufClient) => {
+  const setupTokenVals = async (_addr, _prufClient, justCount) => {
 
     if (!_addr) return swal("Unable to reach user's wallet.");
 
@@ -729,7 +730,7 @@ export default function Dashboard(props) {
       setAssetBalance(e);
       if (Number(e) > 0) {
         setIsAssetHolder(true);
-        getAssetIds(_addr, _prufClient, e)
+        if(!justCount) getAssetIds(_addr, _prufClient, e)
       } else {
         setIsAssetHolder(false);
       }
@@ -741,7 +742,7 @@ export default function Dashboard(props) {
       setNodeBalance(e);
       if (Number(e) > 0) {
         setIsAssetClassHolder(true);
-        getNodeIds(_addr, _prufClient, e)
+        if(!justCount) getNodeIds(_addr, _prufClient, e)
       } else {
         setHeldNodeData([['No nodes held by user', '~', '~', '~']])
         setIsAssetClassHolder(false);
