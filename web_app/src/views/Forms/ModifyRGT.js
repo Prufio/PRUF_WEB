@@ -116,16 +116,68 @@ export default function ModifyRGT(props) {
       return;
     }
 
-    let rgtHash = await props.prufClient.utils.generateSecureRgt(
+    props.prufClient.utils.generateSecureRgt(
       assetInfo.id,
       {
         first: first,
         middle: middle,
         last: last,
-        ID: ID,
+        id: ID,
         password: password
       }
-      );
+      ).then(e=>{
+        let rgtHash = e;
+        setTransactionActive(true);
+        // console.log(assetInfo.id, rgtHash)
+        props.prufClient.do
+          .modifyRightsHash(assetInfo.id, rgtHash)
+          // eslint-disable-next-line react/prop-types
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash;
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Owner Change Successful!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            }).then(() => {
+              //refreshBalances()
+              window.backIndex = assetInfo.dBIndex;
+              window.location.href = assetInfo.lastRef;
+            });
+          });
+      });
 
     let tempTxHash;
     setShowHelp(false);
@@ -133,56 +185,7 @@ export default function ModifyRGT(props) {
     setTxHash("");
     setError(undefined);
 
-    setTransactionActive(true);
-    // console.log(assetInfo.id, rgtHash)
-    await props.prufClient.do
-      .modifyRightsHash(assetInfo.id, rgtHash)
-      // eslint-disable-next-line react/prop-types
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransactionActive(false);
-        setTxStatus(false);
-        setTxHash(Object.values(_error)[0].transactionHash);
-        tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setError(Object.values(_error)[0]);
-        if (tempTxHash !== undefined) {
-          swal({
-            title: "Something went wrong!",
-            content: link,
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Something went wrong!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-      })
-      .on("receipt", (receipt) => {
-        setTransactionActive(false);
-        setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setTxHash(receipt.transactionHash);
-        swal({
-          title: "Owner Change Successful!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        }).then(() => {
-          //refreshBalances()
-          window.backIndex = assetInfo.dBIndex;
-          window.location.href = assetInfo.lastRef;
-        });
-      });
+
   };
 
   if (!props.prufClient) {

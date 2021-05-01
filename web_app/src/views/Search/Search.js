@@ -2208,7 +2208,10 @@ export default function Search(props) {
         props.prufClient.get
           .nodeData(obj.nodeId)
           .then(e => {
-            obj.nodeName = e.name;
+            obj.nodeName = e.name.toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+              letter.toUpperCase()
+            );;
             obj.nodeData = e
             setSelectedRootID(e.root);
             return getMutableData(obj);
