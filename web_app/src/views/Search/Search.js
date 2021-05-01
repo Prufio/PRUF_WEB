@@ -2746,6 +2746,29 @@ export default function Search(props) {
           <br />
         </Card>
       )}
+      {props.prufClient !== undefined && props.prufClient !== {} && props.prufClient.get === undefined && (
+        <Card>
+          <CardHeader icon>
+            <CardIcon className="headerIconBack">
+              <DashboardOutlined />
+            </CardIcon>
+            <h4 className={classes.cardIconTitle}>Asset</h4>
+          </CardHeader>
+          <CardBody>
+            <form>
+              <h3>
+                Connecting to the blockchain
+                <div className="lds-ellipsisIF">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </h3>
+            </form>
+          </CardBody>
+          <br />
+        </Card>
+      )}
       {props.prufClient !== undefined && props.prufClient !== {} && props.prufClient.get !== undefined && (
         <>
           {scanQR === false && moreInfo === false && (
