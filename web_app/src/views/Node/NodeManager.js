@@ -879,7 +879,7 @@ export default function NodeManager(props) {
                                 data={props.heldNodeData.map((prop, key) => {
                                     return {
                                         id: key,
-                                        name: prop[0],
+                                        name: prop[0] === 'No nodes held by user' || prop[0] === '' || prop[0] === 'Loading Nodes...' ? prop[0] : <button className="nodeButton2" onClick={() => handleSimple({ name: prop[0], index: key, href: "view" })}>{` ${prop[0]} `}</button>,
                                         actions: (
                                             // we've added some custom button actions
                                             <div className="actions-right">
@@ -1086,7 +1086,7 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Transfer
                                                                     </MenuItem>
-                                                                    {props.nodeExtData[
+                                                                    {/* {props.nodeExtData[
                                                                         key
                                                                     ] &&
                                                                         props.nodeExtData[
@@ -1109,7 +1109,7 @@ export default function NodeManager(props) {
                                                                             >
                                                                                 View
                                                                             </MenuItem>
-                                                                        )}
+                                                                        )} */}
                                                                     {props.nodeExtData[
                                                                         key
                                                                     ] &&
