@@ -532,35 +532,35 @@ export default function Dashboard(props) {
         // }
 
         if (newAsset && dBIndex > -1) {
-          // idArr.push(newAsset.id);
-          // //newAsset.lastRef = "/#/user/dashboard"
-          // newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
-          // console.log("Replacing asset at index: ", dBIndex);
-          // console.log("Old Assets", tempArr);
-          // tempArr.splice(dBIndex, 1, newAsset);
-          // console.log("New Assets", tempArr);
-          // setAssetArr(tempArr);
-          // setAssetIds(idArr);
+          idArr.push(newAsset.id);
+          //newAsset.lastRef = "/#/user/dashboard"
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
+          console.log("Replacing asset at index: ", dBIndex);
+          console.log("Old Assets", tempArr);
+          tempArr.splice(dBIndex, 1, newAsset);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
+          setAssetIds(idArr);
           window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length);
         } else if (dBIndex > -1 && !newAsset) {
-          // console.log("Deleting asset at index: ", dBIndex);
-          // console.log("Old Assets", tempArr);
-          // tempArr.splice(dBIndex, 1);
-          // idArr.splice(dBIndex, 1);
-          // console.log("New Assets", tempArr);
-          // setAssetArr(tempArr);
+          console.log("Deleting asset at index: ", dBIndex);
+          console.log("Old Assets", tempArr);
+          tempArr.splice(dBIndex, 1);
+          idArr.splice(dBIndex, 1);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
           getAssetIds(addr, prufClient, assetIds.length -1);
           window.replaceAssetData = {};
         } else if (newAsset && !dBIndex) {
-          // idArr.push(newAsset.id);
-          // //newAsset.lastRef = "/#/user/dashboard";
-          // newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
-          // console.log("Adding asset: ", newAsset);
-          // console.log("Old Assets", tempArr);
-          // tempArr.push(newAsset);
-          // console.log("New Assets", tempArr);
-          // setAssetArr(tempArr);
+          idArr.push(newAsset.id);
+          //newAsset.lastRef = "/#/user/dashboard";
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
+          console.log("Adding asset: ", newAsset);
+          console.log("Old Assets", tempArr);
+          tempArr.push(newAsset);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
           window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length + 1);
         }

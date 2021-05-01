@@ -1928,9 +1928,7 @@ export default function Dashboard(props) {
                   <Icon
                     className="MLBGradientRefresh"
                     onClick={() => {
-                      window.replaceAssetData.refreshBals = true
-                      window.location.href = "/#/user/home"
-                      window.location.href = "/#/user/dashboard"
+                      window.location.reload()
                     }}
                   >
                     <Refresh />
