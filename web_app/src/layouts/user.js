@@ -1003,7 +1003,7 @@ export default function Dashboard(props) {
     else {
       _prufClient.get.assetRecord(ids[iteration]).then(e => {
         let obj = Object.assign({}, e)
-        console.log(e)
+        //console.log(e)
         obj.identicon = <Jdenticon value={ids[iteration]} />
         obj.identiconLG = <Jdenticon value={ids[iteration]} />
 
@@ -1018,7 +1018,10 @@ export default function Dashboard(props) {
             _prufClient.get
               .nodeData(obj.nodeId)
               .then(e => {
-                obj.nodeName = e.name;
+                obj.nodeName = e.name.toLowerCase()
+                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                  letter.toUpperCase()
+                );
                 obj.nodeData = Object.assign({}, e)
                 _prufClient.get.ownerOfNode(obj.nodeId).then(e => {
                   obj.nodeAdmin = e

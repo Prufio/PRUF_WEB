@@ -77,7 +77,6 @@ export default function TransferNode(props) {
         let tempHash = varToHash
         for (let i = 0; i < 1000; i++) {
             tempHash = window.web3.utils.soliditySha3(tempHash)
-            //console.log(tempHash);
         }
         return tempHash
     }
