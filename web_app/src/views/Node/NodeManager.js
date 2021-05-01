@@ -876,7 +876,7 @@ export default function NodeManager(props) {
                                         accessor: 'actions',
                                     },
                                 ]}
-                                data={nodeData.map((prop, key) => {
+                                data={props.heldNodeData.map((prop, key) => {
                                     return {
                                         id: key,
                                         name: prop[0],
