@@ -305,6 +305,7 @@ export default function Home(props) {
     // }
 
     const refreshBalances = async () => {
+        if(!props.addr) return
         console.log('Refreshing balances')
 
         if (props.prufClient && props.prufClient.get) {
