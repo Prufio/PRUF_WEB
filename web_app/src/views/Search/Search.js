@@ -1705,6 +1705,7 @@ export default function Search(props) {
   };
 
   const purchaseAsset = async () => {
+    if(!props.addr) return swal("No address detected")
     let newAsset = JSON.parse(JSON.stringify(asset));
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
     let tempTxHash;
@@ -2157,6 +2158,7 @@ export default function Search(props) {
 
   const checkIsHolder = async (id) => {
     if (!id) return;
+    if(!props.addr) return setOwnerOf(false);
     props.prufClient.get.ownerOfAsset(id).then(e => {
       window.web3.utils.toChecksumAddress(e) ===
         window.web3.utils.toChecksumAddress(props.addr)

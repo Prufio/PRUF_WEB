@@ -166,6 +166,7 @@ export default function Dashboard(props) {
       console.log(_prufClient);
       setPrufClient(_prufClient);
       setUpEnvironment(_prufClient)
+      setIsIDHolder(false)
   
     window.web3 = web3;
     return setIsMounted(true);
