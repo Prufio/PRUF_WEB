@@ -133,6 +133,14 @@ export default function Search(props) {
 
   const link = document.createElement("div");
 
+  const awaitPrufInit = (id) => {
+    setTimeout(() => {
+      console.log("Checking...", props.prufClient)
+      if (props.prufClient !== undefined && props.prufClient.get !== undefined) { console.log("Searching...", id); checkInputs(id) }
+      else { awaitPrufInit(id) }
+    }, 100)
+  }
+
   React.useEffect(() => {
     if (
       !window.idxQuery &&
@@ -150,10 +158,13 @@ export default function Search(props) {
         window.location.href.substring(
           window.location.href.indexOf("0x"),
           window.location.href.length
-        )
-      );
+        ))
+      /* awaitPrufInit(props.prufClient, window.location.href.substring(
+        window.location.href.indexOf("0x"),
+        window.location.href.length)) */
     } else if (window.idxQuery) {
       console.log(`Got query: ${window.idxQuery}`)
+      //awaitPrufInit(props.prufClient, window.idxQuery)
       setQuery(window.idxQuery);
       window.idxQuery = null;
     }

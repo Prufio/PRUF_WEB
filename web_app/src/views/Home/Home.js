@@ -305,7 +305,7 @@ export default function Home(props) {
     // }
 
     const refreshBalances = async () => {
-        if(!props.addr) return
+        if (!props.addr) return
         console.log('Refreshing balances')
 
         if (props.prufClient && props.prufClient.get) {
@@ -614,7 +614,21 @@ export default function Home(props) {
                         <form>
                             <h3 className="bump">
                                 <br />
-                                Please connect to an Ethereum provider.
+                                Please <a onClick={() => {
+                                    if (window.ethereum) {
+                                        window.ethereum
+                                            .request({
+                                                method: "eth_accounts",
+                                                params: {},
+                                            })
+                                            .then(async (accounts) => {
+                                                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+                                                setIsMounted(true);
+                                                awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
+                                            });
+                                    } else swal("No ethereum provider detected")
+
+                                }}>connect</a> to an Ethereum provider.
                             </h3>
                         </form>
                     </CardBody>
