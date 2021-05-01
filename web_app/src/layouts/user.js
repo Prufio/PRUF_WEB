@@ -384,7 +384,6 @@ export default function Dashboard(props) {
   };
 
   window.onload = () => {
-    console.log(Content-Security-Policy)
     //console.log("page loaded", window.location.href)
     window.balances = {};
     window.replaceAssetData = {};
