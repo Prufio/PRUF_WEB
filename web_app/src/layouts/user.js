@@ -294,16 +294,16 @@ export default function Dashboard(props) {
         console.log("Accounts changed");
         if (e[0] === undefined || e[0] === null) {
           if (e[0] !== addr) {
-            //window.location.reload();
-            if(isMobile) swal("Changing accounts")
+            window.location.reload();
+            /* if(isMobile) swal("Changing accounts")
               setAddr(window.web3.utils.toChecksumAddress(e[0]));
-              awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0]))
+              awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
           }
         } else if (e[0] !== addr) {
-            if(isMobile) swal("Changing accounts")
+            /* if(isMobile) swal("Changing accounts")
             setAddr(window.web3.utils.toChecksumAddress(e[0]));
-            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0]))
-            //window.location.reload();
+            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
+            window.location.reload();
         }
       });
 
@@ -393,16 +393,16 @@ export default function Dashboard(props) {
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
         if (e[0] !== addr) {
-          //window.location.reload();
-          if(isMobile) swal("Changing accounts")
+          window.location.reload();
+          /* if(isMobile) swal("Changing accounts")
             setAddr(window.web3.utils.toChecksumAddress(e[0]));
-            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0]))
+            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
         }
       } else if (e[0] !== addr) {
-          if(isMobile) swal("Changing accounts")
+          /* if(isMobile) swal("Changing accounts")
           setAddr(window.web3.utils.toChecksumAddress(e[0]));
-          awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0]))
-          //window.location.reload();
+          awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
+          window.location.reload();
       }
     });
   };
