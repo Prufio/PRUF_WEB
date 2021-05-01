@@ -184,10 +184,10 @@ export default function Dashboard(props) {
         window.newStat = {}
       }
 
-      if (window.priceInfo) {
-        newObj.currency = window.priceInfo.currency
-        newObj.price = window.priceInfo.price
-        window.priceInfo = {}
+      if (window.costInfo) {
+        newObj.currency = window.costInfo.currency
+        newObj.price = window.costInfo.price
+        window.costInfo = {}
       }
 
       newObj.dBIndex = backIndex
@@ -1928,7 +1928,9 @@ export default function Dashboard(props) {
                   <Icon
                     className="MLBGradientRefresh"
                     onClick={() => {
-                      window.location.reload();
+                      window.replaceAssetData.refreshBals = true
+                      window.location.href = "/#/user/home"
+                      window.location.href = "/#/user/dashboard"
                     }}
                   >
                     <Refresh />
@@ -2199,7 +2201,7 @@ export default function Dashboard(props) {
               )}
               {selectedAssetObj.nodeData.storageProvider === "1" && (
                 <h6 className="storageProviderText">
-                  Built using&nbsp;
+                  Stored on&nbsp;
                   <img src={IPFSPNG} className="IPFS" alt="" />
                 </h6>
               )}

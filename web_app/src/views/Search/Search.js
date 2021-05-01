@@ -2211,7 +2211,7 @@ export default function Search(props) {
             obj.nodeName = e.name.toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
               letter.toUpperCase()
-            );;
+            );
             obj.nodeData = e
             setSelectedRootID(e.root);
             return getMutableData(obj);
@@ -3255,7 +3255,7 @@ export default function Search(props) {
                     )}
                     {asset.storageProvider === "1" && (
                       <h6 className="storageProviderText">
-                        Built using
+                        Stored on&nbsp; 
                         <img src={IPFSPNG} className="IPFS" alt="" />
                       </h6>
                     )}

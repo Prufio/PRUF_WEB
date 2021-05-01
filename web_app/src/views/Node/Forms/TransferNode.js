@@ -41,11 +41,8 @@ export default function TransferNode(props) {
     document.body.style.cursor = 'default'
 
     React.useEffect(() => {
-        // eslint-disable-next-line react/prop-types
         if (props.ps) {
-            // eslint-disable-next-line react/prop-types
             props.ps.element.scrollTop = 0
-            //console.log("Scrolled to ", props.ps.element.scrollTop);
         } else {
             window.scrollTo({ top: 0, behavior: 'smooth' })
             document.documentElement.scrollTop = 0
@@ -94,11 +91,7 @@ export default function TransferNode(props) {
     }
 
     const transferNode = async () => {
-        //transfer held Node
-        // eslint-disable-next-line react/prop-types
-        const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
-        // eslint-disable-next-line react/prop-types
-        //const splicedList = spliceNodeList(props.nodeList)
+        const pageKey = thousandHashesOf(props.addr, props.winKey) 
 
         if (!window.web3.utils.isAddress(address)) {
             return swal({

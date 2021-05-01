@@ -496,6 +496,7 @@ export default function Dashboard(props) {
       }
       if (window.replaceAssetData.refreshBals) {
         console.log("Resetting token value");
+        //document.body.style.cursor = 'wait'
         setupTokenVals(addr, prufClient);
         buildNodeHeap(addr, prufClient)
         window.replaceAssetData = {};
@@ -1425,6 +1426,7 @@ export default function Dashboard(props) {
     }
     if (iteration >= assetHeap.length) {
       setReserveAD(assetHeap);
+      //document.body.style.cursor = 'auto'
       console.log("Finalized assets: ", finalizedAssets);
       return setAssetArr(finalizedAssets);
     }
