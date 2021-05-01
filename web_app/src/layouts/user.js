@@ -163,11 +163,9 @@ export default function Dashboard(props) {
     );
     const _prufClient = new PRUF(web3);
 
-    await _prufClient.then(e=>{
       console.log(_prufClient);
       setPrufClient(_prufClient);
       setUpEnvironment(_prufClient)
-    })
   
     window.web3 = web3;
     return setIsMounted(true);

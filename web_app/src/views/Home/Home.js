@@ -553,7 +553,6 @@ export default function Home(props) {
                                                 Number(updatedPruf) * 100
                                             ) / 100
                                         )}{' '}
-                                        <small>PRUF</small>
                                     </>
                                 </h3>
                             ) : (
