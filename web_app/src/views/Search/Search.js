@@ -142,6 +142,10 @@ export default function Search(props) {
         window.location.href.length
       ).length === 66
     ) {
+      console.log(`Got query: ${window.location.href.substring(
+        window.location.href.indexOf("0x"),
+        window.location.href.length
+      )}`)
       setQuery(
         window.location.href.substring(
           window.location.href.indexOf("0x"),
@@ -149,6 +153,7 @@ export default function Search(props) {
         )
       );
     } else if (window.idxQuery) {
+      console.log(`Got query: ${window.idxQuery}`)
       setQuery(window.idxQuery);
       window.idxQuery = null;
     }
@@ -166,7 +171,7 @@ export default function Search(props) {
   }, []);
 
   React.useEffect(() => {
-    if (props.prufClient && query) {
+    if (props.prufClient && props.prufClient.get && query) {
       checkInputs(query);
       setQuery(null);
     }
