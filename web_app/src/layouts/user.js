@@ -163,11 +163,12 @@ export default function Dashboard(props) {
     );
     const _prufClient = new PRUF(web3);
 
-      console.log(_prufClient);
-      setPrufClient(_prufClient);
-      setUpEnvironment(_prufClient)
-      setIsIDHolder(false)
-  
+    console.log(_prufClient);
+    setPrufClient(_prufClient);
+    setUpEnvironment(_prufClient)
+    awaitPrufInitNoAddress(_prufClient)
+    setIsIDHolder(false)
+
     window.web3 = web3;
     return setIsMounted(true);
   };
@@ -264,8 +265,16 @@ export default function Dashboard(props) {
   const awaitPrufInit = async (_prufClient, _addr) => {
     //console.log("Waiting for init...", _prufClient.get)
     setTimeout(() => {
-      if (_prufClient.get) { console.log(_prufClient.get); setUpEnvironment(_prufClient, _addr) }
+      if (_prufClient.get) { console.log(_prufClient.get); setUpEnvironment(_prufClient, _addr); if(window.idxQuery){window.location.href = "/#/user/search"; forceUpdate()}}
       else { awaitPrufInit(_prufClient, _addr) }
+    }, 100)
+  }
+
+  const awaitPrufInitNoAddress = async (_prufClient) => {
+    //console.log("Waiting for init...", _prufClient.get)
+    setTimeout(() => {
+      if (_prufClient.get) { console.log(_prufClient.get); setPrufClient(_prufClient); if(window.idxQuery){window.location.href = "/#/user/search"; forceUpdate()}}
+      else { awaitPrufInitNoAddress(_prufClient) }
     }, 100)
   }
 
@@ -550,7 +559,7 @@ export default function Dashboard(props) {
           idArr.splice(dBIndex, 1);
           console.log("New Assets", tempArr);
           setAssetArr(tempArr);
-          getAssetIds(addr, prufClient, assetIds.length -1);
+          getAssetIds(addr, prufClient, assetIds.length - 1);
           window.replaceAssetData = {};
         } else if (newAsset && !dBIndex) {
           idArr.push(newAsset.id);
@@ -729,7 +738,7 @@ export default function Dashboard(props) {
       setAssetBalance(e);
       if (Number(e) > 0) {
         setIsAssetHolder(true);
-        if(!justCount) getAssetIds(_addr, _prufClient, e)
+        if (!justCount) getAssetIds(_addr, _prufClient, e)
       } else {
         setIsAssetHolder(false);
       }
@@ -741,7 +750,7 @@ export default function Dashboard(props) {
       setNodeBalance(e);
       if (Number(e) > 0) {
         setIsAssetClassHolder(true);
-        if(!justCount) getNodeIds(_addr, _prufClient, e)
+        if (!justCount) getNodeIds(_addr, _prufClient, e)
       } else {
         setHeldNodeData([['No nodes held by user', '~', '~', '~']])
         setIsAssetClassHolder(false);
@@ -824,72 +833,72 @@ export default function Dashboard(props) {
       .nodeData(String(acArray[iteration]))
       .then(e => {
         if (String(acArray[iteration]) === e.root) {
-              rootArray.push(acArray[iteration]);
-              rootNameArray.push(
-                e.name
-                  .toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  )
-              );
-              _nodeIdSets[String(acArray[iteration])] = [];
-              return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+          rootArray.push(acArray[iteration]);
+          rootNameArray.push(
+            e.name
+              .toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              )
+          );
+          _nodeIdSets[String(acArray[iteration])] = [];
+          return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
         } else {
           //console.log(acArray[i])
           if (e.managementType === "255") {
             return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
           } else if (e.managementType === "1" || e.managementType === "2") {
-            _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x=>{
-              if (x === _addr){
-                  allClasses.push(String(acArray[iteration]));
-                  allClassNames.push(
-                    e.name
-                      .toLowerCase()
-                      .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                        letter.toUpperCase()
-                      )
-                  );
-                  return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+            _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x => {
+              if (x === _addr) {
+                allClasses.push(String(acArray[iteration]));
+                allClassNames.push(
+                  e.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    )
+                );
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               } else {
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               }
             })
             //getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
           } else if (e.managementType === "3") {
-            _prufClient.get.userType(_addr, String(acArray[iteration])).then(x=>{
-              if (x === "1"){
-                  allClasses.push(String(acArray[iteration]));
-                  allClassNames.push(
-                    e.name
-                      .toLowerCase()
-                      .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                        letter.toUpperCase()
-                      )
-                  );
-                  return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+            _prufClient.get.userType(_addr, String(acArray[iteration])).then(x => {
+              if (x === "1") {
+                allClasses.push(String(acArray[iteration]));
+                allClassNames.push(
+                  e.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    )
+                );
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               } else {
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               }
             })
           } else {
-              allClasses.push(String(acArray[iteration]));
-              allClassNames.push(
-                e.name
-                  .toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  )
-              );
-              return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
+            allClasses.push(String(acArray[iteration]));
+            allClassNames.push(
+              e.name
+                .toLowerCase()
+                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                  letter.toUpperCase()
+                )
+            );
+            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
           }
         }
       });
   };
 
   const setUpNodeInformation = async (_prufClient, obj) => {
-    if(!obj) return
+    if (!obj) return
     console.log(obj)
-    let 
+    let
       allClasses = obj.allCArr,
       rootArray = obj.rArr,
       _nodeIdSets = obj.sets,
@@ -902,7 +911,7 @@ export default function Dashboard(props) {
       _prufClient.get
         .nodeData(String(allClasses[i]))
         .then(e => {
-          _nodeIdSets[String(rootArray[Number(e.root-1)])].push({
+          _nodeIdSets[String(rootArray[Number(e.root - 1)])].push({
             id: allClasses[i],
             name: allClassNames[i]
               .toLowerCase()
@@ -923,7 +932,7 @@ export default function Dashboard(props) {
     // eslint-disable-next-line react/prop-types
     if (!iteration) iteration = 0
     if (!ids) ids = []
-    if (iteration >= bal) return buildNodesInWallet(_prufClient, ids) 
+    if (iteration >= bal) return buildNodesInWallet(_prufClient, ids)
     _prufClient.get
       // eslint-disable-next-line react/prop-types
       .heldNodeAtIndex(_addr, String(iteration))
@@ -949,18 +958,18 @@ export default function Dashboard(props) {
           _nodeData.push([
             //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
             e.name.toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-              letter.toUpperCase()
-            ),
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              ),
             String(ids[iteration]),
             'N/A',
             'N/A',
           ])
           e.nodeId = ids[iteration]
           e.name = e.name.toLowerCase()
-          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-            letter.toUpperCase()
-          )
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+              letter.toUpperCase()
+            )
           _extDataArr.push(e)
           return buildNodesInWallet(_prufClient, ids, _extDataArr, _nodeData, iteration + 1)
         })
@@ -999,7 +1008,7 @@ export default function Dashboard(props) {
       console.log("ids: ", ids);
       iteration = 0;
     }
-    
+
     if (iteration >= ids.length) return getMutableData(data, _prufClient)
     else {
       _prufClient.get.assetRecord(ids[iteration]).then(e => {
@@ -1020,9 +1029,9 @@ export default function Dashboard(props) {
               .nodeData(obj.nodeId)
               .then(e => {
                 obj.nodeName = e.name.toLowerCase()
-                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                  letter.toUpperCase()
-                );
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  );
                 obj.nodeData = Object.assign({}, e)
                 _prufClient.get.ownerOfNode(obj.nodeId).then(e => {
                   obj.nodeAdmin = e

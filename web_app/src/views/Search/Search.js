@@ -154,6 +154,10 @@ export default function Search(props) {
         window.location.href.indexOf("0x"),
         window.location.href.length
       )}`)
+      window.idxQuery = window.location.href.substring(
+        window.location.href.indexOf("0x"),
+        window.location.href.length
+      )
       setQuery(
         window.location.href.substring(
           window.location.href.indexOf("0x"),
@@ -166,7 +170,7 @@ export default function Search(props) {
       console.log(`Got query: ${window.idxQuery}`)
       //awaitPrufInit(props.prufClient, window.idxQuery)
       setQuery(window.idxQuery);
-      window.idxQuery = null;
+      //window.idxQuery = null;
     }
     if (props.ps) {
       props.ps.element.scrollTop = 0;
@@ -183,10 +187,11 @@ export default function Search(props) {
 
   React.useEffect(() => {
     if (props.prufClient && props.prufClient.get && query) {
+      window.location.href = `/#/user/search/${query}`
       checkInputs(query);
       setQuery(null);
     }
-  }, [props.prufClient, query]);
+  }, [props.prufClient, query, window.location.href]);
 
   const ACLogin = (event) => {
     if (!props.IDHolder) {
@@ -2114,6 +2119,7 @@ export default function Search(props) {
   };
 
   const checkInputs = (fromQR) => {
+    window.idxQuery = null;
     let id;
 
     if (fromQR) {
