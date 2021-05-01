@@ -3382,388 +3382,468 @@ export default function Search(props) {
                     )}
                     {isRecycling && (
                       <>
-                        <>
-                          {nodeId === "" && transactionActive && (
-                            <Card>
-                              <CardHeader icon>
-                                <CardIcon className="headerIconBack">
-                                  <Category />
-                                </CardIcon>
-                                <h4 className={classes.cardIconTitle}>
-                                  Select Node
-                                  </h4>
-                              </CardHeader>
-                              <CardBody>
-                                <form>
-                                  <h3>
-                                    Creating ID
-                                      <div className="lds-ellipsisIF">
-                                      <div></div>
-                                      <div></div>
-                                      <div></div>
-                                    </div>
-                                  </h3>
-                                </form>
-                              </CardBody>
-                              <br />
-                            </Card>
-                          )}
-                          {nodeId === "" && !transactionActive && props.IDHolder === false && (
-                            <Card>
-                              <CardHeader icon>
-                                <CardIcon className="headerIconBack">
-                                  <Category />
-                                </CardIcon>
-                                <h4 className={classes.cardIconTitle}>
-                                  Select Node
-                                  </h4>
-                              </CardHeader>
-                              <CardBody>
-                                <form>
-                                  <FormControl
-                                    fullWidth
-                                    className={classes.selectFormControl}
-                                  >
-                                    {selectedRootID === "" ? (
-                                      <>
-                                        <InputLabel>
-                                          Select Node
-                                          </InputLabel>
-                                        <Select
-                                          disabled
-                                          MenuProps={{
-                                            className: classes.selectMenu,
-                                          }}
-                                          classes={{
-                                            select: classes.select,
-                                          }}
-                                          value={classSelect}
-                                          onChange={() => { }}
-                                          inputProps={{
-                                            name: "classSelect",
-                                            id: "class-select",
-                                          }}
-                                        ></Select>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <InputLabel>
-                                          Select Node
-                                          </InputLabel>
-                                        <Select
-                                          MenuProps={{
-                                            className: classes.selectMenu,
-                                          }}
-                                          classes={{
-                                            select: classes.select,
-                                          }}
-                                          value={classSelect}
-                                          onChange={(e) => {
-                                            ACLogin(e);
-                                          }}
-                                          inputProps={{
-                                            name: "classSelect",
-                                            id: "class-select",
-                                          }}
-                                        >
-                                          {generateSubCatList(
-                                            props.nodeIdSets[
-                                            selectedRootID
-                                            ]
-                                          )}
-                                        </Select>
-                                      </>
-                                    )}
-                                  </FormControl>
-                                </form>
-                              </CardBody>
-                              <br />
-                            </Card>
-                          )}
-                          {nodeId === "" && !transactionActive && props.IDHolder === true && (
-                            <Card>
-                              <CardHeader icon>
-                                <CardIcon className="headerIconBack">
-                                  <Category />
-                                </CardIcon>
-                                <h4 className={classes.cardIconTitle}>
-                                  Select Node
-                                  </h4>
-                              </CardHeader>
-                              <CardBody>
-                                <form>
-                                  <FormControl
-                                    fullWidth
-                                    className={classes.selectFormControl}
-                                  >
-                                    {selectedRootID === "" ? (
-                                      <>
-                                        <InputLabel>
-                                          Select Node
-                                          </InputLabel>
-                                        <Select
-                                          disabled
-                                          MenuProps={{
-                                            className: classes.selectMenu,
-                                          }}
-                                          classes={{
-                                            select: classes.select,
-                                          }}
-                                          value={classSelect}
-                                          onChange={() => { }}
-                                          inputProps={{
-                                            name: "classSelect",
-                                            id: "class-select",
-                                          }}
-                                        ></Select>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <InputLabel>
-                                          Select Node
-                                          </InputLabel>
-                                        <Select
-                                          MenuProps={{
-                                            className: classes.selectMenu,
-                                          }}
-                                          classes={{
-                                            select: classes.select,
-                                          }}
-                                          value={classSelect}
-                                          onChange={(e) => {
-                                            ACLogin(e);
-                                          }}
-                                          inputProps={{
-                                            name: "classSelect",
-                                            id: "class-select",
-                                          }}
-                                        >
-                                          {generateSubCatList(
-                                            props.nodeIdSets[
-                                            selectedRootID
-                                            ]
-                                          )}
-                                        </Select>
-                                      </>
-                                    )}
-                                  </FormControl>
-                                </form>
-                              </CardBody>
-                              <br />
-                            </Card>
-                          )}
-                        </>
-                        {props.IDHolder === true && nodeId !== "" &&(
+                        {props.prufClient === undefined && (
                           <Card>
                             <CardHeader icon>
                               <CardIcon className="headerIconBack">
-                                <AccountBox />
+                                <Category />
                               </CardIcon>
-                              <h4 className={classes.cardIconTitle}>
-                                New Owner Info
-                              </h4>
+                              <h4 className={classes.cardIconTitle}>Node Selection</h4>
                             </CardHeader>
                             <CardBody>
                               <form>
-                                <h5>Asset Selected: {asset.name}</h5>
-                                <>
-                                  {!transaction && (
-                                    <>
-                                      <CustomInput
-                                        success={loginFirstState === "success"}
-                                        error={loginFirstState === "error"}
-                                        labelText="First Name *"
-                                        id="firstName"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          onChange: (event) => {
-                                            setFirst(event.target.value.trim());
-                                            if (event.target.value !== "") {
-                                              setloginFirstState("success");
-                                            } else {
-                                              setloginFirstState("error");
-                                            }
-                                            setloginFirst(event.target.value);
-                                          },
-                                        }}
-                                      />
-                                      <CustomInput
-                                        labelText="Middle Name"
-                                        id="middleName"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          onChange: (event) => {
-                                            setMiddle(
-                                              event.target.value.trim()
-                                            );
-                                          },
-                                        }}
-                                      />
-                                      <CustomInput
-                                        success={loginLastState === "success"}
-                                        error={loginLastState === "error"}
-                                        labelText="Last Name *"
-                                        id="lastName"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          onChange: (event) => {
-                                            setLast(event.target.value.trim());
-                                            if (event.target.value !== "") {
-                                              setloginLastState("success");
-                                            } else {
-                                              setloginLastState("error");
-                                            }
-                                            setloginLast(event.target.value);
-                                          },
-                                        }}
-                                      />
-                                      <CustomInput
-                                        success={loginIDState === "success"}
-                                        error={loginIDState === "error"}
-                                        labelText="ID Number *"
-                                        id="idNumber"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          onChange: (event) => {
-                                            setID(event.target.value.trim());
-                                            if (event.target.value !== "") {
-                                              setloginIDState("success");
-                                            } else {
-                                              setloginIDState("error");
-                                            }
-                                            setloginID(event.target.value);
-                                          },
-                                        }}
-                                      />
-                                      <CustomInput
-                                        success={
-                                          loginPasswordState === "success"
-                                        }
-                                        error={loginPasswordState === "error"}
-                                        labelText="Password *"
-                                        id="ownerpassword"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          type: "password",
-                                          onChange: (event) => {
-                                            setPassword(
-                                              event.target.value.trim()
-                                            );
-                                            if (event.target.value !== "") {
-                                              setloginPasswordState("success");
-                                            } else {
-                                              setloginPasswordState("error");
-                                            }
-                                            setloginPassword(
-                                              event.target.value
-                                            );
-                                          },
-                                        }}
-                                      />
-                                      <div className={classes.formCategory}>
-                                        <small>*</small> Required fields
-                                      </div>
-                                    </>
-                                  )}
-                                  {transaction && (
-                                    <>
-                                      <CustomInput
-                                        labelText={first}
-                                        id="first"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          disabled: true,
-                                        }}
-                                      />
-                                      <CustomInput
-                                        labelText={middle}
-                                        id="middle"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          disabled: true,
-                                        }}
-                                      />
-                                      <CustomInput
-                                        labelText={last}
-                                        id="last"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          disabled: true,
-                                        }}
-                                      />
-                                      <CustomInput
-                                        labelText={ID}
-                                        id="ID"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          disabled: true,
-                                        }}
-                                      />
-                                      <CustomInput
-                                        labelText={password}
-                                        id="ownerpassword"
-                                        formControlProps={{
-                                          fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                          type: "password",
-                                          disabled: true,
-                                        }}
-                                      />
-                                    </>
-                                  )}
-                                </>
-                                {!transaction && (
-                                  <>
-                                    {recycleCost > 0 ? (
-                                      <h4>
-                                        Cost to recycle asset: ü&nbsp;{recycleCost}
-
-                                      </h4>
-                                    ) : (
-                                      <h4>Cost to recycle asset: None</h4>
-                                    )}
-                                    <Button
-                                      color="info"
-                                      className="MLBGradient"
-                                      onClick={(e) => recycleAsset()}
-                                    >
-                                      Recycle Asset
-                                    </Button>
-                                  </>
-                                )}
-                                {transaction && (
+                                <h3>
+                                  Connecting to the blockchain
+                                <div className="lds-ellipsisIF">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                  </div>
+                                </h3>
+                              </form>
+                            </CardBody>
+                            <br />
+                          </Card>
+                        )}
+                        {/* eslint-disable-next-line react/prop-types */}
+                        {props.IDHolder === undefined && props.prufClient !== undefined && (
+                          <Card>
+                            <CardHeader icon>
+                              <CardIcon className="headerIconBack">
+                                <Category />
+                              </CardIcon>
+                              <h4 className={classes.cardIconTitle}>Node Selection</h4>
+                            </CardHeader>
+                            <CardBody>
+                              <form>
+                                <h3>
+                                  Getting Token Balances
+                                <div className="lds-ellipsisIF">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                  </div>
+                                </h3>
+                              </form>
+                            </CardBody>
+                            <br />
+                          </Card>
+                        )}
+                        {/* eslint-disable-next-line react/prop-types */}
+                        {props.IDHolder !== undefined &&
+                          props.prufClient !== undefined &&
+                          // eslint-disable-next-line react/prop-types
+                          props.nodeIdSets === undefined && (
+                            <Card>
+                              <CardHeader icon>
+                                <CardIcon className="headerIconBack">
+                                  <Category />
+                                </CardIcon>
+                                <h4 className={classes.cardIconTitle}>Node Selection</h4>
+                              </CardHeader>
+                              <CardBody>
+                                <form>
                                   <h3>
-                                    Recycling Asset
-                                    <div className="lds-ellipsisIF">
+                                    Getting Node Data
+                                  <div className="lds-ellipsisIF">
                                       <div></div>
                                       <div></div>
                                       <div></div>
                                     </div>
                                   </h3>
+                                </form>
+                              </CardBody>
+                              <br />
+                            </Card>
+                          )}
+                        {props.IDHolder !== undefined &&
+                          props.prufClient !== undefined &&
+                          props.nodeIdSets !== undefined && (
+                            <>
+                              <>
+                                {nodeId === "" && transactionActive && (
+                                  <Card>
+                                    <CardHeader icon>
+                                      <CardIcon className="headerIconBack">
+                                        <Category />
+                                      </CardIcon>
+                                      <h4 className={classes.cardIconTitle}>
+                                        Select Node
+                                  </h4>
+                                    </CardHeader>
+                                    <CardBody>
+                                      <form>
+                                        <h3>
+                                          Creating ID
+                                      <div className="lds-ellipsisIF">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                          </div>
+                                        </h3>
+                                      </form>
+                                    </CardBody>
+                                    <br />
+                                  </Card>
                                 )}
-                              </form>
-                            </CardBody>
-                          </Card>
-                        )}
+                                {nodeId === "" && !transactionActive && props.IDHolder === false && (
+                                  <Card>
+                                    <CardHeader icon>
+                                      <CardIcon className="headerIconBack">
+                                        <Category />
+                                      </CardIcon>
+                                      <h4 className={classes.cardIconTitle}>
+                                        Select Node
+                                  </h4>
+                                    </CardHeader>
+                                    <CardBody>
+                                      <form>
+                                        <FormControl
+                                          fullWidth
+                                          className={classes.selectFormControl}
+                                        >
+                                          {selectedRootID === "" ? (
+                                            <>
+                                              <InputLabel>
+                                                Select Node
+                                          </InputLabel>
+                                              <Select
+                                                disabled
+                                                MenuProps={{
+                                                  className: classes.selectMenu,
+                                                }}
+                                                classes={{
+                                                  select: classes.select,
+                                                }}
+                                                value={classSelect}
+                                                onChange={() => { }}
+                                                inputProps={{
+                                                  name: "classSelect",
+                                                  id: "class-select",
+                                                }}
+                                              ></Select>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <InputLabel>
+                                                Select Node
+                                          </InputLabel>
+                                              <Select
+                                                MenuProps={{
+                                                  className: classes.selectMenu,
+                                                }}
+                                                classes={{
+                                                  select: classes.select,
+                                                }}
+                                                value={classSelect}
+                                                onChange={(e) => {
+                                                  ACLogin(e);
+                                                }}
+                                                inputProps={{
+                                                  name: "classSelect",
+                                                  id: "class-select",
+                                                }}
+                                              >
+                                                {generateSubCatList(
+                                                  props.nodeIdSets[
+                                                  selectedRootID
+                                                  ]
+                                                )}
+                                              </Select>
+                                            </>
+                                          )}
+                                        </FormControl>
+                                      </form>
+                                    </CardBody>
+                                    <br />
+                                  </Card>
+                                )}
+                                {nodeId === "" && !transactionActive && props.IDHolder === true && (
+                                  <Card>
+                                    <CardHeader icon>
+                                      <CardIcon className="headerIconBack">
+                                        <Category />
+                                      </CardIcon>
+                                      <h4 className={classes.cardIconTitle}>
+                                        Select Node
+                                  </h4>
+                                    </CardHeader>
+                                    <CardBody>
+                                      <form>
+                                        <FormControl
+                                          fullWidth
+                                          className={classes.selectFormControl}
+                                        >
+                                          {selectedRootID === "" ? (
+                                            <>
+                                              <InputLabel>
+                                                Select Node
+                                          </InputLabel>
+                                              <Select
+                                                disabled
+                                                MenuProps={{
+                                                  className: classes.selectMenu,
+                                                }}
+                                                classes={{
+                                                  select: classes.select,
+                                                }}
+                                                value={classSelect}
+                                                onChange={() => { }}
+                                                inputProps={{
+                                                  name: "classSelect",
+                                                  id: "class-select",
+                                                }}
+                                              ></Select>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <InputLabel>
+                                                Select Node
+                                          </InputLabel>
+                                              <Select
+                                                MenuProps={{
+                                                  className: classes.selectMenu,
+                                                }}
+                                                classes={{
+                                                  select: classes.select,
+                                                }}
+                                                value={classSelect}
+                                                onChange={(e) => {
+                                                  ACLogin(e);
+                                                }}
+                                                inputProps={{
+                                                  name: "classSelect",
+                                                  id: "class-select",
+                                                }}
+                                              >
+                                                {generateSubCatList(
+                                                  props.nodeIdSets[
+                                                  selectedRootID
+                                                  ]
+                                                )}
+                                              </Select>
+                                            </>
+                                          )}
+                                        </FormControl>
+                                      </form>
+                                    </CardBody>
+                                    <br />
+                                  </Card>
+                                )}
+                              </>
+                              {props.IDHolder === true && nodeId !== "" && (
+                                <Card>
+                                  <CardHeader icon>
+                                    <CardIcon className="headerIconBack">
+                                      <AccountBox />
+                                    </CardIcon>
+                                    <h4 className={classes.cardIconTitle}>
+                                      New Owner Info
+                              </h4>
+                                  </CardHeader>
+                                  <CardBody>
+                                    <form>
+                                      <h5>Asset Selected: {asset.name}</h5>
+                                      <>
+                                        {!transaction && (
+                                          <>
+                                            <CustomInput
+                                              success={loginFirstState === "success"}
+                                              error={loginFirstState === "error"}
+                                              labelText="First Name *"
+                                              id="firstName"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                onChange: (event) => {
+                                                  setFirst(event.target.value.trim());
+                                                  if (event.target.value !== "") {
+                                                    setloginFirstState("success");
+                                                  } else {
+                                                    setloginFirstState("error");
+                                                  }
+                                                  setloginFirst(event.target.value);
+                                                },
+                                              }}
+                                            />
+                                            <CustomInput
+                                              labelText="Middle Name"
+                                              id="middleName"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                onChange: (event) => {
+                                                  setMiddle(
+                                                    event.target.value.trim()
+                                                  );
+                                                },
+                                              }}
+                                            />
+                                            <CustomInput
+                                              success={loginLastState === "success"}
+                                              error={loginLastState === "error"}
+                                              labelText="Last Name *"
+                                              id="lastName"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                onChange: (event) => {
+                                                  setLast(event.target.value.trim());
+                                                  if (event.target.value !== "") {
+                                                    setloginLastState("success");
+                                                  } else {
+                                                    setloginLastState("error");
+                                                  }
+                                                  setloginLast(event.target.value);
+                                                },
+                                              }}
+                                            />
+                                            <CustomInput
+                                              success={loginIDState === "success"}
+                                              error={loginIDState === "error"}
+                                              labelText="ID Number *"
+                                              id="idNumber"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                onChange: (event) => {
+                                                  setID(event.target.value.trim());
+                                                  if (event.target.value !== "") {
+                                                    setloginIDState("success");
+                                                  } else {
+                                                    setloginIDState("error");
+                                                  }
+                                                  setloginID(event.target.value);
+                                                },
+                                              }}
+                                            />
+                                            <CustomInput
+                                              success={
+                                                loginPasswordState === "success"
+                                              }
+                                              error={loginPasswordState === "error"}
+                                              labelText="Password *"
+                                              id="ownerpassword"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                type: "password",
+                                                onChange: (event) => {
+                                                  setPassword(
+                                                    event.target.value.trim()
+                                                  );
+                                                  if (event.target.value !== "") {
+                                                    setloginPasswordState("success");
+                                                  } else {
+                                                    setloginPasswordState("error");
+                                                  }
+                                                  setloginPassword(
+                                                    event.target.value
+                                                  );
+                                                },
+                                              }}
+                                            />
+                                            <div className={classes.formCategory}>
+                                              <small>*</small> Required fields
+                                      </div>
+                                          </>
+                                        )}
+                                        {transaction && (
+                                          <>
+                                            <CustomInput
+                                              labelText={first}
+                                              id="first"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                disabled: true,
+                                              }}
+                                            />
+                                            <CustomInput
+                                              labelText={middle}
+                                              id="middle"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                disabled: true,
+                                              }}
+                                            />
+                                            <CustomInput
+                                              labelText={last}
+                                              id="last"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                disabled: true,
+                                              }}
+                                            />
+                                            <CustomInput
+                                              labelText={ID}
+                                              id="ID"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                disabled: true,
+                                              }}
+                                            />
+                                            <CustomInput
+                                              labelText={password}
+                                              id="ownerpassword"
+                                              formControlProps={{
+                                                fullWidth: true,
+                                              }}
+                                              inputProps={{
+                                                type: "password",
+                                                disabled: true,
+                                              }}
+                                            />
+                                          </>
+                                        )}
+                                      </>
+                                      {!transaction && (
+                                        <>
+                                          {recycleCost > 0 ? (
+                                            <h4>
+                                              Cost to recycle asset: ü&nbsp;{recycleCost}
+
+                                            </h4>
+                                          ) : (
+                                            <h4>Cost to recycle asset: None</h4>
+                                          )}
+                                          <Button
+                                            color="info"
+                                            className="MLBGradient"
+                                            onClick={(e) => recycleAsset()}
+                                          >
+                                            Recycle Asset
+                                    </Button>
+                                        </>
+                                      )}
+                                      {transaction && (
+                                        <h3>
+                                          Recycling Asset
+                                          <div className="lds-ellipsisIF">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                          </div>
+                                        </h3>
+                                      )}
+                                    </form>
+                                  </CardBody>
+                                </Card>
+                              )}
+                            </>
+                          )}
                       </>
                     )}
                     {isVerifying && (
