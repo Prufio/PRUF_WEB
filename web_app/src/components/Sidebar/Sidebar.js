@@ -421,6 +421,7 @@ class Sidebar extends React.Component {
               <img src={pruftoken} alt="logo" className="addressIcon" />
             )}
             {addr !== undefined && addr !== "" && (
+
               <Blockies
                 scale={4}
                 color={getPrufColor("primary", addr)}
@@ -430,6 +431,7 @@ class Sidebar extends React.Component {
                 seed={addr}
                 className="addressIcon"
               />
+
             )}
 
             {isAndroid && addr !== undefined && (
@@ -563,7 +565,7 @@ class Sidebar extends React.Component {
               {addr === "" && (
                 <img src={pruftoken} alt="logo" className="addressIcon" />
               )}
-              {addr !== undefined && addr !== "" && (
+              {addr !== undefined && addr !== "" && !isMobile && (
                 <Blockies
                   scale={4}
                   color={getPrufColor("primary", addr)}
@@ -574,11 +576,24 @@ class Sidebar extends React.Component {
                   className="addressIcon"
                 />
               )}
+              {addr !== undefined && addr !== "" && isMobile && (
+                <button className="addressIconButton" onClick={() => { copyTextSnippet(addr);}}>
+                <Blockies
+                  scale={4}
+                  color={getPrufColor("primary", addr)}
+                  bgColor={getPrufColor("secondary", addr)}
+                  spotColor={getPrufColor("analogous", addr)}
+                  size={15}
+                  seed={addr}
+                  className="addressIconMobile"
+                />
+                </button>
+              )}
             </a>
             <a className={logoNormal}>
               {!this.props.miniActive && (
                 <>
-                  {addr !== undefined && (
+                  {addr !== undefined && !isMobile && (
                     <>
                       {!this.state.copyText && bgColor !== "white" && (
                         <Tooltip title="Copy to Clipboard" arrow>
@@ -662,7 +677,7 @@ class Sidebar extends React.Component {
                   )}
                 </>
               )}
-              {this.props.miniActive && (
+              {this.props.miniActive && !isMobile &&(
                 <>
                   {addr !== undefined && (
                     <>

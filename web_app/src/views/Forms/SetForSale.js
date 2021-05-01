@@ -31,7 +31,7 @@ export default function SetForSale(props) {
     const [txStatus, setTxStatus] = React.useState(false)
     // eslint-disable-next-line no-unused-vars
     const [txHash, setTxHash] = React.useState('')
-    const [price, setPrice] = React.useState('')
+    const [price, setPrice] = React.useState(window.sentPacket.price)
     const [currency, setCurrency] = React.useState('2')
     const [loginPrice, setloginPrice] = React.useState('')
     const [loginPriceState, setloginPriceState] = React.useState('')
@@ -229,7 +229,10 @@ export default function SetForSale(props) {
         let newAsset = await JSON.parse(JSON.stringify(assetInfo))
 
         let tempTxHash
-
+            if(assetInfo.price === price) {
+                setloginPriceState('error')
+                return swal("Price has not changed!")
+            }
         if (assetInfo.price !== '0') {
             swalReact({
                 content: (
@@ -241,7 +244,7 @@ export default function SetForSale(props) {
                         </h5>
                         <div className="delegationInfoSec">
                             <h4 className="delegationInfo">
-                                Changing price of &nbsp; {assetInfo.name}
+                                Changing price of&nbsp;{assetInfo.name}
                             </h4>
                         </div>
                         <div className="delegationInfoSec">
@@ -672,7 +675,7 @@ export default function SetForSale(props) {
                             />
                         )}
                     </>
-                    {!transactionActive && !assetInfo.price && (
+                    {!transactionActive && assetInfo.price === "0" && price !== "0" &&  (
                         <div className="MLBGradientSubmit">
                             <Button
                                 color="info"
@@ -683,14 +686,14 @@ export default function SetForSale(props) {
                             </Button>
                         </div>
                     )}
-                    {!transactionActive && assetInfo.price && (
+                    {!transactionActive && assetInfo.price !== "0" && price !== "0" && (
                         <div className="MLBGradientSubmit">
                             <Button
                                 color="info"
                                 className="MLBGradient"
                                 onClick={() => setAssetPrice()}
                             >
-                                Modify Price
+                                Change Price
                             </Button>
                         </div>
                     )}

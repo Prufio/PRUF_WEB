@@ -80,8 +80,8 @@ export default function Search(props) {
   const [isRecycling, setIsRecycling] = React.useState(false);
   const [txHash, setTxHash] = React.useState("");
   const [verifyResult, setVerifyResult] = React.useState("");
-  const [nodeId, setAssetClass] = React.useState("");
-  const [nodeName, setAssetClassName] = React.useState("");
+  const [nodeId, setNodeId] = React.useState("");
+  const [nodeName, setNodeIdName] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
   const [txStatus, setTxStatus] = React.useState(false);
   const [copyText, setCopyText] = React.useState(false);
@@ -197,16 +197,16 @@ export default function Search(props) {
     if (!props.IDHolder) {
       IDHolderPrompt();
     } else {
-      setAssetClass(event.target.value);
+      setNodeId(event.target.value);
       setClassSelect(event.target.value);
       try {
-        props.prufClient.get.nodeName(event.target.value).then((e) => {
-          let str = e
+        props.prufClient.get.nodeName(event.target.value).then((x) => {
+          let str = x
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
-          setAssetClassName(str);
-          props.prufClient.get.operationCost(1, event.target.value).then((e) => {
-            setRecycleCost(e);
+          setNodeIdName(str);
+          props.prufClient.get.operationCost(1, event.target.value).then((x) => {
+            setRecycleCost(x);
           })
         });
       } catch {
@@ -1690,7 +1690,7 @@ export default function Search(props) {
     }
   };
 
-  const recycle = () => {
+  const recycle = async () => {
     setIsRecycling(true);
     if (props.ps) {
       console.log(props.ps);
@@ -1726,7 +1726,7 @@ export default function Search(props) {
   };
 
   const purchaseAsset = async () => {
-    if(!props.addr) return swal("No address detected")
+    if (!props.addr) return swal("No address detected")
     let newAsset = JSON.parse(JSON.stringify(asset));
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
     let tempTxHash;
@@ -1843,7 +1843,7 @@ export default function Search(props) {
     setTransaction(true);
 
     props.prufClient.do
-      .recycleAsset(idxHash, rgtHash, asset.nodeId)
+      .recycleAsset(idxHash, rgtHash, nodeId)
       .send({ from: props.addr })
       .on("error", function (_error) {
         setTransaction(false);
@@ -2180,7 +2180,7 @@ export default function Search(props) {
 
   const checkIsHolder = async (id) => {
     if (!id) return;
-    if(!props.addr) return setOwnerOf(false);
+    if (!props.addr) return setOwnerOf(false);
     props.prufClient.get.ownerOfAsset(id).then(e => {
       window.web3.utils.toChecksumAddress(e) ===
         window.web3.utils.toChecksumAddress(props.addr)
@@ -2235,10 +2235,11 @@ export default function Search(props) {
           .nodeData(obj.nodeId)
           .then(e => {
             obj.nodeName = e.name.toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-              letter.toUpperCase()
-            );
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              );
             obj.nodeData = e
+            console.log("HERE", e.root)
             setSelectedRootID(e.root);
             return getMutableData(obj);
           });
@@ -2969,7 +2970,7 @@ export default function Search(props) {
                   {IDXRawInput === false && retrieving && (
                     <>
                       <CustomInput
-                        labelText={IDXRaw}
+                        labelText={IDXRaw.substring(0, 10) + "..." + IDXRaw.substring(56, 66)}
                         id="IDX"
                         formControlProps={{
                           fullWidth: true,
@@ -3304,7 +3305,7 @@ export default function Search(props) {
                     )}
                     {asset.storageProvider === "1" && (
                       <h6 className="storageProviderText">
-                        Stored on&nbsp; 
+                        Stored on&nbsp;
                         <img src={IPFSPNG} className="IPFS" alt="" />
                       </h6>
                     )}
@@ -3381,108 +3382,178 @@ export default function Search(props) {
                     )}
                     {isRecycling && (
                       <>
-                        {props.IDHolder === false && (
-                          <>
-                            {nodeId === "" && transactionActive && (
-                              <Card>
-                                <CardHeader icon>
-                                  <CardIcon className="headerIconBack">
-                                    <Category />
-                                  </CardIcon>
-                                  <h4 className={classes.cardIconTitle}>
-                                    Select Node
+                        <>
+                          {nodeId === "" && transactionActive && (
+                            <Card>
+                              <CardHeader icon>
+                                <CardIcon className="headerIconBack">
+                                  <Category />
+                                </CardIcon>
+                                <h4 className={classes.cardIconTitle}>
+                                  Select Node
                                   </h4>
-                                </CardHeader>
-                                <CardBody>
-                                  <form>
-                                    <h3>
-                                      Creating ID
+                              </CardHeader>
+                              <CardBody>
+                                <form>
+                                  <h3>
+                                    Creating ID
                                       <div className="lds-ellipsisIF">
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                      </div>
-                                    </h3>
-                                  </form>
-                                </CardBody>
-                                <br />
-                              </Card>
-                            )}
-                            {nodeId === "" && !transactionActive && (
-                              <Card>
-                                <CardHeader icon>
-                                  <CardIcon className="headerIconBack">
-                                    <Category />
-                                  </CardIcon>
-                                  <h4 className={classes.cardIconTitle}>
-                                    Select Node
+                                      <div></div>
+                                      <div></div>
+                                      <div></div>
+                                    </div>
+                                  </h3>
+                                </form>
+                              </CardBody>
+                              <br />
+                            </Card>
+                          )}
+                          {nodeId === "" && !transactionActive && props.IDHolder === false && (
+                            <Card>
+                              <CardHeader icon>
+                                <CardIcon className="headerIconBack">
+                                  <Category />
+                                </CardIcon>
+                                <h4 className={classes.cardIconTitle}>
+                                  Select Node
                                   </h4>
-                                </CardHeader>
-                                <CardBody>
-                                  <form>
-                                    <FormControl
-                                      fullWidth
-                                      className={classes.selectFormControl}
-                                    >
-                                      {selectedRootID === "" ? (
-                                        <>
-                                          <InputLabel>
-                                            Select Node
+                              </CardHeader>
+                              <CardBody>
+                                <form>
+                                  <FormControl
+                                    fullWidth
+                                    className={classes.selectFormControl}
+                                  >
+                                    {selectedRootID === "" ? (
+                                      <>
+                                        <InputLabel>
+                                          Select Node
                                           </InputLabel>
-                                          <Select
-                                            disabled
-                                            MenuProps={{
-                                              className: classes.selectMenu,
-                                            }}
-                                            classes={{
-                                              select: classes.select,
-                                            }}
-                                            value={classSelect}
-                                            onChange={() => { }}
-                                            inputProps={{
-                                              name: "classSelect",
-                                              id: "class-select",
-                                            }}
-                                          ></Select>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <InputLabel>
-                                            Select Node
+                                        <Select
+                                          disabled
+                                          MenuProps={{
+                                            className: classes.selectMenu,
+                                          }}
+                                          classes={{
+                                            select: classes.select,
+                                          }}
+                                          value={classSelect}
+                                          onChange={() => { }}
+                                          inputProps={{
+                                            name: "classSelect",
+                                            id: "class-select",
+                                          }}
+                                        ></Select>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <InputLabel>
+                                          Select Node
                                           </InputLabel>
-                                          <Select
-                                            MenuProps={{
-                                              className: classes.selectMenu,
-                                            }}
-                                            classes={{
-                                              select: classes.select,
-                                            }}
-                                            value={classSelect}
-                                            onChange={(e) => {
-                                              ACLogin(e);
-                                            }}
-                                            inputProps={{
-                                              name: "classSelect",
-                                              id: "class-select",
-                                            }}
-                                          >
-                                            {generateSubCatList(
-                                              props.nodeIdSets[
-                                              selectedRootID
-                                              ]
-                                            )}
-                                          </Select>
-                                        </>
-                                      )}
-                                    </FormControl>
-                                  </form>
-                                </CardBody>
-                                <br />
-                              </Card>
-                            )}
-                          </>
-                        )}
-                        {props.IDHolder === true && (
+                                        <Select
+                                          MenuProps={{
+                                            className: classes.selectMenu,
+                                          }}
+                                          classes={{
+                                            select: classes.select,
+                                          }}
+                                          value={classSelect}
+                                          onChange={(e) => {
+                                            ACLogin(e);
+                                          }}
+                                          inputProps={{
+                                            name: "classSelect",
+                                            id: "class-select",
+                                          }}
+                                        >
+                                          {generateSubCatList(
+                                            props.nodeIdSets[
+                                            selectedRootID
+                                            ]
+                                          )}
+                                        </Select>
+                                      </>
+                                    )}
+                                  </FormControl>
+                                </form>
+                              </CardBody>
+                              <br />
+                            </Card>
+                          )}
+                          {nodeId === "" && !transactionActive && props.IDHolder === true && (
+                            <Card>
+                              <CardHeader icon>
+                                <CardIcon className="headerIconBack">
+                                  <Category />
+                                </CardIcon>
+                                <h4 className={classes.cardIconTitle}>
+                                  Select Node
+                                  </h4>
+                              </CardHeader>
+                              <CardBody>
+                                <form>
+                                  <FormControl
+                                    fullWidth
+                                    className={classes.selectFormControl}
+                                  >
+                                    {selectedRootID === "" ? (
+                                      <>
+                                        <InputLabel>
+                                          Select Node
+                                          </InputLabel>
+                                        <Select
+                                          disabled
+                                          MenuProps={{
+                                            className: classes.selectMenu,
+                                          }}
+                                          classes={{
+                                            select: classes.select,
+                                          }}
+                                          value={classSelect}
+                                          onChange={() => { }}
+                                          inputProps={{
+                                            name: "classSelect",
+                                            id: "class-select",
+                                          }}
+                                        ></Select>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <InputLabel>
+                                          Select Node
+                                          </InputLabel>
+                                        <Select
+                                          MenuProps={{
+                                            className: classes.selectMenu,
+                                          }}
+                                          classes={{
+                                            select: classes.select,
+                                          }}
+                                          value={classSelect}
+                                          onChange={(e) => {
+                                            ACLogin(e);
+                                          }}
+                                          inputProps={{
+                                            name: "classSelect",
+                                            id: "class-select",
+                                          }}
+                                        >
+                                          {generateSubCatList(
+                                            props.nodeIdSets[
+                                            selectedRootID
+                                            ]
+                                          )}
+                                        </Select>
+                                      </>
+                                    )}
+                                  </FormControl>
+                                </form>
+                              </CardBody>
+                              <br />
+                            </Card>
+                          )}
+                        </>
+                        {props.IDHolder === true && nodeId !== "" &&(
                           <Card>
                             <CardHeader icon>
                               <CardIcon className="headerIconBack">
@@ -3664,11 +3735,11 @@ export default function Search(props) {
                                   <>
                                     {recycleCost > 0 ? (
                                       <h4>
-                                        Cost to modify asset info: ü
-                                        {recycleCost}
+                                        Cost to recycle asset: ü&nbsp;{recycleCost}
+
                                       </h4>
                                     ) : (
-                                      <></>
+                                      <h4>Cost to recycle asset: None</h4>
                                     )}
                                     <Button
                                       color="info"
