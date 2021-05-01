@@ -248,7 +248,7 @@ export default function Transfer(props) {
                     )}
                     {transactionActive && (
                         <CustomInput
-                            labelText={address}
+                            labelText={address.substring(0, 9) + "..." + address.substring(31, 41)}
                             id="middle"
                             formControlProps={{
                                 fullWidth: true,

@@ -91,7 +91,7 @@ export default function TransferNode(props) {
     }
 
     const transferNode = async () => {
-        const pageKey = thousandHashesOf(props.addr, props.winKey) 
+        const pageKey = thousandHashesOf(props.addr, props.winKey)
 
         if (!window.web3.utils.isAddress(address)) {
             return swal({
@@ -245,7 +245,7 @@ export default function TransferNode(props) {
                     )}
                     {transactionActive && (
                         <CustomInput
-                            labelText={address}
+                            labelText={address.substring(0, 9) + "..." + address.substring(31, 41)}
                             id="middle"
                             formControlProps={{
                                 fullWidth: true,
