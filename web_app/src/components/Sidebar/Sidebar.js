@@ -432,7 +432,7 @@ class Sidebar extends React.Component {
               />
             )}
 
-            {isAndroid && add !== undefined && (
+            {isAndroid && addr !== undefined && (
               <>
                 {bgColor !== "white" && (
                   <Tooltip title="Copy to Clipboard">
