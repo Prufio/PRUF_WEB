@@ -235,102 +235,102 @@ export default function NewRecord(props) {
     document.body.style.cursor = 'wait'
     console.log(event.target.value);
     props.prufClient.get
-        // eslint-disable-next-line react/prop-types
-        .nodeData(event.target.value.id)
-        .then(e => {
-          setNodeExtendedData(e);
-          setStorageProvider(e.storageProvider);
-        })
-/*     try {
       // eslint-disable-next-line react/prop-types
-      props.prufClient.get
-        // eslint-disable-next-line react/prop-types
-        .nodeData(event.target.value)
-        .then(e => {
-          let managementType = e.managementType
-          let nodeData = e;
-          console.log(e)
-          if (isMobile && e.storageProvider === "2") {
-            return swal("This node is configured for Awreave storage, and is currently disabled on mobile devices. Please use a non-mobile device to mint using this node.")
-          }
-
-          props.prufClient.get.ownerOfNode(nodeId).then(e => {
-            let isOwner = (e === props.addr)
-            let authorized = false
-            switch (managementType) {
-              case ("255"):
-                document.body.style.cursor = 'auto', swal("This node is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard."); break;
-              case ("1"): {
-                if (!isOwner) {
-                  document.body.style.cursor = 'auto', swal("This node is in a private management type. Only the node holder has access to asset creation.")
-                }
-                else { authorized = true }
-                break;
-              }
-              case ("2"): {
-                if (!isOwner) {
-                  document.body.style.cursor = 'auto', swal("This node is in a permissive management type. Only the node holder has access to asset creation.")
-                }
-                else { authorized = true }
-                break;
-              }
-              case ("3"): {
-                props.prufClient.get.userType(props.addr, nodeId).then(e => {
-                  if (e !== "1") {
-                    document.body.style.cursor = 'auto', swal("This node is in an authorized management type. Only the node holder and node-authorized users have access to asset creation.");
-                  }
-                  else { authorized = true }
-                }
-                )
-                break;
-              }
-              default: break
-            }
-
-            if (!authorized) return
-
-            setNodeName(
-              nodeData.name
-                .toLowerCase()
-                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                  letter.toUpperCase()
-                )
-            );
-            // console.log(nodeData)
-            setStorageProvider(nodeData.storageProvider);
-            setNodeExtendedData(Object.assign({
-              name: nodeData.name
-                .toLowerCase()
-                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                  letter.toUpperCase()
-                )
-            }, nodeData
-            ));
-            setNodeId(event.target.value);
-            setClassSelect(event.target.value);
-            document.body.style.cursor = 'auto',
-              props.prufClient.get
-                // eslint-disable-next-line react/prop-types
-                .operationCost(event.target.value, "1")
-                .then(e => {
-                  setNRCost(e.total);
-                });
-          })
+      .nodeData(event.target.value.id)
+      .then(e => {
+        setNodeExtendedData(e);
+        setStorageProvider(e.storageProvider);
+      })
+    /*     try {
           // eslint-disable-next-line react/prop-types
-        });
-    } catch {
-      document.body.style.cursor = 'auto',
-        swal({
-          title: "Could not find node",
-          icon: "warning",
-          text: "Please try again.",
-          buttons: {
-            close: {
-              text: "close",
-            },
-          },
-        });
-    } */
+          props.prufClient.get
+            // eslint-disable-next-line react/prop-types
+            .nodeData(event.target.value)
+            .then(e => {
+              let managementType = e.managementType
+              let nodeData = e;
+              console.log(e)
+              if (isMobile && e.storageProvider === "2") {
+                return swal("This node is configured for Awreave storage, and is currently disabled on mobile devices. Please use a non-mobile device to mint using this node.")
+              }
+    
+              props.prufClient.get.ownerOfNode(nodeId).then(e => {
+                let isOwner = (e === props.addr)
+                let authorized = false
+                switch (managementType) {
+                  case ("255"):
+                    document.body.style.cursor = 'auto', swal("This node is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard."); break;
+                  case ("1"): {
+                    if (!isOwner) {
+                      document.body.style.cursor = 'auto', swal("This node is in a private management type. Only the node holder has access to asset creation.")
+                    }
+                    else { authorized = true }
+                    break;
+                  }
+                  case ("2"): {
+                    if (!isOwner) {
+                      document.body.style.cursor = 'auto', swal("This node is in a permissive management type. Only the node holder has access to asset creation.")
+                    }
+                    else { authorized = true }
+                    break;
+                  }
+                  case ("3"): {
+                    props.prufClient.get.userType(props.addr, nodeId).then(e => {
+                      if (e !== "1") {
+                        document.body.style.cursor = 'auto', swal("This node is in an authorized management type. Only the node holder and node-authorized users have access to asset creation.");
+                      }
+                      else { authorized = true }
+                    }
+                    )
+                    break;
+                  }
+                  default: break
+                }
+    
+                if (!authorized) return
+    
+                setNodeName(
+                  nodeData.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    )
+                );
+                // console.log(nodeData)
+                setStorageProvider(nodeData.storageProvider);
+                setNodeExtendedData(Object.assign({
+                  name: nodeData.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    )
+                }, nodeData
+                ));
+                setNodeId(event.target.value);
+                setClassSelect(event.target.value);
+                document.body.style.cursor = 'auto',
+                  props.prufClient.get
+                    // eslint-disable-next-line react/prop-types
+                    .operationCost(event.target.value, "1")
+                    .then(e => {
+                      setNRCost(e.total);
+                    });
+              })
+              // eslint-disable-next-line react/prop-types
+            });
+        } catch {
+          document.body.style.cursor = 'auto',
+            swal({
+              title: "Could not find node",
+              icon: "warning",
+              text: "Please try again.",
+              buttons: {
+                close: {
+                  text: "close",
+                },
+              },
+            });
+        } */
     setNodeName(
       event.target.value.name
         .toLowerCase()
@@ -624,6 +624,7 @@ export default function NewRecord(props) {
   };
 
   const checkAsset = async () => {
+    let idxHash;
     console.log(storageProvider)
 
     if (
@@ -663,15 +664,15 @@ export default function NewRecord(props) {
       return;
     }
     console.log(type, make, model, serial)
-    let idxHash = await props.prufClient.utils.generateAssetID(
+    await props.prufClient.utils.generateAssetID(
       {
-      type: type,
-      make: make,
-      model: model,
-      serial: serial
+        type: type,
+        make: make,
+        model: model,
+        serial: serial
       }
     ).then((e) => {
-      console.log(e)
+      idxHash = e
     })
 
     let ipfsObj;
@@ -792,7 +793,7 @@ export default function NewRecord(props) {
             selected: classes.selectMenuItemSelected,
           }}
           key={"key" + arr[i].name}
-          value={{name: arr[i].name, id: String(arr[i].id)}}
+          value={{ name: arr[i].name, id: String(arr[i].id) }}
         >
           {arr[i].name}
         </MenuItem>
@@ -836,7 +837,8 @@ export default function NewRecord(props) {
   };
 
   const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => {
-    var extendedDataHash, rgtHashRaw, idxHash;
+    console.log(extDataA, extDataB, idx, ipfsObj)
+    var extendedDataHash, idxHash, rgtHash
 
     // eslint-disable-next-line react/prop-types
     const pageKey = thousandHashesOf(props.addr, props.winKey);
@@ -848,7 +850,7 @@ export default function NewRecord(props) {
 
       let newAsset = {
         root: selectedRootID,
-        nodeData : {
+        nodeData: {
           storageProvider: "1",
           ipfs: extendedDataHash,
           root: selectedRootID,
@@ -882,17 +884,20 @@ export default function NewRecord(props) {
       };
 
       idxHash = idx;
-
-      let rgtHash = await props.prufClient.utils.generateSecureRgt(
+      console.log(first, middle, last, ID, password, idx)
+      await props.prufClient.utils.generateSecureRgt(
         idx,
         {
           first: first,
           middle: middle,
           last: last,
-          ID: ID,
+          id: ID,
           password: password
         }
-        );
+      ).then((e) => {
+        console.log(e)
+        rgtHash = e
+      });
 
       setShowHelp(false);
       setTxStatus(false);
@@ -914,7 +919,6 @@ export default function NewRecord(props) {
         text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
         button: "Okay",
       }) */
-
       await props.prufClient.do
         .mintAsset(
           idxHash,
@@ -984,7 +988,7 @@ export default function NewRecord(props) {
 
       let newAsset = {
         root: selectedRootID,
-        nodeData : {
+        nodeData: {
           storageProvider: "1",
           ipfs: extendedDataHash,
           root: selectedRootID,
@@ -1025,16 +1029,19 @@ export default function NewRecord(props) {
         String(serial).replace(/\s/g, ''),
       ) */
 
-      let rgtHash = await props.prufClient.utils.generateSecureRgt(
+      await props.prufClient.utils.generateSecureRgt(
         idx,
         {
           first: first,
           middle: middle,
           last: last,
-          ID: ID,
+          id: ID,
           password: password
         }
-        );
+      ).then((e) => {
+        console.log(e)
+        rgtHash = e
+      });
 
       setShowHelp(false);
       setTxStatus(false);
@@ -1043,7 +1050,6 @@ export default function NewRecord(props) {
       //setResult("");
       setTransactionActive(true);
       console.log("idxHash", idxHash);
-      console.log("New rgtRaw", rgtHashRaw);
       console.log("New rgtHash", rgtHash);
       // eslint-disable-next-line react/prop-types
       console.log("addr: ", props.addr);
