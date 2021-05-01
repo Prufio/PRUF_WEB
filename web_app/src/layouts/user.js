@@ -284,6 +284,30 @@ export default function Dashboard(props) {
   const handleEthereum = async () => {
 
     if (window.ethereum) {
+
+      window.ethereum.on("chainChanged", (chainId) => {
+        console.log(chainId);
+        window.location.reload();
+      });
+
+      window.ethereum.on("accountsChanged", (e) => {
+        console.log("Accounts changed");
+        if (e[0] === undefined || e[0] === null) {
+          if (e[0] !== addr) {
+            //window.location.reload();
+            if(isMobile) swal("Changing accounts")
+              setAddr(window.web3.utils.toChecksumAddress(e[0]));
+              awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0]))
+          }
+        } else if (e[0] !== addr) {
+            if(isMobile) swal("Changing accounts")
+            setAddr(window.web3.utils.toChecksumAddress(e[0]));
+            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0]))
+            //window.location.reload();
+        }
+      });
+
+
       if(isMobile) swal("Ethereum successfully detected")
       //console.log("Found ethereum object");
       let web3;
