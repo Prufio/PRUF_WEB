@@ -155,6 +155,7 @@ export default function Dashboard(props) {
   };
 
   const handleNoEthereum = async () => {
+    if(isMobile) swal("No ethereum detected")
     console.log("No ethereum object available");
     let web3;
     web3 = require("web3");
@@ -249,6 +250,7 @@ export default function Dashboard(props) {
   };
 
   const setCookieTo = (job, val) => {
+    if(cookies["hasBeenNotified"] === false) return
     //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
     console.log("Setting cookie", job, "to", val);
     setCookie(String(job), JSON.stringify(val), {
@@ -258,6 +260,7 @@ export default function Dashboard(props) {
   };
 
   const readCookie = async (job) => {
+    if(cookies["hasBeenNotified"] === false) return
     if (!cookies[job]) return console.log("Referenced nonexistant cookie");
     return cookies[job];
   };
@@ -279,7 +282,33 @@ export default function Dashboard(props) {
   }
 
   const handleEthereum = async () => {
+
     if (window.ethereum) {
+
+      window.ethereum.on("chainChanged", (chainId) => {
+        console.log(chainId);
+        window.location.reload();
+      });
+
+      window.ethereum.on("accountsChanged", (e) => {
+        console.log("Accounts changed");
+        if (e[0] === undefined || e[0] === null) {
+          if (e[0] !== addr) {
+            window.location.reload();
+            /* if(isMobile) swal("Changing accounts")
+              setAddr(window.web3.utils.toChecksumAddress(e[0]));
+              awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
+          }
+        } else if (e[0] !== addr) {
+            /* if(isMobile) swal("Changing accounts")
+            setAddr(window.web3.utils.toChecksumAddress(e[0]));
+            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
+            window.location.reload();
+        }
+      });
+
+
+      if(isMobile) swal("Ethereum successfully detected")
       //console.log("Found ethereum object");
       let web3;
       web3 = require("web3");
@@ -327,7 +356,7 @@ export default function Dashboard(props) {
       });
 
       //More globals (eth-is-connected specific)
-      window.assetTokenInfo = {
+/*       window.assetTokenInfo = {
         nodeId: undefined,
         id: undefined,
         name: undefined,
@@ -345,8 +374,8 @@ export default function Dashboard(props) {
         statuses: [],
         names: [],
         displayImages: [],
-      };
-      window.resetInfo = false;
+      }; */
+
     } else {
       return handleNoEthereum();
     }
@@ -363,11 +392,17 @@ export default function Dashboard(props) {
     window.ethereum.on("accountsChanged", (e) => {
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
-        if (e[0] !== window.addr) {
+        if (e[0] !== addr) {
           window.location.reload();
+          /* if(isMobile) swal("Changing accounts")
+            setAddr(window.web3.utils.toChecksumAddress(e[0]));
+            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
         }
-      } else if (e[0] !== window.addr) {
-        window.location.reload();
+      } else if (e[0] !== addr) {
+          /* if(isMobile) swal("Changing accounts")
+          setAddr(window.web3.utils.toChecksumAddress(e[0]));
+          awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
+          window.location.reload();
       }
     });
   };
@@ -437,25 +472,18 @@ export default function Dashboard(props) {
 
     //Declare a few globals
     window.sentPacket = {};
-    window.hasLoadedAssets = false;
-    window.ipfsCounter = 0;
 
-    /* _ipfs = new IPFS({
-      host: "ipfs.infura.io",
-      port: 5001,
-      protocol: "https",
-    }); */
-
-    //window.ipfs = _ipfs;
     //Give me the desktop version
     if (window.ethereum) {
       handleEthereum();
     } else {
       console.log("In startup else clause");
+
       window.addEventListener("ethereum#initialized", handleEthereum, {
         once: true,
       });
-      setTimeout(handleEthereum, 3300); // 3.3 seconds
+
+      setTimeout(handleEthereum, 3000); // 3 seconds
     }
 
     //initOrbitDB()
