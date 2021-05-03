@@ -477,10 +477,10 @@ export default function CreateNode(props) {
                     <CardBody>
                         <form>
                             {/* eslint-disable-next-line react/prop-types */}
-                            <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
                             <>
                                 {!transactionActive && !transactionActiveID && (
                                     <>
+                                        <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
                                         <CustomInput
                                             success={loginNameState === 'success'}
                                             error={loginNameState === 'error'}
