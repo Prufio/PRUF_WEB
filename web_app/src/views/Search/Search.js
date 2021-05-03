@@ -3372,7 +3372,7 @@ export default function Search(props) {
                         Purchase Item
                       </Button>
                     )}
-                    {currency !== "" && transaction && (
+                    {currency !== "" && transaction && !isRecycling && !isVerifying &&(
                       <h3>
                         Purchasing Asset
                         <div className="lds-ellipsisIF">
