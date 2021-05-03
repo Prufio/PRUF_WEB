@@ -1959,7 +1959,7 @@ export default function Search(props) {
       console.log("rgtHash", rgtHash);
       console.log("addr: ", window.addr);
       setTransaction(true);
-      await props.prufClient.get
+      props.prufClient.get
         .isRightsHolder(idxHash, rgtHash)
         .then(e => {
           if (e) {
