@@ -165,7 +165,7 @@ export default function FinalizeNode(props) {
                     </h4>
                     <h5 className="finalizingTipsContent">
                         Please make sure the following info is correct before
-                        submitting. These setting cannot be changed, and you can
+                        submitting. These settings cannot be changed, and you can
                         only finalize a node once!
                     </h5>
                     <div className="delegationTips">
