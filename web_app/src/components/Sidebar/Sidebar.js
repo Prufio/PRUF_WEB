@@ -420,68 +420,35 @@ class Sidebar extends React.Component {
             {addr === "" && (
               <img src={pruftoken} alt="logo" className="addressIcon" />
             )}
-            {addr !== undefined && addr !== "" && (
-
-              <Blockies
-                scale={4}
-                color={getPrufColor("primary", addr)}
-                bgColor={getPrufColor("secondary", addr)}
-                spotColor={getPrufColor("analogous", addr)}
-                size={15}
-                seed={addr}
-                className="addressIcon"
-              />
-
-            )}
 
             {isAndroid && addr !== undefined && (
               <>
                 {bgColor !== "white" && (
-                  <Tooltip title="Copy to Clipboard">
-                    <div className="addressText">
-                      <CopyToClipboard
-                        text={addr}
-                        onCopy={() => {
-                          swal(
-                            "Address Copied to Clipboard!\n" +
-                            addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)
-                          );
-                        }}
-                      >
-                        <span>
-                          {addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)}
-                        </span>
-                      </CopyToClipboard>
-                    </div>
-                  </Tooltip>
+                  <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                    <Blockies
+                      scale={4}
+                      color={getPrufColor("primary", addr)}
+                      bgColor={getPrufColor("secondary", addr)}
+                      spotColor={getPrufColor("analogous", addr)}
+                      size={15}
+                      seed={addr}
+                      className="addressIconMobile"
+                    />
+                  </button>
                 )}
 
                 {bgColor === "white" && (
-                  <Tooltip title="Copy to Clipboard">
-                    <div className="addressTextBlack">
-                      <CopyToClipboard
-                        text={addr}
-                        onCopy={() => {
-                          swal(
-                            "Address Copied to Clipboard!\n" +
-                            addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)
-                          );
-                        }}
-                      >
-                        <span>
-                          {addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)}
-                        </span>
-                      </CopyToClipboard>
-                    </div>
-                  </Tooltip>
+                  <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                    <Blockies
+                      scale={4}
+                      color={getPrufColor("primary", addr)}
+                      bgColor={getPrufColor("secondary", addr)}
+                      spotColor={getPrufColor("analogous", addr)}
+                      size={15}
+                      seed={addr}
+                      className="addressIconMobile"
+                    />
+                  </button>
                 )}
               </>
             )}
@@ -495,62 +462,32 @@ class Sidebar extends React.Component {
             )}
             {addr !== undefined && addr !== "" && (
               <>
-                <Blockies
-                  scale={4}
-                  color={getPrufColor("primary", addr)}
-                  bgColor={getPrufColor("secondary", addr)}
-                  spotColor={getPrufColor("analogous", addr)}
-                  size={15}
-                  seed={addr}
-                  className="addressIcon"
-                />
-
                 {bgColor !== "white" && (
-                  <Tooltip title="Copy to Clipboard">
-                    <div className="addressText">
-                      <CopyToClipboard
-                        text={addr}
-                        onCopy={() => {
-                          swal(
-                            "Address Copied to Clipboard!\n" +
-                            addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)
-                          );
-                        }}
-                      >
-                        <span>
-                          {addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)}
-                        </span>
-                      </CopyToClipboard>
-                    </div>
-                  </Tooltip>
+                  <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                    <Blockies
+                      scale={4}
+                      color={getPrufColor("primary", addr)}
+                      bgColor={getPrufColor("secondary", addr)}
+                      spotColor={getPrufColor("analogous", addr)}
+                      size={15}
+                      seed={addr}
+                      className="addressIconMobile"
+                    />
+                  </button>
                 )}
 
                 {bgColor === "white" && (
-                  <Tooltip title="Copy to Clipboard">
-                    <div className="addressTextBlack">
-                      <CopyToClipboard
-                        text={addr}
-                        onCopy={() => {
-                          swal(
-                            "Address Copied to Clipboard!\n" +
-                            addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)
-                          );
-                        }}
-                      >
-                        <span>
-                          {addr.substring(0, 8) +
-                            "..." +
-                            addr.substring(34, 42)}
-                        </span>
-                      </CopyToClipboard>
-                    </div>
-                  </Tooltip>
+                  <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                    <Blockies
+                      scale={4}
+                      color={getPrufColor("primary", addr)}
+                      bgColor={getPrufColor("secondary", addr)}
+                      spotColor={getPrufColor("analogous", addr)}
+                      size={15}
+                      seed={addr}
+                      className="addressIconMobile"
+                    />
+                  </button>
                 )}
               </>
             )}
@@ -577,16 +514,16 @@ class Sidebar extends React.Component {
                 />
               )}
               {addr !== undefined && addr !== "" && isMobile && (
-                <button className="addressIconButton" onClick={() => { copyTextSnippet(addr);}}>
-                <Blockies
-                  scale={4}
-                  color={getPrufColor("primary", addr)}
-                  bgColor={getPrufColor("secondary", addr)}
-                  spotColor={getPrufColor("analogous", addr)}
-                  size={15}
-                  seed={addr}
-                  className="addressIconMobile"
-                />
+                <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                  <Blockies
+                    scale={4}
+                    color={getPrufColor("primary", addr)}
+                    bgColor={getPrufColor("secondary", addr)}
+                    spotColor={getPrufColor("analogous", addr)}
+                    size={15}
+                    seed={addr}
+                    className="addressIconMobile"
+                  />
                 </button>
               )}
             </a>
@@ -677,7 +614,7 @@ class Sidebar extends React.Component {
                   )}
                 </>
               )}
-              {this.props.miniActive && !isMobile &&(
+              {this.props.miniActive && !isMobile && (
                 <>
                   {addr !== undefined && (
                     <>
@@ -753,51 +690,31 @@ class Sidebar extends React.Component {
                   )}
 
                   {addr !== undefined && isAndroid && bgColor !== "white" && (
-                    <Tooltip title="Copy to Clipboard" arrow>
-                      <div className="addressText">
-                        <CopyToClipboard
-                          text={addr}
-                          onCopy={() => {
-                            swal(
-                              "Address Copied to Clipboard!\n" +
-                              addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)
-                            );
-                          }}
-                        >
-                          <span>
-                            {addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)}
-                          </span>
-                        </CopyToClipboard>
-                      </div>
-                    </Tooltip>
+                    <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                      <Blockies
+                        scale={4}
+                        color={getPrufColor("primary", addr)}
+                        bgColor={getPrufColor("secondary", addr)}
+                        spotColor={getPrufColor("analogous", addr)}
+                        size={15}
+                        seed={addr}
+                        className="addressIconMobile"
+                      />
+                    </button>
                   )}
 
                   {addr !== undefined && isAndroid && bgColor === "white" && (
-                    <Tooltip title="Copy to Clipboard" arrow>
-                      <div className="addressTextBlack">
-                        <CopyToClipboard
-                          text={addr}
-                          onCopy={() => {
-                            swal(
-                              "Address Copied to Clipboard!\n" +
-                              addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)
-                            );
-                          }}
-                        >
-                          <span>
-                            {addr.substring(0, 8) +
-                              "..." +
-                              addr.substring(34, 42)}
-                          </span>
-                        </CopyToClipboard>
-                      </div>
-                    </Tooltip>
+                    <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                      <Blockies
+                        scale={4}
+                        color={getPrufColor("primary", addr)}
+                        bgColor={getPrufColor("secondary", addr)}
+                        spotColor={getPrufColor("analogous", addr)}
+                        size={15}
+                        seed={addr}
+                        className="addressIconMobile"
+                      />
+                    </button>
                   )}
 
                   {addr === undefined && bgColor !== "white" && (
