@@ -1944,9 +1944,8 @@ export default function Search(props) {
 
     console.log("in vr");
     let idxHash = asset.id;
-    let rgtHash;
 
-    rgtHash = await props.prufClient.utils.generateSecureRgt(
+    props.prufClient.utils.generateSecureRgt(
       asset.id,
       {
         first: first,
@@ -1955,38 +1954,37 @@ export default function Search(props) {
         id: ID,
         password: password
       }
-    );
-
-    console.log("idxHash", idxHash);
-    console.log("rgtHash", rgtHash);
-    console.log("addr: ", window.addr);
-    setTransaction(true);
-    await props.prufClient.get
-      .isRightsHolder(idxHash, rgtHash)
-      .then(e => {
-        if (e) {
-          console.log("Verification Confirmed");
-          swal({
-            title: "Match Confirmed!",
-            icon: "success",
-            button: "Close",
-          });
-          setError("");
-          setTransaction(false);
-          setIsVerifying(false);
-        } else {
-          console.log("Verification not Confirmed");
-          swal({
-            title: "Match Failed!",
-            text: "Please make sure forms are filled out correctly.",
-            icon: "warning",
-            button: "Close",
-          });
-          setTransaction(false);
-          setIsVerifying(false);
-        }
-      });
-    return;
+    ).then(rgtHash=>{
+      console.log("idxHash", idxHash);
+      console.log("rgtHash", rgtHash);
+      console.log("addr: ", window.addr);
+      setTransaction(true);
+      await props.prufClient.get
+        .isRightsHolder(idxHash, rgtHash)
+        .then(e => {
+          if (e) {
+            console.log("Verification Confirmed");
+            swal({
+              title: "Match Confirmed!",
+              icon: "success",
+              button: "Close",
+            });
+            setError("");
+            setTransaction(false);
+            setIsVerifying(false);
+          } else {
+            console.log("Verification not Confirmed");
+            swal({
+              title: "Match Failed!",
+              text: "Please make sure forms are filled out correctly.",
+              icon: "warning",
+              button: "Close",
+            });
+            setTransaction(false);
+            setIsVerifying(false);
+          }
+        });
+    })
   };
 
   const handleOnScan = (e) => {
@@ -2041,12 +2039,10 @@ export default function Search(props) {
 
     console.log("in bvr");
     let idxHash = asset.id;
-    let rgtHash;
-    let rgtHashRaw;
     let receiptVal;
     let tempTxHash;
 
-    rgtHash = await props.prufClient.utils.generateSecureRgt(
+    props.prufClient.utils.generateSecureRgt(
       asset.id,
       {
         first: first,
@@ -2055,71 +2051,69 @@ export default function Search(props) {
         id: ID,
         password: password
       }
-    );
-
-    console.log("idxHash", idxHash);
-    console.log("rgtHash", rgtHash);
-    console.log("addr: ", props.addr);
-    setTransaction(true);
-
-    await props.prufClient.do
-      .verifyRightsHash(idxHash, rgtHash)
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransaction(false);
-        setIsVerifying(false);
-        tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setTxHash(Object.values(_error)[0].transactionHash);
-        console.log(Object.values(_error)[0].transactionHash);
-        console.log(_error);
-        setError(_error);
-      })
-      .on("receipt", (receipt) => {
-        receiptVal = receipt.events.REPORT.returnValues._msg;
-        setTransaction(false);
-        setIsVerifying(false);
-        setTxHash(receipt.transactionHash);
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        setVerifyResult(receiptVal);
-        console.log("Verification Result :", receiptVal);
-      });
-
-    if (receiptVal === "Match confirmed") {
-      swal({
-        title: "Match Confirmed!",
-        content: link,
-        icon: "success",
-        button: "Close",
-      });
-      console.log("Verification conf");
-    }
-
-    if (receiptVal !== "Match confirmed") {
-      if (tempTxHash !== undefined) {
+    ).then(rgtHash=>{
+      console.log("idxHash", idxHash);
+      console.log("rgtHash", rgtHash);
+      console.log("addr: ", props.addr);
+      setTransaction(true);
+  
+      props.prufClient.do
+        .verifyRightsHash(idxHash, rgtHash)
+        .send({ from: props.addr })
+        .on("error",  (_error) => {
+          setTransaction(false);
+          setIsVerifying(false);
+          tempTxHash = Object.values(_error)[0].transactionHash;
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+          let str2 = "' target='_blank'>here</a>";
+          link.innerHTML = String(str1 + tempTxHash + str2);
+          setTxHash(Object.values(_error)[0].transactionHash);
+          console.log(Object.values(_error)[0].transactionHash);
+          console.log(_error);
+          setError(_error);
+        })
+        .on("receipt", (receipt) => {
+          receiptVal = receipt.events.REPORT.returnValues._msg;
+          setTransaction(false);
+          setIsVerifying(false);
+          setTxHash(receipt.transactionHash);
+          tempTxHash = receipt.transactionHash;
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+          let str2 = "' target='_blank'>here</a>";
+          link.innerHTML = String(str1 + tempTxHash + str2);
+          setVerifyResult(receiptVal);
+          console.log("Verification Result :", receiptVal);
+        });
+  
+      if (receiptVal === "Match confirmed") {
         swal({
-          title: "Match Failed!",
+          title: "Match Confirmed!",
           content: link,
-          icon: "warning",
+          icon: "success",
           button: "Close",
         });
+        console.log("Verification conf");
       }
-      if (tempTxHash === undefined) {
-        swal({
-          title: "Match Failed!",
-          icon: "warning",
-          button: "Close",
-        });
+  
+      if (receiptVal !== "Match confirmed") {
+        if (tempTxHash !== undefined) {
+          swal({
+            title: "Match Failed!",
+            content: link,
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        if (tempTxHash === undefined) {
+          swal({
+            title: "Match Failed!",
+            icon: "warning",
+            button: "Close",
+          });
+        }
+        console.log("Verification not conf");
       }
-      console.log("Verification not conf");
-    }
-
-    return;
+    })
   };
 
   const checkInputs = (fromQR) => {
