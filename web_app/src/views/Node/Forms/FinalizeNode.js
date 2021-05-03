@@ -161,11 +161,11 @@ export default function FinalizeNode(props) {
             content: (
                 <Card className="delegationCard">
                     <h4 className="delegationTitle">
-                        Submitted information is immutable!
+                        Submitted information cannot be changed!
                     </h4>
                     <h5 className="finalizingTipsContent">
                         Please make sure the following info is correct before
-                        submitting! These setting cannot be changed, and you can
+                        submitting. These setting cannot be changed, and you can
                         only finalize a node once!
                     </h5>
                     <div className="delegationTips">
