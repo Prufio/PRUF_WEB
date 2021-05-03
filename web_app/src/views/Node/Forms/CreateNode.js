@@ -47,6 +47,7 @@ export default function CreateNode(props) {
     const [mintedID, setMintedID] = React.useState(false)
     // eslint-disable-next-line no-unused-vars
     const [selectedRootID, setSelectedRootID] = React.useState('')
+    const [extDataUploading, setExtDataUploading] = React.useState(false)
 
     const [name, setName] = React.useState('')
     const [root, setRoot] = React.useState('')
@@ -318,7 +319,7 @@ export default function CreateNode(props) {
     //     }
     // }
 
-    const handleNewAssetClass = async () => {
+    const handleNewAssetClass = (extendedDataHash) => {
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey)
         let id
@@ -326,13 +327,38 @@ export default function CreateNode(props) {
             .nodeId(name)
             .then(e => {
                 // eslint-disable-next-line react/prop-types
-                let tempArr = props.heldNodeData
+                let tempArr, tempExtArr
+
+                let tempObj = {
+                    id: e,
+                    name: name,
+                    root: root,
+                    custodyType: "2",
+                    managementType: "255",
+                    storageProvider: "0",
+                    discount: "",
+                    referenceAddress: "",
+                    switches: "",
+                    extData: extendedDataHash,
+                }
+                
+
+
+                if(Number(props.nodes) > 0) {
+                    tempArr = JSON.parse(JSON.stringify(props.heldNodeData))
+                    tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData))
+                } else {
+                    tempArr = [['', '', '', '']]
+                    tempExtArr = []
+                }
+                 
                 // eslint-disable-next-line react/prop-types
-                tempArr.push([name, e, 'N/A', 'N/A'])
+                tempArr.unshift([name, e, 'N/A', 'N/A'])
+                tempExtArr.unshift(tempObj)
+                console.log({newList: tempArr, newData: tempExtArr})
                 window.replaceAssetData = {
                     key: pageKey,
-                    refreshBals: true,
-                    nodeList: ['Loading Nodes...', '~', '~', '~'],
+                    nodeList: {data: tempArr, extData: tempExtArr}
                 }
                 window.location.href = '/#/user/node-manager'
             })
@@ -343,6 +369,7 @@ export default function CreateNode(props) {
             .nodeNameAvailable(name)
             .then(e => {
                 if (e) {
+                    setExtDataUploading(true)
                     window.ipfs.add(JSON.stringify(sampleIpfs)).then((hash) => {
                         if (!hash) {
                             console.error('error sending to ipfs')
@@ -370,7 +397,7 @@ export default function CreateNode(props) {
         //import held asset
 
         console.log({ name, root, extendedDataHash })
-        if (props.pruf < props.currentACPrice) {
+        if (Number(props.pruf) < Number(props.currentACPrice)) {
             return (swal("Insufficient PRUF Balance!"))
         }
         setTransactionActive(true)
@@ -381,7 +408,7 @@ export default function CreateNode(props) {
         setError(undefined)
 
         props.prufClient.do
-            .purchaseNode(name, root, 2, extendedDataHash)
+            .purchaseNode(name, root, "2", extendedDataHash)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {
@@ -427,7 +454,7 @@ export default function CreateNode(props) {
                     button: 'Close',
                 }).then(() => {
                     //refreshBalances()
-                    handleNewAssetClass()
+                    handleNewAssetClass(extendedDataHash)
                 })
             })
     }
@@ -624,7 +651,7 @@ export default function CreateNode(props) {
                                         className="MLBGradient"
                                         onClick={() => checkForAC()}
                                     >
-                                        Purchase AC Node
+                                        Purchase Node
                             </Button>
                                 </div>
                             )}

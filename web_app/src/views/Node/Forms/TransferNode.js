@@ -164,7 +164,15 @@ export default function TransferNode(props) {
                 }).then(() => {
                     //refreshBalances()
                     //window.backIndex = nodeInfo.dBIndex;
-                    window.replaceAssetData.refreshBals = true
+                    let tempArr = JSON.parse(JSON.stringify(props.heldNodeData))
+
+                    if (Number(props.nodes) > 1){
+                        tempArr.splice(nodeInfo.dBIndex, 1)
+                    } else {
+                        tempArr = [['No nodes held by user', '~', '~', '~']]
+                    }
+
+                    window.replaceAssetData = {key: pageKey, NodeList: tempArr}
                     window.location.href = nodeInfo.lastRef
                 })
             })

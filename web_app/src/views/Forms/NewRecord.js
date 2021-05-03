@@ -1192,7 +1192,7 @@ export default function NewRecord(props) {
       {props.IDHolder !== undefined &&
         props.prufClient !== undefined &&
         // eslint-disable-next-line react/prop-types
-        props.nodeIdSets === undefined && (
+        props.nodeSets === undefined && (
           <Card>
             <CardHeader icon>
               <CardIcon className="headerIconBack">
@@ -1219,7 +1219,7 @@ export default function NewRecord(props) {
         // eslint-disable-next-line react/prop-types
         props.IDHolder !== undefined &&
         // eslint-disable-next-line react/prop-types
-        props.nodeIdSets !== undefined && (
+        props.nodeSets !== undefined && (
           <GridContainer>
             <>
               <input
@@ -1330,7 +1330,7 @@ export default function NewRecord(props) {
                             >
                               {generateSubCatList(
                                 // eslint-disable-next-line react/prop-types
-                                props.nodeIdSets[selectedRootID]
+                                props.nodeSets[selectedRootID]
                               )}
                             </Select>
                           </>

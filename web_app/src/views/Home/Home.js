@@ -308,6 +308,8 @@ export default function Home(props) {
         if (!props.addr) return
         console.log('Refreshing balances')
 
+        window.replaceAssetData.refreshBals = true
+
         if (props.prufClient && props.prufClient.get) {
             await window.web3.eth.getBalance(props.addr, (error, result) => {
                 if (error) {
@@ -333,7 +335,7 @@ export default function Home(props) {
                     setUpdatedPruf(e)
                 })
 
-            window.replaceAssetData.refreshBals = true
+            
             forceUpdate()
         } else {
             await window.web3.eth.getBalance(props.addr, (error, result) => {

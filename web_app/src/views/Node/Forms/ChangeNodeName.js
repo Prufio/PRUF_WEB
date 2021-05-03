@@ -129,10 +129,14 @@ export default function ChangeNodeName(props) {
                         button: 'Close',
                     }).then(() => {
                         window.location.href = nodeInfo.lastRef
-                        window.replaceAssetData = {
-                            refreshBals: true,
-                            nodeList: ['Loading Nodes...', '~', '~', '~'],
-                        }
+                        let newNodeInfo = JSON.parse(JSON.stringify(props.nodeExtData[nodeInfo.index]))
+                        let tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData))
+
+                        newNodeInfo.name = name
+
+                        tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
+
+                        window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr}}
                     })
                 })
         } else if (loginName === nodeInfo.name || loginName === '') {

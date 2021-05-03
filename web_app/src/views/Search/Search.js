@@ -3441,7 +3441,7 @@ export default function Search(props) {
                         {props.IDHolder !== undefined &&
                           props.prufClient !== undefined &&
                           // eslint-disable-next-line react/prop-types
-                          props.nodeIdSets === undefined && (
+                          props.nodeSets === undefined && (
                             <Card>
                               <CardHeader icon>
                                 <CardIcon className="headerIconBack">
@@ -3466,7 +3466,7 @@ export default function Search(props) {
                           )}
                         {props.IDHolder !== undefined &&
                           props.prufClient !== undefined &&
-                          props.nodeIdSets !== undefined && (
+                          props.nodeSets !== undefined && (
                             <>
                               <>
                                 {nodeId === "" && transactionActive && (
@@ -3553,7 +3553,7 @@ export default function Search(props) {
                                                 }}
                                               >
                                                 {generateSubCatList(
-                                                  props.nodeIdSets[
+                                                  props.nodeSets[
                                                   selectedRootID
                                                   ]
                                                 )}
@@ -3625,7 +3625,7 @@ export default function Search(props) {
                                                 }}
                                               >
                                                 {generateSubCatList(
-                                                  props.nodeIdSets[
+                                                  props.nodeSets[
                                                   selectedRootID
                                                   ]
                                                 )}

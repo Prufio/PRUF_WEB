@@ -47,9 +47,9 @@ export default function FinalizeNode(props) {
     const [managementType2, setManagementType2] = React.useState(false)
     const [managementType3, setManagementType3] = React.useState(false)
     const [managementType4, setManagementType4] = React.useState(false)
-    const [storageType, setStorageType] = React.useState('1')
-    const [storageType1, setStorageType1] = React.useState(true)
-    const [storageType2, setStorageType2] = React.useState(false)
+    const [storageProvider, setstorageProvider] = React.useState('1')
+    const [storageProvider1, setstorageProvider1] = React.useState(true)
+    const [storageProvider2, setstorageProvider2] = React.useState(false)
     const [card1, setCard1] = React.useState(true)
     const [card2, setCard2] = React.useState(false)
 
@@ -77,6 +77,16 @@ export default function FinalizeNode(props) {
         console.log('No Node found. Rerouting...')
         window.location.href = '/#/user/home'
         window.location.reload()
+    }
+
+    const thousandHashesOf = (varToHash) => {
+        if (!window.web3) return (window.location.href = '/#/user/home')
+        let tempHash = varToHash
+        for (let i = 0; i < 1000; i++) {
+            tempHash = window.web3.utils.soliditySha3(tempHash)
+            //console.log(tempHash);
+        }
+        return tempHash
     }
 
     const goBack = () => {
@@ -116,16 +126,16 @@ export default function FinalizeNode(props) {
         setManagementType4(true)
     }
 
-    const setStorageType1Button = () => {
-        setStorageType('1')
-        setStorageType1(true)
-        setStorageType2(false)
+    const setstorageProvider1Button = () => {
+        setstorageProvider('1')
+        setstorageProvider1(true)
+        setstorageProvider2(false)
     }
 
-    const setStorageType2Button = () => {
-        setStorageType('2')
-        setStorageType1(false)
-        setStorageType2(true)
+    const setstorageProvider2Button = () => {
+        setstorageProvider('2')
+        setstorageProvider1(false)
+        setstorageProvider2(true)
     }
 
     const nextCard = () => {
@@ -170,10 +180,10 @@ export default function FinalizeNode(props) {
                     <div className="delegationTips">
                         <h4 className="alertText">
                             Storage Type:
-                            {storageType === '1' && (
+                            {storageProvider === '1' && (
                                 <img src={IPFSPNG} className="IPFS2" alt="" />
                             )}
-                            {storageType === '2' && (
+                            {storageProvider === '2' && (
                                 <img
                                     src={ARweavePNG}
                                     className="ARweave3"
@@ -198,12 +208,13 @@ export default function FinalizeNode(props) {
             switch (value) {
                 case 'finalize':
                     setTransactionActive(true)
+                    const pageKey = thousandHashesOf(props.addr, props.winKey)
 
                     props.prufClient.do
                         .finalizeNode(
                             nodeInfo.id,
                             managementType,
-                            storageType,
+                            storageProvider,
                             '0x0000000000000000000000000000000000000000'
                         )
                         // eslint-disable-next-line react/prop-types
@@ -248,7 +259,16 @@ export default function FinalizeNode(props) {
                                 icon: 'success',
                                 button: 'Close',
                             })
-                            window.replaceAssetData.refreshBals = true
+
+                            let newNodeInfo = JSON.parse(JSON.stringify(props.nodeExtData[nodeInfo.index]))
+                            let tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData))
+
+                            newNodeInfo.storageProvider = storageProvider
+                            newNodeInfo.managementType = managementType
+
+                            tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
+
+                            window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr, setAddition: {root: nodeInfo.root, id: nodeInfo.id, name: nodeInfo.name}}}
                             window.location.href = nodeInfo.lastRef
                         })
 
@@ -470,11 +490,11 @@ export default function FinalizeNode(props) {
                     </CardHeader>
                     <GridContainer>
                         <GridItem xs={12} sm={4}>
-                            {!storageType1 && (
+                            {!storageProvider1 && (
                                 <Button
                                     className="managementType"
                                     color="info"
-                                    onClick={() => setStorageType1Button()}
+                                    onClick={() => setstorageProvider1Button()}
                                 >
                                     <img
                                         src={IPFSPNG}
@@ -483,10 +503,10 @@ export default function FinalizeNode(props) {
                                     />
                                 </Button>
                             )}
-                            {storageType1 && (
+                            {storageProvider1 && (
                                 <Button
                                     className="managementTypeSelected"
-                                    onClick={() => setStorageType1Button()}
+                                    onClick={() => setstorageProvider1Button()}
                                 >
                                     <img
                                         src={IPFSPNG}
@@ -495,11 +515,11 @@ export default function FinalizeNode(props) {
                                     />
                                 </Button>
                             )}
-                            {!storageType2 && (
+                            {!storageProvider2 && (
                                 <Button
                                     className="managementType"
                                     color="info"
-                                    onClick={() => setStorageType2Button()}
+                                    onClick={() => setstorageProvider2Button()}
                                 >
                                     <img
                                         src={ARweaveGreyPNG}
@@ -508,10 +528,10 @@ export default function FinalizeNode(props) {
                                     />
                                 </Button>
                             )}
-                            {storageType2 && (
+                            {storageProvider2 && (
                                 <Button
                                     className="managementTypeSelected"
-                                    onClick={() => setStorageType2Button()}
+                                    onClick={() => setstorageProvider2Button()}
                                 >
                                     <img
                                         src={ARweaveGreyPNG}
@@ -523,7 +543,7 @@ export default function FinalizeNode(props) {
                         </GridItem>
                         <GridItem xs={12} sm={8}>
                             <Card className="slide-right">
-                                {storageType1 && (
+                                {storageProvider1 && (
                                     <>
                                         <a
                                             href="https://ipfs.io/"
@@ -545,7 +565,7 @@ export default function FinalizeNode(props) {
                                         </p>
                                     </>
                                 )}
-                                {storageType2 && (
+                                {storageProvider2 && (
                                     <>
                                         <a
                                             href="https://www.arweave.org/"

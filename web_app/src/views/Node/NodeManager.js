@@ -199,24 +199,24 @@ export default function NodeManager(props) {
     const buildDelegationList = () => {
         let _delegationList = []
         // eslint-disable-next-line react/prop-types
-        if (!props.nodeIdSets || !props.rootNames) return
+        if (!props.nodeSets || !props.rootNames) return
 
         // eslint-disable-next-line react/prop-types
-        for (let i = 0; i < Object.values(props.nodeIdSets).length; i++) {
+        for (let i = 0; i < Object.values(props.nodeSets).length; i++) {
             for (
                 let x = 0;
                 // eslint-disable-next-line react/prop-types
-                x < Object.values(props.nodeIdSets)[i].length;
+                x < Object.values(props.nodeSets)[i].length;
                 x++
             ) {
                 _delegationList.push([
                     // eslint-disable-next-line react/prop-types
                     props.rootNames[i],
-                    // <button onClick={() => handleSimple({ name: props.rootNames[i], index: key, href: "view", id: Object.values(props.nodeIdSets)[i][x].id })}>{props.rootNames[i]}</Button>,
+                    // <button onClick={() => handleSimple({ name: props.rootNames[i], index: key, href: "view", id: Object.values(props.nodeSets)[i][x].id })}>{props.rootNames[i]}</Button>,
                     // eslint-disable-next-line react/prop-types
-                    Object.values(props.nodeIdSets)[i][x].name,
+                    Object.values(props.nodeSets)[i][x].name,
                     // eslint-disable-next-line react/prop-types
-                    Object.values(props.nodeIdSets)[i][x].id,
+                    Object.values(props.nodeSets)[i][x].id,
                     'N/A',
                     'N/A',
                 ])
@@ -399,6 +399,7 @@ export default function NodeManager(props) {
             tempObj.managementType = props.nodeExtData[index].managementType
             tempObj.discount = props.nodeExtData[index].discount
             tempObj.referenceAddress = props.nodeExtData[index].referenceAddress
+            tempObj.index = index
             getAllCosts(tempObj)
         }
     }

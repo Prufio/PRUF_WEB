@@ -309,7 +309,7 @@ export default function Import(props) {
               <FormControl fullWidth className={classes.selectFormControl}>
                   <>
                     <InputLabel>Select Node</InputLabel>
-                    {assetInfo.nodeData && props.nodeIdSets ? 
+                    {assetInfo.nodeData && props.nodeSets ? 
                     <Select
                       MenuProps={{
                         className: classes.selectMenu,
@@ -326,7 +326,7 @@ export default function Import(props) {
                         id: "class-select",
                       }}
                     >
-                      {generateSubCatList(props.nodeIdSets[assetInfo.nodeData.root])}
+                      {generateSubCatList(props.nodeSets[assetInfo.nodeData.root])}
                     </Select>
                     :
                     <Select
