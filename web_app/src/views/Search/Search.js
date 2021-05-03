@@ -135,7 +135,7 @@ export default function Search(props) {
 
   const awaitPrufInit = (id) => {
     setTimeout(() => {
-      console.log("Checking...", props.prufClient)
+      //console.log("Checking...", props.prufClient)
       if (props.prufClient !== undefined && props.prufClient.get !== undefined) { console.log("Searching...", id); checkInputs(id) }
       else { awaitPrufInit(id) }
     }, 100)
@@ -197,16 +197,16 @@ export default function Search(props) {
     if (!props.IDHolder) {
       IDHolderPrompt();
     } else {
-      setNodeId(event.target.value);
-      setClassSelect(event.target.value);
       try {
         props.prufClient.get.nodeName(event.target.value).then((x) => {
           let str = x
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
           setNodeIdName(str);
-          props.prufClient.get.operationCost(1, event.target.value).then((x) => {
-            setRecycleCost(x);
+          props.prufClient.get.operationCost(event.target.value, 1).then((x) => {
+            setNodeId(event.target.value);
+            setClassSelect(event.target.value);
+            setRecycleCost(x.total);
           })
         });
       } catch {
@@ -1719,6 +1719,8 @@ export default function Search(props) {
   const setIsNotRecycling = () => {
     setSimpleSelect("");
     setIsRecycling(false);
+    setNodeId("");
+    setClassSelect("");
     setloginFirstState("");
     setloginLastState("");
     setloginIDState("");
@@ -1826,7 +1828,7 @@ export default function Search(props) {
     newAsset.status = "Out of Escrow";
     newAsset.statusNum = "58";
 
-    rgtHash = await props.prufClient.utils.generateSecureRgt(
+    props.prufClient.utils.generateSecureRgt(
       asset.id,
       {
         first: first,
@@ -1835,62 +1837,64 @@ export default function Search(props) {
         id: ID,
         password: password
       }
-    );
-
-    console.log("idxHash", idxHash);
-    console.log("rgtHash", rgtHash);
-    console.log("addr: ", window.addr);
-    setTransaction(true);
-
-    props.prufClient.do
-      .recycleAsset(idxHash, rgtHash, nodeId)
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransaction(false);
-        tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        if (tempTxHash !== undefined) {
+    ).then(rgtHash =>{
+      console.log("idxHash", idxHash);
+      console.log("rgtHash", rgtHash);
+      console.log("addr: ", props.addr);
+      setTransaction(true);
+  
+      props.prufClient.do
+        .recycleAsset(idxHash, rgtHash, nodeId)
+        .send({ from: props.addr })
+        .on("error", function (_error) {
+          setTransaction(false);
+          tempTxHash = Object.values(_error)[0].transactionHash;
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+          let str2 = "' target='_blank'>here</a>";
+          link.innerHTML = String(str1 + tempTxHash + str2);
+          if (tempTxHash !== undefined) {
+            swal({
+              title: "Something went wrong!",
+              content: link,
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          if (tempTxHash === undefined) {
+            swal({
+              title: "Something went wrong!",
+              icon: "warning",
+              button: "Close",
+            });
+          }
+          console.log("Verification conf");
+          setTxHash(Object.values(_error)[0].transactionHash);
+          console.log(Object.values(_error)[0].transactionHash);
+          console.log(_error);
+          setError(_error);
+        })
+        .on("receipt", (receipt) => {
+          setTransactionActive(false);
+          setTxStatus(receipt.status);
+          tempTxHash = receipt.transactionHash;
+          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+          let str2 = "' target='_blank'>here</a>";
+          link.innerHTML = String(str1 + tempTxHash + str2);
           swal({
-            title: "Something went wrong!",
+            title: "Recycle Success!",
             content: link,
-            icon: "warning",
+            icon: "success",
             button: "Close",
+          }).then(() => {
+            window.newStat = { num: "58", str: "Out of Escrow" };
+            window.location.href = "/#/user/dashboard";
+            window.replaceAssetData = { key: pageKey, newAsset: newAsset };
           });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Something went wrong!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        console.log("Verification conf");
-        setTxHash(Object.values(_error)[0].transactionHash);
-        console.log(Object.values(_error)[0].transactionHash);
-        console.log(_error);
-        setError(_error);
-      })
-      .on("receipt", (receipt) => {
-        setTransactionActive(false);
-        setTxStatus(receipt.status);
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        swal({
-          title: "Recycle Success!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        }).then(() => {
-          window.newStat = { num: "58", str: "Out of Escrow" };
-          window.location.href = "/#/user/dashboard";
-          window.replaceAssetData = { key: pageKey, newAsset: newAsset };
         });
-      });
-    return;
+    })
+
+
+    //return;
   };
 
   const thousandHashesOf = (varToHash) => {
@@ -2160,7 +2164,11 @@ export default function Search(props) {
     }
 
     props.prufClient.utils.isValidId(id).then((e) => {
-      if (!e) return console.log("!validID");
+      if (!e) return swal({
+        title: "Invalid ID submitted! Check input fields and try again.",
+        icon: "warning",
+        button: "Close",
+      });
 
       props.prufClient.get.assetRecordExists(id).then(e => {
         if (e) {
