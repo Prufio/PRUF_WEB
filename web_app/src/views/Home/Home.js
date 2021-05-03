@@ -621,12 +621,11 @@ export default function Home(props) {
                                                 params: {},
                                             })
                                             .then(async (accounts) => {
-                                                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-                                                setIsMounted(true);
-                                                awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
+                                                console.log(window.web3.utils.toChecksumAddress(accounts[0]));
+                                                //setIsMounted(true);
+                                                //awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
                                             });
                                     } else swal("No ethereum provider detected")
-
                                 }}>connect</a> to an Ethereum provider.
                             </h3>
                         </form>
@@ -653,7 +652,7 @@ export default function Home(props) {
                     <CardBody>
                         <form>
                             <h4>Conversion Rate: ü100,000/1 Kovan Ether</h4>
-                            <h5>Minimum Purchase Amount is ü10000</h5>
+                            <h5>Minimum Purchase Amount is ü10,000</h5>
                             {!prufTransactionActive && (
                                 <>
                                     <CustomInput
@@ -673,7 +672,7 @@ export default function Home(props) {
                                                 )
                                                 if (
                                                     event.target.value !== '' &&
-                                                    event.target.value > 9999
+                                                    event.target.value >= 10000
                                                 ) {
                                                     setloginDepositState(
                                                         'success'
