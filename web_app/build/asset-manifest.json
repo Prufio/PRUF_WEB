@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.0c7f2dcd.chunk.css",
+    "main.css": "/static/css/main.afee1dc5.chunk.css",
     "main.js": "/static/js/main.e460522a.chunk.js",
     "main.js.map": "/static/js/main.e460522a.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.0908cf66.js",
@@ -10,7 +10,7 @@
     "static/js/2.27b6a8a9.chunk.js.map": "/static/js/2.27b6a8a9.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.121b3ca3.chunk.css.map": "/static/css/2.121b3ca3.chunk.css.map",
-    "static/css/main.0c7f2dcd.chunk.css.map": "/static/css/main.0c7f2dcd.chunk.css.map",
+    "static/css/main.afee1dc5.chunk.css.map": "/static/css/main.afee1dc5.chunk.css.map",
     "static/js/2.27b6a8a9.chunk.js.LICENSE.txt": "/static/js/2.27b6a8a9.chunk.js.LICENSE.txt",
     "static/js/main.e460522a.chunk.js.LICENSE.txt": "/static/js/main.e460522a.chunk.js.LICENSE.txt",
     "static/media/BloomBW.be4edce2.jpg": "/static/media/BloomBW.be4edce2.jpg",
@@ -32,7 +32,7 @@
     "static/js/runtime-main.0908cf66.js",
     "static/css/2.121b3ca3.chunk.css",
     "static/js/2.27b6a8a9.chunk.js",
-    "static/css/main.0c7f2dcd.chunk.css",
+    "static/css/main.afee1dc5.chunk.css",
     "static/js/main.e460522a.chunk.js"
   ]
 }
