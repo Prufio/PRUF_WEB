@@ -2012,7 +2012,7 @@ export default function Search(props) {
   };
 
   const blockchainVerifyAsset = async () => {
-    if (!window.ethereum) {
+    if (!props.addr) {
       return swal({
         title: "Connect to an ethereum provider to use this functionality!",
         button: "Close",
@@ -3367,7 +3367,7 @@ export default function Search(props) {
                         Back
                       </Button>
                     )}
-                    {currency !== "" && !transaction && (
+                    {currency !== "" && !transaction && props.addr && (
                       <Button
                         onClick={() => {
                           purchaseAsset();
@@ -3390,7 +3390,40 @@ export default function Search(props) {
                     )}
                     {isRecycling && (
                       <>
-                        {props.prufClient === undefined && (
+                        {!props.addr && (
+                          <Card>
+                            <CardHeader icon>
+                              <CardIcon className="headerIconBack">
+                                <Category />
+                              </CardIcon>
+                              <h4 className={classes.cardIconTitle}>Node Selection</h4>
+                            </CardHeader>
+                            <CardBody>
+                              <form>
+                                <h3 className="bump">
+                                  <br />
+                                Please <a onClick={() => {
+                                    if (props.addr) {
+                                      props.addr
+                                        .request({
+                                          method: "eth_accounts",
+                                          params: {},
+                                        })
+                                        .then(async (accounts) => {
+                                          setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+                                          setIsMounted(true);
+                                          awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
+                                        });
+                                    } else swal("No ethereum provider detected")
+
+                                  }}>connect</a> to an Ethereum provider.
+                            </h3>
+                              </form>
+                            </CardBody>
+                            <br />
+                          </Card>
+                        )}
+                        {props.prufClient === undefined && props.addr && (
                           <Card>
                             <CardHeader icon>
                               <CardIcon className="headerIconBack">
@@ -3414,7 +3447,7 @@ export default function Search(props) {
                           </Card>
                         )}
                         {/* eslint-disable-next-line react/prop-types */}
-                        {props.IDHolder === undefined && props.prufClient !== undefined && (
+                        {props.IDHolder === undefined && props.prufClient !== undefined && props.addr && (
                           <Card>
                             <CardHeader icon>
                               <CardIcon className="headerIconBack">
@@ -3820,12 +3853,12 @@ export default function Search(props) {
                                       {!transaction && (
                                         <>
                                           {recycleCost > 0 ? (
-                                            <h4>
-                                              Cost to recycle asset: ü&nbsp;{recycleCost}
+                                            <h4 className="costsText">
+                                              Cost: ü{recycleCost}
 
                                             </h4>
                                           ) : (
-                                            <h4>Cost to recycle asset: None</h4>
+                                            <h4 className="costsText">Cost: None</h4>
                                           )}
                                           <Button
                                             color="info"
