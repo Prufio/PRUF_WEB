@@ -85,7 +85,7 @@ export default function Dashboard(props) {
   const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage);
 
   const moreInfo = (e) => {
-    console.log(e);
+    //console.log(e);
     // eslint-disable-next-line react/prop-types
     if (props.ps) {
       //console.log(props.ps)
