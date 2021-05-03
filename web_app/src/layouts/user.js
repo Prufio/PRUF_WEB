@@ -155,7 +155,7 @@ export default function Dashboard(props) {
   };
 
   const handleNoEthereum = async () => {
-    if(isMobile) swal("No ethereum detected")
+    //if(isMobile) swal("No ethereum detected")
     console.log("No ethereum object available");
     let web3;
     web3 = require("web3");
@@ -308,7 +308,7 @@ export default function Dashboard(props) {
       });
 
 
-      if(isMobile) swal("Ethereum successfully detected")
+      //if(isMobile) swal("Ethereum successfully detected")
       //console.log("Found ethereum object");
       let web3;
       web3 = require("web3");
@@ -409,6 +409,7 @@ export default function Dashboard(props) {
 
   window.onload = () => {
     //console.log("page loaded", window.location.href)
+    if(cookies['dontCount'] === undefined) setCookieTo('dontCount', [])
     window.balances = {};
     window.replaceAssetData = {};
     let timeOutCounter = 0;
@@ -542,11 +543,8 @@ export default function Dashboard(props) {
       ) {
         window.replaceAssetData = {};
         console.log("Invalid key passed. Aborted call to replace.");
-      } else if (window.replaceAssetData.nodeList) {
-        //console.log("Setting nodeList");
-        //setNodeList(window.replaceAssetData.nodeList);
-        //setCookieTo("nodeList", window.replaceAssetData.nodeList);
-        window.replaceAssetData = {};
+      } else if (window.replaceAssetData.nodeData) {
+
       } else {
         setWinKey(String(Math.round(Math.random() * 100000)));
         console.log(
@@ -725,6 +723,7 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = async (_prufClient, _addr) => {
+    if (typeof cookies['dontCount'] !== 'object') setCookieTo('dontCount', [])
 
     //console.log(_prufClient)
 
@@ -821,6 +820,9 @@ export default function Dashboard(props) {
           }
         });
     } else if (rootsDone === true && acsDone !== true) {
+      if(cookies['dontCount'].includes(iteration)) {
+        return buildNodeHeap(_addr, _prufClient, iteration + 1, arr, true, false);
+      }
       _prufClient.get
         .nodeExists(String(iteration))
         .then(e => {
@@ -837,7 +839,8 @@ export default function Dashboard(props) {
     }
   };
 
-  const getACsFromDB = async (_addr, _prufClient, acArray, iteration, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames) => {
+  const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames) => {
+    //console.log(cookies['dontCount'])
     //console.log(acArray);
     if (!iteration) iteration = 0;
     if (!rootArray) rootArray = [];
@@ -857,13 +860,11 @@ export default function Dashboard(props) {
           allCNArr: allClassNames,
         });
 
-    _prufClient.get
-      .nodeData(String(acArray[iteration]))
-      .then(e => {
-        if (String(acArray[iteration]) === e.root) {
-          rootArray.push(acArray[iteration]);
+    if (acArray[iteration] < 100000) {
+      _prufClient.get.nodeName(String(acArray[iteration])).then(e=>{
+        rootArray.push(acArray[iteration]);
           rootNameArray.push(
-            e.name
+              e
               .toLowerCase()
               .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                 letter.toUpperCase()
@@ -871,7 +872,11 @@ export default function Dashboard(props) {
           );
           _nodeIdSets[String(acArray[iteration])] = [];
           return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
-        } else {
+      })
+    } else {
+      _prufClient.get
+      .nodeData(String(acArray[iteration]))
+      .then(e => {
           //console.log(acArray[i])
           if (e.managementType === "255") {
             return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
@@ -888,6 +893,10 @@ export default function Dashboard(props) {
                 );
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               } else {
+                let tempArr = cookies['dontCount']
+                console.log(tempArr)
+                tempArr.push(acArray[iteration])
+                setCookieTo('dontCount', tempArr)
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
               }
             })
@@ -919,8 +928,8 @@ export default function Dashboard(props) {
             );
             return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeIdSets, rootArray, rootNameArray, allClasses, allClassNames)
           }
-        }
       });
+    }
   };
 
   const setUpNodeInformation = async (_prufClient, obj) => {

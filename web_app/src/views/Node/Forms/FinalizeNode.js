@@ -561,7 +561,7 @@ export default function FinalizeNode(props) {
                                         <p>
                                             A novel blockchain
                                             protocol enabling truly
-                                            permanent data storage. NOTE: ADVANCED USERS ONLY.
+                                            permanent data storage. NOTE: ADVANCED USERS ONLY. YOU WILL NEED SPIN UP A LOCAL ARWEAVE NODE.
                                         </p>
                                     </>
                                 )}

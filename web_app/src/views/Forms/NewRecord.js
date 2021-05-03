@@ -602,18 +602,19 @@ export default function NewRecord(props) {
       _newRecord(extDataA, extDataB, idxHash, ipfsObj);
     } else {
 
-      let ipfsB32 = await props.prufClient.utils.ipfsToB32(
+      props.prufClient.utils.ipfsToB32(
         String(extendedDataHash)
-      );
+      ).then(e=>{
+        console.log(`b32 of ipfs bs58 hash: ${e}\n Asset id: ${idxHash}\n Engraving object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
+        _newRecord(
+          e,
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          idxHash,
+          ipfsObj
+        );
+      })
 
-      console.log(`b32 of ipfs bs58 hash: ${ipfsB32}\n Asset id: ${idxHash}\n Engraving object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
 
-      _newRecord(
-        ipfsB32,
-        "0x0000000000000000000000000000000000000000000000000000000000000000",
-        idxHash,
-        ipfsObj
-      );
     }
   };
 
@@ -664,7 +665,7 @@ export default function NewRecord(props) {
       return;
     }
     console.log(type, make, model, serial)
-    await props.prufClient.utils.generateAssetID(
+    props.prufClient.utils.generateAssetID(
       {
         type: type,
         make: make,

@@ -568,12 +568,11 @@ export default function Home(props) {
                                                     Number(props.pruf) * 100
                                                 ) / 100
                                             )}{' '}
-                                            <small>PRUF</small>
                                         </>
                                     ) : (
                                         <>
                                             {/* eslint-disable-next-line react/prop-types */}
-                                            {props.pruf} <small>PRUF</small>
+                                            {props.pruf} 
                                         </>
                                     )}
                                 </h3>
@@ -653,8 +652,8 @@ export default function Home(props) {
                 {props.prufClient !== undefined && props.prufClient !== {} && props.addr && (
                     <CardBody>
                         <form>
-                            <h4>Conversion Rate: (ü100000/KΞ1)</h4>
-                            <h5>Minimum Purchase Amount is ü10000(KΞ0.1)</h5>
+                            <h4>Conversion Rate: ü100,000/1 Kovan Ether</h4>
+                            <h5>Minimum Purchase Amount is ü10000</h5>
                             {!prufTransactionActive && (
                                 <>
                                     <CustomInput
