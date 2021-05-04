@@ -862,8 +862,8 @@ export default function Dashboard(props) {
     if (!_prufClient) return;
     if (!rootsDone && !acsDone) rootsDone = false;
     acsDone = false;
-    if (!iteration) iteration = 1;
-    if (!arr) arr = [];
+    if (!arr) arr = cookies["roots"] || [];
+    if (!iteration && cookies["roots"]) iteration = cookies["roots"].length+1; else if (!iteration) iteration = 1;
 
     if (rootsDone !== true) {
       _prufClient.get
@@ -871,6 +871,7 @@ export default function Dashboard(props) {
         .then(e => {
           if (e) {
             arr.push(iteration);
+            setCookieTo("roots", arr)
             return buildNodeHeap(_addr, _prufClient, iteration + 1, arr, false, false);
           } else {
             //noMore = true;
@@ -900,8 +901,8 @@ export default function Dashboard(props) {
   const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames) => {
     //console.log(cookies['dontCount'])
     //console.log(acArray);
-    if (!iteration) iteration = 0;
-    if (!rootArray) rootArray = [];
+    if(!iteration && cookies["roots"]); else if (!iteration) iteration = 0;
+    if (!rootArray) rootArray = cookies["roots"] || [];
     if (!rootNameArray) rootNameArray = [];
     if (!allClasses) allClasses = [];
     if (!allClassNames) allClassNames = [];
