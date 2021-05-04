@@ -510,7 +510,7 @@ class Sidebar extends React.Component {
                   spotColor={getPrufColor("analogous", addr)}
                   size={15}
                   seed={addr}
-                  className="addressIcon"
+                  className="addressIconAndroid"
                 />
               )}
               {addr !== undefined && addr !== "" && isMobile && (
@@ -522,7 +522,7 @@ class Sidebar extends React.Component {
                     spotColor={getPrufColor("analogous", addr)}
                     size={15}
                     seed={addr}
-                    className="addressIconMobile"
+                    className="addressIconAndroid"
                   />
                 </button>
               )}
@@ -698,7 +698,7 @@ class Sidebar extends React.Component {
                         spotColor={getPrufColor("analogous", addr)}
                         size={15}
                         seed={addr}
-                        className="addressIconMobile"
+                        className="addressIconAndroid"
                       />
                     </button>
                   )}
@@ -712,7 +712,7 @@ class Sidebar extends React.Component {
                         spotColor={getPrufColor("analogous", addr)}
                         size={15}
                         seed={addr}
-                        className="addressIconMobile"
+                        className="addressIconAndroid"
                       />
                     </button>
                   )}
