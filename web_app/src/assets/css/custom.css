@@ -835,7 +835,7 @@ cursor:pointer;
   /* top: 25px !important; */
   /* left: 75px !important; */
   /* color: white; */
-  /* position: absolute; */
+  position: absolute;
 }
 
 .addressIconButton:hover {
