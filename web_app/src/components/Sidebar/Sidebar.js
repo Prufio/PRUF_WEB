@@ -433,6 +433,7 @@ class Sidebar extends React.Component {
                   );
                 }}
               >
+              <button className="addressIconButton">
                 <Blockies
                   scale={4}
                   color={getPrufColor("primary", addr)}
@@ -442,6 +443,7 @@ class Sidebar extends React.Component {
                   seed={addr}
                   className="addressIconAndroid"
                 />
+              </button>
               </CopyToClipboard>
             )}
           </>
@@ -464,6 +466,7 @@ class Sidebar extends React.Component {
                   );
                 }}
               >
+              <button className="addressIconButton">
                 <Blockies
                   scale={4}
                   color={getPrufColor("primary", addr)}
@@ -473,6 +476,7 @@ class Sidebar extends React.Component {
                   seed={addr}
                   className="addressIconAndroid"
                 />
+              </button>
               </CopyToClipboard>
             )}
           </a>
@@ -487,17 +491,6 @@ class Sidebar extends React.Component {
                 <img src={pruftoken} alt="logo" className="addressIcon" />
               )}
               {addr !== undefined && addr !== "" && !isMobile && (
-                <CopyToClipboard
-                  text={addr}
-                  onCopy={() => {
-                    swal(
-                      "Address Copied to Clipboard!\n" +
-                      addr.substring(0, 8) +
-                      "..." +
-                      addr.substring(34, 42)
-                    );
-                  }}
-                >
                   <Blockies
                     scale={4}
                     color={getPrufColor("primary", addr)}
@@ -507,7 +500,19 @@ class Sidebar extends React.Component {
                     seed={addr}
                     className="addressIconAndroid"
                   />
-                </CopyToClipboard>
+              )}
+              {addr !== undefined && addr !== "" && isMobile && (
+                <button className="addressIconButton" onClick={() => { copyTextSnippet(addr); }}>
+                  <Blockies
+                    scale={4}
+                    color={getPrufColor("primary", addr)}
+                    bgColor={getPrufColor("secondary", addr)}
+                    spotColor={getPrufColor("analogous", addr)}
+                    size={15}
+                    seed={addr}
+                    className="addressIconAndroid"
+                  />
+                </button>
               )}
             </a>
             <a className={logoNormal}>
@@ -684,6 +689,7 @@ class Sidebar extends React.Component {
                         );
                       }}
                     >
+                    <button className="addressIconButton">
                       <Blockies
                         scale={4}
                         color={getPrufColor("primary", addr)}
@@ -693,6 +699,7 @@ class Sidebar extends React.Component {
                         seed={addr}
                         className="addressIconAndroid"
                       />
+                    </button>
                     </CopyToClipboard>
                   )}
 
