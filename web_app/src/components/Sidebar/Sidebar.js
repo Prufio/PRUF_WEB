@@ -510,7 +510,7 @@ class Sidebar extends React.Component {
                     spotColor={getPrufColor("analogous", addr)}
                     size={15}
                     seed={addr}
-                    className="addressIconAndroid"
+                    className="addressIconMobile"
                   />
                 </button>
               )}
