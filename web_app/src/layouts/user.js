@@ -919,15 +919,13 @@ export default function Dashboard(props) {
   }
 
   const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames) => {
-    //console.log(cookies['dontCount'])
-    //console.log(acArray);
-    if/* (!iteration && cookies["roots"]) iteration = cookies["roots"].length + 1; else if */ (!iteration) iteration = 0;
-    if (!rootArray) rootArray =/*  cookies["roots"] || */[];
+    if (!iteration) iteration = 0;
+    if (!rootArray) rootArray = [];
     if (!rootNameArray) rootNameArray = [];
     if (!allClasses) allClasses = [];
     if (!allClassNames) allClassNames = [];
     if (!_nodeSets) _nodeSets = {};
-    //console.log(iteration)
+    
     if (iteration >= acArray.length)
       return setUpNodeInformation(
         _prufClient,
