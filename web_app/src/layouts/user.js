@@ -420,7 +420,7 @@ export default function Dashboard(props) {
 
   window.onload = () => {
     //console.log("page loaded", window.location.href)
-    if (cookies['dontCount'] === undefined) setCookieTo('dontCount', [])
+    //if (cookies[`${_addr}dontCount`] === undefined) setCookieTo(`${_addr}dontCount`, [])
     window.balances = {};
     window.replaceAssetData = {};
     let timeOutCounter = 0;
@@ -535,14 +535,15 @@ export default function Dashboard(props) {
 
   React.useEffect(() => {
     if (isMounted) {
-      //console.log("Heard call for replace.")
+      console.log(`Heard call for replace.`)
+      console.log(window.replaceAssetData)
       if (
         !window.replaceAssetData ||
         Object.values(window.replaceAssetData).length === 0
       ) {
         window.replaceAssetData = {};
       }
-      if (window.replaceAssetData.refreshBals) {
+      if (window.replaceAssetData.refreshBals === true) {
         console.log("Resetting token value");
         //document.body.style.cursor = 'wait'
         setupTokenVals(addr, prufClient, { justCount: true });
@@ -588,18 +589,11 @@ export default function Dashboard(props) {
         let tempArr = JSON.parse(JSON.stringify(assetArr));
         let idArr = JSON.parse(JSON.stringify(assetIds));
         setupTokenVals(addr, prufClient, { justCount: true });
-        // if (!assetArr || assetArr.length < 1) {
-        //   tempArr = [];
-        // }
 
-        // else {
-        //   tempArr = JSON.parse(JSON.stringify(assetArr))
-        // }
 
         if (newAsset && dBIndex > -1) {
           idArr.push(newAsset.id);
-          //newAsset.lastRef = "/#/user/dashboard"
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
           console.log("Replacing asset at index: ", dBIndex);
           console.log("Old Assets", tempArr);
           tempArr.splice(dBIndex, 1, newAsset);
@@ -753,7 +747,7 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = async (_prufClient, _addr) => {
-    if (typeof cookies['dontCount'] !== 'object') setCookieTo('dontCount', [])
+    if (typeof cookies[`${_addr}dontCount`] !== 'object') setCookieTo(`${_addr}dontCount`, [])
 
     //console.log(_prufClient)
 
@@ -860,15 +854,15 @@ export default function Dashboard(props) {
 
   const buildRoots = (_addr, _prufClient, iteration, arr) => {
     if (!_prufClient) return;
-    if (!arr) arr = cookies["roots"] || [];
-    if (!iteration && cookies["roots"]) iteration = cookies["roots"].length + 1; else if (!iteration) iteration = 1;
+    if (!arr) arr = cookies[`${_addr}roots`] || [];
+    if (!iteration && cookies[`${_addr}roots`]) iteration = cookies[`${_addr}roots`].length + 1; else if (!iteration) iteration = 1;
 
     _prufClient.get
       .nodeExists(String(iteration))
       .then(e => {
         if (e) {
           arr.push(iteration);
-          setCookieTo("roots", arr)
+          setCookieTo(`${_addr}roots`, arr)
           return buildRoots(_addr, _prufClient, iteration + 1, arr);
         } else {
           //noMore = true;
@@ -883,21 +877,22 @@ export default function Dashboard(props) {
 
     if (!iteration) {
       iteration = 1000001
-      if (cookies['subNodes']) {
-        iteration += cookies['subNodes'].length
+      if (cookies[`${_addr}subNodes`]) {
+        iteration += cookies[`${_addr}subNodes`].length
       }
     }
 
     if (!arr) {
       arr = roots || []
-      subNodes = cookies['subNodes'] || []
-      if (cookies['subNodes']) {
-        arr = arr.concat(cookies['subNodes'])
+      subNodes = cookies[`${_addr}subNodes`] || []
+      if (cookies[`${_addr}subNodes`]) {
+        arr = arr.concat(cookies[`${_addr}subNodes`])
       }
       console.log(`Cached nodes: ${arr}`)
     }
 
-    if (cookies['dontCount'] && cookies['dontCount'].includes(iteration)) {
+    if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(iteration)) {
+      console.log(`Caught count exception ${iteration}`)
       return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
     }
 
@@ -907,7 +902,7 @@ export default function Dashboard(props) {
         if (e) {
           arr.push(iteration);
           subNodes.push(iteration)
-          setCookieTo("subNodes", subNodes)
+          setCookieTo(`${_addr}subNodes`, subNodes)
           return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes)
         } else {
           console.log(`Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`)
@@ -918,14 +913,15 @@ export default function Dashboard(props) {
 
   }
 
-  const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames) => {
+  const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount) => {
+    if (!dontCount) dontCount = cookies[`${_addr}dontCount`] || []
     if (!iteration) iteration = 0;
     if (!rootArray) rootArray = [];
     if (!rootNameArray) rootNameArray = [];
     if (!allClasses) allClasses = [];
     if (!allClassNames) allClassNames = [];
     if (!_nodeSets) _nodeSets = {};
-    
+
     if (iteration >= acArray.length)
       return setUpNodeInformation(
         _prufClient,
@@ -948,7 +944,7 @@ export default function Dashboard(props) {
             )
         );
         _nodeSets[String(acArray[iteration])] = [];
-        return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+        return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
       })
     } else {
       _prufClient.get
@@ -956,7 +952,7 @@ export default function Dashboard(props) {
         .then(e => {
           //console.log(acArray[i])
           if (e.managementType === "255") {
-            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
           } else if (e.managementType === "1" || e.managementType === "2") {
             _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x => {
               if (x === _addr) {
@@ -968,13 +964,12 @@ export default function Dashboard(props) {
                       letter.toUpperCase()
                     )
                 );
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               } else {
-                let tempArr = cookies['dontCount']
-                console.log(tempArr)
-                tempArr.push(acArray[iteration])
-                setCookieTo('dontCount', tempArr)
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+                //console.log(tempArr)
+                dontCount.push(acArray[iteration])
+                setCookieTo(`${_addr}dontCount`, dontCount)
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               }
             })
             //getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
@@ -989,9 +984,9 @@ export default function Dashboard(props) {
                       letter.toUpperCase()
                     )
                 );
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               } else {
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               }
             })
           } else {
@@ -1003,7 +998,7 @@ export default function Dashboard(props) {
                   letter.toUpperCase()
                 )
             );
-            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
           }
         });
     }

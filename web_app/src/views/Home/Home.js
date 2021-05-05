@@ -172,7 +172,7 @@ export default function Home(props) {
             .sendTransaction({
                 // eslint-disable-next-line react/prop-types
                 from: props.addr,
-                to: '0x5Ca05ADD0CB707511ed627E0344504B150e7c337',
+                to: '0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468',
                 value: amount / 100000,
             })
             .on('error', function (_error) {
@@ -217,18 +217,14 @@ export default function Home(props) {
                     icon: 'success',
                     button: 'Close',
                 })
+                window.replaceAssetData.refreshBals = true
                 refreshBalances()
                 forceUpdate()
-                //refreshBalances()
             })
 
         console.log(window.ipfs)
 
         console.log(
-            // eslint-disable-next-line react/prop-types
-            props.prufClient.utils.isValidId(
-                '0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634'
-            )
         )
 
         return clearPRUFForm()
@@ -287,7 +283,7 @@ export default function Home(props) {
                     button: 'Close',
                 }).then(() => {
                     refreshBalances()
-                    window.replaceAssetData = { IDHolder: true }
+                    window.replaceAssetData.refreshBals = true
                     setHasMinted(true)
                     forceUpdate()
                 })
@@ -307,9 +303,7 @@ export default function Home(props) {
     const refreshBalances = async () => {
         if (!props.addr) return
         console.log('Refreshing balances')
-        window.replaceAssetData.refreshBals = true
-
-        
+        console.log(window.replaceAssetData)
 
         if (props.prufClient && props.prufClient.get) {
             await window.web3.eth.getBalance(props.addr, (error, result) => {
@@ -524,7 +518,7 @@ export default function Home(props) {
                         <CardFooter stats>
                             {!isRefreshingEther && (
                                 <div className="refresh">
-                                    <Cached onClick={() => refreshBalances()} />
+                                    <Cached onClick={() => {window.replaceAssetData.refreshBals = true; refreshBalances()}} />
                                 </div>
                             )}
                             {isRefreshingEther && (
