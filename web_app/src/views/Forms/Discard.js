@@ -98,7 +98,7 @@ export default function Discard(props) {
     setTransactionActive(true);
 
     await props.prufClient.do
-      .discardAsset(window.web3.utils.hexToNumberString(assetInfo.id))
+      .discardAsset(assetInfo.id)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
