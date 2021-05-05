@@ -2082,38 +2082,37 @@ export default function Search(props) {
           link.innerHTML = String(str1 + tempTxHash + str2);
           setVerifyResult(receiptVal);
           console.log("Verification Result :", receiptVal);
+          if (receiptVal === "Match confirmed") {
+            swal({
+              title: "Match Confirmed!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            });
+            console.log("Verification conf");
+          }
+    
+          if (receiptVal !== "Match confirmed") {
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Match Failed!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Match Failed!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            console.log("Verification not conf");
+          }
         });
-    }).then(receiptVal => {
-      if (receiptVal === "Match confirmed") {
-        swal({
-          title: "Match Confirmed!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        });
-        console.log("Verification conf");
-      }
-
-      if (receiptVal !== "Match confirmed") {
-        if (tempTxHash !== undefined) {
-          swal({
-            title: "Match Failed!",
-            content: link,
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Match Failed!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        console.log("Verification not conf");
-      }
-
     })
+
   };
 
   const checkInputs = (fromQR) => {
