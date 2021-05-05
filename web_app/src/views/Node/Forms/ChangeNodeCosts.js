@@ -43,7 +43,7 @@ export default function ChangeNodeCosts(props) {
 
     const [nodeInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)))
     const [beneficiaryAddress, setBeneficiaryAddress] = React.useState(
-        window.sentPacket.costs[0].beneficiary || {}
+         window.sentPacket.costs[0].beneficiary || ""
     )
     const [
         // eslint-disable-next-line no-unused-vars
@@ -137,9 +137,14 @@ export default function ChangeNodeCosts(props) {
     }
 
     const changeCosts = (obj, _beneficiaryAddress, index, iteration) => {
-        //import held Node
+        if (!index) {
+            index = 1
+        }
         console.log(costPacket)
         console.log(Object.values(costPacket).length)
+        if(nodeInfo.costs[index-1]){
+            console.log(nodeInfo.costs[index-1])
+        }
         console.log(nodeInfo)
         console.log(_beneficiaryAddress)
         if (!formChanged) {
@@ -150,9 +155,7 @@ export default function ChangeNodeCosts(props) {
             obj = costPacket
         }
 
-        if (!index) {
-            index = 1
-        }
+        
 
         if (!iteration) {
             iteration = 1
@@ -162,22 +165,21 @@ export default function ChangeNodeCosts(props) {
             _beneficiaryAddress = beneficiaryAddress
         }
 
-        console.log(nodeInfo.costs[index].beneficiary)
+        console.log(nodeInfo.costs[index-1].beneficiary)
         console.log(_beneficiaryAddress)
-        if (
-            Object.values(obj).length < iteration &&
-            nodeInfo.costs[index].beneficiary ===
+        console.log(Object.values(obj).length, iteration, index)
+        console.log(nodeInfo.costs[index-1].beneficiary === _beneficiaryAddress)
+        console.log(obj)
+
+        console.log(
+            !obj[String(index)] &&
+            nodeInfo.costs[index-1].beneficiary ===
             _beneficiaryAddress
-        ) {
-            console.log("here")
-            return swal('Cost updates complete!').then(() => {
-                window.location.href = nodeInfo.lastRef
-            })
-        }
+            )
 
         if (
-            !obj[index] &&
-            nodeInfo.costs[index].beneficiary ===
+            !obj[String(index)] &&
+            nodeInfo.costs[index-1].beneficiary ===
             _beneficiaryAddress
         ) {
             return changeCosts(obj, _beneficiaryAddress, index + 1, iteration)
@@ -191,17 +193,25 @@ export default function ChangeNodeCosts(props) {
         if (!transactionActive) {
             setTransactionActive(true)
         }
-        if (!window.web3.utils.isAddress(beneficiaryAddress)) {
-            swal({
+
+        if (!window.web3.utils.isAddress(_beneficiaryAddress)) {
+            return swal({
                 title: 'Submitted address is not a valid ethereum address!',
                 text: 'Please check form and input a valid ethereum address.',
                 icon: 'warning',
                 button: 'Close',
             })
-            return
         }
+
         setOperationIndex(index)
-        let newCost = obj[index] || nodeInfo.costs[index].acthCost
+
+        let newCost = obj[String(index)] || nodeInfo.costs[index-1].node
+
+        console.log(
+            nodeInfo.id,
+            String(index),
+            window.web3.utils.toWei(String(newCost)),
+            _beneficiaryAddress)
         props.prufClient.do
             .setOperationCost(
                 nodeInfo.id,
@@ -257,12 +267,24 @@ export default function ChangeNodeCosts(props) {
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 window.replaceAssetData.refreshBals = true
                 setTxHash(receipt.transactionHash)
-                return changeCosts(
-                    obj,
-                    _beneficiaryAddress,
-                    index + 1,
-                    iteration + 1
-                )
+                if (!nodeInfo.costs[index] && iteration + 1 > Object.values(obj).length){
+                    console.log("exit")
+                    return swal('Cost updates complete!').then(() => {
+                        window.location.href = nodeInfo.lastRef
+                    })
+                } else if (nodeInfo.costs[index].beneficiary === _beneficiaryAddress && iteration + 1 > Object.values(obj).length) {
+                    console.log("exit")
+                    return swal('Cost updates complete!').then(() => {
+                        window.location.href = nodeInfo.lastRef
+                    })
+                } else {
+                    return changeCosts(
+                        obj,
+                        _beneficiaryAddress,
+                        index + 1,
+                        iteration + 1
+                    )
+                }
             })
     }
 
