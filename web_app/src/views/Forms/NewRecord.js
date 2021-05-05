@@ -449,6 +449,7 @@ export default function NewRecord(props) {
   };
 
   const handleClick = () => {
+    setIsUploading(true)
     fileInput.current.value = "";
     fileInput.current.click();
   };
