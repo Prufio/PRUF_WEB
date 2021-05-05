@@ -1439,7 +1439,7 @@ export default function NewRecord(props) {
                             )}
                           </>
                           {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
-                          {displayImage === "" && isUploading && (
+                          {isUploading && (
                             <>
                               <br />
                               <br />
