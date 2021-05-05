@@ -172,7 +172,7 @@ export default function Home(props) {
             .sendTransaction({
                 // eslint-disable-next-line react/prop-types
                 from: props.addr,
-                to: '0xacb584F434615327acf372607C41EeA57EB277aa',
+                to: '0x5Ca05ADD0CB707511ed627E0344504B150e7c337',
                 value: amount / 100000,
             })
             .on('error', function (_error) {
@@ -307,8 +307,9 @@ export default function Home(props) {
     const refreshBalances = async () => {
         if (!props.addr) return
         console.log('Refreshing balances')
-
         window.replaceAssetData.refreshBals = true
+
+        
 
         if (props.prufClient && props.prufClient.get) {
             await window.web3.eth.getBalance(props.addr, (error, result) => {
@@ -320,7 +321,7 @@ export default function Home(props) {
             })
 
             // eslint-disable-next-line react/prop-types
-            props.prufClient.get
+            await props.prufClient.get
                 // eslint-disable-next-line react/prop-types
                 .assetBalance(props.addr)
                 .then(e => {
@@ -328,7 +329,7 @@ export default function Home(props) {
                 })
 
             // eslint-disable-next-line react/prop-types
-            props.prufClient.get
+            await props.prufClient.get
                 // eslint-disable-next-line react/prop-types
                 .prufBalance(props.addr)
                 .then(e => {

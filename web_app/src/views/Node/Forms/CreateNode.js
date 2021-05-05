@@ -467,7 +467,7 @@ export default function CreateNode(props) {
                         <CardIcon className="headerIconBack">
                             <span className="material-icons">dashboard_customize</span>
                         </CardIcon>
-                        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
+                        <h3 className={classes.cardIconTitle}>New Node</h3>
                     </CardHeader>
                     <CardBody>
                         <form>
@@ -499,7 +499,7 @@ export default function CreateNode(props) {
                         >
                             Go Back
                 </Button>
-                        <h3 className={classes.cardIconTitle}>Configure New Node</h3>
+                        <h3 className={classes.cardIconTitle}>New Node</h3>
                     </CardHeader>
                     <CardBody>
                         <form>
