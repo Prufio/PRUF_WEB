@@ -225,10 +225,6 @@ export default function Home(props) {
         console.log(window.ipfs)
 
         console.log(
-            // eslint-disable-next-line react/prop-types
-            props.prufClient.utils.isValidId(
-                '0x764bba9fadd27da5e1486bb3e7d73ee43526f8c97d3f7c6a4dbabbc2bd22a634'
-            )
         )
 
         return clearPRUFForm()

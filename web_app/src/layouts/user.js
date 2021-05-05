@@ -588,18 +588,11 @@ export default function Dashboard(props) {
         let tempArr = JSON.parse(JSON.stringify(assetArr));
         let idArr = JSON.parse(JSON.stringify(assetIds));
         setupTokenVals(addr, prufClient, { justCount: true });
-        // if (!assetArr || assetArr.length < 1) {
-        //   tempArr = [];
-        // }
 
-        // else {
-        //   tempArr = JSON.parse(JSON.stringify(assetArr))
-        // }
 
         if (newAsset && dBIndex > -1) {
           idArr.push(newAsset.id);
-          //newAsset.lastRef = "/#/user/dashboard"
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
           console.log("Replacing asset at index: ", dBIndex);
           console.log("Old Assets", tempArr);
           tempArr.splice(dBIndex, 1, newAsset);
@@ -919,13 +912,14 @@ export default function Dashboard(props) {
   }
 
   const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames) => {
+
     if (!iteration) iteration = 0;
     if (!rootArray) rootArray = [];
     if (!rootNameArray) rootNameArray = [];
     if (!allClasses) allClasses = [];
     if (!allClassNames) allClassNames = [];
     if (!_nodeSets) _nodeSets = {};
-    
+
     if (iteration >= acArray.length)
       return setUpNodeInformation(
         _prufClient,
