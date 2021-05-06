@@ -77,6 +77,7 @@ export default function Dashboard(props) {
   const [rootNames, setRootNames] = React.useState(undefined);
   const [nodeSets, setNodeSets] = React.useState(undefined);
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
+  const [replaceAssetData, setReplaceAssetData] = React.useState({});
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [nodeIdBalance, setNodeBalance] = React.useState("~");
@@ -97,18 +98,6 @@ export default function Dashboard(props) {
   const [arweaveClient, setArweaveClient] = React.useState();
   const [testWeave, setTestWeave] = React.useState();
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
-
-  const [acArr, setAcArr] = React.useState([
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    1000002,
-    1000001,
-  ]);
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
@@ -133,6 +122,12 @@ export default function Dashboard(props) {
     date.setDate(date.getDate() + days);
     return date;
   };
+
+  const refreshEvent = new Event('refresh')
+
+  window.addEventListener('refresh', () => {
+    setReplaceAssetData(true)
+  })
 
   //console.log("pre-load href", window.location.href)
   const initArweave = async () => {
@@ -534,6 +529,8 @@ export default function Dashboard(props) {
   }, []);
 
   React.useEffect(() => {
+    setReplaceAssetData(false)
+    console.log(isMounted)
     if (isMounted) {
       console.log(`Heard call for replace.`)
       console.log(window.replaceAssetData)
@@ -541,6 +538,7 @@ export default function Dashboard(props) {
         !window.replaceAssetData ||
         Object.values(window.replaceAssetData).length === 0
       ) {
+        console.log("here")
         window.replaceAssetData = {};
       }
       if (window.replaceAssetData.refreshBals === true) {
@@ -626,7 +624,7 @@ export default function Dashboard(props) {
         forceUpdate();
       }
     }
-  }, [window.replaceAssetData]);
+  }, [replaceAssetData]);
 
   const handleImageClick = (image) => {
     setImage(image);
@@ -695,6 +693,7 @@ export default function Dashboard(props) {
             render={() => (
               <prop.component
                 roots={roots}
+                refresh={refreshEvent}
                 rootNames={rootNames}
                 nodeSets={nodeSets}
                 heldNodeData={heldNodeData}
@@ -807,7 +806,9 @@ export default function Dashboard(props) {
 
       window.web3.eth.getBalance(_addr, (error, result) => {
         if (error) {
+          console.log("here")
         } else {
+          console.log(window.web3.utils.fromWei(result, "ether"))
           setETHBalance(window.web3.utils.fromWei(result, "ether"));
         }
       });
@@ -816,9 +817,11 @@ export default function Dashboard(props) {
 
         setAssetBalance(e);
         if (Number(e) > 0) {
+          console.log("here")
           setIsAssetHolder(true);
           if (!options.justCount) getAssetIds(_addr, _prufClient, e)
         } else {
+          console.log("here")
           setIsAssetHolder(false);
         }
 
@@ -828,9 +831,11 @@ export default function Dashboard(props) {
 
         setNodeBalance(e);
         if (Number(e) > 0) {
+          console.log("here")
           setIsAssetClassHolder(true);
           if (!options.justCount) getNodeIds(_addr, _prufClient, e)
         } else {
+          console.log("here")
           setHeldNodeData([['No nodes held by user', '~', '~', '~']])
           setIsAssetClassHolder(false);
         }

@@ -282,8 +282,8 @@ export default function Home(props) {
                     icon: 'success',
                     button: 'Close',
                 }).then(() => {
-                    refreshBalances()
                     window.replaceAssetData.refreshBals = true
+                    refreshBalances()
                     setHasMinted(true)
                     forceUpdate()
                 })
@@ -302,6 +302,7 @@ export default function Home(props) {
 
     const refreshBalances = async () => {
         if (!props.addr) return
+        window.dispatchEvent(props.refresh)
         console.log('Refreshing balances')
         console.log(window.replaceAssetData)
 
@@ -338,7 +339,6 @@ export default function Home(props) {
                     console.log('error')
                 } else {
                     setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
-                    window.replaceAssetData.refreshBals = true
                 }
             })
         }
