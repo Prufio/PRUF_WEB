@@ -400,14 +400,8 @@ export default function Dashboard(props) {
       if (e[0] === undefined || e[0] === null) {
         if (e[0] !== addr) {
           window.location.reload();
-          /* if(isMobile) swal("Changing accounts")
-            setAddr(window.web3.utils.toChecksumAddress(e[0]));
-            awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
         }
       } else if (e[0] !== addr) {
-        /* if(isMobile) swal("Changing accounts")
-        setAddr(window.web3.utils.toChecksumAddress(e[0]));
-        awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
         window.location.reload();
       }
     });
@@ -418,7 +412,6 @@ export default function Dashboard(props) {
     //if (cookies[`${_addr}dontCount`] === undefined) setCookieTo(`${_addr}dontCount`, [])
     window.balances = {};
     window.replaceAssetData = {};
-    let timeOutCounter = 0;
     window.recount = false;
     let _ipfs;
 
@@ -530,10 +523,7 @@ export default function Dashboard(props) {
 
   React.useEffect(() => {
     setReplaceAssetData(false)
-    console.log(isMounted)
     if (isMounted) {
-      console.log(`Heard call for replace.`)
-      console.log(window.replaceAssetData)
       if (
         !window.replaceAssetData ||
         Object.values(window.replaceAssetData).length === 0
