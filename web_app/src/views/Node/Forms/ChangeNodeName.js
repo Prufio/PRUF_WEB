@@ -67,10 +67,17 @@ export default function ChangeNodeName(props) {
         window.location.href = nodeInfo.lastRef
     }
 
+    const thousandHashesOf = (varToHash) => {
+        if (!window.web3) return (window.location.href = '/#/user/home')
+        let tempHash = varToHash
+        for (let i = 0; i < 1000; i++) {
+            tempHash = window.web3.utils.soliditySha3(tempHash)
+        }
+        return tempHash
+    }
+
     const changeName = () => {
-        //import held asset
-        console.log(nameAvailable)
-        console.log(loginName)
+        const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
         props.prufClient.get.nodeNameAvailable(loginName).then(nameAvailable=>{
             console.log(nameAvailable)
             console.log(loginName)
@@ -128,7 +135,6 @@ export default function ChangeNodeName(props) {
                             icon: 'success',
                             button: 'Close',
                         }).then(() => {
-                            window.location.href = nodeInfo.lastRef
                             let newNodeInfo = JSON.parse(JSON.stringify(props.nodeExtData[nodeInfo.index]))
                             let tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData))
     
@@ -138,13 +144,14 @@ export default function ChangeNodeName(props) {
     
                             window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr}}
                             window.dispatchEvent(props.refresh)
+                            window.location.href = nodeInfo.lastRef
                         })
                     })
             } else if (loginName === nodeInfo.name || loginName === '') {
                 console.log('error2')
                 setloginNameState('error')
                 swal('Node name has not changed.')
-            } else if (nameAvailable === true) {
+            } else if (nameAvailable === false) {
                 swal('Node name is already recorded in the system.')
                 return
             }
