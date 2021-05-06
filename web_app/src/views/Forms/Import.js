@@ -189,7 +189,7 @@ export default function Import(props) {
     return subCatSelection;
   };
 
-  const importAsset = async () => {
+  const importAsset = () => {
     //import held asset
 
     // eslint-disable-next-line react/prop-types
@@ -203,7 +203,7 @@ export default function Import(props) {
 
     setTransactionActive(true);
 
-    await props.prufClient.do
+    props.prufClient.do
       .importAsset(assetInfo.id, nodeId)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })

@@ -1727,7 +1727,7 @@ export default function Search(props) {
     setloginPasswordState("");
   };
 
-  const purchaseAsset = async () => {
+  const purchaseAsset = () => {
     if (!props.addr) return swal("No address detected")
     let newAsset = JSON.parse(JSON.stringify(asset));
     const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
@@ -1795,7 +1795,7 @@ export default function Search(props) {
       });
   };
 
-  const recycleAsset = async () => {
+  const recycleAsset = () => {
     if (
       loginFirst === "" ||
       loginLast === "" ||

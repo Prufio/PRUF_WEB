@@ -305,7 +305,7 @@ export default function ModifyDescription(props) {
     return tempHash;
   };
 
-  const updateAssetInfo = async (hash, newAsset) => {
+  const updateAssetInfo = (hash, newAsset) => {
     setHelp(false);
     if (!hash || !id) {
       return;
@@ -324,8 +324,8 @@ export default function ModifyDescription(props) {
     setError(undefined);
 
     setTransactionActive(true);
-    await window.contracts.NP_NC.methods
-      ._modIpfs1(id, hash)
+    props.prufClient.do
+      .modifyAssetExtData(id, hash)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {

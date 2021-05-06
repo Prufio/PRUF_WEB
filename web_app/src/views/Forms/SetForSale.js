@@ -19,7 +19,7 @@ import { MonetizationOnOutlined } from '@material-ui/icons'
 const useStyles = makeStyles(styles)
 
 export default function SetForSale(props) {
-    if(!window.sentPacket) window.sentPacket = {}
+    if (!window.sentPacket) window.sentPacket = {}
 
     const [transactionActive, setTransactionActive] = React.useState(false)
 
@@ -58,11 +58,11 @@ export default function SetForSale(props) {
         if (assetInfo === undefined || assetInfo === null || assetInfo === {}) {
             console.log("No asset found. Rerouting...");
             return (window.location.href = "/#/user/home");
-        } 
-        else if (assetInfo.statusNum && 
+        }
+        else if (assetInfo.statusNum &&
             assetInfo.statusNum === '50' ||
-            assetInfo.statusNum &&  assetInfo.statusNum === '56' ||
-            assetInfo.statusNum &&  assetInfo.statusNum === '70'
+            assetInfo.statusNum && assetInfo.statusNum === '56' ||
+            assetInfo.statusNum && assetInfo.statusNum === '70'
         ) {
             swal({
                 title: 'Asset not in correct status!',
@@ -82,7 +82,7 @@ export default function SetForSale(props) {
         //window.sentPacket = null
         if (assetInfo.lastRef === '/#/user/dashboard')
             window.backIndex = assetInfo.dBIndex
-            window.location.href = assetInfo.lastRef
+        window.location.href = assetInfo.lastRef
     }
 
     const handleSetPrice = (e) => {
@@ -99,10 +99,10 @@ export default function SetForSale(props) {
         return tempHash
     }
 
-    const clearAssetPrice = async () => {
+    const clearAssetPrice = () => {
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey)
-        let newAsset = await JSON.parse(JSON.stringify(assetInfo))
+        let newAsset = JSON.parse(JSON.stringify(assetInfo))
         newAsset.price = "0"
         newAsset.currency = "0"
 
@@ -199,13 +199,14 @@ export default function SetForSale(props) {
                             }).then(() => {
                                 window.location.href = assetInfo.lastRef
                                 window.replaceAssetData.refreshBals = true
+                                window.dispatchEvent(props.refresh)
                                 window.backIndex = assetInfo.dBIndex
                                 window.replaceAssetData = {
                                     key: pageKey,
                                     dBIndex: assetInfo.dBIndex,
                                     newAsset: newAsset,
                                 }
-        window.dispatchEvent(props.refresh)
+                                window.dispatchEvent(props.refresh)
                             })
                         })
                     break
@@ -219,7 +220,7 @@ export default function SetForSale(props) {
         })
     }
 
-    const setAssetPrice = async () => {
+    const setAssetPrice = () => {
         //set asset price
         let pageKey = thousandHashesOf(
             // eslint-disable-next-line react/prop-types
@@ -227,13 +228,13 @@ export default function SetForSale(props) {
             // eslint-disable-next-line react/prop-types
             props.winKey
         )
-        let newAsset = await JSON.parse(JSON.stringify(assetInfo))
+        let newAsset = JSON.parse(JSON.stringify(assetInfo))
 
         let tempTxHash
-            if(assetInfo.price === price) {
-                setloginPriceState('error')
-                return swal("Price has not changed!")
-            }
+        if (assetInfo.price === price) {
+            setloginPriceState('error')
+            return swal("Price has not changed!")
+        }
         if (assetInfo.price !== '0') {
             swalReact({
                 content: (
@@ -270,7 +271,7 @@ export default function SetForSale(props) {
                         className: 'delegationButtonDelegate',
                     },
                 },
-            }).then(async (value) => {
+            }).then((value) => {
                 switch (value) {
                     case 'confirm':
                         newAsset.currency = currency
@@ -352,13 +353,14 @@ export default function SetForSale(props) {
                                         window.location.href = assetInfo.lastRef
                                         window.backIndex = assetInfo.dBIndex
                                         window.replaceAssetData.refreshBals = true
-                                        window.costInfo = {price: price, currency: currency}
+                                        window.dispatchEvent(props.refresh)
+                                        window.costInfo = { price: price, currency: currency }
                                         window.replaceAssetData = {
                                             key: pageKey,
                                             dBIndex: assetInfo.dBIndex,
                                             newAsset: newAsset,
                                         }
-        window.dispatchEvent(props.refresh)
+                                        window.dispatchEvent(props.refresh)
                                     })
                                 })
                         } else {
@@ -422,13 +424,14 @@ export default function SetForSale(props) {
                                         window.location.href = assetInfo.lastRef
                                         window.backIndex = assetInfo.dBIndex
                                         window.replaceAssetData.refreshBals = true
-                                        window.costInfo = {price: price, currency: currency}
+                                        window.dispatchEvent(props.refresh)
+                                        window.costInfo = { price: price, currency: currency }
                                         window.replaceAssetData = {
                                             key: pageKey,
                                             dBIndex: assetInfo.dBIndex,
                                             newAsset: newAsset,
                                         }
-        window.dispatchEvent(props.refresh)
+                                        window.dispatchEvent(props.refresh)
                                     })
                                 })
                         }
@@ -517,14 +520,15 @@ export default function SetForSale(props) {
                         }
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
-                        window.costInfo = {price: price, currency: currency}
+                        window.costInfo = { price: price, currency: currency }
                         window.replaceAssetData.refreshBals = true
+                        window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
-        window.dispatchEvent(props.refresh)
+                        window.dispatchEvent(props.refresh)
                     })
                 })
         } else {
@@ -581,42 +585,43 @@ export default function SetForSale(props) {
                     }).then(() => {
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
-                        window.costInfo = {price: price, currency: currency}
+                        window.costInfo = { price: price, currency: currency }
                         window.replaceAssetData.refreshBals = true
+                        window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
-        window.dispatchEvent(props.refresh)
+                        window.dispatchEvent(props.refresh)
                     })
                 })
         }
     }
 
-    if(!props.prufClient){
+    if (!props.prufClient) {
         return <>
-          <Card>
-              <CardHeader icon>
-                <CardIcon className="headerIconBack">
-                  
-                </CardIcon>
-                <Button
-                  color="info"
-                  className="MLBGradient"
-                  onClick={() => goBack()}
-                >
-                  Go Back
+            <Card>
+                <CardHeader icon>
+                    <CardIcon className="headerIconBack">
+
+                    </CardIcon>
+                    <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
                 </Button>
-                
-              </CardHeader>
-              <CardBody>
-                <h2>Oops, something went wrong...</h2>
-              </CardBody>
-              <br />
+
+                </CardHeader>
+                <CardBody>
+                    <h2>Oops, something went wrong...</h2>
+                </CardBody>
+                <br />
             </Card>
         </>
-      }
+    }
 
     return (
         <Card>
@@ -680,7 +685,7 @@ export default function SetForSale(props) {
                             />
                         )}
                     </>
-                    {!transactionActive && assetInfo.price === "0" && price !== "0" &&  (
+                    {!transactionActive && assetInfo.price === "0" && price !== "0" && (
                         <div className="MLBGradientSubmit">
                             <Button
                                 color="info"
@@ -704,17 +709,17 @@ export default function SetForSale(props) {
                     )}
                     {!transactionActive &&
                         price ===
-                            '0'&& (
-                                <div className="MLBGradientSubmit">
-                                    <Button
-                                        color="info"
-                                        className="MLBGradient"
-                                        onClick={() => clearAssetPrice()}
-                                    >
-                                        Clear Price
+                        '0' && (
+                            <div className="MLBGradientSubmit">
+                                <Button
+                                    color="info"
+                                    className="MLBGradient"
+                                    onClick={() => clearAssetPrice()}
+                                >
+                                    Clear Price
                                     </Button>
-                                </div>
-                            )}
+                            </div>
+                        )}
                     {transactionActive && (
                         <h3>
                             Setting Price

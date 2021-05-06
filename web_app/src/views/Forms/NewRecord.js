@@ -433,7 +433,7 @@ export default function NewRecord(props) {
                 button: "Close",
               }).then(() => {
                 window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
+                window.dispatchEvent(props.refresh)
                 setMintedID(true);
                 forceUpdate();
               });
@@ -838,7 +838,7 @@ export default function NewRecord(props) {
     return rootSelection;
   };
 
-  const _newRecord = async (extDataA, extDataB, idx, ipfsObj) => {
+  const _newRecord = (extDataA, extDataB, idx, ipfsObj) => {
     console.log(extDataA, extDataB, idx, ipfsObj)
     var extendedDataHash, idxHash, rgtHash
 
@@ -1122,7 +1122,7 @@ export default function NewRecord(props) {
                 key: pageKey,
                 newAsset: newAsset,
               };
-        window.dispatchEvent(props.refresh)
+              window.dispatchEvent(props.refresh)
             });
           });
       });

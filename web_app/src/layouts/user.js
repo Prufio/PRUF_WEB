@@ -149,7 +149,7 @@ export default function Dashboard(props) {
     return { testWeave: testWeave, arweave: arweave };
   };
 
-  const handleNoEthereum = async () => {
+  const handleNoEthereum = () => {
     //if(isMobile) swal("No ethereum detected")
     console.log("No ethereum object available");
     let web3;
@@ -276,7 +276,7 @@ export default function Dashboard(props) {
     }, 100)
   }
 
-  const handleEthereum = async () => {
+  const handleEthereum = () => {
 
     if (window.ethereum) {
 
@@ -726,7 +726,7 @@ export default function Dashboard(props) {
     return tempHash;
   };
 
-  const setUpEnvironment = async (_prufClient, _addr) => {
+  const setUpEnvironment = (_prufClient, _addr) => {
 
     //console.log(_prufClient)
 
@@ -751,7 +751,7 @@ export default function Dashboard(props) {
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const setupTokenVals = async (_addr, _prufClient, options) => {
+  const setupTokenVals = (_addr, _prufClient, options) => {
 
     if (!_addr) return swal("Unable to reach user's wallet.");
     if (!options) options = {}
@@ -953,7 +953,7 @@ export default function Dashboard(props) {
                   setCookieTo(`${_addr}dontCount`, dontCount)
                 } else {
                   console.log("Counted when should not have... Removing cached values")
-                  setCookieTo(`${_addr}subNodes`, cookies[`${_addr}subNodes`].splice(indexOf(acArray[iteration]), 1))
+                  setCookieTo(`${_addr}subNodes`, cookies[`${_addr}subNodes`].splice(cookies[`${_addr}subNodes`].indexOf(acArray[iteration]), 1))
                 }
                 
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
@@ -1033,9 +1033,9 @@ export default function Dashboard(props) {
       // eslint-disable-next-line react/prop-types
       .heldNodeAtIndex(_addr, String(iteration))
       .then(e => {
-        if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(e)){
+        /* if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(e)){
           setCookieTo(`${_addr}dontCount`, cookies[`${_addr}dontCount`].splice(cookies[`${_addr}dontCount`].indexOf(e), 1))
-        }
+        } */
         ids.push(e)
         return getNodeIds(_addr, _prufClient, bal, ids, iteration + 1)
       })

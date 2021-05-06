@@ -124,7 +124,7 @@ export default function ModifyStatus(props) {
         return setStatus(status), setStatusName(statusName)
     }
 
-    const modifyStatus = async () => {
+    const modifyStatus = () => {
         if (status === 53 || status === 54) {
             return modifyStatusLS()
         }
@@ -140,7 +140,7 @@ export default function ModifyStatus(props) {
 
         setTransactionActive(true)
 
-        let newAsset = await JSON.parse(JSON.stringify(assetInfo))
+        let newAsset = JSON.parse(JSON.stringify(assetInfo))
         props.prufClient.utils.stringifyStatus(String(status)).then((e) => {
             newAsset.status = e
             newAsset.statusNum = String(status)
@@ -198,12 +198,13 @@ export default function ModifyStatus(props) {
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
                         window.replaceAssetData.refreshBals = true
+                        window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
-        window.dispatchEvent(props.refresh)
+                        window.dispatchEvent(props.refresh)
                     })
                 })
         })
@@ -224,7 +225,7 @@ export default function ModifyStatus(props) {
         return tempHash
     }
 
-    const modifyStatusLS = async () => {
+    const modifyStatusLS = () => {
         //export held asset
         // eslint-disable-next-line react/prop-types
         const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
@@ -237,7 +238,7 @@ export default function ModifyStatus(props) {
 
         setTransactionActive(true)
 
-        let newAsset = await JSON.parse(JSON.stringify(assetInfo))
+        let newAsset = JSON.parse(JSON.stringify(assetInfo))
         props.prufClient.utils.stringifyStatus(String(status)).then((e) => {
             newAsset.status = e
             newAsset.statusNum = status
@@ -292,12 +293,13 @@ export default function ModifyStatus(props) {
                         window.backIndex = assetInfo.dBIndex
                         window.location.href = assetInfo.lastRef
                         window.replaceAssetData.refreshBals = true
+                        window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
-        window.dispatchEvent(props.refresh)
+                        window.dispatchEvent(props.refresh)
                     })
                 })
         })

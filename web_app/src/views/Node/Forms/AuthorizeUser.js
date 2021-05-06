@@ -105,7 +105,7 @@ export default function AuthorizeUser(props) {
     //     props.ps.element.scrollTop = 0;
     // }
 
-    const finalizeNode = async () => {
+    const finalizeNode = () => {
         let tempTxHash
         let addressHash = window.web3.utils.soliditySha3(address)
         //transfer held Node
@@ -122,7 +122,7 @@ export default function AuthorizeUser(props) {
                         submitting!
                     </h5>
                     <div className="delegationTips">
-                        <h4 className="alertText">User: {` ${address.substring(0,8)}...${address.substring(34)}`}</h4>
+                        <h4 className="alertText">User: {` ${address.substring(0, 8)}...${address.substring(34)}`}</h4>
                         {/* <h4 className="alertText">
                         User Type: &nbsp;
                     {userType === "1" && (
@@ -207,7 +207,7 @@ export default function AuthorizeUser(props) {
                                 button: 'Close',
                             })
                             window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
+                            window.dispatchEvent(props.refresh)
                             window.location.href = nodeInfo.lastRef
                         })
 

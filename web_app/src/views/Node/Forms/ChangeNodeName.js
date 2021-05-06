@@ -67,87 +67,89 @@ export default function ChangeNodeName(props) {
         window.location.href = nodeInfo.lastRef
     }
 
-    const changeName = async () => {
+    const changeName = () => {
         //import held asset
         console.log(nameAvailable)
         console.log(loginName)
-        let nameAvailable = await props.prufClient.get.nodeNameAvailable(loginName)
-        console.log(nameAvailable)
-        console.log(loginName)
-        if (nameAvailable) {
-            let tempTxHash
-            setShowHelp(false)
-            setTxStatus(false)
-            setTxHash('')
-            setError(undefined)
-
-            setTransactionActive(true)
-
-            props.prufClient.do
-                .modifyNodeName(nodeInfo.id, name)
-                // eslint-disable-next-line react/prop-types
-                .send({ from: props.addr })
-                .on('error', function (_error) {
-                    setTransactionActive(false)
-                    setTxStatus(false)
-                    setTxHash(Object.values(_error)[0].transactionHash)
-                    tempTxHash = Object.values(_error)[0].transactionHash
-                    let str1 =
-                        "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                    let str2 = "' target='_blank'>here</a>"
-                    link.innerHTML = String(str1 + tempTxHash + str2)
-                    setError(Object.values(_error)[0])
-                    if (tempTxHash !== undefined) {
-                        swal({
-                            title: 'Something went wrong!',
-                            content: link,
-                            icon: 'warning',
-                            button: 'Close',
-                        })
-                    }
-                    if (tempTxHash === undefined) {
-                        swal({
-                            title: 'Something went wrong!',
-                            icon: 'warning',
-                            button: 'Close',
-                        })
-                    }
-                })
-                .on('receipt', (receipt) => {
-                    setTransactionActive(false)
-                    setTxStatus(receipt.status)
-                    tempTxHash = receipt.transactionHash
-                    let str1 =
-                        "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                    let str2 = "' target='_blank'>here</a>"
-                    link.innerHTML = String(str1 + tempTxHash + str2)
-                    setTxHash(receipt.transactionHash)
-                    swal({
-                        title: 'Name Change Successful!',
-                        content: link,
-                        icon: 'success',
-                        button: 'Close',
-                    }).then(() => {
-                        window.location.href = nodeInfo.lastRef
-                        let newNodeInfo = JSON.parse(JSON.stringify(props.nodeExtData[nodeInfo.index]))
-                        let tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData))
-
-                        newNodeInfo.name = name
-
-                        tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
-
-                        window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr}}
-        window.dispatchEvent(props.refresh)
+        props.prufClient.get.nodeNameAvailable(loginName).then(nameAvailable=>{
+            console.log(nameAvailable)
+            console.log(loginName)
+            if (nameAvailable) {
+                let tempTxHash
+                setShowHelp(false)
+                setTxStatus(false)
+                setTxHash('')
+                setError(undefined)
+    
+                setTransactionActive(true)
+    
+                props.prufClient.do
+                    .modifyNodeName(nodeInfo.id, name)
+                    // eslint-disable-next-line react/prop-types
+                    .send({ from: props.addr })
+                    .on('error', function (_error) {
+                        setTransactionActive(false)
+                        setTxStatus(false)
+                        setTxHash(Object.values(_error)[0].transactionHash)
+                        tempTxHash = Object.values(_error)[0].transactionHash
+                        let str1 =
+                            "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+                        let str2 = "' target='_blank'>here</a>"
+                        link.innerHTML = String(str1 + tempTxHash + str2)
+                        setError(Object.values(_error)[0])
+                        if (tempTxHash !== undefined) {
+                            swal({
+                                title: 'Something went wrong!',
+                                content: link,
+                                icon: 'warning',
+                                button: 'Close',
+                            })
+                        }
+                        if (tempTxHash === undefined) {
+                            swal({
+                                title: 'Something went wrong!',
+                                icon: 'warning',
+                                button: 'Close',
+                            })
+                        }
                     })
-                })
-        } else if (loginName === nodeInfo.name || loginName === '') {
-            console.log('error2')
-            setloginNameState('error')
-            swal('Node name has not changed.')
-        } else if (nameAvailable === true) {
-            swal('Node name is already recorded in the system.')
-            return
-        }
+                    .on('receipt', (receipt) => {
+                        setTransactionActive(false)
+                        setTxStatus(receipt.status)
+                        tempTxHash = receipt.transactionHash
+                        let str1 =
+                            "Check out your TX <a href='https://kovan.etherscan.io/tx/"
+                        let str2 = "' target='_blank'>here</a>"
+                        link.innerHTML = String(str1 + tempTxHash + str2)
+                        setTxHash(receipt.transactionHash)
+                        swal({
+                            title: 'Name Change Successful!',
+                            content: link,
+                            icon: 'success',
+                            button: 'Close',
+                        }).then(() => {
+                            window.location.href = nodeInfo.lastRef
+                            let newNodeInfo = JSON.parse(JSON.stringify(props.nodeExtData[nodeInfo.index]))
+                            let tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData))
+    
+                            newNodeInfo.name = name
+    
+                            tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
+    
+                            window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr}}
+                            window.dispatchEvent(props.refresh)
+                        })
+                    })
+            } else if (loginName === nodeInfo.name || loginName === '') {
+                console.log('error2')
+                setloginNameState('error')
+                swal('Node name has not changed.')
+            } else if (nameAvailable === true) {
+                swal('Node name is already recorded in the system.')
+                return
+            }
+        })
+
     }
 
     if (!props.prufClient) {

@@ -90,7 +90,7 @@ export default function TransferNode(props) {
         return tempArr
     }
 
-    const transferNode = async () => {
+    const transferNode = () => {
         const pageKey = thousandHashesOf(props.addr, props.winKey)
 
         if (!window.web3.utils.isAddress(address)) {
@@ -173,7 +173,7 @@ export default function TransferNode(props) {
                     }
 
                     window.replaceAssetData = {key: pageKey, NodeList: tempArr}
-        window.dispatchEvent(props.refresh)
+                    window.dispatchEvent(props.refresh)
                     window.location.href = nodeInfo.lastRef
                 })
             })

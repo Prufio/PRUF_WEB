@@ -120,7 +120,7 @@ export default function Export(props) {
     }
   }
 
-  const exportAsset = async () => {
+  const exportAsset = () => {
     //export held asset
     
 
@@ -141,7 +141,7 @@ export default function Export(props) {
 
     setTransactionActive(true);
 
-    await props.prufClient.do
+    props.prufClient.do
       .exportAsset(assetInfo.id)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })

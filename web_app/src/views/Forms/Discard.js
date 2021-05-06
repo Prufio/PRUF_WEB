@@ -83,7 +83,7 @@ export default function Discard(props) {
     return tempHash;
   };
 
-  const discardAsset = async () => {
+  const discardAsset = () => {
     //export held asset
 
     // eslint-disable-next-line react/prop-types
@@ -97,7 +97,7 @@ export default function Discard(props) {
 
     setTransactionActive(true);
 
-    await props.prufClient.do
+    props.prufClient.do
       .discardAsset(assetInfo.id)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })

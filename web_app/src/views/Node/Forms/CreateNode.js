@@ -360,7 +360,7 @@ export default function CreateNode(props) {
                     key: pageKey,
                     nodeList: {data: tempArr, extData: tempExtArr}
                 }
-        window.dispatchEvent(props.refresh)
+                window.dispatchEvent(props.refresh)
                 window.location.href = '/#/user/node-manager'
             })
     }
@@ -394,7 +394,7 @@ export default function CreateNode(props) {
             })
     }
 
-    const purchaseNode = async (extendedDataHash) => {
+    const purchaseNode = (extendedDataHash) => {
         //import held asset
 
         console.log({ name, root, extendedDataHash })
@@ -453,7 +453,7 @@ export default function CreateNode(props) {
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
+                window.dispatchEvent(props.refresh)
                 setTxHash(receipt.transactionHash)
                 swal({
                     title: 'Node Minting Successul!',
