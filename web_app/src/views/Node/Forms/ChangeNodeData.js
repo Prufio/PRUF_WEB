@@ -300,8 +300,6 @@ export default function ChangeNodeData(props) {
     }
 
     const updateConfigData = (extendedDataHash) => {
-        //import held asset
-
         let tempTxHash
 
         setTransactionActive(true)

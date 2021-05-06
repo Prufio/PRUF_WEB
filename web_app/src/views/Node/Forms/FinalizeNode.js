@@ -267,6 +267,7 @@ export default function FinalizeNode(props) {
                             newNodeInfo.managementType = managementType
 
                             tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
+                            console.log({root: nodeInfo.root, id: nodeInfo.id, name: nodeInfo.name})
 
                             window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr, setAddition: {root: nodeInfo.root, id: nodeInfo.id, name: nodeInfo.name}}}
                             window.dispatchEvent(props.refresh)
