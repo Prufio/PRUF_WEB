@@ -605,7 +605,7 @@ export default function NewRecord(props) {
 
       props.prufClient.utils.ipfsToB32(
         String(extendedDataHash)
-      ).then(e=>{
+      ).then(e => {
         console.log(`b32 of ipfs bs58 hash: ${e}\n Asset id: ${idxHash}\n Engraving object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
         _newRecord(
           e,
@@ -887,7 +887,7 @@ export default function NewRecord(props) {
 
       idxHash = idx;
       console.log(first, middle, last, ID, password, idx)
-      await props.prufClient.utils.generateSecureRgt(
+      props.prufClient.utils.generateSecureRgt(
         idx,
         {
           first: first,
@@ -899,90 +899,90 @@ export default function NewRecord(props) {
       ).then((e) => {
         console.log(e)
         rgtHash = e
-      });
 
-      setShowHelp(false);
-      setTxStatus(false);
-      setTxHash("");
-      setError(undefined);
-      //setResult("");
-      setTransactionActive(true);
-      console.log("idxHash", idxHash);
-      console.log("New rgtHash", rgtHash);
-      // eslint-disable-next-line react/prop-types
-      console.log("addr: ", props.addr);
-      console.log("AC: ", nodeId);
-
-      //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
-      console.log("IPFS bytes32: ", extendedDataHash);
-
-      /* swal({
-        title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
-        button: "Okay",
-      }) */
-      await props.prufClient.do
-        .mintAsset(
-          idxHash,
-          rgtHash,
-          nodeId,
-          "1000000",
-          extendedDataHash,
-          extDataB
-        )
+        setShowHelp(false);
+        setTxStatus(false);
+        setTxHash("");
+        setError(undefined);
+        //setResult("");
+        setTransactionActive(true);
+        console.log("idxHash", idxHash);
+        console.log("New rgtHash", rgtHash);
         // eslint-disable-next-line react/prop-types
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
+        console.log("addr: ", props.addr);
+        console.log("AC: ", nodeId);
+
+        //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+        console.log("IPFS bytes32: ", extendedDataHash);
+
+        /* swal({
+          title: "You are about to create asset: "+idxHash,
+          text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
+          button: "Okay",
+        }) */
+        props.prufClient.do
+          .mintAsset(
+            idxHash,
+            rgtHash,
+            nodeId,
+            "1000000",
+            extendedDataHash,
+            extDataB
+          )
+          // eslint-disable-next-line react/prop-types
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            clearForms();
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setTxHash(receipt.transactionHash);
             swal({
-              title: "Something went wrong!",
+              title: "Asset Created!",
               content: link,
-              icon: "warning",
+              icon: "success",
               button: "Close",
+            }).then(() => {
+              //refreshBalances()
+              //window.replaceAssetData = { pruf: props.pruf-NRCost }
+              window.location.href = "/#/user/dashboard";
+              window.replaceAssetData = {
+                key: pageKey,
+                newAsset: newAsset,
+              };
             });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          clearForms();
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Asset Created!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          }).then(() => {
-            //refreshBalances()
-            //window.replaceAssetData = { pruf: props.pruf-NRCost }
-            window.location.href = "/#/user/dashboard";
-            window.replaceAssetData = {
-              key: pageKey,
-              newAsset: newAsset,
-            };
           });
-        });
+      });
     } else if (storageProvider === "2") {
       console.log("Using arweave");
       let tempTxHash;
@@ -1031,7 +1031,7 @@ export default function NewRecord(props) {
         String(serial).replace(/\s/g, ''),
       ) */
 
-      await props.prufClient.utils.generateSecureRgt(
+      props.prufClient.utils.generateSecureRgt(
         idx,
         {
           first: first,
@@ -1043,93 +1043,92 @@ export default function NewRecord(props) {
       ).then((e) => {
         console.log(e)
         rgtHash = e
-      });
 
-      setShowHelp(false);
-      setTxStatus(false);
-      setTxHash("");
-      setError(undefined);
-      //setResult("");
-      setTransactionActive(true);
-      console.log("idxHash", idxHash);
-      console.log("New rgtHash", rgtHash);
-      // eslint-disable-next-line react/prop-types
-      console.log("addr: ", props.addr);
-      console.log("AC: ", nodeId);
-
-      //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
-      console.log("IPFS bytes32: ", extendedDataHash);
-
-      /* swal({
-        title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
-        button: "Okay",
-      }) */
-
-      await props.prufClient.do
-        .mintAsset(
-          idxHash,
-          rgtHash,
-          nodeId,
-          "1000000",
-          extDataA,
-          extDataB
-        )
+        setShowHelp(false);
+        setTxStatus(false);
+        setTxHash("");
+        setError(undefined);
+        //setResult("");
+        setTransactionActive(true);
+        console.log("idxHash", idxHash);
+        console.log("New rgtHash", rgtHash);
         // eslint-disable-next-line react/prop-types
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          clearForms();
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Asset Created!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          }).then(() => {
-            //refreshBalances()
-            //window.replaceAssetData = { pruf: props.pruf-NRCost }
-            window.location.href = "/#/user/dashboard";
-            window.replaceAssetData = {
-              key: pageKey,
-              newAsset: newAsset,
-            };
-          });
-        });
-    }
+        console.log("addr: ", props.addr);
+        console.log("AC: ", nodeId);
 
+        //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+        console.log("IPFS bytes32: ", extendedDataHash);
+
+        /* swal({
+          title: "You are about to create asset: "+idxHash,
+          text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
+          button: "Okay",
+        }) */
+
+        props.prufClient.do
+          .mintAsset(
+            idxHash,
+            rgtHash,
+            nodeId,
+            "1000000",
+            extDataA,
+            extDataB
+          )
+          // eslint-disable-next-line react/prop-types
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            clearForms();
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Asset Created!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            }).then(() => {
+              //refreshBalances()
+              //window.replaceAssetData = { pruf: props.pruf-NRCost }
+              window.location.href = "/#/user/dashboard";
+              window.replaceAssetData = {
+                key: pageKey,
+                newAsset: newAsset,
+              };
+            });
+          });
+      });
+    }
     setNodeId("");
   };
 
