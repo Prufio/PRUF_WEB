@@ -147,6 +147,7 @@ export default function Discard(props) {
             key: pageKey,
             dBIndex: assetInfo.dBIndex,
           };
+        window.dispatchEvent(props.refresh)
           //window.location.reload()
         });
       });

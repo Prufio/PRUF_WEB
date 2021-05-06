@@ -207,6 +207,7 @@ export default function AuthorizeUser(props) {
                                 button: 'Close',
                             })
                             window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                             window.location.href = nodeInfo.lastRef
                         })
 

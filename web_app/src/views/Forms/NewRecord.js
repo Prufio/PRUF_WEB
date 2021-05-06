@@ -432,7 +432,8 @@ export default function NewRecord(props) {
                 icon: "success",
                 button: "Close",
               }).then(() => {
-                window.replaceAssetData = { IDHolder: true };
+                window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                 setMintedID(true);
                 forceUpdate();
               });
@@ -977,6 +978,7 @@ export default function NewRecord(props) {
                 key: pageKey,
                 newAsset: newAsset,
               };
+        window.dispatchEvent(props.refresh)
             });
           });
       });
@@ -1120,6 +1122,7 @@ export default function NewRecord(props) {
                 key: pageKey,
                 newAsset: newAsset,
               };
+        window.dispatchEvent(props.refresh)
             });
           });
       });

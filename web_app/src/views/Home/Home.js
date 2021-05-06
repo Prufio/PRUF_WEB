@@ -218,6 +218,7 @@ export default function Home(props) {
                     button: 'Close',
                 })
                 window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                 refreshBalances()
                 forceUpdate()
             })
@@ -283,6 +284,7 @@ export default function Home(props) {
                     button: 'Close',
                 }).then(() => {
                     window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                     refreshBalances()
                     setHasMinted(true)
                     forceUpdate()

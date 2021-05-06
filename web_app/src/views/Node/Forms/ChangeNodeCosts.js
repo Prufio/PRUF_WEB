@@ -266,6 +266,7 @@ export default function ChangeNodeCosts(props) {
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                 setTxHash(receipt.transactionHash)
                 if (!nodeInfo.costs[index] && iteration + 1 > Object.values(obj).length){
                     console.log("exit")

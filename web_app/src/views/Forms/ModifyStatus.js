@@ -203,6 +203,7 @@ export default function ModifyStatus(props) {
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
+        window.dispatchEvent(props.refresh)
                     })
                 })
         })
@@ -296,6 +297,7 @@ export default function ModifyStatus(props) {
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
+        window.dispatchEvent(props.refresh)
                     })
                 })
         })

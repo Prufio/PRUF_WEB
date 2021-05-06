@@ -137,6 +137,7 @@ export default function ChangeNodeName(props) {
                         tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
 
                         window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr}}
+        window.dispatchEvent(props.refresh)
                     })
                 })
         } else if (loginName === nodeInfo.name || loginName === '') {

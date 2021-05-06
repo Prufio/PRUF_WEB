@@ -269,6 +269,7 @@ export default function FinalizeNode(props) {
                             tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
 
                             window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr, setAddition: {root: nodeInfo.root, id: nodeInfo.id, name: nodeInfo.name}}}
+        window.dispatchEvent(props.refresh)
                             window.location.href = nodeInfo.lastRef
                         })
 
