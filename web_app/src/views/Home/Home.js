@@ -218,7 +218,6 @@ export default function Home(props) {
                     button: 'Close',
                 })
                 window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
                 refreshBalances()
                 forceUpdate()
             })
@@ -284,7 +283,6 @@ export default function Home(props) {
                     button: 'Close',
                 }).then(() => {
                     window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
                     refreshBalances()
                     setHasMinted(true)
                     forceUpdate()
@@ -292,24 +290,14 @@ export default function Home(props) {
             })
     }
 
-    // const thousandHashesOf = (varToHash) => {
-    //     if (!window.web3) return (window.location.href = '/#/user/home')
-    //     let tempHash = varToHash
-    //     for (let i = 0; i < 1000; i++) {
-    //         tempHash = window.web3.utils.soliditySha3(tempHash)
-    //         //console.log(tempHash);
-    //     }
-    //     return tempHash
-    // }
-
-    const refreshBalances = async () => {
+    const refreshBalances = () => {
         if (!props.addr) return
-        window.dispatchEvent(props.refresh)
         console.log('Refreshing balances')
         console.log(window.replaceAssetData)
 
         if (props.prufClient && props.prufClient.get) {
-            await window.web3.eth.getBalance(props.addr, (error, result) => {
+            window.dispatchEvent(props.refresh)
+            window.web3.eth.getBalance(props.addr, (error, result) => {
                 if (error) {
                     console.log('error')
                 } else {
@@ -318,7 +306,7 @@ export default function Home(props) {
             })
 
             // eslint-disable-next-line react/prop-types
-            await props.prufClient.get
+            props.prufClient.get
                 // eslint-disable-next-line react/prop-types
                 .assetBalance(props.addr)
                 .then(e => {
@@ -326,7 +314,7 @@ export default function Home(props) {
                 })
 
             // eslint-disable-next-line react/prop-types
-            await props.prufClient.get
+            props.prufClient.get
                 // eslint-disable-next-line react/prop-types
                 .prufBalance(props.addr)
                 .then(e => {
@@ -336,7 +324,7 @@ export default function Home(props) {
             
             forceUpdate()
         } else {
-            await window.web3.eth.getBalance(props.addr, (error, result) => {
+            window.web3.eth.getBalance(props.addr, (error, result) => {
                 if (error) {
                     console.log('error')
                 } else {
@@ -580,7 +568,7 @@ export default function Home(props) {
                         <CardFooter stats>
                             {!isRefreshingPruf && (
                                 <div className="refresh">
-                                    <Cached onClick={() => refreshBalances()} />
+                                    <Cached onClick={() => {window.replaceAssetData.refreshBals = true; refreshBalances()}} />
                                 </div>
                             )}
                             {isRefreshingPruf && (
@@ -621,8 +609,6 @@ export default function Home(props) {
                                             })
                                             .then(async (accounts) => {
                                                 console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-                                                //setIsMounted(true);
-                                                //awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
                                             });
                                     } else swal("No ethereum provider detected")
                                 }}>connect</a> to an Ethereum provider.

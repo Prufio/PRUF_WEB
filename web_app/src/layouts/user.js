@@ -125,7 +125,7 @@ export default function Dashboard(props) {
 
   const refreshEvent = new Event('refresh')
 
-  window.addEventListener('refresh', () => {
+  window.addEventListener('refresh', (e) => {
     setReplaceAssetData(true)
   })
 
@@ -290,14 +290,8 @@ export default function Dashboard(props) {
         if (e[0] === undefined || e[0] === null) {
           if (e[0] !== addr) {
             window.location.reload();
-            /* if(isMobile) swal("Changing accounts")
-              setAddr(window.web3.utils.toChecksumAddress(e[0]));
-              awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
           }
         } else if (e[0] !== addr) {
-          /* if(isMobile) swal("Changing accounts")
-          setAddr(window.web3.utils.toChecksumAddress(e[0]));
-          awaitPrufInit(prufClient, window.web3.utils.toChecksumAddress(e[0])) */
           window.location.reload();
         }
       });
@@ -408,8 +402,6 @@ export default function Dashboard(props) {
   };
 
   window.onload = () => {
-    //console.log("page loaded", window.location.href)
-    //if (cookies[`${_addr}dontCount`] === undefined) setCookieTo(`${_addr}dontCount`, [])
     window.balances = {};
     window.replaceAssetData = {};
     window.recount = false;
@@ -528,7 +520,6 @@ export default function Dashboard(props) {
         !window.replaceAssetData ||
         Object.values(window.replaceAssetData).length === 0
       ) {
-        console.log("here")
         window.replaceAssetData = {};
       }
       if (window.replaceAssetData.refreshBals === true) {
@@ -736,7 +727,6 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = async (_prufClient, _addr) => {
-    if (typeof cookies[`${_addr}dontCount`] !== 'object') setCookieTo(`${_addr}dontCount`, [])
 
     //console.log(_prufClient)
 
@@ -796,7 +786,6 @@ export default function Dashboard(props) {
 
       window.web3.eth.getBalance(_addr, (error, result) => {
         if (error) {
-          console.log("here")
         } else {
           console.log(window.web3.utils.fromWei(result, "ether"))
           setETHBalance(window.web3.utils.fromWei(result, "ether"));
@@ -807,11 +796,9 @@ export default function Dashboard(props) {
 
         setAssetBalance(e);
         if (Number(e) > 0) {
-          console.log("here")
           setIsAssetHolder(true);
           if (!options.justCount) getAssetIds(_addr, _prufClient, e)
         } else {
-          console.log("here")
           setIsAssetHolder(false);
         }
 
@@ -821,11 +808,9 @@ export default function Dashboard(props) {
 
         setNodeBalance(e);
         if (Number(e) > 0) {
-          console.log("here")
           setIsAssetClassHolder(true);
           if (!options.justCount) getNodeIds(_addr, _prufClient, e)
         } else {
-          console.log("here")
           setHeldNodeData([['No nodes held by user', '~', '~', '~']])
           setIsAssetClassHolder(false);
         }
@@ -889,6 +874,8 @@ export default function Dashboard(props) {
     if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(iteration)) {
       console.log(`Caught count exception ${iteration}`)
       return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
+    } else {
+      console.log({iteration}, cookies[`${_addr}subNodes`])
     }
 
     _prufClient.get
@@ -909,7 +896,7 @@ export default function Dashboard(props) {
   }
 
   const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount) => {
-    if (!dontCount) dontCount = cookies[`${_addr}dontCount`] || []
+    if (!dontCount) {dontCount = cookies[`${_addr}dontCount`] || []; console.log({dontCount})}
     if (!iteration) iteration = 0;
     if (!rootArray) rootArray = [];
     if (!rootNameArray) rootNameArray = [];
@@ -945,12 +932,11 @@ export default function Dashboard(props) {
       _prufClient.get
         .nodeData(String(acArray[iteration]))
         .then(e => {
-          //console.log(acArray[i])
           if (e.managementType === "255") {
             return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
           } else if (e.managementType === "1" || e.managementType === "2") {
             _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x => {
-              if (x === _addr) {
+              if (window.web3.utils.toChecksumAddress(x) === _addr) {
                 allClasses.push(String(acArray[iteration]));
                 allClassNames.push(
                   e.name
@@ -961,9 +947,15 @@ export default function Dashboard(props) {
                 );
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               } else {
-                //console.log(tempArr)
-                dontCount.push(acArray[iteration])
-                setCookieTo(`${_addr}dontCount`, dontCount)
+                if(!dontCount.includes(acArray[iteration])){
+                  console.log({iteration, dontCount})
+                  dontCount.push(acArray[iteration])
+                  setCookieTo(`${_addr}dontCount`, dontCount)
+                } else {
+                  console.log("Counted when should not have... Removing cached values")
+                  setCookieTo(`${_addr}subNodes`, cookies[`${_addr}subNodes`].splice(indexOf(acArray[iteration]), 1))
+                }
+                
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               }
             })
@@ -1041,6 +1033,9 @@ export default function Dashboard(props) {
       // eslint-disable-next-line react/prop-types
       .heldNodeAtIndex(_addr, String(iteration))
       .then(e => {
+        if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(e)){
+          setCookieTo(`${_addr}dontCount`, cookies[`${_addr}dontCount`].splice(cookies[`${_addr}dontCount`].indexOf(e), 1))
+        }
         ids.push(e)
         return getNodeIds(_addr, _prufClient, bal, ids, iteration + 1)
       })
