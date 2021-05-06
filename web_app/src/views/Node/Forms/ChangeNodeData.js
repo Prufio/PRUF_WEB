@@ -353,6 +353,7 @@ export default function ChangeNodeData(props) {
                 }).then(() => {
                     //window.backIndex = nodeInfo.dBIndex;
                     window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                     window.location.href = nodeInfo.lastRef
                 })
             })

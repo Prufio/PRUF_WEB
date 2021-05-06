@@ -173,6 +173,7 @@ export default function Transfer(props) {
                         key: pageKey,
                         dBIndex: assetInfo.dBIndex,
                     }
+        window.dispatchEvent(props.refresh)
                 })
             })
     }

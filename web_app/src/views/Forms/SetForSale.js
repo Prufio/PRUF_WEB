@@ -205,6 +205,7 @@ export default function SetForSale(props) {
                                     dBIndex: assetInfo.dBIndex,
                                     newAsset: newAsset,
                                 }
+        window.dispatchEvent(props.refresh)
                             })
                         })
                     break
@@ -357,6 +358,7 @@ export default function SetForSale(props) {
                                             dBIndex: assetInfo.dBIndex,
                                             newAsset: newAsset,
                                         }
+        window.dispatchEvent(props.refresh)
                                     })
                                 })
                         } else {
@@ -426,6 +428,7 @@ export default function SetForSale(props) {
                                             dBIndex: assetInfo.dBIndex,
                                             newAsset: newAsset,
                                         }
+        window.dispatchEvent(props.refresh)
                                     })
                                 })
                         }
@@ -521,6 +524,7 @@ export default function SetForSale(props) {
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
+        window.dispatchEvent(props.refresh)
                     })
                 })
         } else {
@@ -584,6 +588,7 @@ export default function SetForSale(props) {
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
+        window.dispatchEvent(props.refresh)
                     })
                 })
         }

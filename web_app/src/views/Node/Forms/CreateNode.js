@@ -251,8 +251,8 @@ export default function CreateNode(props) {
                                 icon: 'success',
                                 button: 'Close',
                             }).then(() => {
-                                window.replaceAssetData = { IDHolder: true }
                                 window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                                 setMintedID(true)
                             })
                         })
@@ -360,6 +360,7 @@ export default function CreateNode(props) {
                     key: pageKey,
                     nodeList: {data: tempArr, extData: tempExtArr}
                 }
+        window.dispatchEvent(props.refresh)
                 window.location.href = '/#/user/node-manager'
             })
     }
@@ -452,6 +453,7 @@ export default function CreateNode(props) {
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
                 window.replaceAssetData.refreshBals = true
+        window.dispatchEvent(props.refresh)
                 setTxHash(receipt.transactionHash)
                 swal({
                     title: 'Node Minting Successul!',

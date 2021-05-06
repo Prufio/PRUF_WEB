@@ -173,6 +173,7 @@ export default function TransferNode(props) {
                     }
 
                     window.replaceAssetData = {key: pageKey, NodeList: tempArr}
+        window.dispatchEvent(props.refresh)
                     window.location.href = nodeInfo.lastRef
                 })
             })

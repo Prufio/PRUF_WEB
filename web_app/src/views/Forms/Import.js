@@ -259,6 +259,7 @@ export default function Import(props) {
             dBIndex: assetInfo.dBIndex,
             newAsset: newAsset,
           };
+        window.dispatchEvent(props.refresh)
         });
       });
   };

@@ -193,6 +193,7 @@ export default function Export(props) {
             dBIndex: newAsset.dBIndex,
             newAsset: newAsset,
           };
+        window.dispatchEvent(props.refresh)
         });
       });
   };
