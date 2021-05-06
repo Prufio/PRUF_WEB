@@ -1928,7 +1928,7 @@ export default function Dashboard(props) {
                   <Icon
                     className="MLBGradientRefresh"
                     onClick={() => {
-                      window.location.reload()
+                      window.dispatchEvent(props.refreshAssets)   
                     }}
                   >
                     <Refresh />

@@ -47,6 +47,10 @@ export default function Dashboard(props) {
   // states and functions
 
   const IPFS = require("ipfs-http-client"); //require("ipfs-mini")
+
+  const refreshEvent = new Event('refresh')
+  const refreshAssetsEvent = new Event('refreshAssets')
+  
   //const OrbitDB = require('orbit-db')
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -122,12 +126,6 @@ export default function Dashboard(props) {
     date.setDate(date.getDate() + days);
     return date;
   };
-
-  const refreshEvent = new Event('refresh')
-
-  window.addEventListener('refresh', (e) => {
-    setReplaceAssetData(!replaceAssetData)
-  })
 
   //console.log("pre-load href", window.location.href)
   const initArweave = async () => {
@@ -296,14 +294,9 @@ export default function Dashboard(props) {
         }
       });
 
-
-      //if(isMobile) swal("Ethereum successfully detected")
-      //console.log("Found ethereum object");
       let web3;
       web3 = require("web3");
       const ethereum = window.ethereum;
-      //console.log("Here");
-
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
       const _prufClient = new PRUF(web3);
@@ -402,6 +395,18 @@ export default function Dashboard(props) {
   };
 
   window.onload = () => {
+
+    
+
+    window.addEventListener('refresh', () => {
+      setReplaceAssetData(!replaceAssetData)
+    });
+
+    window.addEventListener('refreshAssets', () => {
+      setAssetArr([])
+      setupTokenVals(addr, prufClient, { justAssets: true })
+    });
+
     window.balances = {};
     window.replaceAssetData = {};
     window.recount = false;
@@ -549,10 +554,11 @@ export default function Dashboard(props) {
           tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
           setNodeSets(tempSets)
         }
+
         window.replaceAssetData = {}
         setupTokenVals(addr, prufClient, { justNodes: true })
       }
-      
+
       else {
         setWinKey(String(Math.round(Math.random() * 100000)));
         console.log(
@@ -578,7 +584,7 @@ export default function Dashboard(props) {
           setAssetIds(idArr);
           window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length);
-        } 
+        }
 
         else if (dBIndex > -1 && !newAsset) {
           console.log("Deleting asset at index: ", dBIndex);
@@ -589,7 +595,7 @@ export default function Dashboard(props) {
           setAssetArr(tempArr);
           getAssetIds(addr, prufClient, assetIds.length - 1);
           window.replaceAssetData = {};
-        } 
+        }
 
         else if (newAsset && !dBIndex) {
           idArr.push(newAsset.id);
@@ -602,7 +608,7 @@ export default function Dashboard(props) {
           window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length + 1);
         }
-
+        window.replaceAssetData = {}
         forceUpdate();
       }
     }
@@ -675,6 +681,7 @@ export default function Dashboard(props) {
             render={() => (
               <prop.component
                 roots={roots}
+                refreshAssets={refreshAssetsEvent}
                 refresh={refreshEvent}
                 rootNames={rootNames}
                 nodeSets={nodeSets}
@@ -876,14 +883,14 @@ export default function Dashboard(props) {
       console.log(`Caught count exception ${iteration}`)
       return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
     } else {
-      console.log({iteration}, cookies[`${_addr}subNodes`])
+      console.log({ iteration }, cookies[`${_addr}subNodes`])
     }
 
     _prufClient.get
       .nodeExists(String(iteration))
       .then(e => {
         if (e) {
-          if(!arr.includes(iteration)){
+          if (!arr.includes(iteration)) {
             arr.push(iteration);
             subNodes.push(iteration)
             setCookieTo(`${_addr}subNodes`, subNodes)
@@ -899,7 +906,7 @@ export default function Dashboard(props) {
   }
 
   const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount) => {
-    if (!dontCount) {dontCount = cookies[`${_addr}dontCount`] || []; console.log({dontCount})}
+    if (!dontCount) { dontCount = cookies[`${_addr}dontCount`] || []; console.log({ dontCount }) }
     if (!iteration) iteration = 0;
     if (!rootArray) rootArray = [];
     if (!rootNameArray) rootNameArray = [];
@@ -950,8 +957,8 @@ export default function Dashboard(props) {
                 );
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               } else {
-                if(!dontCount.includes(acArray[iteration])){
-                  console.log({iteration, dontCount})
+                if (!dontCount.includes(acArray[iteration])) {
+                  console.log({ iteration, dontCount })
                   dontCount.push(acArray[iteration])
                   setCookieTo(`${_addr}dontCount`, dontCount)
                 } else {
@@ -960,7 +967,7 @@ export default function Dashboard(props) {
                   temp.splice(temp.indexOf(acArray[iteration]), 1)
                   setCookieTo(`${_addr}subNodes`, temp)
                 }
-                
+
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
               }
             })
