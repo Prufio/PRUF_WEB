@@ -126,7 +126,7 @@ export default function Dashboard(props) {
   const refreshEvent = new Event('refresh')
 
   window.addEventListener('refresh', (e) => {
-    setReplaceAssetData(true)
+    setReplaceAssetData(!replaceAssetData)
   })
 
   //console.log("pre-load href", window.location.href)
@@ -514,7 +514,6 @@ export default function Dashboard(props) {
   }, []);
 
   React.useEffect(() => {
-    setReplaceAssetData(false)
     if (isMounted) {
       if (
         !window.replaceAssetData ||
@@ -550,7 +549,7 @@ export default function Dashboard(props) {
           tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
           setNodeSets(tempSets)
         }
-
+        window.replaceAssetData = {}
         setupTokenVals(addr, prufClient, { justNodes: true })
       }
       
