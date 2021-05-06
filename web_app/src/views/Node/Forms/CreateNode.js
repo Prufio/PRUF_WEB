@@ -397,8 +397,14 @@ export default function CreateNode(props) {
         //import held asset
 
         console.log({ name, root, extendedDataHash })
+        if(root === '') {
+            return swal("Please input root node")
+        }
+        if(name === '') {
+            return swal("Please input node name")
+        }
         if (Number(props.pruf) < Number(props.currentACPrice)) {
-            return (swal("Insufficient PRUF Balance!"))
+            return swal("Insufficient PRUF Balance!")
         }
         setTransactionActive(true)
         let tempTxHash

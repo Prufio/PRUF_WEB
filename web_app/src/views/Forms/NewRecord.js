@@ -47,6 +47,7 @@ export default function NewRecord(props) {
   const [rootSelect, setRootSelect] = React.useState("");
   const [classSelect, setClassSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
+  const [IDtransactionActive, setIDtransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
@@ -384,7 +385,7 @@ export default function NewRecord(props) {
     }).then((value) => {
       switch (value) {
         case "yes":
-          setTransactionActive(true);
+          setIDTransactionActive(true);
 
           // const pageKey = thousandHashesOf(props.addr, props.winKey)
 
@@ -393,7 +394,7 @@ export default function NewRecord(props) {
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on("error", function (_error) {
-              setTransactionActive(false);
+              setIDTransactionActive(false);
               setTxStatus(false);
               setTxHash(Object.values(_error)[0].transactionHash);
               tempTxHash = Object.values(_error)[0].transactionHash;
@@ -418,7 +419,7 @@ export default function NewRecord(props) {
               }
             })
             .on("receipt", (receipt) => {
-              setTransactionActive(false);
+              setIDTransactionActive(false);
               setTxStatus(receipt.status);
               tempTxHash = receipt.transactionHash;
               let str1 =
@@ -605,7 +606,7 @@ export default function NewRecord(props) {
 
       props.prufClient.utils.ipfsToB32(
         String(extendedDataHash)
-      ).then(e=>{
+      ).then(e => {
         console.log(`b32 of ipfs bs58 hash: ${e}\n Asset id: ${idxHash}\n Engraving object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
         _newRecord(
           e,
@@ -673,96 +674,94 @@ export default function NewRecord(props) {
         model: model,
         serial: serial
       }
-    ).then((e) => {
-      idxHash = e
-    })
+    ).then(idxHash => {
 
-    let ipfsObj;
-    setShowHelp(false);
+      props.prufClient.get.assetRecordExists(idxHash).then(doesExist => {
 
-    if (nameTag !== "") {
-      ipfsObj = {
-        photo: {},
-        text: {},
-        urls: {},
-        Description: "",
-        DisplayImage: "",
-        name: String(nameTag),
-      };
-    } else {
-      ipfsObj = {
-        photo: {},
-        text: {},
-        urls: {},
-        Description: "",
-        DisplayImage: "",
-        name: "",
-      };
-    }
-
-    if (description !== "") {
-      ipfsObj.Description = description;
-    }
-
-    if (displayImage !== "") {
-      ipfsObj.DisplayImage = displayImageUrl;
-      ipfsObj.photo.DisplayImage = displayImageUrl;
-    }
-
-    let doesExist = await props.prufClient.get.assetRecordExists(idxHash);
-
-    if (doesExist) {
-      swal({
-        title: "Asset already exists!",
-        icon: "warning",
-        button: "Close",
-      });
-    }
-
-    setSubmittedIdxHash(idxHash);
-
-    //setIpfsObj(ipfsObj)
-
-    let payload = JSON.stringify(ipfsObj);
-    let fileSize = Buffer.byteLength(payload, "utf8");
-    if (fileSize > 10000000) {
-      return swal({
-        title:
-          "Document size exceeds 10 MB limit! (" + String(fileSize) + "Bytes)",
-        content: link,
-        icon: "warning",
-        button: "Close",
-      });
-    }
-
-    setIpfsActive(true);
-
-    if (storageProvider === "1") {
-      window.ipfs.add(payload).then((hash) => {
-        if (!hash) {
-          console.log("Something went wrong. Unable to upload to ipfs");
-          setIpfsActive(false);
-        } else {
-          console.log("uploaded at hash: ", hash.cid.string);
-          console.log("idxHash: ", idxHash);
-          console.log("ipfsObj: ", ipfsObj);
-          handleHash(hash.cid.string, idxHash, ipfsObj);
-          setIpfsActive(false);
+        if (doesExist) {
+          return swal({
+            title: "Asset already exists!",
+            icon: "warning",
+            button: "Close",
+          });
         }
-      });
-    } else if (storageProvider === "2") {
-      let file = fileMetaData;
-      let metaData = {
-        Description: ipfsObj.Description,
-        name: ipfsObj.name,
-      };
-      metaData["Content-Type"] = file.type;
-      metaData["Size"] = file.size;
-      metaData["FileName"] = file.name;
-      metaData["Last-Modified"] = file.lastModified;
+      })
 
-      postToArweave(rawFile, metaData, idxHash, ipfsObj);
-    }
+      let ipfsObj;
+      setShowHelp(false);
+
+      if (nameTag !== "") {
+        ipfsObj = {
+          photo: {},
+          text: {},
+          urls: {},
+          Description: "",
+          DisplayImage: "",
+          name: String(nameTag),
+        };
+      } else {
+        ipfsObj = {
+          photo: {},
+          text: {},
+          urls: {},
+          Description: "",
+          DisplayImage: "",
+          name: "",
+        };
+      }
+
+      if (description !== "") {
+        ipfsObj.Description = description;
+      }
+
+      if (displayImage !== "") {
+        ipfsObj.DisplayImage = displayImageUrl;
+        ipfsObj.photo.DisplayImage = displayImageUrl;
+      }
+
+
+      let payload = JSON.stringify(ipfsObj);
+      let fileSize = Buffer.byteLength(payload, "utf8");
+      if (fileSize > 10000000) {
+        return swal({
+          title:
+            "Document size exceeds 10 MB limit! (" + String(fileSize) + "Bytes)",
+          content: link,
+          icon: "warning",
+          button: "Close",
+        });
+      }
+
+      setIpfsActive(true);
+
+      if (storageProvider === "1") {
+        window.ipfs.add(payload).then((hash) => {
+          if (!hash) {
+            console.log("Something went wrong. Unable to upload to ipfs");
+            setIpfsActive(false);
+          } else {
+            console.log("uploaded at hash: ", hash.cid.string);
+            console.log("idxHash: ", idxHash);
+            console.log("ipfsObj: ", ipfsObj);
+            handleHash(hash.cid.string, idxHash, ipfsObj);
+            setIpfsActive(false);
+          }
+        });
+      } else if (storageProvider === "2") {
+        let file = fileMetaData;
+        let metaData = {
+          Description: ipfsObj.Description,
+          name: ipfsObj.name,
+        };
+        metaData["Content-Type"] = file.type;
+        metaData["Size"] = file.size;
+        metaData["FileName"] = file.name;
+        metaData["Last-Modified"] = file.lastModified;
+
+        postToArweave(rawFile, metaData, idxHash, ipfsObj);
+      }
+      setSubmittedIdxHash(idxHash);
+    })
   };
 
   const thousandHashesOf = (varToHash) => {
@@ -887,7 +886,7 @@ export default function NewRecord(props) {
 
       idxHash = idx;
       console.log(first, middle, last, ID, password, idx)
-      await props.prufClient.utils.generateSecureRgt(
+      props.prufClient.utils.generateSecureRgt(
         idx,
         {
           first: first,
@@ -896,93 +895,91 @@ export default function NewRecord(props) {
           id: ID,
           password: password
         }
-      ).then((e) => {
-        console.log(e)
-        rgtHash = e
-      });
+      ).then(rgtHash => {
 
-      setShowHelp(false);
-      setTxStatus(false);
-      setTxHash("");
-      setError(undefined);
-      //setResult("");
-      setTransactionActive(true);
-      console.log("idxHash", idxHash);
-      console.log("New rgtHash", rgtHash);
-      // eslint-disable-next-line react/prop-types
-      console.log("addr: ", props.addr);
-      console.log("AC: ", nodeId);
-
-      //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
-      console.log("IPFS bytes32: ", extendedDataHash);
-
-      /* swal({
-        title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
-        button: "Okay",
-      }) */
-      await props.prufClient.do
-        .mintAsset(
-          idxHash,
-          rgtHash,
-          nodeId,
-          "1000000",
-          extendedDataHash,
-          extDataB
-        )
+        setShowHelp(false);
+        setTxStatus(false);
+        setTxHash("");
+        setError(undefined);
+        //setResult("");
+        setTransactionActive(true);
+        console.log("idxHash", idxHash);
+        console.log("New rgtHash", rgtHash);
         // eslint-disable-next-line react/prop-types
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
+        console.log("addr: ", props.addr);
+        console.log("AC: ", nodeId);
+
+        //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+        console.log("IPFS bytes32: ", extendedDataHash);
+
+        /* swal({
+          title: "You are about to create asset: "+idxHash,
+          text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
+          button: "Okay",
+        }) */
+        props.prufClient.do
+          .mintAsset(
+            idxHash,
+            rgtHash,
+            nodeId,
+            "1000000",
+            extendedDataHash,
+            extDataB
+          )
+          // eslint-disable-next-line react/prop-types
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            clearForms();
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setTxHash(receipt.transactionHash);
             swal({
-              title: "Something went wrong!",
+              title: "Asset Created!",
               content: link,
-              icon: "warning",
+              icon: "success",
               button: "Close",
+            }).then(() => {
+              //refreshBalances()
+              //window.replaceAssetData = { pruf: props.pruf-NRCost }
+              window.location.href = "/#/user/dashboard";
+              window.replaceAssetData = {
+                key: pageKey,
+                newAsset: newAsset,
+              };
             });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          clearForms();
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Asset Created!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          }).then(() => {
-            //refreshBalances()
-            //window.replaceAssetData = { pruf: props.pruf-NRCost }
-            window.location.href = "/#/user/dashboard";
-            window.replaceAssetData = {
-              key: pageKey,
-              newAsset: newAsset,
-            };
           });
-        });
+      });
     } else if (storageProvider === "2") {
       console.log("Using arweave");
       let tempTxHash;
@@ -1031,7 +1028,7 @@ export default function NewRecord(props) {
         String(serial).replace(/\s/g, ''),
       ) */
 
-      await props.prufClient.utils.generateSecureRgt(
+      props.prufClient.utils.generateSecureRgt(
         idx,
         {
           first: first,
@@ -1040,97 +1037,93 @@ export default function NewRecord(props) {
           id: ID,
           password: password
         }
-      ).then((e) => {
-        console.log(e)
-        rgtHash = e
-      });
+      ).then(rgtHash => {
 
-      setShowHelp(false);
-      setTxStatus(false);
-      setTxHash("");
-      setError(undefined);
-      //setResult("");
-      setTransactionActive(true);
-      console.log("idxHash", idxHash);
-      console.log("New rgtHash", rgtHash);
-      // eslint-disable-next-line react/prop-types
-      console.log("addr: ", props.addr);
-      console.log("AC: ", nodeId);
-
-      //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
-      console.log("IPFS bytes32: ", extendedDataHash);
-
-      /* swal({
-        title: "You are about to create asset: "+idxHash,
-        text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
-        button: "Okay",
-      }) */
-
-      await props.prufClient.do
-        .mintAsset(
-          idxHash,
-          rgtHash,
-          nodeId,
-          "1000000",
-          extDataA,
-          extDataB
-        )
+        setShowHelp(false);
+        setTxStatus(false);
+        setTxHash("");
+        setError(undefined);
+        //setResult("");
+        setTransactionActive(true);
+        console.log("idxHash", idxHash);
+        console.log("New rgtHash", rgtHash);
         // eslint-disable-next-line react/prop-types
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransactionActive(false);
-          setTxStatus(false);
-          setTxHash(Object.values(_error)[0].transactionHash);
-          tempTxHash = Object.values(_error)[0].transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setError(Object.values(_error)[0]);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          clearForms();
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash;
-          let str1 =
-            "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          setTxHash(receipt.transactionHash);
-          swal({
-            title: "Asset Created!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          }).then(() => {
-            //refreshBalances()
-            //window.replaceAssetData = { pruf: props.pruf-NRCost }
-            window.location.href = "/#/user/dashboard";
-            window.replaceAssetData = {
-              key: pageKey,
-              newAsset: newAsset,
-            };
-          });
-        });
-    }
+        console.log("addr: ", props.addr);
+        console.log("AC: ", nodeId);
 
-    setNodeId("");
+        //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
+        console.log("IPFS bytes32: ", extendedDataHash);
+
+        /* swal({
+          title: "You are about to create asset: "+idxHash,
+          text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
+          button: "Okay",
+        }) */
+
+        props.prufClient.do
+          .mintAsset(
+            idxHash,
+            rgtHash,
+            nodeId,
+            "1000000",
+            extDataA,
+            extDataB
+          )
+          // eslint-disable-next-line react/prop-types
+          .send({ from: props.addr })
+          .on("error", function (_error) {
+            setTransactionActive(false);
+            setTxStatus(false);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setError(Object.values(_error)[0]);
+            if (tempTxHash !== undefined) {
+              swal({
+                title: "Something went wrong!",
+                content: link,
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            if (tempTxHash === undefined) {
+              swal({
+                title: "Something went wrong!",
+                icon: "warning",
+                button: "Close",
+              });
+            }
+            clearForms();
+          })
+          .on("receipt", (receipt) => {
+            setTransactionActive(false);
+            setTxStatus(receipt.status);
+            tempTxHash = receipt.transactionHash;
+            let str1 =
+              "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setTxHash(receipt.transactionHash);
+            swal({
+              title: "Asset Created!",
+              content: link,
+              icon: "success",
+              button: "Close",
+            }).then(() => {
+              //refreshBalances()
+              //window.replaceAssetData = { pruf: props.pruf-NRCost }
+              window.location.href = "/#/user/dashboard";
+              window.replaceAssetData = {
+                key: pageKey,
+                newAsset: newAsset,
+              };
+            });
+          });
+      });
+    }
   };
 
   // const goBack = () => {
@@ -1365,7 +1358,7 @@ export default function NewRecord(props) {
                   <br />
                 </Card>
               )}
-              {nodeId === "" && transactionActive && (
+              {nodeId === "" && IDtransactionActive && (
                 <Card>
                   <CardHeader icon>
                     <CardIcon className="headerIconBack">
