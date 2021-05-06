@@ -520,20 +520,19 @@ export default function Dashboard(props) {
         !window.replaceAssetData ||
         Object.values(window.replaceAssetData).length === 0
       ) {
-        window.replaceAssetData = {};
+        window.replaceAssetData = {}
       }
       if (window.replaceAssetData.refreshBals === true) {
-        console.log("Resetting token value");
-        //document.body.style.cursor = 'wait'
-        setupTokenVals(addr, prufClient, { justCount: true });
+        console.log("Resetting token value")
+        setupTokenVals(addr, prufClient, { justCount: true })
         buildRoots(addr, prufClient)
-        window.replaceAssetData = {};
+        window.replaceAssetData = {}
         forceUpdate();
       } else if (
         window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
       ) {
-        window.replaceAssetData = {};
-        console.log("Invalid key passed. Aborted call to replace.");
+        window.replaceAssetData = {}
+        console.log("Invalid key passed. Aborted call to replace.")
       } else if (window.replaceAssetData.nodeList) {
 
         let newData = JSON.parse(JSON.stringify(window.replaceAssetData.nodeList))
@@ -548,14 +547,14 @@ export default function Dashboard(props) {
 
         if (newData.setAddition) {
           let tempSets = JSON.parse(JSON.stringify(nodeSets))
-
           tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
-
           setNodeSets(tempSets)
         }
 
         setupTokenVals(addr, prufClient, { justNodes: true })
-      } else {
+      }
+      
+      else {
         setWinKey(String(Math.round(Math.random() * 100000)));
         console.log(
           "Object is defined. index: ",
@@ -569,7 +568,6 @@ export default function Dashboard(props) {
         let idArr = JSON.parse(JSON.stringify(assetIds));
         setupTokenVals(addr, prufClient, { justCount: true });
 
-
         if (newAsset && dBIndex > -1) {
           idArr.push(newAsset.id);
           newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
@@ -581,7 +579,9 @@ export default function Dashboard(props) {
           setAssetIds(idArr);
           window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length);
-        } else if (dBIndex > -1 && !newAsset) {
+        } 
+
+        else if (dBIndex > -1 && !newAsset) {
           console.log("Deleting asset at index: ", dBIndex);
           console.log("Old Assets", tempArr);
           tempArr.splice(dBIndex, 1);
@@ -590,9 +590,10 @@ export default function Dashboard(props) {
           setAssetArr(tempArr);
           getAssetIds(addr, prufClient, assetIds.length - 1);
           window.replaceAssetData = {};
-        } else if (newAsset && !dBIndex) {
+        } 
+
+        else if (newAsset && !dBIndex) {
           idArr.push(newAsset.id);
-          //newAsset.lastRef = "/#/user/dashboard";
           newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
           console.log("Adding asset: ", newAsset);
           console.log("Old Assets", tempArr);
@@ -602,6 +603,7 @@ export default function Dashboard(props) {
           window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length + 1);
         }
+
         forceUpdate();
       }
     }
@@ -882,9 +884,11 @@ export default function Dashboard(props) {
       .nodeExists(String(iteration))
       .then(e => {
         if (e) {
-          arr.push(iteration);
-          subNodes.push(iteration)
-          setCookieTo(`${_addr}subNodes`, subNodes)
+          if(!arr.includes(iteration)){
+            arr.push(iteration);
+            subNodes.push(iteration)
+            setCookieTo(`${_addr}subNodes`, subNodes)
+          }
           return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes)
         } else {
           console.log(`Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`)
@@ -953,7 +957,9 @@ export default function Dashboard(props) {
                   setCookieTo(`${_addr}dontCount`, dontCount)
                 } else {
                   console.log("Counted when should not have... Removing cached values")
-                  setCookieTo(`${_addr}subNodes`, cookies[`${_addr}subNodes`].splice(cookies[`${_addr}subNodes`].indexOf(acArray[iteration]), 1))
+                  let temp = cookies[`${_addr}subNodes`];
+                  temp.splice(temp.indexOf(acArray[iteration]), 1)
+                  setCookieTo(`${_addr}subNodes`, temp)
                 }
                 
                 return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)

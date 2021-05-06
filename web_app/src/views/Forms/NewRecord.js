@@ -1760,7 +1760,7 @@ export default function NewRecord(props) {
                             </>
                           )}
                           <h4>
-                            AC Selected: {nodeName} (ID: {nodeId})
+                            Node Selected: {nodeName} (ID: {nodeId})
                           </h4>
                           {storageProvider === "2" ? (
                             <h6 className="storageProviderText">
