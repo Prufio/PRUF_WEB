@@ -169,7 +169,6 @@ export default function Transfer(props) {
                     //window.backIndex = assetInfo.dBIndex;
                     window.location.href = assetInfo.lastRef
                     window.replaceAssetData.refreshBals = true
-                    window.dispatchEvent(props.refresh)
                     window.replaceAssetData = {
                         key: pageKey,
                         dBIndex: assetInfo.dBIndex,

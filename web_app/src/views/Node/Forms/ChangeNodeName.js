@@ -141,7 +141,7 @@ export default function ChangeNodeName(props) {
                             newNodeInfo.name = name
     
                             tempExtArr.splice(nodeInfo.index, 1, newNodeInfo)
-    
+                            window.replaceAssetData.refreshBals = true
                             window.replaceAssetData = {key: pageKey, nodeList: {extData: tempExtArr}}
                             window.dispatchEvent(props.refresh)
                             window.location.href = nodeInfo.lastRef

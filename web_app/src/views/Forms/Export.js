@@ -188,6 +188,7 @@ export default function Export(props) {
           window.newStat = { num: "70", str: "Ready for Import" };
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
+          window.replaceAssetData.refreshBals = true
           window.replaceAssetData = {
             key: pageKey,
             dBIndex: newAsset.dBIndex,

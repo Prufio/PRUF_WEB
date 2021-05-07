@@ -306,7 +306,6 @@ export default function ChangeNodeData(props) {
 
         props.prufClient.do
             .modifyExtendedConfig(extendedDataHash, nodeInfo.id)
-            // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {
                 setTransactionActive(false)

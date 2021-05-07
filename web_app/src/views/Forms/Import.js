@@ -254,6 +254,7 @@ export default function Import(props) {
           window.newStat = { num: "58", str: "Non-Transferable" };
           window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
+          window.replaceAssetData.refreshBals = true
           window.replaceAssetData = {
             key: pageKey,
             dBIndex: assetInfo.dBIndex,

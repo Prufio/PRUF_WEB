@@ -376,6 +376,7 @@ export default function ModifyDescription(props) {
             dBIndex: asset.dBIndex,
             newAsset: newAsset,
           };
+          window.replaceAssetData.refreshBals = true
         window.dispatchEvent(props.refresh)
         });
       });

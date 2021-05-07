@@ -522,7 +522,6 @@ export default function SetForSale(props) {
                         window.backIndex = assetInfo.dBIndex
                         window.costInfo = { price: price, currency: currency }
                         window.replaceAssetData.refreshBals = true
-                        window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,

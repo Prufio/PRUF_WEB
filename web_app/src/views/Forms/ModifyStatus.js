@@ -198,7 +198,6 @@ export default function ModifyStatus(props) {
                         window.location.href = assetInfo.lastRef
                         window.backIndex = assetInfo.dBIndex
                         window.replaceAssetData.refreshBals = true
-                        window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
@@ -292,13 +291,12 @@ export default function ModifyStatus(props) {
                         window.newStat = { num: String(status), str: e }
                         window.backIndex = assetInfo.dBIndex
                         window.location.href = assetInfo.lastRef
-                        window.replaceAssetData.refreshBals = true
-                        window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
                             dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
                         }
+                        window.replaceAssetData.refreshBals = true
                         window.dispatchEvent(props.refresh)
                     })
                 })

@@ -507,8 +507,8 @@ export default function Dashboard(props) {
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
-    };
-  }, []);
+    }
+  }, [])
 
   React.useEffect(() => {
     setWinKey(String(Math.round(Math.random() * 100000)))
@@ -517,22 +517,19 @@ export default function Dashboard(props) {
         !window.replaceAssetData ||
         Object.values(window.replaceAssetData).length === 0
       ) {
-        window.replaceAssetData = {}
       }
       if (window.replaceAssetData.refreshBals === true) {
         console.log("Resetting token value")
         setupTokenVals(addr, prufClient, { justCount: true })
         buildRoots(addr, prufClient)
-        window.replaceAssetData = {}
         forceUpdate();
-      } else if (window.replaceAssetData.refreshAssets) {
+      } if (window.replaceAssetData.refreshAssets) {
         setupTokenVals(addr, prufClient, { justAssets: true })
-      } else if (
+      } if (
         window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
       ) {
-        window.replaceAssetData = {}
         console.log("Invalid key passed. Aborted call to replace.")
-      } else if (window.replaceAssetData.nodeList) {
+      } if (window.replaceAssetData.nodeList) {
 
         let newData = JSON.parse(JSON.stringify(window.replaceAssetData.nodeList))
 
@@ -549,12 +546,10 @@ export default function Dashboard(props) {
           tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
           setNodeSets(tempSets)
         }
-
-        window.replaceAssetData = {}
         setupTokenVals(addr, prufClient, { justNodes: true })
       }
 
-      else {
+      if (window.replaceAssetData.newAsset || window.replaceAssetData.dBIndex) {
         console.log(
           "Object is defined. index: ",
           window.replaceAssetData.dBIndex,
@@ -576,7 +571,6 @@ export default function Dashboard(props) {
           console.log("New Assets", tempArr);
           setAssetArr(tempArr);
           setAssetIds(idArr);
-          window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length);
         }
 
@@ -588,7 +582,6 @@ export default function Dashboard(props) {
           console.log("New Assets", tempArr);
           setAssetArr(tempArr);
           getAssetIds(addr, prufClient, assetIds.length - 1);
-          window.replaceAssetData = {};
         }
 
         else if (newAsset && !dBIndex) {
@@ -599,9 +592,9 @@ export default function Dashboard(props) {
           tempArr.push(newAsset);
           console.log("New Assets", tempArr);
           setAssetArr(tempArr);
-          window.replaceAssetData = {};
           getAssetIds(addr, prufClient, assetIds.length + 1);
         }
+
         window.replaceAssetData = {}
         forceUpdate();
       }

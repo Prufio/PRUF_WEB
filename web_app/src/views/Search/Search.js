@@ -1791,6 +1791,7 @@ export default function Search(props) {
         }).then(() => {
           window.location.href = "/#/user/dashboard";
           window.replaceAssetData = { key: pageKey, newAsset: newAsset };
+          window.replaceAssetData.refreshBals = true
         window.dispatchEvent(props.refresh)
         });
       });
@@ -1891,6 +1892,7 @@ export default function Search(props) {
             window.newStat = { num: "58", str: "Out of Escrow" };
             window.location.href = "/#/user/dashboard";
             window.replaceAssetData = { key: pageKey, newAsset: newAsset };
+            window.replaceAssetData.refreshBals = true
         window.dispatchEvent(props.refresh)
           });
         });

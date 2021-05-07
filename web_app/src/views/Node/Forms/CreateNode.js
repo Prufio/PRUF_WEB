@@ -321,6 +321,8 @@ export default function CreateNode(props) {
 
     const handleNewAssetClass = (extendedDataHash) => {
         // eslint-disable-next-line react/prop-types
+        
+        window.replaceAssetData.refreshBals = true
         const pageKey = thousandHashesOf(props.addr, props.winKey)
         let id
         props.prufClient.get
@@ -452,8 +454,6 @@ export default function CreateNode(props) {
                     "Check out your TX <a href='https://kovan.etherscan.io/tx/"
                 let str2 = "' target='_blank'>here</a>"
                 link.innerHTML = String(str1 + tempTxHash + str2)
-                window.replaceAssetData.refreshBals = true
-                window.dispatchEvent(props.refresh)
                 setTxHash(receipt.transactionHash)
                 swal({
                     title: 'Node Minting Successul!',

@@ -143,6 +143,7 @@ export default function Discard(props) {
           //refreshBalances()
           //window.backIndex = assetInfo.dBIndex;
           window.location.href = assetInfo.lastRef;
+          window.replaceAssetData.refreshBals = true
           window.replaceAssetData = {
             key: pageKey,
             dBIndex: assetInfo.dBIndex,

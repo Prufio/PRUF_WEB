@@ -171,7 +171,7 @@ export default function TransferNode(props) {
                     } else {
                         tempArr = [['No nodes held by user', '~', '~', '~']]
                     }
-
+                    window.replaceAssetData.refreshBals = true
                     window.replaceAssetData = {key: pageKey, NodeList: tempArr}
                     window.dispatchEvent(props.refresh)
                     window.location.href = nodeInfo.lastRef
