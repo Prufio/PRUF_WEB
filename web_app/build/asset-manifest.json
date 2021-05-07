@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.81a3866d.chunk.css",
-    "main.js": "/static/js/main.9214939b.chunk.js",
-    "main.js.map": "/static/js/main.9214939b.chunk.js.map",
+    "main.js": "/static/js/main.4471dc83.chunk.js",
+    "main.js.map": "/static/js/main.4471dc83.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.0908cf66.js",
     "runtime-main.js.map": "/static/js/runtime-main.0908cf66.js.map",
     "static/css/2.121b3ca3.chunk.css": "/static/css/2.121b3ca3.chunk.css",
@@ -12,7 +12,7 @@
     "static/css/2.121b3ca3.chunk.css.map": "/static/css/2.121b3ca3.chunk.css.map",
     "static/css/main.81a3866d.chunk.css.map": "/static/css/main.81a3866d.chunk.css.map",
     "static/js/2.cb1743a0.chunk.js.LICENSE.txt": "/static/js/2.cb1743a0.chunk.js.LICENSE.txt",
-    "static/js/main.9214939b.chunk.js.LICENSE.txt": "/static/js/main.9214939b.chunk.js.LICENSE.txt",
+    "static/js/main.4471dc83.chunk.js.LICENSE.txt": "/static/js/main.4471dc83.chunk.js.LICENSE.txt",
     "static/media/BloomBW.be4edce2.jpg": "/static/media/BloomBW.be4edce2.jpg",
     "static/media/BloomWB.f2fc63b2.jpg": "/static/media/BloomWB.f2fc63b2.jpg",
     "static/media/PRUFMatrix.10da0d5e.jpg": "/static/media/PRUFMatrix.10da0d5e.jpg",
@@ -33,6 +33,6 @@
     "static/css/2.121b3ca3.chunk.css",
     "static/js/2.cb1743a0.chunk.js",
     "static/css/main.81a3866d.chunk.css",
-    "static/js/main.9214939b.chunk.js"
+    "static/js/main.4471dc83.chunk.js"
   ]
 }
