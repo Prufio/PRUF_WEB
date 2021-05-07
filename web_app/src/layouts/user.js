@@ -50,7 +50,7 @@ export default function Dashboard(props) {
 
   const refreshEvent = new Event('refresh')
   const refreshAssetsEvent = new Event('refreshAssets')
-  
+
   //const OrbitDB = require('orbit-db')
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -155,7 +155,14 @@ export default function Dashboard(props) {
     web3 = new Web3(
       "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
-    const _prufClient = new PRUF(web3);
+    const _prufClient = new PRUF(
+      web3, 
+      {
+      storageAddress: "0x5ab04B13729245F7023f76d0FEDEed482e3e60bd", 
+      partyAddress: "0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468", 
+      defaultNetwork: true
+      }
+    );
 
     console.log(_prufClient);
     setPrufClient(_prufClient);
@@ -173,24 +180,28 @@ export default function Dashboard(props) {
       swal({
         title: "Cookies on app.pruf.io",
         text:
-          "This site uses minimal cookies to offer you optimal performance and loading times.",
+          "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
         icon: "warning",
         buttons: {
+
           moreInfo: {
             text: "Learn more",
             value: "moreInfo",
             className: "moreCookieInfo",
           },
-          decline: {
+
+          /* decline: {
             text: "Decline Use",
             value: "decline",
             className: "declineCookies",
-          },
+          }, */
+
           accept: {
             text: "Accept and continue",
             value: "accept",
             className: "acceptCookies",
           },
+
         },
       }).then((value) => {
         switch (value) {
@@ -201,7 +212,7 @@ export default function Dashboard(props) {
           case "moreInfo":
             swal({
               title: "Cookies on app.pruf.io",
-              text: "Cookies are small packets of user data that are created and stored by your web provider. We use cookes to provide a seamless and fast dApp experiance while simultaneously maintaining the users privacy. We do not store any personally identifiable information. If you prefer to not to use cookies, you can decline this form and your browser will not store any data. please note however, that this will make the application slightly less responsive. The cookies we use on app.pruf.io are strictly for caching asset extended data.",
+              text: "Cookies are small packets of user data that are created and stored in the browser. We use cookes to provide a seamless and fast dApp experience while maintaining user privacy. We do not store or share your data with anyone.",
               buttons: {
                 decline: {
                   text: "Decline Use",
@@ -299,7 +310,14 @@ export default function Dashboard(props) {
       const ethereum = window.ethereum;
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
-      const _prufClient = new PRUF(web3);
+      const _prufClient = new PRUF(
+        web3, 
+        {
+        storageAddress: "0x5ab04B13729245F7023f76d0FEDEed482e3e60bd", 
+        partyAddress: "0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468", 
+        defaultNetwork: true
+        }
+      );
       //console.log(_prufClient);
       setPrufClient(_prufClient);
       window.costs = {};
