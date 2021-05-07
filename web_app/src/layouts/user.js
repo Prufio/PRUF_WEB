@@ -81,7 +81,7 @@ export default function Dashboard(props) {
   const [rootNames, setRootNames] = React.useState(undefined);
   const [nodeSets, setNodeSets] = React.useState(undefined);
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
-  const [replaceAssetData, setReplaceAssetData] = React.useState({});
+  const [replaceAssetData, setReplaceAssetData] = React.useState(0);
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [nodeIdBalance, setNodeBalance] = React.useState("~");
@@ -412,18 +412,23 @@ export default function Dashboard(props) {
     });
   };
 
-  window.onload = () => {
-
-    
-
+  if (window.ethereum) {
+    window.addEventListener("chainListener", chainListener, {once: true});
+    window.addEventListener("accountListener", acctListener, {once: true});
     window.addEventListener('refresh', () => {
-      setReplaceAssetData(!replaceAssetData)
-    });
-
+      setReplaceAssetData(replaceAssetData+1)
+    }, {once: true});
+  
     window.addEventListener('refreshAssets', () => {
       setAssetArr([])
       setupTokenVals(addr, prufClient, { justAssets: true })
-    });
+    }, {once: true});
+    //window.addEventListener("connectListener", connectListener())
+  }
+
+  
+
+  window.onload = () => {
 
     window.balances = {};
     window.replaceAssetData = {};
@@ -505,11 +510,6 @@ export default function Dashboard(props) {
   };
 
   React.useEffect(() => {
-    if (window.ethereum) {
-      window.addEventListener("chainListener", chainListener());
-      window.addEventListener("accountListener", acctListener());
-      //window.addEventListener("connectListener", connectListener())
-    }
 
     if (navigator.platform.indexOf("Win") > -1) {
       //console.log("*****Using ps*****");
@@ -537,6 +537,7 @@ export default function Dashboard(props) {
   }, []);
 
   React.useEffect(() => {
+    console.log(isMounted)
     if (isMounted) {
       if (
         !window.replaceAssetData ||
