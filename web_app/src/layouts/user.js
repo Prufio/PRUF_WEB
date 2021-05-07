@@ -48,9 +48,6 @@ export default function Dashboard(props) {
 
   const IPFS = require("ipfs-http-client"); //require("ipfs-mini")
 
-  const refreshEvent = new Event('refresh')
-  const refreshAssetsEvent = new Event('refreshAssets')
-
   //const OrbitDB = require('orbit-db')
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -74,7 +71,7 @@ export default function Dashboard(props) {
   ]);
   const [sps, setSps] = React.useState(undefined);
   const [assetIds, setAssetIds] = React.useState([]);
-
+  const [listenersLaunched, setListenersLaunched] = React.useState(false)
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [prufClient, setPrufClient] = React.useState();
   const [roots, setRoots] = React.useState(undefined);
@@ -108,6 +105,8 @@ export default function Dashboard(props) {
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
+  const refreshEvent = new Event('refresh')
+  
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -366,27 +365,6 @@ export default function Dashboard(props) {
         }
       });
 
-      //More globals (eth-is-connected specific)
-      /*       window.assetTokenInfo = {
-              nodeId: undefined,
-              id: undefined,
-              name: undefined,
-              photos: undefined,
-              text: undefined,
-              status: undefined,
-            };
-      
-            window.assets = {
-              descriptions: [],
-              ids: [],
-              nodeNames: [],
-              nodeIdes: [],
-              countPairs: [],
-              statuses: [],
-              names: [],
-              displayImages: [],
-            }; */
-
     } else {
       return handleNoEthereum();
     }
@@ -412,18 +390,14 @@ export default function Dashboard(props) {
     });
   };
 
+  const refreshHandler = () => {
+    setReplaceAssetData(replaceAssetData+1)
+  }
+
   if (window.ethereum) {
     window.addEventListener("chainListener", chainListener, {once: true});
     window.addEventListener("accountListener", acctListener, {once: true});
-    window.addEventListener('refresh', () => {
-      setReplaceAssetData(replaceAssetData+1)
-    }, {once: true});
-  
-    window.addEventListener('refreshAssets', () => {
-      setAssetArr([])
-      setupTokenVals(addr, prufClient, { justAssets: true })
-    }, {once: true});
-    //window.addEventListener("connectListener", connectListener())
+    window.addEventListener('refresh', refreshHandler);
   }
 
   
@@ -537,7 +511,7 @@ export default function Dashboard(props) {
   }, []);
 
   React.useEffect(() => {
-    console.log(isMounted)
+    setWinKey(String(Math.round(Math.random() * 100000)))
     if (isMounted) {
       if (
         !window.replaceAssetData ||
@@ -551,6 +525,8 @@ export default function Dashboard(props) {
         buildRoots(addr, prufClient)
         window.replaceAssetData = {}
         forceUpdate();
+      } else if (window.replaceAssetData.refreshAssets) {
+        setupTokenVals(addr, prufClient, { justAssets: true })
       } else if (
         window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
       ) {
@@ -579,7 +555,6 @@ export default function Dashboard(props) {
       }
 
       else {
-        setWinKey(String(Math.round(Math.random() * 100000)));
         console.log(
           "Object is defined. index: ",
           window.replaceAssetData.dBIndex,
@@ -700,7 +675,6 @@ export default function Dashboard(props) {
             render={() => (
               <prop.component
                 roots={roots}
-                refreshAssets={refreshAssetsEvent}
                 refresh={refreshEvent}
                 rootNames={rootNames}
                 nodeSets={nodeSets}
@@ -798,7 +772,7 @@ export default function Dashboard(props) {
       });
     } else if (options.justAssets) {
       _prufClient.get.assetBalance(_addr).then(e => {
-
+        setAssetArr([])
         setAssetBalance(e);
         if (Number(e) > 0) {
           setIsAssetHolder(true);
