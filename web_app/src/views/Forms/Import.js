@@ -368,12 +368,11 @@ export default function Import(props) {
             <form>
               {!transactionActive && (
                 <>
-                  <h4>AssetClass Selected: {nodeId} </h4>
+                  <h4>Node selected: {assetInfo.nodeData.name} </h4>
                   <h4>Asset Selected: {assetInfo.name}</h4>
                   <br />
                   <h5>
-                    You are attempting to import {assetInfo.name} into asset
-                    class {nodeId}.
+                    You are attempting to import {assetInfo.name} into node {assetInfo.nodeData.name}.
                   </h5>
                 </>
               )}
