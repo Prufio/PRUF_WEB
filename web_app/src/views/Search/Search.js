@@ -1990,28 +1990,6 @@ export default function Search(props) {
     })
   };
 
-  const handleOnScan = (e) => {
-    if (!e) {
-      return;
-    }
-    //console.log(e)
-    if (
-      e.includes("0x") &&
-      e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
-    ) {
-      setScanQR(!scanQR);
-      let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66);
-      console.log("Here is what we got in the scanner: ", scanQuery);
-      checkInputs(scanQuery);
-    } else {
-      swal({
-        title: "QR code does not contain a valid asset ID.",
-        icon: "warning",
-        button: "Close",
-      });
-    }
-  };
-
   const blockchainVerifyAsset = async () => {
     if (!props.addr) {
       return swal({
@@ -2117,6 +2095,28 @@ export default function Search(props) {
         });
     })
 
+  };
+
+  const handleOnScan = (e) => {
+    if (!e) {
+      return;
+    }
+    //console.log(e)
+    if (
+      e.includes("0x") &&
+      e.substring(e.indexOf("0x"), e.indexOf("0x") + 66)
+    ) {
+      setScanQR(!scanQR);
+      let scanQuery = e.substring(e.indexOf("0x"), e.indexOf("0x") + 66);
+      console.log("Here is what we got in the scanner: ", scanQuery);
+      checkInputs(scanQuery);
+    } else {
+      swal({
+        title: "QR code does not contain a valid asset ID.",
+        icon: "warning",
+        button: "Close",
+      });
+    }
   };
 
   const checkInputs = (fromQR) => {
@@ -3262,7 +3262,7 @@ export default function Search(props) {
                               Sale Price:&nbsp;
                         </h4>
                             <h4 className={imgClasses.cardTitle}>
-                              {currency} {asset.price}
+                              {currency}{asset.price}
                             </h4>
                           </div>
                         </>

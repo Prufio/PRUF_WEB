@@ -160,199 +160,180 @@ export default function Verify(props) {
         //window.location.href="/#/user/dashboard"
     }
 
-    const verifyAsset = async () => {
-        if (
-            loginFirst === '' ||
-            loginLast === '' ||
-            loginID === '' ||
-            loginPassword === ''
-        ) {
-            if (loginFirst === '') {
-                setloginFirstState('error')
-            }
-            if (loginLast === '') {
-                setloginLastState('error')
-            }
-            if (loginID === '') {
-                setloginIDState('error')
-            }
-            if (loginPassword === '') {
-                setloginPasswordState('error')
-            }
-            return
-        }
-
-        console.log('in vr')
-        // let extendedDataHash
-        // let tempResult
-        let idxHash = assetInfo.id
-        let rgtHash
-
-        rgtHash = await props.prufClient.utils.generateSecureRgt(
-            assetInfo.id,
-            {
-              first: first,
-              middle: middle,
-              last: last,
-              ID: ID,
-              password: password
-            }
-            );
-
-        console.log('idxHash', idxHash)
-        console.log('rgtHash', rgtHash)
-        console.log('addr: ', window.addr)
-        setTransaction(true)
-        props.prufClient.get
-            .isRightsHolder(idxHash, rgtHash)
-            .then(e => {
-                if (e) {
-                    swal({
-                        title: 'Match Confirmed!',
-                        // text: "Check your TX here:" + txHash,
-                        icon: 'success',
-                        button: 'Close',
-                    }).then(() => {
-                        window.backIndex = assetInfo.dBIndex
-                        window.location.href = assetInfo.lastRef
-                    })
-                    setError('')
-                    setTransaction(false)
-                } else {
-                    console.log('Verification not Confirmed')
-                    swal({
-                        title: 'Match Failed!',
-                        text:
-                            'Please make sure forms are filled out correctly.',
-                        icon: 'warning',
-                        button: 'Close',
-                    })
-                    setTransaction(false)
-                }
-            })
-        return clearForms()
-    }
-
     const goBack = () => {
         window.backIndex = assetInfo.dBIndex
         window.location.href = assetInfo.lastRef
     }
 
+    const verifyAsset = async () => {
+      if (
+        loginFirst === "" ||
+        loginLast === "" ||
+        loginID === "" ||
+        loginPassword === ""
+      ) {
+        if (loginFirst === "") {
+          setloginFirstState("error");
+        }
+        if (loginLast === "") {
+          setloginLastState("error");
+        }
+        if (loginID === "") {
+          setloginIDState("error");
+        }
+        if (loginPassword === "") {
+          setloginPasswordState("error");
+        }
+        return;
+      }
+  
+      console.log("in vr");
+      let idxHash = assetInfo.id;
+  
+      props.prufClient.utils.generateSecureRgt(
+        assetInfo.id,
+        {
+          first: first,
+          middle: middle,
+          last: last,
+          id: ID,
+          password: password
+        }
+      ).then(rgtHash => {
+        console.log("idxHash", idxHash);
+        console.log("rgtHash", rgtHash);
+        console.log("addr: ", window.addr);
+        setTransaction(true);
+        props.prufClient.get
+          .isRightsHolder(idxHash, rgtHash)
+          .then(e => {
+            if (e) {
+              console.log("Verification Confirmed");
+              swal({
+                title: "Match Confirmed!",
+                icon: "success",
+                button: "Close",
+              });
+              setError("");
+              setTransaction(false);
+            } else {
+              console.log("Verification not Confirmed");
+              swal({
+                title: "Match Failed!",
+                text: "Please make sure forms are filled out correctly.",
+                icon: "warning",
+                button: "Close",
+              });
+              setTransaction(false);
+            }
+          });
+      })
+    };
+  
     const blockchainVerifyAsset = async () => {
-        if (!window.ethereum) {
-            return swal({
-                title:
-                    'Connect to an ethereum provider to use this functionality!',
-                button: 'Close',
-            })
+      if (!props.addr) {
+        return swal({
+          title: "Connect to an ethereum provider to use this functionality!",
+          button: "Close",
+        });
+      }
+      if (
+        loginFirst === "" ||
+        loginLast === "" ||
+        loginID === "" ||
+        loginPassword === ""
+      ) {
+        if (loginFirst === "") {
+          setloginFirstState("error");
         }
-        if (
-            loginFirst === '' ||
-            loginLast === '' ||
-            loginID === '' ||
-            loginPassword === ''
-        ) {
-            if (loginFirst === '') {
-                setloginFirstState('error')
-            }
-            if (loginLast === '') {
-                setloginLastState('error')
-            }
-            if (loginID === '') {
-                setloginIDState('error')
-            }
-            if (loginPassword === '') {
-                setloginPasswordState('error')
-            }
-            return
+        if (loginLast === "") {
+          setloginLastState("error");
         }
-
-        console.log('in bvr')
-        let idxHash = assetInfo.id
-        let rgtHash
-        let receiptVal
-        let tempTxHash
-
-        rgtHash = await props.prufClient.utils.generateSecureRgt(
-            assetInfo.id,
-            {
-              first: first,
-              middle: middle,
-              last: last,
-              ID: ID,
-              password: password
-            }
-            );
-
-        console.log('idxHash', idxHash)
-        console.log('rgtHash', rgtHash)
-        // eslint-disable-next-line react/prop-types
-        console.log('addr: ', props.addr)
-        setTransaction(true)
-
+        if (loginID === "") {
+          setloginIDState("error");
+        }
+        if (loginPassword === "") {
+          setloginPasswordState("error");
+        }
+        return;
+      }
+  
+      console.log("in bvr");
+      let idxHash = assetInfo.id;
+      let receiptVal;
+      let tempTxHash;
+  
+      props.prufClient.utils.generateSecureRgt(
+        assetInfo.id,
+        {
+          first: first,
+          middle: middle,
+          last: last,
+          id: ID,
+          password: password
+        }
+      ).then(rgtHash => {
+        console.log("idxHash", idxHash);
+        console.log("rgtHash", rgtHash);
+        console.log("addr: ", props.addr);
+        setTransaction(true);
+  
         props.prufClient.do
-            .verifyRightsHash(idxHash, rgtHash)
-            // eslint-disable-next-line react/prop-types
-            .send({ from: props.addr })
-            .on('error', function (_error) {
-                setTransaction(false)
-                tempTxHash = Object.values(_error)[0].transactionHash
-                let str1 =
-                    "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                let str2 = "' target='_blank'>here</a>"
-                link.innerHTML = String(str1 + tempTxHash + str2)
-                setTxHash(Object.values(_error)[0].transactionHash)
-                console.log(Object.values(_error)[0].transactionHash)
-                console.log(_error)
-                setError(_error)
-            })
-            .on('receipt', (receipt) => {
-                receiptVal = receipt.events.REPORT.returnValues._msg
-                setTransaction(false)
-                setTxHash(receipt.transactionHash)
-                tempTxHash = receipt.transactionHash
-                let str1 =
-                    "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                let str2 = "' target='_blank'>here</a>"
-                link.innerHTML = String(str1 + tempTxHash + str2)
-                setVerifyResult(receiptVal)
-                console.log('Verification Result :', receiptVal)
-
-                if (receiptVal === 'Match confirmed') {
-                    swal({
-                        title: 'Match Confirmed!',
-                        content: link,
-                        icon: 'success',
-                        button: 'Close',
-                    }).then(() => {
-                        window.backIndex = assetInfo.dBIndex
-                        window.location.href = assetInfo.lastRef
-                    })
-                    console.log('Verification conf')
-                }
-
-                if (receiptVal !== 'Match confirmed') {
-                    if (tempTxHash !== undefined) {
-                        swal({
-                            title: 'Match Failed!',
-                            content: link,
-                            icon: 'warning',
-                            button: 'Close',
-                        })
-                    }
-                    if (tempTxHash === undefined) {
-                        swal({
-                            title: 'Something Went Wrong!',
-                            icon: 'warning',
-                            button: 'Close',
-                        })
-                    }
-                    console.log('Verification not conf')
-                }
-            })
-
-        return clearForms()
-    }
+          .verifyRightsHash(idxHash, rgtHash)
+          .send({ from: props.addr })
+          .on("error", (_error) => {
+            setTransaction(false);
+            tempTxHash = Object.values(_error)[0].transactionHash;
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setTxHash(Object.values(_error)[0].transactionHash);
+            console.log(Object.values(_error)[0].transactionHash);
+            console.log(_error);
+            setError(_error);
+          })
+          .on("receipt", (receipt) => {
+            receiptVal = receipt.events.REPORT.returnValues._msg;
+            setTransaction(false);
+            setTxHash(receipt.transactionHash);
+            tempTxHash = receipt.transactionHash;
+            let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+            let str2 = "' target='_blank'>here</a>";
+            link.innerHTML = String(str1 + tempTxHash + str2);
+            setVerifyResult(receiptVal);
+            console.log("Verification Result :", receiptVal);
+            if (receiptVal === "Match confirmed") {
+              swal({
+                title: "Match Confirmed!",
+                content: link,
+                icon: "success",
+                button: "Close",
+              });
+              console.log("Verification conf");
+            }
+      
+            if (receiptVal !== "Match confirmed") {
+              if (tempTxHash !== undefined) {
+                swal({
+                  title: "Match Failed!",
+                  content: link,
+                  icon: "warning",
+                  button: "Close",
+                });
+              }
+              if (tempTxHash === undefined) {
+                swal({
+                  title: "Match Failed!",
+                  icon: "warning",
+                  button: "Close",
+                });
+              }
+              console.log("Verification not conf");
+            }
+          });
+      })
+  
+    };
 
     const classes = useStyles()
 
