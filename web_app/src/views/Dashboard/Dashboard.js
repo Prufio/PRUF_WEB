@@ -963,14 +963,15 @@ export default function Dashboard(props) {
               Update Asset Info
             </MenuItem> */}
             <MenuItem
-              key="SelItem5"
+              key="DisabledItem3"
+              disabled
               classes={{
                 root: classes.selectMenuItem,
                 selected: classes.selectMenuItemSelected,
               }}
               value="edit-rightsholder"
             >
-              Update Owner Info
+              Update Owner Info (Not Available in this Status)
             </MenuItem>
           </Select>
         );
