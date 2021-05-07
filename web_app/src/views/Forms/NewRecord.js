@@ -1560,7 +1560,7 @@ export default function NewRecord(props) {
                               />
                             </>
                           )}
-                          {!transactionActive && (
+                          {!transactionActive && !ipfsActive && (
                             <>
                               <CustomInput
                                 success={loginMakeState === "success"}
@@ -1810,7 +1810,7 @@ export default function NewRecord(props) {
                       <CardBody>
                         <form>
                           <>
-                            {!transactionActive && (
+                            {!transactionActive && !ipfsActive && (
                               <>
                                 <CustomInput
                                   success={loginFirstState === "success"}
@@ -2021,7 +2021,7 @@ export default function NewRecord(props) {
                               </>
                             )}
                           </>
-                          {!transactionActive && !isUploading && (
+                          {!transactionActive && !isUploading && !ipfsActive && (
                             <>
                               <h4 className="costsText">Cost: ü{NRCost}</h4>
                               <div className="MLBGradientSubmit">
