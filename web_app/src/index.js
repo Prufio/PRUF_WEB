@@ -18,6 +18,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 import AdminLayout from "layouts/user.js";
+import { CookiesProvider } from "react-cookie";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 
@@ -31,11 +32,18 @@ console.log(query);
 const fullUrl = "/user/home" + query */
 
 ReactDOM.render(
-  <HashRouter>
-    <Switch>
-      <Route path="/user" component={AdminLayout} />
-      { /* fullUrl ? <Redirect from="/" to={fullUrl} /> :   */<Redirect from="/" to="/user/home" />}
-    </Switch>
- </HashRouter>,
+  <CookiesProvider>
+    <HashRouter>
+      <Switch>
+        <Route path="/user" component={AdminLayout} />
+        {
+          /* fullUrl ? <Redirect from="/" to={fullUrl} /> :   */ <Redirect
+            from="/"
+            to="/user/home"
+          />
+        }
+      </Switch>
+    </HashRouter>
+  </CookiesProvider>,
   document.getElementById("root")
 );

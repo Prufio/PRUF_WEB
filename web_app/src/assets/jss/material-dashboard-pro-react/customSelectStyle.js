@@ -4,7 +4,7 @@ import {
   whiteColor,
   blackColor,
   grayColor,
-  hexToRgb
+  hexToRgb,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const customSelectStyle = {
@@ -18,32 +18,32 @@ const customSelectStyle = {
     color: grayColor[2],
     letterSpacing: "0",
     "&:focus": {
-      backgroundColor: "transparent"
+      backgroundColor: "transparent",
     },
     "&[aria-owns] + input + svg": {
-      transform: "rotate(180deg)"
+      transform: "rotate(180deg)",
     },
     "& + input + svg": {
-      transition: "all 300ms linear"
-    }
+      transition: "all 300ms linear",
+    },
   },
   selectFormControl: {
     margin: "7px 0 17px 0 !important",
     "& > div": {
       "&:before": {
         borderBottomWidth: "1px !important",
-        borderBottomColor: grayColor[4] + "!important"
+        borderBottomColor: grayColor[4] + "!important",
       },
       "&:after": {
-        borderBottomColor: primaryColor[0] + "!important"
-      }
-    }
+        borderBottomColor: primaryColor[5] + "!important",
+      },
+    },
   },
   selectLabel: {
     fontSize: "12px",
     textTransform: "uppercase",
     color: grayColor[2] + " !important",
-    top: "8px"
+    top: "8px",
   },
   selectMenu: {
     "& > div > ul": {
@@ -59,14 +59,14 @@ const customSelectStyle = {
       textAlign: "left",
       listStyle: "none",
       backgroundColor: whiteColor,
-      backgroundClip: "padding-box"
+      backgroundClip: "padding-box",
     },
     "& $selectPaper $selectMenuItemSelectedMultiple": {
-      backgroundColor: "inherit"
+      backgroundColor: "inherit",
     },
     "& > div + div": {
-      maxHeight: "266px !important"
-    }
+      maxHeight: "266px !important",
+    },
   },
   selectMenuItem: {
     fontSize: "13px",
@@ -82,24 +82,24 @@ const customSelectStyle = {
     color: grayColor[7],
     paddingRight: "30px",
     "&:hover": {
-      backgroundColor: primaryColor[0],
+      backgroundColor: primaryColor[5],
       color: whiteColor,
-      ...primaryBoxShadow
-    }
+      ...primaryBoxShadow,
+    },
   },
   selectMenuItemSelected: {
-    backgroundColor: primaryColor[0] + "!important",
-    color: whiteColor
+    backgroundColor: primaryColor[5] + "!important",
+    color: whiteColor,
   },
   selectMenuItemSelectedMultiple: {
     backgroundColor: "transparent !important",
     "&:hover": {
-      backgroundColor: primaryColor[0] + "!important",
+      backgroundColor: primaryColor[5] + "!important",
       color: whiteColor,
       ...primaryBoxShadow,
       "&:after": {
-        color: whiteColor
-      }
+        color: whiteColor,
+      },
     },
     "&:after": {
       top: "16px",
@@ -113,8 +113,8 @@ const customSelectStyle = {
       position: "absolute",
       content: "''",
       borderBottom: "2px solid currentColor",
-      transition: "opacity 90ms cubic-bezier(0,0,.2,.1)"
-    }
+      transition: "opacity 90ms cubic-bezier(0,0,.2,.1)",
+    },
   },
   selectPaper: {
     boxSizing: "borderBox",
@@ -130,8 +130,8 @@ const customSelectStyle = {
     textAlign: "left",
     listStyle: "none",
     backgroundColor: "transparent",
-    maxHeight: "266px"
-  }
+    maxHeight: "266px",
+  },
 };
 
 export default customSelectStyle;

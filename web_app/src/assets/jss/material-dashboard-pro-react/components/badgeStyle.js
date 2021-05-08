@@ -6,7 +6,7 @@ import {
   infoColor,
   roseColor,
   grayColor,
-  whiteColor
+  whiteColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const badgeStyle = {
@@ -20,32 +20,32 @@ const badgeStyle = {
     color: whiteColor,
     textAlign: "center",
     verticalAlign: "baseline",
-    display: "inline-block"
+    display: "inline-block",
   },
   primary: {
-    backgroundColor: primaryColor[0]
+    backgroundColor: primaryColor[0],
   },
   warning: {
-    backgroundColor: warningColor[0]
+    backgroundColor: warningColor[0],
   },
   danger: {
-    backgroundColor: dangerColor[0]
+    backgroundColor: dangerColor[0],
   },
   success: {
-    backgroundColor: successColor[0]
+    backgroundColor: successColor[0],
   },
   info: {
-    backgroundColor: infoColor[0]
+    backgroundColor: infoColor[0],
   },
   rose: {
-    backgroundColor: roseColor[0]
+    backgroundColor: roseColor[0],
   },
   gray: {
-    backgroundColor: grayColor[0]
+    backgroundColor: grayColor[0],
   },
   darkBlue: {
-    backgroundColor: primaryColor[6]
-  }
+    backgroundColor: primaryColor[6],
+  },
 };
 
 export default badgeStyle;

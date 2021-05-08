@@ -1,8 +1,8 @@
 import React from "react";
 import "../../assets/css/custom.css";
-import QrReader from 'react-qr-reader'
+import QrReader from "react-qr-reader";
 import { isMobile } from "react-device-detect";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -33,15 +33,19 @@ import { DashboardOutlined, DashboardRounded } from "@material-ui/icons";
 const useStyles = makeStyles(styles);
 
 export default function Recycle(props) {
-  const [checked, setChecked] = React.useState([24, 22]);
-  const [selectedEnabled, setSelectedEnabled] = React.useState("b");
+  // const [checked, setChecked] = React.useState([24, 22]);
+  // const [selectedEnabled, setSelectedEnabled] = React.useState("b");
+  // eslint-disable-next-line no-unused-vars
+  if(!window.sentPacket) window.sentPacket = {}
   const [selectedValue, setSelectedValue] = React.useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [simpleSelect, setSimpleSelect] = React.useState("");
-  const [scanQR, setScanQR] = React.useState(false)
+  const [scanQR, setScanQR] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
   const [QRValue, setQRValue] = React.useState("");
   const [recycling, setRecycling] = React.useState(false);
-  const [assetClass, setAssetClass] = React.useState("");
+  const [nodeId, setAssetClass] = React.useState("");
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
@@ -55,9 +59,12 @@ export default function Recycle(props) {
   const [loginType, setloginType] = React.useState("");
   const [loginModel, setloginModel] = React.useState("");
   const [loginSerial, setloginSerial] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [loginIDX, setloginIDX] = React.useState("");
 
-  const [loginManufacturerState, setloginManufacturerState] = React.useState("");
+  const [loginManufacturerState, setloginManufacturerState] = React.useState(
+    ""
+  );
   const [loginTypeState, setloginTypeState] = React.useState("");
   const [loginModelState, setloginModelState] = React.useState("");
   const [loginSerialState, setloginSerialState] = React.useState("");
@@ -79,70 +86,57 @@ export default function Recycle(props) {
   const [loginIDState, setloginIDState] = React.useState("");
   const [loginPasswordState, setloginPasswordState] = React.useState("");
 
+    // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
+  // eslint-disable-next-line no-unused-vars
   const [verifyResult, setVerifyResult] = React.useState("");
 
-  const [assetInfo, ] = React.useState(window.sentPacket)
+  const [assetInfo] = React.useState(JSON.parse(JSON.stringify(window.sentPacket)));
 
-  const link = document.createElement('div')
+    // eslint-disable-next-line no-unused-vars
+  const link = document.createElement("div");
 
-  window.sentPacket = null
+  //window.sentPacket = null;
 
   const classes = useStyles();
 
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
-      console.log("Scrolled to ", props.ps.element.scrollTop)
+      // eslint-disable-next-line react/prop-types
+      console.log("Scrolled to ", props.ps.element.scrollTop);
     }
-  }, [])
+  }, []);
 
   if (assetInfo === undefined || assetInfo === null) {
-    console.log("No asset found. Rerouting...")
-    window.location.href = "/#/user/home"
-    window.location.reload()
+    console.log("No asset found. Rerouting...");
+    window.location.href = "/#/user/home";
+    window.location.reload();
   }
 
   if (assetInfo.statusNum !== "60") {
     swal({
       title: "Asset not in correct status!",
-      text: "This asset is not in a recyclable status, please set asset into a discarded status before attempting to recycle.",
+      text:
+        "This asset is not in a recyclable status, please set asset into a discarded status before attempting to recycle.",
       icon: "warning",
       button: "Close",
     });
-    return window.location.href = "/#/user/dashboard"
+    return (window.location.href = "/#/user/search");
   }
 
-  const handleChange = event => {
-    setSelectedValue(event.target.value);
-  };
-
-  const handleChangeEnabled = event => {
-    setSelectedEnabled(event.target.value);
-  };
-
-  const handleToggle = value => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-  };
-
-  const ACLogin = event => {
+  const ACLogin = (event) => {
     setAssetClass(event.target.value);
   };
 
-  const handleScanQR = event => {
+  const handleScanQR = () => {
     setScanQR(!scanQR);
-    console.log("new value", !scanQR)
+    console.log("new value", !scanQR);
   };
 
-  const clearForms = event => {
+  const clearForms = () => {
     setManufacturer("");
     setType("");
     setModel("");
@@ -168,13 +162,21 @@ export default function Recycle(props) {
     setIDXRawInput(false);
     setScanQR(false);
     setQRValue("");
-    console.log("clearing forms")
+    console.log("clearing forms");
   };
 
   const recycleAsset = async () => {
     if (!IDXRawInput) {
-      if (loginType === "" || loginManufacturer === "" || loginModel === "" || loginSerial === "" || loginFirst === "" || loginLast === "" || loginID === "" || loginPassword === "") {
-
+      if (
+        loginType === "" ||
+        loginManufacturer === "" ||
+        loginModel === "" ||
+        loginSerial === "" ||
+        loginFirst === "" ||
+        loginLast === "" ||
+        loginID === "" ||
+        loginPassword === ""
+      ) {
         if (loginType === "") {
           setloginTypeState("error");
         }
@@ -210,85 +212,68 @@ export default function Recycle(props) {
       }
     }
 
-    console.log("in RA")
+    console.log("in RA");
     let idxHash;
     let rgtHash;
     let rgtHashRaw;
     let receiptVal;
     let tempTxHash;
 
-    {
-      IDXRawInput === true && (
-        idxHash = IDXRaw
-      )
+    if (IDXRawInput === true) {
+      idxHash = IDXRaw;
     }
-    {
-      QRValue !== "" && (
-        idxHash = QRValue
-      )
+    if (QRValue !== "") {
+      idxHash = QRValue;
     }
 
-    {
-      IDXRawInput === false && QRValue === "" && (
-        idxHash = window.web3.utils.soliditySha3(
-          String(type).replace(/\s/g, ''),
-          String(manufacturer).replace(/\s/g, ''),
-          String(model).replace(/\s/g, ''),
-          String(serial).replace(/\s/g, ''),
-        )
-      )
-    }
-    {
-      middle === "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
-      )
-    }
-    {
-      middle !== "" && (
-        rgtHashRaw = window.web3.utils.soliditySha3(
-          String(first).replace(/\s/g, ''),
-          String(middle).replace(/\s/g, ''),
-          String(last).replace(/\s/g, ''),
-          String(ID).replace(/\s/g, ''),
-          String(password).replace(/\s/g, ''),
-        )
-      )
+    if (IDXRawInput === false && QRValue === "") {
+      idxHash = await props.prufClient.utils.generateAssetID(
+        type,
+        manufacturer,
+        model,
+        serial
+      );
     }
 
-    rgtHash = window.web3.utils.soliditySha3(String(idxHash), String(rgtHashRaw));
-    rgtHash = window.utils.tenThousandHashesOf(rgtHash);
+    rgtHash = await props.prufClient.utils.generateSecureRgt(
+      idxHash,
+      {
+        first: first,
+        middle: middle,
+        last: last,
+        ID: ID,
+        password: password
+      }
+      );
 
     console.log("idxHash", idxHash);
     console.log("rgtHash", rgtHash);
-    console.log("addr: ", window.addr);
-    setRecycling(true)
+    // eslint-disable-next-line react/prop-types
+    console.log("addr: ", props.addr);
+    setRecycling(true);
 
-    await window.contracts.RCLR.methods
-      .recycle(idxHash, rgtHash, assetClass)
-      .send({ from: window.addr })
+    props.prufClient.do
+      .recycleAsset(idxHash, rgtHash, nodeId)
+      // eslint-disable-next-line react/prop-types
+      .send({ from: props.addr })
       .on("error", function (_error) {
         setRecycling(false);
         tempTxHash = Object.values(_error)[0].transactionHash;
         setTxHash(Object.values(_error)[0].transactionHash);
         console.log(Object.values(_error)[0].transactionHash);
-        console.log(_error)
+        console.log(_error);
         setError(_error);
-        clearForms()
+        clearForms();
       })
       .on("receipt", (receipt) => {
+        //refreshBalances()
         receiptVal = receipt.events.REPORT.returnValues._msg;
-        setRecycling(false)
-        setTxHash(receipt.transactionHash)
-        tempTxHash = receipt.transactionHash
-        setVerifyResult(receiptVal)
+        setRecycling(false);
+        setTxHash(receipt.transactionHash);
+        tempTxHash = receipt.transactionHash;
+        setVerifyResult(receiptVal);
         console.log("verify Result :", receiptVal);
       });
-
 
     if (receiptVal === "Match confirmed") {
       swal({
@@ -297,83 +282,78 @@ export default function Recycle(props) {
         icon: "success",
         button: "Close",
       });
-      console.log("verify conf")
+      console.log("verify conf");
     }
 
     if (receiptVal !== "Match confirmed") {
       swal({
         title: "Match Failed!",
-        text: "Please make sure all forms are filled out correctly. Check out your TX here:" + tempTxHash,
+        text:
+          "Please make sure all forms are filled out correctly. Check out your TX here:" +
+          tempTxHash,
         icon: "warning",
         button: "Close",
       });
-      console.log("verify not conf")
+      console.log("verify not conf");
     }
 
-    return clearForms()
-  }
-
+    return clearForms();
+  };
 
   return (
     <GridContainer>
-      {assetClass === "" && (
+      {nodeId === "" && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
               <Category />
             </CardIcon>
-            <h4 className={classes.cardIconTitle}>Select Asset Class</h4>
+            <h4 className={classes.cardIconTitle}>Select Root Node</h4>
           </CardHeader>
           <CardBody>
             <form>
-              <FormControl
-                fullWidth
-                className={classes.selectFormControl}
-              >
-                <InputLabel
-                >
-                  Select Asset Class
-                        </InputLabel>
+              <FormControl fullWidth className={classes.selectFormControl}>
+                <InputLabel>Select Root Node</InputLabel>
                 <Select
                   MenuProps={{
-                    className: classes.selectMenu
+                    className: classes.selectMenu,
                   }}
                   classes={{
-                    select: classes.select
+                    select: classes.select,
                   }}
                   value={simpleSelect}
                   onChange={ACLogin}
                   inputProps={{
                     name: "simpleSelect",
-                    id: "simple-select"
+                    id: "simple-select",
                   }}
                 >
                   <MenuItem
                     disabled
                     classes={{
-                      root: classes.selectMenuItem
+                      root: classes.selectMenuItem,
                     }}
                   >
-                    Select Asset Class
-                          </MenuItem>
+                    Select Node
+                  </MenuItem>
                   <MenuItem
                     classes={{
                       root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
+                      selected: classes.selectMenuItemSelected,
                     }}
                     value="100003"
                   >
                     Trinkets
-                          </MenuItem>
+                  </MenuItem>
                   <MenuItem
                     classes={{
                       root: classes.selectMenuItem,
-                      selected: classes.selectMenuItemSelected
+                      selected: classes.selectMenuItemSelected,
                     }}
                     value="100004"
                   >
                     Personal Computers
-                          </MenuItem>
+                  </MenuItem>
                 </Select>
               </FormControl>
             </form>
@@ -381,7 +361,7 @@ export default function Recycle(props) {
           <br />
         </Card>
       )}
-      {assetClass !== "" && (
+      {nodeId !== "" && (
         <>
           <GridItem xs={12} sm={12} md={6}>
             {!scanQR && QRValue === "" && (
@@ -402,11 +382,11 @@ export default function Recycle(props) {
                           labelText="Manufacturer *"
                           id="manufacturer"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setManufacturer(event.target.value.trim())
+                            onChange: (event) => {
+                              setManufacturer(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginManufacturerState("success");
                               } else {
@@ -422,11 +402,11 @@ export default function Recycle(props) {
                           labelText="Type *"
                           id="type"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setType(event.target.value.trim())
+                            onChange: (event) => {
+                              setType(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginTypeState("success");
                               } else {
@@ -442,11 +422,11 @@ export default function Recycle(props) {
                           labelText="Model *"
                           id="model"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setModel(event.target.value.trim())
+                            onChange: (event) => {
+                              setModel(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginModelState("success");
                               } else {
@@ -462,11 +442,11 @@ export default function Recycle(props) {
                           labelText="Serial *"
                           id="serial"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setSerial(event.target.value.trim())
+                            onChange: (event) => {
+                              setSerial(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginSerialState("success");
                               } else {
@@ -478,7 +458,7 @@ export default function Recycle(props) {
                         />
                         <div className={classes.formCategory}>
                           <small>*</small> Required fields
-              </div>
+                        </div>
                       </>
                     )}
                     {IDXRawInput === false && recycling && (
@@ -487,40 +467,40 @@ export default function Recycle(props) {
                           labelText={manufacturer}
                           id="manufacturer"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           labelText={type}
                           id="type"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           labelText={model}
                           id="model"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           labelText={serial}
                           id="serial"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                       </>
@@ -530,41 +510,41 @@ export default function Recycle(props) {
                         <CustomInput
                           id="manufacturer"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
                             placeholder: "Disabled",
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           id="type"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
                             placeholder: "Disabled",
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           id="model"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
                             placeholder: "Disabled",
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           id="serial"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
                             placeholder: "Disabled",
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                       </>
@@ -576,17 +556,19 @@ export default function Recycle(props) {
                             <Checkbox
                               tabIndex={-1}
                               onClick={() => setIDXRawInput(!IDXRawInput)}
-                              checkedIcon={<Check className={classes.checkedIcon} />}
+                              checkedIcon={
+                                <Check className={classes.checkedIcon} />
+                              }
                               icon={<Check className={classes.uncheckedIcon} />}
                               classes={{
                                 checked: classes.checked,
-                                root: classes.checkRoot
+                                root: classes.checkRoot,
                               }}
                             />
                           }
                           classes={{
                             label: classes.label,
-                            root: classes.labelRoot
+                            root: classes.labelRoot,
                           }}
                           label="Input Asset ID"
                         />
@@ -600,11 +582,11 @@ export default function Recycle(props) {
                           labelText="Asset ID *"
                           id="IDX"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setIDXRaw(event.target.value.trim())
+                            onChange: (event) => {
+                              setIDXRaw(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginIDXState("success");
                               } else {
@@ -616,7 +598,7 @@ export default function Recycle(props) {
                         />
                         <div className={classes.formCategory}>
                           <small>*</small> Required fields
-                  </div>
+                        </div>
                       </>
                     )}
                     {IDXRawInput === true && recycling && (
@@ -626,30 +608,41 @@ export default function Recycle(props) {
                             labelText={IDXRaw}
                             id="IDX"
                             formControlProps={{
-                              fullWidth: true
+                              fullWidth: true,
                             }}
                             inputProps={{
-                              disabled: true
+                              disabled: true,
                             }}
                           />
                         )}
 
                         {isMobile && (
                           <CustomInput
-                            labelText={IDXRaw.substring(0, 12) + "..." + IDXRaw.substring(54, 66)}
+                            labelText={
+                              IDXRaw.substring(0, 12) +
+                              "..." +
+                              IDXRaw.substring(54, 66)
+                            }
                             id="IDX"
                             formControlProps={{
-                              fullWidth: true
+                              fullWidth: true,
                             }}
                             inputProps={{
-                              disabled: true
+                              disabled: true,
                             }}
                           />
                         )}
                       </>
                     )}
                     {!recycling && (
-                      <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Scan QR</Button>
+                      <Button
+                        value={scanQR}
+                        onClick={(e) => handleScanQR(e)}
+                        color="info"
+                        className="MLBGradient"
+                      >
+                        Scan QR
+                      </Button>
                     )}
                   </form>
                 </CardBody>
@@ -673,22 +666,32 @@ export default function Recycle(props) {
                         // retrieveRecordQR(result);
                         setQRValue(result);
                       }
-
                     }}
                     onError={(err) => {
                       if (err) {
                         console.info(err);
                       }
                     }}
-
-                    style={{ width: '100%' }}
+                    style={{ width: "100%" }}
                   />
                   {recycling && (
                     <h3>
-                      Recycling Asset<div className="lds-ellipsisIF"><div></div><div></div><div></div></div>
+                      Recycling Asset
+                      <div className="lds-ellipsisIF">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
                     </h3>
                   )}
-                  <Button value={scanQR} onClick={(e) => handleScanQR(e)} color="info" className="MLBGradient">Back</Button>
+                  <Button
+                    value={scanQR}
+                    onClick={(e) => handleScanQR(e)}
+                    color="info"
+                    className="MLBGradient"
+                  >
+                    Back
+                  </Button>
                 </CardBody>
               </Card>
             )}
@@ -706,13 +709,19 @@ export default function Recycle(props) {
                     labelText={"IDX : " + QRValue}
                     id="IDX"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
-                      disabled: true
+                      disabled: true,
                     }}
                   />
-                  <Button onClick={() => setQRValue("")} color="info" className="MLBGradient">Back</Button>
+                  <Button
+                    onClick={() => setQRValue("")}
+                    color="info"
+                    className="MLBGradient"
+                  >
+                    Back
+                  </Button>
                 </CardBody>
               </Card>
             )}
@@ -736,11 +745,11 @@ export default function Recycle(props) {
                           labelText="First Name *"
                           id="firstName"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setFirst(event.target.value.trim())
+                            onChange: (event) => {
+                              setFirst(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginFirstState("success");
                               } else {
@@ -754,11 +763,11 @@ export default function Recycle(props) {
                           labelText="Middle Name"
                           id="middleName"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setMiddle(event.target.value.trim())
+                            onChange: (event) => {
+                              setMiddle(event.target.value.trim());
                             },
                           }}
                         />
@@ -768,11 +777,11 @@ export default function Recycle(props) {
                           labelText="Last Name *"
                           id="lastName"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setLast(event.target.value.trim())
+                            onChange: (event) => {
+                              setLast(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginLastState("success");
                               } else {
@@ -788,11 +797,11 @@ export default function Recycle(props) {
                           labelText="ID Number *"
                           id="idNumber"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            onChange: event => {
-                              setID(event.target.value.trim())
+                            onChange: (event) => {
+                              setID(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginIDState("success");
                               } else {
@@ -808,12 +817,12 @@ export default function Recycle(props) {
                           labelText="Password *"
                           id="ownerpassword"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
                             type: "password",
-                            onChange: event => {
-                              setPassword(event.target.value.trim())
+                            onChange: (event) => {
+                              setPassword(event.target.value.trim());
                               if (event.target.value !== "") {
                                 setloginPasswordState("success");
                               } else {
@@ -825,7 +834,7 @@ export default function Recycle(props) {
                         />
                         <div className={classes.formCategory}>
                           <small>*</small> Required fields
-              </div>
+                        </div>
                       </>
                     )}
                     {recycling && (
@@ -834,51 +843,51 @@ export default function Recycle(props) {
                           labelText={first}
                           id="first"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           labelText={middle}
                           id="middle"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           labelText={last}
                           id="last"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           labelText={ID}
                           id="ID"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                         <CustomInput
                           labelText={password}
                           id="ownerpassword"
                           formControlProps={{
-                            fullWidth: true
+                            fullWidth: true,
                           }}
                           inputProps={{
                             type: "password",
-                            disabled: true
+                            disabled: true,
                           }}
                         />
                       </>
@@ -886,7 +895,13 @@ export default function Recycle(props) {
                   </>
                   {!recycling && (
                     <div className="MLBGradientSubmit">
-                      <Button color="info" className="MLBGradient" onClick={(e) => recycleAsset()}>Recycle Asset</Button>
+                      <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => recycleAsset()}
+                      >
+                        Recycle Asset
+                      </Button>
                     </div>
                   )}
                   {/* <Button color="info" className="MLBGradient" onClick={() => swal({

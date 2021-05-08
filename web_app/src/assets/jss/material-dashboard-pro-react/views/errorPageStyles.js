@@ -11,25 +11,25 @@ const errorPageStyles = () => ({
     color: whiteColor,
     padding: "0 15px",
     width: "100%",
-    maxWidth: "880px"
+    maxWidth: "880px",
   },
   title: {
     ...title,
     fontSize: "13.7em",
     color: whiteColor,
     letterSpacing: "14px",
-    fontWeight: "700"
+    fontWeight: "700",
   },
   subTitle: {
     fontSize: "2.25rem",
     marginTop: "0",
-    marginBottom: "8px"
+    marginBottom: "8px",
   },
   description: {
     fontSize: "1.125rem",
     marginTop: "0",
-    marginBottom: "8px"
-  }
+    marginBottom: "8px",
+  },
 });
 
 export default errorPageStyles;

@@ -1,70 +1,68 @@
 import {
   primaryColor,
   dangerColor,
-  roseColor,
   grayColor,
   blackColor,
-  darkBlueColor,
   whiteColor,
-  hexToRgb
+  hexToRgb,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const customCheckboxRadioSwitch = {
   checkRoot: {
     padding: "14px",
     "&:hover": {
-      backgroundColor: "unset"
-    }
+      backgroundColor: primaryColor[7],
+    },
   },
   radioRoot: {
     padding: "16px",
     "&:hover": {
-      backgroundColor: "unset"
-    }
+      backgroundColor: primaryColor[5],
+    },
   },
   labelRoot: {
-    marginLeft: "-14px"
+    marginLeft: "-14px",
   },
   checkboxAndRadio: {
     position: "relative",
     display: "block",
     marginTop: "10px",
-    marginBottom: "10px"
+    marginBottom: "10px",
   },
   checkboxAndRadioHorizontal: {
     position: "relative",
     display: "block",
     "&:first-child": {
-      marginTop: "10px"
+      marginTop: "10px",
     },
     "&:not(:first-child)": {
-      marginTop: "-14px"
+      marginTop: "-14px",
     },
     marginTop: "0",
-    marginBottom: "0"
+    marginBottom: "0",
   },
   checked: {
-    color: primaryColor[7] + "!important"
+    color: primaryColor[5] + "!important",
   },
   checkedIcon: {
     width: "20px",
     height: "20px",
     border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
-    borderRadius: "3px"
+    borderRadius: "3px",
   },
   uncheckedIcon: {
     width: "0px",
     height: "0px",
     padding: "9px",
     border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
-    borderRadius: "3px"
+    borderRadius: "3px",
   },
   disabledCheckboxAndRadio: {
     "& $checkedIcon,& $uncheckedIcon,& $radioChecked,& $radioUnchecked": {
       borderColor: blackColor,
       opacity: "0.26",
-      color: blackColor
-    }
+      color: blackColor,
+    },
   },
   label: {
     cursor: "pointer",
@@ -75,7 +73,7 @@ const customCheckboxRadioSwitch = {
     fontWeight: "400",
     display: "inline-flex",
     transition: "0.3s ease all",
-    letterSpacing: "unset"
+    letterSpacing: "unset",
   },
   labelHorizontal: {
     color: "rgba(" + hexToRgb(blackColor) + ", 0.26)",
@@ -87,11 +85,11 @@ const customCheckboxRadioSwitch = {
     paddingTop: "39px",
     marginRight: "0",
     "@media (min-width: 992px)": {
-      float: "right"
-    }
+      float: "right",
+    },
   },
   labelHorizontalRadioCheckbox: {
-    paddingTop: "22px"
+    paddingTop: "22px",
   },
   labelLeftHorizontal: {
     color: "rgba(" + hexToRgb(blackColor) + ", 0.26)",
@@ -101,29 +99,29 @@ const customCheckboxRadioSwitch = {
     lineHeight: "1.428571429",
     fontWeight: "400",
     paddingTop: "22px",
-    marginRight: "0"
+    marginRight: "0",
   },
   labelError: {
-    color: dangerColor[0]
+    color: dangerColor[0],
   },
   radio: {
-    color: primaryColor[0] + "!important"
+    color: primaryColor[0] + "!important",
   },
   radioChecked: {
     width: "16px",
     height: "16px",
-    border: "1px solid " + primaryColor[0],
-    borderRadius: "50%"
+    border: "1px solid " + primaryColor[7],
+    borderRadius: "50%",
   },
   radioUnchecked: {
     width: "0px",
     height: "0px",
     padding: "7px",
     border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
-    borderRadius: "50%"
+    borderRadius: "50%",
   },
   inlineChecks: {
-    marginTop: "8px"
+    marginTop: "8px",
   },
   iconCheckbox: {
     height: "116px",
@@ -139,52 +137,52 @@ const customCheckboxRadioSwitch = {
       verticalAlign: "middle",
       borderRadius: "50%",
       color: "inherit",
-      transition: "all 0.2s"
+      transition: "all 0.2s",
     },
     "&:hover": {
       color: primaryColor[5],
       "& > span:first-child": {
-        borderColor: primaryColor[5]
-      }
-    }
+        borderColor: primaryColor[5],
+      },
+    },
   },
   iconCheckboxChecked: {
-    color: roseColor[0],
+    color: primaryColor[5],
     "& > span:first-child": {
-      borderColor: roseColor[0]
-    }
+      borderColor: primaryColor[5],
+    },
   },
   iconCheckboxIcon: {
     fontSize: "40px",
-    lineHeight: "111px"
+    lineHeight: "111px",
   },
   switchBase: {
-    color: primaryColor[5] + "!important"
+    color: primaryColor[5] + "!important",
   },
   switchIcon: {
     boxShadow: "0 1px 3px 1px rgba(" + hexToRgb(blackColor) + ", 0.4)",
     color: whiteColor + " !important",
-    border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)"
+    border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
   },
   switchIconChecked: {
     borderColor: primaryColor[0],
-    transform: "translateX(0px)!important"
+    transform: "translateX(0px)!important",
   },
   switchBar: {
     width: "30px",
     height: "15px",
     backgroundColor: "rgb(" + hexToRgb(grayColor[18]) + ")",
     borderRadius: "15px",
-    opacity: "0.7!important"
+    opacity: "0.7!important",
   },
   switchChecked: {
     "& + $switchBar": {
-      backgroundColor: "rgba(" + hexToRgb(primaryColor[5]) + ", 1) !important"
+      backgroundColor: "rgba(" + hexToRgb(primaryColor[5]) + ", 1) !important",
     },
     "& $switchIcon": {
-      borderColor: primaryColor[5]
-    }
-  }
+      borderColor: primaryColor[5],
+    },
+  },
 };
 
 export default customCheckboxRadioSwitch;

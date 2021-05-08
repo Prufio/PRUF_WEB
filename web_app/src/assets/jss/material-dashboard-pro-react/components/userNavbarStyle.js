@@ -8,7 +8,7 @@ import {
   warningColor,
   dangerColor,
   whiteColor,
-  grayColor
+  grayColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 import "../../../../assets/css/custom.css";
 
@@ -27,14 +27,14 @@ const headerStyle = () => ({
     padding: "10px 0",
     transition: "all 150ms ease 0s",
     minHeight: "50px",
-    display: "block"
+    display: "block",
   },
   container: {
     ...containerFluid,
-    minHeight: "50px"
+    minHeight: "50px",
   },
   flex: {
-    flex: 1
+    flex: 1,
   },
   title: {
     ...defaultFont,
@@ -48,47 +48,47 @@ const headerStyle = () => ({
     margin: "0 !important",
     letterSpacing: "unset",
     "&:hover,&:focus": {
-      background: "transparent"
-    }
+      background: "transparent",
+    },
   },
   primary: {
     backgroundColor: primaryColor[0],
     color: whiteColor,
-    ...defaultBoxShadow
+    ...defaultBoxShadow,
   },
   info: {
     backgroundColor: infoColor[0],
     color: whiteColor,
-    ...defaultBoxShadow
+    ...defaultBoxShadow,
   },
   success: {
     backgroundColor: successColor[0],
     color: whiteColor,
-    ...defaultBoxShadow
+    ...defaultBoxShadow,
   },
   warning: {
     backgroundColor: warningColor[0],
     color: whiteColor,
-    ...defaultBoxShadow
+    ...defaultBoxShadow,
   },
   danger: {
     backgroundColor: dangerColor[0],
     color: whiteColor,
-    ...defaultBoxShadow
+    ...defaultBoxShadow,
   },
   sidebarMinimize: {
     float: "left",
     padding: "0 0 0 15px",
     display: "block",
-    color: grayColor[6]
+    color: grayColor[6],
   },
   sidebarMinimizeRTL: {
-    padding: "0 15px 0 0 !important"
+    padding: "0 15px 0 0 !important",
   },
   sidebarMiniIcon: {
     width: "20px",
-    height: "17px"
-  }
+    height: "17px",
+  },
 });
 
 export default headerStyle;

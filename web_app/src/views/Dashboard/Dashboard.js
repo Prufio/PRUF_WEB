@@ -2,9 +2,10 @@ import React from "react";
 import "../../assets/css/custom.css";
 import { isMobile, isAndroid } from "react-device-detect";
 import { RWebShare } from "react-web-share";
-import swalReact from '@sweetalert/with-react';
-import Jdenticon from 'react-jdenticon';
-import { QRCode } from 'react-qrcode-logo';
+import swalReact from "@sweetalert/with-react";
+import swal from "sweetalert";
+import Jdenticon from "react-jdenticon";
+import { QRCode } from "react-qrcode-logo";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -13,15 +14,11 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import Icon from '@material-ui/core/Icon';
+import Icon from "@material-ui/core/Icon";
 
 // @material-ui/icons
-// import ContentCopy from "@material-ui/icons/ContentCopy";
-// import InfoOutline from "@material-ui/icons/InfoOutline";
 import Refresh from "@material-ui/icons/Refresh";
 import Share from "@material-ui/icons/Share";
-import Create from "@material-ui/icons/Create";
-import Edit from "@material-ui/icons/Edit";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
@@ -36,163 +33,258 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import placeholder from "../../assets/img/placeholder.jpg";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
-import { DashboardOutlined, KeyboardArrowLeft, Settings } from "@material-ui/icons";
+import {
+  ArrowBackIos,
+  ArrowForwardIos,
+  DashboardOutlined,
+  KeyboardArrowLeft,
+  Settings,
+} from "@material-ui/icons";
 import TextField from "@material-ui/core/TextField";
-import Printer from "../../Resources/print"
-import swal from "sweetalert";
+import Printer from "../../Resources/print";
+import ARweavePNG from "../../assets/img/arweave.png";
+import IPFSPNG from "../../assets/img/ipfs.png";
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
-
   React.useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
+      // eslint-disable-next-line react/prop-types
       props.ps.element.scrollTop = 0;
       //console.log("Scrolled to ", props.ps.element.scrollTop)
-    }
-    else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
-      
     }
-  }, [])
+    if (window.assetsPerPage) {
+      setAssetsPerPage(window.assetsPerPage);
+    }
+  }, []);
 
   const [viewAsset, setViewAsset] = React.useState(false);
   const [simpleSelect, setSimpleSelect] = React.useState("");
   const [selectedAssetObj, setSelectedAssetObj] = React.useState({});
+  // eslint-disable-next-line no-unused-vars
   const [identicon, setIdenticon] = React.useState(<></>);
-  const [baseURL, setBaseURL] = React.useState("https://app.pruf.io/#/user/search/");
+  // eslint-disable-next-line no-unused-vars
+  const [baseURL, setBaseURL] = React.useState(
+    "https://app.pruf.io/#/user/search/"
+  );
   const [URL, setURL] = React.useState("");
   const [selectedImage, setSelectedImage] = React.useState("");
   const [copyText, setCopyText] = React.useState(false);
+  const [pageNum, setPageNum] = React.useState(1);
+  const [assetsPerPage, setAssetsPerPage] = React.useState(8);
+  // eslint-disable-next-line no-unused-vars
+  const [currency, setCurrency] = React.useState("ü");
+
+  // eslint-disable-next-line react/prop-types
+  const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage);
 
   const moreInfo = (e) => {
-    //console.log(props.ps);
+    //console.log(e);
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
       //console.log(props.ps)
-      props.ps.element.scrollTop = 0
-    }
-    else {
-      window.scrollTo({top: 0, behavior: 'smooth'})
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-      
+      // eslint-disable-next-line react/prop-types
+      props.ps.element.scrollTop = 124;
+    } else {
+      window.scrollTo({ bottom: -124, behavior: "smooth" });
+      document.documentElement.scrollTop = 124;
+      document.scrollingElement.scrollTop = 124;
     }
     //console.log(props.ps.element.scrollTop)
-    const url = String(baseURL) + String(e.idxHash)
+    const url = String(baseURL) + String(e.id);
 
-    if (e === "back") { setSelectedAssetObj({}); return setViewAsset(false); }
+    if (e === "back") {
+      // eslint-disable-next-line react/prop-types
+      if (props.ps) {
+        //console.log(props.ps)
+        // eslint-disable-next-line react/prop-types
+        props.ps.element.scrollTop = 0;
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        document.documentElement.scrollTop = 0;
+        document.scrollingElement.scrollTop = 0;
+      }
+      let _pageNum = pageNum;
 
+      const getRightPage = () => {
+        if (assetsPerPage * _pageNum <= selectedAssetObj.dBIndex) {
+          _pageNum++;
+          getRightPage();
+        }
+      };
+
+      getRightPage();
+
+      setPageNum(_pageNum);
+      setSelectedAssetObj({});
+      return setViewAsset(false);
+    }
     if (e.DisplayImage !== undefined && e.DisplayImage !== "") {
       setSelectedImage(e.DisplayImage);
-    }
-
-    else {
-      setSelectedImage("")
+    } else {
+      setSelectedImage("");
     }
 
     setViewAsset(true);
     setSelectedAssetObj(e);
     setIdenticon(<Jdenticon value={e.id} />);
-    setURL(url)
+    setURL(url);
 
     window.printObj = e;
-
-  }
+  };
 
   const copyTextSnippet = (temp) => {
-    navigator.clipboard.writeText(temp)
+    navigator.clipboard.writeText(temp);
     if (isMobile) {
-      swal("Asset ID Copied to Clipboard!")
+      swal("Asset ID Copied to Clipboard!");
     }
     if (!isMobile) {
-      setCopyText(true)
-      setTimeout(() => { setCopyText(false) }, 1000);
+      setCopyText(true);
+      setTimeout(() => {
+        setCopyText(false);
+      }, 1000);
     }
-  }
+  };
 
   const generateAssetDash = (arr) => {
+    if (!arr) return <></>;
+    //console.log(window.backIndex);
+    if (
+      window.backIndex > -1 &&
+      window.backIndex !== null &&
+      window.backIndex !== undefined
+    ) {
+      let backIndex = window.backIndex,
+        newObj = {},
+        newStat,
+        newStatNum;
+
+      if (window.newDescObj) {
+        newObj = JSON.parse(JSON.stringify(window.newDescObj));
+        if (newObj.photo.DisplayImage) {
+          newObj.DisplayImage = newObj.photo.DisplayImage;
+        } else if (newObj.photo && Object.values(newObj.photo).length > 0) {
+          newObj.DisplayImage = Object.values(newObj.photo)[0];
+        } else {
+          newObj.DisplayImage = "";
+        }
+      } else if (arr[backIndex]) {
+        newObj = JSON.parse(JSON.stringify(arr[backIndex]));
+      }
+
+      if (window.newStat) {
+        newObj.statusNum = window.newStat.num;
+        newObj.status = window.newStat.str;
+        window.newStat = {}
+      }
+
+      if (window.costInfo) {
+        newObj.currency = window.costInfo.currency
+        newObj.price = window.costInfo.price
+        window.costInfo = {}
+      }
+
+      newObj.dBIndex = backIndex
+
+      window.newStat = null;
+      window.newDescObj = null;
+
+      moreInfo(newObj);
+
+      window.backIndex = undefined;
+    }
+
     if (arr.length > 0) {
       let component = [];
+      let numOfPages = Math.ceil(arr.length / assetsPerPage);
+      let start = pageNum * assetsPerPage - assetsPerPage;
+      let end = start + assetsPerPage;
+
+      if (pageNum === numOfPages) {
+        end -= pageNum * assetsPerPage - arr.length;
+      }
       //console.log(obj)
 
-      for (let i = 0; i < arr.length; i++) {
+      for (let i = start; i < end; i++) {
         //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
+        //console.log(i, arr.length - start)
+        //if(i < arr.length - start){
         component.push(
-          <GridItem key={"asset" + i} xs={12} sm={12} md={4}>
+          <GridItem key={"asset" + i} xs={12} sm={6} md={6} lg={3}>
             <Card chart className={classes.cardHover}>
               <>
                 {!isMobile && (
-                  <CardHeader image className={classes.cardHeaderHoverDashboard}>
-                    <a className="dashboardAssetImage" onClick={() => moreInfo({
-                      dBIndex: i,
-                      id: arr[i].id,
-                      countPair: arr[i].countPair,
-                      idxHash: arr[i].id,
-                      descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
-                      DisplayImage: arr[i].DisplayImage,
-                      name: arr[i].name,
-                      assetClass: arr[i].assetClass,
-                      assetClassName: arr[i].assetClassName,
-                      status: arr[i].status,
-                      statusNum: arr[i].statusNum,
-                      Description: arr[i].text.Description,
-                      note: arr[i].note,
-                      text: arr[i].text,
-                      urls: arr[i].urls,
-                      photo: arr[i].photo,
-                      photoUrls: arr[i].photoUrls,
-                      identicon: arr[i].identicon
-                    })}>
+                  <CardHeader
+                    image
+                    className={classes.cardHeaderHoverDashboard}
+                  >
+                    <button
+                      className={classes.cardHeaderHoverJdenticon}
+                      onClick={() =>
+                        moreInfo(Object.assign(arr[i], { dBIndex: i }))
+                      }
+                    >
+                      {arr[i].DisplayImage !== "" &&
+                        arr[i].DisplayImage !== undefined && (
+                          <img
+                            title="View Asset"
+                            src={arr[i].DisplayImage}
+                            alt=""
+                          />
+                        )}
 
-                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
-                        <img title="View Asset" src={arr[i].DisplayImage} alt="" />
-                      )}
-
-                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
-                        <>
-                          <Jdenticon value={arr[i].id} />
-                        </>
-                      )}
-                      {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
-                        <>
-                          <Jdenticon value={arr[i].id} />
-                        </>
-                      )}
-                    </a>
+                      {arr[i].DisplayImage !== "" &&
+                        arr[i].DisplayImage === undefined && (
+                          <div className="jdenticonMoreInfo">
+                            <Jdenticon value={arr[i].id} />
+                          </div>
+                        )}
+                      {arr[i].DisplayImage === "" &&
+                        arr[i].DisplayImage !== undefined && (
+                          <div className="jdenticonMoreInfo">
+                            <Jdenticon value={arr[i].id} />
+                          </div>
+                        )}
+                    </button>
                   </CardHeader>
                 )}
                 {isMobile && (
                   <CardHeader image className={classes.cardHeaderHover}>
-                    <a>
+                    <button className={classes.cardHeaderHoverJdenticon}>
+                      {arr[i].DisplayImage !== "" &&
+                        arr[i].DisplayImage !== undefined && (
+                          <img
+                            title="View Asset"
+                            src={arr[i].DisplayImage}
+                            alt=""
+                          />
+                        )}
 
-                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage !== undefined && (
-                        <img title="View Asset" src={arr[i].DisplayImage} alt="" />
-                      )}
-
-                      {arr[i].DisplayImage !== "" && arr[i].DisplayImage === undefined && (
-                        <>
-                          <Jdenticon value={arr[i].id} />
-                        </>
-                      )}
-                      {arr[i].DisplayImage === "" && arr[i].DisplayImage !== undefined && (
-                        <>
-                          <Jdenticon value={arr[i].id} />
-                        </>
-                      )}
-                    </a>
+                      {arr[i].DisplayImage !== "" &&
+                        arr[i].DisplayImage === undefined && (
+                          <>
+                            <Jdenticon value={arr[i].id} />
+                          </>
+                        )}
+                      {arr[i].DisplayImage === "" &&
+                        arr[i].DisplayImage !== undefined && (
+                          <>
+                            <Jdenticon value={arr[i].id} />
+                          </>
+                        )}
+                    </button>
                   </CardHeader>
                 )}
               </>
-              {/* <CardHeader onClick={(e) => setViewAsset(!viewAsset)} color="info" className="DBGradient">
-            <img src={macbook} alt="logo" className="assetImage" />
-            </CardHeader> */}
+
               <CardBody>
-                {!isMobile && (
-                  <div className={classes.cardHover}>
-                  </div>
-                )}
+                {!isMobile && <div className={classes.cardHover}></div>}
                 {isMobile && (
                   <div className={classes.cardHoverUnder}>
                     <Tooltip
@@ -201,210 +293,1694 @@ export default function Dashboard(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button color="success" simple justIcon onClick={() => moreInfo({
-                        dBIndex: i,
-                        id: arr[i].id,
-                        countPair: arr[i].countPair,
-                        idxHash: arr[i].id,
-                        descriptionObj: { text: arr[i].text, photo: arr[i].photo, urls: arr[i].urls, name: arr[i].name },
-                        DisplayImage: arr[i].DisplayImage,
-                        name: arr[i].name,
-                        assetClass: arr[i].assetClass,
-                        assetClassName: arr[i].assetClassName,
-                        status: arr[i].status,
-                        statusNum: arr[i].statusNum,
-                        Description: arr[i].text.Description,
-                        note: arr[i].note,
-                        text: arr[i].text,
-                        urls: arr[i].urls,
-                        photo: arr[i].photo,
-                        photoUrls: arr[i].photoUrls,
-                        identicon: arr[i].identicon
-                      })}>
-                        <Icon>
-                          login
-                        </Icon>
+                      <Button
+                        color="success"
+                        simple
+                        justIcon
+                        onClick={() =>
+                          moreInfo(Object.assign(arr[i], { dBIndex: i }))
+                        }
+                      >
+                        <Icon>login</Icon>
                       </Button>
                     </Tooltip>
                   </div>
                 )}
                 <h4 className={classes.cardTitle}>{arr[i].name}</h4>
-                <h5 className={classes.cardTitle}>Status: {arr[i].status}</h5>
-
+                {arr[i].currency === "0" && (
+                  <h5 className={classes.cardTitle}>Status:&nbsp;{arr[i].status}</h5>
+                )}
+                {arr[i].currency === undefined && (
+                  <h5 className={classes.cardTitle}>Status:&nbsp;{arr[i].status}</h5>
+                )}
+                {arr[i].currency !== "0" && (
+                  <div>
+                  <h5 className={classes.cardTitle}>Status:&nbsp;{arr[i].status}</h5>
+                  <h5 className={classes.cardTitle}>Sale Price:&nbsp;ü{arr[i].price}</h5>
+                  </div>
+                )}
               </CardBody>
               {/* <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter> */}
+                <div className={classes.stats}>
+                  <AccessTime /> updated 4 minutes ago
+                </div>
+              </CardFooter> */}
             </Card>
           </GridItem>
         );
+        //}
       }
-      return component
+
+      return component;
+      // eslint-disable-next-line react/prop-types
+    } else if (props.assets === "0") {
+      return (
+        <h2>
+          No assets held by user.{" "}
+          <a className="lightBlue" href="/#/user/new-asset">
+            Create One
+          </a>
+          .
+        </h2>
+      );
+    } else {
+      return (
+        <>
+          <h3>Getting Asset Data</h3>{" "}
+          <div className="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </>
+      );
     }
-
-    else if (props.assets === "0") { return <h1>No assets held by user. <a href="/#/user/new-asset">Create One</a>.</h1> }
-
-    else { return <><h3>Getting Asset Data</h3> <div className="lds-ellipsis"><div></div><div></div><div></div></div></> }
-
-  }
+  };
 
   const generateThumbs = (obj) => {
-    let component = [], photos = Object.values(obj.photo);
+    let component = [],
+      photos = Object.values(obj.photo);
     //console.log("photos", photos)
     if (photos.length === 0) {
       return (
         <div className="assetImageSelectorButton">
-          <img title="View Image" src={placeholder} className="imageSelectorImage" alt="" />
+          <img
+            title="View Image"
+            src={placeholder}
+            className="imageSelectorImage"
+            alt=""
+          />
         </div>
-      )
+      );
     }
     for (let i = 0; i < photos.length; i++) {
       component.push(
-        <div key={"thumb" + String(i)} value={photos[i]} className="assetImageSelectorButton" onClick={() => { showImage(photos[i]) }}>
-          <img title="View Image" src={photos[i]} className="imageSelectorImage" alt="" />
+        <div
+          key={"thumb" + String(i)}
+          value={photos[i]}
+          className="assetImageSelectorButton"
+          onClick={() => {
+            showImage(photos[i]);
+          }}
+        >
+          <img
+            title="View Image"
+            src={photos[i]}
+            className="imageSelectorImage"
+            alt=""
+          />
         </div>
-      )
+      );
     }
-
-    return component
-  }
+    return component;
+  };
 
   const showImage = (e) => {
-    var i = new Image();
+    setSelectedImage(e);
 
-    i.onload = function () {
-      var j = new Image();
-      j.onload = function () {
-        // let move = i.height - j.height
-        // if (props.ps) {
-        //   if (move < 0) {
-        //     props.ps.element.scrollTop += move
-        //   } else {
-        //     props.ps.element.scrollTop = 0
-        //   }
-        //   console.log("Scrolled ", move)
-        //   //console.log(props.ps.element.scrollTop)
-        // }
-        setSelectedImage(e)
-      }
-      j.src = selectedImage;
-    };
-
-    i.src = e;
     //console.log(selectedImage)
     //console.log(e)
-  }
+  };
 
-  const handleSimple = event => {
+  const newPageNum = (e) => {
+    setPageNum(e);
+  };
+
+  const handleShowNum = (e) => {
+    let _pageNum = pageNum;
+
+    const getNewNum = () => {
+      // eslint-disable-next-line react/prop-types
+      if (_pageNum * e > props.assetArr.length && _pageNum !== 1) {
+        _pageNum--;
+        return getNewNum();
+      }
+    };
+
+    getNewNum();
+
+    setPageNum(_pageNum);
+    setAssetsPerPage(e);
+  };
+
+  const renderOptions = (status) => {
+    // @dev add new status cases as they arise
+    let component = [];
+    if (!status || !selectedAssetObj.statusNum) return;
+    switch (status) {
+      case "50": {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            {/* <MenuItem
+              key="DisabledItem3"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info (Not Available in this Status)
+            </MenuItem> */}
+            <MenuItem
+              key="DisabledItem5"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info (Not Available in this Status)
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "51": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export
+            </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            {/* <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem> */}
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "52": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            {/* <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem> */}
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "53": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            {/* <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem> */}
+            <MenuItem
+              key="DisabledItem3"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info (Not Available in this Status)
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "54": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            {/* <MenuItem
+              key="SelItem4"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem> */}
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "56": {
+        component.push(
+          <Select
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            {/* <MenuItem
+              key="DisabledItem3"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info (Not Available in this Status)
+            </MenuItem> */}
+            <MenuItem
+              key="DisabledItem5"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info (Not Available in this Status)
+            </MenuItem>
+          </Select>
+        );
+        break;
+      } // @dev rework when escrow released
+      case "57": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            {/* <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem> */}
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "58": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              disabled
+              key="SelItem1"
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            {/* <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem> */}
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "59": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem6"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="SelItem5"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status
+            </MenuItem>
+            {/* <MenuItem
+              key="SelItem6"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info
+            </MenuItem> */}
+            <MenuItem
+              key="SelItem7"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      case "70": {
+        component.push(
+          <Select
+            key="Sel1"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              key="SelItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Select an option from the list
+            </MenuItem>
+            {selectedAssetObj.price === "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Set for sale
+            </MenuItem>)}
+            {selectedAssetObj.price !== "0" && (
+            <MenuItem
+              key="SelItem9"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="sell"
+            >
+              Change Price
+            </MenuItem>
+            )}
+            <MenuItem
+              key="DisabledItem0"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="transfer"
+            >
+              Transfer (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem2"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="verify"
+            >
+              Verify
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem1"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="discard"
+            >
+              Discard (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="SelItem3"
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="import"
+            >
+              Import
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem2"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="export"
+            >
+              Export (Not Available in this Status)
+            </MenuItem>
+            <MenuItem
+              key="DisabledItem4"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="modify-status"
+            >
+              Change Status (Not Available in this Status)
+            </MenuItem>
+            {/* <MenuItem
+              key="DisabledItem3"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-information"
+            >
+              Update Asset Info (Not Available in this Status)
+            </MenuItem> */}
+            <MenuItem
+              key="DisabledItem5"
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value="edit-rightsholder"
+            >
+              Update Owner Info (Not Available in this Status)
+            </MenuItem>
+          </Select>
+        );
+        break;
+      }
+      default: {
+        console.log("Error in option switch");
+      }
+    }
+
+    return component;
+  };
+
+  const handleSimple = (event) => {
+    // eslint-disable-next-line react/prop-types
     if (props.ps) {
-      props.ps.element.scrollTop = 0
+      // eslint-disable-next-line react/prop-types
+      props.ps.element.scrollTop = 0;
       //console.log(props.ps.element.scrollTop)
     }
 
-    let tempObj = JSON.parse(JSON.stringify(selectedAssetObj))
+    let tempObj = JSON.parse(JSON.stringify(selectedAssetObj));
 
     tempObj.lastRef = "/#/user/dashboard";
 
-    window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-
-    console.log(tempObj)
-    console.log(window.sentPacket)
-    //console.log(window.sentPacket);
-    setSimpleSelect(event.target.value);
-    let e = event.target.value, href;
+    let e = event.target.value,
+      href,
+      costId = null;
 
     switch (e) {
+      case "sell": {
+        href = "/#/user/set-for-sale";
+        costId = null;
+        break;
+      }
       case "transfer": {
         href = "/#/user/transfer-asset";
-        break
+        costId = null;
+        break;
       }
       case "escrow": {
         href = "/#/user/escrow-manager";
-        break
+        costId = null;
+        break;
       }
       case "import": {
         href = "/#/user/import-asset";
-        break
+        costId = 1;
+        break;
       }
       case "export": {
         href = "/#/user/export-asset";
-        break
+        costId = null;
+        break;
       }
       case "discard": {
         href = "/#/user/discard-asset";
-        break
+        costId = null;
+        break;
       }
       case "modify-status": {
         href = "/#/user/modify-status";
-        break
+        costId = 5;
+        break;
       }
       case "edit-information": {
         href = "/#/user/modify-description";
-        break
+        costId = 8;
+        break;
       }
       case "edit-rightsholder": {
         href = "/#/user/modify-rightsholder";
-        break
+        costId = 6;
+        break;
       }
       case "verify": {
         href = "/#/user/verify-asset";
-        break
+        costId = null;
+        break;
       }
       default: {
         console.log("Invalid menu selection: '", e, "'");
-        break
+        costId = null;
+        break;
       }
     }
+    if (costId !== null) {
+      props.prufClient.get
+        .operationCost(selectedAssetObj.nodeId, costId)
+        .then(e => {
+            tempObj.opCost = e.total
+            window.sentPacket = JSON.parse(JSON.stringify(tempObj))
+            window.assetsPerPage = assetsPerPage
+            console.log(tempObj)
+            console.log(window.sentPacket)
+            setSimpleSelect(event.target.value)
+            return (window.location.href = href)
+        });
+    } else {
+      window.sentPacket = JSON.parse(JSON.stringify(tempObj));
+      window.assetsPerPage = assetsPerPage;
 
-    return window.location.href = href;
+      console.log(tempObj);
+      console.log(window.sentPacket);
+      setSimpleSelect(event.target.value);
+      return (window.location.href = href);
+    }
   };
 
   const classes = useStyles();
   return (
     <div>
-      <GridContainer>
-        <GridItem xs={12}>
-          <Card>
-            <CardHeader icon onClick={() => { moreInfo("back") }}>
-              <CardIcon className="headerIconBack">
-                <DashboardOutlined />
-              </CardIcon>
-              <div className="dashboardHeader">
-                <h4 className={classes.cardIconTitle}>
-                  Asset Dashboard
-              </h4>
-                <Tooltip
-                  title="Refresh"
-                >
-                  <Icon className="MLBGradientRefresh" onClick={() => { window.location.reload(); }}>
+      {/* <GridContainer> */}
+      {/* <GridItem xs={12}> */}
+      {!viewAsset && (
+        <Card>
+          <CardHeader icon>
+            <CardIcon
+              className="headerIconBack"
+              onClick={() => {
+                moreInfo("back");
+              }}
+            >
+              <DashboardOutlined />
+            </CardIcon>
+            <div className="dashboardHeader">
+              <div className="flexRowWithGap">
+                <h4 className={classes.cardIconTitle}>Asset Dashboard</h4>
+                <Tooltip title="Refresh">
+                  <Icon
+                    className="MLBGradientRefresh"
+                    onClick={() => {
+                      window.replaceAssetData.refreshAssets = true
+                      window.dispatchEvent(props.refresh)
+                    }}
+                  >
                     <Refresh />
                   </Icon>
                 </Tooltip>
               </div>
+            </div>
+            <br />
+          </CardHeader>
+          {/* eslint-disable-next-line react/prop-types*/}
+          {!props.addr && props.isMounted && (
+            <h3 className="bump">
               <br />
-            </CardHeader>
-            {!props.addr && props.isMounted && (
-              <h3 className="bump"><br />Please connect to an Ethereum provider.</h3>
-            )}
-          </Card>
-        </GridItem>
-      </GridContainer>
+              Please connect to an Ethereum provider.
+            </h3>
+          )}
+        </Card>
+      )}
+      {/* </GridItem> */}
+      {/* </GridContainer> */}
+      {/* eslint-disable-next-line react/prop-types */}
       {props.addr && props.isMounted && props.assets === "~" && (
         <GridContainer>
-          <><h3>Getting Token Balances</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
+          <>
+            <h3>Getting Token Balances</h3>
+            <div className="lds-ellipsis">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </>
         </GridContainer>
       )}
+      {/* eslint-disable-next-line react/prop-types */}
       {!props.addr && !props.isMounted && props.assets === "~" && (
         <GridContainer>
-          <><h3>Getting User Address</h3><div className="lds-ellipsis"><div></div><div></div><div></div></div></>
+          <>
+            <h3>Getting User Address</h3>
+            <div className="lds-ellipsis">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </>
         </GridContainer>
       )}
+      {/* eslint-disable-next-line react/prop-types */}
       {!viewAsset && props.addr && props.assets !== "~" && (
-        <GridContainer>
-          {generateAssetDash(props.assetArr || [])}
-        </GridContainer>
+        // eslint-disable-next-line react/prop-types
+        <GridContainer>{generateAssetDash(props.assetArr || [])}</GridContainer>
       )}
       {viewAsset && (
         <div>
@@ -420,7 +1996,75 @@ export default function Dashboard(props) {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
+                        <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      {selectedAssetObj.nodeData.storageProvider === "2" && (
+                        <Tooltip title="See it on ARweave">
+                          <a
+                            href={`${selectedAssetObj.ContentUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img src={selectedImage} alt="" />
+                          </a>
+                        </Tooltip>
+                      )}
+                      {selectedAssetObj.nodeData.storageProvider === "1" && (
+                        <img src={selectedImage} alt="" />
+                      )}
+                    </>
+                  )}
+                  {selectedAssetObj.DisplayImage === "" && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
+                          <KeyboardArrowLeft />
+                        </Button>
+                      </Tooltip>
+                      <div className="jdenticonMoreInfo">
+                        <Jdenticon value={selectedAssetObj.id} />
+                      </div>
+                    </>
+                  )}
+                </CardHeader>
+              )}
+              {isMobile && (
+                <CardHeader
+                  image
+                  onClick={() => moreInfo("back")}
+                  className={classes.cardHeaderHover}
+                >
+                  {selectedAssetObj.DisplayImage !== "" && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Back"
+                        placement="bottom"
+                        classes={{ tooltip: classes.tooltip }}
+                      >
+                        <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
@@ -435,45 +2079,20 @@ export default function Dashboard(props) {
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
                       >
-                        <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
+                        <Button
+                          onClick={() => moreInfo("back")}
+                          color="info"
+                          justIcon
+                          className="back"
+                        >
                           <KeyboardArrowLeft />
                         </Button>
                       </Tooltip>
-                      <Jdenticon value={selectedAssetObj.id} />
+                      <div className="jdenticonMoreInfo">
+                        <Jdenticon className="jdenticonMoreInfo" value={selectedAssetObj.id} />
+                      </div>
                     </>
                   )}
-                </CardHeader>
-              )}
-              {isMobile && (
-                <CardHeader image onClick={(e) => moreInfo("back")} className={classes.cardHeaderHover}>
-                  {selectedAssetObj.DisplayImage !== "" && (
-                    <>
-                      <Tooltip
-                        id="tooltip-top"
-                        title="Back"
-                        placement="bottom"
-                        classes={{ tooltip: classes.tooltip }}
-                      >
-                        <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
-                          <KeyboardArrowLeft />
-                        </Button>
-                      </Tooltip>
-                      <img src={selectedImage} alt="..." />
-                    </>
-                  )}
-                  {selectedAssetObj.DisplayImage === "" && (<>
-                    <Tooltip
-                      id="tooltip-top"
-                      title="Back"
-                      placement="bottom"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <Button onClick={(e) => moreInfo("back")} color="info" justIcon className="back">
-                        <KeyboardArrowLeft />
-                      </Button>
-                    </Tooltip>
-                    <Jdenticon value={selectedAssetObj.id} />
-                  </>)}
                 </CardHeader>
               )}
             </>
@@ -483,138 +2102,120 @@ export default function Dashboard(props) {
                   {generateThumbs(selectedAssetObj)}
                 </div>
               )}
-              <br />
-              <h4 className={classes.cardTitle}>Name: {selectedAssetObj.name}</h4>
-              <h4 className={classes.cardTitle}>Class: {selectedAssetObj.assetClassName} (NODE ID: {selectedAssetObj.assetClass})</h4>
-              <h4 className={classes.cardTitle}>Status: {selectedAssetObj.status}</h4>
-              <br />
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                multiline
-                rows={4}
-                defaultValue={selectedAssetObj.Description}
-                variant="outlined"
-                fullWidth
-                disabled
-              />
+              <div className="horizontal">
+                <h4 className={classes.cardTitleContent}>
+                  Name:&nbsp;
+            </h4>
+                <h4 className={classes.cardTitle}>
+                  {selectedAssetObj.name}
+                </h4>
+              </div>
+              <div className="horizontal">
+                <h4 className={classes.cardTitleContent}>
+                  Node:&nbsp;
+            </h4>
+                <h4 className={classes.cardTitle}>
+                  {selectedAssetObj.nodeName}
+                </h4>
+              </div>
 
+              {selectedAssetObj.currency === "0" && (
+                <div className="horizontal">
+                  <h4 className={classes.cardTitleContent}>
+                    Status:&nbsp;
+              </h4>
+                  <h4 className={classes.cardTitle}>
+                    {selectedAssetObj.status}
+                  </h4>
+                </div>
+              )}
+              {selectedAssetObj.currency === undefined && (
+                <div className="horizontal">
+                  <h4 className={classes.cardTitleContent}>
+                    Status:&nbsp;
+              </h4>
+                  <h4 className={classes.cardTitle}>
+                    {selectedAssetObj.status}
+                  </h4>
+                </div>
+              )}
+              {selectedAssetObj.currency !== "0" &&
+                selectedAssetObj.currency !== undefined && (
+                  <>
+                    <div className="horizontal">
+                      <h4 className={classes.cardTitleContent}>
+                        Status:&nbsp;
+                </h4>
+                      <h4 className={classes.cardTitle}>
+                        {selectedAssetObj.status}
+                      </h4>
+                    </div>
+                    <div className="horizontal">
+                      <h4 className={classes.cardTitleContent}>
+                        Sale Price:&nbsp;
+                </h4>
+                      <h4 className={classes.cardTitle}>
+                        {currency}{selectedAssetObj.price}
+                      </h4>
+                    </div>
+                  </>
+                )}
+              {selectedAssetObj.Description !== undefined && (
+                <>
+                  <br />
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="Description"
+                    multiline
+                    rows={4}
+                    defaultValue={selectedAssetObj.Description}
+                    variant="outlined"
+                    fullWidth
+                    disabled
+                  />
+                </>
+              )}
+              {selectedAssetObj.Description === undefined && (
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  defaultValue="None"
+                  variant="outlined"
+                  fullWidth
+                  disabled
+                />
+              )}
+              {selectedAssetObj.nodeData.storageProvider === "2" && (
+                <h6 className="storageProviderText">
+                  See it on&nbsp;
+                  <a
+                    href={`${selectedAssetObj.ContentUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src={ARweavePNG} className="ARweave" alt=""></img>
+                  </a>
+                </h6>
+              )}
+              {selectedAssetObj.nodeData.storageProvider === "1" && (
+                <h6 className="storageProviderText">
+                  Stored on&nbsp;
+                  <img src={IPFSPNG} className="IPFS" alt="" />
+                </h6>
+              )}
+              {/*@dev URLs go here*/}
               <br />
               <div>
-                <FormControl
-                  fullWidth
-                  className={classes.selectFormControl}
-                >
+                <FormControl fullWidth className={classes.selectFormControl}>
                   <InputLabel className="functionSelectorText">
                     <Danger>
                       <Settings className="functionSelectorIcon" />
                     </Danger>
                     Options
-                        </InputLabel>
-                  <Select
-                    MenuProps={{
-                      className: classes.selectMenu
-                    }}
-                    classes={{
-                      select: classes.select
-                    }}
-                    value={simpleSelect}
-                    onChange={handleSimple}
-                    inputProps={{
-                      name: "simpleSelect",
-                      id: "simple-select"
-                    }}
-                  >
-                    <MenuItem
-                      disabled
-                      classes={{
-                        root: classes.selectMenuItem
-                      }}
-                    >
-                      Select Action
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="transfer"
-                    >
-                      Transfer
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="verify"
-                    >
-                      Verify
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="import"
-                    >
-                      Import
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="export"
-                    >
-                      Export
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="discard"
-                    >
-                      Discard
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="modify-status"
-                    >
-                      Change Status
-                          </MenuItem>
-                    {/* <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="decrement-counter"
-                    >
-                      Decrement Counter
-                          </MenuItem> */}
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-information"
-                    >
-                      Update Asset Info
-                          </MenuItem>
-                    <MenuItem
-                      classes={{
-                        root: classes.selectMenuItem,
-                        selected: classes.selectMenuItemSelected
-                      }}
-                      value="edit-rightsholder"
-                    >
-                      Update Owner Info
-                          </MenuItem>
-                  </Select>
+                  </InputLabel>
+                  {renderOptions(selectedAssetObj.statusNum)}
                 </FormControl>
               </div>
             </CardBody>
@@ -622,20 +2223,32 @@ export default function Dashboard(props) {
               {!isMobile && (
                 <>
                   {!copyText && (
-                    <Tooltip
-                      title="Copy to Clipboard"
-                    >
+                    <Tooltip title="Copy to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(selectedAssetObj.id);
+                          }}
+                        >
+                          {selectedAssetObj.id}
+                        </button>
                       </div>
                     </Tooltip>
                   )}
                   {copyText && (
-                    <Tooltip
-                      title="Copied to Clipboard"
-                    >
+                    <Tooltip title="Copied to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash}</a>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(selectedAssetObj.id);
+                          }}
+                        >
+                          {selectedAssetObj.id}
+                        </button>
                       </div>
                     </Tooltip>
                   )}
@@ -644,32 +2257,55 @@ export default function Dashboard(props) {
               {isMobile && !isAndroid && (
                 <>
                   {!copyText && (
-                    <Tooltip
-                      title="Copy to Clipboard"
-                    >
+                    <Tooltip title="Copy to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</a>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(selectedAssetObj.id);
+                          }}
+                        >
+                          {selectedAssetObj.id.substring(0, 10) +
+                            "..." +
+                            selectedAssetObj.id.substring(56, 66)}
+                        </button>
                       </div>
                     </Tooltip>
                   )}
                   {copyText && (
-                    <Tooltip
-                      title="Copied to Clipboard"
-                    >
+                    <Tooltip title="Copied to Clipboard">
                       <div className={classes.stats}>
-                        Asset ID: &nbsp; <a className="IDText" onClick={() => { copyTextSnippet(selectedAssetObj.idxHash) }}>{selectedAssetObj.idxHash.substring(0, 10) + "..." + selectedAssetObj.idxHash.substring(56, 66)}</a>
+                        Asset ID:
+                        <button
+                          className="IDText"
+                          onClick={() => {
+                            copyTextSnippet(selectedAssetObj.id);
+                          }}
+                        >
+                          {selectedAssetObj.id.substring(0, 10) +
+                            "..." +
+                            selectedAssetObj.id.substring(56, 66)}
+                        </button>
                       </div>
                     </Tooltip>
                   )}
                 </>
               )}
               {isMobile && isAndroid && (
-                <Tooltip
-                  title="Copy to Clipboard"
-                >
-                  <CopyToClipboard text={selectedAssetObj.idxHash}
-                    onCopy={() => { swal("Asset ID Copied to Clipboard!") }}>
-                    <span>Asset ID: &nbsp; {selectedAssetObj.idxHash.substring(0, 14) + "..." + selectedAssetObj.idxHash.substring(52, 66)}</span>
+                <Tooltip title="Copy to Clipboard">
+                  <CopyToClipboard
+                    text={selectedAssetObj.id}
+                    onCopy={() => {
+                      swal("Asset ID Copied to Clipboard!");
+                    }}
+                  >
+                    <span>
+                      Asset ID:
+                      {selectedAssetObj.id.substring(0, 10) +
+                        "..." +
+                        selectedAssetObj.id.substring(56, 66)}
+                    </span>
                   </CopyToClipboard>
                 </Tooltip>
               )}
@@ -682,44 +2318,197 @@ export default function Dashboard(props) {
                     title: "Share Asset Link",
                   }}
                 >
-
-                  <Tooltip
-                    title="Share Asset URL"
-                  >
+                  <Tooltip title="Share Asset URL">
                     <Icon className="footerIcon">
                       <Share />
                     </Icon>
                   </Tooltip>
                 </RWebShare>
                 {!isMobile && (
-                  <Printer obj={{ name: selectedAssetObj.name, idxHash: selectedAssetObj.idxHash, assetClassName: selectedAssetObj.assetClassName }} />
+                  <Printer
+                    obj={{
+                      name: selectedAssetObj.name,
+                      id: selectedAssetObj.id,
+                      nodeName: selectedAssetObj.nodeName,
+                    }}
+                  />
                 )}
-                <Tooltip
-                  title="View QR"
-                >
+                <Tooltip title="View QR">
                   <Icon
                     className="footerIcon"
                     onClick={() => {
                       swalReact({
-                        content: <QRCode
-                          value={URL}
-                          size="160"
-                          fgColor="#002a40"
-                          quietZone="2"
-                          ecLevel="M"
-                        />,
-                        buttons: "close"
-                      })
-                    }}>
+                        content: (
+                          <QRCode
+                            value={URL}
+                            size="160"
+                            fgColor="#002a40"
+                            quietZone="2"
+                            ecLevel="M"
+                          />
+                        ),
+                        buttons: "close",
+                      });
+                    }}
+                  >
                     qr_code
-                </Icon>
+                  </Icon>
                 </Tooltip>
               </div>
             </CardFooter>
           </Card>
         </div>
-      )
-      }
+      )}
+
+      {!viewAsset && (
+        <Card className="dashboardFooter">
+          {isMobile && (
+            <h6>Assets Per Page: </h6>
+          )}
+          {!isMobile && (
+            <h4>Assets Per Page: </h4>
+          )}
+          <br />
+          <Select
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            className="assetNumDropdown"
+            value={assetsPerPage}
+            onChange={(e) => {
+              handleShowNum(e.target.value);
+            }}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            <MenuItem
+              disabled
+              classes={{
+                root: classes.selectMenuItem,
+              }}
+            >
+              Assets per page
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value={4}
+            >
+              4
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value={8}
+            >
+              8
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value={12}
+            >
+              12
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value={16}
+            >
+              16
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value={20}
+            >
+              20
+            </MenuItem>
+            <MenuItem
+              classes={{
+                root: classes.selectMenuItem,
+                selected: classes.selectMenuItemSelected,
+              }}
+              value={60}
+            >
+              60
+            </MenuItem>
+          </Select>
+          <div className="dashboardFooterPage">
+            {numOfPages > 0 && pageNum > 1 && (
+              <Button
+                className="pageButton"
+                icon
+                onClick={() => {
+                  newPageNum(pageNum - 1);
+                }}
+              >
+                <ArrowBackIos />
+              </Button>
+            )}
+            {numOfPages > 0 && pageNum === 1 && (
+              <Button
+                className="pageButton"
+                disabled
+                icon
+                onClick={() => {
+                  newPageNum(pageNum - 1);
+                }}
+              >
+                <ArrowBackIos />
+              </Button>
+            )}
+
+            {numOfPages > 0 && !isMobile && (
+              <h4>
+                Page {pageNum} / {numOfPages}
+              </h4>
+            )}
+
+            {numOfPages > 0 && isMobile && (
+              <h6>
+                Page {pageNum} / {numOfPages}
+              </h6>
+            )}
+
+            {numOfPages > 0 && pageNum !== numOfPages && (
+              <Button
+                className="pageButton"
+                icon
+                onClick={() => {
+                  newPageNum(pageNum + 1);
+                }}
+              >
+                <ArrowForwardIos />
+              </Button>
+            )}
+            {numOfPages > 0 && pageNum === numOfPages && (
+              <Button
+                className="pageButton"
+                icon
+                disabled
+                onClick={() => {
+                  newPageNum(pageNum + 1);
+                }}
+              >
+                <ArrowForwardIos />
+              </Button>
+            )}
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

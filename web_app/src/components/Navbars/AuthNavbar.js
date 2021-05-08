@@ -34,13 +34,13 @@ export default function AuthNavbar(props) {
     setOpen(!open);
   };
   // verifies if routeName is the one active (in browser input)
-  const activeRoute = routeName => {
+  const activeRoute = (routeName) => {
     return window.location.href.indexOf(routeName) > -1 ? true : false;
   };
   const classes = useStyles();
   const { color, brandText } = props;
   const appBarClasses = cx({
-    [" " + classes[color]]: color
+    [" " + classes[color]]: color,
   });
   var list = (
     <List className={classes.list}>
@@ -58,7 +58,7 @@ export default function AuthNavbar(props) {
         <NavLink
           to={"/auth/pricing-page"}
           className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/auth/pricing-page")
+            [classes.navLinkActive]: activeRoute("/auth/pricing-page"),
           })}
         >
           <MonetizationOn className={classes.listItemIcon} />
@@ -73,7 +73,7 @@ export default function AuthNavbar(props) {
         <NavLink
           to={"/auth/register-page"}
           className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/auth/register-page")
+            [classes.navLinkActive]: activeRoute("/auth/register-page"),
           })}
         >
           <PersonAdd className={classes.listItemIcon} />
@@ -88,7 +88,7 @@ export default function AuthNavbar(props) {
         <NavLink
           to={"/auth/login-page"}
           className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/auth/login-page")
+            [classes.navLinkActive]: activeRoute("/auth/login-page"),
           })}
         >
           <Fingerprint className={classes.listItemIcon} />
@@ -103,7 +103,7 @@ export default function AuthNavbar(props) {
         <NavLink
           to={"/auth/lock-screen-page"}
           className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/auth/lock-screen-page")
+            [classes.navLinkActive]: activeRoute("/auth/lock-screen-page"),
           })}
         >
           <LockOpen className={classes.listItemIcon} />
@@ -152,11 +152,11 @@ export default function AuthNavbar(props) {
               anchor={"right"}
               open={open}
               classes={{
-                paper: classes.drawerPaper
+                paper: classes.drawerPaper,
               }}
               onClose={handleDrawerToggle}
               ModalProps={{
-                keepMounted: true // Better open performance on mobile.
+                keepMounted: true, // Better open performance on mobile.
               }}
             >
               {list}
@@ -170,5 +170,5 @@ export default function AuthNavbar(props) {
 
 AuthNavbar.propTypes = {
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
-  brandText: PropTypes.string
+  brandText: PropTypes.string,
 };

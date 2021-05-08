@@ -1,10 +1,19 @@
 import React from "react";
 import cx from "classnames";
-import Jdenticon from 'react-jdenticon';
+import Jdenticon from "react-jdenticon";
+import swal from "sweetalert";
 import Web3 from "web3";
-import buildContracts from "../Resources/Contracts";
+import Arweave from "arweave";
+import TestWeave from "testweave-sdk";
+import arconf from "../Resources/arconf";
+
+import PRUF from "pruf-js";
+import { isMobile } from "react-device-detect";
+//import OrbitDB from 'orbit-db';
+/* import resolveContracts from "../Resources/Contracts"; */
 import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -22,233 +31,419 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
+import {
+  AirlineSeatLegroomExtraSharp,
+  IndeterminateCheckBox,
+  WrapText,
+} from "@material-ui/icons";
+import defaultBGImage from "../assets/img/Sidebar Backgrounds/TracesWB.jpg";
 
 var ps;
 
 const useStyles = makeStyles(styles);
 
-
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
-  const IPFS = require("ipfs-mini")
+
+  const IPFS = require("ipfs-http-client"); //require("ipfs-mini")
+
+  //const OrbitDB = require('orbit-db')
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [miniActive, setMiniActive] = React.useState(false);
-  const [image, setImage] = React.useState(require("assets/img/Sidebar Backgrounds/TracesWB.jpg"));
+  const [miniActive, setMiniActive] = React.useState(true);
+  const [image, setImage] = React.useState(defaultBGImage);
   const [color, setColor] = React.useState("blue");
   const [bgColor, setBgColor] = React.useState("darkBlue");
   const [isKovan, setIsKovan] = React.useState(true);
-  const [buildReady, setBuildReady] = React.useState(false);
   const [ETHBalance, setETHBalance] = React.useState("~");
   const [addr, setAddr] = React.useState("");
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
-  const [resetInfo, setResetInfo] = React.useState(false);
-  const [isIDHolder, setIsIDHolder] = React.useState(false);
-  const [sidebarRoutes, setSideBarRoutes] = React.useState([routes[0], routes[2], routes[1], routes[3]]);
-  const [sps, setSps] = React.useState(undefined)
-  const [assetObjectArr, setAssetObjectArr] = React.useState([])
-
+  const [isIDHolder, setIsIDHolder] = React.useState();
+  const [sidebarRoutes, setSidebarRoutes] = React.useState([
+    routes[0],
+    routes[1],
+    routes[2],
+    routes[3],
+    routes[4],
+  ]);
+  const [sps, setSps] = React.useState(undefined);
+  const [assetIds, setAssetIds] = React.useState([]);
+  const [listenersLaunched, setListenersLaunched] = React.useState(false)
   const [prufBalance, setPrufBalance] = React.useState("~");
+  const [prufClient, setPrufClient] = React.useState();
+  const [roots, setRoots] = React.useState(undefined);
+  const [rootNames, setRootNames] = React.useState(undefined);
+  const [nodeSets, setNodeSets] = React.useState(undefined);
   const [currentACIndex, setCurrentACIndex] = React.useState("~");
+  const [replaceAssetData, setReplaceAssetData] = React.useState(0);
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
-  const [assetClassBalance, setAssetClassBalance] = React.useState("~");
+  const [nodeIdBalance, setNodeBalance] = React.useState("~");
+  const [heldNodeData, setHeldNodeData] = React.useState([['Loading Nodes...', '~', '~', '~']]);
+  const [nodeExtData, setNodeExtData] = React.useState();
   const [IDBalance, setIDBalance] = React.useState("0");
+  const [cookies, setCookie, removeCookie] = useCookies(["nodeList"]);
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
   const [WD, setWD] = React.useState(false);
-  const [hasSetUp, setHasSetUp] = React.useState(false);
-  const [assets, setAssets] = React.useState({})
-  const [reserveAD, setReserveAD] = React.useState({})
-  const [assetArr, setAssetArr] = React.useState({})
-  const [winKey, setWinKey] = React.useState(String(Math.round(Math.random() * 100000)))
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [assets, setAssets] = React.useState({});
+  const [nodeList, setNodeList] = React.useState(null);
+  const [reserveAD, setReserveAD] = React.useState({});
+  const [assetArr, setAssetArr] = React.useState([]);
+  const [winKey, setWinKey] = React.useState(
+    String(Math.round(Math.random() * 100000))
+  );
+  const [arweaveClient, setArweaveClient] = React.useState();
+  const [testWeave, setTestWeave] = React.useState();
+  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
-
-  //console.log("pre-load log", window.location.href)
-
-  const handleNoEthereum = () => {
-    console.log("No ethereum object available");
-    let web3;
-    web3 = require("web3");
-    web3 = new Web3("https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959");
-    setUpContractEnvironment(web3).then(() => {
-    });
-    window.web3 = web3;
-    window.isKovan = true;
-    return setIsMounted(true);
-  }
-
-  const handleEthereum = () => {
-    if (window.ethereum) {
-      //console.log("Found ethereum object");
-      let web3;
-
-      web3 = require("web3");
-      const ethereum = window.ethereum;
-      //console.log("Here");
-
-      web3 = new Web3(web3.givenProvider);
-      window.web3 = web3;
-      window.costs = {};
-      window.additionalElementArrays = {
-        photo: [],
-        text: [],
-        name: ""
-      };
-
-      web3.eth.net.getNetworkType().then((e) => {
-        if (e === "kovan") {
-          window.isKovan = true;
-          ethereum.request({
-            method: 'eth_accounts',
-            params: {},
-          }).then((accounts) => {
-            if (accounts[0] !== undefined) {
-              setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-              window.addr = window.web3.utils.toChecksumAddress(accounts[0])
-              setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
-              setIsMounted(true);
-            }
-            else {
-              ethereum.send('eth_requestAccounts').then((accounts) => {
-                if (accounts[0] !== undefined) {
-                  setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-                  window.addr = window.web3.utils.toChecksumAddress(accounts[0])
-                  setUpContractEnvironment(web3, window.web3.utils.toChecksumAddress(accounts[0]));
-                  setIsMounted(true);
-                }
-              });
-            }
-          });
-          return setIsKovan(true);
-        }
-        else { window.isKovan = false; return setIsKovan(false); }
-      })
-
-      //More globals (eth-is-connected specific)
-      window.assetTokenInfo = {
-        assetClass: undefined,
-        idxHash: undefined,
-        name: undefined,
-        photos: undefined,
-        text: undefined,
-        status: undefined,
-      };
-
-      window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-      window.resetInfo = false;
-    }
-    else {
-      return handleNoEthereum();
-    }
-  }
-
-  const chainListener = () => {
-    window.ethereum.on('chainChanged', (chainId) => {
-      console.log(chainId);
-      window.location.reload();
-    });
-  }
-
-  const acctListener = () => {
-    window.ethereum.on("accountsChanged", (e) => {
-      //console.log("new: ",e[0] ?? "No new address fetched", "old: ", addr ?? "No address currently stored")
-      //if (window.addr === undefined || window.addr === null || window.addr === "") window.location.reload()
-      console.log("Accounts changed");
-      if (e[0] === undefined || e[0] === null) {
-        if (e[0] !== window.addr) {
-          window.location.reload()
-        }
-
-        /* console.log("Here");
-        window.ETHBalance = "0";
-        window.ipfsCounter = 0;
-        window.balances = ["0", "0", "0", "0"];
-        setAssetClassBalance("~");
-        setAssetBalance("~");
-        setIDBalance("0");
-        setIsAssetHolder(false);
-        setIsAssetClassHolder(false);
-        setIsIDHolder(false);
-        setHasFetchedBalances(false);
-        setETHBalance("~");
-        setPrufBalance("~");
-        setAssets({});
-        setAddr("");
-        window.addr = "" */
-      }
-
-      else if (e[0] !== window.addr) {
-        window.location.reload()
-      }
-
-      /*       window.assetClass = undefined;
-            window.isAuthUser = false;
-            window.isACAdmin = false;
-            window.ipfsCounter = 0;
-            setAddr(window.web3.utils.toChecksumAddress(e[0]))
-            window.addr = window.web3.utils.toChecksumAddress(e[0])
-            setAssets({});
-            setAssetClassBalance("~");
-            setAssetBalance("~");
-            setIDBalance("0");
-            setIsAssetHolder(false);
-            setIsAssetClassHolder(false);
-            setIsIDHolder(false);
-            setHasFetchedBalances(false);
-            setETHBalance("~");
-            setPrufBalance("~");
-            window.recount = true;
-            window.resetInfo = true;*/
-
-    });
-  }
-
+  const refreshEvent = new Event('refresh')
+  
+  //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
     " " +
     cx({
       [classes.mainPanelSidebarMini]: miniActive,
       [classes.mainPanelWithPerfectScrollbar]:
-        navigator.platform.indexOf("Win") > -1
+        navigator.platform.indexOf("Win") > -1,
     });
+
   // ref for main panel div
   const mainPanel = React.createRef();
 
+  Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  };
+
+  //console.log("pre-load href", window.location.href)
+  const initArweave = async () => {
+    const _arweave = Arweave;
+    const arweave = _arweave.init(arconf);
+
+    setArweaveClient(arweave);
+
+    console.log(arweave);
+
+    const testWeave = await TestWeave.init(arweave);
+
+    setTestWeave(testWeave);
+
+    console.log(testWeave);
+
+    window.arweave = arweave;
+
+    return { testWeave: testWeave, arweave: arweave };
+  };
+
+  const handleNoEthereum = () => {
+    //if(isMobile) swal("No ethereum detected")
+    console.log("No ethereum object available");
+    let web3;
+    web3 = require("web3");
+    web3 = new Web3(
+      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+    );
+    const _prufClient = new PRUF(
+      web3, 
+      {
+      storageAddress: "0x5ab04B13729245F7023f76d0FEDEed482e3e60bd", 
+      partyAddress: "0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468", 
+      defaultNetwork: true
+      }
+    );
+
+    console.log(_prufClient);
+    setPrufClient(_prufClient);
+    setUpEnvironment(_prufClient)
+    awaitPrufInitNoAddress(_prufClient)
+    setIsIDHolder(false)
+
+    window.web3 = web3;
+    return setIsMounted(true);
+  };
+
+  const checkForCookies = () => {
+
+    if (!cookies.hasBeenNotified) {
+      swal({
+        title: "Cookies on app.pruf.io",
+        text:
+          "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
+        icon: "warning",
+        buttons: {
+
+          moreInfo: {
+            text: "Learn more",
+            value: "moreInfo",
+            className: "moreCookieInfo",
+          },
+
+          /* decline: {
+            text: "Decline Use",
+            value: "decline",
+            className: "declineCookies",
+          }, */
+
+          accept: {
+            text: "Accept and continue",
+            value: "accept",
+            className: "acceptCookies",
+          },
+
+        },
+      }).then((value) => {
+        switch (value) {
+          case "accept":
+            setCookieTo("hasBeenNotified", true);
+            break;
+
+          case "moreInfo":
+            swal({
+              title: "Cookies on app.pruf.io",
+              text: "Cookies are small packets of user data that are created and stored in the browser. We use cookes to provide a seamless and fast dApp experience while maintaining user privacy. We do not store or share your data with anyone.",
+              buttons: {
+                decline: {
+                  text: "Decline Use",
+                  value: "decline",
+                  className: "declineCookies",
+                },
+                accept: {
+                  text: "Accept and continue",
+                  value: "accept",
+                  className: "acceptCookies",
+                },
+              },
+            }).then((value) => {
+              switch (value) {
+                case "accept":
+                  setCookieTo("hasBeenNotified", true);
+                  break;
+
+                case "decline":
+                  setCookieTo("hasBeenNotified", false);
+                  break;
+
+                default:
+                  break;
+              }
+            });
+            break;
+
+          case "decline":
+            setCookieTo("hasBeenNotified", false);
+            break;
+
+          default:
+            break;
+        }
+      });
+    }
+    //console.log("Cookies:", cookies);
+  };
+
+  const setCookieTo = (job, val) => {
+    if (cookies["hasBeenNotified"] === false) return
+    //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
+    console.log("Setting cookie", job, "to", val);
+    setCookie(String(job), JSON.stringify(val), {
+      path: "/",
+      expires: new Date().addDays(5),
+    });
+  };
+
+  const readCookie = async (job) => {
+    if (cookies["hasBeenNotified"] === false) return
+    if (!cookies[job]) return console.log("Referenced nonexistant cookie");
+    return cookies[job];
+  };
+
+  const awaitPrufInit = async (_prufClient, _addr) => {
+    //console.log("Waiting for init...", _prufClient.get)
+    setTimeout(() => {
+      if (_prufClient.get) { console.log(_prufClient.get); setUpEnvironment(_prufClient, _addr); if (window.idxQuery) { window.location.href = "/#/user/search"; forceUpdate() } }
+      else { awaitPrufInit(_prufClient, _addr) }
+    }, 100)
+  }
+
+  const awaitPrufInitNoAddress = async (_prufClient) => {
+    //console.log("Waiting for init...", _prufClient.get)
+    setTimeout(() => {
+      if (_prufClient.get) { console.log(_prufClient.get); setPrufClient(_prufClient); if (window.idxQuery) { window.location.href = "/#/user/search"; forceUpdate() } }
+      else { awaitPrufInitNoAddress(_prufClient) }
+    }, 100)
+  }
+
+  const handleEthereum = () => {
+
+    if (window.ethereum) {
+
+      window.ethereum.on("chainChanged", (chainId) => {
+        console.log(chainId);
+        window.location.reload();
+      });
+
+      window.ethereum.on("accountsChanged", (e) => {
+        console.log("Accounts changed");
+        if (e[0] === undefined || e[0] === null) {
+          if (e[0] !== addr) {
+            window.location.reload();
+          }
+        } else if (e[0] !== addr) {
+          window.location.reload();
+        }
+      });
+
+      let web3;
+      web3 = require("web3");
+      const ethereum = window.ethereum;
+      web3 = new Web3(web3.givenProvider);
+      window.web3 = web3;
+      const _prufClient = new PRUF(
+        web3, 
+        {
+        storageAddress: "0x5ab04B13729245F7023f76d0FEDEed482e3e60bd", 
+        partyAddress: "0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468", 
+        defaultNetwork: true
+        }
+      );
+      //console.log(_prufClient);
+      setPrufClient(_prufClient);
+      window.costs = {};
+      window.additionalElementArrays = {
+        photo: [],
+        text: [],
+        name: "",
+      };
+
+      web3.eth.net.getNetworkType().then((e) => {
+        if (e === "kovan") {
+          window.isKovan = true;
+          ethereum
+            .request({
+              method: "eth_accounts",
+              params: {},
+            })
+            .then(async (accounts) => {
+              if (accounts[0] !== undefined) {
+                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+                setIsMounted(true);
+                awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
+              } else {
+                ethereum.send('eth_requestAccounts').then((accounts) => {
+                  if (accounts[0] !== undefined) {
+                    setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+                    window.addr = window.web3.utils.toChecksumAddress(accounts[0])
+                    setUpContractEnvironment(_prufClient, web3, window.web3.utils.toChecksumAddress(accounts[0]));
+                    setIsMounted(true);
+                  }
+                });
+              }
+            });
+
+          return setIsKovan(true);
+        } else {
+          window.isKovan = false;
+          setIsKovan(false);
+          return swal({
+            title: "Connect to the Kovan Testnet!",
+            text:
+              "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
+            icon: "warning",
+            button: "Okay",
+          });
+        }
+      });
+
+    } else {
+      return handleNoEthereum();
+    }
+  };
+
+  const chainListener = () => {
+    window.ethereum.on("chainChanged", (chainId) => {
+      console.log(chainId);
+      window.location.reload();
+    });
+  };
+
+  const acctListener = () => {
+    window.ethereum.on("accountsChanged", (e) => {
+      console.log("Accounts changed");
+      if (e[0] === undefined || e[0] === null) {
+        if (e[0] !== addr) {
+          window.location.reload();
+        }
+      } else if (e[0] !== addr) {
+        window.location.reload();
+      }
+    });
+  };
+
+  const refreshHandler = () => {
+    setReplaceAssetData(replaceAssetData+1)
+  }
+
+  if (window.ethereum) {
+    window.addEventListener("chainListener", chainListener, {once: true});
+    window.addEventListener("accountListener", acctListener, {once: true});
+    window.addEventListener('refresh', refreshHandler);
+  }
+
+  
+
   window.onload = () => {
-    //console.log("page loaded", window.location.href)
+
     window.balances = {};
     window.replaceAssetData = {};
-    let timeOutCounter = 0;
     window.recount = false;
     let _ipfs;
 
-    _ipfs = new IPFS({
-      host: "ipfs.infura.io",
-      port: 5001,
-      protocol: "https",
-    });
+    _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"));
 
-    let hrefStr = String(window.location.href.substring(window.location.href.indexOf('/#/'), window.location.href.length))
+    let hrefStr = String(
+      window.location.href.substring(
+        window.location.href.indexOf("/#/"),
+        window.location.href.length
+      )
+    );
     //console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
-    if (hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66) {
+    if (
+      hrefStr.includes("0x") &&
+      hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length).length === 66
+    ) {
       if (!window.location.href.includes("/#/user/search")) {
-        window.idxQuery = hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66)
-        console.log("query detected for idx: ", hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.indexOf('0x') + 66));
-        window.location.href = String("/#/user/search/" + hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length))
+        window.idxQuery = hrefStr.substring(
+          hrefStr.indexOf("0x"),
+          hrefStr.indexOf("0x") + 66
+        );
+        console.log(
+          "query detected for idx: ",
+          hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.indexOf("0x") + 66)
+        );
+        window.location.href = String(
+          "/#/user/search/" +
+          hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
+        );
       }
-    }
-
-    else if (hrefStr !== "/#/user/dashboard" && hrefStr !== "/#/user/home" && hrefStr !== "/#/user/search") {
-      console.log("Rerouting...")
+    } else if (
+      hrefStr !== "/#/user/dashboard" &&
+      hrefStr !== "/#/user/home" &&
+      hrefStr !== "/#/user/search" &&
+      hrefStr !== "/#/user/node-manager" &&
+      hrefStr !== "/#/user/new-asset"
+    ) {
+      console.log("Rerouting...");
       window.location.href = "/#/user/home";
     }
 
@@ -259,68 +454,52 @@ export default function Dashboard(props) {
     window.jdenticon_config = {
       hues: [196],
       lightness: {
-        color: [0.36, 0.70],
-        grayscale: [0.24, 0.82]
+        color: [0.36, 0.7],
+        grayscale: [0.24, 0.82],
       },
       saturation: {
         color: 0.75,
-        grayscale: 0.10
+        grayscale: 0.1,
       },
-      backColor: "#ffffffff"
+      backColor: "#ffffffff",
     };
 
     //Declare a few globals
-    window.sentPacket = undefined;
-    window.isSettingUpContracts = false;
-    window.hasLoadedAssets = false;
+    window.sentPacket = {};
 
-    window.menuChange = undefined;
-
-    window.ipfsCounter = 0;
-
-    _ipfs = new IPFS({
-      host: "ipfs.infura.io",
-      port: 5001,
-      protocol: "https",
-    });
-
-    window.ipfs = _ipfs;
     //Give me the desktop version
     if (window.ethereum) {
-      handleEthereum()
-    }
+      handleEthereum();
+    } else {
+      console.log("In startup else clause");
 
-    else {
-      console.log("In startup else clause")
-      window.addEventListener('ethereum#initialized', handleEthereum, {
+      window.addEventListener("ethereum#initialized", handleEthereum, {
         once: true,
       });
-      setTimeout(handleEthereum, 3300); // 3.3 seconds
+
+      setTimeout(handleEthereum, 3000); // 3 seconds
     }
 
-
-  }
-
-  // effect instead of componentDidMount, componentDidUpdate and componentWillUnmount
+    //initOrbitDB()
+  };
 
   React.useEffect(() => {
 
-    if (window.ethereum) {
-      window.addEventListener("chainListener", chainListener())
-      window.addEventListener("accountListener", acctListener())
-      //window.addEventListener("connectListener", connectListener())
-    }
-
     if (navigator.platform.indexOf("Win") > -1) {
-      console.log("*****Using ps*****");
+      //console.log("*****Using ps*****");
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
-        suppressScrollY: false
+        suppressScrollY: false,
       });
       document.body.style.overflow = "hidden";
       setSps(ps);
       //console.log(ps);
     }
+
+    if (cookies) checkForCookies();
+
+    if (!isMobile)
+      setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
     window.addEventListener("resize", resizeFunction);
 
     // Specify how to clean up after this effect:
@@ -328,111 +507,109 @@ export default function Dashboard(props) {
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
-    };
-  }, []);
+    }
+  }, [])
 
   React.useEffect(() => {
+    setWinKey(String(Math.round(Math.random() * 100000)))
     if (isMounted) {
-      //console.log("Heard call for replace.")
-      if (!window.replaceAssetData || JSON.stringify(window.replaceAssetData) === "{}") {
-        window.replaceAssetData = {};
+      if (
+        !window.replaceAssetData ||
+        Object.values(window.replaceAssetData).length === 0
+      ) {
       }
-      if (window.replaceAssetData.ether || window.replaceAssetData.pruf || window.replaceAssetData.assets){
-        if (window.replaceAssetData.ether) setETHBalance(window.replaceAssetData.ether);
-        if (window.replaceAssetData.pruf) setPrufBalance(window.replaceAssetData.pruf);
-        if (window.replaceAssetData.assets) setAssetBalance(window.replaceAssetData.assets);
-        window.replaceAssetData = {};
-      }
-      
-      else if (window.replaceAssetData.key !== thousandHashesOf(addr, winKey)) {
-        window.replaceAssetData = {}
-        console.log("Invalid key passed. Aborted call.")
-      }
-      else {
-        setWinKey(String(Math.round(Math.random() * 100000)));
-        console.log("Object is defined. index: ", window.replaceAssetData.dBIndex, " new asset: ", window.replaceAssetData.newAsset)
-        let newAsset = window.replaceAssetData.newAsset;
-        let dBIndex = window.replaceAssetData.dBIndex;
+      if (window.replaceAssetData.refreshBals === true) {
+        console.log("Resetting token value")
+        setupTokenVals(addr, prufClient, { justCount: true })
+        buildRoots(addr, prufClient)
+        forceUpdate();
+      } if (window.replaceAssetData.refreshAssets) {
+        setupTokenVals(addr, prufClient, { justAssets: true })
+      } if (
+        window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
+      ) {
+        console.log("Invalid key passed. Aborted call to replace.")
+      } if (window.replaceAssetData.nodeList) {
 
-        if (newAsset && dBIndex) {
-          newAsset.id = newAsset.idxHash;
-          //newAsset.lastRef = "/#/user/dashboard"
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id}/>
-          console.log("Replacing asset at index: ", dBIndex)
-          let tempArr = JSON.parse(JSON.stringify(assetArr))
-          console.log("Old Assets", tempArr)
-          tempArr.splice(dBIndex, 1, newAsset)
-          console.log("New Assets", tempArr)
-          setAssetArr(tempArr)
-          window.replaceAssetData = {}
-          reloadAssetAt(dBIndex, newAsset.idxHash)
+        let newData = JSON.parse(JSON.stringify(window.replaceAssetData.nodeList))
+
+        if (newData.extData) {
+          setNodeExtData(newData.extData)
         }
 
-        else if (dBIndex && !newAsset) {
-          console.log("Deleting asset at index: ", dBIndex)
-          let tempArr = JSON.parse(JSON.stringify(assetArr))
-          console.log("Old Assets", tempArr)
-          tempArr.splice(dBIndex, 1)
-          console.log("New Assets", tempArr)
-          setAssetArr(tempArr)
-          window.replaceAssetData = {}
+        if (newData.data) {
+          setHeldNodeData(newData.data)
+        }
+
+        if (newData.setAddition) {
+          let tempSets = JSON.parse(JSON.stringify(nodeSets))
+          tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
+          setNodeSets(tempSets)
+        }
+        setupTokenVals(addr, prufClient, { justNodes: true })
+      }
+
+      if (window.replaceAssetData.newAsset || window.replaceAssetData.dBIndex) {
+        console.log(
+          "Object is defined. index: ",
+          window.replaceAssetData.dBIndex,
+          " new asset: ",
+          window.replaceAssetData.newAsset
+        );
+        let newAsset = window.replaceAssetData.newAsset;
+        let dBIndex = window.replaceAssetData.dBIndex;
+        let tempArr = JSON.parse(JSON.stringify(assetArr));
+        let idArr = JSON.parse(JSON.stringify(assetIds));
+        setupTokenVals(addr, prufClient, { justCount: true });
+
+        if (newAsset && dBIndex > -1) {
+          idArr.push(newAsset.id);
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
+          console.log("Replacing asset at index: ", dBIndex);
+          console.log("Old Assets", tempArr);
+          tempArr.splice(dBIndex, 1, newAsset);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
+          setAssetIds(idArr);
+          getAssetIds(addr, prufClient, assetIds.length);
+        }
+
+        else if (dBIndex > -1 && !newAsset) {
+          console.log("Deleting asset at index: ", dBIndex);
+          console.log("Old Assets", tempArr);
+          tempArr.splice(dBIndex, 1);
+          idArr.splice(dBIndex, 1);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
+          getAssetIds(addr, prufClient, assetIds.length - 1);
         }
 
         else if (newAsset && !dBIndex) {
-          newAsset.id = newAsset.idxHash;
-          //newAsset.lastRef = "/#/user/dashboard";
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id}/>
+          idArr.push(newAsset.id);
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
           console.log("Adding asset: ", newAsset);
-          let tempArr = JSON.parse(JSON.stringify(assetArr));
           console.log("Old Assets", tempArr);
-          tempArr.push(newAsset)
+          tempArr.push(newAsset);
           console.log("New Assets", tempArr);
-          setAssetArr(tempArr)
-          window.replaceAssetData = {}
-          reloadAssetAt(tempArr.length - 1, newAsset.idxHash);
+          setAssetArr(tempArr);
+          getAssetIds(addr, prufClient, assetIds.length + 1);
         }
 
-        forceUpdate()
+        window.replaceAssetData = {}
+        forceUpdate();
       }
     }
-  }, [window.replaceAssetData]);
+  }, [replaceAssetData]);
 
-  // React.useEffect(() => { if (window.resetInfo !== resetInfo) { setResetInfo(window.resetInfo) } }, [window.resetInfo])
-
-  React.useEffect(() => {
-    if (resetInfo) {
-      setAssets({});
-      setAssetBalance("~");
-      setIsAssetHolder(false);
-      setHasFetchedBalances(false);
-      setETHBalance("~");
-      setPrufBalance("~");
-      setBuildReady(false);
-      console.log("WD: setting up assets (Step one)")
-      window.ethereum.request({
-        method: 'eth_accounts',
-        params: {},
-      }).then((accounts) => {
-        if (accounts[0] !== undefined) {
-          console.log("got accounts");
-          setUpAssets("AssetListener", accounts[0]);
-        }
-      })
-      window.resetInfo = false;
-    }
-  }, [resetInfo])
-
-  // functions for changeing the states from components
-
-  const handleImageClick = image => {
+  const handleImageClick = (image) => {
     setImage(image);
   };
 
-  const handleColorClick = color => {
+  const handleColorClick = (color) => {
     setColor(color);
   };
 
-  const handleBgColorClick = bgColor => {
+  const handleBgColorClick = (bgColor) => {
     switch (bgColor) {
       case "white":
         setLogo(require("assets/img/logo.svg"));
@@ -460,7 +637,7 @@ export default function Dashboard(props) {
     return !window.location.pathname.includes("/user/");
   };
 
-  const getActiveRoute = routes => {
+  const getActiveRoute = (routes) => {
     let activeRoute = "Default Brand Text";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
@@ -479,7 +656,7 @@ export default function Dashboard(props) {
     return activeRoute;
   };
 
-  const getRoutes = routes => {
+  const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
@@ -490,6 +667,12 @@ export default function Dashboard(props) {
             path={prop.layout + prop.path}
             render={() => (
               <prop.component
+                roots={roots}
+                refresh={refreshEvent}
+                rootNames={rootNames}
+                nodeSets={nodeSets}
+                heldNodeData={heldNodeData}
+                nodeExtData={nodeExtData}
                 ps={sps}
                 isMounted={isMounted}
                 addr={addr}
@@ -498,11 +681,16 @@ export default function Dashboard(props) {
                 pruf={prufBalance}
                 ether={ETHBalance}
                 assets={assetBalance}
+                nodes={nodeIdBalance}
                 currentACPrice={currentACPrice}
                 IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
-              />)}
+                prufClient={prufClient}
+                arweaveClient={arweaveClient}
+                testWeave={testWeave}
+              />
+            )}
             key={key}
           />
         );
@@ -511,209 +699,6 @@ export default function Dashboard(props) {
       }
     });
   };
-
-  const reloadAssetAt = async (index, id) => {
-    if (!window.contracts || !window.web3) return
-
-    console.log("reloading asset at index ", index)
-    let ipfsHash;
-    let tempResult;
-    let fullUrl = "";
-    let idxHash;
-    if (id) {
-      idxHash = id;
-    } else {
-      idxHash = JSON.parse(JSON.stringify(assetArr[index])).id;
-    }
-    console.log("Asset ID: ", idxHash)
-
-    await window.contracts.STOR.methods
-      .retrieveShortRecord(idxHash)
-      .call(
-        function (_error, _result) {
-          if (_error) {
-            console.log(_error);
-          }
-          else {
-            console.log("Found asset!");
-            tempResult = Object.values(_result);
-
-            if (Object.values(_result)[5] > 0) { ipfsHash = window.utils.getIpfsHashFromBytes32(Object.values(_result)[5]); }
-            console.log("ipfs data in promise", ipfsHash);
-
-            if (Object.values(_result)[6] > 0); {
-              let knownUrl = "https://ipfs.io/ipfs/";
-              let hash = "";
-              /* window.utils.getIpfsHashFromBytes32(Object.values(_result)[6]).then((e)=>{
-                hash =String(e)
-                fullUrl = knownUrl + hash;
-              });   */
-              fullUrl = "";
-            }
-
-            const finalize = (obj) => {
-              let tempArr = JSON.parse(JSON.stringify(assetArr));
-              obj.dBIndex = index;
-              //obj.lastRef = "/#/user/dashboard";
-              console.log("Old Assets", tempArr);
-              tempArr.splice(index, 1, obj);
-              console.log("New Assets", tempArr);
-              setAssetArr(tempArr);
-            }
-
-            let newAsset = {}
-
-            window.utils.getACName(tempResult[2]).then((e) => {
-              newAsset = Object.assign(newAsset,{
-                id: idxHash,
-                idxHash: idxHash,
-                statusNum: String(tempResult[0]),
-                identicon: <Jdenticon value={idxHash} />,
-                assetClass: tempResult[2],
-                assetClassName: e,
-                note: fullUrl,
-                ipfs: ipfsHash,
-                countPair: [tempResult[4], tempResult[3]]
-              })
-              window.utils.getStatusString(String(tempResult[0])).then((e) => {
-                newAsset.status = e;
-
-                let assetObj;
-
-                window.ipfs.cat(ipfsHash, async (error, result) => {
-                  if (error) {
-                    assetObj = { text: {}, photo: {}, urls: {}, name: "" }
-                    newAsset.text = assetObj.text;
-                    newAsset.Description = "";
-                    newAsset.urls = assetObj.urls;
-                    newAsset.name = assetObj.name;
-                    newAsset.photo = assetObj.photo;
-                    newAsset.DisplayImage = ""
-                    finalize(newAsset)
-                  } else {
-                    console.log("Got updated asset ipfs")
-                    assetObj = JSON.parse(result)
-                    newAsset.photoUrls = JSON.parse(result).photo;
-                    let vals = Object.values(assetObj.photo), keys = Object.keys(assetObj.photo);
-    
-                    newAsset.text = assetObj.text;
-                    newAsset.Description = assetObj.text.Description;
-                    newAsset.urls = assetObj.urls;
-                    newAsset.name = assetObj.name;
-    
-                    if (keys.length < 1) {
-                      newAsset.photo = assetObj.photo;
-                      newAsset.DisplayImage = ""
-                      finalize(newAsset)
-                    }
-    
-                    for (let i = 0; i < keys.length; i++) {
-                      const get = () => {
-                        if (vals[i].includes("data") && vals[i].includes("base64")) {
-                          assetObj.photo[keys[i]] = vals[i];
-                          //console.log(assetObj.photo[keys[i]]);
-                          if (keys[i] === "DisplayImage") {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                          }
-                          else if (i === keys.length - 1) {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                          }
-    
-                          if (i + 1 === keys.length) {
-                            newAsset.photo = assetObj.photo;
-                            newAsset.DisplayImage = assetObj.DisplayImage;
-                            finalize(newAsset)
-                          }
-    
-                          forceUpdate();
-                        }
-    
-                        else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                          assetObj.photo[keys[i]] = vals[i];
-                          if (keys[i] === "DisplayImage") {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                          }
-                          else if (i === keys.length - 1) {
-                            //console.log("Setting Display Image")
-                            assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                          }
-    
-                          if (i + 1 === keys.length) {
-                            newAsset.photo = assetObj.photo;
-                            newAsset.DisplayImage = assetObj.DisplayImage;
-                            finalize(newAsset)
-                          }
-    
-                          forceUpdate();
-                        }
-    
-                        else {
-                          const req = new XMLHttpRequest();
-                          req.responseType = "text";
-    
-                          req.onload = function (e) {
-                            //console.log("in onload")
-                            if (this.response.includes("base64")) {
-                              assetObj.photo[keys[i]] = this.response;
-                              //console.log(assetObj.photo[keys[i]]);
-    
-                              if (keys[i] === "DisplayImage") {
-                                //console.log("Setting Display Image")
-                                assetObj.DisplayImage = assetObj.photo[keys[i]]
-                              }
-    
-                              else if (i === keys.length - 1) {
-                                //console.log("Setting Display Image")
-                                assetObj.DisplayImage = assetObj.photo[keys[0]]
-                              }
-                              forceUpdate();
-                            }
-    
-                            if (i + 1 === keys.length) {
-                              newAsset.photo = assetObj.photo;
-                              newAsset.DisplayImage = assetObj.DisplayImage;
-                              finalize(newAsset)
-                            }
-                          }
-    
-                          req.onerror = function (e) {
-                            //console.log("http request error")
-                            if (vals[i].includes("http")) {
-                              assetObj.photo[keys[i]] = vals[i];
-                              if (keys[i] === "DisplayImage") {
-                                //console.log("Setting Display Image")
-                                assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                              }
-                              else if (i === keys.length - 1) {
-                                //console.log("Setting Display Image")
-                                assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                              }
-                              forceUpdate();
-                            }
-    
-                            if (i + 1 === keys.length) {
-                              newAsset.photo = assetObj.photo;
-                              newAsset.DisplayImage = assetObj.DisplayImage;
-                              finalize(newAsset)
-                            }
-                          }
-                          req.open('GET', vals[i], true);
-                          req.send();
-                        }
-                      }
-                      await get()
-                    }
-                  }
-                });
-              })
-            })
-          }
-        });
-
-  }
 
   const sidebarMinimize = () => {
     setMiniActive(!miniActive);
@@ -726,347 +711,983 @@ export default function Dashboard(props) {
   };
 
   const thousandHashesOf = (varToHash) => {
-    if (!window.web3) return
+    if (!window.web3) return;
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
       //console.log(tempHash);
     }
     return tempHash;
-  }
+  };
 
-  const setUpContractEnvironment = async (_web3, _addr) => {
-    if (window.isKovan === false) { return }
-    //console.log("IN SUCE, addr:", _addr)
-    if (window.isSettingUpContracts) { return (console.log("Already in the middle of setUp...")) }
-    window.isSettingUpContracts = true;
+  const setUpEnvironment = (_prufClient, _addr) => {
+
+    //console.log(_prufClient)
+
+    console.log("Getting things set up...")
+
+    if (window.isKovan === false) {
+      return;
+    }
+
+    initArweave();
+
+    if (window.idxQuery) {
+      window.location.href = "/#/user/search/" + window.idxQuery;
+    }
+
     if (window.ethereum) {
-      window._contracts = await buildContracts(_web3)
-
-      await window.utils.getContracts().then(() => {
-        window.isSettingUpContracts = false;
-        setWD(true)
-        if (window.idxQuery) { window.location.href = '/#/user/search/' + window.idxQuery }
-      })
-
       if (_addr) {
-        await window.utils.getETHBalance(_addr);
-        await setUpTokenVals(true, "SetupContractEnvironment", _addr)
+        setupTokenVals(_addr, _prufClient)
+        buildRoots(_addr, _prufClient)
+      }
+    }
+  };
+
+  //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
+  const setupTokenVals = (_addr, _prufClient, options) => {
+
+    if (!_addr) return swal("Unable to reach user's wallet.");
+    if (!options) options = {}
+
+    if (options.justNodes) {
+      _prufClient.get.nodeBalance(_addr).then(e => {
+
+        setNodeBalance(e);
+        if (Number(e) > 0) {
+          setIsAssetClassHolder(true);
+          if (!options.justCount) getNodeIds(_addr, _prufClient, e)
+        } else {
+          setHeldNodeData([['No nodes held by user', '~', '~', '~']])
+          setIsAssetClassHolder(false);
+        }
+
+      });
+    } else if (options.justAssets) {
+      _prufClient.get.assetBalance(_addr).then(e => {
+        setAssetArr([])
+        setAssetBalance(e);
+        if (Number(e) > 0) {
+          setIsAssetHolder(true);
+          if (!options.justCount) getAssetIds(_addr, _prufClient, e)
+        } else {
+          setIsAssetHolder(false);
+        }
+
+      });
+    } else {
+
+
+      window.web3.eth.getBalance(_addr, (error, result) => {
+        if (error) {
+        } else {
+          console.log(window.web3.utils.fromWei(result, "ether"))
+          setETHBalance(window.web3.utils.fromWei(result, "ether"));
+        }
+      });
+
+      _prufClient.get.assetBalance(_addr).then(e => {
+
+        setAssetBalance(e);
+        if (Number(e) > 0) {
+          setIsAssetHolder(true);
+          if (!options.justCount) getAssetIds(_addr, _prufClient, e)
+        } else {
+          setIsAssetHolder(false);
+        }
+
+      });
+
+      _prufClient.get.nodeBalance(_addr).then(e => {
+
+        setNodeBalance(e);
+        if (Number(e) > 0) {
+          setIsAssetClassHolder(true);
+          if (!options.justCount) getNodeIds(_addr, _prufClient, e)
+        } else {
+          setHeldNodeData([['No nodes held by user', '~', '~', '~']])
+          setIsAssetClassHolder(false);
+        }
+
+      });
+
+      _prufClient.get.holdsId(_addr).then(e => {
+        setIsIDHolder(e);
+      });
+
+      _prufClient.get.prufBalance(_addr).then(e => {
+        setPrufBalance(e);
+      });
+
+      _prufClient.get.nodePricing().then(e => {
+        setCurrentACIndex(e.currentNodeIndex);
+        setCurrentACPrice(e.currentNodePrice);
+      });
+    }
+  };
+
+  const buildRoots = (_addr, _prufClient, iteration, arr) => {
+    if (!_prufClient) return;
+    if (!arr) arr = cookies[`${_addr}roots`] || [];
+    if (!iteration && cookies[`${_addr}roots`]) iteration = cookies[`${_addr}roots`].length + 1; else if (!iteration) iteration = 1;
+
+    _prufClient.get
+      .nodeExists(String(iteration))
+      .then(e => {
+        if (e) {
+          arr.push(iteration);
+          setCookieTo(`${_addr}roots`, arr)
+          return buildRoots(_addr, _prufClient, iteration + 1, arr);
+        } else {
+          //noMore = true;
+          console.log(`Broke rootGet recursion at: ${iteration} because node doesn't exist at index`)
+          return buildSubNodes(_addr, _prufClient, undefined, undefined, undefined, arr);
+        }
+      });
+  };
+
+  const buildSubNodes = (_addr, _prufClient, iteration, arr, subNodes, roots) => {
+    if (!_prufClient) return;
+
+    if (!iteration) {
+      iteration = 1000001
+      if (cookies[`${_addr}subNodes`]) {
+        iteration += cookies[`${_addr}subNodes`].length
       }
     }
 
+    if (!arr) {
+      arr = roots || []
+      subNodes = cookies[`${_addr}subNodes`] || []
+      if (cookies[`${_addr}subNodes`]) {
+        arr = arr.concat(cookies[`${_addr}subNodes`])
+      }
+      console.log(`Cached nodes: ${arr}`)
+    }
+
+    if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(iteration)) {
+      console.log(`Caught count exception ${iteration}`)
+      return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
+    } else {
+      console.log({ iteration }, cookies[`${_addr}subNodes`])
+    }
+
+    _prufClient.get
+      .nodeExists(String(iteration))
+      .then(e => {
+        if (e) {
+          if (!arr.includes(iteration)) {
+            arr.push(iteration);
+            subNodes.push(iteration)
+            setCookieTo(`${_addr}subNodes`, subNodes)
+          }
+          return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes)
+        } else {
+          console.log(`Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`)
+          console.log(`All nodes: ${arr}`)
+          return getACsFromDB(_addr, _prufClient, arr)
+        }
+      });
+
+  }
+
+  const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount) => {
+    if (!dontCount) { dontCount = cookies[`${_addr}dontCount`] || []; console.log({ dontCount }) }
+    if (!iteration) iteration = 0;
+    if (!rootArray) rootArray = [];
+    if (!rootNameArray) rootNameArray = [];
+    if (!allClasses) allClasses = [];
+    if (!allClassNames) allClassNames = [];
+    if (!_nodeSets) _nodeSets = {};
+
+    if (iteration >= acArray.length)
+      return setUpNodeInformation(
+        _prufClient,
+        {
+          sets: _nodeSets,
+          rArr: rootArray,
+          rnArr: rootNameArray,
+          allCArr: allClasses,
+          allCNArr: allClassNames,
+        });
+
+    if (acArray[iteration] < 100000) {
+      _prufClient.get.nodeName(String(acArray[iteration])).then(e => {
+        rootArray.push(acArray[iteration]);
+        rootNameArray.push(
+          e
+            .toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+              letter.toUpperCase()
+            )
+        );
+        _nodeSets[String(acArray[iteration])] = [];
+        return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+      })
+    } else {
+      _prufClient.get
+        .nodeData(String(acArray[iteration]))
+        .then(e => {
+          if (e.managementType === "255") {
+            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+          } else if (e.managementType === "1" || e.managementType === "2") {
+            _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x => {
+              if (window.web3.utils.toChecksumAddress(x) === _addr) {
+                allClasses.push(String(acArray[iteration]));
+                allClassNames.push(
+                  e.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    )
+                );
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+              } else {
+                if (!dontCount.includes(acArray[iteration])) {
+                  console.log({ iteration, dontCount })
+                  dontCount.push(acArray[iteration])
+                  setCookieTo(`${_addr}dontCount`, dontCount)
+                } else {
+                  console.log("Counted when should not have... Removing cached values")
+                  let temp = cookies[`${_addr}subNodes`];
+                  temp.splice(temp.indexOf(acArray[iteration]), 1)
+                  setCookieTo(`${_addr}subNodes`, temp)
+                }
+
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+              }
+            })
+            //getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+          } else if (e.managementType === "3") {
+            _prufClient.get.userType(_addr, String(acArray[iteration])).then(x => {
+              if (x === "1") {
+                allClasses.push(String(acArray[iteration]));
+                allClassNames.push(
+                  e.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    )
+                );
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+              } else {
+                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+              }
+            })
+          } else {
+            allClasses.push(String(acArray[iteration]));
+            allClassNames.push(
+              e.name
+                .toLowerCase()
+                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                  letter.toUpperCase()
+                )
+            );
+            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+          }
+        });
+    }
+  };
+
+  const setUpNodeInformation = async (_prufClient, obj) => {
+    if (!obj) return
+    console.log(obj)
+    let
+      allClasses = obj.allCArr,
+      rootArray = obj.rArr,
+      _nodeSets = obj.sets,
+      rootNameArray = obj.rnArr,
+      allClassNames = obj.allCNArr;
+
+    //console.log(allClasses, allClassNames, rootArray)
+
+    for (let i = 0; i < allClasses.length; i++) {
+      _prufClient.get
+        .nodeData(String(allClasses[i]))
+        .then(e => {
+          _nodeSets[String(rootArray[Number(e.root - 1)])].push({
+            id: allClasses[i],
+            name: allClassNames[i]
+              .toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              ),
+          });
+        });
+    }
+
+    console.log("Class Sets: ", _nodeSets);
+    setRoots(rootArray);
+    setRootNames(rootNameArray);
+    setNodeSets(_nodeSets);
+  };
+
+  const getNodeIds = async (_addr, _prufClient, bal, ids, iteration) => {
+    // eslint-disable-next-line react/prop-types
+    if (!iteration) iteration = 0
+    if (!ids) ids = []
+    if (iteration >= bal) return buildNodesInWallet(_prufClient, ids)
+    _prufClient.get
+      // eslint-disable-next-line react/prop-types
+      .heldNodeAtIndex(_addr, String(iteration))
+      .then(e => {
+        /* if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(e)){
+          setCookieTo(`${_addr}dontCount`, cookies[`${_addr}dontCount`].splice(cookies[`${_addr}dontCount`].indexOf(e), 1))
+        } */
+        ids.push(e)
+        return getNodeIds(_addr, _prufClient, bal, ids, iteration + 1)
+      })
+  }
+
+  const buildNodesInWallet = (_prufClient, ids, _extDataArr, _nodeData, iteration) => {
+    if (!ids) return
+    if (!iteration) iteration = 0
+    if (!_nodeData) _nodeData = []
+    if (!_extDataArr) _extDataArr = []
+    //console.log({ ids })
+    if (iteration < ids.length) {
+      // eslint-disable-next-line react/prop-types
+      _prufClient.get
+        // eslint-disable-next-line react/prop-types
+        .nodeData(ids[iteration])
+        .then(e => {
+          //console.log(e)
+          _nodeData.push([
+            //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
+            e.name.toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              ),
+            String(ids[iteration]),
+            'N/A',
+            'N/A',
+          ])
+          e.nodeId = ids[iteration]
+          e.name = e.name.toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+              letter.toUpperCase()
+            )
+          _extDataArr.push(e)
+          return buildNodesInWallet(_prufClient, ids, _extDataArr, _nodeData, iteration + 1)
+        })
+    } else {
+      _nodeData.push(['', '', '', ''])
+      setNodeExtData(_extDataArr)
+      setHeldNodeData(_nodeData)
+      //console.log("HERE", _extDataArr)
+      return //console.log(_nodeData)
+    }
+  }
+
+  const getAssetIds = (_addr, _prufClient, bal, ids, iteration) => {
+    if (!bal) return;
+    if (Number(bal) === 0) return console.log("No assets held by user");
+    if (!ids) ids = [];
+    if (!iteration) iteration = 0;
+    if (ids.length >= bal) {
+      setAssetIds(ids);
+      return buildAssetHeap(_addr, _prufClient, ids);
+    } else {
+      _prufClient.get
+        .heldAssetAtIndex(_addr, String(iteration))
+        .then(e => {
+          //console.log(e)
+          ids.push(e);
+          getAssetIds(_addr, _prufClient, bal, ids, iteration + 1);
+        });
+    }
+  };
+
+  const buildAssetHeap = (_addr, _prufClient, ids, data, iteration) => {
+    if (!ids) return;
+    if (!data) data = [];
+    if (!iteration) {
+      console.log("ids: ", ids);
+      iteration = 0;
+    }
+
+    if (iteration >= ids.length) return getMutableData(data, _prufClient)
     else {
-      window.isSettingUpContracts = true;
-      window._contracts = await buildContracts(_web3)
-      await window.utils.getContracts().then(() => {
-        window.isSettingUpContracts = false;
-        setWD(true)
+      _prufClient.get.assetRecord(ids[iteration]).then(e => {
+        let obj = Object.assign({}, e)
+        //console.log(e)
+        obj.identicon = <Jdenticon value={ids[iteration]} />
+        obj.identiconLG = <Jdenticon value={ids[iteration]} />
+
+        _prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
+          obj.status = e
+        });
+
+        _prufClient.get
+          .assetPriceData(ids[iteration])
+          .then(e => {
+            obj = Object.assign(obj, e)
+            _prufClient.get
+              .nodeData(obj.nodeId)
+              .then(e => {
+                obj.nodeName = e.name.toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  );
+                obj.nodeData = Object.assign({}, e)
+                _prufClient.get.ownerOfNode(obj.nodeId).then(e => {
+                  obj.nodeAdmin = e
+                  _prufClient.get.userType(window.web3.utils.soliditySha3(_addr), obj.nodeId).then(e => {
+                    obj.userAuthLevel = e
+                    data.push(obj);
+                    return buildAssetHeap(
+                      _addr,
+                      _prufClient,
+                      ids,
+                      data,
+                      iteration + 1
+                    )
+                  })
+                })
+              })
+          })
       })
     }
-
-    //window.addEventListener("navigator", navTypeListener);
-
   }
 
-  const setUpAssets = async (who, _addr, recount, which) => {
-    console.log("SUA, called from ", who)
-
-    let tempObj = {};
-
-    window.hasNoAssets = false;
-    window.hasNoAssetClasses = false;
-    window.ipfsCounter = 0;
-    window.ipfsHashArray = [];
-    window.assets = { descriptions: [], ids: [], assetClassNames: [], assetClasses: [], countPairs: [], statuses: [], names: [], displayImages: [] };
-    window.assetClasses = { names: [], exData: [], discounts: [], custodyTypes: [], roots: [], ids: [], identicons: [], identiconsLG: [] }
-    window.hasLoadedAssetClasses = false;
-    window.assetTokenInfo = {
-      assetClass: undefined,
-      idxHash: undefined,
-      name: undefined,
-      photos: undefined,
-      text: undefined,
-      status: undefined,
-    }
-
-    if (which) {
-      // Add pick/replace asset by index
-    }
-
-    //Case of recount
-    if (window.recount === true) {
-      window.aTknIDs = [];
-      window.acTknIDs = [];
-      if (window.balances !== undefined) window.balances.assetBalance = 0;
-      window.recount = false
-      await window.utils.getETHBalance(_addr);
-      return setUpTokenVals(true, "SUA recount", _addr)
-    }
-    console.log("SA: In setUpAssets")
-
-    window.utils.getAssetTokenInfo(_addr).then((simpleAssets) => {
-      if (simpleAssets.ipfs) {
-        if (!simpleAssetView) { getIpfsData(simpleAssets, simpleAssets.ipfs, simpleAssets.ids.length) }
-        else { console.log("Displaying simplified assets"); return buildAssets(simpleAssets, [], true) }
-      }
-    })
-
-  }
-
-  const getIpfsData = async (simpleAssets, array, jobs, iteration, assetData) => {
-    let _assetData
-    if (!array) return
+  const getMutableData = (
+    assetHeap,
+    _prufClient,
+    assetsWithMutableData,
+    iteration
+  ) => {
+    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
     if (!iteration) {
-      iteration = 1
+      console.log("Assets Prior to mutable data retreival:", assetHeap);
+      iteration = 0;
     }
-    if (!jobs) {
-      jobs = array.length
-    }
-    if (assetData) {
-      _assetData = assetData
-    } else {
-      _assetData = [];
-    }
-    if (jobs < iteration) {
-      //console.log(_assetData);
-      console.log("Finished getting extended data.");
-      return buildAssets(simpleAssets, _assetData);
+    if (!assetsWithMutableData) assetsWithMutableData = [];
+    if (iteration >= assetHeap.length) {
+      /* console.log("EXIT"); */ return getEngravings(
+      assetsWithMutableData,
+      _prufClient
+    );
     }
 
-    let lookup = array[iteration - 1]
+    let _arweave = window.arweave;
 
-    await window.ipfs.cat(lookup, async (error, result) => {
-      if (error) {
-        _assetData.push({ text: {}, photo: {}, urls: {}, name: "" })
-        console.log(error)
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-      } else {
-        console.log("got job #", iteration)
-        _assetData.push(JSON.parse(result))
-        return getIpfsData(simpleAssets, array, jobs, iteration + 1, _assetData)
-      }
-    });
-  }
+    let obj = assetHeap[iteration];
+    let storageProvider = obj.nodeData.storageProvider;
+    let mutableDataQuery;
 
-  const buildAssets = async (simpleAssets, assetData, noIpfs) => {
-    let ids = simpleAssets.ids;
-    setReserveAD(assetData)
-    console.log("BA: In buildAssets.")
-    let tempObj = simpleAssets;
-    let assetArray = [];
-
-    if (ids.length > 0) {
-      if (noIpfs) {
-        for (let x = 0; x < ids.length; x++) {
-          let assetObj = { text: {}, photo: {}, urls: {}, name: "Name Unavailable" }
-
-          assetObj.DisplayImage = "";
-          assetObj.identicon = <Jdenticon value={ids[x]} />;
-          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-          assetObj.note = "";
-          assetObj.photoUrls = {}
-          assetObj.id = simpleAssets.ids[x];
-          assetObj.ipfs = simpleAssets.ipfs[x];
-          assetObj.countPair = simpleAssets.countPairs[x];
-          assetObj.assetClass = simpleAssets.assetClasses[x];
-          assetObj.status = simpleAssets.statuses[x];
-          assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x];
-
-          console.log(assetObj)
-          assetArray.push(assetObj)
-          forceUpdate()
-        }
-      }
-      else {
-        for (let x = 0; x < assetData.length; x++) {
-          let vals = Object.values(assetData[x].photo), keys = Object.keys(assetData[x].photo);
-          let assetObj = { text: {}, photo: {}, urls: {}, name: "" }
-
-          if (assetData[x].name === "" || assetData[x].name === undefined) {
-            assetObj.name = "Name Unavailable";
-          }
-
-          else {
-            assetObj.name = assetData[x].name
-          }
-
-          for (let i = 0; i < keys.length; i++) {
-            const get = () => {
-              if (vals[i].includes("data") && vals[i].includes("base64")) {
-                assetObj.photo[keys[i]] = vals[i];
-                //console.log(assetObj.photo[keys[i]]);
-                //console.log(x);
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-                //setAssetArr(assetArray)
-                forceUpdate();
-              }
-
-              else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-                assetObj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                }
-                else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                }
-                //setAssetArr(assetArray)
-                forceUpdate();
-              }
-
-              else {
-                const req = new XMLHttpRequest();
-                req.responseType = "text";
-
-                req.onload = function (e) {
-                  //console.log("in onload")
-                  if (this.response.includes("base64")) {
-                    assetObj.photo[keys[i]] = this.response;
-                    //console.log(assetObj.photo[keys[i]]);
-                    //console.log(x);
-                    if (keys[i] === "DisplayImage") {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                    }
-                    else if (i === keys.length - 1) {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                    }
-                    //setAssetArr(assetArray)
-                    forceUpdate();
-                  }
-                }
-
-                req.onerror = function (e) {
-                  //console.log("http request error")
-                  if (vals[i].includes("http")) {
-                    assetObj.photo[keys[i]] = vals[i];
-                    if (keys[i] === "DisplayImage") {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[i]])
-                    }
-                    else if (i === keys.length - 1) {
-                      //console.log("Setting Display Image")
-                      assetObj.DisplayImage = (assetObj.photo[keys[0]])
-                    }
-                    //setAssetArr(assetArray)
-                    forceUpdate();
-                  }
-                }
-
-                req.open('GET', vals[i], true);
-                req.send();
-              }
-            }
-            await get()
-          }
-
-
-          if (keys.length === 0) {
-            assetObj.DisplayImage = "";
-          }
-
-          assetObj.note = simpleAssets.notes[x];
-          assetObj.photoUrls = assetData[x].photo
-          assetObj.text = assetData[x].text
-          assetObj.urls = assetData[x].urls
-
-          assetObj.identicon = <Jdenticon value={ids[x]} />;
-          assetObj.identiconLG = <Jdenticon value={ids[x]} />;
-
-          assetObj.id = simpleAssets.ids[x];
-          assetObj.ipfs = simpleAssets.ipfs[x];
-          assetObj.countPair = simpleAssets.countPairs[x];
-          assetObj.assetClass = simpleAssets.assetClasses[x];
-          assetObj.status = simpleAssets.statuses[x];
-          assetObj.statusNum = simpleAssets.statusNums[x];
-          assetObj.assetClassName = simpleAssets.assetClassNames[x];
-
-          //console.log(assetObj)
-          assetArray.push(assetObj)
-          setAssetArr(assetArray)
-        }
-
-      }
-    }
-
-    if (window.balances.prufTokenBalance !== prufBalance || window.balances.assetBalance !== assetBalance) {
-      setAssetBalance(window.balances.assetBalance);
-      setAssetClassBalance(window.balances.assetClassBalance);
-      setPrufBalance(window.balances.prufTokenBalance);
-      setIDBalance(window.balances.IDTokenBalance);
-      setIsAssetHolder(window.window.assetHolderBool);
-      setIsAssetClassHolder(window.assetClassHolderBool);
-      setIsIDHolder(window.IDHolderBool);
-      setHasFetchedBalances(window.hasFetchedBalances);
-    }
-
-    //setAssets(tempObj);
-    setAssetArr(assetArray)
-    //console.log(assetArray)
-    console.log("BA: Assets after rebuild: ", assetArray);
-    forceUpdate();
-  }
-
-  //Count up user tokens, takes  "willSetup" bool to determine whether to call setUpAssets() after count
-  const setUpTokenVals = async (willSetup, who, _addr) => {
-    console.log("STV: Setting up balances, called from ", who)
-
-    await window.utils.determineTokenBalance(_addr).then((e) => {
-      if (e === undefined) return console.log("Account Locked")
-      setAssetBalance(e.assetBalance);
-      setAssetClassBalance(e.assetClassBalance);
-      setPrufBalance(e.prufTokenBalance);
-      setIDBalance(e.IDTokenBalance);
-      setIsAssetHolder(window.assetHolderBool);
-      setIsAssetClassHolder(window.assetClassHolderBool);
-      setIsIDHolder(window.IDHolderBool);
-      setHasFetchedBalances(window.hasFetchedBalances);
-      setETHBalance(window.ETHBalance)
-    })
-
-
-    let temp;
-    let temp2;
-
-    if (window.contracts) {
-      await window.contracts.AC_MGR.methods.currentACpricingInfo().call(
-        function (_error, _result) {
-          if (_error) {
-            return (console.log("IN ERROR IN ERROR IN ERROR"))
-          }
-          else {
-            temp = window.web3.utils.fromWei(Object.values(_result)[0])
-            return temp2 = window.web3.utils.fromWei(Object.values(_result)[1])
-          }
-
-        }
+    if (
+      obj.mutableDataA ===
+      "0x0000000000000000000000000000000000000000000000000000000000000000"
+      || obj.nodeData.root === obj.nodeId
+    ) {
+      obj.mutableData = "";
+      assetsWithMutableData.push(obj);
+      //console.log("EXIT")
+      return getMutableData(
+        assetHeap,
+        _prufClient,
+        assetsWithMutableData,
+        iteration + 1
       );
+    } else if (storageProvider === "1") {
+      _prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
+        console.log("MDQ", e);
+
+        if (cookies[window.web3.utils.soliditySha3(e)]) {
+          console.log("Using cached mutable data:", cookies[e]);
+          obj.mutableData = cookies[window.web3.utils.soliditySha3(e)];
+          assetsWithMutableData.push(obj);
+          console.log("EXIT");
+          return getMutableData(
+            assetHeap,
+            _prufClient,
+            assetsWithMutableData,
+            iteration + 1
+          );
+        } else {
+          for await (const chunk of window.ipfs.cat(e)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            console.log(str);
+            try {
+              obj.mutableData = JSON.parse(str);
+            } catch {
+              obj.mutableData = str;
+            }
+            assetsWithMutableData.push(obj);
+            setCookieTo(window.web3.utils.soliditySha3(e), JSON.parse(str));
+            //console.log("EXIT")
+            return getMutableData(
+              assetHeap,
+              _prufClient,
+              assetsWithMutableData,
+              iteration + 1
+            );
+          }
+        }
+      });
+    } else if (storageProvider === "2") {
+      console.log(obj.mutableDataA, obj.mutableDataB);
+      mutableDataQuery = window.web3.utils.hexToUtf8(
+        obj.mutableDataA +
+        obj.mutableDataB.substring(
+          2,
+          24
+        )
+      );
+      console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`);
+      //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
+      if (cookies[window.web3.utils.soliditySha3(mutableDataQuery)]) {
+        //console.log("Using cached mutable data:", cookies[mutableDataQuery])
+        obj.mutableData =
+          cookies[window.web3.utils.soliditySha3(mutableDataQuery)];
+        assetsWithMutableData.push(obj);
+        //console.log("EXIT")
+        return getMutableData(
+          assetHeap,
+          _prufClient,
+          assetsWithMutableData,
+          iteration + 1
+        );
+      } else {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onload = () => {
+          if (xhr.status !== 404) {
+            try {
+              _arweave.transactions.get(mutableDataQuery).then((e) => {
+                let tempObj = {};
+                e.get("tags").forEach((tag) => {
+                  let key = tag.get("name", { decode: true, string: true });
+                  let value = tag.get("value", { decode: true, string: true });
+                  tempObj[key] = value;
+                  //console.log(`${key} : ${value}`);
+                });
+                //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
+                tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+                obj.mutableData = tempObj;
+                assetsWithMutableData.push(obj);
+                setCookieTo(
+                  window.web3.utils.soliditySha3(mutableDataQuery),
+                  tempObj
+                );
+                //console.log("EXIT")
+                return getMutableData(
+                  assetHeap,
+                  _prufClient,
+                  assetsWithMutableData,
+                  iteration + 1
+                );
+              });
+            } catch {
+              obj.mutableData = "";
+              assetsWithMutableData.push(obj);
+              return getMutableData(
+                assetHeap,
+                _prufClient,
+                assetsWithMutableData,
+                iteration + 1
+              );
+            }
+          } else {
+            console.log("Id returned 404");
+            obj.mutableData = "";
+            assetsWithMutableData.push(obj);
+            return getMutableData(
+              assetHeap,
+              _prufClient,
+              assetsWithMutableData,
+              iteration + 1
+            );
+          }
+        };
+
+        xhr.onerror = () => {
+          console.log("Id returned 404");
+          obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+          obj.mutableData = "";
+          assetsWithMutableData.push(obj);
+          return getMutableData(
+            assetHeap,
+            _prufClient,
+            assetsWithMutableData,
+            iteration + 1
+          );
+        };
+
+        xhr.open("GET", `http://localhost:1984/tx/${mutableDataQuery}`, true);
+        xhr.send(null);
+
+        try {
+          xhr.send(null);
+        } catch {
+          console.log("Id returned 404");
+          obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+          obj.mutableData = "";
+          assetsWithMutableData.push(obj);
+          return getMutableData(
+            assetHeap,
+            _prufClient,
+            assetsWithMutableData,
+            iteration + 1
+          );
+        }
+      }
+    }
+  };
+
+  const getEngravings = (
+    assetHeap,
+    _prufClient,
+    assetsWithEngravings,
+    iteration
+  ) => {
+    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
+    if (!iteration) {
+      console.log("Assets Prior to engraving retreival:", assetHeap);
+      iteration = 0;
+    }
+    if (!assetsWithEngravings) assetsWithEngravings = [];
+    if (iteration >= assetHeap.length) {
+      /* console.log("EXIT"); */ return finalizeAssets(assetsWithEngravings);
     }
 
-    if (temp !== undefined) {
-      setCurrentACIndex(temp)
-      setCurrentACPrice(temp2)
+    let _arweave = window.arweave;
+
+    let obj = assetHeap[iteration];
+    let storageProvider = obj.nodeData.storageProvider;
+    let engravingQuery;
+
+    if (
+      obj.engravingA ===
+      "0x0000000000000000000000000000000000000000000000000000000000000000"
+      || obj.nodeData.root === obj.nodeId
+    ) {
+      obj.engraving = "";
+      assetsWithEngravings.push(obj);
+      //console.log("EXIT")
+      return getEngravings(
+        assetHeap,
+        _prufClient,
+        assetsWithEngravings,
+        iteration + 1
+      );
+    } else if (storageProvider === "1") {
+      _prufClient.utils.ipfsFromB32(obj.engravingA).then(async (e) => {
+        engravingQuery = e;
+        console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`);
+
+        if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
+          //console.log("Using cached engraving:", cookies[engravingQuery])
+          obj.engraving =
+            cookies[window.web3.utils.soliditySha3(engravingQuery)];
+          //console.log("EXIT")
+          assetsWithEngravings.push(obj);
+          return getEngravings(
+            assetHeap,
+            _prufClient,
+            assetsWithEngravings,
+            iteration + 1
+          );
+        } else {
+          for await (const chunk of window.ipfs.cat(engravingQuery)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            console.log(str);
+            try {
+              obj.engraving = JSON.parse(str);
+            } catch {
+              obj.engraving = str;
+            }
+
+            assetsWithEngravings.push(obj);
+            setCookieTo(
+              window.web3.utils.soliditySha3(engravingQuery),
+              JSON.parse(str)
+            );
+            //console.log("EXIT")
+            return getEngravings(
+              assetHeap,
+              _prufClient,
+              assetsWithEngravings,
+              iteration + 1
+            );
+          }
+        }
+      });
+    } else if (storageProvider === "2") {
+      engravingQuery = window.web3.utils.hexToUtf8(
+        obj.engravingA +
+        obj.engravingB.substring(
+          2,
+          24
+        )
+      );
+      //console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
+      if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
+        //console.log("Using cached engraving:", cookies[engravingQuery])
+        obj.engraving = cookies[window.web3.utils.soliditySha3(engravingQuery)];
+        //console.log("EXIT")
+        assetsWithEngravings.push(obj);
+        return getEngravings(
+          assetHeap,
+          _prufClient,
+          assetsWithEngravings,
+          iteration + 1
+        );
+      } else {
+        let xhr = new XMLHttpRequest();
+
+        xhr.onload = () => {
+          if (xhr.status !== 404) {
+            try {
+              _arweave.transactions.get(engravingQuery).then((e) => {
+                if (!e) throw "Thrown";
+                let tempObj = {};
+                e.get("tags").forEach((tag) => {
+                  let key = tag.get("name", { decode: true, string: true });
+                  let value = tag.get("value", { decode: true, string: true });
+                  tempObj[key] = value;
+                  //console.log(`${key} : ${value}`);
+                });
+                //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
+                tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+                obj.engraving = tempObj;
+                assetsWithEngravings.push(obj);
+                setCookieTo(
+                  window.web3.utils.soliditySha3(engravingQuery),
+                  tempObj
+                );
+                //console.log("EXIT")
+                return getEngravings(
+                  assetHeap,
+                  _prufClient,
+                  assetsWithEngravings,
+                  iteration + 1
+                );
+              });
+            } catch {
+              console.log("In arweave catch clause");
+              obj.engraving = "";
+              assetsWithEngravings.push(obj);
+              return getEngravings(
+                assetHeap,
+                _prufClient,
+                assetsWithEngravings,
+                iteration + 1
+              );
+            }
+          } else {
+            console.log("Id returned 404");
+            obj.engraving = "";
+            obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+            assetsWithEngravings.push(obj);
+            return getEngravings(
+              assetHeap,
+              _prufClient,
+              assetsWithEngravings,
+              iteration + 1
+            );
+          }
+        };
+
+        xhr.onerror = () => {
+          console.log("Gateway returned 404");
+          obj.engraving = "";
+          obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+          assetsWithEngravings.push(obj);
+          return getEngravings(
+            assetHeap,
+            _prufClient,
+            assetsWithEngravings,
+            iteration + 1
+          );
+        };
+
+        xhr.open("GET", `http://localhost:1984/tx/${engravingQuery}`, true);
+        try {
+          xhr.send(null);
+        } catch {
+          console.log("Gateway returned 404");
+          obj.engraving = "";
+          obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+          assetsWithEngravings.push(obj);
+          return getEngravings(
+            assetHeap,
+            _prufClient,
+            assetsWithEngravings,
+            iteration + 1
+          );
+        }
+      }
+    }
+  };
+
+  const finalizeAssets = (assetHeap, finalizedAssets, iteration) => {
+    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
+    if (!finalizedAssets) finalizedAssets = [];
+    if (!iteration) {
+      console.log("Assets Prior to final sorting:", assetHeap);
+      iteration = 0;
+    }
+    if (iteration >= assetHeap.length) {
+      setReserveAD(assetHeap);
+      //document.body.style.cursor = 'auto'
+      console.log("Finalized assets: ", finalizedAssets);
+      return setAssetArr(finalizedAssets);
     }
 
-    await console.log(window.balances);
+    let obj = assetHeap[iteration];
 
-    if (willSetup) {
-      forceUpdate();
-      return setUpAssets("setUpTokenVals", _addr)
+    obj.photo = obj.engraving.photo || obj.mutableData.photo || {};
+    obj.text = obj.engraving.text || obj.mutableData.text || {};
+    obj.urls = obj.engraving.urls || obj.mutableData.urls || {};
+    obj.name = obj.engraving.name || obj.mutableData.name || "Name Unavailable";
+    obj.photoUrls = obj.engraving.photo || obj.mutableData.photo || {};
+    obj.Description =
+      obj.engraving.Description || obj.mutableData.Description || "";
+    obj.ContentUrl =
+      obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
+
+    let vals = Object.values(obj.photo),
+      keys = Object.keys(obj.photo);
+
+    if (obj.nodeData.storageProvider === "2") {
+      if (
+        obj.engraving.contentUrl &&
+        obj.engraving["Content-Type"].includes("image")
+      ) {
+        obj.DisplayImage = obj.engraving.contentUrl;
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      } else if (
+        obj.mutableData.contentUrl &&
+        obj.mutableData["Content-Type"].includes("image")
+      ) {
+        obj.DisplayImage = obj.mutableData.contentUrl;
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      } else if (keys.length === 0) {
+        obj.DisplayImage = "";
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      }
+    } else if (obj.nodeData.storageProvider === "1") {
+      const getAndSet = (url) => {
+        const req = new XMLHttpRequest();
+        req.responseType = "text";
+
+        req.onload = function () {
+          //console.log("response", this.response);
+          if (this.response.includes("base64")) {
+            obj.DisplayImage = this.response;
+            finalizedAssets.push(obj);
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+          }
+        };
+
+        req.onerror = function (e) {
+          //console.log("http request error")
+          obj.DisplayImage = "";
+          finalizedAssets.push(obj);
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        };
+        req.open("GET", url, true);
+        try {
+          req.send();
+        } catch {
+          obj.DisplayImage = "";
+          finalizedAssets.push(obj);
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
+      };
+
+      if (
+        obj.engraving !== "" &&
+        obj.engraving.DisplayImage !== "" &&
+        obj.engraving.DisplayImage !== undefined
+      ) {
+        getAndSet(obj.engraving.DisplayImage);
+      } else if (
+        obj.mutableData !== "" &&
+        obj.mutableData.DisplayImage !== "" &&
+        obj.mutableData.DisplayImage !== undefined
+      ) {
+        getAndSet(obj.mutableData.DisplayImage);
+      }
+    } else if (keys.length > 0) {
+      for (let i = 0; i < keys.length; i++) {
+        const get = () => {
+          if (vals[i].includes("data") && vals[i].includes("base64")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              obj.DisplayImage = obj.photo[keys[i]];
+            } else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = obj.photo[keys[0]];
+            }
+            forceUpdate();
+            finalizedAssets.push(obj);
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+          } else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+            obj.photo[keys[i]] = vals[i];
+            if (keys[i] === "DisplayImage") {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = obj.photo[keys[i]];
+            } else if (i === keys.length - 1) {
+              //console.log("Setting Display Image")
+              obj.DisplayImage = obj.photo[keys[0]];
+            }
+            forceUpdate();
+            finalizedAssets.push(obj);
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+          } else {
+            const req = new XMLHttpRequest();
+            req.responseType = "text";
+
+            req.onload = function (e) {
+              //console.log("in onload")
+              if (this.response.includes("base64")) {
+                obj.photo[keys[i]] = this.response;
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = obj.photo[keys[i]];
+                } else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = obj.photo[keys[0]];
+                }
+                forceUpdate();
+                finalizedAssets.push(obj);
+                finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+              }
+            };
+
+            req.onerror = function (e) {
+              //console.log("http request error")
+              if (vals[i].includes("http")) {
+                obj.photo[keys[i]] = vals[i];
+                if (keys[i] === "DisplayImage") {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = obj.photo[keys[i]];
+                } else if (i === keys.length - 1) {
+                  //console.log("Setting Display Image")
+                  obj.DisplayImage = obj.photo[keys[0]];
+                }
+                forceUpdate();
+                finalizedAssets.push(obj);
+                finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+              }
+            };
+            req.open("GET", vals[i], true);
+            req.send();
+          }
+        };
+        get();
+      }
+    } else {
+      obj.DisplayImage = "";
+      finalizedAssets.push(obj);
+      finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
     }
-
-    return forceUpdate();
-  }
+  };
 
   return (
     <div className={classes.wrapper}>
@@ -1091,7 +1712,6 @@ export default function Dashboard(props) {
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
         />
-        {/* On the /maps/full-screen-maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
           <div className={classes.content}>
             <div className={classes.container}>
@@ -1102,13 +1722,13 @@ export default function Dashboard(props) {
             </div>
           </div>
         ) : (
-            <div className={classes.map}>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from="/user" to="/user/home" />
-              </Switch>
-            </div>
-          )}
+          <div className={classes.map}>
+            <Switch>
+              {getRoutes(routes)}
+              <Redirect from="/user" to="/user/home" />
+            </Switch>
+          </div>
+        )}
         {getRoute() ? <Footer fluid /> : null}
         <FixedPlugin
           handleImageClick={handleImageClick}

@@ -26,13 +26,13 @@ export default function AdminNavbar(props) {
   const classes = useStyles();
   const { color, rtlActive, brandText } = props;
   const appBarClasses = cx({
-    [" " + classes[color]]: color
+    [" " + classes[color]]: color,
   });
   const sidebarMinimize =
     classes.sidebarMinimize +
     " " +
     cx({
-      [classes.sidebarMinimizeRTL]: rtlActive
+      [classes.sidebarMinimizeRTL]: rtlActive,
     });
   return (
     <AppBar className={classes.appBar + appBarClasses}>
@@ -92,5 +92,5 @@ AdminNavbar.propTypes = {
   brandText: PropTypes.string,
   miniActive: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,
-  sidebarMinimize: PropTypes.func
+  sidebarMinimize: PropTypes.func,
 };

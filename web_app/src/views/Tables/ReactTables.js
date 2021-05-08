@@ -25,8 +25,8 @@ const styles = {
   cardIconTitle: {
     ...cardTitle,
     marginTop: "15px",
-    marginBottom: "0px"
-  }
+    marginBottom: "0px",
+  },
 };
 
 const useStyles = makeStyles(styles);
@@ -49,7 +49,7 @@ export default function ReactTables() {
               round
               simple
               onClick={() => {
-                let obj = data.find(o => o.id === key);
+                let obj = data.find((o) => o.id === key);
                 alert(
                   "You've clicked LIKE button on \n{ \nName: " +
                     obj.name +
@@ -73,7 +73,7 @@ export default function ReactTables() {
               round
               simple
               onClick={() => {
-                let obj = data.find(o => o.id === key);
+                let obj = data.find((o) => o.id === key);
                 alert(
                   "You've clicked EDIT button on \n{ \nName: " +
                     obj.name +
@@ -115,7 +115,7 @@ export default function ReactTables() {
               <Close />
             </Button>{" "}
           </div>
-        )
+        ),
       };
     })
   );
@@ -135,24 +135,24 @@ export default function ReactTables() {
               columns={[
                 {
                   Header: "Name",
-                  accessor: "name"
+                  accessor: "name",
                 },
                 {
                   Header: "Position",
-                  accessor: "position"
+                  accessor: "position",
                 },
                 {
                   Header: "Office",
-                  accessor: "office"
+                  accessor: "office",
                 },
                 {
                   Header: "Age",
-                  accessor: "age"
+                  accessor: "age",
                 },
                 {
                   Header: "Actions",
-                  accessor: "actions"
-                }
+                  accessor: "actions",
+                },
               ]}
               data={data}
             />

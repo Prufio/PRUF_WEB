@@ -3,7 +3,7 @@ import {
   cardTitle,
   blackColor,
   hexToRgb,
-  grayColor
+  grayColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 import customCheckboxRadioSwitch from "assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.js";
@@ -12,12 +12,12 @@ const registerPageStyle = {
   ...customCheckboxRadioSwitch,
   cardTitle: {
     ...cardTitle,
-    textAlign: "center"
+    textAlign: "center",
   },
   container: {
     ...container,
     position: "relative",
-    zIndex: "3"
+    zIndex: "3",
     // paddingTop: "23vh"
   },
   cardSignup: {
@@ -32,42 +32,42 @@ const registerPageStyle = {
       ", 0.2)",
     marginBottom: "100px",
     padding: "40px 0px",
-    marginTop: "15vh"
+    marginTop: "15vh",
   },
   center: {
-    textAlign: "center"
+    textAlign: "center",
   },
   right: {
-    textAlign: "right"
+    textAlign: "right",
   },
   left: {
-    textAlign: "left"
+    textAlign: "left",
   },
   form: {
     padding: "0 20px",
-    position: "relative"
+    position: "relative",
   },
   socialTitle: {
-    fontSize: "18px"
+    fontSize: "18px",
   },
   inputAdornment: {
     marginRight: "18px",
-    position: "relative"
+    position: "relative",
   },
   inputAdornmentIcon: {
-    color: grayColor[6]
+    color: grayColor[6],
   },
   customFormControlClasses: {
-    margin: "0 12px"
+    margin: "0 12px",
   },
   checkboxLabelControl: {
-    margin: "0"
+    margin: "0",
   },
   checkboxLabel: {
     fontSize: "0.875rem",
     marginLeft: "6px",
-    color: "rgba(" + hexToRgb(blackColor) + ", 0.26)"
-  }
+    color: "rgba(" + hexToRgb(blackColor) + ", 0.26)",
+  },
 };
 
 export default registerPageStyle;

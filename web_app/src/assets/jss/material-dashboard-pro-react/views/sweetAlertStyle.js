@@ -7,18 +7,18 @@ const sweetAlertStyle = {
     marginTop: "0",
     marginBottom: "3px",
     color: grayColor[2],
-    fontSize: "18px"
+    fontSize: "18px",
   },
   center: {
-    textAlign: "center"
+    textAlign: "center",
   },
   right: {
-    textAlign: "right"
+    textAlign: "right",
   },
   left: {
-    textAlign: "left"
+    textAlign: "left",
   },
-  ...buttonStyle
+  ...buttonStyle,
 };
 
 export default sweetAlertStyle;

@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 const styles = {
   grid: {
     margin: "0 -15px",
-    width: "calc(100% + 30px)"
+    width: "calc(100% + 30px)",
     // '&:before,&:after':{
     //   display: 'table',
     //   content: '" "',
@@ -16,7 +16,7 @@ const styles = {
     // '&:after':{
     //   clear: 'both',
     // }
-  }
+  },
 };
 
 const useStyles = makeStyles(styles);
@@ -33,5 +33,5 @@ export default function GridContainer(props) {
 
 GridContainer.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
 };

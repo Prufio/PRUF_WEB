@@ -5,7 +5,7 @@ import {
   infoCardHeader,
   primaryCardHeader,
   roseCardHeader,
-  grayColor
+  grayColor,
 } from "assets/jss/material-dashboard-pro-react.js";
 
 const cardTextStyle = {
@@ -16,14 +16,14 @@ const cardTextStyle = {
     borderRadius: "3px",
     backgroundColor: grayColor[0],
     padding: "15px",
-    marginTop: "-20px"
+    marginTop: "-20px",
   },
   warningCardHeader,
   successCardHeader,
   dangerCardHeader,
   infoCardHeader,
   primaryCardHeader,
-  roseCardHeader
+  roseCardHeader,
 };
 
 export default cardTextStyle;
