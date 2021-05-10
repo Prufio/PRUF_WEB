@@ -298,1260 +298,620 @@ export default function Search(props) {
   };
 
   const renderOptions = (status) => {
-    // @dev add new status cases as they arise
-    let component = [];
     if (!status || !asset.statusNum) return;
-    switch (status) {
-      case "50": {
-        component.push(
-          <Select
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              disabled
-              key="SelItem1"
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem4"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status (Not Available in this Status)
-            </MenuItem>
-            {/* <MenuItem
-              key="DisabledItem3"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info (Not Available in this Status)
-            </MenuItem> */}
-            <MenuItem
-              key="DisabledItem5"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info (Not Available in this Status)
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "51": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              disabled
-              key="SelItem1"
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem4"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export
-            </MenuItem>
-            <MenuItem
-              key="SelItem5"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status
-            </MenuItem>
-            {/* <MenuItem
-              key="SelItem6"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-            </MenuItem> */}
-            <MenuItem
-              key="SelItem7"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "52": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              key="SelItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status
-            </MenuItem>
-            {/* <MenuItem
-              key="SelItem4"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-            </MenuItem> */}
-            <MenuItem
-              key="SelItem5"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "53": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              key="SelItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status
-            </MenuItem>
-            {/* <MenuItem
-              key="SelItem4"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-            </MenuItem> */}
-            <MenuItem
-              key="DisabledItem3"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info (Not Available in this Status)
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "54": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              key="SelItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status
-            </MenuItem>
-            {/* <MenuItem
-              key="SelItem4"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-            </MenuItem> */}
-            <MenuItem
-              key="SelItem5"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "56": {
-        component.push(
-          <Select
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              disabled
-              key="SelItem1"
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem4"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status (Not Available in this Status)
-            </MenuItem>
-            {/* <MenuItem
-              key="DisabledItem3"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info (Not Available in this Status)
-            </MenuItem> */}
-            <MenuItem
-              key="DisabledItem5"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info (Not Available in this Status)
-            </MenuItem>
-          </Select>
-        );
-        break;
-      } // @dev rework when escrow released
-      case "57": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              disabled
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem1"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem5"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status
-            </MenuItem>
-            {/* <MenuItem
-              key="SelItem6"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-            </MenuItem> */}
-            <MenuItem
-              key="SelItem7"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "58": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              disabled
-              key="SelItem1"
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem5"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status
-            </MenuItem>
-            {/* <MenuItem
-              key="SelItem6"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-            </MenuItem> */}
-            <MenuItem
-              key="SelItem7"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "59": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              key="SelItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem6"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="SelItem5"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status
-            </MenuItem>
-            {/* <MenuItem
-              key="SelItem6"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info
-            </MenuItem> */}
-            <MenuItem
-              key="SelItem7"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      case "70": {
-        component.push(
-          <Select
-            key="Sel1"
-            MenuProps={{
-              className: classes.selectMenu,
-            }}
-            classes={{
-              select: classes.select,
-            }}
-            value={simpleSelect}
-            onChange={(e) => handleSimple(e)}
-            inputProps={{
-              name: "simpleSelect",
-              id: "simple-select",
-            }}
-          >
-            <MenuItem
-              key="SelItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Select an option from the list
-            </MenuItem>
-            <MenuItem
-              key="SelItem9"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="sell"
-            >
-              Set for sale
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem0"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="transfer"
-            >
-              Transfer (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem2"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="verify"
-            >
-              Verify
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem1"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="discard"
-            >
-              Discard (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="SelItem3"
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="import"
-            >
-              Import
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem2"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="export"
-            >
-              Export (Not Available in this Status)
-            </MenuItem>
-            <MenuItem
-              key="DisabledItem4"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="modify-status"
-            >
-              Change Status (Not Available in this Status)
-            </MenuItem>
-            {/* <MenuItem
-              key="DisabledItem3"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-information"
-            >
-              Update Asset Info (Not Available in this Status)
-            </MenuItem> */}
-            <MenuItem
-              key="DisabledItem5"
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-                selected: classes.selectMenuItemSelected,
-              }}
-              value="edit-rightsholder"
-            >
-              Update Owner Info (Not Available in this Status)
-            </MenuItem>
-          </Select>
-        );
-        break;
-      }
-      default: {
+    let na = '(Not Available in this Status)'
+    let opt
+    switch(status) {
+      case "50" : {
+        opt = [
+          {
+            dis: true,
+            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: true,
+            msg: `Change Status ${na}`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: true,
+            msg: `Update Owner Info ${na}`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "51" : {
+        opt = [
+          {
+            dis: false,
+            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: false,
+            msg: `Transfer`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: false,
+            msg: `Export`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: false,
+            msg: `Change Status`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: false,
+            msg: `Update Owner Info`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "52" : {
+        opt = [
+          {
+            dis: false,
+            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: false,
+            msg: `Change Status`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: false,
+            msg: `Update Owner Info`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "53" : {
+        opt = [
+          {
+            dis: true,
+            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: false,
+            msg: `Change Status`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: false,
+            msg: `Update Owner Info`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "54" : {
+        opt = [
+          {
+            dis: true,
+            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: false,
+            msg: `Change Status`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: false,
+            msg: `Update Owner Info`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "56" : {
+        opt = [
+          {
+            dis: true,
+            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: true,
+            msg: `Change Status ${na}`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: true,
+            msg: `Update Owner Info ${na}`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "57" : {
+        opt = [
+          {
+            dis: false,
+            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: false,
+            msg: `Change Status`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: false,
+            msg: `Update Owner Info`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "58" : {
+        opt = [
+          {
+            dis: false,
+            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: false,
+            msg: `Change Status`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: false,
+            msg: `Update Owner Info`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "59" : {
+        opt = [
+          {
+            dis: false,
+            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: false,
+            msg: `Discard`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: true,
+            msg: `Import ${na}`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: false,
+            msg: `Change Status`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: false,
+            msg: `Update Mutable Info`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: false,
+            msg: `Update Owner Info`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } case "70" : {
+        opt = [
+          {
+            dis: false,
+            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+            key: "sfsOption",
+            val: "sell"
+          },
+          {
+            dis: true,
+            msg: `Transfer ${na}`,
+            key: "txrOption", 
+            val: "transfer"
+          },
+          {
+            dis: false,
+            msg: "Verify",
+            key: "verOption",
+            val: "verify"
+          },
+          {
+            dis: true,
+            msg: `Discard ${na}`,
+            key: "dscOption",
+            val: "discard"
+          },
+          {
+            dis: false,
+            msg: `Import`,
+            key: "impOption",
+            val: "import"
+          },
+          {
+            dis: true,
+            msg: `Export ${na}`,
+            key: "expOption",
+            val: "export"
+          },
+          {
+            dis: true,
+            msg: `Change Status ${na}`,
+            key: "chsOption",
+            val: "modify-status"
+          },
+          {
+            dis: true,
+            msg: `Update Mutable Info ${na}`,
+            key: "umiOption",
+            val: "edit-information"
+          },
+          {
+            dis: true,
+            msg: `Update Owner Info ${na}`,
+            key: 'uoiOption',
+            val: 'edit-rightsholder'
+          }
+        ]; break
+      } default: {
         console.log("Error in option switch");
       }
     }
 
-    return component;
+    let options = opt.map((option) => {
+      
+      return (             
+      <MenuItem
+      key={option.key}
+      disabled={option.dis}
+      value={option.val}
+      classes={{
+        root: classes.selectMenuItem,
+        selected: classes.selectMenuItemSelected,
+      }}
+    >
+      {option.msg}
+    </MenuItem>)
+    })
+
+    return(
+      <Select
+            key="OptionSelect"
+            MenuProps={{
+              className: classes.selectMenu,
+            }}
+            classes={{
+              select: classes.select,
+            }}
+            value={simpleSelect}
+            onChange={(e) => handleSimple(e)}
+            inputProps={{
+              name: "simpleSelect",
+              id: "simple-select",
+            }}
+          >
+            {options}
+          </Select>
+    )
   };
 
   const getDBIndexOf = (e) => {

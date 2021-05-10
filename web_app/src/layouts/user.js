@@ -9,8 +9,6 @@ import arconf from "../Resources/arconf";
 
 import PRUF from "pruf-js";
 import { isMobile } from "react-device-detect";
-//import OrbitDB from 'orbit-db';
-/* import resolveContracts from "../Resources/Contracts"; */
 import buildWindowUtils from "../Resources/WindowUtils";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useCookies } from "react-cookie";
