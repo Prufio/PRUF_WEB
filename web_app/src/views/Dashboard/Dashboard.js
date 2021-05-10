@@ -472,12 +472,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -529,12 +529,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -586,12 +586,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -643,12 +643,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -700,12 +700,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -757,12 +757,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
@@ -814,12 +814,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -871,12 +871,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -928,12 +928,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: false,
             msg: `Update Owner Info`,
@@ -985,12 +985,12 @@ export default function Dashboard(props) {
             key: "chsOption",
             val: "modify-status"
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
             val: "edit-information"
-          },
+          }, */
           {
             dis: true,
             msg: `Update Owner Info ${na}`,
