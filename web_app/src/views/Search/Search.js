@@ -328,7 +328,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
@@ -387,7 +387,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
@@ -446,7 +446,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
@@ -505,7 +505,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
@@ -564,7 +564,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
@@ -623,7 +623,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
@@ -682,7 +682,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
@@ -741,7 +741,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
@@ -800,7 +800,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: false,
             msg: `Update Mutable Info`,
             key: "umiOption",
@@ -859,7 +859,7 @@ export default function Search(props) {
             key: "chsOption",
             val: "modify-status",
           },
-          {
+          /* {
             dis: true,
             msg: `Update Mutable Info ${na}`,
             key: "umiOption",
