@@ -95,7 +95,8 @@ export default function Dashboard(props) {
     String(Math.round(Math.random() * 100000))
   );
   const [arweaveClient, setArweaveClient] = React.useState();
-  const [testWeave, setTestWeave] = React.useState();
+  const [ARWallet, setARWallet] = React.useState("");
+  /* const [testWeave, setTestWeave] = React.useState(); */
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
@@ -133,15 +134,20 @@ export default function Dashboard(props) {
 
     console.log(arweave);
 
-    const testWeave = await TestWeave.init(arweave);
+    if(window.arweaveWallet) {
+      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
+      //window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
+    } 
 
-    setTestWeave(testWeave);
+    //const testWeave = await TestWeave.init(arweave);
 
-    console.log(testWeave);
+    //setTestWeave(testWeave);
 
-    window.arweave = arweave;
+    //console.log(testWeave);
 
-    return { testWeave: testWeave, arweave: arweave };
+    window.arweaveClient = arweave;
+
+    return { arweave: arweave };
   };
 
   const handleNoEthereum = () => {
@@ -666,6 +672,7 @@ export default function Dashboard(props) {
             render={() => (
               <prop.component
                 roots={roots}
+                ARWallet={ARWallet}
                 refresh={refreshEvent}
                 rootNames={rootNames}
                 nodeSets={nodeSets}
@@ -686,7 +693,6 @@ export default function Dashboard(props) {
                 winKey={winKey}
                 prufClient={prufClient}
                 arweaveClient={arweaveClient}
-                testWeave={testWeave}
               />
             )}
             key={key}
@@ -1029,9 +1035,6 @@ export default function Dashboard(props) {
       // eslint-disable-next-line react/prop-types
       .heldNodeAtIndex(_addr, String(iteration))
       .then(e => {
-        /* if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(e)){
-          setCookieTo(`${_addr}dontCount`, cookies[`${_addr}dontCount`].splice(cookies[`${_addr}dontCount`].indexOf(e), 1))
-        } */
         ids.push(e)
         return getNodeIds(_addr, _prufClient, bal, ids, iteration + 1)
       })
@@ -1167,7 +1170,7 @@ export default function Dashboard(props) {
     );
     }
 
-    let _arweave = window.arweave;
+    let _arweave = window.arweaveClient;
 
     let obj = assetHeap[iteration];
     let storageProvider = obj.nodeData.storageProvider;
@@ -1261,7 +1264,7 @@ export default function Dashboard(props) {
                   //console.log(`${key} : ${value}`);
                 });
                 //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
-                tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+                tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
                 obj.mutableData = tempObj;
                 assetsWithMutableData.push(obj);
                 setCookieTo(
@@ -1301,7 +1304,7 @@ export default function Dashboard(props) {
 
         xhr.onerror = () => {
           console.log("Id returned 404");
-          obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+          obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
           obj.mutableData = "";
           assetsWithMutableData.push(obj);
           return getMutableData(
@@ -1312,14 +1315,14 @@ export default function Dashboard(props) {
           );
         };
 
-        xhr.open("GET", `http://localhost:1984/tx/${mutableDataQuery}`, true);
+        xhr.open("GET", `https://arweave.net/${mutableDataQuery}`, true);
         xhr.send(null);
 
         try {
           xhr.send(null);
         } catch {
           console.log("Id returned 404");
-          obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+          obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
           obj.mutableData = "";
           assetsWithMutableData.push(obj);
           return getMutableData(
@@ -1349,7 +1352,7 @@ export default function Dashboard(props) {
       /* console.log("EXIT"); */ return finalizeAssets(assetsWithEngravings);
     }
 
-    let _arweave = window.arweave;
+    let _arweave = window.arweaveClient;
 
     let obj = assetHeap[iteration];
     let storageProvider = obj.nodeData.storageProvider;
@@ -1447,7 +1450,7 @@ export default function Dashboard(props) {
                   //console.log(`${key} : ${value}`);
                 });
                 //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
-                tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+                tempObj.contentUrl = `https://arweave.net/${engravingQuery}`;
                 obj.engraving = tempObj;
                 assetsWithEngravings.push(obj);
                 setCookieTo(
@@ -1476,7 +1479,7 @@ export default function Dashboard(props) {
           } else {
             console.log("Id returned 404");
             obj.engraving = "";
-            obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+            obj.contentUrl = `https://arweave.net/${engravingQuery}`;
             assetsWithEngravings.push(obj);
             return getEngravings(
               assetHeap,
@@ -1490,7 +1493,7 @@ export default function Dashboard(props) {
         xhr.onerror = () => {
           console.log("Gateway returned 404");
           obj.engraving = "";
-          obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+          obj.contentUrl = `https://arweave.net/${engravingQuery}`;
           assetsWithEngravings.push(obj);
           return getEngravings(
             assetHeap,
@@ -1500,13 +1503,13 @@ export default function Dashboard(props) {
           );
         };
 
-        xhr.open("GET", `http://localhost:1984/tx/${engravingQuery}`, true);
+        xhr.open("GET", `https://arweave.net/${engravingQuery}`, true);
         try {
           xhr.send(null);
         } catch {
           console.log("Gateway returned 404");
           obj.engraving = "";
-          obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+          obj.contentUrl = `https://arweave.net/${engravingQuery}`;
           assetsWithEngravings.push(obj);
           return getEngravings(
             assetHeap,

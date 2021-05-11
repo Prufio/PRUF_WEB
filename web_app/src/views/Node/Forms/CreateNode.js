@@ -569,52 +569,6 @@ export default function CreateNode(props) {
                                         <div className={classes.formCategory}>
                                             <small>*</small> Required fields
                                 </div>
-
-                                        {/* <div className={classes.checkboxAndRadio}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        tabIndex={-1}
-                        onClick={() => setAdvanced(!advanced)}
-                        checkedIcon={<Check className={classes.checkedIcon} />}
-                        icon={<Check className={classes.uncheckedIcon} />}
-                        classes={{
-                          checked: classes.checked,
-                          root: classes.checkRoot
-                        }}
-                      />
-                    }
-                    classes={{
-                      label: classes.label,
-                      root: classes.labelRoot
-                    }}
-                    label="Advanced Options"
-                  />
-                </div>
-                {advanced && (
-                  <Card>
-                    <CardHeader>
-                      <h4 className={classes.cardTitle}>Advanced Options</h4>
-                    </CardHeader>
-                    <CardBody>
-                      <Accordion
-                        // active={0}
-                        collapses={[
-                          {
-                            title: "Set Pricing (Optional)",
-                            content:
-                              setPricing()
-                          },
-                          {
-                            title: "Select Class Layout (Optional)",
-                            content:
-                              setLayout()
-                          }
-                        ]}
-                      />
-                    </CardBody>
-                  </Card>
-                )} */}
                                     </>
                                 )}
                                 {transactionActive && !transactionActiveID && (
@@ -639,16 +593,6 @@ export default function CreateNode(props) {
                                                 disabled: true,
                                             }}
                                         />
-                                        {/* <CustomInput
-                  labelText={ipfs}
-                  id="ipfs"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                  inputProps={{
-                    disabled: true
-                  }}
-                /> */}
                                     </>
                                 )}
                             </>

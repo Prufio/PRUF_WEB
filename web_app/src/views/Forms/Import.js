@@ -83,57 +83,7 @@ export default function Import(props) {
   }, []);
 
   const checkCreds = async (e) => {
-    let nodeId = e.target.value;
-/*     let nodeManagement;
-
-    console.log({nodeId, nodeManagement})
-
-    props.prufClient.get.nodeData(nodeId).then(e => {
-
-        nodeManagement = e.managementType
-
-        if (Number(nodeManagement) < 4) {
-
-          switch(nodeManagement) {
-            
-            case("1") : {
-              if (window.web3.utils.toChecksumAddress(assetInfo.nodeAdmin) !== window.web3.utils.toChecksumAddress(props.addr)){
-                console.log(assetInfo.nodeAdmin, props.addr)
-                return console.log("Must be node admin to import into this node.")
-              } else {
-                return ACLogin(nodeId)
-              }
-            }
-    
-            case("2") : {
-              if (window.web3.utils.toChecksumAddress(assetInfo.nodeAdmin) !== window.web3.utils.toChecksumAddress(props.addr)) {
-                console.log(assetInfo.nodeAdmin, props.addr)
-                return console.log("Must be node admin to import into this node.")
-              } else {
-                return ACLogin(nodeId)
-              }
-              
-            }
-    
-            case("3") : {
-              if(!assetInfo.userAuthLevel || assetInfo.userAuthLevel !== "1") {
-                return console.log("User address not authorized to import into node.")
-              } else {
-                return ACLogin(nodeId)
-              }
-            }
-    
-            default : break
-          }
-    
-        }
-    
-        else {
-          return ACLogin(nodeId)
-        }
-    }) */
-
-    return ACLogin(nodeId)
+    return ACLogin(e.target.value)
   }
 
 

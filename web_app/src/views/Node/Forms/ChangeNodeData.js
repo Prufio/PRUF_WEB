@@ -231,11 +231,6 @@ export default function ChangeNodeData(props) {
                     <form>
                         <h4>Node Selected: {nodeInfo.name}</h4>
                         {idFields.length > 0 && <>{generateIdFields()}</>}
-                        {/* {ownerFields.length > 0 && (
-              <>
-                {generateOwnerFields()}
-              </>
-            )} */}
                         {landingConfig && (
                             <>
                                 URL: {'  '}{' '}

@@ -123,18 +123,6 @@ export default function AuthorizeUser(props) {
                     </h5>
                     <div className="delegationTips">
                         <h4 className="alertText">User: {` ${address.substring(0, 8)}...${address.substring(34)}`}</h4>
-                        {/* <h4 className="alertText">
-                        User Type: &nbsp;
-                    {userType === "1" && (
-                            <>Admin</>
-                        )}
-                        {userType === "2" && (
-                            <>Custodian</>
-                        )}
-                        {userType === "5" && (
-                            <>Automated</>
-                        )}
-                    </h4> */}
                     </div>
                 </Card>
             ),
@@ -297,108 +285,8 @@ export default function AuthorizeUser(props) {
                     </>
                 )}
             </CardBody>
-            {/* </Card> */}
-            {/* )} */}
-            {/* {card2 && (
-                <Card className="Slider">
-                    <CardHeader>
-                        <h2 className={classes.cardIconTitle}>Select User Type</h2>
-                    </CardHeader>
-                    <GridContainer>
-                        <GridItem xs={12} sm={4}>
-                            {!userType1 && (
-                                <Button className="managementType" color="info" onClick={() => setUserType1Button()}>
-                                    <VpnKey />
-                Admin
-                                </Button>
-                            )}
-                            {userType1 && (
-                                <Button className="managementTypeSelected" onClick={() => setUserType1Button()}>
-                                    <VpnKey />
-                                    Admin
-                                </Button>
-                            )}
-                            {!userType2 && (
-                                <Button className="managementType" color="info" onClick={() => setUserType2Button()}>
-                                    <Security />
-                Custodian
-                                </Button>
-                            )}
-                            {userType2 && (
-                                <Button className="managementTypeSelected" onClick={() => setUserType2Button()}>
-                                    <Security />
-                                    Custodian
-                                </Button>
-                            )}
-                            {!userType3 && (
-                                <Button className="managementType" color="info" onClick={() => setUserType3Button()}>
-                                    <AssignmentTurnedIn />
-                Automated
-                                </Button>
-                            )}
-                            {userType3 && (
-                                <Button className="managementTypeSelected" onClick={() => setUserType3Button()}>
-                                    <AssignmentTurnedIn />
-                                    Automated
-                                </Button>
-                            )}
-                        </GridItem>
-                        <GridItem xs={12} sm={8}>
-                            <Card className="slide-right">
-                                {userType1 && (
-                                    <>
-                                        <h3>Admin</h3>
-                                        <p>
-                                            Full Permissions
-                                        </p>
-                                        <p>
-                                            The Restricted user type is by far the most exclusive. With restriced access to node operations, this type allows only
-                                            the node holder to create assets within the node, export assets within the node, or import assets into the node. This
-                                            enables a provably secure and tight-knit operation, and would be most suited to artists, or one-of-a-kind asset creation.
-                            </p>
-                                    </>
-                                )}
-                                {userType2 && (
-                                    <>
-                                        <h3>Custodian</h3>
-                                        <p>
-                                            Full Permissions
-                                        </p>
-                                        <p>
-                                            Much like the Restricted user type, the Permissive user type is just a little bit more diverse. Alongside
-                                            it's reduced access to public node operations such as private asset importing and creation, this type allows asset-holders
-                                            to export assets out of the node. This allows for a more diverse range of items, and allows the node use to be more public to
-                                            its users. Permissive node user is a great option for variations of collectables, or every-day use items such as bicicles,
-                                            motor-vehicles or BETTER EXAMPLES...
-                            </p>
-                                    </>
-                                )}
-                                {userType3 && (
-                                    <>
-                                        <h3>Automated</h3>
-                                        <p>
-                                            Full Permissions
-                                        </p>
-                                        <p>
-                                            The Authorized user type is the most private options for private businesses or enterprises. Authorized node user
-                                            allows for a permission based authority for any party authorized by the node holder. In order to access any operations within the
-                                            node, the calling user must be authorized, otherwise access is entirely limited. This allows for a private, secure, yet expandable
-                                            node user, and would be best used by private businesses and enterprises yada yada im not the person for this job...
-                            </p>
-                                    </>
-                                )}
-                            </Card>
-                        </GridItem>
-                    </GridContainer>
-                </Card>
-            )} */}
             {!transactionActive && (
                 <>
-                    {/* {card1 && (
-                        <div className="MLBGradientSubmit">
-                            <Button className="MLBGradient" onClick={() => nextCard()} icon >Next <KeyboardArrowRight /> </Button>
-                        </div>
-                    )} */}
                     {/* {card2 && ( */}
                     <div className="MLBGradientSubmit">
                         <Button

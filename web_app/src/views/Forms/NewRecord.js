@@ -144,13 +144,7 @@ export default function NewRecord(props) {
 
   const postToArweave = async (data, metaData, idxHash, ipfsObj) => {
     // eslint-disable-next-line react/prop-types
-    let dataTransaction = await props.arweaveClient.createTransaction(
-      {
-        data,
-      },
-      // eslint-disable-next-line react/prop-types
-      props.testWeave.rootJWK
-    );
+    let dataTransaction = await props.arweaveClient.createTransaction({data: data});
 
     console.log(
       "pre-tags",
@@ -179,24 +173,23 @@ export default function NewRecord(props) {
 
     // eslint-disable-next-line react/prop-types
     await props.arweaveClient.transactions.sign(
-      dataTransaction,
-      // eslint-disable-next-line react/prop-types
-      props.testWeave.rootJWK
+      dataTransaction
     );
     // eslint-disable-next-line react/prop-types
     const statusBeforePost = await props.arweaveClient.transactions.getStatus(
       dataTransaction.id
     );
     console.log(statusBeforePost); // this will return 404
-    // eslint-disable-next-line react/prop-types
+/*     // eslint-disable-next-line react/prop-types
     await props.arweaveClient.transactions.post(dataTransaction);
     // eslint-disable-next-line react/prop-types
     const statusAfterPost = await props.arweaveClient.transactions.getStatus(
       dataTransaction.id
-    );
-    console.log(statusAfterPost); // this will return 202
+    ); */
+
+    ///console.log(statusAfterPost); // this will return 202
     //await testWeave.mine();
-    mineTx().then(async () => {
+    mineTx(dataTransaction).then(async () => {
       // eslint-disable-next-line react/prop-types
       const statusAfterMine = await props.arweaveClient.transactions.getStatus(
         dataTransaction.id
@@ -211,14 +204,14 @@ export default function NewRecord(props) {
     });
   };
 
-  const mineTx = async () => {
-    // eslint-disable-next-line react/prop-types
-    await props.testWeave.mine();
-    // eslint-disable-next-line react/prop-types
-    await props.testWeave.mine();
-    // eslint-disable-next-line react/prop-types
-    await props.testWeave.mine();
-    return;
+  const mineTx = async (tx) => {
+    let uploader = await arweave.transactions.getUploader(tx);
+
+    while (!uploader.isComplete) {
+    await uploader.uploadChunk();
+    console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+    }
+
   };
 
   const rootLogin = (e) => {
@@ -242,96 +235,6 @@ export default function NewRecord(props) {
         setNodeExtendedData(e);
         setStorageProvider(e.storageProvider);
       })
-    /*     try {
-          // eslint-disable-next-line react/prop-types
-          props.prufClient.get
-            // eslint-disable-next-line react/prop-types
-            .nodeData(event.target.value)
-            .then(e => {
-              let managementType = e.managementType
-              let nodeData = e;
-              console.log(e)
-              if (isMobile && e.storageProvider === "2") {
-                return swal("This node is configured for Awreave storage, and is currently disabled on mobile devices. Please use a non-mobile device to mint using this node.")
-              }
-    
-              props.prufClient.get.ownerOfNode(nodeId).then(e => {
-                let isOwner = (e === props.addr)
-                let authorized = false
-                switch (managementType) {
-                  case ("255"):
-                    document.body.style.cursor = 'auto', swal("This node is not yet configured. If you own this node and wish to use it, please finalize it using the Node Manager dashboard."); break;
-                  case ("1"): {
-                    if (!isOwner) {
-                      document.body.style.cursor = 'auto', swal("This node is in a private management type. Only the node holder has access to asset creation.")
-                    }
-                    else { authorized = true }
-                    break;
-                  }
-                  case ("2"): {
-                    if (!isOwner) {
-                      document.body.style.cursor = 'auto', swal("This node is in a permissive management type. Only the node holder has access to asset creation.")
-                    }
-                    else { authorized = true }
-                    break;
-                  }
-                  case ("3"): {
-                    props.prufClient.get.userType(props.addr, nodeId).then(e => {
-                      if (e !== "1") {
-                        document.body.style.cursor = 'auto', swal("This node is in an authorized management type. Only the node holder and node-authorized users have access to asset creation.");
-                      }
-                      else { authorized = true }
-                    }
-                    )
-                    break;
-                  }
-                  default: break
-                }
-    
-                if (!authorized) return
-    
-                setNodeName(
-                  nodeData.name
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    )
-                );
-                // console.log(nodeData)
-                setStorageProvider(nodeData.storageProvider);
-                setNodeExtendedData(Object.assign({
-                  name: nodeData.name
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    )
-                }, nodeData
-                ));
-                setNodeId(event.target.value);
-                setClassSelect(event.target.value);
-                document.body.style.cursor = 'auto',
-                  props.prufClient.get
-                    // eslint-disable-next-line react/prop-types
-                    .operationCost(event.target.value, "1")
-                    .then(e => {
-                      setNRCost(e.total);
-                    });
-              })
-              // eslint-disable-next-line react/prop-types
-            });
-        } catch {
-          document.body.style.cursor = 'auto',
-            swal({
-              title: "Could not find node",
-              icon: "warning",
-              text: "Please try again.",
-              buttons: {
-                close: {
-                  text: "close",
-                },
-              },
-            });
-        } */
     setNodeName(
       event.target.value.name
         .toLowerCase()
@@ -386,9 +289,6 @@ export default function NewRecord(props) {
       switch (value) {
         case "yes":
           setIDTransactionActive(true);
-
-          // const pageKey = thousandHashesOf(props.addr, props.winKey)
-
           props.prufClient.do
             .getId()
             // eslint-disable-next-line react/prop-types
@@ -565,6 +465,7 @@ export default function NewRecord(props) {
       const buf = Buffer(reader.result);
       setRawFile(reader.result);
       setDisplayImage(prefix + base64.encode(buf));
+      setIsUploading(false);
     };
 
     reader.readAsArrayBuffer(file); // Read Provided File
@@ -912,12 +813,6 @@ export default function NewRecord(props) {
 
         //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
         console.log("IPFS bytes32: ", extendedDataHash);
-
-        /* swal({
-          title: "You are about to create asset: "+idxHash,
-          text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
-          button: "Okay",
-        }) */
         props.prufClient.do
           .mintAsset(
             idxHash,
@@ -1007,7 +902,7 @@ export default function NewRecord(props) {
         text: ipfsObj.text,
         urls: ipfsObj.urls,
         name: ipfsObj.name,
-        DisplayImage: `http://localhost:1984/${extendedDataHash}`,
+        DisplayImage: `https://arweave.net/${extendedDataHash}`,
         nodeId: nodeId,
         nodeName:
           nodeName.substring(0, 1).toUpperCase() +
@@ -1023,13 +918,7 @@ export default function NewRecord(props) {
         identiconLG: [<Jdenticon value={idx} key="" />],
       };
 
-      idxHash = idx; /* window.web3.utils.soliditySha3(
-        String(type).replace(/\s/g, ''),
-        String(make).replace(/\s/g, ''),
-        String(model).replace(/\s/g, ''),
-        String(serial).replace(/\s/g, ''),
-      ) */
-
+      idxHash = idx; 
       props.prufClient.utils.generateSecureRgt(
         idx,
         {
@@ -1055,12 +944,6 @@ export default function NewRecord(props) {
 
         //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
         console.log("IPFS bytes32: ", extendedDataHash);
-
-        /* swal({
-          title: "You are about to create asset: "+idxHash,
-          text:  "Address: "+props.addr+"\nipfs: "+extendedDataHash+"\nrgtHash: "+rgtHash+"\nac: "+nodeId,
-          button: "Okay",
-        }) */
 
         props.prufClient.do
           .mintAsset(
@@ -1296,12 +1179,10 @@ export default function NewRecord(props) {
                             >
                               Currently Unavailable
                             </MenuItem>
-                            {/* {generateNodeList(props.nodeList)} */}
                           </Select>
                         </FormControl>
                       )}
                       <br></br>
-                      {/* {selectedRootID !== "" && !publicNode && ( */}
                       {selectedRootID !== "" && (
                         <FormControl
                           fullWidth
@@ -1333,29 +1214,6 @@ export default function NewRecord(props) {
                           </>
                         </FormControl>
                       )}
-                      {/* {!transactionActive && (
-                      <div className={extClasses.block}>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={publicNode}
-                              onChange={event => setPublicNode(!publicNode)}
-                              value="publicNode"
-                              classes={{
-                                switchBase: extClasses.switchBase,
-                                checked: extClasses.switchChecked,
-                                thumb: extClasses.switchIcon,
-                                track: extClasses.switchBar
-                              }}
-                            />
-                          }
-                          classes={{
-                            label: extClasses.label
-                          }}
-                          label="Select Public Node"
-                        />
-                      </div>
-                    )} */}
                     </form>
                   </CardBody>
                   <br />
@@ -1434,7 +1292,6 @@ export default function NewRecord(props) {
                               />
                             )}
                           </>
-                          {/* <h4 className={classes.cardIconTitle}>(optional)</h4> */}
                           {isUploading && (
                             <>
                               <br />
@@ -2067,7 +1924,6 @@ export default function NewRecord(props) {
                 </>
               )}
             </>
-            {/* )} */}
           </GridContainer>
         )}
     </>

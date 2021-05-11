@@ -501,13 +501,6 @@ export default function ModifyDescription(props) {
       ) {
         return (
           <CardHeader image className={classes.cardHeaderHover}>
-            {/* <Tooltip
-              id="tooltip-top"
-              title="Back"
-              placement="bottom"
-              classes={{ tooltip: classes.tooltip }}
-            >
-            </Tooltip> */}
             {asset.identicon}
           </CardHeader>
         );

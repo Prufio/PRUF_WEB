@@ -163,9 +163,6 @@ export default function Search(props) {
           window.location.href.indexOf("0x"),
           window.location.href.length
         ))
-      /* awaitPrufInit(props.prufClient, window.location.href.substring(
-        window.location.href.indexOf("0x"),
-        window.location.href.length)) */
     } else if (window.idxQuery) {
       console.log(`Got query: ${window.idxQuery}`)
       //awaitPrufInit(props.prufClient, window.idxQuery)
@@ -1664,21 +1661,21 @@ export default function Search(props) {
                 //console.log(`${key} : ${value}`);
               });
               //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
-              tempObj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+              tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
               obj.mutableData = tempObj;
-              obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+              obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
               return getEngraving(obj);
             });
           } catch {
             console.log("Id returned 404");
             obj.mutableData = "";
-            obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+            obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
             return getEngraving(obj);
           }
         } else {
           console.log("Gateway returned 404");
           obj.mutableData = "";
-          obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+          obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
           return getEngraving(obj);
         }
       };
@@ -1686,17 +1683,17 @@ export default function Search(props) {
       xhr.onerror = () => {
         console.log("Gateway returned 404");
         obj.mutableData = "";
-        obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+        obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
         return getEngraving(obj);
       };
 
-      xhr.open("GET", `http://localhost:1984/tx/${mutableDataQuery}`, true);
+      xhr.open("GET", `https://arweave.net/tx/${mutableDataQuery}`, true);
       try {
         xhr.send(null);
       } catch {
         console.log("Gateway returned 404");
         obj.mutableData = "";
-        obj.contentUrl = `http://localhost:1984/${mutableDataQuery}`;
+        obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
         return getEngraving(obj);
       }
     }
@@ -1755,7 +1752,7 @@ export default function Search(props) {
                 //console.log(`${key} : ${value}`);
               });
               //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
-              tempObj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+              tempObj.contentUrl = `https://arweave.net/${engravingQuery}`;
               obj.engraving = tempObj;
               return finalizeAsset(obj);
             });
@@ -1767,7 +1764,7 @@ export default function Search(props) {
         } else {
           console.log("Id returned 404");
           obj.engraving = "";
-          obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+          obj.contentUrl = `https://arweave.net/${engravingQuery}`;
           return finalizeAsset(obj);
         }
       };
@@ -1775,17 +1772,17 @@ export default function Search(props) {
       xhr.onerror = () => {
         console.log("Gateway returned 404");
         obj.engraving = "";
-        obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+        obj.contentUrl = `https://arweave.net/${engravingQuery}`;
         return finalizeAsset(obj);
       };
 
-      xhr.open("GET", `http://localhost:1984/tx/${engravingQuery}`, true);
+      xhr.open("GET", `https://arweave.net/tx/${engravingQuery}`, true);
       try {
         xhr.send(null);
       } catch {
         console.log("Gateway returned 404");
         obj.engraving = "";
-        obj.contentUrl = `http://localhost:1984/${engravingQuery}`;
+        obj.contentUrl = `https://arweave.net/${engravingQuery}`;
         return finalizeAsset(obj);
       }
     }

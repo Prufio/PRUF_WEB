@@ -422,52 +422,6 @@ export default function NodeManager(props) {
             }
         })
     }
-    /*     if(!props.prufClient){
-            return <>
-              <Card>
-                  <CardHeader icon>
-                    <CardIcon className="headerIconBack">
-                      
-                    </CardIcon>
-                    <Button
-                      color="info"
-                      className="MLBGradient"
-                      onClick={() => goBack()}
-                    >
-                      Go Back
-                    </Button>
-                    
-                  </CardHeader>
-                  <CardBody>
-                    <h2>Oops, something went wrong...</h2>
-                  </CardBody>
-                  <br />
-                </Card>
-            </>
-          }
-          if(props.prufClient && !props.prufClient.get){
-            return <>
-              <Card>
-                  <CardHeader icon>
-                    <CardIcon className="headerIconBack">
-                      
-                    </CardIcon>
-                    <Button
-                      color="info"
-                      className="MLBGradient"
-                      onClick={() => goBack()}
-                    >
-                      Go Back
-                    </Button>
-                    
-                  </CardHeader>
-                  <CardBody>
-                    <h2>Oops, something went wrong...</h2>
-                  </CardBody>
-                  <br />
-                </Card>
-            </>
-          } */
     return (
         <GridContainer>
             <GridItem xs={12}>
@@ -677,8 +631,7 @@ export default function NodeManager(props) {
                                                                         Change
                                                                         Name
                                                                     </MenuItem>
-                                                                    {/* <MenuItem
-                                                                        id={`transfer${key}`}
+                                                                    <MenuItem
                                                                         classes={{
                                                                             root:
                                                                                 classes.selectMenuItem,
@@ -689,7 +642,7 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Update
                                                                         Data
-                                                                    </MenuItem> */}
+                                                                    </MenuItem>
                                                                     <MenuItem
                                                                         id={`changecosts${key}`}
                                                                         classes={{
@@ -903,7 +856,7 @@ export default function NodeManager(props) {
                                                                         Change
                                                                         Name
                                                                     </MenuItem>
-                                                                    {/* <MenuItem
+                                                                    <MenuItem
                                                                         classes={{
                                                                             root:
                                                                                 classes.selectMenuItem,
@@ -922,7 +875,7 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Update
                                                                         Data
-                                                                    </MenuItem> */}
+                                                                    </MenuItem>
                                                                     <MenuItem
                                                                         classes={{
                                                                             root:
@@ -992,30 +945,6 @@ export default function NodeManager(props) {
                                                                     >
                                                                         Transfer
                                                                     </MenuItem>
-                                                                    {/* {props.nodeExtData[
-                                                                        key
-                                                                    ] &&
-                                                                        props.nodeExtData[
-                                                                            key
-                                                                        ]
-                                                                            .managementType !==
-                                                                        '255' && (
-                                                                            <MenuItem
-                                                                                classes={{
-                                                                                    root:
-                                                                                        classes.selectMenuItem,
-                                                                                    selected:
-                                                                                        classes.selectMenuItemSelected,
-                                                                                }}
-                                                                                value={{
-                                                                                    temp:
-                                                                                        'view',
-                                                                                    index: key,
-                                                                                }}
-                                                                            >
-                                                                                View
-                                                                            </MenuItem>
-                                                                        )} */}
                                                                     {props.nodeExtData[
                                                                         key
                                                                     ] &&
