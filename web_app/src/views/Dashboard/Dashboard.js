@@ -77,12 +77,12 @@ export default function Dashboard(props) {
   const [selectedImage, setSelectedImage] = React.useState("");
   const [copyText, setCopyText] = React.useState(false);
   const [pageNum, setPageNum] = React.useState(1);
-  const [assetsPerPage, setAssetsPerPage] = React.useState(8);
+  const [assetsPerPage, setAssetsPerPage] = React.useState(props.assetsPerPage || 8);
   // eslint-disable-next-line no-unused-vars
   const [currency, setCurrency] = React.useState("ü");
 
   // eslint-disable-next-line react/prop-types
-  const numOfPages = Math.ceil(props.assetArr.length / assetsPerPage);
+  const numOfPages = Math.ceil(props.assetArr.length / props.assetsPerPage);
 
   const moreInfo = (e) => {
     //console.log(e);
@@ -113,7 +113,7 @@ export default function Dashboard(props) {
       let _pageNum = pageNum;
 
       const getRightPage = () => {
-        if (assetsPerPage * _pageNum <= selectedAssetObj.dBIndex) {
+        if (props.assetsPerPage * _pageNum <= selectedAssetObj.dBIndex) {
           _pageNum++;
           getRightPage();
         }
@@ -202,12 +202,12 @@ export default function Dashboard(props) {
 
     if (arr.length > 0) {
       let component = [];
-      let numOfPages = Math.ceil(arr.length / assetsPerPage);
-      let start = pageNum * assetsPerPage - assetsPerPage;
-      let end = start + assetsPerPage;
+      let numOfPages = Math.ceil(arr.length / props.assetsPerPage);
+      let start = pageNum * props.assetsPerPage - props.assetsPerPage;
+      let end = start + props.assetsPerPage;
 
       if (pageNum === numOfPages) {
-        end -= pageNum * assetsPerPage - arr.length;
+        end -= pageNum * props.assetsPerPage - arr.length;
       }
       //console.log(obj)
 
@@ -407,6 +407,7 @@ export default function Dashboard(props) {
   };
 
   const handleShowNum = (e) => {
+    if(!e) return
     let _pageNum = pageNum;
 
     const getNewNum = () => {
@@ -421,6 +422,8 @@ export default function Dashboard(props) {
 
     setPageNum(_pageNum);
     setAssetsPerPage(e);
+    window.replaceAssetData.assetsPerPage = e
+    window.dispatchEvent(props.refresh)
   };
 
   const renderOptions = (status) => {
@@ -1119,7 +1122,7 @@ export default function Dashboard(props) {
         .then(e => {
             tempObj.opCost = e.total
             window.sentPacket = JSON.parse(JSON.stringify(tempObj))
-            window.assetsPerPage = assetsPerPage
+            window.assetsPerPage = props.assetsPerPage
             console.log(tempObj)
             console.log(window.sentPacket)
             setSimpleSelect(event.target.value)
@@ -1127,7 +1130,7 @@ export default function Dashboard(props) {
         });
     } else {
       window.sentPacket = JSON.parse(JSON.stringify(tempObj));
-      window.assetsPerPage = assetsPerPage;
+      window.assetsPerPage = props.assetsPerPage;
 
       console.log(tempObj);
       console.log(window.sentPacket);
@@ -1604,7 +1607,7 @@ export default function Dashboard(props) {
               className: classes.selectMenu,
             }}
             className="assetNumDropdown"
-            value={assetsPerPage}
+            value={props.assetsPerPage}
             onChange={(e) => {
               handleShowNum(e.target.value);
             }}
@@ -1613,14 +1616,6 @@ export default function Dashboard(props) {
               id: "simple-select",
             }}
           >
-            <MenuItem
-              disabled
-              classes={{
-                root: classes.selectMenuItem,
-              }}
-            >
-              Assets per page
-            </MenuItem>
             <MenuItem
               classes={{
                 root: classes.selectMenuItem,

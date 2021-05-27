@@ -1569,22 +1569,27 @@ export default function Search(props) {
 
     setRetrieving(true);
 
+    //Call to the API for an asset with assetId 'id'
     props.prufClient.get.assetRecord(id).then(e => {
       setScanQR(false);
       setResult(Object.values(e));
       setError("");
 
+      //If asset is in status 60, allow for recycling
       e.statusNum === "60" ? setRecycled(true) : checkIsHolder(id);
 
-      let obj = e;
+      let obj = Object.assign({}, e);
 
+      //Some jdenticons for default placeholders
       obj.identicon = <Jdenticon value={id} />;
       obj.identiconLG = <Jdenticon value={id} />;
 
+      //util call for status string
       props.prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
         obj.status = e;
       });
 
+      //retreive price data set by holder
       props.prufClient.get.assetPriceData(id).then(e => {
         obj = Object.assign(obj, e)
 
@@ -1595,6 +1600,7 @@ export default function Search(props) {
           ? setCurrency("ü")
           : setCurrency("");
 
+        //get data on the node in which the asset resides
         props.prufClient.get
           .nodeData(obj.nodeId)
           .then(e => {
@@ -1625,10 +1631,12 @@ export default function Search(props) {
       obj.mutableData = "";
       return getEngraving(obj);
     } else if (storageProvider === "1") {
+      //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
       props.prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
         let mutableDataQuery = e;
         console.log("MDQ", e);
 
+        //fetch mutableData from IPFS if storageProvider === '1'
         for await (const chunk of window.ipfs.cat(mutableDataQuery)) {
           let str = new TextDecoder("utf-8").decode(chunk);
           console.log(str);
@@ -1642,16 +1650,20 @@ export default function Search(props) {
       });
     } else if (storageProvider === "2") {
       console.log(obj.mutableDataA, obj.mutableDataB);
+
+      //Convert b32 stored on chain to a valid Arweave txId
       mutableDataQuery = window.web3.utils.hexToUtf8(
         obj.mutableDataA +
         obj.mutableDataB.substring(2, 24)
       );
 
+      //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
       let xhr = new XMLHttpRequest();
-
+      
       xhr.onload = () => {
         if (xhr.status !== 404) {
           try {
+            //fetch mutableData from Arweave if storageProvider === '2'
             props.arweaveClient.transactions.get(mutableDataQuery).then((e) => {
               let tempObj = {};
               e.get("tags").forEach((tag) => {
@@ -1713,8 +1725,10 @@ export default function Search(props) {
       obj.engraving = "";
       return finalizeAsset(obj);
     } else if (storageProvider === "1") {
+      //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
       props.prufClient.utils.ipfsFromB32(obj.engravingA).then(async (e) => {
         engravingQuery = e;
+        //fetch engraving from IPFS if storageProvider === '1'
         for await (const chunk of window.ipfs.cat(engravingQuery)) {
           let str = new TextDecoder("utf-8").decode(chunk);
           console.log(str);
@@ -1729,6 +1743,8 @@ export default function Search(props) {
       });
     } else if (storageProvider === "2") {
       console.log(obj.engravingB.indexOf("0000000000000000000000"));
+
+      //Convert b32 stored on chain to a valid Arweave txId
       engravingQuery = window.web3.utils.hexToUtf8(
         obj.engravingA +
         obj.engravingB.substring(
@@ -1736,12 +1752,14 @@ export default function Search(props) {
           24
         )
       );
-
+      
+      //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
       let xhr = new XMLHttpRequest();
 
       xhr.onload = () => {
         if (xhr.status !== 404) {
           try {
+            //fetch engraving from Arweave if storageProvider === '2'
             props.arweaveClient.transactions.get(engravingQuery).then((e) => {
               if (!e) throw "Thrown";
               let tempObj = {};
@@ -1791,6 +1809,8 @@ export default function Search(props) {
   const finalizeAsset = (asset) => {
     if (!asset) return console.log("Failed upon reception of:", asset);
 
+    //In here we get all the data together and bundle it into an object, with a bias towards putting permanent data on display. 
+
     let obj = JSON.parse(JSON.stringify(asset));
 
     obj.photo = obj.engraving.photo || obj.mutableData.photo || {};
@@ -1804,11 +1824,9 @@ export default function Search(props) {
       obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
     obj.storageProvider = obj.nodeData.storageProvider;
 
-    let vals = Object.values(obj.photo),
-      keys = Object.keys(obj.photo);
+    let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
     console.log("Finalizing", obj);
-
     if (obj.nodeData.storageProvider === "2") {
       console.log("detected storageProvider 2");
 
@@ -1894,6 +1912,8 @@ export default function Search(props) {
       }
     } else if (keys.length > 0) {
       for (let i = 0; i < keys.length; i++) {
+
+        // We call this function repeatedly until all options for displayImage have been exhausted.
         const get = () => {
           if (vals[i].includes("data") && vals[i].includes("base64")) {
             obj.photo[keys[i]] = vals[i];

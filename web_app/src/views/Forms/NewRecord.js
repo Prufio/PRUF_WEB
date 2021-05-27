@@ -3,7 +3,10 @@ import "../../assets/css/custom.css";
 import swal from "sweetalert";
 import base64 from "base64-arraybuffer";
 import Jdenticon from "react-jdenticon";
+//import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, pdfjs } from 'react-pdf'
 import { isMobile } from "react-device-detect";
+import placeholder from "../../assets/img/placeholder.jpg";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -33,6 +36,8 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 
 import ARweavePNG from "../../assets/img/arweave.png";
 import IPFSPNG from "../../assets/img/ipfs.png";
+import { createNoSubstitutionTemplateLiteral, setSourceMapRange } from "typescript";
+import { Canvas } from "@react-pdf/renderer";
 
 const useStyles = makeStyles(styles);
 // const useExtStyles = makeStyles(extStyles)
@@ -62,7 +67,7 @@ export default function NewRecord(props) {
   // eslint-disable-next-line no-unused-vars
   const [publicNode, setPublicNode] = React.useState(true);
   // eslint-disable-next-line no-unused-vars
-  const [file, setFile] = React.useState(null);
+  const [contentUrl, setContentUrl] = React.useState("");
 
   //const [ipfsObj, setIpfsObj] = React.useState("");
 
@@ -90,9 +95,7 @@ export default function NewRecord(props) {
   // const [loginDescriptionName, setloginDescriptionName] = React.useState("");
   // const [loginDescription, setloginDescription] = React.useState("");
 
-  const [loginMakeState, setloginMakeState] = React.useState(
-    ""
-  );
+  const [loginMakeState, setloginMakeState] = React.useState("");
   const [loginTypeState, setloginTypeState] = React.useState("");
   const [loginModelState, setloginModelState] = React.useState("");
   const [loginSerialState, setloginSerialState] = React.useState("");
@@ -101,6 +104,8 @@ export default function NewRecord(props) {
   const [middle, setMiddle] = React.useState("");
   const [last, setLast] = React.useState("");
   const [ID, setID] = React.useState("");
+  const [PDF, setPDF] = React.useState("");
+  const [fileType, setFileType] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const [loginFirst, setloginFirst] = React.useState("");
@@ -122,11 +127,19 @@ export default function NewRecord(props) {
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   const maxImageSize = 1000;
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
   const link = document.createElement("div");
   const resizeImg = require("resize-img");
 
   let fileInput = React.createRef();
+  let pdfDoc = React.createRef();
+
+  React.useEffect(() => {
+    let element = pdfDoc
+    console.log(element)
+    //setDisplayImage(element.current.toDataURL())
+  }, [PDF])
 
   React.useEffect(() => {
     // eslint-disable-next-line react/prop-types
@@ -139,12 +152,11 @@ export default function NewRecord(props) {
       document.documentElement.scrollTop = 0;
       document.scrollingElement.scrollTop = 0;
     }
-    //postToArweave("String to upload", {name: "Beans", size: "Also beans"})
   }, []);
 
   const postToArweave = async (data, metaData, idxHash, ipfsObj) => {
-    // eslint-disable-next-line react/prop-types
-    let dataTransaction = await props.arweaveClient.createTransaction({data: data});
+
+    let dataTransaction = await props.arweaveClient.createTransaction({ data: data });
 
     console.log(
       "pre-tags",
@@ -154,6 +166,7 @@ export default function NewRecord(props) {
     );
 
     if (metaData) {
+      dataTransaction.addTag("Primary-Content", `https://arweave.net/${dataTransaction.id}`)
       const vals = Object.values(metaData);
       const keys = Object.keys(metaData);
 
@@ -180,23 +193,22 @@ export default function NewRecord(props) {
       dataTransaction.id
     );
     console.log(statusBeforePost); // this will return 404
-/*     // eslint-disable-next-line react/prop-types
-    await props.arweaveClient.transactions.post(dataTransaction);
-    // eslint-disable-next-line react/prop-types
-    const statusAfterPost = await props.arweaveClient.transactions.getStatus(
-      dataTransaction.id
-    ); */
 
     ///console.log(statusAfterPost); // this will return 202
-    //await testWeave.mine();
     mineTx(dataTransaction).then(async () => {
       // eslint-disable-next-line react/prop-types
       const statusAfterMine = await props.arweaveClient.transactions.getStatus(
         dataTransaction.id
       );
+
       console.log(statusAfterMine);
+
       setIpfsActive(false);
+
+      ipfsObj.DisplayImage = `https://arweave.net/${dataTransaction.id}`
+
       handleHash(
+        dataTransaction.id,
         window.web3.utils.utf8ToHex(dataTransaction.id),
         idxHash,
         ipfsObj
@@ -205,11 +217,11 @@ export default function NewRecord(props) {
   };
 
   const mineTx = async (tx) => {
-    let uploader = await arweave.transactions.getUploader(tx);
+    let uploader = await props.arweaveClient.transactions.getUploader(tx);
 
     while (!uploader.isComplete) {
-    await uploader.uploadChunk();
-    console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
+      await uploader.uploadChunk();
+      console.log(`${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
     }
 
   };
@@ -352,6 +364,8 @@ export default function NewRecord(props) {
 
   const handleClick = () => {
     setIsUploading(true)
+    setPDF("")
+    setRawFile("")
     fileInput.current.value = "";
     fileInput.current.click();
   };
@@ -384,141 +398,109 @@ export default function NewRecord(props) {
     console.log("clearing forms");
   };
 
-  const addImage = async (prefix, buffer) => {
+  const addToIpfs = async (prefix, buffer) => {
     if (!buffer) return;
-    console.log("adding image...");
+    console.log(`Adding file with base64 prefix: ${prefix}`);
     let tempBuffer = buffer;
     let src = prefix + base64.encode(tempBuffer);
 
-    var i = new Image();
-
-    i.onload = function () {
-      console.log(i.height, i.width);
-      if (i.height > maxImageSize || i.width > maxImageSize) {
-        let newH, newW, ar;
-        if (i.width > i.height) {
-          ar = i.height / i.width;
-          newW = maxImageSize;
-          newH = ar * newW;
+      window.ipfs.add(src).then((hash) => {
+        if (!hash) {
+          console.error("ERROR UPLOADING TO IPFS")
+          return setIsUploading(false);
         } else {
-          ar = i.width / i.height;
-          newH = maxImageSize;
-          newW = ar * newH;
+          let url = `https://ipfs.io/ipfs/${hash.cid}`;
+          console.log(`Url --> ${url}`);
+          if (prefix.includes("image")){
+            setDisplayImageUrl(url);
+            setDisplayImage(src);
+            setContentUrl(url)
+          } else if (prefix.includes("pdf")) {
+            setDisplayImage(placeholder);
+            setContentUrl(url)
+          } else if (prefix.includes("zip")) {
+            setDisplayImage(placeholder);
+            setContentUrl(url)
+          }
+          setIsUploading(false);
         }
-        console.log("Resizing image... ");
-        resizeImg(tempBuffer, {
-          height: newH,
-          width: newW,
-          format: "jpg",
-        }).then((e) => {
-          console.log("Resized to ", newH, "x", newW);
-          window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
-            if (!hash) {
-              //console.error(err)
-              return setIsUploading(false);
-            } else {
-              let url = `https://ipfs.io/ipfs/${hash.cid}`;
-              console.log(`Url --> ${url}`);
-              setDisplayImageUrl(url);
-              setDisplayImage(prefix + base64.encode(e));
-              setIsUploading(false);
-              return forceUpdate();
-            }
-          });
-        });
-      } else {
-        resizeImg(tempBuffer, {
-          height: i.height,
-          width: i.width,
-          format: "jpg",
-        }).then((e) => {
-          console.log("Converted to .JPG");
-          window.ipfs.add(prefix + base64.encode(e)).then((hash) => {
-            if (!hash) {
-              //console.error(err)
-              return setIsUploading(false);
-            } else {
-              let url = `https://ipfs.io/ipfs/${hash.cid}`;
-              console.log(`Url --> ${url}`);
-              setDisplayImageUrl(url);
-              setDisplayImage(prefix + base64.encode(e));
-              setIsUploading(false);
-              return forceUpdate();
-            }
-          });
-        });
-      }
-    };
-
-    i.src = src;
-  };
-  const uploadOther = (e) => {
-    e.preventDefault();
-    if (!e.target.files[0]) return;
-    let file;
-    file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setFileMetaData(file);
-      const prefix = `data:${file.type};base64,`;
-      const buf = Buffer(reader.result);
-      setRawFile(reader.result);
-      setDisplayImage(prefix + base64.encode(buf));
-      setIsUploading(false);
-    };
-
-    reader.readAsArrayBuffer(file); // Read Provided File
+      });
   };
 
   const uploadImage = (e) => {
     e.preventDefault();
+    console.log(e)
     if (!e.target.files[0]) return;
     let file;
     file = e.target.files[0];
+    const reader = new FileReader();
 
     if (storageProvider === "2") {
-      return uploadOther(e);
-    } else if (!file.type.includes("image")) {
-      return;
-    }
+      console.log(`Reading file... SP2`)
+      reader.onloadend = () => {
+        setFileMetaData(file);
+        const _fileType = file.type;
+        const prefix = `data:${_fileType};base64,`;
+        const buffer = Buffer(reader.result);
+        setFileType(_fileType)
+        setRawFile(reader.result);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      console.log(file);
-      setIsUploading(true);
-      const fileType = file.type;
-      const prefix = `data:${fileType};base64,`;
-      const buf = Buffer(reader.result);
-      //const base64buf = prefix + base64.encode(buf);
-      addImage(prefix, buf);
-    };
-    //const photo = document.getElementById("photo");
+        if (_fileType.includes("image")) {
+          setDisplayImage(prefix + base64.encode(buffer))
+          setIsUploading(false);
+        }
+        else if (_fileType.includes("pdf") || _fileType.includes("zip")) {
+          setDisplayImage(placeholder);
+          setIsUploading(false);
+        } else  {
+          swal(`File type '${_fileType}' not supported`)
+          setIsUploading(false);
+        }
+      };
+
+    } else if (storageProvider === "1") {
+
+      reader.onloadend = () => {
+        console.log(`Reading file... SP1`)
+        console.log(file);
+        setIsUploading(true);
+        const _fileType = file.type;
+        const prefix = `data:${_fileType};base64,`;
+        const buffer = Buffer(reader.result);
+        setFileType(_fileType)
+        setRawFile(reader.result);
+        if (_fileType.includes("pdf") || _fileType.includes("zip") || _fileType.includes("image")) {
+          addToIpfs(prefix, buffer)
+        } else {
+          swal(`File type '${_fileType}' not supported`)
+          setIsUploading(false);
+        }
+      };
+
+    }
     reader.readAsArrayBuffer(e.target.files[0]); // Read Provided File
   };
 
-  const handleHash = async (extendedDataHash, idxHash, ipfsObj) => {
+  const handleHash = async (dataTransaction, extendedDataHash, idxHash, ipfsObj) => {
     if (storageProvider === "2") {
       let extDataA = String(extendedDataHash).substring(0, 66);
       let extDataB =
         "0x" +
         String(extendedDataHash).substring(66, String(extendedDataHash).length);
-      _newRecord(extDataA, extDataB, idxHash, ipfsObj);
+      _newRecord(dataTransaction, extDataA, extDataB, idxHash, ipfsObj);
     } else {
-
       props.prufClient.utils.ipfsToB32(
         String(extendedDataHash)
       ).then(e => {
         console.log(`b32 of ipfs bs58 hash: ${e}\n Asset id: ${idxHash}\n Engraving object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
         _newRecord(
+          dataTransaction,
           e,
           "0x0000000000000000000000000000000000000000000000000000000000000000",
           idxHash,
           ipfsObj
         );
       })
-
-
     }
   };
 
@@ -529,7 +511,7 @@ export default function NewRecord(props) {
   };
 
   const checkAsset = async () => {
-    let idxHash;
+
     console.log(storageProvider)
 
     if (
@@ -599,6 +581,8 @@ export default function NewRecord(props) {
           urls: {},
           Description: "",
           DisplayImage: "",
+          PrimaryContent: contentUrl,
+          ContentType: fileType,
           name: String(nameTag),
         };
       } else {
@@ -608,6 +592,8 @@ export default function NewRecord(props) {
           urls: {},
           Description: "",
           DisplayImage: "",
+          PrimaryContent: contentUrl,
+          ContentType: fileType,
           name: "",
         };
       }
@@ -617,17 +603,17 @@ export default function NewRecord(props) {
       }
 
       if (displayImage !== "") {
-        ipfsObj.DisplayImage = displayImageUrl;
-        ipfsObj.photo.DisplayImage = displayImageUrl;
+        ipfsObj.DisplayImage = storageProvider === "1" ? displayImageUrl : "";
+        ipfsObj.photo.DisplayImage = storageProvider === "1" ? displayImageUrl : "";
       }
-
 
       let payload = JSON.stringify(ipfsObj);
       let fileSize = Buffer.byteLength(payload, "utf8");
-      if (fileSize > 10000000) {
+
+      if (fileSize > 50000000) {
         return swal({
           title:
-            "Document size exceeds 10 MB limit! (" + String(fileSize) + "Bytes)",
+            "Document size exceeds 50 MB limit! (" + String(fileSize) + "Bytes)",
           content: link,
           icon: "warning",
           button: "Close",
@@ -645,7 +631,7 @@ export default function NewRecord(props) {
             console.log("uploaded at hash: ", hash.cid.string);
             console.log("idxHash: ", idxHash);
             console.log("ipfsObj: ", ipfsObj);
-            handleHash(hash.cid.string, idxHash, ipfsObj);
+            handleHash("", hash.cid.string, idxHash, ipfsObj);
             setIpfsActive(false);
           }
         });
@@ -662,6 +648,7 @@ export default function NewRecord(props) {
 
         postToArweave(rawFile, metaData, idxHash, ipfsObj);
       }
+      
       setSubmittedIdxHash(idxHash);
     })
   };
@@ -671,7 +658,6 @@ export default function NewRecord(props) {
     let tempHash = varToHash;
     for (let i = 0; i < 1000; i++) {
       tempHash = window.web3.utils.soliditySha3(tempHash);
-      //console.log(tempHash);
     }
     return tempHash;
   };
@@ -688,6 +674,7 @@ export default function NewRecord(props) {
         Select a Node
       </MenuItem>,
     ];
+
     for (let i = 0; i < arr.length; i++) {
       subCatSelection.push(
         <MenuItem
@@ -702,7 +689,6 @@ export default function NewRecord(props) {
         </MenuItem>
       );
     }
-    //console.log(arr)
     return subCatSelection;
   };
 
@@ -739,7 +725,7 @@ export default function NewRecord(props) {
     return rootSelection;
   };
 
-  const _newRecord = (extDataA, extDataB, idx, ipfsObj) => {
+  const _newRecord = (dataTransaction, extDataA, extDataB, idx, ipfsObj) => {
     console.log(extDataA, extDataB, idx, ipfsObj)
     var extendedDataHash, idxHash, rgtHash
 
@@ -867,13 +853,9 @@ export default function NewRecord(props) {
               button: "Close",
             }).then(() => {
               //refreshBalances()
-              //window.replaceAssetData = { pruf: props.pruf-NRCost }
               window.location.href = "/#/user/dashboard";
-              window.replaceAssetData = {
-                key: pageKey,
-                newAsset: newAsset,
-              };
-        window.dispatchEvent(props.refresh)
+              window.replaceAssetData.refreshAssets = true
+              window.dispatchEvent(props.refresh)
             });
           });
       });
@@ -885,8 +867,8 @@ export default function NewRecord(props) {
       let newAsset = {
         root: selectedRootID,
         nodeData: {
-          storageProvider: "1",
-          ipfs: extendedDataHash,
+          storageProvider: "2",
+          ipfs: "",
           root: selectedRootID,
           name: nodeName.substring(0, 1).toUpperCase() +
             nodeName.substring(1, nodeName.length).toLowerCase(),
@@ -897,12 +879,13 @@ export default function NewRecord(props) {
         currency: "0",
         storageProvider: "2",
         ipfs: extendedDataHash,
+        PrimaryContent: `https://arweave.net/${dataTransaction}`,
         photo: ipfsObj.photo,
-        photoUrls: { DisplayImage: displayImageUrl },
+        photoUrls: { DisplayImage: `https://arweave.net/${dataTransaction}` },
         text: ipfsObj.text,
         urls: ipfsObj.urls,
         name: ipfsObj.name,
-        DisplayImage: `https://arweave.net/${extendedDataHash}`,
+        DisplayImage: `https://arweave.net/${dataTransaction}`,
         nodeId: nodeId,
         nodeName:
           nodeName.substring(0, 1).toUpperCase() +
@@ -918,7 +901,7 @@ export default function NewRecord(props) {
         identiconLG: [<Jdenticon value={idx} key="" />],
       };
 
-      idxHash = idx; 
+      idxHash = idx;
       props.prufClient.utils.generateSecureRgt(
         idx,
         {
@@ -999,12 +982,12 @@ export default function NewRecord(props) {
               button: "Close",
             }).then(() => {
               //refreshBalances()
-              //window.replaceAssetData = { pruf: props.pruf-NRCost }
               window.location.href = "/#/user/dashboard";
-              window.replaceAssetData = {
-                key: pageKey,
-                newAsset: newAsset,
-              };
+              /*               window.replaceAssetData = {
+                              key: pageKey,
+                              newAsset: newAsset,
+                            }; */
+              window.replaceAssetData.refreshAssets = true
               window.dispatchEvent(props.refresh)
             });
           });
@@ -1327,7 +1310,7 @@ export default function NewRecord(props) {
                                 image
                                 className={classes.cardHeaderHoverCustom}
                               >
-                                <img src={displayImage} alt="" />
+                                <img src={displayImage} alt="" className="newDisplayImage" />
                               </CardHeader>
                             </>
                           )}

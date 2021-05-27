@@ -6,6 +6,7 @@ import Web3 from "web3";
 import Arweave from "arweave";
 import TestWeave from "testweave-sdk";
 import arconf from "../Resources/arconf";
+import placeholder from "../assets/img/placeholder.jpg";
 
 import PRUF from "pruf-js";
 import { isMobile } from "react-device-detect";
@@ -69,6 +70,7 @@ export default function Dashboard(props) {
   ]);
   const [sps, setSps] = React.useState(undefined);
   const [assetIds, setAssetIds] = React.useState([]);
+  const [assetsPerPage, setAssetsPerPage] = React.useState(8)
   const [listenersLaunched, setListenersLaunched] = React.useState(false)
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [prufClient, setPrufClient] = React.useState();
@@ -147,7 +149,7 @@ export default function Dashboard(props) {
 
     window.arweaveClient = arweave;
 
-    return { arweave: arweave };
+    return arweave;
   };
 
   const handleNoEthereum = () => {
@@ -262,7 +264,7 @@ export default function Dashboard(props) {
     console.log("Setting cookie", job, "to", val);
     setCookie(String(job), JSON.stringify(val), {
       path: "/",
-      expires: new Date().addDays(5),
+      expires: new Date().addDays(10),
     });
   };
 
@@ -340,15 +342,35 @@ export default function Dashboard(props) {
             })
             .then(async (accounts) => {
               if (accounts[0] !== undefined) {
-                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+                setAddr(window.web3.utils.toChecksumAddress(accounts[0]))
+                let _addr = window.web3.utils.toChecksumAddress(accounts[0])
+                if (cookies[`${_addr}sideBarLogo`]) {
+                  setLogo(cookies[`${_addr}sideBarLogo`])
+                } if (cookies[`${_addr}sideBarColor`]) {
+                  setColor(cookies[`${_addr}sideBarColor`])
+                } if (cookies[`${_addr}sideBarBackground`]) {
+                  setBgColor(cookies[`${_addr}sideBarBackground`])
+                } if (cookies[`${_addr}sideBarImage`]) {
+                  setImage(cookies[`${_addr}sideBarImage`])
+                }
+                awaitPrufInit(_prufClient, _addr)
                 setIsMounted(true);
-                awaitPrufInit(_prufClient, window.web3.utils.toChecksumAddress(accounts[0]))
               } else {
                 ethereum.send('eth_requestAccounts').then((accounts) => {
                   if (accounts[0] !== undefined) {
-                    setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-                    window.addr = window.web3.utils.toChecksumAddress(accounts[0])
-                    setUpContractEnvironment(_prufClient, web3, window.web3.utils.toChecksumAddress(accounts[0]));
+                    setAddr(window.web3.utils.toChecksumAddress(accounts[0]))
+                    let _addr = window.web3.utils.toChecksumAddress(accounts[0])
+                    if (cookies[`${_addr}sideBarLogo`]) {
+                      setLogo(cookies[`${_addr}sideBarLogo`])
+                    } if (cookies[`${_addr}sideBarColor`]) {
+                      setColor(cookies[`${_addr}sideBarColor`])
+                    } if (cookies[`${_addr}sideBarBackground`]) {
+                      setBgColor(cookies[`${_addr}sideBarBackground`])
+                    } if (cookies[`${_addr}sideBarImage`]) {
+                      setImage(cookies[`${_addr}sideBarImage`])
+                    }
+                    window.addr = _addr
+                    awaitPrufInit(_prufClient, _addr)
                     setIsMounted(true);
                   }
                 });
@@ -412,6 +434,10 @@ export default function Dashboard(props) {
     window.replaceAssetData = {};
     window.recount = false;
     let _ipfs;
+
+    if(cookies[`assetsPerPage`]) {
+      setAssetsPerPage(cookies[`assetsPerPage`])
+    }
 
     _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"));
 
@@ -522,13 +548,17 @@ export default function Dashboard(props) {
         Object.values(window.replaceAssetData).length === 0
       ) {
       }
+      if (window.replaceAssetData.assetsPerPage) {
+        setAssetsPerPage(window.replaceAssetData.assetsPerPage)
+        setCookieTo(`assetsPerPage`, window.replaceAssetData.assetsPerPage)
+      }
       if (window.replaceAssetData.refreshBals === true) {
         console.log("Resetting token value")
-        setupTokenVals(addr, prufClient, { justCount: true })
+        setupTokenVals(arweaveClient, addr, prufClient, { justCount: true })
         buildRoots(addr, prufClient)
         forceUpdate();
       } if (window.replaceAssetData.refreshAssets) {
-        setupTokenVals(addr, prufClient, { justAssets: true })
+        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true })
       } if (
         window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
       ) {
@@ -550,7 +580,7 @@ export default function Dashboard(props) {
           tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
           setNodeSets(tempSets)
         }
-        setupTokenVals(addr, prufClient, { justNodes: true })
+        setupTokenVals(arweaveClient, addr, prufClient, { justNodes: true })
       }
 
       if (window.replaceAssetData.newAsset || window.replaceAssetData.dBIndex) {
@@ -564,7 +594,7 @@ export default function Dashboard(props) {
         let dBIndex = window.replaceAssetData.dBIndex;
         let tempArr = JSON.parse(JSON.stringify(assetArr));
         let idArr = JSON.parse(JSON.stringify(assetIds));
-        setupTokenVals(addr, prufClient, { justCount: true });
+        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
 
         if (newAsset && dBIndex > -1) {
           idArr.push(newAsset.id);
@@ -574,7 +604,6 @@ export default function Dashboard(props) {
           tempArr.splice(dBIndex, 1, newAsset);
           console.log("New Assets", tempArr);
           setAssetArr(tempArr);
-          setAssetIds(idArr);
           getAssetIds(addr, prufClient, assetIds.length);
         }
 
@@ -590,7 +619,6 @@ export default function Dashboard(props) {
 
         else if (newAsset && !dBIndex) {
           idArr.push(newAsset.id);
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
           console.log("Adding asset: ", newAsset);
           console.log("Old Assets", tempArr);
           tempArr.push(newAsset);
@@ -607,22 +635,27 @@ export default function Dashboard(props) {
 
   const handleImageClick = (image) => {
     setImage(image);
+    setCookieTo(`${addr}sideBarImage`, image)
   };
 
   const handleColorClick = (color) => {
     setColor(color);
+    setCookieTo(`${addr}sideBarColor`, color)
   };
 
   const handleBgColorClick = (bgColor) => {
-    switch (bgColor) {
-      case "white":
-        setLogo(require("assets/img/logo.svg"));
-        break;
-      default:
-        setLogo(require("assets/img/logo-white.svg"));
-        break;
+    let logo
+    
+    if (bgColor === "white"){
+      logo = require("assets/img/logo.svg")
+    } else {
+      logo = require("assets/img/logo-white.svg")
     }
+
+    setLogo(logo)
     setBgColor(bgColor);
+    setCookieTo(`${addr}sideBarLogo`, logo)
+    setCookieTo(`${addr}sideBarBackground`, bgColor)
   };
 
   const handleFixedClick = () => {
@@ -671,6 +704,7 @@ export default function Dashboard(props) {
             path={prop.layout + prop.path}
             render={() => (
               <prop.component
+                assetsPerPage={assetsPerPage}
                 roots={roots}
                 ARWallet={ARWallet}
                 refresh={refreshEvent}
@@ -734,22 +768,22 @@ export default function Dashboard(props) {
       return;
     }
 
-    initArweave();
+    initArweave().then(e=>{
+      if (window.ethereum) {
+        if (_addr) {
+          setupTokenVals(e, _addr, _prufClient)
+          buildRoots(_addr, _prufClient)
+        }
+      }
+    });
 
     if (window.idxQuery) {
       window.location.href = "/#/user/search/" + window.idxQuery;
     }
-
-    if (window.ethereum) {
-      if (_addr) {
-        setupTokenVals(_addr, _prufClient)
-        buildRoots(_addr, _prufClient)
-      }
-    }
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const setupTokenVals = (_addr, _prufClient, options) => {
+  const setupTokenVals = (_arweave, _addr, _prufClient, options) => {
 
     if (!_addr) return swal("Unable to reach user's wallet.");
     if (!options) options = {}
@@ -773,7 +807,7 @@ export default function Dashboard(props) {
         setAssetBalance(e);
         if (Number(e) > 0) {
           setIsAssetHolder(true);
-          if (!options.justCount) getAssetIds(_addr, _prufClient, e)
+          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e)
         } else {
           setIsAssetHolder(false);
         }
@@ -795,7 +829,7 @@ export default function Dashboard(props) {
         setAssetBalance(e);
         if (Number(e) > 0) {
           setIsAssetHolder(true);
-          if (!options.justCount) getAssetIds(_addr, _prufClient, e)
+          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e)
         } else {
           setIsAssetHolder(false);
         }
@@ -1080,26 +1114,26 @@ export default function Dashboard(props) {
     }
   }
 
-  const getAssetIds = (_addr, _prufClient, bal, ids, iteration) => {
+  const getAssetIds = (_arweave, _addr, _prufClient, bal, ids, iteration) => {
     if (!bal) return;
     if (Number(bal) === 0) return console.log("No assets held by user");
     if (!ids) ids = [];
     if (!iteration) iteration = 0;
     if (ids.length >= bal) {
       setAssetIds(ids);
-      return buildAssetHeap(_addr, _prufClient, ids);
+      return buildAssetHeap(_arweave, _addr, _prufClient, ids);
     } else {
       _prufClient.get
         .heldAssetAtIndex(_addr, String(iteration))
         .then(e => {
           //console.log(e)
           ids.push(e);
-          getAssetIds(_addr, _prufClient, bal, ids, iteration + 1);
+          getAssetIds(_arweave, _addr, _prufClient, bal, ids, iteration + 1);
         });
     }
   };
 
-  const buildAssetHeap = (_addr, _prufClient, ids, data, iteration) => {
+  const buildAssetHeap = (_arweave, _addr, _prufClient, ids, data, iteration) => {
     if (!ids) return;
     if (!data) data = [];
     if (!iteration) {
@@ -1107,7 +1141,7 @@ export default function Dashboard(props) {
       iteration = 0;
     }
 
-    if (iteration >= ids.length) return getMutableData(data, _prufClient)
+    if (iteration >= ids.length) return getMutableData(_arweave, data, _prufClient)
     else {
       _prufClient.get.assetRecord(ids[iteration]).then(e => {
         let obj = Object.assign({}, e)
@@ -1137,6 +1171,7 @@ export default function Dashboard(props) {
                     obj.userAuthLevel = e
                     data.push(obj);
                     return buildAssetHeap(
+                      _arweave,
                       _addr,
                       _prufClient,
                       ids,
@@ -1152,6 +1187,7 @@ export default function Dashboard(props) {
   }
 
   const getMutableData = (
+    _arweave,
     assetHeap,
     _prufClient,
     assetsWithMutableData,
@@ -1165,12 +1201,11 @@ export default function Dashboard(props) {
     if (!assetsWithMutableData) assetsWithMutableData = [];
     if (iteration >= assetHeap.length) {
       /* console.log("EXIT"); */ return getEngravings(
+      _arweave,
       assetsWithMutableData,
       _prufClient
     );
     }
-
-    let _arweave = window.arweaveClient;
 
     let obj = assetHeap[iteration];
     let storageProvider = obj.nodeData.storageProvider;
@@ -1185,6 +1220,7 @@ export default function Dashboard(props) {
       assetsWithMutableData.push(obj);
       //console.log("EXIT")
       return getMutableData(
+        _arweave,
         assetHeap,
         _prufClient,
         assetsWithMutableData,
@@ -1200,6 +1236,7 @@ export default function Dashboard(props) {
           assetsWithMutableData.push(obj);
           console.log("EXIT");
           return getMutableData(
+            _arweave,
             assetHeap,
             _prufClient,
             assetsWithMutableData,
@@ -1218,6 +1255,7 @@ export default function Dashboard(props) {
             setCookieTo(window.web3.utils.soliditySha3(e), JSON.parse(str));
             //console.log("EXIT")
             return getMutableData(
+              _arweave,
               assetHeap,
               _prufClient,
               assetsWithMutableData,
@@ -1244,6 +1282,7 @@ export default function Dashboard(props) {
         assetsWithMutableData.push(obj);
         //console.log("EXIT")
         return getMutableData(
+          _arweave,
           assetHeap,
           _prufClient,
           assetsWithMutableData,
@@ -1257,6 +1296,7 @@ export default function Dashboard(props) {
             try {
               _arweave.transactions.get(mutableDataQuery).then((e) => {
                 let tempObj = {};
+                console.log(e.get("tags"))
                 e.get("tags").forEach((tag) => {
                   let key = tag.get("name", { decode: true, string: true });
                   let value = tag.get("value", { decode: true, string: true });
@@ -1273,6 +1313,7 @@ export default function Dashboard(props) {
                 );
                 //console.log("EXIT")
                 return getMutableData(
+                  _arweave,
                   assetHeap,
                   _prufClient,
                   assetsWithMutableData,
@@ -1283,6 +1324,7 @@ export default function Dashboard(props) {
               obj.mutableData = "";
               assetsWithMutableData.push(obj);
               return getMutableData(
+                _arweave,
                 assetHeap,
                 _prufClient,
                 assetsWithMutableData,
@@ -1294,6 +1336,7 @@ export default function Dashboard(props) {
             obj.mutableData = "";
             assetsWithMutableData.push(obj);
             return getMutableData(
+              _arweave,
               assetHeap,
               _prufClient,
               assetsWithMutableData,
@@ -1308,6 +1351,7 @@ export default function Dashboard(props) {
           obj.mutableData = "";
           assetsWithMutableData.push(obj);
           return getMutableData(
+            _arweave,
             assetHeap,
             _prufClient,
             assetsWithMutableData,
@@ -1315,8 +1359,7 @@ export default function Dashboard(props) {
           );
         };
 
-        xhr.open("GET", `https://arweave.net/${mutableDataQuery}`, true);
-        xhr.send(null);
+        xhr.open("GET", `https://arweave.net/${mutableDataQuery}`);
 
         try {
           xhr.send(null);
@@ -1326,6 +1369,7 @@ export default function Dashboard(props) {
           obj.mutableData = "";
           assetsWithMutableData.push(obj);
           return getMutableData(
+            _arweave,
             assetHeap,
             _prufClient,
             assetsWithMutableData,
@@ -1337,6 +1381,7 @@ export default function Dashboard(props) {
   };
 
   const getEngravings = (
+    _arweave,
     assetHeap,
     _prufClient,
     assetsWithEngravings,
@@ -1352,8 +1397,6 @@ export default function Dashboard(props) {
       /* console.log("EXIT"); */ return finalizeAssets(assetsWithEngravings);
     }
 
-    let _arweave = window.arweaveClient;
-
     let obj = assetHeap[iteration];
     let storageProvider = obj.nodeData.storageProvider;
     let engravingQuery;
@@ -1367,6 +1410,7 @@ export default function Dashboard(props) {
       assetsWithEngravings.push(obj);
       //console.log("EXIT")
       return getEngravings(
+        _arweave,
         assetHeap,
         _prufClient,
         assetsWithEngravings,
@@ -1384,6 +1428,7 @@ export default function Dashboard(props) {
           //console.log("EXIT")
           assetsWithEngravings.push(obj);
           return getEngravings(
+            _arweave,
             assetHeap,
             _prufClient,
             assetsWithEngravings,
@@ -1406,6 +1451,7 @@ export default function Dashboard(props) {
             );
             //console.log("EXIT")
             return getEngravings(
+              _arweave,
               assetHeap,
               _prufClient,
               assetsWithEngravings,
@@ -1422,13 +1468,12 @@ export default function Dashboard(props) {
           24
         )
       );
-      //console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
+      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
       if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
-        //console.log("Using cached engraving:", cookies[engravingQuery])
         obj.engraving = cookies[window.web3.utils.soliditySha3(engravingQuery)];
-        //console.log("EXIT")
         assetsWithEngravings.push(obj);
         return getEngravings(
+          _arweave,
           assetHeap,
           _prufClient,
           assetsWithEngravings,
@@ -1438,18 +1483,17 @@ export default function Dashboard(props) {
         let xhr = new XMLHttpRequest();
 
         xhr.onload = () => {
-          if (xhr.status !== 404) {
+          if (xhr.status !== 404 && xhr.status !== 202) {
+            console.log(xhr)
             try {
               _arweave.transactions.get(engravingQuery).then((e) => {
-                if (!e) throw "Thrown";
                 let tempObj = {};
+                console.log(e)
                 e.get("tags").forEach((tag) => {
                   let key = tag.get("name", { decode: true, string: true });
                   let value = tag.get("value", { decode: true, string: true });
                   tempObj[key] = value;
-                  //console.log(`${key} : ${value}`);
                 });
-                //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
                 tempObj.contentUrl = `https://arweave.net/${engravingQuery}`;
                 obj.engraving = tempObj;
                 assetsWithEngravings.push(obj);
@@ -1457,8 +1501,8 @@ export default function Dashboard(props) {
                   window.web3.utils.soliditySha3(engravingQuery),
                   tempObj
                 );
-                //console.log("EXIT")
                 return getEngravings(
+                  _arweave,
                   assetHeap,
                   _prufClient,
                   assetsWithEngravings,
@@ -1470,6 +1514,7 @@ export default function Dashboard(props) {
               obj.engraving = "";
               assetsWithEngravings.push(obj);
               return getEngravings(
+                _arweave,
                 assetHeap,
                 _prufClient,
                 assetsWithEngravings,
@@ -1482,6 +1527,7 @@ export default function Dashboard(props) {
             obj.contentUrl = `https://arweave.net/${engravingQuery}`;
             assetsWithEngravings.push(obj);
             return getEngravings(
+              _arweave,
               assetHeap,
               _prufClient,
               assetsWithEngravings,
@@ -1496,6 +1542,7 @@ export default function Dashboard(props) {
           obj.contentUrl = `https://arweave.net/${engravingQuery}`;
           assetsWithEngravings.push(obj);
           return getEngravings(
+            _arweave,
             assetHeap,
             _prufClient,
             assetsWithEngravings,
@@ -1503,7 +1550,7 @@ export default function Dashboard(props) {
           );
         };
 
-        xhr.open("GET", `https://arweave.net/${engravingQuery}`, true);
+        xhr.open("GET", `https://arweave.net/${engravingQuery}`);
         try {
           xhr.send(null);
         } catch {
@@ -1512,6 +1559,7 @@ export default function Dashboard(props) {
           obj.contentUrl = `https://arweave.net/${engravingQuery}`;
           assetsWithEngravings.push(obj);
           return getEngravings(
+            _arweave,
             assetHeap,
             _prufClient,
             assetsWithEngravings,
@@ -1543,15 +1591,16 @@ export default function Dashboard(props) {
     obj.urls = obj.engraving.urls || obj.mutableData.urls || {};
     obj.name = obj.engraving.name || obj.mutableData.name || "Name Unavailable";
     obj.photoUrls = obj.engraving.photo || obj.mutableData.photo || {};
-    obj.Description =
-      obj.engraving.Description || obj.mutableData.Description || "";
-    obj.ContentUrl =
-      obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
+    obj.PrimaryContent = obj.engraving.PrimaryContent || obj.mutableData.PrimaryContent || ""; 
+    obj.ContentType = obj.engraving.ContentType || obj.mutableData.ContentType || obj.engraving["Content-Type"] || obj.mutableData["Content-Type"] || "";
+    obj.Description = obj.engraving.Description || obj.mutableData.Description || "";
+    obj.ContentUrl = obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
 
     let vals = Object.values(obj.photo),
       keys = Object.keys(obj.photo);
 
     if (obj.nodeData.storageProvider === "2") {
+      console.log("2")
       if (
         obj.engraving.contentUrl &&
         obj.engraving["Content-Type"].includes("image")
@@ -1566,20 +1615,50 @@ export default function Dashboard(props) {
         obj.DisplayImage = obj.mutableData.contentUrl;
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      } else if (obj.engraving["Content-Type"].includes("pdf")) {
+        obj.DisplayImage = placeholder
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      } else if (obj.engraving["Content-Type"].includes("zip")) {
+        obj.DisplayImage = placeholder
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      } else if (obj.mutableData["Content-Type"].includes("pdf")) {
+        obj.DisplayImage = placeholder
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+      } else if (obj.mutableData["Content-Type"].includes("zip")) {
+        obj.DisplayImage = placeholder
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       } else if (keys.length === 0) {
         obj.DisplayImage = "";
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       }
     } else if (obj.nodeData.storageProvider === "1") {
+      console.log("1")
       const getAndSet = (url) => {
+        if (!url || url === "") {
+          obj.DisplayImage = "";
+          finalizedAssets.push(obj);
+          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+        }
         const req = new XMLHttpRequest();
         req.responseType = "text";
 
         req.onload = function () {
           //console.log("response", this.response);
-          if (this.response.includes("base64")) {
+          if (this.response.includes("image")) {
+            console.log("image")
             obj.DisplayImage = this.response;
+            finalizedAssets.push(obj);
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+          }
+
+          else if (this.response.includes("application")) {
+            console.log("app")
+            obj.DisplayImage = placeholder
             finalizedAssets.push(obj);
             finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
           }
@@ -1587,6 +1666,7 @@ export default function Dashboard(props) {
 
         req.onerror = function (e) {
           //console.log("http request error")
+          console.log("error")
           obj.DisplayImage = "";
           finalizedAssets.push(obj);
           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
@@ -1601,7 +1681,10 @@ export default function Dashboard(props) {
         }
       };
 
-      if (
+      if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
+        getAndSet(obj.engraving.PrimaryContent)
+      }
+      else if (
         obj.engraving !== "" &&
         obj.engraving.DisplayImage !== "" &&
         obj.engraving.DisplayImage !== undefined
@@ -1613,6 +1696,10 @@ export default function Dashboard(props) {
         obj.mutableData.DisplayImage !== undefined
       ) {
         getAndSet(obj.mutableData.DisplayImage);
+      } else {
+        obj.DisplayImage = ""
+        finalizedAssets.push(obj);
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1)
       }
     } else if (keys.length > 0) {
       for (let i = 0; i < keys.length; i++) {
@@ -1661,7 +1748,7 @@ export default function Dashboard(props) {
               }
             };
 
-            req.onerror = function (e) {
+            req.onerror = function () {
               //console.log("http request error")
               if (vals[i].includes("http")) {
                 obj.photo[keys[i]] = vals[i];
@@ -1684,6 +1771,7 @@ export default function Dashboard(props) {
         get();
       }
     } else {
+      console.log("in else")
       obj.DisplayImage = "";
       finalizedAssets.push(obj);
       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
