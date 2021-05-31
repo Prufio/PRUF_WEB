@@ -37,6 +37,8 @@ import {
 } from "@material-ui/icons";
 import defaultBGImage from "../assets/img/Sidebar Backgrounds/TracesWB.jpg";
 
+window.populatedListeners = false
+
 var ps;
 
 const useStyles = makeStyles(styles);
@@ -107,6 +109,7 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
   const refreshEvent = new Event('refresh')
+  const connectArweaveEvent = new Event('connectArweave')
   
   //classes for main panel
   const mainPanelClasses =
@@ -136,10 +139,10 @@ export default function Dashboard(props) {
 
     console.log(arweave);
 
-    if(window.arweaveWallet) {
-      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
-      //window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
-    } 
+    // if(window.arweaveWallet) {
+    //   window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
+    //   //window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
+    // } 
 
     //const testWeave = await TestWeave.init(arweave);
 
@@ -420,10 +423,24 @@ export default function Dashboard(props) {
     setReplaceAssetData(replaceAssetData+1)
   }
 
-  if (window.ethereum) {
+  const connectArweave = () => {
+
+    if(!window.arweaveWallet) {
+      return swal("We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back.")
+    }
+
+    swal("You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet.").then(()=>{
+      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
+    })
+    
+  }
+
+  if (window.ethereum && !window.populatedListeners) {
     window.addEventListener("chainListener", chainListener, {once: true});
     window.addEventListener("accountListener", acctListener, {once: true});
     window.addEventListener('refresh', refreshHandler);
+    window.addEventListener('connectArweave', connectArweave);
+    window.populatedListeners = true;
   }
 
   
@@ -708,6 +725,7 @@ export default function Dashboard(props) {
                 roots={roots}
                 ARWallet={ARWallet}
                 refresh={refreshEvent}
+                connectArweave={connectArweaveEvent}
                 rootNames={rootNames}
                 nodeSets={nodeSets}
                 heldNodeData={heldNodeData}

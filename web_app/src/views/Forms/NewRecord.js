@@ -246,6 +246,9 @@ export default function NewRecord(props) {
       .then(e => {
         setNodeExtendedData(e);
         setStorageProvider(e.storageProvider);
+        if(e.storageProvider === "2") {
+          window.dispatchEvent(props.connectArweave)
+        }
       })
     setNodeName(
       event.target.value.name
