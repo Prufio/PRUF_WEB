@@ -11,6 +11,9 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Eth from '../assets/img/eth-logo.png'
+import {Cached} from '@material-ui/icons'
+import Footer from "components/Footer/Footer.js";
 
 // core components
 import AdminNavbar from "components/Navbars/userNavbar.js";
@@ -21,24 +24,24 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import CustomCheckboxRadioSwitch from "assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.js";
-import Footer from "components/Footer/Footer.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import GridContainer from 'components/Grid/GridContainer.js'
+import GridItem from 'components/Grid/GridItem.js'
+import CardFooter from 'components/Card/CardFooter.js'
 
 import routes from "routes.js";
 
-import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
-import { SettingsOutlined } from "@material-ui/icons";
+import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
+import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 
 var ps;
 
 const useStyles = makeStyles(styles);
+const userStyles = makeStyles(userStyle);
 
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
-  const [miniActive, setMiniActive] = React.useState(false);
+  const [miniActive, setMiniActive] = React.useState(true);
   const [mobileOpen, setMobileOpen] = React.useState(true);
   const [addr, setAddr] = React.useState("");
   const [roots, setRoots] = React.useState(undefined);
@@ -52,8 +55,13 @@ export default function Dashboard(props) {
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   const [splitter, setSplitter] = React.useState({});
   const [util, setUtil] = React.useState({})
+  const updatedEther = false
+  const isRefreshingEther = false
+  const updatedPruf = false
+  const isRefreshingPruf = false
   // styles
   const classes = useStyles();
+  const userClasses = userStyles();
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -204,6 +212,53 @@ export default function Dashboard(props) {
     }
   };
 
+  const refreshBalances = () => {
+      if (!props.addr) return
+      console.log('Refreshing balances')
+      console.log(window.replaceAssetData)
+
+      if (props.prufClient && props.prufClient.get) {
+          window.dispatchEvent(props.refresh)
+          window.web3.eth.getBalance(props.addr, (error, result) => {
+              if (error) {
+                  console.log('error')
+              } else {
+                  setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
+              }
+          })
+
+          // eslint-disable-next-line react/prop-types
+          props.prufClient.get
+              // eslint-disable-next-line react/prop-types
+              .assetBalance(props.addr)
+              .then(e => {
+                  setUpdatedAssets(e)
+              })
+
+          // eslint-disable-next-line react/prop-types
+          props.prufClient.get
+              // eslint-disable-next-line react/prop-types
+              .prufBalance(props.addr)
+              .then(e => {
+                  setUpdatedPruf(e)
+              })
+
+          
+          forceUpdate()
+      } else {
+          window.web3.eth.getBalance(props.addr, (error, result) => {
+              if (error) {
+                  console.log('error')
+              } else {
+                  setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
+              }
+          })
+      }
+
+      // eslint-disable-next-line react/prop-types
+
+  }
+
   const setUpEnvironment = (_addr) => {
     const Splitter_ADDRESS = "", Util_ADDRESS = "";
     const Splitter_ABI = "", Util_ABI = "";
@@ -225,7 +280,7 @@ export default function Dashboard(props) {
   };
 
   return (
-    <div className={classes.wrapper}>
+    <div className={userClasses.wrapper}>
       <AdminNavbar
         sidebarMinimize={sidebarMinimize.bind(this)}
         miniActive={miniActive}
@@ -237,14 +292,118 @@ export default function Dashboard(props) {
       <br />
       <br />
       <div className={mainPanelClasses} ref={mainPanel}>
-        <div>
+        <div className="splitterForm">
           <br />
+            <GridContainer>
+                <GridItem xs={12} sm={6} md={6} lg={3}>
+                    <Card>
+                        <CardHeader stats icon>
+                            <CardIcon
+                                className="headerIconBack"
+                                onClick={() =>
+                                    window.open('https://ethereum.org/en/')
+                                }
+                            >
+                                <img className="Icon" src={Eth} alt=""></img>
+                            </CardIcon>
+                            <p className={classes.cardCategory}>ETH Balance</p>
+                            {updatedEther ? (
+                                <h3 className={classes.cardTitle}>
+                                    {updatedEther.substring(0, 7)}{' '}
+                                </h3>
+                            ) :
+                                props.ether ? (
+                                    <h3 className={classes.cardTitle}>
+                                        {props.ether.substring(0, 7)}{' '}
+                                    </h3>
+                                ) : (
+                                    <h3 className={classes.cardTitle}>
+                                        ~
+                                    </h3>
+                                )}
+                        </CardHeader>
+                        <CardFooter stats>
+                            {!isRefreshingEther && (
+                                <div className="refresh">
+                                    <Cached onClick={() => {window.replaceAssetData.refreshBals = true; refreshBalances()}} />
+                                </div>
+                            )}
+                            {isRefreshingEther && (
+                                <div className={classes.stats}>
+                                    <div className="lds-ellipsisCard">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                            )}
+                        </CardFooter>
+                    </Card>
+                </GridItem>
+                <GridItem xs={12} sm={6} md={6} lg={3}>
+                    <Card>
+                        <CardHeader color="danger" stats icon>
+                            <CardIcon
+                                className="headerIconBack"
+                                onClick={() => window.open('https://pruf.io/')}
+                            >
+                                <img className="Icon" src={Pruf} alt=""></img>
+                            </CardIcon>
+                            <p className={classes.cardCategory}>PRUF Balance</p>
+                            {updatedPruf ? (
+                                <h3 className={classes.cardTitle}>
+                                    <>
+                                        {String(
+                                            Math.round(
+                                                Number(updatedPruf) * 100
+                                            ) / 100
+                                        )}{' '}
+                                    </>
+                                </h3>
+                            ) : (
+                                <h3 className={classes.cardTitle}>
+                                    {props.pruf !== '~' ? (
+                                        <>
+                                            {String(
+                                                Math.round(
+                                                    
+                                                    Number(props.pruf) * 100
+                                                ) / 100
+                                            )}{' '}
+                                        </>
+                                    ) : (
+                                        <>
+                                            {props.pruf} 
+                                        </>
+                                    )}
+                                </h3>
+                            )}
+                        </CardHeader>
+                        <CardFooter stats>
+                            {!isRefreshingPruf && (
+                                <div className="refresh">
+                                    <Cached onClick={() => {window.replaceAssetData.refreshBals = true; refreshBalances()}} />
+                                </div>
+                            )}
+                            {isRefreshingPruf && (
+                                <div className={classes.stats}>
+                                    <div className="lds-ellipsisCard">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                            )}
+                        </CardFooter>
+                    </Card>
+                </GridItem>
+            </GridContainer>
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
                 <img className="IconFaucet" src={Pruf} alt=""></img>
               </CardIcon>
-              <h4 className={classes.cardIconTitle}>Split Tokens</h4>
+              <h5 className={classes.cardIconTitle}>Split Tokens</h5>
             </CardHeader>
             {/* eslint-disable-next-line react/prop-types */}
             {!addr && (
@@ -291,7 +450,7 @@ export default function Dashboard(props) {
                         setUseConnected(!useConnected);
                       }}
                     />{" "}
-                    {` `}Use connected wallet address
+                    {` `}<span className="splitterCheckboxFont">Use connected wallet address</span>
                     <br />
                     {!useConnected ? (
                       <CustomInput
@@ -330,10 +489,9 @@ export default function Dashboard(props) {
                 </form>
               </CardBody>
             )}
-
-            {/* eslint-disable-next-line react/prop-types */}
           </Card>
         </div>
+      <Footer fluid />
       </div>
     </div>
   );

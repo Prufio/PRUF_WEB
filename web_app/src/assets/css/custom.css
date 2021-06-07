@@ -4,7 +4,7 @@
 } */
 body {
     background: linear-gradient(0deg, rgba(0, 83, 128, 0.212), #015f9218) !important;
-    /* overflow-x: hidden !important; */
+    overflow-x: hidden !important;
 }
 .CopyrightBackground {
     background-image: url('../img/Sidebar Backgrounds/TracesWB.jpg') !important;
@@ -1394,4 +1394,12 @@ max-width: 80px !important;
 
 .like{
   height: 35px;
+}
+
+.splitterForm {
+  padding: 20px;
+}
+
+.splitterCheckboxFont {
+  font-size: 15px;
 }
