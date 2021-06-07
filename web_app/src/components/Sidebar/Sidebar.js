@@ -89,10 +89,10 @@ class SidebarWrapper extends React.Component {
     }
   }
   render() {
-    const { className, user, headerLinks, links } = this.props;
+    const { className, split, headerLinks, links } = this.props;
     return (
       <div className={className} ref={this.sidebarWrapper}>
-        {user}
+        {split}
         {headerLinks}
         {links}
       </div>
@@ -130,7 +130,7 @@ class Sidebar extends React.Component {
 
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
-  // while on the src/views/forms/RegularForms.jsx - route /user/regular-forms
+  // while on the src/views/forms/RegularForms.jsx - route /split/regular-forms
   getCollapseInitialState(routes) {
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse && this.getCollapseInitialState(routes[i].views)) {
@@ -372,8 +372,8 @@ class Sidebar extends React.Component {
           rtlActive && this.props.miniActive && this.state.miniActive,
         [classes.collapseItemTextRTL]: rtlActive,
       });
-    const userWrapperClass =
-      classes.user +
+    const splitWrapperClass =
+      classes.split +
       " " +
       cx({
         [classes.whiteAfter]: bgColor === "white",
@@ -410,7 +410,7 @@ class Sidebar extends React.Component {
       }
     };
 
-    var user = (
+    var split = (
       <div className={logoClasses}>
         {!this.props.miniActive && isAndroid && (
           <>
@@ -592,12 +592,12 @@ class Sidebar extends React.Component {
                   )}
 
                   {addr === undefined && bgColor !== "white" && (
-                    <h5 className="addressText">User Address Unavailable</h5>
+                    <h5 className="addressText">split Address Unavailable</h5>
                   )}
 
                   {addr === undefined && bgColor === "white" && (
                     <h5 className="addressTextBlack">
-                      User Address Unavailable
+                      split Address Unavailable
                     </h5>
                   )}
                 </>
@@ -704,12 +704,12 @@ class Sidebar extends React.Component {
                   )}
 
                   {addr === undefined && bgColor !== "white" && (
-                    <h5 className="addressText">User Address Unavailable</h5>
+                    <h5 className="addressText">split Address Unavailable</h5>
                   )}
 
                   {addr === undefined && bgColor === "white" && (
                     <h5 className="addressTextBlack">
-                      User Address Unavailable
+                      split Address Unavailable
                     </h5>
                   )}
                 </>
@@ -748,7 +748,7 @@ class Sidebar extends React.Component {
       });
     var brand = (
       <div className={logoClasses}>
-        <a href="/#/user/home" className={logoMini}>
+        <a href="/#/split/home" className={logoMini}>
           {bgColor !== "white" && (
             <img src={pruftoken} alt="logo" className={classes.img} />
           )}
@@ -756,7 +756,7 @@ class Sidebar extends React.Component {
             <img src={pruftokenblk} alt="logo" className={classes.img} />
           )}
         </a>
-        <a href="/#/user/home" className={logoNormal}>
+        <a href="/#/split/home" className={logoNormal}>
           PRüF DASHBOARD
         </a>
       </div>
@@ -796,7 +796,7 @@ class Sidebar extends React.Component {
             {brand}
             <SidebarWrapper
               className={sidebarWrapper}
-              user={user}
+              split={split}
               headerLinks={<AdminNavbarLinks rtlActive={rtlActive} />}
               links={links}
             />
@@ -822,7 +822,7 @@ class Sidebar extends React.Component {
             {brand}
             <SidebarWrapper
               className={sidebarWrapper}
-              user={user}
+              split={split}
               links={links}
             />
             {image !== undefined ? (
@@ -866,7 +866,7 @@ Sidebar.propTypes = {
 
 SidebarWrapper.propTypes = {
   className: PropTypes.string,
-  user: PropTypes.object,
+  split: PropTypes.object,
   headerLinks: PropTypes.object,
   links: PropTypes.object,
 };

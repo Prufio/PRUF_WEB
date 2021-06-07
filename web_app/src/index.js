@@ -29,17 +29,17 @@ if(window.location.href.includes('0x')){
   query = "";
 }
 console.log(query);
-const fullUrl = "/user/home" + query */
+const fullUrl = "/split/home" + query */
 
 ReactDOM.render(
   <CookiesProvider>
     <HashRouter>
       <Switch>
-        <Route path="/user" component={AdminLayout} />
+        <Route path="/split" component={AdminLayout} />
         {
           /* fullUrl ? <Redirect from="/" to={fullUrl} /> :   */ <Redirect
             from="/"
-            to="/user/home"
+            to="/split"
           />
         }
       </Switch>

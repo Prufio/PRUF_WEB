@@ -41,7 +41,7 @@ export default function HeaderLinks(props) {
             ).length === 66
         ) {
             window.location.href =
-                '/#/user/search/' +
+                '/#/split/search/' +
                 searchBarVal.substring(
                     searchBarVal.indexOf('0x'),
                     searchBarVal.trim().length

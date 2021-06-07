@@ -45,7 +45,7 @@ export default function AuthNavbar(props) {
   var list = (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
-        <NavLink to={"/user/dashboard"} className={classes.navLink}>
+        <NavLink to={"/user"} className={classes.navLink}>
           <Dashboard className={classes.listItemIcon} />
           <ListItemText
             primary={"Dashboard"}

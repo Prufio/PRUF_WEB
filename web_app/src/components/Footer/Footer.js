@@ -38,7 +38,7 @@ export default function Footer(props) {
 
   const copy2 = () => {
     document.body.style.cursor = 'auto'
-    window.location.href = "/#/user/counter"
+    window.location.href = "/#/split/counter"
     setCounter(0)
   }
 
@@ -64,7 +64,7 @@ export default function Footer(props) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="/#/user/home" className="links">
+              <a href="/#/split/home" className="links">
                 {rtlActive ? "الصفحة الرئيسية" : "Home"}
               </a>
             </ListItem>
