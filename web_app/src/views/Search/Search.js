@@ -1553,7 +1553,7 @@ export default function Search(props) {
     });
   };
 
-  const buildAsset = (id) => {
+  const buildAsset = (id) => { 
     if (!id) return;
 
     setURL(`${baseURL}${id}`);
@@ -1608,10 +1608,16 @@ export default function Search(props) {
               .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                 letter.toUpperCase()
               );
-            obj.nodeData = e
-            console.log("HERE", e.root)
-            setSelectedRootID(e.root);
-            return getMutableData(obj);
+            setSelectedRootID(e.root)
+            obj.nodeData = Object.assign({}, e)
+            props.prufClient.get.ownerOfNode(obj.nodeId).then(e => {
+              obj.nodeAdmin = e
+              props.prufClient.get.userType(window.web3.utils.soliditySha3(props.addr), obj.nodeId).then(e => {
+                obj.userAuthLevel = e
+                console.log("HERE", e.root);
+                return getMutableData(obj);
+              })
+            })
           });
       });
     });
@@ -1627,6 +1633,7 @@ export default function Search(props) {
     if (
       obj.mutableDataA ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
+      || obj.nodeData.root === obj.nodeId
     ) {
       obj.mutableData = "";
       return getEngraving(obj);
@@ -1635,7 +1642,6 @@ export default function Search(props) {
       props.prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
         let mutableDataQuery = e;
         console.log("MDQ", e);
-
         //fetch mutableData from IPFS if storageProvider === '1'
         for await (const chunk of window.ipfs.cat(mutableDataQuery)) {
           let str = new TextDecoder("utf-8").decode(chunk);
@@ -1721,6 +1727,7 @@ export default function Search(props) {
     if (
       obj.engravingA ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
+      || obj.nodeData.root === obj.nodeId
     ) {
       obj.engraving = "";
       return finalizeAsset(obj);
@@ -1794,7 +1801,7 @@ export default function Search(props) {
         return finalizeAsset(obj);
       };
 
-      xhr.open("GET", `https://arweave.net/tx/${engravingQuery}`, true);
+      xhr.open("GET", `https://arweave.net/${engravingQuery}`, true);
       try {
         xhr.send(null);
       } catch {
@@ -1818,18 +1825,17 @@ export default function Search(props) {
     obj.urls = obj.engraving.urls || obj.mutableData.urls || {};
     obj.name = obj.engraving.name || obj.mutableData.name || "Name Unavailable";
     obj.photoUrls = obj.engraving.photo || obj.mutableData.photo || {};
-    obj.Description =
-      obj.engraving.Description || obj.mutableData.Description || "";
-    obj.ContentUrl =
-      obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
+    obj.Description = obj.engraving.Description || obj.mutableData.Description || "";
+    obj.ContentUrl = obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
     obj.storageProvider = obj.nodeData.storageProvider;
-
+    obj.PrimaryContent = obj.engraving.PrimaryContent || obj.mutableData.PrimaryContent || ""; 
+    obj.ContentType = obj.engraving.ContentType || obj.mutableData.ContentType || obj.engraving["Content-Type"] || obj.mutableData["Content-Type"] || "";
+    obj.Description = obj.engraving.Description || obj.mutableData.Description || "";
     let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
     console.log("Finalizing", obj);
     if (obj.nodeData.storageProvider === "2") {
       console.log("detected storageProvider 2");
-
       if (
         obj.engraving.contentUrl &&
         obj.engraving["Content-Type"].includes("image")
@@ -1850,6 +1856,30 @@ export default function Search(props) {
         setRetrieving(false);
         setMoreInfo(true);
         return;
+      } else if (obj.engraving["Content-Type"].includes("pdf")) {
+        obj.DisplayImage = placeholder
+        setAsset(obj);
+        setSelectedImage(obj.DisplayImage);
+        setRetrieving(false);
+        setMoreInfo(true);
+      } else if (obj.engraving["Content-Type"].includes("zip")) {
+        obj.DisplayImage = placeholder
+        setAsset(obj);
+        setSelectedImage(obj.DisplayImage);
+        setRetrieving(false);
+        setMoreInfo(true);
+      } else if (obj.mutableData["Content-Type"].includes("pdf")) {
+        obj.DisplayImage = placeholder
+        setAsset(obj);
+        setSelectedImage(obj.DisplayImage);
+        setRetrieving(false);
+        setMoreInfo(true);
+      } else if (obj.mutableData["Content-Type"].includes("zip")) {
+        obj.DisplayImage = placeholder
+        setAsset(obj);
+        setSelectedImage(obj.DisplayImage);
+        setRetrieving(false);
+        setMoreInfo(true);
       } else if (keys.length === 0) {
         obj.DisplayImage = "";
         setAsset(obj);
@@ -1865,13 +1895,18 @@ export default function Search(props) {
 
         req.onload = function () {
           //console.log("response", this.response);
-          if (this.response.includes("base64")) {
+          if (this.response.includes("image")) {
             obj.DisplayImage = this.response;
             setAsset(obj);
             setSelectedImage(obj.DisplayImage);
             setRetrieving(false);
             setMoreInfo(true);
             return;
+          } else if (this.response.includes("application")) {
+            console.log("app")
+            obj.DisplayImage = placeholder
+            finalizedAssets.push(obj);
+            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
           }
         };
 
@@ -1896,8 +1931,9 @@ export default function Search(props) {
           return;
         }
       };
-
-      if (
+      if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
+        getAndSet(obj.engraving.PrimaryContent)
+      } else if (
         obj.engraving !== "" &&
         obj.engraving.DisplayImage !== "" &&
         obj.engraving.DisplayImage !== undefined

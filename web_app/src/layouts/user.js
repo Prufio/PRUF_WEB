@@ -406,7 +406,7 @@ export default function Dashboard(props) {
     });
   };
 
-  const acctListener = () => {
+  const  acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
@@ -1614,8 +1614,7 @@ export default function Dashboard(props) {
     obj.Description = obj.engraving.Description || obj.mutableData.Description || "";
     obj.ContentUrl = obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
 
-    let vals = Object.values(obj.photo),
-      keys = Object.keys(obj.photo);
+    let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
     if (obj.nodeData.storageProvider === "2") {
       console.log("2")
