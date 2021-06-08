@@ -144,6 +144,9 @@ export default function Dashboard(props) {
   }, []);
 
   const split = () => {
+    if(Number(etherBalance) < 0.0001) {
+       swal({icon: "warning", title: "Warning!", text: "You may not have enough ether to pay the gas fees for this transaction."})
+    }
     if (useConnected || addr === customAddress) {
       console.log(`Splitting PRUF balance of ${addr}`);
       setTransacting(true);
