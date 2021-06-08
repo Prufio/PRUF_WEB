@@ -76,22 +76,22 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
-    window.ethereum.on("chainChanged", (chainId) => {
-      console.log(chainId);
-      window.location.reload();
-    });
+  window.ethereum.on("chainChanged", (chainId) => {
+    console.log(chainId);
+    window.location.reload();
+  });
 
 
-    window.ethereum.on("accountsChanged", (e) => {
-      console.log("Accounts changed");
-      if (e[0] === undefined || e[0] === null) {
-        if (e[0] !== addr) {
-          window.location.reload();
-        }
-      } else if (window.web3.utils.toChecksumAddress(e[0]) !== addr) {
+  window.ethereum.on("accountsChanged", (e) => {
+    console.log("Accounts changed");
+    if (e[0] === undefined || e[0] === null) {
+      if (e[0] !== addr) {
         window.location.reload();
       }
-    });
+    } else if (window.web3.utils.toChecksumAddress(e[0]) !== addr) {
+      window.location.reload();
+    }
+  });
 
   // if (window.ethereum && !window.addedListeners) {
   //   window.addEventListener("chainChanged", chainListener);
@@ -107,16 +107,21 @@ export default function Dashboard(props) {
           params: {},
         })
         .then(async (accounts) => {
-          console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-          setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-          setUpEnvironment(window.web3.utils.toChecksumAddress(accounts[0]));
+          if (accounts[0] === undefined) {
+            return console.log("Ethereum account !detected")
+          } else {
+
+            console.log(window.web3.utils.toChecksumAddress(accounts[0]));
+            setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+            setUpEnvironment(accounts[0]);
+          }
         });
     }
 
     let web3 = require("web3");
     web3 = new Web3(
       web3.givenProvider ||
-        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     window.web3 = web3;
 
@@ -164,6 +169,7 @@ export default function Dashboard(props) {
         })
         .on("error", () => {
           swal("Something went wrong!");
+          setTransacting(false)
           getSnapShotInfo(addr)
         });
     } else {
@@ -286,358 +292,358 @@ export default function Dashboard(props) {
     const Splitter_ADDRESS = "0x980AaB0F43cea7E7a21F73cf9ed4eADB5845e1Dc",
       Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
     const Splitter_ABI = [
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "grantRole",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "pause",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "renounceRole",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "Paused",
-          type: "event",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "revokeRole",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "previousAdminRole",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "newAdminRole",
-              type: "bytes32",
-            },
-          ],
-          name: "RoleAdminChanged",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "sender",
-              type: "address",
-            },
-          ],
-          name: "RoleGranted",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "sender",
-              type: "address",
-            },
-          ],
-          name: "RoleRevoked",
-          type: "event",
-        },
-        {
-          inputs: [],
-          name: "splitMyPruf",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_address",
-              type: "address",
-            },
-          ],
-          name: "splitPrufAtAddress",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "unpause",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "Unpaused",
-          type: "event",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_address",
-              type: "address",
-            },
-          ],
-          name: "checkMyAddress",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "CONTRACT_ADMIN_ROLE",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "DEFAULT_ADMIN_ROLE",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-          ],
-          name: "getRoleAdmin",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "uint256",
-              name: "index",
-              type: "uint256",
-            },
-          ],
-          name: "getRoleMember",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-          ],
-          name: "getRoleMemberCount",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "hasRole",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "paused",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "PAUSER_ROLE",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-      ],
+      {
+        inputs: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "grantRole",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "pause",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "renounceRole",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [],
+        stateMutability: "nonpayable",
+        type: "constructor",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: false,
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "Paused",
+        type: "event",
+      },
+      {
+        inputs: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "revokeRole",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            indexed: true,
+            internalType: "bytes32",
+            name: "previousAdminRole",
+            type: "bytes32",
+          },
+          {
+            indexed: true,
+            internalType: "bytes32",
+            name: "newAdminRole",
+            type: "bytes32",
+          },
+        ],
+        name: "RoleAdminChanged",
+        type: "event",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "sender",
+            type: "address",
+          },
+        ],
+        name: "RoleGranted",
+        type: "event",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+          {
+            indexed: true,
+            internalType: "address",
+            name: "sender",
+            type: "address",
+          },
+        ],
+        name: "RoleRevoked",
+        type: "event",
+      },
+      {
+        inputs: [],
+        name: "splitMyPruf",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "_address",
+            type: "address",
+          },
+        ],
+        name: "splitPrufAtAddress",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "unpause",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: false,
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "Unpaused",
+        type: "event",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "_address",
+            type: "address",
+          },
+        ],
+        name: "checkMyAddress",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "CONTRACT_ADMIN_ROLE",
+        outputs: [
+          {
+            internalType: "bytes32",
+            name: "",
+            type: "bytes32",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "DEFAULT_ADMIN_ROLE",
+        outputs: [
+          {
+            internalType: "bytes32",
+            name: "",
+            type: "bytes32",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+        ],
+        name: "getRoleAdmin",
+        outputs: [
+          {
+            internalType: "bytes32",
+            name: "",
+            type: "bytes32",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+        ],
+        name: "getRoleMember",
+        outputs: [
+          {
+            internalType: "address",
+            name: "",
+            type: "address",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+        ],
+        name: "getRoleMemberCount",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "account",
+            type: "address",
+          },
+        ],
+        name: "hasRole",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "paused",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "PAUSER_ROLE",
+        outputs: [
+          {
+            internalType: "bytes32",
+            name: "",
+            type: "bytes32",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+    ],
       Util_ABI = [
         {
           inputs: [],
@@ -1706,7 +1712,7 @@ export default function Dashboard(props) {
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
-                <img className="IconFaucet" src={Pruf} alt=""></img>
+                <span class="material-icons"> toll </span>
               </CardIcon>
               <h5 className={classes.cardIconTitle}>Split Tokens</h5>
             </CardHeader>
@@ -1750,74 +1756,76 @@ export default function Dashboard(props) {
             {addr && (
               <CardBody>
                 <form>
-                  <h3>
-                    Eligible? {isEligible === true ? "YES" : "NO"}
-                    <br />
-                    Snapshot balance: ü{walletInfo}
-                    <br />
-                    <input
-                      type="checkbox"
-                      onChange={() => {
-                        console.log(`setting useConnected to ${!useConnected}`);
-                        setUseConnected(!useConnected);
-                        setCustomAddress("");
-                        if (!useConnected) {
-                          getSnapShotInfo(addr);
-                        } else {
-                          setWalletInfo("");
-                          setIsEligible(false);
-                        }
-                      }}
-                    />{" "}
-                    {` `}
-                    <span className="splitterCheckboxFont">
-                      Use connected wallet address
+                  <input
+                    type="checkbox"
+                    onChange={() => {
+                      console.log(`setting useConnected to ${!useConnected}`);
+                      setUseConnected(!useConnected);
+                      setCustomAddress("");
+                      if (!useConnected) {
+                        getSnapShotInfo(addr);
+                      } else {
+                        setWalletInfo("");
+                        setIsEligible(false);
+                      }
+                    }}
+                  />{" "}
+                  {` `}
+                  <span className="splitterCheckboxFont">
+                    Use connected wallet address
                     </span>
-                    <br />
-                    {!useConnected ? (
-                      <CustomInput
-                        formControlProps={{
-                          fullWidth: true,
-                        }}
-                        inputProps={{
-                          value: customAddress,
-                          onChange: (e) => {
-                            handleCustomAddress(e); // Set undefined to remove entirely
-                          },
-                          placeholder: `Tokenholder address`,
-                        }}
-                      />
-                    ) : (
-                      <></>
-                    )}
-                    {!transacting && isEligible ? (
-                      <Button
-                        color="info"
-                        className="MLBGradient"
-                        onClick={() => split()}
-                      >
-                        Split
-                      </Button>
-                    ) : transacting ? (
-                      <>
-                        Splitting tokens
+                  <br />
+                  {!useConnected ? (
+                    <CustomInput
+                      formControlProps={{
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        value: customAddress,
+                        onChange: (e) => {
+                          handleCustomAddress(e); // Set undefined to remove entirely
+                        },
+                        placeholder: `Tokenholder address`,
+                      }}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  {isEligible && (
+                    <h4>
+                      Unclaimed balance: ü{walletInfo}
+                    </h4>
+                  )}
+                  <h4>
+                    Account Status: {isEligible === true ? "Eligible" : "Not Eligible"}
+                  </h4>
+                  {!transacting && isEligible ? (
+                    <Button
+                      color="info"
+                      className="MLBGradient"
+                      onClick={() => split()}
+                    >
+                      Split
+                    </Button>
+                  ) : transacting ? (
+                    <>
+                      Splitting tokens
                         <div className="lds-ellipsisIF">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                        </div>
-                        <br />
-                        <br />
-                        <Button disabled onClick={() => split()}>
-                          Split
-                        </Button>
-                      </>
-                    ) : (
-                      <Button disabled onClick={() => split()}>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                      <br />
+                      <br />
+                      <Button className="MLBGradient" disabled onClick={() => split()}>
                         Split
-                      </Button>
-                    )}
-                  </h3>
+                        </Button>
+                    </>
+                  ) : (
+                    <Button className="MLBGradient" disabled onClick={() => split()}>
+                      Split
+                    </Button>
+                  )}
                 </form>
               </CardBody>
             )}
