@@ -1722,8 +1722,7 @@ export default function Dashboard(props) {
                         if (window.ethereum) {
                           window.ethereum
                             .request({
-                              method: "eth_accounts",
-                              params: {},
+                              method: "eth_requestAccounts"
                             })
                             .then(async (accounts) => {
                               console.log(
