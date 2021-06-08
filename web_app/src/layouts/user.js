@@ -11,8 +11,8 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import Eth from '../assets/img/eth-logo.png'
-import {Cached} from '@material-ui/icons'
+import Eth from "../assets/img/eth-logo.png";
+import { Cached } from "@material-ui/icons";
 import Footer from "components/Footer/Footer.js";
 
 // core components
@@ -24,9 +24,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import GridContainer from 'components/Grid/GridContainer.js'
-import GridItem from 'components/Grid/GridItem.js'
-import CardFooter from 'components/Card/CardFooter.js'
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+import CardFooter from "components/Card/CardFooter.js";
 
 import routes from "routes.js";
 
@@ -44,7 +44,10 @@ export default function Dashboard(props) {
   const [miniActive, setMiniActive] = React.useState(true);
   const [mobileOpen, setMobileOpen] = React.useState(true);
   const [addr, setAddr] = React.useState("");
-  const [roots, setRoots] = React.useState(undefined);
+  const [etherBalance, setEtherBalance] = React.useState("");
+  const [prufBalance, setPrufBalance] = React.useState("");
+  const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
+  const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false);
   const [useConnected, setUseConnected] = React.useState(false);
   const [transacting, setTransacting] = React.useState(false);
   const [customAddress, setCustomAddress] = React.useState("");
@@ -54,11 +57,7 @@ export default function Dashboard(props) {
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   const [splitter, setSplitter] = React.useState({});
-  const [util, setUtil] = React.useState({})
-  const updatedEther = false
-  const isRefreshingEther = false
-  const updatedPruf = false
-  const isRefreshingPruf = false
+  const [util, setUtil] = React.useState({});
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
@@ -150,11 +149,16 @@ export default function Dashboard(props) {
       if (window.web3.utils.isAddress(customAddress)) {
         console.log(`Splitting balance of ${customAddress}`);
       } else {
-        return swal(`Given value "${customAddress}" is not a valid Ethereum address`);
+        return swal(
+          `Given value "${customAddress}" is not a valid Ethereum address`
+        );
       }
     }
     setTransacting(true);
-    setTimeout(async () => {setTransacting(false); swal("Tokens split successfully!")}, 2000);
+    setTimeout(async () => {
+      setTransacting(false);
+      swal("Tokens split successfully!");
+    }, 2000);
   };
 
   const getActiveRoute = (routes) => {
@@ -195,12 +199,30 @@ export default function Dashboard(props) {
     });
   };
 
-  const handleCustomAddress = (e) => {
-    setCustomAddress(e.target.value || undefined)
-    if(window.web3.utils.isAddress(e.target.value)){
-      getSnapShotInfo(e.target.value)
+  const refreshBalances = (job) => {
+    if (!addr) return console.error("No address is connected!");
+    if (job === "eth") {
+      setIsRefreshingEther(true);
+      web3.eth.getBalance(addr).then(async (e) => {
+        setEtherBalance(
+          Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
+        );
+        setIsRefreshingEther(false);
+      });
     }
-  }
+
+    else {
+      setIsRefreshingPruf(true);
+      setTimeout(()=>{prufBalance === "" ? setPrufBalance('300') : setPrufBalance(`${Number(prufBalance) +1}`); setIsRefreshingPruf(false)}, 2000)
+    }
+  };
+
+  const handleCustomAddress = (e) => {
+    setCustomAddress(e.target.value || undefined);
+    if (window.web3.utils.isAddress(e.target.value)) {
+      getSnapShotInfo(e.target.value);
+    }
+  };
 
   const sidebarMinimize = () => {
     setMiniActive(!miniActive);
@@ -212,64 +234,19 @@ export default function Dashboard(props) {
     }
   };
 
-  const refreshBalances = () => {
-      if (!props.addr) return
-      console.log('Refreshing balances')
-      console.log(window.replaceAssetData)
-
-      if (props.prufClient && props.prufClient.get) {
-          window.dispatchEvent(props.refresh)
-          window.web3.eth.getBalance(props.addr, (error, result) => {
-              if (error) {
-                  console.log('error')
-              } else {
-                  setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
-              }
-          })
-
-          // eslint-disable-next-line react/prop-types
-          props.prufClient.get
-              // eslint-disable-next-line react/prop-types
-              .assetBalance(props.addr)
-              .then(e => {
-                  setUpdatedAssets(e)
-              })
-
-          // eslint-disable-next-line react/prop-types
-          props.prufClient.get
-              // eslint-disable-next-line react/prop-types
-              .prufBalance(props.addr)
-              .then(e => {
-                  setUpdatedPruf(e)
-              })
-
-          
-          forceUpdate()
-      } else {
-          window.web3.eth.getBalance(props.addr, (error, result) => {
-              if (error) {
-                  console.log('error')
-              } else {
-                  setUpdatedEther(window.web3.utils.fromWei(result, 'ether'))
-              }
-          })
-      }
-
-      // eslint-disable-next-line react/prop-types
-
-  }
-
   const setUpEnvironment = (_addr) => {
-    const Splitter_ADDRESS = "", Util_ADDRESS = "";
-    const Splitter_ABI = "", Util_ABI = "";
+    const Splitter_ADDRESS = "",
+      Util_ADDRESS = "";
+    const Splitter_ABI = "",
+      Util_ABI = "";
 
     console.log("Getting things set up...");
 
     const SPLITTER = new _web3.eth.Contract(Splitter_ABI, Splitter_ADDRESS);
     const UTIL = new _web3.eth.Contract(Util_ABI, Util_ADDRESS);
-    setSplitter(SPLITTER)
-    setUtil(UTIL)
-    
+    setSplitter(SPLITTER);
+    setUtil(UTIL);
+
     //UTIL.methods.
   };
 
@@ -294,110 +271,90 @@ export default function Dashboard(props) {
       <div className={mainPanelClasses} ref={mainPanel}>
         <div className="splitterForm">
           <br />
-            <GridContainer>
-                <GridItem xs={12} sm={6} md={6} lg={3}>
-                    <Card>
-                        <CardHeader stats icon>
-                            <CardIcon
-                                className="headerIconBack"
-                                onClick={() =>
-                                    window.open('https://ethereum.org/en/')
-                                }
-                            >
-                                <img className="Icon" src={Eth} alt=""></img>
-                            </CardIcon>
-                            <p className={classes.cardCategory}>ETH Balance</p>
-                            {updatedEther ? (
-                                <h3 className={classes.cardTitle}>
-                                    {updatedEther.substring(0, 7)}{' '}
-                                </h3>
-                            ) :
-                                props.ether ? (
-                                    <h3 className={classes.cardTitle}>
-                                        {props.ether.substring(0, 7)}{' '}
-                                    </h3>
-                                ) : (
-                                    <h3 className={classes.cardTitle}>
-                                        ~
-                                    </h3>
-                                )}
-                        </CardHeader>
-                        <CardFooter stats>
-                            {!isRefreshingEther && (
-                                <div className="refresh">
-                                    <Cached onClick={() => {window.replaceAssetData.refreshBals = true; refreshBalances()}} />
-                                </div>
-                            )}
-                            {isRefreshingEther && (
-                                <div className={classes.stats}>
-                                    <div className="lds-ellipsisCard">
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                    </div>
-                                </div>
-                            )}
-                        </CardFooter>
-                    </Card>
-                </GridItem>
-                <GridItem xs={12} sm={6} md={6} lg={3}>
-                    <Card>
-                        <CardHeader color="danger" stats icon>
-                            <CardIcon
-                                className="headerIconBack"
-                                onClick={() => window.open('https://pruf.io/')}
-                            >
-                                <img className="Icon" src={Pruf} alt=""></img>
-                            </CardIcon>
-                            <p className={classes.cardCategory}>PRUF Balance</p>
-                            {updatedPruf ? (
-                                <h3 className={classes.cardTitle}>
-                                    <>
-                                        {String(
-                                            Math.round(
-                                                Number(updatedPruf) * 100
-                                            ) / 100
-                                        )}{' '}
-                                    </>
-                                </h3>
-                            ) : (
-                                <h3 className={classes.cardTitle}>
-                                    {props.pruf !== '~' ? (
-                                        <>
-                                            {String(
-                                                Math.round(
-                                                    
-                                                    Number(props.pruf) * 100
-                                                ) / 100
-                                            )}{' '}
-                                        </>
-                                    ) : (
-                                        <>
-                                            {props.pruf} 
-                                        </>
-                                    )}
-                                </h3>
-                            )}
-                        </CardHeader>
-                        <CardFooter stats>
-                            {!isRefreshingPruf && (
-                                <div className="refresh">
-                                    <Cached onClick={() => {window.replaceAssetData.refreshBals = true; refreshBalances()}} />
-                                </div>
-                            )}
-                            {isRefreshingPruf && (
-                                <div className={classes.stats}>
-                                    <div className="lds-ellipsisCard">
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                    </div>
-                                </div>
-                            )}
-                        </CardFooter>
-                    </Card>
-                </GridItem>
-            </GridContainer>
+          <GridContainer>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card>
+                <CardHeader stats icon>
+                  <CardIcon
+                    className="headerIconBack"
+                    onClick={() => window.open("https://ethereum.org/en/")}
+                  >
+                    <img className="Icon" src={Eth} alt=""></img>
+                  </CardIcon>
+                  <p className={classes.cardCategory}>ETH Balance</p>
+                  {etherBalance ? (
+                    <h3 className={classes.cardTitle}>
+                      {etherBalance.substring(0, 7)}{" "}
+                    </h3>
+                  ) : (
+                    <h3 className={classes.cardTitle}>~</h3>
+                  )}
+                </CardHeader>
+                <CardFooter stats>
+                  {!isRefreshingEther && (
+                    <div className="refresh">
+                      <Cached
+                        onClick={() => {
+                          refreshBalances('eth');
+                        }}
+                      />
+                    </div>
+                  )}
+                  {isRefreshingEther && (
+                    <div className={classes.stats}>
+                      <div className="lds-ellipsisCard">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  )}
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card>
+                <CardHeader color="danger" stats icon>
+                  <CardIcon
+                    className="headerIconBack"
+                    onClick={() => window.open("https://pruf.io/")}
+                  >
+                    <img className="Icon" src={Pruf} alt=""></img>
+                  </CardIcon>
+                  <p className={classes.cardCategory}>PRUF Balance</p>
+                  {prufBalance ? (
+                    <h3 className={classes.cardTitle}>
+                      <>
+                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                      </>
+                    </h3>
+                  ) : (
+                    <h3 className={classes.cardTitle}>~</h3>
+                  )}
+                </CardHeader>
+                <CardFooter stats>
+                  {!isRefreshingPruf && (
+                    <div className="refresh">
+                      <Cached
+                        onClick={() => {
+                          refreshBalances();
+                        }}
+                      />
+                    </div>
+                  )}
+                  {isRefreshingPruf && (
+                    <div className={classes.stats}>
+                      <div className="lds-ellipsisCard">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  )}
+                </CardFooter>
+              </Card>
+            </GridItem>
+          </GridContainer>
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
@@ -450,7 +407,10 @@ export default function Dashboard(props) {
                         setUseConnected(!useConnected);
                       }}
                     />{" "}
-                    {` `}<span className="splitterCheckboxFont">Use connected wallet address</span>
+                    {` `}
+                    <span className="splitterCheckboxFont">
+                      Use connected wallet address
+                    </span>
                     <br />
                     {!useConnected ? (
                       <CustomInput
@@ -469,20 +429,26 @@ export default function Dashboard(props) {
                       <></>
                     )}
                     {!transacting ? (
-                      <Button color="info" className="MLBGradient" onClick={() => split()}>Split</Button>
-                    ) : (
-                      <>
-                      Splitting tokens
-                      <div className="lds-ellipsisIF">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
-                      <br/>
-                      <br/>
-                      <Button disabled onClick={() => split()}>
+                      <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => split()}
+                      >
                         Split
                       </Button>
+                    ) : (
+                      <>
+                        Splitting tokens
+                        <div className="lds-ellipsisIF">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
+                        <br />
+                        <br />
+                        <Button disabled onClick={() => split()}>
+                          Split
+                        </Button>
                       </>
                     )}
                   </h3>
@@ -491,7 +457,7 @@ export default function Dashboard(props) {
             )}
           </Card>
         </div>
-      <Footer fluid />
+        <Footer fluid />
       </div>
     </div>
   );
