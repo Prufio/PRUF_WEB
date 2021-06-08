@@ -145,13 +145,13 @@ export default function Dashboard(props) {
 
   const split = () => {
     if (useConnected) {
-      console.log(`Splitting balance of ${addr}`);
+      console.log(`Splitting PRUF balance of ${addr}`);
       setTransacting(true);
       setTimeout(async () => {
         setTransacting(false);
         swal({
           title: `Success!`,
-          text: `Tokens in wallet "${addr}" split successfully.`,
+          text: `Tokens in wallet "${addr}" have been split successfully.`,
           icon: "success",
           button: "Close",
         }).then(() =>
@@ -160,13 +160,13 @@ export default function Dashboard(props) {
     }, 2000);
     } else {
       if (window.web3.utils.isAddress(customAddress)) {
-        console.log(`Splitting balance of ${customAddress}`);
+        console.log(`Splitting PRUF balance of ${customAddress}`);
         setTransacting(true);
         setTimeout(async () => {
           setTransacting(false);
           swal({
             title: `Success!`,
-            text: `Tokens in wallet "${customAddress}" split successfully.`,
+            text: `Tokens in wallet "${customAddress}" have been split successfully.`,
             icon: "success",
             button: "Close",
           }).then(() =>
@@ -267,7 +267,7 @@ export default function Dashboard(props) {
 
   const setUpEnvironment = (_addr) => {
     const Splitter_ADDRESS = "",
-      Util_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538";
+      Util_ADDRESS = "0xd661975D57E503B9e25b01EefBaFFdcAA5296E53";
     const Splitter_ABI = "",
       Util_ABI = [
         {
