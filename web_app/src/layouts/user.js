@@ -94,6 +94,12 @@ export default function Dashboard(props) {
     });
   };
 
+  if (window.ethereum && !window.addedListeners) {
+    window.addEventListener("chainListener", chainListener);
+    window.addEventListener("accountListener", acctListener);
+    window.addedListeners = true;
+  }
+
   React.useEffect(() => {
     if (window.ethereum) {
       window.ethereum
@@ -129,10 +135,6 @@ export default function Dashboard(props) {
     }
 
     window.addEventListener("resize", resizeFunction);
-    if (window.ethereum) {
-      window.addEventListener("chainListener", chainListener, { once: true });
-      window.addEventListener("accountListener", acctListener, { once: true });
-    }
 
     // Specify how to clean up after this effect:
     return function cleanup() {
