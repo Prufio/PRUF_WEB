@@ -64,37 +64,32 @@ export default function Footer(props) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="/#/split/home" className="links">
-                {rtlActive ? "الصفحة الرئيسية" : "Home"}
-              </a>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <a href="https://pruf.io/" className="links">
+              <a href="https://pruf.io/" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Company"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://twitter.com/prufteam" className="links">
+              <a href="https://twitter.com/prufteam" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Twitter"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://t.me/pruftalk" className="links">
+              <a href="https://t.me/pruftalk" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Telegram"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://github.com/Prufio" className="links">
+              <a href="https://github.com/Prufio" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Github"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://www.reddit.com/r/PRuF/" className="links">
+              <a href="https://www.reddit.com/r/PRuF/" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Reddit"}
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="https://discord.com/invite/m4jsh6y" className="links">
+              <a href="https://discord.com/invite/m4jsh6y" className="links" target="_blank">
                 {rtlActive ? "شركة" : "Discord"}
               </a>
             </ListItem>
