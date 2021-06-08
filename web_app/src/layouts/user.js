@@ -75,23 +75,25 @@ export default function Dashboard(props) {
 
   // ref for main panel div
   const mainPanel = React.createRef();
-
-  window.ethereum.on("chainChanged", (chainId) => {
-    console.log(chainId);
-    window.location.reload();
-  });
-
-
-  window.ethereum.on("accountsChanged", (e) => {
-    console.log("Accounts changed");
-    if (e[0] === undefined || e[0] === null) {
-      if (e[0] !== addr) {
+  if (window.ethereum){
+    window.ethereum.on("chainChanged", (chainId) => {
+      console.log(chainId);
+      window.location.reload();
+    });
+  
+  
+    window.ethereum.on("accountsChanged", (e) => {
+      console.log("Accounts changed");
+      if (e[0] === undefined || e[0] === null) {
+        if (e[0] !== addr) {
+          window.location.reload();
+        }
+      } else if (window.web3.utils.toChecksumAddress(e[0]) !== addr) {
         window.location.reload();
       }
-    } else if (window.web3.utils.toChecksumAddress(e[0]) !== addr) {
-      window.location.reload();
-    }
-  });
+    });
+  }
+  
 
   // if (window.ethereum && !window.addedListeners) {
   //   window.addEventListener("chainChanged", chainListener);
@@ -1743,7 +1745,7 @@ export default function Dashboard(props) {
                             });
                         } else
                           swal(
-                            "No ethereum provider detected. Try again with a web3-enabled browser to use PRüF."
+                            "No ethereum provider detected. Try using a web3-enabled browser."
                           );
                       }}
                     >
