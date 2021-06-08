@@ -152,58 +152,113 @@ export default function Dashboard(props) {
 
   const split = () => {
     if(Number(etherBalance) < 0.0001) {
-       swal({icon: "warning", title: "Warning!", text: "You may not have enough ether to pay the gas fees for this transaction."})
+       swal({icon: "warning", title: "Warning!", text: "You may not have enough ether to pay the gas fees for this transaction."}).then(()=>{
+        if (useConnected || addr === customAddress) {
+          console.log(`Splitting PRUF balance of ${addr}`);
+          setTransacting(true);
+          splitter
+            .splitMyPruf()
+            .send({ from: addr })
+            .on("receipt", () => {
+              setTransacting(false);
+              swal({
+                title: `Success!`,
+                text: `Tokens in wallet "${addr}" have been split successfully.`,
+                icon: "success",
+                button: "Close",
+              }).then(() => {
+                refreshBalances("both", addr)
+                getSnapShotInfo(addr)
+              });
+            })
+            .on("error", () => {
+              swal("Something went wrong!");
+              setTransacting(false)
+              getSnapShotInfo(addr)
+            });
+        } else {
+          if (window.web3.utils.isAddress(customAddress)) {
+            console.log(`Splitting PRUF balance of ${customAddress}`);
+            setTransacting(true);
+            splitter
+              .splitPrufAtAddress(customAddress)
+              .send({ from: addr })
+              .on("receipt", () => {
+                setTransacting(false);
+                swal({
+                  title: `Success!`,
+                  text: `Tokens in wallet "${customAddress}" have been split successfully.`,
+                  icon: "success",
+                  button: "Close",
+                }).then(() => {
+                  refreshBalances("both", addr)
+                  getSnapShotInfo(customAddress)
+                });
+              })
+              .on("error", () => {
+                swal("Something went wrong!");
+                getSnapShotInfo(customAddress)
+              });
+          } else {
+            return swal(
+              `Given value "${customAddress}" is not a valid Ethereum address. Please try again.`
+            );
+          }
+        }
+       })
     }
-    if (useConnected || addr === customAddress) {
-      console.log(`Splitting PRUF balance of ${addr}`);
-      setTransacting(true);
-      splitter
-        .splitMyPruf()
-        .send({ from: addr })
-        .on("receipt", () => {
-          setTransacting(false);
-          swal({
-            title: `Success!`,
-            text: `Tokens in wallet "${addr}" have been split successfully.`,
-            icon: "success",
-            button: "Close",
-          }).then(() => {
-            refreshBalances("both", addr)
-            getSnapShotInfo(addr)
-          });
-        })
-        .on("error", () => {
-          swal("Something went wrong!");
-          setTransacting(false)
-          getSnapShotInfo(addr)
-        });
-    } else {
-      if (window.web3.utils.isAddress(customAddress)) {
-        console.log(`Splitting PRUF balance of ${customAddress}`);
+    else{
+      if (useConnected || addr === customAddress) {
+        console.log(`Splitting PRUF balance of ${addr}`);
         setTransacting(true);
         splitter
-          .splitPrufAtAddress(customAddress)
+          .splitMyPruf()
           .send({ from: addr })
           .on("receipt", () => {
             setTransacting(false);
             swal({
               title: `Success!`,
-              text: `Tokens in wallet "${customAddress}" have been split successfully.`,
+              text: `Tokens in wallet "${addr}" have been split successfully.`,
               icon: "success",
               button: "Close",
             }).then(() => {
               refreshBalances("both", addr)
-              getSnapShotInfo(customAddress)
+              getSnapShotInfo(addr)
             });
           })
           .on("error", () => {
             swal("Something went wrong!");
-            getSnapShotInfo(customAddress)
+            setTransacting(false)
+            getSnapShotInfo(addr)
           });
       } else {
-        return swal(
-          `Given value "${customAddress}" is not a valid Ethereum address. Please try again.`
-        );
+        if (window.web3.utils.isAddress(customAddress)) {
+          console.log(`Splitting PRUF balance of ${customAddress}`);
+          setTransacting(true);
+          splitter
+            .splitPrufAtAddress(customAddress)
+            .send({ from: addr })
+            .on("receipt", () => {
+              setTransacting(false);
+              swal({
+                title: `Success!`,
+                text: `Tokens in wallet "${customAddress}" have been split successfully.`,
+                icon: "success",
+                button: "Close",
+              }).then(() => {
+                refreshBalances("both", addr)
+                getSnapShotInfo(customAddress)
+              });
+            })
+            .on("error", () => {
+              swal("Something went wrong!");
+              getSnapShotInfo(customAddress)
+            });
+        } else {
+          return swal(
+            `Given value "${customAddress}" is not a valid Ethereum address. Please try again.`
+          );
+        }
       }
     }
   };
