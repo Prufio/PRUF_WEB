@@ -52,6 +52,7 @@ export default function Dashboard(props) {
   const [customAddress, setCustomAddress] = React.useState("");
   const [walletInfo, setWalletInfo] = React.useState("0");
   const [isEligible, setIsEligible] = React.useState(false);
+  const [tempAddr, setTempAddr] = React.useState("")
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
@@ -352,10 +353,14 @@ export default function Dashboard(props) {
   };
 
   const handleCustomAddress = (e) => {
-    setCustomAddress(e.target.value || undefined);
+    setTempAddr(e.target.value);
+    setWalletInfo("0")
+    setIsEligible(false)
     if (window.web3.utils.isAddress(e.target.value)) {
       setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value))
       getSnapShotInfo(e.target.value);
+    } else {
+      setCustomAddress("")
     }
   };
 
@@ -1688,7 +1693,8 @@ export default function Dashboard(props) {
         if (result === "0") setIsEligible(false);
         setWalletInfo(window.web3.utils.fromWei(result));
       } else {
-        setWalletInfo("");
+        setIsEligible(false);
+        setWalletInfo("0");
       }
     });
   };
@@ -1842,6 +1848,7 @@ export default function Dashboard(props) {
                       console.log(`setting useConnected to ${!useConnected}`);
                       setUseConnected(!useConnected);
                       setCustomAddress("");
+                      setTempAddr("")
                       if (!useConnected) {
                         getSnapShotInfo(addr);
                       } else {
@@ -1852,7 +1859,7 @@ export default function Dashboard(props) {
                   />{" "}
                   {` `}
                   <span className="splitterCheckboxFont">
-                    Use connected wallet address
+                    Use connected wallet
                     </span>
                   <br />
                   {!useConnected ? (
@@ -1861,7 +1868,7 @@ export default function Dashboard(props) {
                         fullWidth: true,
                       }}
                       inputProps={{
-                        value: customAddress,
+                        value: tempAddr,
                         onChange: (e) => {
                           handleCustomAddress(e); // Set undefined to remove entirely
                         },
@@ -1877,7 +1884,7 @@ export default function Dashboard(props) {
                     </h4>
                   )}
                   <h4>
-                    Account Status: {isEligible === true ? "Eligible" : "Not Eligible"}
+                    Account Status: {isEligible === true ? "Eligible" : customAddress === "" || customAddress === undefined ? "Invalid Address" : "Not Eligible"}
                   </h4>
                   {!transacting && isEligible ? (
                     <Button
