@@ -149,7 +149,12 @@ export default function Dashboard(props) {
       setTransacting(true);
       setTimeout(async () => {
         setTransacting(false);
-        swal(`Tokens in wallet "${addr}" split successfully!`).then(() =>
+        swal({
+          title: `Success!`,
+          text: `Tokens in wallet "${addr}" split successfully.`,
+          icon: "success",
+          button: "Close",
+        }).then(() =>
           refreshBalances("both", addr)
       );
     }, 2000);
@@ -159,13 +164,18 @@ export default function Dashboard(props) {
         setTransacting(true);
         setTimeout(async () => {
           setTransacting(false);
-          swal(`Tokens in wallet "${customAddress}" split successfully!`).then(() =>
+          swal({
+            title: `Success!`,
+            text: `Tokens in wallet "${customAddress}" split successfully.`,
+            icon: "success",
+            button: "Close",
+          }).then(() =>
             refreshBalances("both", addr)
         );
     }, 2000);
       } else {
         return swal(
-          `Given value "${customAddress}" is not a valid Ethereum address`
+          `Given value "${customAddress}" is not a valid Ethereum address. Please try again.`
         );
       }
     }
@@ -1331,7 +1341,7 @@ export default function Dashboard(props) {
                                 window.web3.utils.toChecksumAddress(accounts[0])
                               );
                             });
-                        } else swal("No ethereum provider detected");
+                        } else swal("No ethereum provider detected. Try again with a web3-enabled browser to use PRüF.");
                       }}
                     >
                       connect
