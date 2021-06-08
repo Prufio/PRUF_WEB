@@ -109,6 +109,7 @@ export default function Dashboard(props) {
         .then(async (accounts) => {
           console.log(window.web3.utils.toChecksumAddress(accounts[0]));
           setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+          setUpEnvironment(window.web3.utils.toChecksumAddress(accounts[0]));
         });
     }
 
@@ -145,20 +146,29 @@ export default function Dashboard(props) {
   const split = () => {
     if (useConnected) {
       console.log(`Splitting balance of ${addr}`);
+      setTransacting(true);
+      setTimeout(async () => {
+        setTransacting(false);
+        swal(`Tokens in wallet "${addr}" split successfully!`).then(() =>
+          refreshBalances("both", addr)
+      );
+    }, 2000);
     } else {
       if (window.web3.utils.isAddress(customAddress)) {
         console.log(`Splitting balance of ${customAddress}`);
+        setTransacting(true);
+        setTimeout(async () => {
+          setTransacting(false);
+          swal(`Tokens in wallet "${customAddress}" split successfully!`).then(() =>
+            refreshBalances("both", addr)
+        );
+    }, 2000);
       } else {
         return swal(
           `Given value "${customAddress}" is not a valid Ethereum address`
         );
       }
     }
-    setTransacting(true);
-    setTimeout(async () => {
-      setTransacting(false);
-      swal("Tokens split successfully!");
-    }, 2000);
   };
 
   const getActiveRoute = (routes) => {
@@ -199,11 +209,14 @@ export default function Dashboard(props) {
     });
   };
 
-  const refreshBalances = (job) => {
-    if (!addr) return console.error("No address is connected!");
-    if (job === "eth") {
+  const refreshBalances = (job, _addr) => {
+    if (!_addr) return console.error("No address is connected!");
+
+    console.log(`Refrshing balances of address: ${_addr}`);
+
+    if (job === "eth" || job === "both") {
       setIsRefreshingEther(true);
-      web3.eth.getBalance(addr).then(async (e) => {
+      window.web3.eth.getBalance(_addr).then(async (e) => {
         setEtherBalance(
           Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
         );
@@ -211,10 +224,18 @@ export default function Dashboard(props) {
       });
     }
 
-    else {
-      setIsRefreshingPruf(true);
-      setTimeout(()=>{prufBalance === "" ? setPrufBalance('300') : setPrufBalance(`${Number(prufBalance) +1}`); setIsRefreshingPruf(false)}, 2000)
-    }
+    if (job === "eth") return;
+
+    setIsRefreshingPruf(true);
+    util.balanceOf(_addr).call(async (error, result) => {
+      if (!error) {
+        setPrufBalance(
+          Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+        );
+      }
+      setIsRefreshingPruf(false);
+    });
+    //setTimeout(()=>{prufBalance === "" ? setPrufBalance('300') : setPrufBalance(`${Number(prufBalance) + 1}`); setIsRefreshingPruf(false)}, 2000)
   };
 
   const handleCustomAddress = (e) => {
@@ -236,18 +257,945 @@ export default function Dashboard(props) {
 
   const setUpEnvironment = (_addr) => {
     const Splitter_ADDRESS = "",
-      Util_ADDRESS = "";
+      Util_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538";
     const Splitter_ABI = "",
-      Util_ABI = "";
+      Util_ABI = [
+        {
+          inputs: [],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "Approval",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "Paused",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "previousAdminRole",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "newAdminRole",
+              type: "bytes32",
+            },
+          ],
+          name: "RoleAdminChanged",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+          ],
+          name: "RoleGranted",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+          ],
+          name: "RoleRevoked",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "id",
+              type: "uint256",
+            },
+          ],
+          name: "Snapshot",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "Transfer",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "Unpaused",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_paymentAddress",
+              type: "address",
+            },
+          ],
+          name: "AdminSetSharesAddress",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "CONTRACT_ADMIN_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "DEFAULT_ADMIN_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "MINTER_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "PAUSER_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "PAYABLE_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "SNAPSHOT_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "TRUSTED_AGENT_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_key",
+              type: "uint256",
+            },
+          ],
+          name: "adminKillTrustedAgent",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+          ],
+          name: "allowance",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "approve",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "balanceOf",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "snapshotId",
+              type: "uint256",
+            },
+          ],
+          name: "balanceOfAt",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "burn",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "burnFrom",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "cap",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "decimals",
+          outputs: [
+            {
+              internalType: "uint8",
+              name: "",
+              type: "uint8",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "subtractedValue",
+              type: "uint256",
+            },
+          ],
+          name: "decreaseAllowance",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+          ],
+          name: "getRoleAdmin",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+          ],
+          name: "getRoleMember",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+          ],
+          name: "getRoleMemberCount",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "grantRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "hasRole",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "addedValue",
+              type: "uint256",
+            },
+          ],
+          name: "increaseAllowance",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_addr",
+              type: "address",
+            },
+          ],
+          name: "isColdWallet",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_amount",
+              type: "uint256",
+            },
+          ],
+          name: "mint",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "name",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "pause",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "paused",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_senderAddress",
+              type: "address",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint32",
+                  name: "assetClass",
+                  type: "uint32",
+                },
+                {
+                  internalType: "address",
+                  name: "rootAddress",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "ACTHaddress",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "rootPrice",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "ACTHprice",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct Invoice",
+              name: "invoice",
+              type: "tuple",
+            },
+          ],
+          name: "payForService",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "renounceRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "revokeRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "setColdWallet",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "symbol",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "takeSnapshot",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalSupply",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "snapshotId",
+              type: "uint256",
+            },
+          ],
+          name: "totalSupplyAt",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "transfer",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "transferFrom",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_addr",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_amount",
+              type: "uint256",
+            },
+          ],
+          name: "trustedAgentBurn",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_from",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_amount",
+              type: "uint256",
+            },
+          ],
+          name: "trustedAgentTransfer",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "unSetColdWallet",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "unpause",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ];
 
     console.log("Getting things set up...");
 
-    const SPLITTER = new _web3.eth.Contract(Splitter_ABI, Splitter_ADDRESS);
-    const UTIL = new _web3.eth.Contract(Util_ABI, Util_ADDRESS);
-    setSplitter(SPLITTER);
-    setUtil(UTIL);
+    // const SPLITTER = new _web3.eth.Contract(Splitter_ABI, Splitter_ADDRESS);
+    const UTIL = new window.web3.eth.Contract(Util_ABI, Util_ADDRESS);
+    // setSplitter(SPLITTER);
+    setUtil(UTIL.methods);
 
-    //UTIL.methods.
+    setIsRefreshingEther(true);
+    window.web3.eth.getBalance(_addr).then(async (e) => {
+      setEtherBalance(
+        Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
+      );
+      setIsRefreshingEther(false);
+    });
+
+    setIsRefreshingPruf(true);
+    UTIL.methods.balanceOf(_addr).call(async (error, result) => {
+      if (!error) {
+        setPrufBalance(
+          Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+        );
+      }
+      setIsRefreshingPruf(false);
+    });
   };
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
@@ -264,8 +1212,6 @@ export default function Dashboard(props) {
         brandText={getActiveRoute(routes)}
         {...rest}
       />{" "}
-      <br />
-      <br />
       <br />
       <br />
       <div className={mainPanelClasses} ref={mainPanel}>
@@ -295,7 +1241,7 @@ export default function Dashboard(props) {
                     <div className="refresh">
                       <Cached
                         onClick={() => {
-                          refreshBalances('eth');
+                          refreshBalances("eth", addr);
                         }}
                       />
                     </div>
@@ -337,7 +1283,7 @@ export default function Dashboard(props) {
                     <div className="refresh">
                       <Cached
                         onClick={() => {
-                          refreshBalances();
+                          refreshBalances("pruf", addr);
                         }}
                       />
                     </div>
