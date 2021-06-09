@@ -110,7 +110,12 @@ export default function Dashboard(props) {
         })
         .then(async (accounts) => {
           if (accounts[0] === undefined) {
-            return console.log("Ethereum account !detected")
+            window.ethereum.request({method: "eth_requestAccounts"}).then(async (accounts) => {
+              if(accounts[0] === undefined) return swal("Can't connect to wallet.")
+              console.log(window.web3.utils.toChecksumAddress(accounts[0]));
+              setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+              setUpEnvironment(accounts[0]);
+            })
           } else {
 
             console.log(window.web3.utils.toChecksumAddress(accounts[0]));
