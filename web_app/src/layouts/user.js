@@ -52,7 +52,7 @@ export default function Dashboard(props) {
   const [customAddress, setCustomAddress] = React.useState("");
   const [walletInfo, setWalletInfo] = React.useState("0");
   const [isEligible, setIsEligible] = React.useState(false);
-  const [tempAddr, setTempAddr] = React.useState("");
+  const [ethAmount, setEthAmount] = React.useState("");
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
@@ -198,7 +198,6 @@ export default function Dashboard(props) {
     presale.checkWhitelist(_addr).call(async (error, result) => {
       if (!error) {
         console.log(result);
-
         setWalletInfo({
           min: window.web3.utils.fromWei(result["0"]),
           max: window.web3.utils.fromWei(result["1"]),
@@ -257,15 +256,8 @@ export default function Dashboard(props) {
   };
 
   const handleCustomAddress = (e) => {
-    setTempAddr(e.target.value);
-    setWalletInfo("0");
-    if (window.web3.utils.isAddress(e.target.value)) {
-      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
-      getWhitelistInfo(e.target.value);
-    } else {
-      setIsEligible(false);
-      setCustomAddress("");
-    }
+    setEthAmount(e.target.value)
+    setCustomAddress(e.target.value);
   };
 
   const sidebarMinimize = () => {
@@ -1884,6 +1876,18 @@ export default function Dashboard(props) {
       }
       setIsRefreshingPruf(false);
     });
+
+    PRESALE.methods.checkWhitelist(_addr).call(async (error, result) => {
+      if (!error) {
+        console.log(result);
+        setWalletInfo({
+          min: window.web3.utils.fromWei(result["0"]),
+          max: window.web3.utils.fromWei(result["1"]),
+          rate: window.web3.utils.fromWei(result["2"]),
+        });
+      }
+      setIsRefreshingPruf(false);
+    });
   };
 
   return (
@@ -2018,7 +2022,7 @@ export default function Dashboard(props) {
                       }}
                       inputProps={{
                         type: "number",
-                        value: tempAddr,
+                        value: ethAmount,
                         onChange: (e) => {
                           handleCustomAddress(e); // Set undefined to remove entirely
                         },
