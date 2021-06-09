@@ -58,7 +58,7 @@ export default function Dashboard(props) {
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
-  const [splitter, setSplitter] = React.useState({});
+  const [presale, setPresale] = React.useState({});
   const [util, setUtil] = React.useState({});
   // styles
   const classes = useStyles();
@@ -155,7 +155,7 @@ export default function Dashboard(props) {
             if (useConnected || addr === customAddress) {
               console.log(`Splitting PRUF balance of ${addr}`);
               setTransacting(true);
-              splitter
+              presale
                 .splitMyPruf()
                 .send({ from: addr })
                 .on("receipt", () => {
@@ -179,7 +179,7 @@ export default function Dashboard(props) {
               if (window.web3.utils.isAddress(customAddress)) {
                 console.log(`Splitting PRUF balance of ${customAddress}`);
                 setTransacting(true);
-                splitter
+                presale
                   .splitPrufAtAddress(customAddress)
                   .send({ from: addr })
                   .on("receipt", () => {
@@ -214,7 +214,7 @@ export default function Dashboard(props) {
       if (useConnected || addr === customAddress) {
         console.log(`Splitting PRUF balance of ${addr}`);
         setTransacting(true);
-        splitter
+        presale
           .splitMyPruf()
           .send({ from: addr })
           .on("receipt", () => {
@@ -238,7 +238,7 @@ export default function Dashboard(props) {
         if (window.web3.utils.isAddress(customAddress)) {
           console.log(`Splitting PRUF balance of ${customAddress}`);
           setTransacting(true);
-          splitter
+          presale
             .splitPrufAtAddress(customAddress)
             .send({ from: addr })
             .on("receipt", () => {
@@ -294,7 +294,7 @@ export default function Dashboard(props) {
   };
 
   const getActiveRoute = (routes) => {
-    let activeRoute = "PRüF Token Splitter";
+    let activeRoute = "PRüF Token Exchange";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
         let collapseActiveRoute = getActiveRoute(routes[i].views);
@@ -317,11 +317,11 @@ export default function Dashboard(props) {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/split") {
+      if (prop.layout === "/sale") {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={() => <prop.component splitter={splitter.methods} />}
+            render={() => <prop.component presale={presale.methods} />}
             key={key}
           />
         );
@@ -357,7 +357,6 @@ export default function Dashboard(props) {
       }
       setIsRefreshingPruf(false);
     });
-    //setTimeout(()=>{prufBalance === "" ? setPrufBalance('300') : setPrufBalance(`${Number(prufBalance) + 1}`); setIsRefreshingPruf(false)}, 2000)
   };
 
   const handleCustomAddress = (e) => {
@@ -383,362 +382,672 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_addr) => {
-    const Splitter_ADDRESS = "0x980AaB0F43cea7E7a21F73cf9ed4eADB5845e1Dc",
+    const Presale_ADDRESS = "0xb7D09306d0C5D3C2A5C0FDc1146efb2415445Cf3",
       Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
-    const Splitter_ABI = [
+      const PRESALE_ABI = [
         {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "grantRole",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
         },
         {
-          inputs: [],
-          name: "pause",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "Paused",
+          "type": "event"
         },
         {
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
+              "indexed": false,
+              "internalType": "address",
+              "name": "addr",
+              "type": "address"
             },
             {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
           ],
-          name: "renounceRole",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "name": "REPORT",
+          "type": "event"
         },
         {
-          inputs: [],
-          stateMutability: "nonpayable",
-          type: "constructor",
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "previousAdminRole",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "newAdminRole",
+              "type": "bytes32"
+            }
+          ],
+          "name": "RoleAdminChanged",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: false,
-              internalType: "address",
-              name: "account",
-              type: "address",
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
           ],
-          name: "Paused",
-          type: "event",
+          "name": "RoleGranted",
+          "type": "event"
         },
         {
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
+              "indexed": true,
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
             },
             {
-              internalType: "address",
-              name: "account",
-              type: "address",
+              "indexed": true,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
             },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            }
           ],
-          name: "revokeRole",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "name": "RoleRevoked",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "anonymous": false,
+          "inputs": [
             {
-              indexed: true,
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "previousAdminRole",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "bytes32",
-              name: "newAdminRole",
-              type: "bytes32",
-            },
+              "indexed": false,
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
           ],
-          name: "RoleAdminChanged",
-          type: "event",
+          "name": "Unpaused",
+          "type": "event"
         },
         {
-          anonymous: false,
-          inputs: [
+          "inputs": [
             {
-              indexed: true,
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "sender",
-              type: "address",
-            },
+              "internalType": "uint256",
+              "name": "_airdropAmount",
+              "type": "uint256"
+            }
           ],
-          name: "RoleGranted",
-          type: "event",
+          "name": "ADMIN_setAirDropAmount",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          anonymous: false,
-          inputs: [
+          "inputs": [
             {
-              indexed: true,
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "sender",
-              type: "address",
-            },
+              "internalType": "address payable",
+              "name": "_address",
+              "type": "address"
+            }
           ],
-          name: "RoleRevoked",
-          type: "event",
+          "name": "ADMIN_setPaymentAddress",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "splitMyPruf",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_presaleLimit",
+              "type": "uint256"
+            }
+          ],
+          "name": "ADMIN_setPresaleLimit",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: "address",
-              name: "_address",
-              type: "address",
-            },
+              "internalType": "address",
+              "name": "_address",
+              "type": "address"
+            }
           ],
-          name: "splitPrufAtAddress",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "name": "ADMIN_setTokenContract",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "unpause",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_a",
+              "type": "address"
+            }
+          ],
+          "name": "AIRDROP_Mint1",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          anonymous: false,
-          inputs: [
+          "inputs": [
             {
-              indexed: false,
-              internalType: "address",
-              name: "account",
-              type: "address",
+              "internalType": "address",
+              "name": "_a",
+              "type": "address"
             },
+            {
+              "internalType": "address",
+              "name": "_b",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_c",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_d",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_e",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_f",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_g",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_h",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_i",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_j",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_k",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_l",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_m",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_n",
+              "type": "address"
+            }
           ],
-          name: "Unpaused",
-          type: "event",
+          "name": "AIRDROP_Mint14",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [
             {
-              internalType: "address",
-              name: "_address",
-              type: "address",
+              "internalType": "address",
+              "name": "_a",
+              "type": "address"
             },
-          ],
-          name: "checkMyAddress",
-          outputs: [
             {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
+              "internalType": "address",
+              "name": "_b",
+              "type": "address"
             },
+            {
+              "internalType": "address",
+              "name": "_c",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_d",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_e",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "AIRDROP_Mint5",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "CONTRACT_ADMIN_ROLE",
-          outputs: [
+          "inputs": [],
+          "name": "AIRDROP_ROLE",
+          "outputs": [
             {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "DEFAULT_ADMIN_ROLE",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "inputs": [],
+          "name": "BUY_PRUF",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "DEFAULT_ADMIN_ROLE",
+          "outputs": [
             {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
           ],
-          name: "getRoleAdmin",
-          outputs: [
-            {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "PAUSER_ROLE",
+          "outputs": [
             {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "uint256",
-              name: "index",
-              type: "uint256",
-            },
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
           ],
-          name: "getRoleMember",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "WHITELIST_ROLE",
+          "outputs": [
             {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
           ],
-          name: "getRoleMemberCount",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [
+          "inputs": [],
+          "name": "airdropAmount",
+          "outputs": [
             {
-              internalType: "bytes32",
-              name: "role",
-              type: "bytes32",
-            },
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
           ],
-          name: "hasRole",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "paused",
-          outputs: [
+          "inputs": [],
+          "name": "balance",
+          "outputs": [
             {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "stateMutability": "view",
+          "type": "function"
         },
         {
-          inputs: [],
-          name: "PAUSER_ROLE",
-          outputs: [
+          "inputs": [
             {
-              internalType: "bytes32",
-              name: "",
-              type: "bytes32",
-            },
+              "internalType": "address",
+              "name": "_addr",
+              "type": "address"
+            }
           ],
-          stateMutability: "view",
-          type: "function",
+          "name": "checkWhitelist",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         },
-      ],
-      Util_ABI = [
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            }
+          ],
+          "name": "getRoleAdmin",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            }
+          ],
+          "name": "getRoleMember",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            }
+          ],
+          "name": "getRoleMemberCount",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "grantRole",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "hasRole",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "pause",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "paused",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "payment_address",
+          "outputs": [
+            {
+              "internalType": "address payable",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "presaleCount",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "presaleLimit",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "renounceRole",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "name": "revokeRole",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "unpause",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_addr",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_tokensPerEth",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_minEth",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_maxEth",
+              "type": "uint256"
+            }
+          ],
+          "name": "whitelist",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "withdraw",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "stateMutability": "payable",
+          "type": "receive"
+        }
+      ];
+      
+      const Util_ABI = [
         {
           inputs: [],
           stateMutability: "nonpayable",
@@ -1653,13 +1962,14 @@ export default function Dashboard(props) {
 
     console.log("Getting things set up...");
 
-    const SPLITTER = new window.web3.eth.Contract(
-      Splitter_ABI,
-      Splitter_ADDRESS
+
+    const PRESALE = new window.web3.eth.Contract(
+      PRESALE_ABI,
+      Presale_ADDRESS
     );
     const UTIL = new window.web3.eth.Contract(Util_ABI, Util_ADDRESS);
 
-    setSplitter(SPLITTER.methods);
+    setPresale(PRESALE.methods);
     setUtil(UTIL.methods);
 
     setIsRefreshingEther(true);
@@ -1679,33 +1989,6 @@ export default function Dashboard(props) {
       }
       setIsRefreshingPruf(false);
     });
-  };
-
-  //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
-  const getSnapShotInfo = (_addr) => {
-    if (!_addr) return swal("Unable to reach user's wallet.");
-    console.log("Getting snapshot info");
-
-    splitter.checkMyAddress(_addr).call( (error, result) => {
-      if (!error && result === "0") {
-        console.log(result)
-        util.balanceOfAt(_addr, 1).call( (error, result) => {
-          if (!error) {
-            console.log(result);
-            if (result === "0") setIsEligible(false)
-            else setIsEligible(true)
-            setWalletInfo(window.web3.utils.fromWei(result));
-          } else {
-            setIsEligible(false)
-            setWalletInfo("0")
-          }
-        });
-      } else {
-        setIsEligible(false)
-      }
-    });
-
-    
   };
 
   return (
@@ -1810,7 +2093,7 @@ export default function Dashboard(props) {
               <CardIcon className="headerIconBack">
                 <span class="material-icons"> toll </span>
               </CardIcon>
-              <h5 className={classes.cardIconTitle}>Split Tokens</h5>
+              <h5 className={classes.cardIconTitle}>Buy Tokens</h5>
             </CardHeader>
             {/* eslint-disable-next-line react/prop-types */}
             {!addr && (
@@ -1835,26 +2118,6 @@ export default function Dashboard(props) {
             {addr && (
               <CardBody>
                 <form>
-                  <input
-                    type="checkbox"
-                    onChange={() => {
-                      console.log(`setting useConnected to ${!useConnected}`);
-                      setUseConnected(!useConnected);
-                      setCustomAddress("");
-                      setTempAddr("");
-                      if (!useConnected) {
-                        getSnapShotInfo(addr);
-                      } else {
-                        setWalletInfo("");
-                        setIsEligible(false);
-                      }
-                    }}
-                  />{" "}
-                  {` `}
-                  <span className="splitterCheckboxFont">
-                    Use connected wallet
-                  </span>
-                  <br />
                   {!useConnected ? (
                     <CustomInput
                       formControlProps={{
@@ -1865,16 +2128,16 @@ export default function Dashboard(props) {
                         onChange: (e) => {
                           handleCustomAddress(e); // Set undefined to remove entirely
                         },
-                        placeholder: `Tokenholder address`,
+                        placeholder: `ETH`,
                       }}
                     />
                   ) : (
                     <></>
                   )}
-                  {isEligible ? <h4>Unclaimed balance: ü{walletInfo}</h4> : <> </>}
+                  {isEligible ? <h4>Amount: ü{walletInfo}</h4> : <> </>}
                   {useConnected || tempAddr !== "" ? (
                     <h4>
-                      Account Status:{" "}
+                      Account Exchange Rate:{" "}
                       {isEligible === true
                         ? "Eligible"
                         : useConnected
@@ -1892,11 +2155,11 @@ export default function Dashboard(props) {
                       className="MLBGradient"
                       onClick={() => split()}
                     >
-                      Split
+                      Purchace
                     </Button>
                   ) : transacting ? (
                     <>
-                      Splitting tokens
+                      Purchacing tokens
                       <div className="lds-ellipsisIF">
                         <div></div>
                         <div></div>
@@ -1909,7 +2172,7 @@ export default function Dashboard(props) {
                         disabled
                         onClick={() => split()}
                       >
-                        Split
+                        Purchase
                       </Button>
                     </>
                   ) : (
@@ -1918,7 +2181,7 @@ export default function Dashboard(props) {
                       disabled
                       onClick={() => split()}
                     >
-                      Split
+                      Purchace
                     </Button>
                   )}
                 </form>
