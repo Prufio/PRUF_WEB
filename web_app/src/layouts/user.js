@@ -370,7 +370,7 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_addr) => {
-    const Presale_ADDRESS = "0xb7D09306d0C5D3C2A5C0FDc1146efb2415445Cf3",
+    const Presale_ADDRESS = "0x72eC41b545Cdc24a4094565aF7DF733Ffaa014ED",
       Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
       const PRESALE_ABI = [
         {
