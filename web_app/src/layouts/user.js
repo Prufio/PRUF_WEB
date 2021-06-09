@@ -295,7 +295,6 @@ export default function Dashboard(props) {
 
   const getActiveRoute = (routes) => {
     let activeRoute = "PRUF Token Swap";
-    let activeRoute = "Get PRüF Tokens";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
         let collapseActiveRoute = getActiveRoute(routes[i].views);
