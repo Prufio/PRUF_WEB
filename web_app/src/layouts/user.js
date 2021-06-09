@@ -294,6 +294,7 @@ export default function Dashboard(props) {
   };
 
   const getActiveRoute = (routes) => {
+    let activeRoute = "PRUF Token Swap";
     let activeRoute = "Get PRüF Tokens";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
@@ -2107,11 +2108,10 @@ export default function Dashboard(props) {
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
-                <span class="material-icons"> toll </span>
+                <span class="material-icons"> account_balance_wallet </span>
               </CardIcon>
-              <h5 className={classes.cardIconTitle}>Buy Tokens</h5>
+              <h5 className={classes.cardIconTitle}>Get PRUF</h5>
             </CardHeader>
-            {/* eslint-disable-next-line react/prop-types */}
             {!addr && (
               <CardBody>
                 <form>
@@ -2130,7 +2130,6 @@ export default function Dashboard(props) {
                 </form>
               </CardBody>
             )}
-            {/* eslint-disable-next-line react/prop-types */}
             {addr && (
               <CardBody>
                 <form>
@@ -2140,6 +2139,7 @@ export default function Dashboard(props) {
                         fullWidth: true,
                       }}
                       inputProps={{
+                        type: 'number',
                         value: tempAddr,
                         onChange: (e) => {
                           handleCustomAddress(e); // Set undefined to remove entirely
@@ -2153,7 +2153,7 @@ export default function Dashboard(props) {
                   {isEligible ? <h4>Amount: ü{walletInfo}</h4> : <> </>}
                   {useConnected || tempAddr !== "" ? (
                     <h4>
-                      Account Exchange Rate:{" "}
+                      Account Whitelsit Rate:{" "}
                       {isEligible === true
                         ? "Eligible"
                         : useConnected
