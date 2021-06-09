@@ -167,13 +167,13 @@ export default function Dashboard(props) {
                     button: "Close",
                   }).then(() => {
                     refreshBalances("both", addr);
-                    getSnapShotInfo(addr);
+                    getWhitelistInfo(addr);
                   });
                 })
                 .on("error", () => {
                   swal("Something went wrong!");
                   setTransacting(false);
-                  getSnapShotInfo(addr);
+                  getWhitelistInfo(addr);
                 });
             } else {
               if (window.web3.utils.isAddress(customAddress)) {
@@ -191,12 +191,12 @@ export default function Dashboard(props) {
                       button: "Close",
                     }).then(() => {
                       refreshBalances("both", addr);
-                      getSnapShotInfo(customAddress);
+                      getWhitelistInfo(customAddress);
                     });
                   })
                   .on("error", () => {
                     swal("Something went wrong!");
-                    getSnapShotInfo(customAddress);
+                    getWhitelistInfo(customAddress);
                   });
               } else {
                 return swal(
@@ -226,13 +226,13 @@ export default function Dashboard(props) {
               button: "Close",
             }).then(() => {
               refreshBalances("both", addr);
-              getSnapShotInfo(addr);
+              getWhitelistInfo(addr);
             });
           })
           .on("error", () => {
             swal("Something went wrong!");
             setTransacting(false);
-            getSnapShotInfo(addr);
+            getWhitelistInfo(addr);
           });
       } else {
         if (window.web3.utils.isAddress(customAddress)) {
@@ -250,12 +250,12 @@ export default function Dashboard(props) {
                 button: "Close",
               }).then(() => {
                 refreshBalances("both", addr);
-                getSnapShotInfo(customAddress);
+                getWhitelistInfo(customAddress);
               });
             })
             .on("error", () => {
               swal("Something went wrong!");
-              getSnapShotInfo(customAddress);
+              getWhitelistInfo(customAddress);
             });
         } else {
           return swal(
@@ -312,6 +312,22 @@ export default function Dashboard(props) {
     return activeRoute;
   };
 
+  const getWhitelistInfo = (_addr) => {
+    presale.checkWhitelist(_addr).call(async (error, result) => {
+      if (!error) {
+        console.log(result)
+
+        setWalletInfo({
+          min: result["0"],
+          max: result["1"],
+          rate: result["2"]
+        });
+        
+      }
+      setIsRefreshingPruf(false);
+    });
+  }
+
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.collapse) {
@@ -357,6 +373,18 @@ export default function Dashboard(props) {
       }
       setIsRefreshingPruf(false);
     });
+  };
+
+  const handleCustomAddress = (e) => {
+    setTempAddr(e.target.value);
+    setWalletInfo("0");
+    if (window.web3.utils.isAddress(e.target.value)) {
+      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
+      getWhitelistInfo(e.target.value);
+    } else {
+      setIsEligible(false);
+      setCustomAddress("");
+    }
   };
 
   const sidebarMinimize = () => {
@@ -2142,11 +2170,11 @@ export default function Dashboard(props) {
                       className="MLBGradient"
                       onClick={() => split()}
                     >
-                      Purchace
+                      Purchase
                     </Button>
                   ) : transacting ? (
                     <>
-                      Minting tokens
+                      Purchasing tokens
                       <div className="lds-ellipsisIF">
                         <div></div>
                         <div></div>
@@ -2168,7 +2196,7 @@ export default function Dashboard(props) {
                       disabled
                       onClick={() => split()}
                     >
-                      Purchace
+                      Purchase
                     </Button>
                   )}
                 </form>
