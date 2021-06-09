@@ -2,7 +2,7 @@ import React from "react";
 import cx from "classnames";
 import swal from "sweetalert";
 import Web3 from "web3";
-import { Route} from "react-router-dom";
+import { Route } from "react-router-dom";
 
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -52,7 +52,7 @@ export default function Dashboard(props) {
   const [customAddress, setCustomAddress] = React.useState("");
   const [walletInfo, setWalletInfo] = React.useState("0");
   const [isEligible, setIsEligible] = React.useState(false);
-  const [tempAddr, setTempAddr] = React.useState("")
+  const [tempAddr, setTempAddr] = React.useState("");
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
@@ -75,13 +75,12 @@ export default function Dashboard(props) {
 
   // ref for main panel div
   const mainPanel = React.createRef();
-  if (window.ethereum){
+  if (window.ethereum) {
     window.ethereum.on("chainChanged", (chainId) => {
       console.log(chainId);
       window.location.reload();
     });
-  
-  
+
     window.ethereum.on("accountsChanged", (e) => {
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
@@ -93,7 +92,6 @@ export default function Dashboard(props) {
       }
     });
   }
-  
 
   // if (window.ethereum && !window.addedListeners) {
   //   window.addEventListener("chainChanged", chainListener);
@@ -102,12 +100,12 @@ export default function Dashboard(props) {
   // }
 
   React.useEffect(() => {
-    setTimeout(getAddress(), 1000)
+    setTimeout(getAddress(), 1000);
 
     let web3 = require("web3");
     web3 = new Web3(
       web3.givenProvider ||
-      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     window.web3 = web3;
 
@@ -135,85 +133,84 @@ export default function Dashboard(props) {
   }, []);
 
   const split = () => {
-    if(Number(etherBalance) < 0.0001) {
-       swal({
-         icon: "warning", 
-         title: "Warning!", 
-         text: "You may not have enough ether to pay for gas!",
-         buttons: {
+    if (Number(etherBalance) < 0.0001) {
+      swal({
+        icon: "warning",
+        title: "Warning!",
+        text: "You may not have enough ether to pay for gas!",
+        buttons: {
           Cancel: {
-              text: 'Cancel',
+            text: "Cancel",
           },
           Proceed: {
-              text: "I know what I'm doing",
+            text: "I know what I'm doing",
           },
-      },
-        }).then((value) => {
-          switch (value) {
-              case 'Cancel':
-                  return;
+        },
+      }).then((value) => {
+        switch (value) {
+          case "Cancel":
+            return;
 
-                  case 'Proceed':
-                    if (useConnected || addr === customAddress) {
-                      console.log(`Splitting PRUF balance of ${addr}`);
-                      setTransacting(true);
-                      splitter
-                        .splitMyPruf()
-                        .send({ from: addr })
-                        .on("receipt", () => {
-                          setTransacting(false);
-                          swal({
-                            title: `Success!`,
-                            text: `Tokens in wallet "${addr}" have been split successfully.`,
-                            icon: "success",
-                            button: "Close",
-                          }).then(() => {
-                            refreshBalances("both", addr)
-                            getSnapShotInfo(addr)
-                          });
-                        })
-                        .on("error", () => {
-                          swal("Something went wrong!");
-                          setTransacting(false)
-                          getSnapShotInfo(addr)
-                        });
-                    } else {
-                      if (window.web3.utils.isAddress(customAddress)) {
-                        console.log(`Splitting PRUF balance of ${customAddress}`);
-                        setTransacting(true);
-                        splitter
-                          .splitPrufAtAddress(customAddress)
-                          .send({ from: addr })
-                          .on("receipt", () => {
-                            setTransacting(false);
-                            swal({
-                              title: `Success!`,
-                              text: `Tokens in wallet "${customAddress}" have been split successfully.`,
-                              icon: "success",
-                              button: "Close",
-                            }).then(() => {
-                              refreshBalances("both", addr)
-                              getSnapShotInfo(customAddress)
-                            });
-                          })
-                          .on("error", () => {
-                            swal("Something went wrong!");
-                            getSnapShotInfo(customAddress)
-                          });
-                      } else {
-                        return swal(
-                          `Given value "${customAddress}" is not a valid Ethereum address. Please try again.`
-                        );
-                      }
-                    };
-                    break;
+          case "Proceed":
+            if (useConnected || addr === customAddress) {
+              console.log(`Splitting PRUF balance of ${addr}`);
+              setTransacting(true);
+              splitter
+                .splitMyPruf()
+                .send({ from: addr })
+                .on("receipt", () => {
+                  setTransacting(false);
+                  swal({
+                    title: `Success!`,
+                    text: `Tokens in wallet "${addr}" have been split successfully.`,
+                    icon: "success",
+                    button: "Close",
+                  }).then(() => {
+                    refreshBalances("both", addr);
+                    getSnapShotInfo(addr);
+                  });
+                })
+                .on("error", () => {
+                  swal("Something went wrong!");
+                  setTransacting(false);
+                  getSnapShotInfo(addr);
+                });
+            } else {
+              if (window.web3.utils.isAddress(customAddress)) {
+                console.log(`Splitting PRUF balance of ${customAddress}`);
+                setTransacting(true);
+                splitter
+                  .splitPrufAtAddress(customAddress)
+                  .send({ from: addr })
+                  .on("receipt", () => {
+                    setTransacting(false);
+                    swal({
+                      title: `Success!`,
+                      text: `Tokens in wallet "${customAddress}" have been split successfully.`,
+                      icon: "success",
+                      button: "Close",
+                    }).then(() => {
+                      refreshBalances("both", addr);
+                      getSnapShotInfo(customAddress);
+                    });
+                  })
+                  .on("error", () => {
+                    swal("Something went wrong!");
+                    getSnapShotInfo(customAddress);
+                  });
+              } else {
+                return swal(
+                  `Given value "${customAddress}" is not a valid Ethereum address. Please try again.`
+                );
+              }
+            }
+            break;
 
-              default:
-                  break
-          }
-        })
-    }
-    else{
+          default:
+            break;
+        }
+      });
+    } else {
       if (useConnected || addr === customAddress) {
         console.log(`Splitting PRUF balance of ${addr}`);
         setTransacting(true);
@@ -228,14 +225,14 @@ export default function Dashboard(props) {
               icon: "success",
               button: "Close",
             }).then(() => {
-              refreshBalances("both", addr)
-              getSnapShotInfo(addr)
+              refreshBalances("both", addr);
+              getSnapShotInfo(addr);
             });
           })
           .on("error", () => {
             swal("Something went wrong!");
-            setTransacting(false)
-            getSnapShotInfo(addr)
+            setTransacting(false);
+            getSnapShotInfo(addr);
           });
       } else {
         if (window.web3.utils.isAddress(customAddress)) {
@@ -252,13 +249,13 @@ export default function Dashboard(props) {
                 icon: "success",
                 button: "Close",
               }).then(() => {
-                refreshBalances("both", addr)
-                getSnapShotInfo(customAddress)
+                refreshBalances("both", addr);
+                getSnapShotInfo(customAddress);
               });
             })
             .on("error", () => {
               swal("Something went wrong!");
-              getSnapShotInfo(customAddress)
+              getSnapShotInfo(customAddress);
             });
         } else {
           return swal(
@@ -273,28 +270,28 @@ export default function Dashboard(props) {
     if (window.ethereum) {
       window.ethereum
         .request({
-          method: "eth_accounts"
+          method: "eth_accounts",
         })
         .then(async (accounts) => {
           if (accounts[0] === undefined) {
-            window.ethereum.request({method: "eth_requestAccounts"}).then(async (accounts) => {
-              if(accounts[0] === undefined) return swal("Can't connect to wallet.")
-              console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-              setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-              setUpEnvironment(accounts[0]);
-            })
+            window.ethereum
+              .request({ method: "eth_requestAccounts" })
+              .then(async (accounts) => {
+                if (accounts[0] === undefined)
+                  return swal("Can't connect to wallet.");
+                console.log(window.web3.utils.toChecksumAddress(accounts[0]));
+                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+                setUpEnvironment(accounts[0]);
+              });
           } else {
-
             console.log(window.web3.utils.toChecksumAddress(accounts[0]));
             setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
             setUpEnvironment(accounts[0]);
           }
         });
+    } else {
     }
-
-    else {
-    }
-  }
+  };
 
   const getActiveRoute = (routes) => {
     let activeRoute = "PRüF Token Splitter";
@@ -365,13 +362,13 @@ export default function Dashboard(props) {
 
   const handleCustomAddress = (e) => {
     setTempAddr(e.target.value);
-    setWalletInfo("0")
-    setIsEligible(false)
+    setWalletInfo("0");
+    setIsEligible(false);
     if (window.web3.utils.isAddress(e.target.value)) {
-      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value))
+      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
       getSnapShotInfo(e.target.value);
     } else {
-      setCustomAddress("")
+      setCustomAddress("");
     }
   };
 
@@ -389,358 +386,358 @@ export default function Dashboard(props) {
     const Splitter_ADDRESS = "0x980AaB0F43cea7E7a21F73cf9ed4eADB5845e1Dc",
       Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
     const Splitter_ABI = [
-      {
-        inputs: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-        ],
-        name: "grantRole",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "pause",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-        ],
-        name: "renounceRole",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [],
-        stateMutability: "nonpayable",
-        type: "constructor",
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: false,
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-        ],
-        name: "Paused",
-        type: "event",
-      },
-      {
-        inputs: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-        ],
-        name: "revokeRole",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            indexed: true,
-            internalType: "bytes32",
-            name: "previousAdminRole",
-            type: "bytes32",
-          },
-          {
-            indexed: true,
-            internalType: "bytes32",
-            name: "newAdminRole",
-            type: "bytes32",
-          },
-        ],
-        name: "RoleAdminChanged",
-        type: "event",
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            indexed: true,
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-          {
-            indexed: true,
-            internalType: "address",
-            name: "sender",
-            type: "address",
-          },
-        ],
-        name: "RoleGranted",
-        type: "event",
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            indexed: true,
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-          {
-            indexed: true,
-            internalType: "address",
-            name: "sender",
-            type: "address",
-          },
-        ],
-        name: "RoleRevoked",
-        type: "event",
-      },
-      {
-        inputs: [],
-        name: "splitMyPruf",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "address",
-            name: "_address",
-            type: "address",
-          },
-        ],
-        name: "splitPrufAtAddress",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "unpause",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: false,
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-        ],
-        name: "Unpaused",
-        type: "event",
-      },
-      {
-        inputs: [
-          {
-            internalType: "address",
-            name: "_address",
-            type: "address",
-          },
-        ],
-        name: "checkMyAddress",
-        outputs: [
-          {
-            internalType: "uint256",
-            name: "",
-            type: "uint256",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "CONTRACT_ADMIN_ROLE",
-        outputs: [
-          {
-            internalType: "bytes32",
-            name: "",
-            type: "bytes32",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "DEFAULT_ADMIN_ROLE",
-        outputs: [
-          {
-            internalType: "bytes32",
-            name: "",
-            type: "bytes32",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-        ],
-        name: "getRoleAdmin",
-        outputs: [
-          {
-            internalType: "bytes32",
-            name: "",
-            type: "bytes32",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            internalType: "uint256",
-            name: "index",
-            type: "uint256",
-          },
-        ],
-        name: "getRoleMember",
-        outputs: [
-          {
-            internalType: "address",
-            name: "",
-            type: "address",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-        ],
-        name: "getRoleMemberCount",
-        outputs: [
-          {
-            internalType: "uint256",
-            name: "",
-            type: "uint256",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "account",
-            type: "address",
-          },
-        ],
-        name: "hasRole",
-        outputs: [
-          {
-            internalType: "bool",
-            name: "",
-            type: "bool",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "paused",
-        outputs: [
-          {
-            internalType: "bool",
-            name: "",
-            type: "bool",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [],
-        name: "PAUSER_ROLE",
-        outputs: [
-          {
-            internalType: "bytes32",
-            name: "",
-            type: "bytes32",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-    ],
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "grantRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "pause",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "renounceRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "Paused",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "revokeRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "previousAdminRole",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "newAdminRole",
+              type: "bytes32",
+            },
+          ],
+          name: "RoleAdminChanged",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+          ],
+          name: "RoleGranted",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+          ],
+          name: "RoleRevoked",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "splitMyPruf",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_address",
+              type: "address",
+            },
+          ],
+          name: "splitPrufAtAddress",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "unpause",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "Unpaused",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_address",
+              type: "address",
+            },
+          ],
+          name: "checkMyAddress",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "CONTRACT_ADMIN_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "DEFAULT_ADMIN_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+          ],
+          name: "getRoleAdmin",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+          ],
+          name: "getRoleMember",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+          ],
+          name: "getRoleMemberCount",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "hasRole",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "paused",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "PAUSER_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
       Util_ABI = [
         {
           inputs: [],
@@ -1691,23 +1688,24 @@ export default function Dashboard(props) {
 
     splitter.checkMyAddress(_addr).call(async (error, result) => {
       if (!error && result === "0") {
-        console.log(result);
-        setIsEligible(true);
+        console.log(result)
+        util.balanceOfAt(_addr, 1).call(async (error, result) => {
+          if (!error) {
+            console.log(result);
+            if (result === "0") setIsEligible(false)
+            else setIsEligible(true)
+            setWalletInfo(window.web3.utils.fromWei(result));
+          } else {
+            setIsEligible(false)
+            setWalletInfo("0")
+          }
+        });
       } else {
-        setIsEligible(false);
+        setIsEligible(false)
       }
     });
 
-    util.balanceOfAt(_addr, 1).call(async (error, result) => {
-      if (!error) {
-        console.log(result);
-        if (result === "0") setIsEligible(false);
-        setWalletInfo(window.web3.utils.fromWei(result));
-      } else {
-        setIsEligible(false);
-        setWalletInfo("0");
-      }
-    });
+    
   };
 
   return (
@@ -1823,7 +1821,7 @@ export default function Dashboard(props) {
                     Please{" "}
                     <a
                       onClick={() => {
-                        getAddress()
+                        getAddress();
                       }}
                     >
                       connect
@@ -1843,7 +1841,7 @@ export default function Dashboard(props) {
                       console.log(`setting useConnected to ${!useConnected}`);
                       setUseConnected(!useConnected);
                       setCustomAddress("");
-                      setTempAddr("")
+                      setTempAddr("");
                       if (!useConnected) {
                         getSnapShotInfo(addr);
                       } else {
@@ -1855,7 +1853,7 @@ export default function Dashboard(props) {
                   {` `}
                   <span className="splitterCheckboxFont">
                     Use connected wallet
-                    </span>
+                  </span>
                   <br />
                   {!useConnected ? (
                     <CustomInput
@@ -1873,14 +1871,21 @@ export default function Dashboard(props) {
                   ) : (
                     <></>
                   )}
-                  {isEligible && (
+                  {isEligible ? <h4>Unclaimed balance: ü{walletInfo}</h4> : <> </>}
+                  {useConnected || tempAddr !== "" ? (
                     <h4>
-                      Unclaimed balance: ü{walletInfo}
+                      Account Status:{" "}
+                      {isEligible === true
+                        ? "Eligible"
+                        : useConnected
+                        ? "Not Eligible"
+                        : customAddress === "" || customAddress === undefined
+                        ? "Invalid Address"
+                        : "Not Eligible"}
                     </h4>
+                  ) : (
+                    <></>
                   )}
-                  <h4>
-                    Account Status: {isEligible === true ? "Eligible" : customAddress === "" || customAddress === undefined ? "Invalid Address" : "Not Eligible"}
-                  </h4>
                   {!transacting && isEligible ? (
                     <Button
                       color="info"
@@ -1892,19 +1897,27 @@ export default function Dashboard(props) {
                   ) : transacting ? (
                     <>
                       Splitting tokens
-                        <div className="lds-ellipsisIF">
+                      <div className="lds-ellipsisIF">
                         <div></div>
                         <div></div>
                         <div></div>
                       </div>
                       <br />
                       <br />
-                      <Button className="MLBGradient" disabled onClick={() => split()}>
+                      <Button
+                        className="MLBGradient"
+                        disabled
+                        onClick={() => split()}
+                      >
                         Split
-                        </Button>
+                      </Button>
                     </>
                   ) : (
-                    <Button className="MLBGradient" disabled onClick={() => split()}>
+                    <Button
+                      className="MLBGradient"
+                      disabled
+                      onClick={() => split()}
+                    >
                       Split
                     </Button>
                   )}
