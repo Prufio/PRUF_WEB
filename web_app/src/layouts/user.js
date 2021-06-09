@@ -134,11 +134,14 @@ export default function Dashboard(props) {
   }, []);
 
   const swap = () => {
+    if(Number(ethAmount) < Number(walletInfo.min)) return swal("Please submit a value more than or equal to the minimum contribution")
+    if(Number(ethAmount) < Number(walletInfo.max)) return swal("Please submit a value less than or equal to the maximum contribution")
+
     window.web3.eth
       .sendTransaction({
-        from: window.addr,
+        from: addr,
         to: presaleAddress,
-        value: amount,
+        value: window.web3.utils.toWei(ethAmount),
       })
       .on("error", function (_error) {
         setTransacting(false)
@@ -2021,9 +2024,8 @@ export default function Dashboard(props) {
                       console.log(`setting useConnected to ${!useConnected}`);
                       setUseConnected(!useConnected);
                       setCustomAddress("");
-                      setTempAddr("");
                       if (!useConnected) {
-                        getSnapShotInfo(addr);
+                        getWhitelistInfo(addr);
                       } else {
                         setWalletInfo("");
                         setIsEligible(false);
@@ -2040,7 +2042,7 @@ export default function Dashboard(props) {
                         fullWidth: true,
                       }}
                       inputProps={{
-                        value: tempAddr,
+                        value: ethAmount,
                         onChange: (e) => {
                           handleCustomAddress(e); // Set undefined to remove entirely
                         },
@@ -2051,7 +2053,7 @@ export default function Dashboard(props) {
                     <></>
                   )}
                   {isEligible ? <h4>Amount: ü{walletInfo}</h4> : <> </>}
-                  {useConnected || tempAddr !== "" ? (
+                  {useConnected || ethAmount !== "" ? (
                     <h4>
                       Account Whitelsit Rate:{" "}
                       {isEligible === true
