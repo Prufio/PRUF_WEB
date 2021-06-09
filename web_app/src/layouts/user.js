@@ -42,7 +42,7 @@ export default function Dashboard(props) {
   // states and functions
   const [miniActive, setMiniActive] = React.useState(true);
   const [mobileOpen, setMobileOpen] = React.useState(true);
-  const [addr, setAddr] = React.useState("");
+  const [addr, setAddr] = React.useState();
   const [etherBalance, setEtherBalance] = React.useState("");
   const [prufBalance, setPrufBalance] = React.useState("");
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
@@ -102,28 +102,7 @@ export default function Dashboard(props) {
   // }
 
   React.useEffect(() => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({
-          method: "eth_accounts",
-          params: {},
-        })
-        .then(async (accounts) => {
-          if (accounts[0] === undefined) {
-            window.ethereum.request({method: "eth_requestAccounts"}).then(async (accounts) => {
-              if(accounts[0] === undefined) return swal("Can't connect to wallet.")
-              console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-              setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-              setUpEnvironment(accounts[0]);
-            })
-          } else {
-
-            console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-            setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-            setUpEnvironment(accounts[0]);
-          }
-        });
-    }
+    setTimeout(getAddress(), 1000)
 
     let web3 = require("web3");
     web3 = new Web3(
@@ -289,6 +268,33 @@ export default function Dashboard(props) {
       }
     }
   };
+
+  const getAddress = () => {
+    if (window.ethereum) {
+      window.ethereum
+        .request({
+          method: "eth_accounts"
+        })
+        .then(async (accounts) => {
+          if (accounts[0] === undefined) {
+            window.ethereum.request({method: "eth_requestAccounts"}).then(async (accounts) => {
+              if(accounts[0] === undefined) return swal("Can't connect to wallet.")
+              console.log(window.web3.utils.toChecksumAddress(accounts[0]));
+              setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+              setUpEnvironment(accounts[0]);
+            })
+          } else {
+
+            console.log(window.web3.utils.toChecksumAddress(accounts[0]));
+            setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
+            setUpEnvironment(accounts[0]);
+          }
+        });
+    }
+
+    else {
+    }
+  }
 
   const getActiveRoute = (routes) => {
     let activeRoute = "PRüF Token Splitter";
@@ -1817,23 +1823,7 @@ export default function Dashboard(props) {
                     Please{" "}
                     <a
                       onClick={() => {
-                        if (window.ethereum) {
-                          window.ethereum
-                            .request({
-                              method: "eth_requestAccounts"
-                            })
-                            .then(async (accounts) => {
-                              console.log(
-                                window.web3.utils.toChecksumAddress(accounts[0])
-                              );
-                              setAddr(
-                                window.web3.utils.toChecksumAddress(accounts[0])
-                              );
-                            });
-                        } else
-                          swal(
-                            "No ethereum provider detected. Try using a web3-enabled browser."
-                          );
+                        getAddress()
                       }}
                     >
                       connect
