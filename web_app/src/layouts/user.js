@@ -106,7 +106,7 @@ export default function Dashboard(props) {
     let web3 = require("web3");
     web3 = new Web3(
       web3.givenProvider ||
-        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     window.web3 = web3;
 
@@ -134,8 +134,8 @@ export default function Dashboard(props) {
   }, []);
 
   const swap = () => {
-    if(Number(ethAmount) < Number(walletInfo.min)) return swal("Please submit a value more than or equal to the minimum contribution")
-    if(Number(ethAmount) < Number(walletInfo.max)) return swal("Please submit a value less than or equal to the maximum contribution")
+    if (Number(ethAmount) < Number(walletInfo.min)) return swal("Please submit a value more than or equal to the minimum contribution")
+    if (Number(ethAmount) < Number(walletInfo.max)) return swal("Please submit a value less than or equal to the maximum contribution")
 
     window.web3.eth
       .sendTransaction({
@@ -2059,20 +2059,20 @@ export default function Dashboard(props) {
                       {isEligible === true
                         ? "Eligible"
                         : useConnected
-                        ? "Not Eligible"
-                        : customAddress === "" || customAddress === undefined
-                        ? "Invalid Address"
-                        : "Not Eligible"}
+                          ? "Not Eligible"
+                          : customAddress === "" || customAddress === undefined
+                            ? "Invalid Address"
+                            : "Not Eligible"}
                     </h4>
                   ) : (
                     <></>
                   )}
-                    <Button
-                      color="info"
-                      className="MLBGradient"
-                      onClick={() => split()}
-                    >
-                      Check Status
+                  <Button
+                    color="info"
+                    className="MLBGradient"
+                    onClick={() => split()}
+                  >
+                    Check Status
                     </Button>
                 </form>
               </CardBody>
@@ -2106,49 +2106,63 @@ export default function Dashboard(props) {
             {addr && (
               <CardBody>
                 <form>
-                  {!useConnected ? (
-                    <CustomInput
-                      formControlProps={{
-                        fullWidth: true,
-                      }}
-                      inputProps={{
-                        type: "number",
-                        value: ethAmount,
-                        onChange: (e) => {
-                          handleCustomAddress(e); // Set undefined to remove entirely
-                        },
-                        placeholder: `ETH`,
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
+                  <CustomInput
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      type: "number",
+                      value: ethAmount,
+                      onChange: (e) => {
+                        handleCustomAddress(e); // Set undefined to remove entirely
+                      },
+                      placeholder: `ETH`,
+                    }}
+                  />
 
                   <h4>
-                    Whitelist Status:{" "}
-                    {Number(walletInfo.min) > 0
-                      ? `Minimum Ticket: ${walletInfo.min}\n Maximum Ticket: ${walletInfo.max}\n PRUF per ETH: ${walletInfo.rate}`
-                      : "Not Whitelisted"}
+                    Whitelist Status:
                   </h4>
-
-                  {!transacting && Number(walletInfo.min) > 0 ? (
-                    <Button
-                      color="info"
-                      className="MLBGradient"
-                      onClick={() => swap()}
-                    >
-                      Purchase
-                    </Button>
-                  ) : transacting ? (
-                    <>
-                      Purchasing tokens
+                  {Number(walletInfo.min) > 0
+                    ? <>
+                      <h5>Minimum Ticket: {walletInfo.min}</h5>
+                      <h5>Maximum Ticket: {walletInfo.max}</h5>
+                      <h5>PRUF per ETH: {walletInfo.rate}</h5>
+                    </>
+                    : <>
+                      <h5>Minimum Ticket: 0.1ETH</h5>
+                      <h5>Maximum Ticket: 10ETH</h5>
+                      <h5>PRUF per ETH: 100,000</h5>
+                    </>
+                  }
+                  <div>
+                    {!transacting && Number(walletInfo.min) > 0 ? (
+                      <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => swap()}
+                      >
+                        Purchase
+                      </Button>
+                    ) : transacting ? (
+                      <>
+                        Purchasing tokens
                       <div className="lds-ellipsisIF">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
-                      <br />
-                      <br />
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
+                        <br />
+                        <br />
+                        <Button
+                          className="MLBGradient"
+                          disabled
+                          onClick={() => swap()}
+                        >
+                          Purchase
+                      </Button>
+                      </>
+                    ) : (
                       <Button
                         className="MLBGradient"
                         disabled
@@ -2156,16 +2170,8 @@ export default function Dashboard(props) {
                       >
                         Purchase
                       </Button>
-                    </>
-                  ) : (
-                    <Button
-                      className="MLBGradient"
-                      disabled
-                      onClick={() => swap()}
-                    >
-                      Purchase
-                    </Button>
-                  )}
+                    )}
+                  </div>
                 </form>
               </CardBody>
             )}
