@@ -294,7 +294,7 @@ export default function Dashboard(props) {
   };
 
   const getActiveRoute = (routes) => {
-    let activeRoute = "PRüF Token Exchange";
+    let activeRoute = "PRUF Token Swap";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
         let collapseActiveRoute = getActiveRoute(routes[i].views);
@@ -357,18 +357,6 @@ export default function Dashboard(props) {
       }
       setIsRefreshingPruf(false);
     });
-  };
-
-  const handleCustomAddress = (e) => {
-    setTempAddr(e.target.value);
-    setWalletInfo("0");
-    if (window.web3.utils.isAddress(e.target.value)) {
-      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
-      getSnapShotInfo(e.target.value);
-    } else {
-      setIsEligible(false);
-      setCustomAddress("");
-    }
   };
 
   const sidebarMinimize = () => {
@@ -2093,9 +2081,8 @@ export default function Dashboard(props) {
               <CardIcon className="headerIconBack">
                 <span class="material-icons"> toll </span>
               </CardIcon>
-              <h5 className={classes.cardIconTitle}>Buy Tokens</h5>
+              <h5 className={classes.cardIconTitle}>Get PRUF</h5>
             </CardHeader>
-            {/* eslint-disable-next-line react/prop-types */}
             {!addr && (
               <CardBody>
                 <form>
@@ -2114,7 +2101,6 @@ export default function Dashboard(props) {
                 </form>
               </CardBody>
             )}
-            {/* eslint-disable-next-line react/prop-types */}
             {addr && (
               <CardBody>
                 <form>
@@ -2137,7 +2123,7 @@ export default function Dashboard(props) {
                   {isEligible ? <h4>Amount: ü{walletInfo}</h4> : <> </>}
                   {useConnected || tempAddr !== "" ? (
                     <h4>
-                      Account Exchange Rate:{" "}
+                      Account Whitelsit Rate:{" "}
                       {isEligible === true
                         ? "Eligible"
                         : useConnected
@@ -2159,7 +2145,7 @@ export default function Dashboard(props) {
                     </Button>
                   ) : transacting ? (
                     <>
-                      Purchacing tokens
+                      Minting tokens
                       <div className="lds-ellipsisIF">
                         <div></div>
                         <div></div>
