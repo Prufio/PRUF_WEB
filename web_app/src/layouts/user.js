@@ -2107,6 +2107,95 @@ export default function Dashboard(props) {
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
+                <span class="material-icons"> military_tech </span>
+              </CardIcon>
+              <h5 className={classes.cardIconTitle}>Check Whitelist Status</h5>
+            </CardHeader>
+            {!addr && (
+              <CardBody>
+                <form>
+                  <h3 className="bump">
+                    <br />
+                    Please{" "}
+                    <a
+                      onClick={() => {
+                        getAddress();
+                      }}
+                    >
+                      connect
+                    </a>{" "}
+                    to an Ethereum provider.
+                  </h3>
+                </form>
+              </CardBody>
+            )}
+            {addr && (
+              <CardBody>
+                <form>
+                  <input
+                    type="checkbox"
+                    onChange={() => {
+                      console.log(`setting useConnected to ${!useConnected}`);
+                      setUseConnected(!useConnected);
+                      setCustomAddress("");
+                      setTempAddr("");
+                      if (!useConnected) {
+                        getSnapShotInfo(addr);
+                      } else {
+                        setWalletInfo("");
+                        setIsEligible(false);
+                      }
+                    }}
+                  />{" "}
+                  {` `}
+                  <span className="splitterCheckboxFont">
+                    Use connected wallet
+                  </span>
+                  {!useConnected ? (
+                    <CustomInput
+                      formControlProps={{
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        value: tempAddr,
+                        onChange: (e) => {
+                          handleCustomAddress(e); // Set undefined to remove entirely
+                        },
+                        placeholder: `Address`,
+                      }}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  {isEligible ? <h4>Amount: ü{walletInfo}</h4> : <> </>}
+                  {useConnected || tempAddr !== "" ? (
+                    <h4>
+                      Account Whitelsit Rate:{" "}
+                      {isEligible === true
+                        ? "Eligible"
+                        : useConnected
+                        ? "Not Eligible"
+                        : customAddress === "" || customAddress === undefined
+                        ? "Invalid Address"
+                        : "Not Eligible"}
+                    </h4>
+                  ) : (
+                    <></>
+                  )}
+                    <Button
+                      color="info"
+                      className="MLBGradient"
+                      onClick={() => split()}
+                    >
+                      Check Status
+                    </Button>
+                </form>
+              </CardBody>
+            )}
+          </Card>
+          <Card>
+            <CardHeader color="info" icon>
+              <CardIcon className="headerIconBack">
                 <span class="material-icons"> account_balance_wallet </span>
               </CardIcon>
               <h5 className={classes.cardIconTitle}>Get PRUF</h5>
