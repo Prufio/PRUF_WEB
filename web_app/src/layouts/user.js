@@ -363,11 +363,11 @@ export default function Dashboard(props) {
   const handleCustomAddress = (e) => {
     setTempAddr(e.target.value);
     setWalletInfo("0");
-    setIsEligible(false);
     if (window.web3.utils.isAddress(e.target.value)) {
       setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
       getSnapShotInfo(e.target.value);
     } else {
+      setIsEligible(false);
       setCustomAddress("");
     }
   };
@@ -1686,10 +1686,10 @@ export default function Dashboard(props) {
     if (!_addr) return swal("Unable to reach user's wallet.");
     console.log("Getting snapshot info");
 
-    splitter.checkMyAddress(_addr).call(async (error, result) => {
+    splitter.checkMyAddress(_addr).call( (error, result) => {
       if (!error && result === "0") {
         console.log(result)
-        util.balanceOfAt(_addr, 1).call(async (error, result) => {
+        util.balanceOfAt(_addr, 1).call( (error, result) => {
           if (!error) {
             console.log(result);
             if (result === "0") setIsEligible(false)
