@@ -2079,7 +2079,7 @@ export default function Dashboard(props) {
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
-                <span class="material-icons"> toll </span>
+                <span class="material-icons"> account_balance_wallet </span>
               </CardIcon>
               <h5 className={classes.cardIconTitle}>Get PRUF</h5>
             </CardHeader>
@@ -2110,6 +2110,7 @@ export default function Dashboard(props) {
                         fullWidth: true,
                       }}
                       inputProps={{
+                        type: 'number',
                         value: tempAddr,
                         onChange: (e) => {
                           handleCustomAddress(e); // Set undefined to remove entirely
