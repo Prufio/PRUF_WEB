@@ -2103,8 +2103,6 @@ export default function Dashboard(props) {
                       )}
                     </>
                   )}
-                  <div>
-                  </div>
                 </form>
               </CardBody>
             )}
