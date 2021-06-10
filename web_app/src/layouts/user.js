@@ -50,8 +50,10 @@ export default function Dashboard(props) {
   const [useConnected, setUseConnected] = React.useState(false);
   const [transacting, setTransacting] = React.useState(false);
   const [customAddress, setCustomAddress] = React.useState("");
+  const [tempAddress, setTempAddress] = React.useState("");
   const [walletInfo, setWalletInfo] = React.useState("0");
-  const [isEligible, setIsEligible] = React.useState(false);
+  const [connectedWalletInfo, setConnectedWalletInfo] = React.useState("0");
+  const [isValidAddress, setValidAddress] = React.useState(undefined);
   const [ethAmount, setEthAmount] = React.useState("");
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
@@ -106,7 +108,7 @@ export default function Dashboard(props) {
     let web3 = require("web3");
     web3 = new Web3(
       web3.givenProvider ||
-        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     window.web3 = web3;
 
@@ -134,14 +136,8 @@ export default function Dashboard(props) {
   }, []);
 
   const swap = () => {
-    if (Number(ethAmount) < Number(walletInfo.min))
-      return swal(
-        "Please submit a value more than or equal to the minimum contribution"
-      );
-    if (Number(ethAmount) < Number(walletInfo.max))
-      return swal(
-        "Please submit a value less than or equal to the maximum contribution"
-      );
+    if (Number(ethAmount) <= Number(walletInfo.min)) return swal({icon:"warning", title:"!Error!", text:"Please submit a value more than or equal to the minimum ticket size."})
+    if (Number(ethAmount) >= Number(walletInfo.max)) return swal({icon:"warning", title:"!Error!", text:"Please submit a value less than or equal to the maximum ticket size."})
 
     window.web3.eth
       .sendTransaction({
@@ -264,8 +260,19 @@ export default function Dashboard(props) {
   };
 
   const handleCustomAddress = (e) => {
-    setEthAmount(e.target.value);
-    setCustomAddress(e.target.value);
+    setTempAddress(e.target.value)
+    if (window.web3.utils.isAddress(e.target.value)) {
+      getWhitelistInfo(e.target.value)
+      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
+      setValidAddress(true)
+    } else {
+      setCustomAddress("");
+      setValidAddress(false)
+    }
+  };
+
+  const handlePurchaceAmount = (e) => {
+    setEthAmount(e.target.value)
   };
 
   const sidebarMinimize = () => {
@@ -1888,7 +1895,7 @@ export default function Dashboard(props) {
     PRESALE.methods.checkWhitelist(_addr).call(async (error, result) => {
       if (!error) {
         console.log(result);
-        setWalletInfo({
+        setConnectedWalletInfo({
           min: window.web3.utils.fromWei(result["0"]),
           max: window.web3.utils.fromWei(result["1"]),
           rate: window.web3.utils.fromWei(result["2"]),
@@ -2029,56 +2036,74 @@ export default function Dashboard(props) {
                       console.log(`setting useConnected to ${!useConnected}`);
                       setUseConnected(!useConnected);
                       setCustomAddress("");
-                      if (!useConnected) {
-                        getWhitelistInfo(addr);
-                      } else {
-                        setWalletInfo("");
-                        setIsEligible(false);
-                      }
+                      setValidAddress(undefined)
+                      setTempAddress("")
+                      getWhitelistInfo(addr);
                     }}
                   />{" "}
                   {` `}
                   <span className="splitterCheckboxFont">
                     Use connected wallet
                   </span>
-                  {!useConnected ? (
-                    <CustomInput
-                      formControlProps={{
-                        fullWidth: true,
-                      }}
-                      inputProps={{
-                        value: ethAmount,
-                        onChange: (e) => {
-                          handleCustomAddress(e); // Set undefined to remove entirely
-                        },
-                        placeholder: `Address`,
-                      }}
-                    />
-                  ) : (
-                    <></>
+                  {useConnected && (
+
+                    <>
+                      <h4>
+                        Connected Wallet: {addr}
+                      </h4>
+                      {Number(walletInfo.rate) === 100000 && walletInfo.rate !== 0 && (
+                        <h4>
+                          Whitelist Status: Basic Rate
+                        </h4>
+                      )}
+                      {Number(walletInfo.rate) !== 100000 && walletInfo.rate !== 0 && (
+                        <h4>
+                          Whitelist Status: Authorized Rate
+                        </h4>
+                      )}
+                      <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
+                      <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
+                      <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
+                    </>
                   )}
-                  {isEligible ? <h4>Amount: ü{walletInfo}</h4> : <> </>}
-                  {useConnected || ethAmount !== "" ? (
-                    <h4>
-                      Account Whitelsit Rate:{" "}
-                      {isEligible === true
-                        ? "Eligible"
-                        : useConnected
-                        ? "Not Eligible"
-                        : customAddress === "" || customAddress === undefined
-                        ? "Invalid Address"
-                        : "Not Eligible"}
-                    </h4>
-                  ) : (
-                    <></>
+                  {!useConnected && (
+                    <>
+                      <CustomInput
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          onChange: (e) => {
+                            handleCustomAddress(e); // Set undefined to remove entirely
+                          },
+                          placeholder: `Address`,
+                        }}
+                      />
+
+                      {customAddress !== "" &&
+                        <>
+                          {Number(walletInfo.rate) === 100000 && walletInfo.rate !== "0" && (
+                            <h4>
+                              Whitelist Status: Basic Rate
+                            </h4>
+                          )}
+                          {Number(walletInfo.rate) !== 100000 && walletInfo.rate !== "0" && (
+                            <h4>
+                              Whitelist Status: Authorized Rate
+                            </h4>
+                          )}
+                          <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
+                          <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
+                          <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
+                        </>
+                      }
+                      {isValidAddress !== true && tempAddress !== "" && (
+                        <h5>Address: {tempAddress} is not a valid address.</h5>
+                      )}
+                    </>
                   )}
-                  <Button
-                    color="info"
-                    className="MLBGradient"
-                    onClick={() => split()}
-                  >
-                    Check Status
-                  </Button>
+                  <div>
+                  </div>
                 </form>
               </CardBody>
             )}
@@ -2111,49 +2136,67 @@ export default function Dashboard(props) {
             {addr && (
               <CardBody>
                 <form>
-                  {!useConnected ? (
-                    <CustomInput
-                      formControlProps={{
-                        fullWidth: true,
-                      }}
-                      inputProps={{
-                        type: "number",
-                        value: ethAmount,
-                        onChange: (e) => {
-                          handleCustomAddress(e); // Set undefined to remove entirely
-                        },
-                        placeholder: `ETH`,
-                      }}
-                    />
-                  ) : (
-                    <></>
-                  )}
-
+                  <CustomInput
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      type: "number",
+                      value: ethAmount,
+                      onChange: (e) => {
+                        handlePurchaceAmount(e); // Set undefined to remove entirely
+                      },
+                      placeholder: `ETH`,
+                    }}
+                  />
                   <h4>
-                    Whitelist Status:{" "}
-                    {Number(walletInfo.min) > 0
-                      ? `Minimum Ticket: ${walletInfo.min}\n Maximum Ticket: ${walletInfo.max}\n PRUF per ETH: ${walletInfo.rate}`
-                      : "Not Whitelisted"}
+                    Connected Wallet: {addr}
                   </h4>
-
-                  {!transacting && Number(walletInfo.min) > 0 ? (
-                    <Button
-                      color="info"
-                      className="MLBGradient"
-                      onClick={() => swap()}
-                    >
-                      Purchase
-                    </Button>
-                  ) : transacting ? (
+                  {Number(connectedWalletInfo.rate) === 100000 && Number(connectedWalletInfo.rate) !== "0" && (
+                    <h4>
+                      Active wallet whitelist status: Basic Rate
+                    </h4>
+                  )}
+                  {Number(connectedWalletInfo.rate) !== 100000 && Number(connectedWalletInfo.rate) !== "0" && (
+                    <h4>
+                      Active wallet whitelist status: Authorized Rate
+                    </h4>
+                  )}
+                  {Number(connectedWalletInfo.rate) >= 100000 && (
                     <>
-                      Purchasing tokens
+                      <h5>Minimum Ticket: {connectedWalletInfo.min}ETH</h5>
+                      <h5>Maximum Ticket: {connectedWalletInfo.max}ETH</h5>
+                      <h5>Ratio: ü{connectedWalletInfo.rate}/ETH</h5>
+                    </>
+                  )}
+                  <div>
+                    {!transacting && Number(connectedWalletInfo.min) > 0 ? (
+                      <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => swap()}
+                      >
+                        Purchase
+                      </Button>
+                    ) : transacting ? (
+                      <>
+                        Purchasing tokens
                       <div className="lds-ellipsisIF">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
-                      <br />
-                      <br />
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
+                        <br />
+                        <br />
+                        <Button
+                          className="MLBGradient"
+                          disabled
+                          onClick={() => swap()}
+                        >
+                          Purchase
+                      </Button>
+                      </>
+                    ) : (
                       <Button
                         className="MLBGradient"
                         disabled
@@ -2161,16 +2204,8 @@ export default function Dashboard(props) {
                       >
                         Purchase
                       </Button>
-                    </>
-                  ) : (
-                    <Button
-                      className="MLBGradient"
-                      disabled
-                      onClick={() => swap()}
-                    >
-                      Purchase
-                    </Button>
-                  )}
+                    )}
+                  </div>
                 </form>
               </CardBody>
             )}
