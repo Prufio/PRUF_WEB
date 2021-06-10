@@ -146,10 +146,10 @@ export default function Dashboard(props) {
         value: window.web3.utils.toWei(ethAmount),
       })
       .on("error", function (_error) {
-        setTransacting(false)
+        setTransacting(false);
       })
       .on("receipt", (receipt) => {
-        setTransacting(false)
+        setTransacting(false);
       });
   };
 
@@ -176,7 +176,6 @@ export default function Dashboard(props) {
             setUpEnvironment(accounts[0]);
           }
         });
-    } else {
     }
   };
 
@@ -1871,7 +1870,7 @@ export default function Dashboard(props) {
     const PRESALE = new window.web3.eth.Contract(PRESALE_ABI, Presale_ADDRESS);
     const UTIL = new window.web3.eth.Contract(Util_ABI, Util_ADDRESS);
 
-    setPresaleAddress(Presale_ADDRESS)
+    setPresaleAddress(Presale_ADDRESS);
     setPresale(PRESALE.methods);
     setUtil(UTIL.methods);
 
