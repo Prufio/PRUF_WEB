@@ -1403,3 +1403,14 @@ max-width: 80px !important;
 .splitterCheckboxFont {
   font-size: 15px;
 }
+
+.splitterA {
+  color: black;
+  text-decoration: underline;
+}
+
+.splitterA:hover {
+  color: #00a8ff;
+  text-decoration: underline;
+  cursor: pointer;
+}

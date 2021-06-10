@@ -60,7 +60,7 @@ export default function Dashboard(props) {
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
-  const [presale, setPresale] = React.useState({});
+  const [presale, setPresale] = React.useState();
   const [presaleAddress, setPresaleAddress] = React.useState("");
   const [util, setUtil] = React.useState({});
   // styles
@@ -136,8 +136,8 @@ export default function Dashboard(props) {
   }, []);
 
   const swap = () => {
-    if (Number(ethAmount) <= Number(walletInfo.min)) return swal({icon:"warning", title:"!Error!", text:"Please submit a value more than or equal to the minimum ticket size."})
-    if (Number(ethAmount) >= Number(walletInfo.max)) return swal({icon:"warning", title:"!Error!", text:"Please submit a value less than or equal to the maximum ticket size."})
+    if (Number(ethAmount) <= Number(walletInfo.min)) return swal({ icon: "warning", title: "!Error!", text: "Please submit a value more than or equal to the minimum ticket size." })
+    if (Number(ethAmount) >= Number(walletInfo.max)) return swal({ icon: "warning", title: "!Error!", text: "Please submit a value less than or equal to the maximum ticket size." })
 
     window.web3.eth
       .sendTransaction({
@@ -161,11 +161,10 @@ export default function Dashboard(props) {
         })
         .then(async (accounts) => {
           if (accounts[0] === undefined) {
+            setUpEnvironment();
             window.ethereum
               .request({ method: "eth_requestAccounts" })
               .then(async (accounts) => {
-                if (accounts[0] === undefined)
-                  return swal("Can't connect to wallet.");
                 console.log(window.web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
                 setUpEnvironment(accounts[0]);
@@ -176,6 +175,9 @@ export default function Dashboard(props) {
             setUpEnvironment(accounts[0]);
           }
         });
+    }
+    else {
+      setUpEnvironment();
     }
   };
 
@@ -286,6 +288,7 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_addr) => {
+
     const Presale_ADDRESS = "0x72eC41b545Cdc24a4094565aF7DF733Ffaa014ED",
       Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
 
@@ -1873,36 +1876,37 @@ export default function Dashboard(props) {
     setPresaleAddress(Presale_ADDRESS);
     setPresale(PRESALE.methods);
     setUtil(UTIL.methods);
-
-    setIsRefreshingEther(true);
-    window.web3.eth.getBalance(_addr).then(async (e) => {
-      setEtherBalance(
-        Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
-      );
-      setIsRefreshingEther(false);
-    });
-
-    setIsRefreshingPruf(true);
-    UTIL.methods.balanceOf(_addr).call(async (error, result) => {
-      if (!error) {
-        setPrufBalance(
-          Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+    if (_addr) {
+      setIsRefreshingEther(true);
+      window.web3.eth.getBalance(_addr).then(async (e) => {
+        setEtherBalance(
+          Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
         );
-      }
-      setIsRefreshingPruf(false);
-    });
+        setIsRefreshingEther(false);
+      });
 
-    PRESALE.methods.checkWhitelist(_addr).call(async (error, result) => {
-      if (!error) {
-        console.log(result);
-        setConnectedWalletInfo({
-          min: window.web3.utils.fromWei(result["0"]),
-          max: window.web3.utils.fromWei(result["1"]),
-          rate: window.web3.utils.fromWei(result["2"]),
-        });
-      }
-      setIsRefreshingPruf(false);
-    });
+      setIsRefreshingPruf(true);
+      UTIL.methods.balanceOf(_addr).call(async (error, result) => {
+        if (!error) {
+          setPrufBalance(
+            Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+          );
+        }
+        setIsRefreshingPruf(false);
+      });
+
+      PRESALE.methods.checkWhitelist(_addr).call(async (error, result) => {
+        if (!error) {
+          console.log(result);
+          setConnectedWalletInfo({
+            min: window.web3.utils.fromWei(result["0"]),
+            max: window.web3.utils.fromWei(result["1"]),
+            rate: window.web3.utils.fromWei(result["2"]),
+          });
+        }
+        setIsRefreshingPruf(false);
+      });
+    }
   };
 
   return (
@@ -2005,28 +2009,10 @@ export default function Dashboard(props) {
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
-                <span class="material-icons"> military_tech </span>
+                <span className="material-icons"> military_tech </span>
               </CardIcon>
               <h5 className={classes.cardIconTitle}>Check Whitelist Status</h5>
             </CardHeader>
-            {!addr && (
-              <CardBody>
-                <form>
-                  <h3 className="bump">
-                    <br />
-                    Please{" "}
-                    <a
-                      onClick={() => {
-                        getAddress();
-                      }}
-                    >
-                      connect
-                    </a>{" "}
-                    to an Ethereum provider.
-                  </h3>
-                </form>
-              </CardBody>
-            )}
             {addr && (
               <CardBody>
                 <form>
@@ -2105,109 +2091,150 @@ export default function Dashboard(props) {
                 </form>
               </CardBody>
             )}
-          </Card>
-          <Card>
-            <CardHeader color="info" icon>
-              <CardIcon className="headerIconBack">
-                <span class="material-icons"> account_balance_wallet </span>
-              </CardIcon>
-              <h5 className={classes.cardIconTitle}>Get PRUF</h5>
-            </CardHeader>
             {!addr && (
               <CardBody>
                 <form>
-                  <h3 className="bump">
-                    <br />
-                    Please{" "}
-                    <a
-                      onClick={() => {
-                        getAddress();
+                  <>
+                    <CustomInput
+                      formControlProps={{
+                        fullWidth: true,
                       }}
-                    >
-                      connect
-                    </a>{" "}
-                    to an Ethereum provider.
-                  </h3>
+                      inputProps={{
+                        onChange: (e) => {
+                          handleCustomAddress(e); // Set undefined to remove entirely
+                        },
+                        placeholder: `Address`,
+                      }}
+                    />
+
+                    {customAddress !== "" &&
+                      <>
+                        {Number(walletInfo.rate) === 100000 && walletInfo.rate !== "0" && (
+                          <h4>
+                            Whitelist Status: Basic Rate
+                          </h4>
+                        )}
+                        {Number(walletInfo.rate) !== 100000 && walletInfo.rate !== "0" && (
+                          <h4>
+                            Whitelist Status: Authorized Rate
+                          </h4>
+                        )}
+                        <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
+                        <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
+                        <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
+                      </>
+                    }
+                    {isValidAddress !== true && tempAddress !== "" && (
+                      <h5>Address: {tempAddress} is not a valid address.</h5>
+                    )}
+                  </>
                 </form>
               </CardBody>
             )}
-            {addr && (
-              <CardBody>
-                <form>
-                  <CustomInput
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      type: "number",
-                      value: ethAmount,
-                      onChange: (e) => {
-                        handlePurchaceAmount(e); // Set undefined to remove entirely
-                      },
-                      placeholder: `ETH`,
-                    }}
-                  />
-                  <h4>
-                    Connected Wallet: {addr}
-                  </h4>
-                  {Number(connectedWalletInfo.rate) === 100000 && Number(connectedWalletInfo.rate) !== "0" && (
-                    <h4>
-                      Active wallet whitelist status: Basic Rate
-                    </h4>
-                  )}
-                  {Number(connectedWalletInfo.rate) !== 100000 && Number(connectedWalletInfo.rate) !== "0" && (
-                    <h4>
-                      Active wallet whitelist status: Authorized Rate
-                    </h4>
-                  )}
-                  {Number(connectedWalletInfo.rate) >= 100000 && (
-                    <>
-                      <h5>Minimum Ticket: {connectedWalletInfo.min}ETH</h5>
-                      <h5>Maximum Ticket: {connectedWalletInfo.max}ETH</h5>
-                      <h5>Ratio: ü{connectedWalletInfo.rate}/ETH</h5>
-                    </>
-                  )}
-                  <div>
-                    {!transacting && Number(connectedWalletInfo.min) > 0 ? (
-                      <Button
-                        color="info"
-                        className="MLBGradient"
-                        onClick={() => swap()}
+          </Card>
+            <Card>
+              <CardHeader color="info" icon>
+                <CardIcon className="headerIconBack">
+                  <span class="material-icons"> account_balance_wallet </span>
+                </CardIcon>
+                <h5 className={classes.cardIconTitle}>Get PRUF</h5>
+              </CardHeader>
+              {!addr && (
+                <CardBody>
+                  <form>
+                    <h3 className="bump">
+                      <br />
+                    Please{" "}
+                      <a
+                        onClick={() => {
+                          getAddress();
+                        }}
+                        className="splitterA"
                       >
-                        Purchase
-                      </Button>
-                    ) : transacting ? (
+                        connect
+                    </a>{" "}
+                    to an Ethereum provider.
+                  </h3>
+                  </form>
+                </CardBody>
+              )}
+              {addr && (
+                <CardBody>
+                  <form>
+                    <CustomInput
+                      formControlProps={{
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        type: "number",
+                        value: ethAmount,
+                        onChange: (e) => {
+                          handlePurchaceAmount(e); // Set undefined to remove entirely
+                        },
+                        placeholder: `ETH`,
+                      }}
+                    />
+                    <h4>
+                      Connected Wallet: {addr}
+                    </h4>
+                    {Number(connectedWalletInfo.rate) === 100000 && Number(connectedWalletInfo.rate) !== "0" && (
+                      <h4>
+                        Active wallet whitelist status: Basic Rate
+                      </h4>
+                    )}
+                    {Number(connectedWalletInfo.rate) !== 100000 && Number(connectedWalletInfo.rate) !== "0" && (
+                      <h4>
+                        Active wallet whitelist status: Authorized Rate
+                      </h4>
+                    )}
+                    {Number(connectedWalletInfo.rate) >= 100000 && (
                       <>
-                        Purchasing tokens
+                        <h5>Minimum Ticket: {connectedWalletInfo.min}ETH</h5>
+                        <h5>Maximum Ticket: {connectedWalletInfo.max}ETH</h5>
+                        <h5>Ratio: ü{connectedWalletInfo.rate}/ETH</h5>
+                      </>
+                    )}
+                    <div>
+                      {!transacting && Number(connectedWalletInfo.min) > 0 ? (
+                        <Button
+                          color="info"
+                          className="MLBGradient"
+                          onClick={() => swap()}
+                        >
+                          Purchase
+                        </Button>
+                      ) : transacting ? (
+                        <>
+                          Purchasing tokens
                       <div className="lds-ellipsisIF">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                        </div>
-                        <br />
-                        <br />
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                          </div>
+                          <br />
+                          <br />
+                          <Button
+                            className="MLBGradient"
+                            disabled
+                            onClick={() => swap()}
+                          >
+                            Purchase
+                      </Button>
+                        </>
+                      ) : (
                         <Button
                           className="MLBGradient"
                           disabled
                           onClick={() => swap()}
                         >
                           Purchase
-                      </Button>
-                      </>
-                    ) : (
-                      <Button
-                        className="MLBGradient"
-                        disabled
-                        onClick={() => swap()}
-                      >
-                        Purchase
-                      </Button>
-                    )}
-                  </div>
-                </form>
-              </CardBody>
-            )}
-          </Card>
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </CardBody>
+              )}
+            </Card>
         </div>
         <Footer fluid />
       </div>
