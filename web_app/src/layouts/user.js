@@ -47,7 +47,6 @@ export default function Dashboard(props) {
   const [prufBalance, setPrufBalance] = React.useState("");
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
   const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false);
-  const [useConnected, setUseConnected] = React.useState(false);
   const [transacting, setTransacting] = React.useState(false);
   const [customAddress, setCustomAddress] = React.useState("");
   const [tempAddress, setTempAddress] = React.useState("");
@@ -59,8 +58,6 @@ export default function Dashboard(props) {
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
-  const [fixedClasses, setFixedClasses] = React.useState("dropdown");
-  const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   const [presale, setPresale] = React.useState();
   const [presaleAddress, setPresaleAddress] = React.useState("");
   const [util, setUtil] = React.useState({});
@@ -2030,38 +2027,6 @@ export default function Dashboard(props) {
             {addr && (
               <CardBody>
                 <form>
-                  <input
-                    type="checkbox"
-                    onChange={() => {
-                      console.log(`setting useConnected to ${!useConnected}`);
-                      setUseConnected(!useConnected);
-                      setCustomAddress("");
-                      setValidAddress(undefined);
-                      setTempAddress("");
-                      getWhitelistInfo(addr);
-                    }}
-                  />{" "}
-                  {` `}
-                  <span className="splitterCheckboxFont">
-                    Use connected wallet
-                  </span>
-                  {useConnected && (
-                    <>
-                      <h4>Connected Wallet: {addr}</h4>
-                      {Number(walletInfo.rate) === 100000 &&
-                        walletInfo.rate !== 0 && (
-                          <h4>Whitelist Status: Basic Rate</h4>
-                        )}
-                      {Number(walletInfo.rate) !== 100000 &&
-                        walletInfo.rate !== 0 && (
-                          <h4>Whitelist Status: Authorized Rate</h4>
-                        )}
-                      <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
-                      <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
-                      <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
-                    </>
-                  )}
-                  {!useConnected && (
                     <>
                       <CustomInput
                         formControlProps={{
@@ -2094,7 +2059,6 @@ export default function Dashboard(props) {
                         <h5>Address: {tempAddress} is not a valid address.</h5>
                       )}
                     </>
-                  )}
                 </form>
               </CardBody>
             )}
