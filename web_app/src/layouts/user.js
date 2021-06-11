@@ -55,6 +55,7 @@ export default function Dashboard(props) {
   const [connectedWalletInfo, setConnectedWalletInfo] = React.useState("0");
   const [isValidAddress, setValidAddress] = React.useState(undefined);
   const [ethAmount, setEthAmount] = React.useState("");
+  const [web3, setWeb3] = React.useState()
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
@@ -90,7 +91,7 @@ export default function Dashboard(props) {
         if (e[0] !== addr) {
           window.location.reload();
         }
-      } else if (window.web3.utils.toChecksumAddress(e[0]) !== addr) {
+      } else if (web3.utils.toChecksumAddress(e[0]) !== addr) {
         window.location.reload();
       }
     });
@@ -103,15 +104,19 @@ export default function Dashboard(props) {
   // }
 
   React.useEffect(() => {
-    setTimeout(getAddress(), 1000);
 
     let web3 = require("web3");
-    web3 = new Web3(
-      web3.givenProvider ||
-      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
-    );
-    window.web3 = web3;
+    if (window.ethereum) {
+      web3 = new Web3(web3.givenProvider);
+      window.web3 = web3;
+      setWeb3(web3)
+    } else {
+      web3 = new Web3("https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959");
+      window.web3 = web3;
+      setWeb3(web3)
+    }
 
+    setTimeout(getAddress(web3), 1000);
     console.log({ web3 });
 
     if (navigator.platform.indexOf("Win") > -1) {
@@ -136,14 +141,24 @@ export default function Dashboard(props) {
   }, []);
 
   const swap = () => {
-    if (Number(ethAmount) <= Number(walletInfo.min)) return swal({ icon: "warning", title: "!Error!", text: "Please submit a value more than or equal to the minimum ticket size." })
-    if (Number(ethAmount) >= Number(walletInfo.max)) return swal({ icon: "warning", title: "!Error!", text: "Please submit a value less than or equal to the maximum ticket size." })
+    if (Number(ethAmount) <= Number(walletInfo.min))
+      return swal({
+        icon: "warning",
+        title: "!Error!",
+        text: "Please submit a value more than or equal to the minimum ticket size.",
+      });
+    if (Number(ethAmount) >= Number(walletInfo.max))
+      return swal({
+        icon: "warning",
+        title: "!Error!",
+        text: "Please submit a value less than or equal to the maximum ticket size.",
+      });
 
-    window.web3.eth
+    web3.eth
       .sendTransaction({
         from: addr,
         to: presaleAddress,
-        value: window.web3.utils.toWei(ethAmount),
+        value: web3.utils.toWei(ethAmount),
       })
       .on("error", function (_error) {
         setTransacting(false);
@@ -153,7 +168,7 @@ export default function Dashboard(props) {
       });
   };
 
-  const getAddress = () => {
+  const getAddress = (_web3) => {
     if (window.ethereum) {
       window.ethereum
         .request({
@@ -161,23 +176,22 @@ export default function Dashboard(props) {
         })
         .then(async (accounts) => {
           if (accounts[0] === undefined) {
-            setUpEnvironment();
+            setUpEnvironment(_web3);
             window.ethereum
               .request({ method: "eth_requestAccounts" })
               .then(async (accounts) => {
-                console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-                setUpEnvironment(accounts[0]);
+                console.log(_web3.utils.toChecksumAddress(accounts[0]));
+                setAddr(_web3.utils.toChecksumAddress(accounts[0]));
+                setUpEnvironment(_web3, accounts[0]);
               });
           } else {
-            console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-            setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-            setUpEnvironment(accounts[0]);
+            console.log(_web3.utils.toChecksumAddress(accounts[0]));
+            setAddr(_web3.utils.toChecksumAddress(accounts[0]));
+            setUpEnvironment(_web3, accounts[0]);
           }
         });
-    }
-    else {
-      setUpEnvironment();
+    } else {
+      setUpEnvironment(_web3);
     }
   };
 
@@ -205,9 +219,9 @@ export default function Dashboard(props) {
       if (!error) {
         console.log(result);
         setWalletInfo({
-          min: window.web3.utils.fromWei(result["0"]),
-          max: window.web3.utils.fromWei(result["1"]),
-          rate: window.web3.utils.fromWei(result["2"]),
+          min: web3.utils.fromWei(result["0"]),
+          max: web3.utils.fromWei(result["1"]),
+          rate: web3.utils.fromWei(result["2"]),
         });
       }
       setIsRefreshingPruf(false);
@@ -240,9 +254,9 @@ export default function Dashboard(props) {
 
     if (job === "eth" || job === "both") {
       setIsRefreshingEther(true);
-      window.web3.eth.getBalance(_addr).then(async (e) => {
+      web3.eth.getBalance(_addr).then(async (e) => {
         setEtherBalance(
-          Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
+          Number(web3.utils.fromWei(e)).toFixed(5).toString()
         );
         setIsRefreshingEther(false);
       });
@@ -254,7 +268,7 @@ export default function Dashboard(props) {
     util.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
-          Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+          Number(web3.utils.fromWei(result)).toFixed(5).toString()
         );
       }
       setIsRefreshingPruf(false);
@@ -262,19 +276,19 @@ export default function Dashboard(props) {
   };
 
   const handleCustomAddress = (e) => {
-    setTempAddress(e.target.value)
-    if (window.web3.utils.isAddress(e.target.value)) {
-      getWhitelistInfo(e.target.value)
-      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
-      setValidAddress(true)
+    setTempAddress(e.target.value);
+    if (web3.utils.isAddress(e.target.value)) {
+      getWhitelistInfo(e.target.value);
+      setCustomAddress(web3.utils.toChecksumAddress(e.target.value));
+      setValidAddress(true);
     } else {
       setCustomAddress("");
-      setValidAddress(false)
+      setValidAddress(false);
     }
   };
 
   const handlePurchaceAmount = (e) => {
-    setEthAmount(e.target.value)
+    setEthAmount(e.target.value);
   };
 
   const sidebarMinimize = () => {
@@ -287,8 +301,7 @@ export default function Dashboard(props) {
     }
   };
 
-  const setUpEnvironment = (_addr) => {
-
+  const setUpEnvironment = (_web3, _addr) => {
     const Presale_ADDRESS = "0x72eC41b545Cdc24a4094565aF7DF733Ffaa014ED",
       Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
 
@@ -1870,17 +1883,18 @@ export default function Dashboard(props) {
 
     console.log("Getting things set up...");
 
-    const PRESALE = new window.web3.eth.Contract(PRESALE_ABI, Presale_ADDRESS);
-    const UTIL = new window.web3.eth.Contract(Util_ABI, Util_ADDRESS);
+    const PRESALE = new _web3.eth.Contract(PRESALE_ABI, Presale_ADDRESS);
+    const UTIL = new _web3.eth.Contract(Util_ABI, Util_ADDRESS);
 
     setPresaleAddress(Presale_ADDRESS);
     setPresale(PRESALE.methods);
     setUtil(UTIL.methods);
+
     if (_addr) {
       setIsRefreshingEther(true);
-      window.web3.eth.getBalance(_addr).then(async (e) => {
+        _web3.eth.getBalance(_addr).then(async (e) => {
         setEtherBalance(
-          Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
+          Number(_web3.utils.fromWei(e)).toFixed(5).toString()
         );
         setIsRefreshingEther(false);
       });
@@ -1889,7 +1903,7 @@ export default function Dashboard(props) {
       UTIL.methods.balanceOf(_addr).call(async (error, result) => {
         if (!error) {
           setPrufBalance(
-            Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+            Number(_web3.utils.fromWei(result)).toFixed(5).toString()
           );
         }
         setIsRefreshingPruf(false);
@@ -1899,9 +1913,9 @@ export default function Dashboard(props) {
         if (!error) {
           console.log(result);
           setConnectedWalletInfo({
-            min: window.web3.utils.fromWei(result["0"]),
-            max: window.web3.utils.fromWei(result["1"]),
-            rate: window.web3.utils.fromWei(result["2"]),
+            min: _web3.utils.fromWei(result["0"]),
+            max: _web3.utils.fromWei(result["1"]),
+            rate: _web3.utils.fromWei(result["2"]),
           });
         }
         setIsRefreshingPruf(false);
@@ -2022,8 +2036,8 @@ export default function Dashboard(props) {
                       console.log(`setting useConnected to ${!useConnected}`);
                       setUseConnected(!useConnected);
                       setCustomAddress("");
-                      setValidAddress(undefined)
-                      setTempAddress("")
+                      setValidAddress(undefined);
+                      setTempAddress("");
                       getWhitelistInfo(addr);
                     }}
                   />{" "}
@@ -2032,21 +2046,16 @@ export default function Dashboard(props) {
                     Use connected wallet
                   </span>
                   {useConnected && (
-
                     <>
-                      <h4>
-                        Connected Wallet: {addr}
-                      </h4>
-                      {Number(walletInfo.rate) === 100000 && walletInfo.rate !== 0 && (
-                        <h4>
-                          Whitelist Status: Basic Rate
-                        </h4>
-                      )}
-                      {Number(walletInfo.rate) !== 100000 && walletInfo.rate !== 0 && (
-                        <h4>
-                          Whitelist Status: Authorized Rate
-                        </h4>
-                      )}
+                      <h4>Connected Wallet: {addr}</h4>
+                      {Number(walletInfo.rate) === 100000 &&
+                        walletInfo.rate !== 0 && (
+                          <h4>Whitelist Status: Basic Rate</h4>
+                        )}
+                      {Number(walletInfo.rate) !== 100000 &&
+                        walletInfo.rate !== 0 && (
+                          <h4>Whitelist Status: Authorized Rate</h4>
+                        )}
                       <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
                       <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
                       <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
@@ -2066,23 +2075,21 @@ export default function Dashboard(props) {
                         }}
                       />
 
-                      {customAddress !== "" &&
+                      {customAddress !== "" && (
                         <>
-                          {Number(walletInfo.rate) === 100000 && walletInfo.rate !== "0" && (
-                            <h4>
-                              Whitelist Status: Basic Rate
-                            </h4>
-                          )}
-                          {Number(walletInfo.rate) !== 100000 && walletInfo.rate !== "0" && (
-                            <h4>
-                              Whitelist Status: Authorized Rate
-                            </h4>
-                          )}
+                          {Number(walletInfo.rate) === 100000 &&
+                            walletInfo.rate !== "0" && (
+                              <h4>Whitelist Status: Basic Rate</h4>
+                            )}
+                          {Number(walletInfo.rate) !== 100000 &&
+                            walletInfo.rate !== "0" && (
+                              <h4>Whitelist Status: Authorized Rate</h4>
+                            )}
                           <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
                           <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
                           <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
                         </>
-                      }
+                      )}
                       {isValidAddress !== true && tempAddress !== "" && (
                         <h5>Address: {tempAddress} is not a valid address.</h5>
                       )}
@@ -2107,23 +2114,21 @@ export default function Dashboard(props) {
                       }}
                     />
 
-                    {customAddress !== "" &&
+                    {customAddress !== "" && (
                       <>
-                        {Number(walletInfo.rate) === 100000 && walletInfo.rate !== "0" && (
-                          <h4>
-                            Whitelist Status: Basic Rate
-                          </h4>
-                        )}
-                        {Number(walletInfo.rate) !== 100000 && walletInfo.rate !== "0" && (
-                          <h4>
-                            Whitelist Status: Authorized Rate
-                          </h4>
-                        )}
+                        {Number(walletInfo.rate) === 100000 &&
+                          walletInfo.rate !== "0" && (
+                            <h4>Whitelist Status: Basic Rate</h4>
+                          )}
+                        {Number(walletInfo.rate) !== 100000 &&
+                          walletInfo.rate !== "0" && (
+                            <h4>Whitelist Status: Authorized Rate</h4>
+                          )}
                         <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
                         <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
                         <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
                       </>
-                    }
+                    )}
                     {isValidAddress !== true && tempAddress !== "" && (
                       <h5>Address: {tempAddress} is not a valid address.</h5>
                     )}
@@ -2132,96 +2137,92 @@ export default function Dashboard(props) {
               </CardBody>
             )}
           </Card>
-            <Card>
-              <CardHeader color="info" icon>
-                <CardIcon className="headerIconBack">
-                  <span class="material-icons"> account_balance_wallet </span>
-                </CardIcon>
-                <h5 className={classes.cardIconTitle}>Get PRUF</h5>
-              </CardHeader>
-              {!addr && (
-                <CardBody>
-                  <form>
-                    <h3 className="bump">
-                      <br />
+          <Card>
+            <CardHeader color="info" icon>
+              <CardIcon className="headerIconBack">
+                <span class="material-icons"> account_balance_wallet </span>
+              </CardIcon>
+              <h5 className={classes.cardIconTitle}>Get PRUF</h5>
+            </CardHeader>
+            {!addr && (
+              <CardBody>
+                <form>
+                  <h3 className="bump">
+                    <br />
                     Please{" "}
-                      <a
-                        onClick={() => {
-                          getAddress();
-                        }}
-                        className="splitterA"
-                      >
-                        connect
+                    <a
+                      onClick={() => {
+                        getAddress(web3);
+                      }}
+                      className="splitterA"
+                    >
+                      connect
                     </a>{" "}
                     to an Ethereum provider.
                   </h3>
-                  </form>
-                </CardBody>
-              )}
-              {addr && (
-                <CardBody>
-                  <form>
-                    <CustomInput
-                      formControlProps={{
-                        fullWidth: true,
-                      }}
-                      inputProps={{
-                        type: "number",
-                        value: ethAmount,
-                        onChange: (e) => {
-                          handlePurchaceAmount(e); // Set undefined to remove entirely
-                        },
-                        placeholder: `ETH`,
-                      }}
-                    />
-                    <h4>
-                      Connected Wallet: {addr}
-                    </h4>
-                    {Number(connectedWalletInfo.rate) === 100000 && Number(connectedWalletInfo.rate) !== "0" && (
-                      <h4>
-                        Active wallet whitelist status: Basic Rate
-                      </h4>
+                </form>
+              </CardBody>
+            )}
+            {addr && (
+              <CardBody>
+                <form>
+                  <CustomInput
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      type: "number",
+                      value: ethAmount,
+                      onChange: (e) => {
+                        handlePurchaceAmount(e); // Set undefined to remove entirely
+                      },
+                      placeholder: `ETH`,
+                    }}
+                  />
+                  <h4>Connected Wallet: {addr}</h4>
+                  {Number(connectedWalletInfo.rate) === 100000 &&
+                    Number(connectedWalletInfo.rate) !== "0" && (
+                      <h4>Active wallet whitelist status: Basic Rate</h4>
                     )}
-                    {Number(connectedWalletInfo.rate) !== 100000 && Number(connectedWalletInfo.rate) !== "0" && (
-                      <h4>
-                        Active wallet whitelist status: Authorized Rate
-                      </h4>
+                  {Number(connectedWalletInfo.rate) !== 100000 &&
+                    Number(connectedWalletInfo.rate) !== "0" && (
+                      <h4>Active wallet whitelist status: Authorized Rate</h4>
                     )}
-                    {Number(connectedWalletInfo.rate) >= 100000 && (
+                  {Number(connectedWalletInfo.rate) >= 100000 && (
+                    <>
+                      <h5>Minimum Ticket: {connectedWalletInfo.min}ETH</h5>
+                      <h5>Maximum Ticket: {connectedWalletInfo.max}ETH</h5>
+                      <h5>Ratio: ü{connectedWalletInfo.rate}/ETH</h5>
+                    </>
+                  )}
+                  <div>
+                    {!transacting && Number(connectedWalletInfo.min) > 0 ? (
+                      ethAmount > 0 ?
+                      <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => swap()}
+                      >
+                        Purchase
+                      </Button> 
+                      :
+                      <Button
+                      className="MLBGradient"
+                      disabled
+                      onClick={() => swap()}
+                    >
+                      Purchase
+                    </Button>
+                    ) : transacting ? (
                       <>
-                        <h5>Minimum Ticket: {connectedWalletInfo.min}ETH</h5>
-                        <h5>Maximum Ticket: {connectedWalletInfo.max}ETH</h5>
-                        <h5>Ratio: ü{connectedWalletInfo.rate}/ETH</h5>
-                      </>
-                    )}
-                    <div>
-                      {!transacting && Number(connectedWalletInfo.min) > 0 ? (
-                        <Button
-                          color="info"
-                          className="MLBGradient"
-                          onClick={() => swap()}
-                        >
-                          Purchase
-                        </Button>
-                      ) : transacting ? (
-                        <>
-                          Purchasing tokens
-                      <div className="lds-ellipsisIF">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                          </div>
-                          <br />
-                          <br />
-                          <Button
-                            className="MLBGradient"
-                            disabled
-                            onClick={() => swap()}
-                          >
-                            Purchase
-                      </Button>
-                        </>
-                      ) : (
+                        Purchasing tokens
+                        <div className="lds-ellipsisIF">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
+                        <br />
+                        <br />
                         <Button
                           className="MLBGradient"
                           disabled
@@ -2229,12 +2230,21 @@ export default function Dashboard(props) {
                         >
                           Purchase
                         </Button>
-                      )}
-                    </div>
-                  </form>
-                </CardBody>
-              )}
-            </Card>
+                      </>
+                    ) : (
+                      <Button
+                        className="MLBGradient"
+                        disabled
+                        onClick={() => swap()}
+                      >
+                        Purchase
+                      </Button>
+                    )}
+                  </div>
+                </form>
+              </CardBody>
+            )}
+          </Card>
         </div>
         <Footer fluid />
       </div>
