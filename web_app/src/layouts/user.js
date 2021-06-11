@@ -138,13 +138,13 @@ export default function Dashboard(props) {
   }, []);
 
   const swap = () => {
-    if (Number(ethAmount) <= Number(walletInfo.min))
+    if (Number(ethAmount) < Number(connectedWalletInfo.min))
       return swal({
         icon: "warning",
         title: "!Error!",
         text: "Please submit a value more than or equal to the minimum ticket size.",
       });
-    if (Number(ethAmount) >= Number(walletInfo.max))
+    if (Number(ethAmount) > Number(connectedWalletInfo.max))
       return swal({
         icon: "warning",
         title: "!Error!",
@@ -159,9 +159,24 @@ export default function Dashboard(props) {
       })
       .on("error", function (_error) {
         setTransacting(false);
+        swal({
+          icon: "warning",
+          title: "!Error!",
+          text: "Something went wrong.",
+        }).then(()=>{
+          refreshBalances("both", addr)
+          getConnectedWhitelistInfo()
+        })
       })
       .on("receipt", (receipt) => {
         setTransacting(false);
+        swal({
+          icon: "success",
+          title: "Transaction successful!",
+        }).then(()=>{
+          refreshBalances("both", addr)
+          getConnectedWhitelistInfo()
+        })
       });
   };
 
@@ -209,6 +224,20 @@ export default function Dashboard(props) {
       }
     }
     return activeRoute;
+  };
+
+  const getConnectedWhitelistInfo = () => {
+    presale.checkWhitelist(addr).call(async (error, result) => {
+      if (!error) {
+        console.log(result);
+        setConnectedWalletInfo({
+          min: web3.utils.fromWei(result["0"]),
+          max: web3.utils.fromWei(result["1"]),
+          rate: web3.utils.fromWei(result["2"]),
+        });
+      }
+      setIsRefreshingPruf(false);
+    });
   };
 
   const getWhitelistInfo = (_addr) => {
@@ -2052,7 +2081,7 @@ export default function Dashboard(props) {
                             )}
                           <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
                           <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
-                          <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
+                          <h5>Swap Ratio: ü{walletInfo.rate}/ETH</h5>
                         </>
                       )}
                       {isValidAddress !== true && tempAddress !== "" && (
@@ -2090,7 +2119,7 @@ export default function Dashboard(props) {
                           )}
                         <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
                         <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
-                        <h5>Ratio: ü{walletInfo.rate}/ETH</h5>
+                        <h5>Swap Ratio: ü{walletInfo.rate}/ETH</h5>
                       </>
                     )}
                     {isValidAddress !== true && tempAddress !== "" && (
@@ -2156,11 +2185,11 @@ export default function Dashboard(props) {
                     <>
                       <h5>Minimum Ticket: {connectedWalletInfo.min}ETH</h5>
                       <h5>Maximum Ticket: {connectedWalletInfo.max}ETH</h5>
-                      <h5>Ratio: ü{connectedWalletInfo.rate}/ETH</h5>
+                      <h5>Swap Ratio: ü{connectedWalletInfo.rate}/ETH</h5>
                     </>
                   )}
                   <div>
-                    {!transacting && Number(connectedWalletInfo.min) > 0 ? (
+                    {!transacting && Number(connectedWalletInfo.max) > 0 ? (
                       ethAmount > 0 ?
                       <Button
                         color="info"
