@@ -387,7 +387,7 @@ export default function Dashboard(props) {
       if (e !== "main")
       return swal({title:"Connect to the Ethereum Mainnet!", icon:"warning", text:`You are currently connected to '${e}'. Please switch to 'Ethereum Mainnet' in your provider settings.`})
     })
-    const Splitter_ADDRESS = "0x980AaB0F43cea7E7a21F73cf9ed4eADB5845e1Dc",
+    const Splitter_ADDRESS = "0x71a4be4f528a1d4F3f56ea5316C5A1650e01E043",
       Util_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538";
     const Splitter_ABI = [
         {
