@@ -1822,6 +1822,7 @@ export default function Dashboard(props) {
                     <br />
                     Please{" "}
                     <a
+                      className="splitterA"
                       onClick={() => {
                         getAddress(web3);
                       }}
