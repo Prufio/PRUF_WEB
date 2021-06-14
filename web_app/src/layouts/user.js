@@ -1809,7 +1809,7 @@ export default function Dashboard(props) {
           <Card>
             <CardHeader color="info" icon>
               <CardIcon className="headerIconBack">
-                <span class="material-icons"> toll </span>
+                <span className="material-icons"> toll </span>
               </CardIcon>
               <h5 className={classes.cardIconTitle}>Split Tokens</h5>
             </CardHeader>
