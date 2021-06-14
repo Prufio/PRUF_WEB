@@ -105,7 +105,7 @@ export default function Dashboard(props) {
     let web3 = require("web3");
     web3 = new Web3(
       web3.givenProvider ||
-        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+        "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     window.web3 = web3;
 
@@ -384,7 +384,7 @@ export default function Dashboard(props) {
 
   const setUpEnvironment = (_addr) => {
     const Splitter_ADDRESS = "0x980AaB0F43cea7E7a21F73cf9ed4eADB5845e1Dc",
-      Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
+      Util_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538";
     const Splitter_ABI = [
         {
           inputs: [
