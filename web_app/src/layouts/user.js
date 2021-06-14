@@ -196,6 +196,7 @@ export default function Dashboard(props) {
                   })
                   .on("error", () => {
                     swal("Something went wrong!");
+                    setTransacting(false);
                     getSnapShotInfo(customAddress);
                   });
               } else {
@@ -255,6 +256,7 @@ export default function Dashboard(props) {
             })
             .on("error", () => {
               swal("Something went wrong!");
+              setTransacting(false);
               getSnapShotInfo(customAddress);
             });
         } else {
