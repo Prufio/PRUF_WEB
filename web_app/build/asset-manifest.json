@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.ee12ffc1.chunk.css",
-    "main.js": "/static/js/main.c5bb2182.chunk.js",
-    "main.js.map": "/static/js/main.c5bb2182.chunk.js.map",
+    "main.js": "/static/js/main.bea69da8.chunk.js",
+    "main.js.map": "/static/js/main.bea69da8.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.e3728281.js",
     "runtime-main.js.map": "/static/js/runtime-main.e3728281.js.map",
     "static/css/2.121b3ca3.chunk.css": "/static/css/2.121b3ca3.chunk.css",
@@ -12,7 +12,7 @@
     "static/css/2.121b3ca3.chunk.css.map": "/static/css/2.121b3ca3.chunk.css.map",
     "static/css/main.ee12ffc1.chunk.css.map": "/static/css/main.ee12ffc1.chunk.css.map",
     "static/js/2.d8b46136.chunk.js.LICENSE.txt": "/static/js/2.d8b46136.chunk.js.LICENSE.txt",
-    "static/js/main.c5bb2182.chunk.js.LICENSE.txt": "/static/js/main.c5bb2182.chunk.js.LICENSE.txt",
+    "static/js/main.bea69da8.chunk.js.LICENSE.txt": "/static/js/main.bea69da8.chunk.js.LICENSE.txt",
     "static/media/custom.css": "/static/media/TracesWB.ba7ad1a4.jpg",
     "static/media/eth-logo.a85b6de0.png": "/static/media/eth-logo.a85b6de0.png",
     "static/media/logo-white.svg": "/static/media/logo-white.6a2b2982.svg"
@@ -22,6 +22,6 @@
     "static/css/2.121b3ca3.chunk.css",
     "static/js/2.d8b46136.chunk.js",
     "static/css/main.ee12ffc1.chunk.css",
-    "static/js/main.c5bb2182.chunk.js"
+    "static/js/main.bea69da8.chunk.js"
   ]
 }
