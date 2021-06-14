@@ -55,6 +55,7 @@ export default function Dashboard(props) {
   const [tempAddr, setTempAddr] = React.useState("");
   const [web3, setWeb3] = React.useState()
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
+  const [sps, setSps] = React.useState(undefined);
 
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
