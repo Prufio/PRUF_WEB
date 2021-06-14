@@ -53,6 +53,7 @@ export default function Dashboard(props) {
   const [walletInfo, setWalletInfo] = React.useState("0");
   const [isEligible, setIsEligible] = React.useState(false);
   const [tempAddr, setTempAddr] = React.useState("");
+  const [web3, setWeb3] = React.useState()
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   // const [hasImage, setHasImage] = React.useState(true);
@@ -87,7 +88,7 @@ export default function Dashboard(props) {
         if (e[0] !== addr) {
           window.location.reload();
         }
-      } else if (window.web3.utils.toChecksumAddress(e[0]) !== addr) {
+      } else if (web3.utils.toChecksumAddress(e[0]) !== addr) {
         window.location.reload();
       }
     });
@@ -100,16 +101,15 @@ export default function Dashboard(props) {
   // }
 
   React.useEffect(() => {
-    setTimeout(getAddress(), 1000);
-
-    let web3 = require("web3");
-    web3 = new Web3(
-      web3.givenProvider ||
+    let _web3 = require("web3");
+    _web3 = new Web3(
+      _web3.givenProvider ||
         "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
-    window.web3 = web3;
+    setWeb3(_web3);
+    setTimeout(getAddress(_web3), 1000);
 
-    console.log({ web3 });
+    console.log({ _web3 });
 
     if (navigator.platform.indexOf("Win") > -1) {
       //console.log("*****Using ps*****");
@@ -176,7 +176,7 @@ export default function Dashboard(props) {
                   getSnapShotInfo(addr);
                 });
             } else {
-              if (window.web3.utils.isAddress(customAddress)) {
+              if (web3.utils.isAddress(customAddress)) {
                 console.log(`Splitting PRUF balance of ${customAddress}`);
                 setTransacting(true);
                 splitter
@@ -235,7 +235,7 @@ export default function Dashboard(props) {
             getSnapShotInfo(addr);
           });
       } else {
-        if (window.web3.utils.isAddress(customAddress)) {
+        if (web3.utils.isAddress(customAddress)) {
           console.log(`Splitting PRUF balance of ${customAddress}`);
           setTransacting(true);
           splitter
@@ -266,7 +266,7 @@ export default function Dashboard(props) {
     }
   };
 
-  const getAddress = () => {
+  const getAddress = (_web3) => {
     if (window.ethereum) {
       window.ethereum
         .request({
@@ -279,14 +279,14 @@ export default function Dashboard(props) {
               .then(async (accounts) => {
                 if (accounts[0] === undefined)
                   return swal("Can't connect to wallet.");
-                console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-                setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-                setUpEnvironment(accounts[0]);
+                console.log(_web3.utils.toChecksumAddress(accounts[0]));
+                setAddr(_web3.utils.toChecksumAddress(accounts[0]));
+                setUpEnvironment(_web3, accounts[0]);
               });
           } else {
-            console.log(window.web3.utils.toChecksumAddress(accounts[0]));
-            setAddr(window.web3.utils.toChecksumAddress(accounts[0]));
-            setUpEnvironment(accounts[0]);
+            console.log(_web3.utils.toChecksumAddress(accounts[0]));
+            setAddr(_web3.utils.toChecksumAddress(accounts[0]));
+            setUpEnvironment(_web3, accounts[0]);
           }
         });
     } else {
@@ -338,9 +338,9 @@ export default function Dashboard(props) {
 
     if (job === "eth" || job === "both") {
       setIsRefreshingEther(true);
-      window.web3.eth.getBalance(_addr).then(async (e) => {
+      web3.eth.getBalance(_addr).then(async (e) => {
         setEtherBalance(
-          Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
+          Number(web3.utils.fromWei(e)).toFixed(5).toString()
         );
         setIsRefreshingEther(false);
       });
@@ -352,7 +352,7 @@ export default function Dashboard(props) {
     util.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
-          Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+          Number(web3.utils.fromWei(result)).toFixed(5).toString()
         );
       }
       setIsRefreshingPruf(false);
@@ -363,8 +363,8 @@ export default function Dashboard(props) {
   const handleCustomAddress = (e) => {
     setTempAddr(e.target.value);
     setWalletInfo("0");
-    if (window.web3.utils.isAddress(e.target.value)) {
-      setCustomAddress(window.web3.utils.toChecksumAddress(e.target.value));
+    if (web3.utils.isAddress(e.target.value)) {
+      setCustomAddress(web3.utils.toChecksumAddress(e.target.value));
       getSnapShotInfo(e.target.value);
     } else {
       setIsEligible(false);
@@ -382,7 +382,11 @@ export default function Dashboard(props) {
     }
   };
 
-  const setUpEnvironment = (_addr) => {
+  const setUpEnvironment = (_web3, _addr) => {
+    _web3.eth.net.getNetworkType().then(e=>{
+      if (e !== "main")
+      return swal({title:"Connect to the Ethereum Mainnet!", icon:"warning", text:`You are currently connected to '${e}'. Please switch to 'Ethereum Mainnet' in your provider settings.`})
+    })
     const Splitter_ADDRESS = "0x980AaB0F43cea7E7a21F73cf9ed4eADB5845e1Dc",
       Util_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538";
     const Splitter_ABI = [
@@ -1653,19 +1657,19 @@ export default function Dashboard(props) {
 
     console.log("Getting things set up...");
 
-    const SPLITTER = new window.web3.eth.Contract(
+    const SPLITTER = new _web3.eth.Contract(
       Splitter_ABI,
       Splitter_ADDRESS
     );
-    const UTIL = new window.web3.eth.Contract(Util_ABI, Util_ADDRESS);
+    const UTIL = new _web3.eth.Contract(Util_ABI, Util_ADDRESS);
 
     setSplitter(SPLITTER.methods);
     setUtil(UTIL.methods);
 
     setIsRefreshingEther(true);
-    window.web3.eth.getBalance(_addr).then(async (e) => {
+    _web3.eth.getBalance(_addr).then(async (e) => {
       setEtherBalance(
-        Number(window.web3.utils.fromWei(e)).toFixed(5).toString()
+        Number(_web3.utils.fromWei(e)).toFixed(5).toString()
       );
       setIsRefreshingEther(false);
     });
@@ -1674,7 +1678,7 @@ export default function Dashboard(props) {
     UTIL.methods.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
-          Number(window.web3.utils.fromWei(result)).toFixed(5).toString()
+          Number(_web3.utils.fromWei(result)).toFixed(5).toString()
         );
       }
       setIsRefreshingPruf(false);
@@ -1694,7 +1698,7 @@ export default function Dashboard(props) {
             console.log(result);
             if (result === "0") setIsEligible(false);
             else setIsEligible(true);
-            setWalletInfo(window.web3.utils.fromWei(result));
+            setWalletInfo(web3.utils.fromWei(result));
           } else {
             setIsEligible(false);
             setWalletInfo("0");
@@ -1819,7 +1823,7 @@ export default function Dashboard(props) {
                     Please{" "}
                     <a
                       onClick={() => {
-                        getAddress();
+                        getAddress(web3);
                       }}
                     >
                       connect
