@@ -108,7 +108,7 @@ export default function Dashboard(props) {
       window.web3 = web3;
       setWeb3(web3)
     } else {
-      web3 = new Web3("https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959");
+      web3 = new Web3("https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959");
       window.web3 = web3;
       setWeb3(web3)
     }
@@ -328,8 +328,8 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_web3, _addr) => {
-    const Presale_ADDRESS = "0x72eC41b545Cdc24a4094565aF7DF733Ffaa014ED",
-      Util_ADDRESS = "0xd076f69BC9f8452CE54711ff2A7662Ed8Df8A74b";
+    const Presale_ADDRESS = "0xb7D09306d0C5D3C2A5C0FDc1146efb2415445Cf3",
+      Util_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538";
 
     const PRESALE_ABI = [
       {
@@ -2053,7 +2053,7 @@ export default function Dashboard(props) {
               </CardIcon>
               <h5 className={classes.cardIconTitle}>Check Whitelist Status</h5>
             </CardHeader>
-            {addr && (
+            {/* {addr && (
               <CardBody>
                 <form>
                     <>
@@ -2076,8 +2076,10 @@ export default function Dashboard(props) {
                               <h4>Whitelist Status: Basic Rate</h4>
                             )}
                           {Number(walletInfo.rate) !== 100000 &&
-                            walletInfo.rate !== "0" && (
+                            Number(walletInfo.max) > 0 ? (
                               <h4>Whitelist Status: Authorized Rate</h4>
+                            ) : (
+                              <h4>Whitelist Status: Not Whitelisted</h4>
                             )}
                           <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
                           <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
@@ -2090,8 +2092,8 @@ export default function Dashboard(props) {
                     </>
                 </form>
               </CardBody>
-            )}
-            {!addr && (
+            )} */}
+            {/* {!addr && ( */}
               <CardBody>
                 <form>
                   <>
@@ -2109,17 +2111,29 @@ export default function Dashboard(props) {
 
                     {customAddress !== "" && (
                       <>
-                        {Number(walletInfo.rate) === 100000 &&
-                          walletInfo.rate !== "0" && (
+                        {Number(walletInfo.rate) === 100000 && (
+                          Number(walletInfo.max) > 0 ? (
                             <h4>Whitelist Status: Basic Rate</h4>
-                          )}
+                          ) : (
+                            <h4>Whitelist Status: Not Whitelisted</h4>
+                          )
+                        )}
                         {Number(walletInfo.rate) !== 100000 &&
-                          walletInfo.rate !== "0" && (
+                          Number(walletInfo.max) > 0 ? (
                             <h4>Whitelist Status: Authorized Rate</h4>
+                          ) : (
+                            <h4>Whitelist Status: Not Whitelisted</h4>
                           )}
-                        <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
-                        <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
-                        <h5>Swap Ratio: ü{walletInfo.rate}/ETH</h5>
+                        
+                        {Number(walletInfo.max) > 0 ? (
+                          <>
+                            <h5>Minimum Ticket: {walletInfo.min}ETH</h5>
+                            <h5>Maximum Ticket: {walletInfo.max}ETH</h5>
+                            <h5>Swap Ratio: ü{walletInfo.rate}/ETH</h5>
+                          </>
+                        ) : (
+                          <></>
+                        )}
                       </>
                     )}
                     {isValidAddress !== true && tempAddress !== "" && (
@@ -2128,7 +2142,7 @@ export default function Dashboard(props) {
                   </>
                 </form>
               </CardBody>
-            )}
+            {/* )} */}
           </Card>
           <Card>
             <CardHeader color="info" icon>
@@ -2173,15 +2187,20 @@ export default function Dashboard(props) {
                     }}
                   />
                   <h4>Connected Wallet: {addr}</h4>
-                  {Number(connectedWalletInfo.rate) === 100000 &&
-                    Number(connectedWalletInfo.rate) !== "0" && (
+                  {Number(connectedWalletInfo.rate) === 100000 && (
+                    Number(connectedWalletInfo.max) > 0 ? (
                       <h4>Active wallet whitelist status: Basic Rate</h4>
-                    )}
-                  {Number(connectedWalletInfo.rate) !== 100000 &&
-                    Number(connectedWalletInfo.rate) !== "0" && (
+                    ) : (
+                      <h4>Active wallet whitelist status: Not Whitelisted</h4>
+                    ))}
+                  {Number(connectedWalletInfo.rate) !== 100000 && (
+                    Number(connectedWalletInfo.max) > 0 ? (
                       <h4>Active wallet whitelist status: Authorized Rate</h4>
-                    )}
-                  {Number(connectedWalletInfo.rate) >= 100000 && (
+                      )
+                      : (
+                        <h4>Active wallet whitelist status: Not Whitelisted</h4>
+                    ))}
+                  {Number(connectedWalletInfo.max) > 0 && (
                     <>
                       <h5>Minimum Ticket: {connectedWalletInfo.min}ETH</h5>
                       <h5>Maximum Ticket: {connectedWalletInfo.max}ETH</h5>
