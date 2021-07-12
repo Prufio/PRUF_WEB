@@ -89,10 +89,10 @@ class SidebarWrapper extends React.Component {
     }
   }
   render() {
-    const { className, split, headerLinks, links } = this.props;
+    const { className, bridge, headerLinks, links } = this.props;
     return (
       <div className={className} ref={this.sidebarWrapper}>
-        {split}
+        {bridge}
         {headerLinks}
         {links}
       </div>
@@ -130,7 +130,7 @@ class Sidebar extends React.Component {
 
   // this verifies if any of the collapses should be default opened on a rerender of this component
   // for example, on the refresh of the page,
-  // while on the src/views/forms/RegularForms.jsx - route /split/regular-forms
+  // while on the src/views/forms/RegularForms.jsx - route /bridge/regular-forms
   getCollapseInitialState(routes) {
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse && this.getCollapseInitialState(routes[i].views)) {
@@ -373,7 +373,7 @@ class Sidebar extends React.Component {
         [classes.collapseItemTextRTL]: rtlActive,
       });
     const splitWrapperClass =
-      classes.split +
+      classes.bridge +
       " " +
       cx({
         [classes.whiteAfter]: bgColor === "white",
@@ -410,7 +410,7 @@ class Sidebar extends React.Component {
       }
     };
 
-    var split = (
+    var bridge = (
       <div className={logoClasses}>
         {!this.props.miniActive && isAndroid && (
           <>
@@ -592,12 +592,12 @@ class Sidebar extends React.Component {
                   )}
 
                   {addr === undefined && bgColor !== "white" && (
-                    <h5 className="addressText">split Address Unavailable</h5>
+                    <h5 className="addressText">bridge Address Unavailable</h5>
                   )}
 
                   {addr === undefined && bgColor === "white" && (
                     <h5 className="addressTextBlack">
-                      split Address Unavailable
+                      bridge Address Unavailable
                     </h5>
                   )}
                 </>
@@ -704,12 +704,12 @@ class Sidebar extends React.Component {
                   )}
 
                   {addr === undefined && bgColor !== "white" && (
-                    <h5 className="addressText">split Address Unavailable</h5>
+                    <h5 className="addressText">bridge Address Unavailable</h5>
                   )}
 
                   {addr === undefined && bgColor === "white" && (
                     <h5 className="addressTextBlack">
-                      split Address Unavailable
+                      bridge Address Unavailable
                     </h5>
                   )}
                 </>
@@ -748,7 +748,7 @@ class Sidebar extends React.Component {
       });
     var brand = (
       <div className={logoClasses}>
-        <a href="/#/split/home" className={logoMini}>
+        <a href="/#/bridge/home" className={logoMini}>
           {bgColor !== "white" && (
             <img src={pruftoken} alt="logo" className={classes.img} />
           )}
@@ -756,7 +756,7 @@ class Sidebar extends React.Component {
             <img src={pruftokenblk} alt="logo" className={classes.img} />
           )}
         </a>
-        <a href="/#/split/home" className={logoNormal}>
+        <a href="/#/bridge/home" className={logoNormal}>
           PRüF DASHBOARD
         </a>
       </div>
@@ -796,7 +796,7 @@ class Sidebar extends React.Component {
             {brand}
             <SidebarWrapper
               className={sidebarWrapper}
-              split={split}
+              bridge={bridge}
               headerLinks={<AdminNavbarLinks rtlActive={rtlActive} />}
               links={links}
             />
@@ -822,7 +822,7 @@ class Sidebar extends React.Component {
             {brand}
             <SidebarWrapper
               className={sidebarWrapper}
-              split={split}
+              bridge={bridge}
               links={links}
             />
             {image !== undefined ? (
@@ -866,7 +866,7 @@ Sidebar.propTypes = {
 
 SidebarWrapper.propTypes = {
   className: PropTypes.string,
-  split: PropTypes.object,
+  bridge: PropTypes.object,
   headerLinks: PropTypes.object,
   links: PropTypes.object,
 };
