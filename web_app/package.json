@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "4.9.14",
     "@material-ui/icons": "4.9.1",
+    "@maticnetwork/maticjs": "^2.0.43",
     "@metamask/detect-provider": "^1.2.0",
     "@react-pdf/renderer": "^2.0.12",
     "@sweetalert/with-react": "^0.1.1",
