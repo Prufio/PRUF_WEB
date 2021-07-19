@@ -2,22 +2,22 @@ import React from "react";
 import cx from "classnames";
 import swal from "sweetalert";
 import Web3 from "web3";
-import { MaticPOSClient } from '@maticnetwork/maticjs'
-import { useCookies } from 'react-cookie';
+import { MaticPOSClient } from "@maticnetwork/maticjs";
+import { useCookies } from "react-cookie";
 import { Route } from "react-router-dom";
+import swalReact from "@sweetalert/with-react";
 // creates a beautiful scrollbar
 
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 // @material-ui/core components
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
-import Eth from "../assets/img/eth-logo.png";
-import Polygon from "../assets/img/matic-token-inverted-icon.png";
-import { Cached } from "@material-ui/icons";
-import Footer from "components/Footer/Footer.js";
+import { Cached, InfoOutlined } from "@material-ui/icons";
 
 // core components
+import Footer from "components/Footer/Footer.js";
 import AdminNavbar from "components/Navbars/userNavbar.js";
 import Button from "components/CustomButtons/Button.js";
 import Pruf from "../assets/img/pruftoken.png";
@@ -29,6 +29,9 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CardFooter from "components/Card/CardFooter.js";
+
+import Eth from "../assets/img/eth-logo.png";
+import Polygon from "../assets/img/matic-token-inverted-icon.png";
 
 import routes from "routes.js";
 
@@ -96,7 +99,7 @@ export default function Dashboard(props) {
     ERC20_Predicate_ADDRESS = "0xdD6596F2029e6233DEFfaCa316e6A95217d4Dc34",
     Child_Mgr_ADDRESS = "0xb5505a6d998549090530911180f38aC5130101c6";
 
-    const Util_Child_ABI = [
+  const Util_Child_ABI = [
       {
         inputs: [],
         stateMutability: "nonpayable",
@@ -2730,15 +2733,20 @@ export default function Dashboard(props) {
       },
     ];
 
-
-  const mainWeb3 = new Web3("https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959")
-  const maticWeb3 = new Web3("https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518")
+  const mainWeb3 = new Web3(
+    "https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+  );
+  const maticWeb3 = new Web3(
+    "https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
+  );
 
   const maticPOSClient = new MaticPOSClient({
     network: "testnet",
     version: "mumbai",
-    parentProvider: "https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
-    maticProvider: "https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
+    parentProvider:
+      "https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
+    maticProvider:
+      "https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518",
   });
 
   if (window.ethereum) {
@@ -2797,15 +2805,19 @@ export default function Dashboard(props) {
     depositAmount,
     childChainManagerProxy
   ) => {
-    const ws = new WebSocket(/*"wss://rpc-mumbai.maticvigil.com/ws/v1/ccb543453ee1affc879932231adcc00adb350518"*/"wss://ws-mumbai.matic.today/");
+    const ws = new WebSocket(
+      /*"wss://rpc-mumbai.maticvigil.com/ws/v1/ccb543453ee1affc879932231adcc00adb350518"*/ "wss://ws-mumbai.matic.today/"
+    );
 
     return new Promise((resolve, reject) => {
       ws.onopen = () => {
-        ws.send(`{"id": 1, "method": "eth_subscribe", "params": ["newDeposits", {"Contract": ${childChainManagerProxy}}]}`);
-  
+        ws.send(
+          `{"id": 1, "method": "eth_subscribe", "params": ["newDeposits", {"Contract": ${childChainManagerProxy}}]}`
+        );
+
         ws.onmessage = (msg) => {
           const parsedMsg = JSON.parse(msg);
-          console.log(parsedMsg)
+          console.log(parsedMsg);
           if (
             parsedMsg &&
             parsedMsg.params &&
@@ -2817,7 +2829,7 @@ export default function Dashboard(props) {
               ["bytes32", "bytes"],
               fullData
             );
-  
+
             // check if sync is of deposit type (keccak256("DEPOSIT"))
             const depositType =
               "0x87a7811f4bfedea3d341ad165680ae306b01aaeacc205d227629cf157dd9f821";
@@ -2830,7 +2842,7 @@ export default function Dashboard(props) {
                 ["address", "address", "bytes"],
                 syncData
               );
-  
+
               // depositData can be further decoded to get amount, tokenId etc. based on token type
               // For ERC20 tokens
               const { 0: amount } = web3.eth.abi.decodeParameters(
@@ -2847,169 +2859,345 @@ export default function Dashboard(props) {
             }
           }
         };
-  
+
         ws.onerror = (e) => {
-          console.log("ERROR",e)
+          console.log("ERROR", e);
           reject(false);
         };
-  
+
         ws.onclose = (e) => {
-          console.log("CLOSE",e)
+          console.log("CLOSE", e);
           reject(false);
         };
       };
     });
-  }
+  };
 
   const getMaticWithdrawals = (_addr) => {
     var txReq = new XMLHttpRequest();
     //txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${addr}&startblock=0&endblock=19999999&sort=asc`, true ) // false for synchronous request
-    txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc`, true )
-    txReq.send( null );
+    txReq.open(
+      "GET",
+      `https://api-testnet.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc`,
+      true
+    );
+    txReq.send(null);
 
     txReq.onload = () => {
-      let txns = JSON.parse(txReq.responseText).result, withdrawals = [];
-      console.log({txns: txns})
-      txns.forEach(e => {
+      let txns = JSON.parse(txReq.responseText).result,
+        withdrawals = [];
+      console.log({ txns: txns });
+      txns.forEach((e) => {
         //console.log({methodId: e.input.substring(2, 10)})
-        if (e.input.substring(2, 10) === '2e1a7d4d' && e.to === "0x45f7c1ec0f0e19674a699577f9d89fb5424acf1f"){
-          if (cookies[`beenRedeemed${_addr}`] && !cookies[`beenRedeemed${_addr}`].includes(e.hash)) withdrawals.push(e.hash)
-          else console.log("skipped cached tx")
-        } 
-        
-      })
+        if (
+          e.input.substring(2, 10) === "2e1a7d4d" &&
+          e.to === "0x45f7c1ec0f0e19674a699577f9d89fb5424acf1f"
+        ) {
+          if (
+            cookies[`beenRedeemed${_addr}`] &&
+            !cookies[`beenRedeemed${_addr}`].includes(e.hash)
+          )
+            withdrawals.push(e.hash);
+          else console.log("skipped cached tx");
+        }
+      });
       //web3.eth.abi.decodeParameters(Util_Child_ABI, "0x2e1a7d4d00000000000000000000000000000000000000000000001dd0c885f9a0d80000")
-      console.log(withdrawals)
-      return checkTxs(_addr, withdrawals)
-    }
-  }
+      console.log(withdrawals);
+      return checkTxs(_addr, withdrawals);
+    };
+  };
 
   const checkTxs = (_addr, withdrawals, discards, iteration) => {
     if (!withdrawals || withdrawals.length < 1) {
-      setFindingTxs(false)
-      if (discards && discards.length > 0) setCookie(`beenRedeemed${_addr}`, discards)
-      console.log("Bad or empty props", {withdrawList: withdrawals})
-      return setRedeemList([])
+      setFindingTxs(false);
+      if (discards && discards.length > 0)
+        setCookie(`beenRedeemed${_addr}`, discards);
+      console.log("Bad or empty props", { withdrawList: withdrawals });
+      return setRedeemList([]);
     }
 
-    console.log(cookies[`beenRedeemed${_addr}`])
+    console.log(cookies[`beenRedeemed${_addr}`]);
 
-    if (discards === undefined && cookies[`beenRedeemed${_addr}`] !== "undefined") {discards = JSON.parse(JSON.stringify(cookies[`beenRedeemed${_addr}`]))}
-    else if(discards === undefined) {discards = []}
-    if (!iteration) iteration = 0
+    if (
+      discards === undefined &&
+      cookies[`beenRedeemed${_addr}`] !== "undefined"
+    ) {
+      discards = JSON.parse(JSON.stringify(cookies[`beenRedeemed${_addr}`]));
+    } else if (discards === undefined) {
+      discards = [];
+    }
+    if (!iteration) iteration = 0;
 
-    console.log(discards)
+    console.log(discards);
 
     if (iteration >= withdrawals.length) {
-      console.log("Exit with redeemable tx(s)", withdrawals.length)
-      setFindingTxs(false)
-      if (discards && discards.length > 0) setCookie(`beenRedeemed${_addr}`, discards)
-      return setRedeemList(withdrawals)
+      console.log("Exit with redeemable tx(s)", withdrawals.length);
+      setFindingTxs(false);
+      if (discards && discards.length > 0)
+        setCookie(`beenRedeemed${_addr}`, discards);
+      return setRedeemList(withdrawals);
     }
 
-      maticPOSClient.exitERC20(withdrawals[iteration], { from: _addr, encodeAbi: true })
-      .then(()=>{
-        checkTxs(_addr, withdrawals, discards, iteration + 1)
+    maticPOSClient
+      .exitERC20(withdrawals[iteration], { from: _addr, encodeAbi: true })
+      .then(() => {
+        checkTxs(_addr, withdrawals, discards, iteration + 1);
       })
       .catch((e) => {
         if (e.message.includes("Burn transaction has not been checkpointed")) {
-          console.log("Burn transaction has not yet been checkpointed")
-          swal(`We detected a pending POLYGON -> ETH transaction.\n\n TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a few minutes.`)
+          console.log("Burn transaction has not yet been checkpointed");
+          swal(
+            `We detected a pending POLYGON -> ETH transaction.\n\n TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a few minutes.`
+          );
         } else {
-          console.log("Found already redeemed")
-          if (!discards.includes(withdrawals[iteration])) discards.push(withdrawals[iteration])
+          console.log("Found already redeemed");
+          if (!discards.includes(withdrawals[iteration]))
+            discards.push(withdrawals[iteration]);
         }
-        withdrawals.shift()
-        checkTxs(_addr, withdrawals, discards, iteration)
-      })
-  }
+        withdrawals.shift();
+        checkTxs(_addr, withdrawals, discards, iteration);
+      });
+  };
 
-  const getPendingTxInfo = async (txHash) => {
-
-  }
+  const getPendingTxInfo = async (txHash) => {};
 
   const redeem = (list) => {
-    console.log(list)
+    console.log(list);
     if (list.length > 0) {
-      let current = list.shift()
-      console.log(current)
-      maticPOSClient.exitERC20(current, { from: addr, encodeAbi: true })
-      .then(e => {
-        web3.eth.sendTransaction({
-          from: addr,
-          to: Root_Mgr_ADDRESS,
-          data: e.data
-        }).on("receipt", ()=> {
-          console.log("Got tokens")
-          refreshBalances("both")
-          return redeem(list)
-        }).on("error", () => {
-          console.log("Error redeeming")
-          return redeem(list)
-        }).catch(() => {
-          console.log("Already redeemed or invalid")
-          return redeem(list)
+      let current = list.shift();
+      console.log(current);
+      maticPOSClient
+        .exitERC20(current, { from: addr, encodeAbi: true })
+        .then((e) => {
+          web3.eth
+            .sendTransaction({
+              from: addr,
+              to: Root_Mgr_ADDRESS,
+              data: e.data,
+            })
+            .on("receipt", () => {
+              console.log("Got tokens");
+              refreshBalances("both");
+              return redeem(list);
+            })
+            .on("error", () => {
+              console.log("Error redeeming");
+              return redeem(list);
+            })
+            .catch(() => {
+              console.log("Already redeemed or invalid");
+              return redeem(list);
+            });
         })
-      })
-      .catch(() => {
-        console.log("Error encountered")
-      })
-    }
-
-    else return console.log("Done redeeming")
-  }
+        .catch(() => {
+          console.log("Error encountered");
+        });
+    } else return console.log("Done redeeming");
+  };
 
   const swap = () => {
-    if(!amountToSwap || amountToSwap <= 0) return swal("Please input a number greater than zero.")
-    else if (Number(amountToSwap) > Number(prufBalance)) return swal("Submitted amount exceeds PRUF balance")
-    console.log(`Amount: ${amountToSwap}`)
-    if(currentChain === "Ethereum"){
-      setTransacting(true)
-      setAllowance(true)
-      const amount = web3.utils.toWei(amountToSwap)
-      const depositData = web3.eth.abi.encodeParameter('uint256', amount)
-      util.methods
-      .approve(ERC20_Predicate_ADDRESS, amount)
-      .send({ from: addr })
-      .on("error", () => {
-        console.log("ERROR INCREASING ALLOWANCE")
-        setAllowance(false)
-      })
-      .on("receipt", () => {
-        //swal("SUCCESSFULLY INCREASED ALLOWANCE");
-        refreshBalances("eth")
-        setAllowance(false)
-        rootManager.methods
-        .depositFor(addr, web3.utils.toChecksumAddress(Util_Parent_ADDRESS), depositData)
-        .send({ from: addr })
-        .on("error", () => {
-          console.log("ERROR DEPOSITING")
-          setTransacting(false)
-        })
-        .on("receipt", () => {
-          swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO POLYGON WALLET`)
-          setTransacting(false)
-          refreshBalances("both")
-        })
+    if (!amountToSwap || amountToSwap <= 0)
+      return swal("Please input a number greater than zero.");
+    else if (Number(amountToSwap) > Number(prufBalance))
+      return swal("Submitted amount exceeds PRUF balance");
+    console.log(`Amount: ${amountToSwap}`);
+    if (currentChain === "Ethereum") {
+      swalReact({
+        icon: "warning",
+        content: (
+          <Card className="delegationCard">
+            <h4 className="delegationTitle">Authorize Token Bridge</h4>
+            <h5 className="finalizingTipsContent">
+              In order to authorize a token bridge, you must confirm the amount
+              to be transferred, and that the address authorizing the bridge is
+              correct.
+            </h5>
+            <h5 className="finalizingTipsContent">Please review below.</h5>
+            <div className="delegationTips">
+              <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
+            </div>
+            <div className="delegationTips">
+              <h4 className="alertTextSm">From address: {addr}</h4>
+            </div>
+            <div className="delegationTips">
+              <h4 className="alertText">From Chain: {currentChain}</h4>
+            </div>
+            <div className="delegationTips">
+              <h4 className="alertText">To Chain: Polygon</h4>
+            </div>
+          </Card>
+        ),
+        buttons: {
+          back: {
+            text: "Go Back",
+            className: "delegationButtonBack",
+          },
+          confirm: {
+            text: "Confirm",
+            className: "delegationButtonBack",
+          },
+        },
+      }).then((value) => {
+        switch (value) {
+          case "confirm":
+            console.log("here!")
+            setTransacting(true);
+            setAllowance(true);
+            const amount = web3.utils.toWei(amountToSwap);
+            const depositData = web3.eth.abi.encodeParameter("uint256", amount);
+            util.methods
+              .approve(ERC20_Predicate_ADDRESS, amount)
+              .send({ from: addr })
+              .on("error", () => {
+                console.log("ERROR INCREASING ALLOWANCE");
+                setAllowance(false);
+              })
+              .on("receipt", () => {
+                swalReact({
+                  icon: "warning",
+                  content: (
+                    <Card className="delegationCard">
+                      <h4 className="delegationTitle">Authorize Send</h4>
+                      <h5 className="finalizingTipsContent">
+                        Now that the bridge has been authorized, you must
+                        confirm the transfer of tokens to be sent.
+                      </h5>
+                      <h5 className="finalizingTipsContent">
+                        Please review below.
+                      </h5>
+                      <div className="delegationTips">
+                        <h4 className="alertText">
+                          Amount to Send: ü{amountToSwap}
+                        </h4>
+                      </div>
+                      <div className="delegationTips">
+                        <h4 className="alertTextSm">From address: {addr}</h4>
+                      </div>
+                      <div className="delegationTips">
+                        <h4 className="alertText">
+                          From Chain: {currentChain}
+                        </h4>
+                      </div>
+                      <div className="delegationTips">
+                        <h4 className="alertText">To Chain: Polygon</h4>
+                      </div>
+                    </Card>
+                  ),
+                  buttons: {
+                    back: {
+                      text: "Go Back",
+                      className: "delegationButtonBack",
+                    },
+                    confirm: {
+                      text: "Confirm",
+                      className: "delegationButtonBack",
+                    },
+                  },
+                }).then((value) => {
+                  switch (value) {
+                    case "confirm":
+                      refreshBalances("eth");
+                      setAllowance(false);
+                      rootManager.methods
+                        .depositFor(
+                          addr,
+                          web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
+                          depositData
+                        )
+                        .send({ from: addr })
+                        .on("error", () => {
+                          console.log("ERROR DEPOSITING");
+                          setTransacting(false);
+                        })
+                        .on("receipt", () => {
+                          swal(
+                            `SUCCESSFULLY SENT ${amountToSwap} TOKENS TO POLYGON WALLET`
+                          );
+                          setTransacting(false);
+                          refreshBalances("both");
+                        });
+                      break;
+
+                    case "back":
+                      break;
+
+                    default:
+                      break;
+                  }
+                });
+              });
+            break;
+
+          case "back":
+            break;
+
+          default:
+            break;
+        }
       });
     } else if (currentChain === "Polygon") {
-      setTransacting(true)
-      const amount = web3.utils.toWei(String(amountToSwap))
-      util.methods
-      .withdraw(amount)
-      .send({ from: addr })
-      .on("error", () => {
-        swal("ERROR ATTEMPTING WITHRAWAL")
-        setTransacting(false)
-      })
-      .on("receipt", () => {
-        setTransacting(false)
-        setAmountToSwap()
-        swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO BRIDGE`)
-        refreshBalances("both")
-      })
+      swalReact({
+        icon: "warning",
+        content: (
+          <Card className="delegationCard">
+            <h4 className="delegationTitle">Authorize Send</h4>
+            <h5 className="finalizingTipsContent">
+              Please confrm the token transfer you are attempting to send.
+            </h5>
+            <h5 className="finalizingTipsContent">Please review below.</h5>
+            <div className="delegationTips">
+              <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
+            </div>
+            <div className="delegationTips">
+              <h4 className="alertTextSm">From address: {addr}</h4>
+            </div>
+            <div className="delegationTips">
+              <h4 className="alertText">From Chain: {currentChain}</h4>
+            </div>
+            <div className="delegationTips">
+              <h4 className="alertText">To Chain: Ethereum</h4>
+            </div>
+          </Card>
+        ),
+        buttons: {
+          back: {
+            text: "Go Back",
+            className: "delegationButtonBack",
+          },
+          confirm: {
+            text: "Confirm",
+            className: "delegationButtonBack",
+          },
+        },
+      }).then((value) => {
+        switch (value) {
+          case "confirm":
+            setTransacting(true);
+            const amount = web3.utils.toWei(String(amountToSwap));
+            util.methods
+              .withdraw(amount)
+              .send({ from: addr })
+              .on("error", () => {
+                swal("ERROR ATTEMPTING WITHRAWAL");
+                setTransacting(false);
+              })
+              .on("receipt", () => {
+                setTransacting(false);
+                setAmountToSwap();
+                swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO BRIDGE`);
+                refreshBalances("both");
+              });
+            break;
+
+          case "back":
+            break;
+
+          default:
+            break;
+        }
+      });
     } else {
-      swal("Something went wrong")
+      swal("Something went wrong");
     }
   };
 
@@ -3079,32 +3267,31 @@ export default function Dashboard(props) {
   };
 
   const refreshBalances = (job, _addr) => {
-    if (!_addr) return console.error("No address is connected!")
+    if (!_addr) return console.error("No address is connected!");
 
-    console.log(`Refreshing balances of address: ${_addr}`)
+    console.log(`Refreshing balances of address: ${_addr}`);
 
     if (job === "eth" || job === "both") {
-      setIsRefreshingEther(true)
+      setIsRefreshingEther(true);
       web3.eth.getBalance(_addr).then(async (e) => {
-        setEtherBalance(Number(web3.utils.fromWei(e)).toFixed(5).toString())
-        setIsRefreshingEther(false)
+        setEtherBalance(Number(web3.utils.fromWei(e)).toFixed(5).toString());
+        setIsRefreshingEther(false);
       });
     }
 
     if (job === "eth") return;
-    setIsRefreshingPruf(true)
-    setFindingTxs(true)
-    if (currentChain === "Ethereum") getMaticWithdrawals(_addr)
+    setIsRefreshingPruf(true);
+    setFindingTxs(true);
+    if (currentChain === "Ethereum") getMaticWithdrawals(_addr);
     util.methods.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
           Number(web3.utils.fromWei(result)).toFixed(5).toString()
         );
       }
-      setIsRefreshingPruf(false)
+      setIsRefreshingPruf(false);
     });
   };
-
 
   const sidebarMinimize = () => {
     setMiniActive(!miniActive);
@@ -3117,12 +3304,9 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_web3, _addr) => {
-    if (!cookies[`beenRedeemed${_addr}`])setCookie(`beenRedeemed${_addr}`, [])
-    
-    let _rootManager = new _web3.eth.Contract(
-      Root_Mgr_ABI,
-      Root_Mgr_ADDRESS
-    );
+    if (!cookies[`beenRedeemed${_addr}`]) setCookie(`beenRedeemed${_addr}`, []);
+
+    let _rootManager = new _web3.eth.Contract(Root_Mgr_ABI, Root_Mgr_ADDRESS);
     setRootManager(_rootManager);
 
     _web3.eth.net.getNetworkType().then((e) => {
@@ -3135,7 +3319,7 @@ export default function Dashboard(props) {
 
             _util = new _web3.eth.Contract(Util_Child_ABI, Util_Child_ADDRESS);
             setUtil(_util);
-            setIsRefreshingPruf(true)
+            setIsRefreshingPruf(true);
             _util.methods.balanceOf(_addr).call(async (error, result) => {
               if (!error) {
                 setPrufBalance(
@@ -3155,8 +3339,8 @@ export default function Dashboard(props) {
         _util = new _web3.eth.Contract(Util_Parent_ABI, Util_Parent_ADDRESS);
         setUtil(_util);
         setIsRefreshingPruf(true);
-        setFindingTxs(true)
-        getMaticWithdrawals(_addr)
+        setFindingTxs(true);
+        getMaticWithdrawals(_addr);
         _util.methods.balanceOf(_addr).call(async (error, result) => {
           if (!error) {
             setPrufBalance(
@@ -3165,14 +3349,13 @@ export default function Dashboard(props) {
           }
           setIsRefreshingPruf(false);
         });
-      }
-
-      else {
+      } else {
         setTwinChain("Polygon");
         setCurrentChain("Ethereum");
-        swal(`You are connected to the network '${e}', please connect to the Göerli or Mumbai Testnet`)
+        swal(
+          `You are connected to the network '${e}', please connect to the Göerli or Mumbai Testnet`
+        );
       }
-
     });
     // console.log("Getting things set up...");
 
@@ -3233,13 +3416,20 @@ export default function Dashboard(props) {
                 </CardHeader>
                 <CardFooter stats>
                   {!isRefreshingEther && (
-                    <div className="refresh">
-                      <Cached
-                        onClick={() => {
-                          refreshBalances("eth", addr);
-                        }}
-                      />
-                    </div>
+                    <Tooltip
+                      id="tooltip-top"
+                      title="Refresh Balances"
+                      placement="bottom"
+                      classes={{ tooltip: userClasses.toolTip }}
+                    >
+                      <div className="refresh">
+                        <Cached
+                          onClick={() => {
+                            refreshBalances("eth", addr);
+                          }}
+                        />
+                      </div>
+                    </Tooltip>
                   )}
                   {isRefreshingEther && (
                     <div className={classes.stats}>
@@ -3278,20 +3468,68 @@ export default function Dashboard(props) {
                 <CardFooter stats>
                   {!isRefreshingPruf && (
                     <>
-                    <div className="refresh">
-                      <Cached
-                        onClick={() => {
-                          refreshBalances("pruf", addr);
-                        }}
-                      />
-                    </div>
-                    {currentChain === "Ethereum" && redeemList.length > 0 && !findingTxs ? <Button onClick = {()=>redeem(redeemList)}> Redeem pending balance </Button> :
-                    currentChain === "Ethereum" && findingTxs ? 
-                    <div className="lds-ellipsisCard">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div> : currentChain === "Ethereum" ? <h5>No pending balance</h5> : <> </>}
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Refresh Balances"
+                        placement="bottom"
+                        classes={{ tooltip: userClasses.toolTip }}
+                      >
+                        <div className="refresh">
+                          <Cached
+                            onClick={() => {
+                              refreshBalances("pruf", addr);
+                            }}
+                          />
+                        </div>
+                      </Tooltip>
+                      {currentChain === "Ethereum" &&
+                      redeemList.length > 0 &&
+                      !findingTxs ? (
+                        <div className="inlineFlex">
+                          <Tooltip
+                            id="tooltip-top"
+                            title="Info"
+                            placement="bottom"
+                            classes={{ tooltip: userClasses.toolTip }}
+                          >
+                            <InfoOutlined
+                              className="info"
+                              onClick={() => {
+                                swal("JBS");
+                              }}
+                            />
+                          </Tooltip>
+                          <Button onClick={() => redeem(redeemList)}>
+                            {" "}
+                            Redeem pending balance{" "}
+                          </Button>
+                        </div>
+                      ) : currentChain === "Ethereum" && findingTxs ? (
+                        <div className="lds-ellipsisCard">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
+                      ) : currentChain === "Ethereum" ? (
+                        <div className="inlineFlex">
+                          <Tooltip
+                            id="tooltip-top"
+                            title="Info"
+                            placement="bottom"
+                            classes={{ tooltip: userClasses.toolTip }}
+                          >
+                            <InfoOutlined
+                              className="info"
+                              onClick={() => {
+                                swal("JBS");
+                              }}
+                            />
+                          </Tooltip>
+                          <h5 className="pendingBal">No pending balance</h5>
+                        </div>
+                      ) : (
+                        <> </>
+                      )}
                     </>
                   )}
                   {isRefreshingPruf && (
@@ -3377,23 +3615,25 @@ export default function Dashboard(props) {
                         {`Send to ${twinChain}`}
                       </Button>
                     </>
-                  ) : <>
-                  Sending tokens to {twinChain} wallet
-                  <div className="lds-ellipsisIF">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
-                  <br />
-                  <br />
-                  <Button
-                    className="MLBGradient"
-                    disabled
-                    onClick={() => swap()}
-                  >
-                    {`Send to ${twinChain}`}
-                  </Button>
-                </>}
+                  ) : (
+                    <>
+                      Sending tokens to {twinChain} wallet
+                      <div className="lds-ellipsisIF">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                      <br />
+                      <br />
+                      <Button
+                        className="MLBGradient"
+                        disabled
+                        onClick={() => swap()}
+                      >
+                        {`Send to ${twinChain}`}
+                      </Button>
+                    </>
+                  )}
                 </form>
               </CardBody>
             )}
