@@ -3167,6 +3167,8 @@ export default function Dashboard(props) {
                         break;
 
                       case "back":
+                        console.log("ERROR DEPOSITING");
+                        setTransacting(false);
                         break;
 
                       default:
@@ -3177,6 +3179,8 @@ export default function Dashboard(props) {
               break;
 
             case "back":
+              console.log("ERROR INCREASING ALLOWANCE");
+              setAllowance(false);
               break;
 
             default:
@@ -3251,6 +3255,8 @@ export default function Dashboard(props) {
               break;
 
             case "back":
+              console.log("ERROR DEPOSITING");
+              setTransacting(false);
               break;
 
             default:
@@ -3313,7 +3319,7 @@ export default function Dashboard(props) {
             case "confirm":
               setTransacting(true);
               setAllowance(true);
-              const amount = web3.utils.toWei(Number(amountToSwap) - Number(oldAllowance));
+              const amount = web3.utils.toWei(`${Number(amountToSwap) - Number(oldAllowance)}`);
               const depositData = web3.eth.abi.encodeParameter(
                 "uint256",
                 amount
@@ -3399,6 +3405,8 @@ export default function Dashboard(props) {
                         break;
 
                       case "back":
+                        console.log("ERROR DEPOSITING");
+                        setTransacting(false);
                         break;
 
                       default:
@@ -3409,6 +3417,8 @@ export default function Dashboard(props) {
               break;
 
             case "back":
+              console.log("ERROR INCREASING ALLOWANCE");
+              setAllowance(false);
               break;
 
             default:
@@ -3473,6 +3483,8 @@ export default function Dashboard(props) {
             break;
 
           case "back":
+            swal("ERROR ATTEMPTING WITHRAWAL");
+            setTransacting(false);
             break;
 
           default:
