@@ -2995,8 +2995,9 @@ export default function Dashboard(props) {
         .catch(() => {
           console.log("Error encountered");
         });
+    })
     } else return console.log("Done redeeming");
-  };
+  }
 
   const swap = () => {
     if (!amountToSwap || amountToSwap <= 0)
@@ -3499,7 +3500,7 @@ export default function Dashboard(props) {
                             <InfoOutlined
                               className="info"
                               onClick={() => {
-                                swal("JBS");
+                                swal("You do not currently have any pending Polygon PRUF withdrawals available.");
                               }}
                             />
                           </Tooltip>
