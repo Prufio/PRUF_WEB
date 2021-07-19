@@ -3883,7 +3883,7 @@ export default function Dashboard(props) {
                             <InfoOutlined
                               className="info"
                               onClick={() => {
-                                swal("JBS");
+                                swal("You do not have any pending Polygon PRUF withdrawals.");
                               }}
                             />
                           </Tooltip>
