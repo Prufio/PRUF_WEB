@@ -2862,66 +2862,92 @@ export default function Dashboard(props) {
   }
 
   const getMaticWithdrawals = (_addr) => {
+    
     var txReq = new XMLHttpRequest();
     //txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${addr}&startblock=0&endblock=19999999&sort=asc`, true ) // false for synchronous request
     txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc`, true )
     txReq.send( null );
+    let erc20Req = new XMLHttpRequest();
+    erc20Req.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${_addr}&startblock=0&endblock=19999999&sort=asc`, true ) // false for synchronous request
 
-    txReq.onload = () => {
+    txReq.onload = async () => {
       let txns = JSON.parse(txReq.responseText).result, withdrawals = [];
       console.log({txns: txns})
       txns.forEach(e => {
         //console.log({methodId: e.input.substring(2, 10)})
         if (e.input.substring(2, 10) === '2e1a7d4d' && e.to === "0x45f7c1ec0f0e19674a699577f9d89fb5424acf1f"){
-          if (cookies[`beenRedeemed${_addr}`] && !cookies[`beenRedeemed${_addr}`].includes(e.hash)) withdrawals.push(e.hash)
+          if (cookies[`beenRedeemed${_addr}`] && !cookies[`beenRedeemed${_addr}`].includes(e.hash)) {withdrawals.push(e.hash)}
           else console.log("skipped cached tx")
         } 
-        
       })
+
       //web3.eth.abi.decodeParameters(Util_Child_ABI, "0x2e1a7d4d00000000000000000000000000000000000000000000001dd0c885f9a0d80000")
-      console.log(withdrawals)
-      return checkTxs(_addr, withdrawals)
+      console.log({withdrawals: withdrawals})
+      erc20Req.send( null );
+
+      erc20Req.onload = () => {
+        let erc20Txs = JSON.parse(erc20Req.responseText).result.reverse()
+        console.log({erc20Txs: erc20Txs})
+        checkTxs(_addr, JSON.parse(JSON.stringify(withdrawals)), JSON.parse(JSON.stringify(erc20Txs)))
+      }
+      
     }
   }
 
-  const checkTxs = (_addr, withdrawals, discards, iteration) => {
+  const checkTxs = (_addr, withdrawals, erc20Txs, discards, iteration) => {
+    //console.trace("Running checkTxs")
     if (!withdrawals || withdrawals.length < 1) {
       setFindingTxs(false)
-      if (discards && discards.length > 0) setCookie(`beenRedeemed${_addr}`, discards)
+      if (discards && discards.length > 0) {discards.pop(); setCookie(`beenRedeemed${_addr}`, discards)}
       console.log("Bad or empty props", {withdrawList: withdrawals})
       return setRedeemList([])
     }
 
-    console.log(cookies[`beenRedeemed${_addr}`])
+    //console.log(cookies[`beenRedeemed${_addr}`])
 
     if (discards === undefined && cookies[`beenRedeemed${_addr}`] !== "undefined") {discards = JSON.parse(JSON.stringify(cookies[`beenRedeemed${_addr}`]))}
     else if(discards === undefined) {discards = []}
     if (!iteration) iteration = 0
 
-    console.log(discards)
+    //console.log(discards)
 
     if (iteration >= withdrawals.length) {
       console.log("Exit with redeemable tx(s)", withdrawals.length)
       setFindingTxs(false)
-      if (discards && discards.length > 0) setCookie(`beenRedeemed${_addr}`, discards)
-      return setRedeemList(withdrawals)
+      setRedeemAmount()
+      if (discards && discards.length > 0) {discards.pop(); setCookie(`beenRedeemed${_addr}`, discards)}
+      for (let tx of erc20Txs) {
+        if (tx.hash === withdrawals[withdrawals.length - 1]) {
+        setRedeemAmount(web3.utils.fromWei(tx.value))
+        console.log(`Match found for erc20tx. Setting redeem val to ${web3.utils.fromWei(tx.value)}`)
+        } else {
+          console.log("No Dice...")
+        }
+        return setRedeemList(withdrawals)
+      }
+      
     }
 
+    else {
       maticPOSClient.exitERC20(withdrawals[iteration], { from: _addr, encodeAbi: true })
       .then(()=>{
-        checkTxs(_addr, withdrawals, discards, iteration + 1)
+        checkTxs(_addr, withdrawals, erc20Txs, discards, iteration + 1)
       })
       .catch((e) => {
+        console.log(e.message)
         if (e.message.includes("Burn transaction has not been checkpointed")) {
           console.log("Burn transaction has not yet been checkpointed")
           swal(`We detected a pending POLYGON -> ETH transaction.\n\n TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a few minutes.`)
-        } else {
+        } else if (e.message.includes("EXIT_ALREADY_PROCESSED")) {
           console.log("Found already redeemed")
           if (!discards.includes(withdrawals[iteration])) discards.push(withdrawals[iteration])
+        } else {
+          console.error("SOMETHING WENT WRONG: ", e.message)
         }
         withdrawals.shift()
-        checkTxs(_addr, withdrawals, discards, iteration)
+        return checkTxs(_addr, withdrawals, erc20Txs, discards, iteration)
       })
+    }
   }
 
   const getPendingTxInfo = async (txHash) => {
@@ -2934,14 +2960,14 @@ export default function Dashboard(props) {
       let current = list.shift()
       console.log(current)
       maticPOSClient.exitERC20(current, { from: addr, encodeAbi: true })
-      .then(e => {
-        web3.eth.sendTransaction({
+      .then(async e => {
+        await web3.eth.sendTransaction({
           from: addr,
           to: Root_Mgr_ADDRESS,
           data: e.data
         }).on("receipt", ()=> {
           console.log("Got tokens")
-          refreshBalances("both")
+          refreshBalances("both", addr)
           return redeem(list)
         }).on("error", () => {
           console.log("Error redeeming")
@@ -2960,6 +2986,7 @@ export default function Dashboard(props) {
   }
 
   const swap = () => {
+    if(!util.methods) return swal("Something isn't right! Try refreshing the page.")
     if(!amountToSwap || amountToSwap <= 0) return swal("Please input a number greater than zero.")
     else if (Number(amountToSwap) > Number(prufBalance)) return swal("Submitted amount exceeds PRUF balance")
     console.log(`Amount: ${amountToSwap}`)
@@ -2977,7 +3004,7 @@ export default function Dashboard(props) {
       })
       .on("receipt", () => {
         //swal("SUCCESSFULLY INCREASED ALLOWANCE");
-        refreshBalances("eth")
+        refreshBalances("eth", addr)
         setAllowance(false)
         rootManager.methods
         .depositFor(addr, web3.utils.toChecksumAddress(Util_Parent_ADDRESS), depositData)
@@ -2989,7 +3016,7 @@ export default function Dashboard(props) {
         .on("receipt", () => {
           swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO POLYGON WALLET`)
           setTransacting(false)
-          refreshBalances("both")
+          refreshBalances("both", addr)
         })
       });
     } else if (currentChain === "Polygon") {
@@ -3006,7 +3033,7 @@ export default function Dashboard(props) {
         setTransacting(false)
         setAmountToSwap()
         swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO BRIDGE`)
-        refreshBalances("both")
+        refreshBalances("both", addr)
       })
     } else {
       swal("Something went wrong")
@@ -3079,6 +3106,7 @@ export default function Dashboard(props) {
   };
 
   const refreshBalances = (job, _addr) => {
+    if(!util.methods) return swal("Something isn't right! Try refreshing the page.")
     if (!_addr) return console.error("No address is connected!")
 
     console.log(`Refreshing balances of address: ${_addr}`)
