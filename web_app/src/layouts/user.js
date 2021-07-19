@@ -3136,7 +3136,6 @@ export default function Dashboard(props) {
                 }).then((value) => {
                   switch (value) {
                     case "confirm":
-                      refreshBalances("eth");
                       setAllowance(false);
                       rootManager.methods
                         .depositFor(
