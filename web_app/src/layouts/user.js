@@ -57,7 +57,6 @@ export default function Dashboard(props) {
   const [useConnected, setUseConnected] = React.useState(false);
   const [transacting, setTransacting] = React.useState(false);
   const [allowance, setAllowance] = React.useState(false);
-  const [oldAllowance, setOldAllowance] = React.useState("0");
   const [customAddress, setCustomAddress] = React.useState("");
   const [walletInfo, setWalletInfo] = React.useState("0");
   const [isEligible, setIsEligible] = React.useState(false);
@@ -2984,9 +2983,13 @@ export default function Dashboard(props) {
             e.message.includes("Burn transaction has not been checkpointed")
           ) {
             console.log("Burn transaction has not yet been checkpointed");
-            swal(
-              `We detected a pending POLYGON -> ETH transaction.\n\n TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a few minutes.`
-            );
+            swal({
+              title: "We detected a pending POLYGON -> ETH transaction.",
+              text:
+              `TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a few minutes.`,
+              icon: "warning",
+              button: "Close",
+            })
           } else if (e.message.includes("EXIT_ALREADY_PROCESSED")) {
             console.log("Found already redeemed");
             if (!discards.includes(withdrawals[iteration]))
@@ -3038,394 +3041,423 @@ export default function Dashboard(props) {
 
   const swap = () => {
     if (!amountToSwap || amountToSwap <= 0)
-      return swal("Please input a number greater than zero.");
+      return swal({
+        title: "Please input a number greater than zero.",
+        icon: "warning",
+        button: "Close",
+      })
     else if (Number(amountToSwap) > Number(prufBalance))
-      return swal("Submitted amount exceeds PRUF balance");
+      return swal({
+        title: "Submitted amount exceeds PRUF balance",
+        icon: "warning",
+        button: "Close",
+      })
     console.log(`Amount: ${amountToSwap}`);
     if (currentChain === "Ethereum") {
-      if (oldAllowance === "0") {
-        swalReact({
-          icon: "warning",
-          content: (
-            <Card className="delegationCard">
-              <h4 className="delegationTitle">Authorize Token Bridge</h4>
-              <h5 className="finalizingTipsContent">
-                In order to authorize a token bridge, you must confirm the
-                amount to be transferred, and that the address authorizing the
-                bridge is correct.
-              </h5>
-              <h5 className="finalizingTipsContent">Please review below.</h5>
-              <div className="delegationTips">
-                <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertTextSm">From address: {addr}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">From Chain: {currentChain}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">To Chain: Polygon</h4>
-              </div>
-            </Card>
-          ),
-          buttons: {
-            back: {
-              text: "Go Back",
-              value: "back",
-              className: "delegationButtonBack",
-            },
-            confirm: {
-              text: "Confirm",
-              value: "confirm",
-              className: "delegationButtonBack",
-            },
-          },
-        }).then((value) => {
-          switch (value) {
-            case "confirm":
-              setTransacting(true);
-              setAllowance(true);
-              const amount = web3.utils.toWei(amountToSwap);
-              const depositData = web3.eth.abi.encodeParameter(
-                "uint256",
-                amount
-              );
-              util.methods
-                .approve(ERC20_Predicate_ADDRESS, amount)
-                .send({ from: addr })
-                .on("error", () => {
-                  console.log("ERROR INCREASING ALLOWANCE");
-                  setAllowance(false);
-                })
-                .on("receipt", () => {
-                  swalReact({
-                    icon: "warning",
-                    content: (
-                      <Card className="delegationCard">
-                        <h4 className="delegationTitle">Authorize Send</h4>
-                        <h5 className="finalizingTipsContent">
-                          Now that the bridge has been authorized, you must
-                          confirm the transfer of tokens to be sent.
-                        </h5>
-                        <h5 className="finalizingTipsContent">
-                          Please review below.
-                        </h5>
-                        <div className="delegationTips">
-                          <h4 className="alertText">
-                            Amount to Send: ü{amountToSwap}
-                          </h4>
-                        </div>
-                        <div className="delegationTips">
-                          <h4 className="alertTextSm">From address: {addr}</h4>
-                        </div>
-                        <div className="delegationTips">
-                          <h4 className="alertText">
-                            From Chain: {currentChain}
-                          </h4>
-                        </div>
-                        <div className="delegationTips">
-                          <h4 className="alertText">To Chain: Polygon</h4>
-                        </div>
-                      </Card>
-                    ),
-                    buttons: {
-                      back: {
-                        text: "Go Back",
-                        value: "back",
-                        className: "delegationButtonBack",
-                      },
-                      confirm: {
-                        text: "Confirm",
-                        value: "confirm",
-                        className: "delegationButtonBack",
-                      },
-                    },
-                  }).then((value) => {
-                    switch (value) {
-                      case "confirm":
-                        refreshBalances("eth");
-                        setAllowance(false);
-                        rootManager.methods
-                          .depositFor(
-                            addr,
-                            web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
-                            depositData
-                          )
-                          .send({ from: addr })
-                          .on("error", () => {
-                            console.log("ERROR DEPOSITING");
-                            setTransacting(false);
-                          })
-                          .on("receipt", () => {
-                            swal(
-                              `Successfully sent ü${amountToSwap} to polygon wallet`
-                            );
-                            setTransacting(false);
-                            refreshBalances("both");
-                          });
-                        break;
 
-                      case "back":
-                        console.log("ERROR DEPOSITING");
-                        setTransacting(false);
-                        break;
-
-                      default:
-                        break;
-                    }
+    util.methods
+    .allowance(addr, ERC20_Predicate_ADDRESS)
+    .call(async (error, result) => {
+      if (!error) {
+        if (web3.utils.fromWei(result) === "0") {
+          swalReact({
+            icon: "warning",
+            content: (
+              <Card className="delegationCard">
+                <h4 className="delegationTitle">Authorize Token Bridge</h4>
+                <h5 className="finalizingTipsContent">
+                  In order to authorize a token bridge, you must confirm the
+                  amount to be transferred, and that the address authorizing the
+                  bridge is correct.
+                </h5>
+                <h5 className="finalizingTipsContent">Please review below.</h5>
+                <div className="delegationTips">
+                  <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertTextSm">From address: {addr}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">From Chain: {currentChain}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">To Chain: Polygon</h4>
+                </div>
+              </Card>
+            ),
+            buttons: {
+              back: {
+                text: "Go Back",
+                value: "back",
+                className: "delegationButtonBack",
+              },
+              confirm: {
+                text: "Confirm",
+                value: "confirm",
+                className: "delegationButtonBack",
+              },
+            },
+          }).then((value) => {
+            switch (value) {
+              case "confirm":
+                setTransacting(true);
+                setAllowance(true);
+                const amount = web3.utils.toWei(amountToSwap);
+                const depositData = web3.eth.abi.encodeParameter(
+                  "uint256",
+                  amount
+                );
+                util.methods
+                  .approve(ERC20_Predicate_ADDRESS, amount)
+                  .send({ from: addr })
+                  .on("error", () => {
+                    console.log("ERROR INCREASING ALLOWANCE");
+                    setTransacting(false);
+                    setAllowance(false);
+                  })
+                  .on("receipt", () => {
+                    swalReact({
+                      icon: "warning",
+                      content: (
+                        <Card className="delegationCard">
+                          <h4 className="delegationTitle">Authorize Send</h4>
+                          <h5 className="finalizingTipsContent">
+                            Now that the bridge has been authorized, you must
+                            confirm the transfer of tokens to be sent.
+                          </h5>
+                          <h5 className="finalizingTipsContent">
+                            Please review below.
+                          </h5>
+                          <div className="delegationTips">
+                            <h4 className="alertText">
+                              Amount to Send: ü{amountToSwap}
+                            </h4>
+                          </div>
+                          <div className="delegationTips">
+                            <h4 className="alertTextSm">From address: {addr}</h4>
+                          </div>
+                          <div className="delegationTips">
+                            <h4 className="alertText">
+                              From Chain: {currentChain}
+                            </h4>
+                          </div>
+                          <div className="delegationTips">
+                            <h4 className="alertText">To Chain: Polygon</h4>
+                          </div>
+                        </Card>
+                      ),
+                      buttons: {
+                        back: {
+                          text: "Go Back",
+                          value: "back",
+                          className: "delegationButtonBack",
+                        },
+                        confirm: {
+                          text: "Confirm",
+                          value: "confirm",
+                          className: "delegationButtonBack",
+                        },
+                      },
+                    }).then((value) => {
+                      switch (value) {
+                        case "confirm":
+                          refreshBalances("eth");
+                          setAllowance(false);
+                          rootManager.methods
+                            .depositFor(
+                              addr,
+                              web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
+                              depositData
+                            )
+                            .send({ from: addr })
+                            .on("error", () => {
+                              console.log("ERROR DEPOSITING");
+                              setTransacting(false);
+                            })
+                            .on("receipt", () => {
+                              swal({
+                              title: `Successfully sent ü${amountToSwap} to polygon wallet`,
+                              icon: "success",
+                              button: "Close",
+                            })
+                              setTransacting(false);
+                              refreshBalances("both");
+                            });
+                          break;
+  
+                        case "back":
+                          console.log("ERROR DEPOSITING");
+                          setTransacting(false);
+                          break;
+  
+                        default:
+                          break;
+                      }
+                    });
                   });
-                });
-              break;
-
-            case "back":
-              console.log("ERROR INCREASING ALLOWANCE");
-              setAllowance(false);
-              break;
-
-            default:
-              break;
-          }
-        });
-      } else if (
-        oldAllowance !== "0" &&
-        Number(oldAllowance) >= Number(amountToSwap)
-      ) {
-        swalReact({
-          icon: "warning",
-          content: (
-            <Card className="delegationCard">
-              <h4 className="delegationTitle">Authorize Send</h4>
-              <h5 className="finalizingTipsContent">
-                Now that the bridge has been authorized, you must confirm the
-                transfer of tokens to be sent.
-              </h5>
-              <h5 className="finalizingTipsContent">Please review below.</h5>
-              <div className="delegationTips">
-                <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">
-                  Previous allowance: ü{oldAllowance}
-                </h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertTextSm">From address: {addr}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">From Chain: {currentChain}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">To Chain: Polygon</h4>
-              </div>
-            </Card>
-          ),
-          buttons: {
-            back: {
-              text: "Go Back",
-              value: "back",
-              className: "delegationButtonBack",
+                break;
+  
+              case "back":
+                console.log("ERROR INCREASING ALLOWANCE");
+                setTransacting(false);
+                setAllowance(false);
+                break;
+  
+              default:
+                break;
+            }
+          });
+        } else if (
+          web3.utils.fromWei(result) !== "0" &&
+          Number(web3.utils.fromWei(result)) >= Number(amountToSwap)
+        ) {
+          swalReact({
+            icon: "warning",
+            content: (
+              <Card className="delegationCard">
+                <h4 className="delegationTitle">Authorize Send</h4>
+                <h5 className="finalizingTipsContent">
+                  Now that the bridge has been authorized, you must confirm the
+                  transfer of tokens to be sent.
+                </h5>
+                <h5 className="finalizingTipsContent">Please review below.</h5>
+                <div className="delegationTips">
+                  <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">
+                    Current allowance: ü{web3.utils.fromWei(result)}
+                  </h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertTextSm">From address: {addr}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">From chain: {currentChain}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">To chain: Polygon</h4>
+                </div>
+              </Card>
+            ),
+            buttons: {
+              back: {
+                text: "Go Back",
+                value: "back",
+                className: "delegationButtonBack",
+              },
+              confirm: {
+                text: "Confirm",
+                value: "confirm",
+                className: "delegationButtonBack",
+              },
             },
-            confirm: {
-              text: "Confirm",
-              value: "confirm",
-              className: "delegationButtonBack",
-            },
-          },
-        }).then((value) => {
-          switch (value) {
-            case "confirm":
-              setAllowance(false);
-              rootManager.methods
-                .depositFor(
-                  addr,
-                  web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
-                  depositData
-                )
-                .send({ from: addr })
-                .on("error", () => {
-                  console.log("ERROR DEPOSITING");
-                  setTransacting(false);
-                })
-                .on("receipt", () => {
-                  swal(`Successfully sent ü${amountToSwap} to polygon wallet`);
-                  setTransacting(false);
-                  refreshBalances("both");
-                });
-              break;
-
-            case "back":
-              console.log("ERROR DEPOSITING");
-              setTransacting(false);
-              break;
-
-            default:
-              break;
-          }
-        });
-      } else if (
-        oldAllowance !== "0" &&
-        Number(oldAllowance) < Number(amountToSwap)
-      ) {
-        swalReact({
-          icon: "warning",
-          content: (
-            <Card className="delegationCard">
-              <h4 className="delegationTitle">Authorize Token Bridge</h4>
-              <h5 className="finalizingTipsContent">
-                In order to authorize a token bridge, you must confirm the
-                amount to be transferred, and that the address authorizing the
-                bridge is correct.
-              </h5>
-              <h5 className="finalizingTipsContent">Please review below.</h5>
-              <div className="delegationTips">
-                <h4 className="alertText">
-                  Previous allowance: ü{oldAllowance}
-                </h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
-              </div>
-                        <div className="delegationTips">
-                          <h4 className="alertText">
-                            Additional Allowance Required: ü{Number(amountToSwap) - Number(oldAllowance)}
-                          </h4>
-                        </div>
-              <div className="delegationTips">
-                <h4 className="alertTextSm">From address: {addr}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">From Chain: {currentChain}</h4>
-              </div>
-              <div className="delegationTips">
-                <h4 className="alertText">To Chain: Polygon</h4>
-              </div>
-            </Card>
-          ),
-          buttons: {
-            back: {
-              text: "Go Back",
-              value: "back",
-              className: "delegationButtonBack",
-            },
-            confirm: {
-              text: "Confirm",
-              value: "confirm",
-              className: "delegationButtonBack",
-            },
-          },
-        }).then((value) => {
-          switch (value) {
-            case "confirm":
-              setTransacting(true);
-              setAllowance(true);
-              const amount = web3.utils.toWei(`${Number(amountToSwap) - Number(oldAllowance)}`);
-              const depositData = web3.eth.abi.encodeParameter(
-                "uint256",
-                amount
-              );
-              util.methods
-                .increaseAllowance(ERC20_Predicate_ADDRESS, amount)
-                .send({ from: addr })
-                .on("error", () => {
-                  console.log("ERROR INCREASING ALLOWANCE");
-                  setAllowance(false);
-                })
-                .on("receipt", () => {
-                  swalReact({
-                    icon: "warning",
-                    content: (
-                      <Card className="delegationCard">
-                        <h4 className="delegationTitle">Authorize Send</h4>
-                        <h5 className="finalizingTipsContent">
-                          Now that the bridge has been authorized, you must
-                          confirm the transfer of tokens to be sent.
-                        </h5>
-                        <h5 className="finalizingTipsContent">
-                          Please review below.
-                        </h5>
-                        <div className="delegationTips">
-                          <h4 className="alertText">
-                            Previous allowance: ü{oldAllowance}
-                          </h4>
-                        </div>
-                        <div className="delegationTips">
-                          <h4 className="alertText">
-                            Amount to Send: ü{amountToSwap}
-                          </h4>
-                        </div>
-                        <div className="delegationTips">
-                          <h4 className="alertTextSm">From address: {addr}</h4>
-                        </div>
-                        <div className="delegationTips">
-                          <h4 className="alertText">
-                            From Chain: {currentChain}
-                          </h4>
-                        </div>
-                        <div className="delegationTips">
-                          <h4 className="alertText">To Chain: Polygon</h4>
-                        </div>
-                      </Card>
-                    ),
-                    buttons: {
-                      back: {
-                        text: "Go Back",
-                        value: "back",
-                        className: "delegationButtonBack",
-                      },
-                      confirm: {
-                        text: "Confirm",
-                        value: "confirm",
-                        className: "delegationButtonBack",
-                      },
-                    },
-                  }).then((value) => {
-                    switch (value) {
-                      case "confirm":
-                        refreshBalances("eth");
-                        setAllowance(false);
-                        rootManager.methods
-                          .depositFor(
-                            addr,
-                            web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
-                            depositData
-                          )
-                          .send({ from: addr })
-                          .on("error", () => {
-                            console.log("ERROR DEPOSITING");
-                            setTransacting(false);
-                          })
-                          .on("receipt", () => {
-                            swal(
-                              `Successfully sent ü${amountToSwap} to polygon wallet`
-                            );
-                            setTransacting(false);
-                            refreshBalances("both");
-                          });
-                        break;
-
-                      case "back":
-                        console.log("ERROR DEPOSITING");
-                        setTransacting(false);
-                        break;
-
-                      default:
-                        break;
-                    }
+          }).then((value) => {
+            switch (value) {
+              case "confirm":
+                setAllowance(false);
+                rootManager.methods
+                  .depositFor(
+                    addr,
+                    web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
+                    depositData
+                  )
+                  .send({ from: addr })
+                  .on("error", () => {
+                    console.log("ERROR DEPOSITING");
+                    setTransacting(false);
+                  })
+                  .on("receipt", () => {
+                    swal({
+                    title: `Successfully sent ü${amountToSwap} to polygon wallet`,
+                    icon: "success",
+                    button: "Close",
+                  })
+                    setTransacting(false);
+                    refreshBalances("both");
                   });
-                });
-              break;
-
-            case "back":
-              console.log("ERROR INCREASING ALLOWANCE");
-              setAllowance(false);
-              break;
-
-            default:
-              break;
-          }
-        });
+                break;
+  
+              case "back":
+                console.log("ERROR DEPOSITING");
+                setTransacting(false);
+                break;
+  
+              default:
+                break;
+            }
+          });
+        } else if (
+          web3.utils.fromWei(result) !== "0" &&
+          Number(web3.utils.fromWei(result)) < Number(amountToSwap)
+        ) {
+          swalReact({
+            icon: "warning",
+            content: (
+              <Card className="delegationCard">
+                <h4 className="delegationTitle">Authorize Token Bridge</h4>
+                <h5 className="finalizingTipsContent">
+                  In order to authorize a token bridge, you must confirm the
+                  amount to be transferred, and that the address authorizing the
+                  bridge is correct.
+                </h5>
+                <h5 className="finalizingTipsContent">Please review below.</h5>
+                <div className="delegationTips">
+                  <h4 className="alertText">
+                    Current allowance: ü{web3.utils.fromWei(result)}
+                  </h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
+                </div>
+                          <div className="delegationTips">
+                            <h4 className="alertText">
+                              Additional Allowance Required: ü{Number(amountToSwap) - Number(web3.utils.fromWei(result))}
+                            </h4>
+                          </div>
+                <div className="delegationTips">
+                  <h4 className="alertTextSm">From address: {addr}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">From Chain: {currentChain}</h4>
+                </div>
+                <div className="delegationTips">
+                  <h4 className="alertText">To Chain: Polygon</h4>
+                </div>
+              </Card>
+            ),
+            buttons: {
+              back: {
+                text: "Go Back",
+                value: "back",
+                className: "delegationButtonBack",
+              },
+              confirm: {
+                text: "Confirm",
+                value: "confirm",
+                className: "delegationButtonBack",
+              },
+            },
+          }).then((value) => {
+            switch (value) {
+              case "confirm":
+                setTransacting(true);
+                setAllowance(true);
+                const amount = web3.utils.toWei(`${Number(amountToSwap) - Number(web3.utils.fromWei(result))}`);
+                const depositData = web3.eth.abi.encodeParameter(
+                  "uint256",
+                  amount
+                );
+                util.methods
+                  .increaseAllowance(ERC20_Predicate_ADDRESS, amount)
+                  .send({ from: addr })
+                  .on("error", () => {
+                    console.log("ERROR INCREASING ALLOWANCE");
+                    setAllowance(false);
+                    setTransacting(false);
+                  })
+                  .on("receipt", () => {
+                    swalReact({
+                      icon: "warning",
+                      content: (
+                        <Card className="delegationCard">
+                          <h4 className="delegationTitle">Authorize Send</h4>
+                          <h5 className="finalizingTipsContent">
+                            Now that the bridge has been authorized, you must
+                            confirm the transfer of tokens to be sent.
+                          </h5>
+                          <h5 className="finalizingTipsContent">
+                            Please review below.
+                          </h5>
+                          <div className="delegationTips">
+                            <h4 className="alertText">
+                              Current allowance: ü{web3.utils.fromWei(result)}
+                            </h4>
+                          </div>
+                          <div className="delegationTips">
+                            <h4 className="alertText">
+                              Amount to Send: ü{amountToSwap}
+                            </h4>
+                          </div>
+                          <div className="delegationTips">
+                            <h4 className="alertTextSm">From address: {addr}</h4>
+                          </div>
+                          <div className="delegationTips">
+                            <h4 className="alertText">
+                              From Chain: {currentChain}
+                            </h4>
+                          </div>
+                          <div className="delegationTips">
+                            <h4 className="alertText">To Chain: Polygon</h4>
+                          </div>
+                        </Card>
+                      ),
+                      buttons: {
+                        back: {
+                          text: "Go Back",
+                          value: "back",
+                          className: "delegationButtonBack",
+                        },
+                        confirm: {
+                          text: "Confirm",
+                          value: "confirm",
+                          className: "delegationButtonBack",
+                        },
+                      },
+                    }).then((value) => {
+                      switch (value) {
+                        case "confirm":
+                          refreshBalances("eth");
+                          setAllowance(false);
+                          rootManager.methods
+                            .depositFor(
+                              addr,
+                              web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
+                              depositData
+                            )
+                            .send({ from: addr })
+                            .on("error", () => {
+                              console.log("ERROR DEPOSITING");
+                              setTransacting(false);
+                            })
+                            .on("receipt", () => {
+                              swal({
+                              title: `Successfully sent ü${amountToSwap} to polygon wallet`,
+                              icon: "success",
+                              button: "Close",
+                            })
+                              setTransacting(false);
+                              refreshBalances("both");
+                            });
+                          break;
+  
+                        case "back":
+                          console.log("ERROR DEPOSITING");
+                          setTransacting(false);
+                          break;
+  
+                        default:
+                          break;
+                      }
+                    });
+                  });
+                break;
+  
+              case "back":
+                console.log("ERROR INCREASING ALLOWANCE");
+                setAllowance(false);
+                break;
+  
+              default:
+                break;
+            }
+          });
+        }
+      } else {
+        return console.log("ERR")
       }
+    })
+      
     } else if (currentChain === "Polygon") {
       swalReact({
         icon: "warning",
@@ -3471,19 +3503,31 @@ export default function Dashboard(props) {
               .withdraw(amount)
               .send({ from: addr })
               .on("error", () => {
-                swal("ERROR ATTEMPTING WITHRAWAL");
+                swal({
+                title: "Error attempting withdrawal.",
+                icon: "warning",
+                button: "Close",
+              })
                 setTransacting(false);
               })
               .on("receipt", () => {
                 setTransacting(false);
                 setAmountToSwap();
-                swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO BRIDGE`);
+                swal({
+                title: `Successfully sent ü${amountToSwap} to bridge.`,
+                icon: "success",
+                button: "Close",
+              })
                 refreshBalances("both");
               });
             break;
 
           case "back":
-            swal("ERROR ATTEMPTING WITHRAWAL");
+            swal({
+            title: "Error attempting withdrawal.",
+            icon: "warning",
+            button: "Close",
+          })
             setTransacting(false);
             break;
 
@@ -3492,7 +3536,11 @@ export default function Dashboard(props) {
         }
       });
     } else {
-      swal("Something went wrong");
+      swal({
+      title: "Something went wrong",
+      icon: "warning",
+      button: "Close",
+    })
     }
   };
 
@@ -3508,7 +3556,11 @@ export default function Dashboard(props) {
               .request({ method: "eth_requestAccounts" })
               .then(async (accounts) => {
                 if (accounts[0] === undefined)
-                  return swal("Can't connect to wallet.");
+                  return swal({
+                  title: "Can't connect to wallet.",
+                  icon: "warning",
+                  button: "Close",
+                })
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
                 setUpEnvironment(_web3, accounts[0]);
@@ -3563,7 +3615,11 @@ export default function Dashboard(props) {
 
   const refreshBalances = (job, _addr) => {
     if (!util.methods)
-      return swal("Something isn't right! Try refreshing the page.");
+      return swal({
+        title: "Something isn't right! Try refreshing the page.",
+        icon: "warning",
+        button: "Close",
+      })
     if (!_addr) return console.error("No address is connected!");
 
     console.log(`Refreshing balances of address: ${_addr}`);
@@ -3626,7 +3682,11 @@ export default function Dashboard(props) {
               setIsRefreshingPruf(false);
             });
           } else {
-            swal("Please connect to the Mumbai or Goerli testnet");
+            swal({
+            title: "Please connect to the Mumbai or Goerli testnet",
+            icon: "warning",
+            button: "Close",
+          })
           }
         });
       } else if (e === "goerli") {
@@ -3638,15 +3698,6 @@ export default function Dashboard(props) {
         setIsRefreshingPruf(true);
         setFindingTxs(true);
         getMaticWithdrawals(_addr);
-        _util.methods
-          .allowance(_addr, ERC20_Predicate_ADDRESS)
-          .call(async (error, result) => {
-            if (!error) {
-              setOldAllowance(Number(_web3.utils.fromWei(result)).toString());
-            } else {
-              setOldAllowance("");
-            }
-          });
         _util.methods.balanceOf(_addr).call(async (error, result) => {
           if (!error) {
             setPrufBalance(
@@ -3658,9 +3709,11 @@ export default function Dashboard(props) {
       } else {
         setTwinChain("Polygon");
         setCurrentChain("Ethereum");
-        swal(
-          `You are connected to the network '${e}', please connect to the Göerli or Mumbai Testnet`
-        );
+        swal({
+        title: `You are connected to the network '${e}', please connect to the Göerli or Mumbai Testnet`,
+        icon: "warning",
+        button: "Close",
+      })
       }
     });
     // console.log("Getting things set up...");
@@ -3800,9 +3853,11 @@ export default function Dashboard(props) {
                             <InfoOutlined
                               className="info"
                               onClick={() => {
-                                swal(
-                                  "You do not currently have any pending Polygon PRUF withdrawals available."
-                                );
+                                swal({
+                                title: `You do not currently have any pending Polygon PRUF withdrawals available.`,
+                                icon: "warning",
+                                button: "Close",
+                              })
                               }}
                             />
                           </Tooltip>
