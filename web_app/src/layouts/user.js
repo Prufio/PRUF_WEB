@@ -3048,11 +3048,9 @@ export default function Dashboard(props) {
           icon: "warning",
           content: (
             <Card className="delegationCard">
-              <h4 className="delegationTitle">Authorize Token Bridge</h4>
+              <h4 className="delegationTitle">Allow Token Bridge</h4>
               <h5 className="finalizingTipsContent">
-                In order to authorize a token bridge, you must confirm the
-                amount to be transferred, and that the address authorizing the
-                bridge is correct.
+                In order to send PRUF across the bridge, you must allow the required amount of tokens to be transfered.
               </h5>
               <h5 className="finalizingTipsContent">Please review below.</h5>
               <div className="delegationTips">
@@ -3144,7 +3142,7 @@ export default function Dashboard(props) {
                   }).then((value) => {
                     switch (value) {
                       case "confirm":
-                        refreshBalances("eth");
+                        refreshBalances("eth", addr);
                         setAllowance(false);
                         rootManager.methods
                           .depositFor(
@@ -3162,7 +3160,7 @@ export default function Dashboard(props) {
                               `Successfully sent ü${amountToSwap} to polygon wallet`
                             );
                             setTransacting(false);
-                            refreshBalances("both");
+                            refreshBalances("both", addr);
                           });
                         break;
 
@@ -3250,7 +3248,7 @@ export default function Dashboard(props) {
                 .on("receipt", () => {
                   swal(`Successfully sent ü${amountToSwap} to polygon wallet`);
                   setTransacting(false);
-                  refreshBalances("both");
+                  refreshBalances("both", addr);
                 });
               break;
 
@@ -3271,11 +3269,9 @@ export default function Dashboard(props) {
           icon: "warning",
           content: (
             <Card className="delegationCard">
-              <h4 className="delegationTitle">Authorize Token Bridge</h4>
+              <h4 className="delegationTitle">Allow Token Bridge</h4>
               <h5 className="finalizingTipsContent">
-                In order to authorize a token bridge, you must confirm the
-                amount to be transferred, and that the address authorizing the
-                bridge is correct.
+                In order to send PRUF across the bridge, you must allow the required amount of tokens to be transfered.
               </h5>
               <h5 className="finalizingTipsContent">Please review below.</h5>
               <div className="delegationTips">
@@ -3382,7 +3378,7 @@ export default function Dashboard(props) {
                   }).then((value) => {
                     switch (value) {
                       case "confirm":
-                        refreshBalances("eth");
+                        refreshBalances("eth", addr);
                         setAllowance(false);
                         rootManager.methods
                           .depositFor(
@@ -3400,7 +3396,7 @@ export default function Dashboard(props) {
                               `Successfully sent ü${amountToSwap} to polygon wallet`
                             );
                             setTransacting(false);
-                            refreshBalances("both");
+                            refreshBalances("both", addr);
                           });
                         break;
 
@@ -3478,7 +3474,7 @@ export default function Dashboard(props) {
                 setTransacting(false);
                 setAmountToSwap();
                 swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO BRIDGE`);
-                refreshBalances("both");
+                refreshBalances("both", addr);
               });
             break;
 
