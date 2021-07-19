@@ -3801,7 +3801,7 @@ export default function Dashboard(props) {
                               className="info"
                               onClick={() => {
                                 swal(
-                                  "You do not currently have any pending Polygon PRUF withdrawals available."
+                                  "You do not have any pending Polygon PRUF withdrawals."
                                 );
                               }}
                             />
@@ -3828,7 +3828,7 @@ export default function Dashboard(props) {
                             <InfoOutlined
                               className="info"
                               onClick={() => {
-                                swal("JBS");
+                                swal("You do not have any pending Polygon PRUF withdrawals.");
                               }}
                             />
                           </Tooltip>
