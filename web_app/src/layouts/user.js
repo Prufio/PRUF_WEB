@@ -2888,7 +2888,7 @@ export default function Dashboard(props) {
       "GET",
       `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${_addr}&startblock=0&endblock=19999999&sort=asc`,
       true
-    ); // false for synchronous request
+    ); 
 
     txReq.onload = async () => {
       let txns = JSON.parse(txReq.responseText).result,
