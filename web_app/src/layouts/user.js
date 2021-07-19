@@ -3,8 +3,10 @@ import cx from "classnames";
 import swal from "sweetalert";
 import Web3 from "web3";
 import { MaticPOSClient } from '@maticnetwork/maticjs'
+import { useCookies } from 'react-cookie';
 import { Route } from "react-router-dom";
 // creates a beautiful scrollbar
+
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
@@ -55,12 +57,13 @@ export default function Dashboard(props) {
   const [customAddress, setCustomAddress] = React.useState("");
   const [walletInfo, setWalletInfo] = React.useState("0");
   const [isEligible, setIsEligible] = React.useState(false);
-  const [amountToSwap, setAmountToSwap] = React.useState("");
+  const [amountToSwap, setAmountToSwap] = React.useState();
   const [twinChain, setTwinChain] = React.useState("");
   const [currentChain, setCurrentChain] = React.useState("");
   const [web3, setWeb3] = React.useState();
   const [maticClient, setMaticClient] = React.useState();
   const [redeemAmount, setRedeemAmount] = React.useState();
+  const [cookies, setCookie, removeCookie] = useCookies([]);
   const [rootManager, setRootManager] = React.useState();
   const [redeemList, setRedeemList] = React.useState([]);
   const [findingTxs, setFindingTxs] = React.useState(false);
@@ -2869,7 +2872,11 @@ export default function Dashboard(props) {
       console.log({txns: txns})
       txns.forEach(e => {
         //console.log({methodId: e.input.substring(2, 10)})
-        if (e.input.substring(2, 10) === '2e1a7d4d' && e.to === "0x45f7c1ec0f0e19674a699577f9d89fb5424acf1f") withdrawals.push(e.hash)
+        if (e.input.substring(2, 10) === '2e1a7d4d' && e.to === "0x45f7c1ec0f0e19674a699577f9d89fb5424acf1f"){
+          if (cookies[`beenRedeemed${_addr}`] && !cookies[`beenRedeemed${_addr}`].includes(e.hash)) withdrawals.push(e.hash)
+          else console.log("skipped cached tx")
+        } 
+        
       })
       //web3.eth.abi.decodeParameters(Util_Child_ABI, "0x2e1a7d4d00000000000000000000000000000000000000000000001dd0c885f9a0d80000")
       console.log(withdrawals)
@@ -2877,33 +2884,43 @@ export default function Dashboard(props) {
     }
   }
 
-  const checkTxs = (_addr, withdrawals, iteration) => {
+  const checkTxs = (_addr, withdrawals, discards, iteration) => {
     if (!withdrawals || withdrawals.length < 1) {
       setFindingTxs(false)
+      if (discards && discards.length > 0) setCookie(`beenRedeemed${_addr}`, discards)
       console.log("Bad or empty props", {withdrawList: withdrawals})
       return setRedeemList([])
     }
+
+    console.log(cookies[`beenRedeemed${_addr}`])
+
+    if (discards === undefined && cookies[`beenRedeemed${_addr}`] !== "undefined") {discards = JSON.parse(JSON.stringify(cookies[`beenRedeemed${_addr}`]))}
+    else if(discards === undefined) {discards = []}
     if (!iteration) iteration = 0
 
-    if (iteration >= withdrawals.length) {+
+    console.log(discards)
+
+    if (iteration >= withdrawals.length) {
       console.log("Exit with redeemable tx(s)", withdrawals.length)
       setFindingTxs(false)
+      if (discards && discards.length > 0) setCookie(`beenRedeemed${_addr}`, discards)
       return setRedeemList(withdrawals)
     }
 
       maticPOSClient.exitERC20(withdrawals[iteration], { from: _addr, encodeAbi: true })
       .then(()=>{
-        checkTxs(_addr, withdrawals, iteration + 1)
+        checkTxs(_addr, withdrawals, discards, iteration + 1)
       })
       .catch((e) => {
         if (e.message.includes("Burn transaction has not been checkpointed")) {
           console.log("Burn transaction has not yet been checkpointed")
-          swal(`We detected a pending POLYGON -> ETH withdrawal at transaction ${withdrawals[iteration]}. It will be available to redeem once it has been checkpointed on Polygon.`)
+          swal(`We detected a pending POLYGON -> ETH transaction.\n\n TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a few minutes.`)
         } else {
           console.log("Found already redeemed")
+          if (!discards.includes(withdrawals[iteration])) discards.push(withdrawals[iteration])
         }
         withdrawals.shift()
-        checkTxs(_addr, withdrawals, iteration)
+        checkTxs(_addr, withdrawals, discards, iteration)
       })
   }
 
@@ -2914,10 +2931,11 @@ export default function Dashboard(props) {
   const redeem = (list) => {
     console.log(list)
     if (list.length > 0) {
-      let current = list.pop()
+      let current = list.shift()
+      console.log(current)
       maticPOSClient.exitERC20(current, { from: addr, encodeAbi: true })
-      .then(async e => {
-        await web3.eth.sendTransaction({
+      .then(e => {
+        web3.eth.sendTransaction({
           from: addr,
           to: Root_Mgr_ADDRESS,
           data: e.data
@@ -2942,7 +2960,8 @@ export default function Dashboard(props) {
   }
 
   const swap = () => {
-    if(amountToSwap <= 0) return swal("Please input a number greater than zero.")
+    if(!amountToSwap || amountToSwap <= 0) return swal("Please input a number greater than zero.")
+    else if (Number(amountToSwap) > Number(prufBalance)) return swal("Submitted amount exceeds PRUF balance")
     console.log(`Amount: ${amountToSwap}`)
     if(currentChain === "Ethereum"){
       setTransacting(true)
@@ -2957,7 +2976,7 @@ export default function Dashboard(props) {
         setAllowance(false)
       })
       .on("receipt", () => {
-        swal("SUCCESSFULLY INCREASED ALLOWANCE");
+        //swal("SUCCESSFULLY INCREASED ALLOWANCE");
         refreshBalances("eth")
         setAllowance(false)
         rootManager.methods
@@ -2982,12 +3001,11 @@ export default function Dashboard(props) {
       .on("error", () => {
         swal("ERROR ATTEMPTING WITHRAWAL")
         setTransacting(false)
-        setAmountToSwap()
       })
       .on("receipt", () => {
         setTransacting(false)
         setAmountToSwap()
-        swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO PREDICATE`)
+        swal(`SUCCESSFULLY SENT ${amountToSwap} TOKENS TO BRIDGE`)
         refreshBalances("both")
       })
     } else {
@@ -3076,7 +3094,7 @@ export default function Dashboard(props) {
     if (job === "eth") return;
     setIsRefreshingPruf(true)
     setFindingTxs(true)
-    getMaticWithdrawals(_addr)
+    if (currentChain === "Ethereum") getMaticWithdrawals(_addr)
     util.methods.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
@@ -3085,7 +3103,6 @@ export default function Dashboard(props) {
       }
       setIsRefreshingPruf(false)
     });
-    //setTimeout(()=>{prufBalance === "" ? setPrufBalance('300') : setPrufBalance(`${Number(prufBalance) + 1}`); setIsRefreshingPruf(false)}, 2000)
   };
 
 
@@ -3100,6 +3117,7 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_web3, _addr) => {
+    if (!cookies[`beenRedeemed${_addr}`])setCookie(`beenRedeemed${_addr}`, [])
     
     let _rootManager = new _web3.eth.Contract(
       Root_Mgr_ABI,
@@ -3323,7 +3341,7 @@ export default function Dashboard(props) {
                       onChange: (e) => {
                         setAmountToSwap(e.target.value); // Set undefined to remove entirely
                       },
-                      placeholder: `Amount`,
+                      placeholder: `0`,
                     }}
                   />
                   {!transacting ? (
