@@ -123,6 +123,29 @@ body {
   transform: rotate(90deg);
 }
 
+.inlineFlex {
+  display: inline-flex;
+}
+
+.info {
+  display: inline-flex;
+  color: #017ec0;
+  cursor: pointer;
+}
+
+.info:hover {
+  color: #0168a0;
+}
+
+.pendingBal {
+  color: black;
+  margin-top: -0px;
+}
+
+.pendingBal:hover {
+  cursor:auto !important;
+}
+
 .lightBlue {
   color: #017ec0;
 }
@@ -1331,6 +1354,12 @@ max-width: 80px !important;
 .alertText {
   margin-left: 5px;
   font-weight: bold;
+}
+
+.alertTextSm {
+  font-size: 12px;
+  margin-left: 5px;
+  font-weight:bold;
 }
 
 .space {

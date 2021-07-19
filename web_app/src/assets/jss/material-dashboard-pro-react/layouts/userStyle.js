@@ -1,3 +1,4 @@
+import { colors } from "@material-ui/core";
 import {
   drawerWidth,
   drawerMiniWidth,
@@ -48,6 +49,10 @@ const appStyle = (theme) => ({
   mainPanelWithPerfectScrollbar: {
     overflow: "hidden !important",
   },
+  toolTip: {
+    backgroundColor: "transparent !important;",
+    color: "black !important"
+  }
 });
 
 export default appStyle;
