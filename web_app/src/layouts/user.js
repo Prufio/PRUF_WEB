@@ -3166,6 +3166,13 @@ export default function Dashboard(props) {
           setIsRefreshingPruf(false);
         });
       }
+
+      else {
+        setTwinChain("Polygon");
+        setCurrentChain("Ethereum");
+        swal(`You are connected to the network '${e}', please connect to the Göerli or Mumbai Testnet`)
+      }
+
     });
     // console.log("Getting things set up...");
 
@@ -3284,7 +3291,7 @@ export default function Dashboard(props) {
                         <div></div>
                         <div></div>
                         <div></div>
-                      </div> : currentChain === "Ethereum" ? <h4>No redeemable balance</h4> : <> </>}
+                      </div> : currentChain === "Ethereum" ? <h5>No pending balance</h5> : <> </>}
                     </>
                   )}
                   {isRefreshingPruf && (
