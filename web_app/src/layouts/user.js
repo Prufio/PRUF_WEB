@@ -3022,7 +3022,7 @@ export default function Dashboard(props) {
             })
             .on("receipt", () => {
               console.log("Got tokens");
-              return refreshBalances("both", addr);
+              return refreshBalances("both", web3, addr);
             })
             .on("error", () => {
               console.log("Error redeeming");
@@ -3159,7 +3159,7 @@ export default function Dashboard(props) {
                     }).then((value) => {
                       switch (value) {
                         case "confirm":
-                          refreshBalances("eth", addr);
+                          refreshBalances("eth", web3, addr);
                           setAllowance(false);
                           rootManager.methods
                             .depositFor(
@@ -3179,7 +3179,7 @@ export default function Dashboard(props) {
                               button: "Close",
                             })
                               setTransacting(false);
-                              refreshBalances("both", addr);
+                              refreshBalances("both", web3, addr);
                             });
                           break;
   
@@ -3272,7 +3272,7 @@ export default function Dashboard(props) {
                     button: "Close",
                   })
                     setTransacting(false);
-                    refreshBalances("both", addr);
+                    refreshBalances("both", web3, addr);
                   });
                 break;
   
@@ -3405,7 +3405,7 @@ export default function Dashboard(props) {
                     }).then((value) => {
                       switch (value) {
                         case "confirm":
-                          refreshBalances("eth", addr);
+                          refreshBalances("eth", web3, addr);
                           setAllowance(false);
                           rootManager.methods
                             .depositFor(
@@ -3425,7 +3425,7 @@ export default function Dashboard(props) {
                               button: "Close",
                             })
                               setTransacting(false);
-                              refreshBalances("both", addr);
+                              refreshBalances("both", web3, addr);
                             });
                           break;
   
@@ -3516,7 +3516,7 @@ export default function Dashboard(props) {
                 icon: "success",
                 button: "Close",
               })
-                refreshBalances("both", addr);
+                refreshBalances("both", web3, addr);
               });
             break;
 
@@ -3611,7 +3611,7 @@ export default function Dashboard(props) {
     });
   };
 
-  const refreshBalances = (job, _addr) => {
+  const refreshBalances = (job, _web3, _addr) => {
     if (!util.methods)
       return swal({
         title: "Something isn't right! Try refreshing the page.",
@@ -3781,7 +3781,7 @@ export default function Dashboard(props) {
                       <div className="refresh">
                         <Cached
                           onClick={() => {
-                            refreshBalances("eth", addr);
+                            refreshBalances("eth", web3, addr);
                           }}
                         />
                       </div>
@@ -3833,7 +3833,7 @@ export default function Dashboard(props) {
                         <div className="refresh">
                           <Cached
                             onClick={() => {
-                              refreshBalances("pruf", addr);
+                              refreshBalances("pruf", web3, addr);
                             }}
                           />
                         </div>
