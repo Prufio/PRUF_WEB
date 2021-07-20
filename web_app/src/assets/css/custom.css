@@ -1356,6 +1356,16 @@ max-width: 80px !important;
   font-weight: bold;
 }
 
+.redeemButton {
+  background-color: transparent;
+  color: #002a40 !important;
+}
+
+.redeemButton:active {
+  background-color: white;
+  color: #00a8ff !important;
+}
+
 .alertTextSm {
   font-size: 12px;
   margin-left: 5px;

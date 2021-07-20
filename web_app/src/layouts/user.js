@@ -3859,7 +3859,7 @@ export default function Dashboard(props) {
                               }}
                             />
                           </Tooltip>
-                          <Button onClick={() => redeem(redeemList)}>
+                          <Button className="redeemButton" onClick={() => redeem(redeemList)}>
                             {" "}
                             Redeem pending balance{" "}
                           </Button>
