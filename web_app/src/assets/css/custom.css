@@ -1357,11 +1357,12 @@ max-width: 80px !important;
 }
 
 .redeemButton {
-  background-color: transparent;
+  margin-top: -5px !important;
+  background-color: transparent !important;
   color: #002a40 !important;
 }
 
-.redeemButton:active {
+.redeemButton:hover {
   background-color: white;
   color: #00a8ff !important;
 }
