@@ -2873,7 +2873,7 @@ export default function Dashboard(props) {
     });
   };
 
-  const getMaticWithdrawals = (_addr) => {
+  const getMaticWithdrawals = (_web3, _addr) => {
     var txReq = new XMLHttpRequest();
     //txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${addr}&startblock=0&endblock=19999999&sort=asc`, true ) // false for synchronous request
     txReq.open(
@@ -2916,6 +2916,7 @@ export default function Dashboard(props) {
         let erc20Txs = JSON.parse(erc20Req.responseText).result.reverse();
         console.log({ erc20Txs: erc20Txs });
         checkTxs(
+          _web3,
           _addr,
           JSON.parse(JSON.stringify(withdrawals)),
           JSON.parse(JSON.stringify(erc20Txs))
@@ -2924,7 +2925,7 @@ export default function Dashboard(props) {
     };
   };
 
-  const checkTxs = (_addr, withdrawals, erc20Txs, discards, iteration) => {
+  const checkTxs = (_web3, _addr, withdrawals, erc20Txs, discards, iteration) => {
     //console.trace("Running checkTxs")
     if (!withdrawals || withdrawals.length < 1) {
       setFindingTxs(false);
@@ -2960,9 +2961,9 @@ export default function Dashboard(props) {
       }
       for (let tx of erc20Txs) {
         if (tx.hash === withdrawals[withdrawals.length - 1]) {
-          setRedeemAmount(web3.utils.fromWei(tx.value));
+          setRedeemAmount(_web3.utils.fromWei(tx.value));
           console.log(
-            `Match found for erc20tx. Setting redeem val to ${web3.utils.fromWei(
+            `Match found for erc20tx. Setting redeem val to ${_web3.utils.fromWei(
               tx.value
             )}`
           );
@@ -2975,7 +2976,7 @@ export default function Dashboard(props) {
       maticPOSClient
         .exitERC20(withdrawals[iteration], { from: _addr, encodeAbi: true })
         .then(() => {
-          checkTxs(_addr, withdrawals, erc20Txs, discards, iteration + 1);
+          checkTxs(_web3, _addr, withdrawals, erc20Txs, discards, iteration + 1);
         })
         .catch((e) => {
           console.log(e.message);
@@ -2998,7 +2999,7 @@ export default function Dashboard(props) {
             console.error("SOMETHING WENT WRONG: ", e.message);
           }
           withdrawals.shift();
-          return checkTxs(_addr, withdrawals, erc20Txs, discards, iteration);
+          return checkTxs(_web3, _addr, withdrawals, erc20Txs, discards, iteration);
         });
     }
   };
@@ -3635,7 +3636,7 @@ export default function Dashboard(props) {
     if (job === "eth") return;
     setIsRefreshingPruf(true);
     setFindingTxs(true);
-    if (currentChain === "Ethereum") getMaticWithdrawals(_addr);
+    if (currentChain === "Ethereum") getMaticWithdrawals(_web3, _addr);
     util.methods.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
@@ -3697,7 +3698,7 @@ export default function Dashboard(props) {
         setUtil(_util);
         setIsRefreshingPruf(true);
         setFindingTxs(true);
-        getMaticWithdrawals(_addr);
+        getMaticWithdrawals(_web3, _addr);
         _util.methods.balanceOf(_addr).call(async (error, result) => {
           if (!error) {
             setPrufBalance(
