@@ -66,7 +66,7 @@ export default function Dashboard(props) {
   const [currentChain, setCurrentChain] = React.useState("");
   const [web3, setWeb3] = React.useState();
   const [maticClient, setMaticClient] = React.useState();
-  const [redeemAmount, setRedeemAmount] = React.useState();
+  const [redeemAmount, setRedeemAmount] = React.useState("0");
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [rootManager, setRootManager] = React.useState();
   const [redeemList, setRedeemList] = React.useState([]);
@@ -2905,7 +2905,10 @@ export default function Dashboard(props) {
             !cookies[`beenRedeemed${_addr}`].includes(e.hash)
           ) {
             withdrawals.push(e.hash);
-          } else if (!cookies[`beenRedeemed${_addr}`] || cookies[`beenRedeemed${_addr}`] === undefined) {
+          } else if (
+            !cookies[`beenRedeemed${_addr}`] ||
+            cookies[`beenRedeemed${_addr}`] === undefined
+          ) {
             withdrawals.push(e.hash);
           } else console.log("skipped cached tx");
         }
@@ -2928,15 +2931,22 @@ export default function Dashboard(props) {
     };
   };
 
-  const checkTxs = (_web3, _addr, withdrawals, erc20Txs, discards, iteration) => {
-    console.log(cookies)
+  const checkTxs = (
+    _web3,
+    _addr,
+    withdrawals,
+    erc20Txs,
+    discards,
+    iteration
+  ) => {
+    console.log(cookies);
     //console.trace("Running checkTxs")
     if (!withdrawals || withdrawals.length < 1) {
       setFindingTxs(false);
       if (discards && discards.length > 0) {
         discards.pop();
         setCookie(`beenRedeemed${_addr}`, discards);
-        console.log({discards: discards})
+        console.log({ discards: discards });
       }
       console.log("Bad or empty props", { withdrawList: withdrawals });
       return setRedeemList([]);
@@ -2949,11 +2959,11 @@ export default function Dashboard(props) {
       cookies[`beenRedeemed${_addr}`] &&
       cookies[`beenRedeemed${_addr}`] !== "undefined"
     ) {
-      console.log("Discards undefined and set full")
+      console.log("Discards undefined and set full");
       discards = JSON.parse(JSON.stringify(cookies[`beenRedeemed${_addr}`]));
     } else if (!discards) {
-      console.log("Discards undefined but set empty")
-      console.log({Cookies: cookies[`beenRedeemed${_addr}`]})
+      console.log("Discards undefined but set empty");
+      console.log({ Cookies: cookies[`beenRedeemed${_addr}`] });
       discards = [];
     }
     if (!iteration) iteration = 0;
@@ -2967,7 +2977,7 @@ export default function Dashboard(props) {
       if (discards && discards.length > 0) {
         discards.pop();
         setCookie(`beenRedeemed${_addr}`, discards);
-        console.log({discards: discards})
+        console.log({ discards: discards });
       }
       for (let tx of erc20Txs) {
         if (tx.hash === withdrawals[withdrawals.length - 1]) {
@@ -3011,7 +3021,7 @@ export default function Dashboard(props) {
             console.log("Found already redeemed");
             if (!discards.includes(withdrawals[iteration]))
               discards.push(withdrawals[iteration]);
-              console.log({discards: discards})
+            console.log({ discards: discards });
           } else {
             console.error("SOMETHING WENT WRONG: ", e.message);
           }
@@ -3031,6 +3041,8 @@ export default function Dashboard(props) {
   const getPendingTxInfo = async (txHash) => {};
 
   const redeem = (list) => {
+    list = JSON.parse(JSON.stringify(list))
+    console.log(currentChain, redeemList.length, findingTxs);
     console.log(list);
     if (list.length > 0) {
       let current = list.shift();
@@ -3039,6 +3051,7 @@ export default function Dashboard(props) {
       maticPOSClient
         .exitERC20(current, { from: addr, encodeAbi: true })
         .then(async (e) => {
+          console.log(currentChain, redeemList.length, findingTxs);
           await web3.eth
             .sendTransaction({
               from: addr,
@@ -3057,10 +3070,6 @@ export default function Dashboard(props) {
             .catch(() => {
               setRedeeming(false);
               console.log("Already redeemed or invalid");
-            })
-            .catch(() => {
-              setRedeeming(false);
-              console.log("Error encountered");
             });
         });
     } else return console.log("Done redeeming");
@@ -3247,6 +3256,11 @@ export default function Dashboard(props) {
               web3.utils.fromWei(result) !== "0" &&
               Number(web3.utils.fromWei(result)) >= Number(amountToSwap)
             ) {
+              const amount = web3.utils.toWei(amountToSwap);
+              const depositData = web3.eth.abi.encodeParameter(
+                "uint256",
+                amount
+              );
               swalReact({
                 icon: "warning",
                 content: (
@@ -3295,6 +3309,7 @@ export default function Dashboard(props) {
               }).then((value) => {
                 switch (value) {
                   case "confirm":
+                    setTransacting(true);
                     setAllowance(false);
                     rootManager.methods
                       .depositFor(
@@ -3671,7 +3686,7 @@ export default function Dashboard(props) {
   };
 
   const refreshBalances = (job, _web3, _addr) => {
-    console.log({redeemed: cookies[`beenRedeemed${_addr}`]})
+    console.log({ redeemed: cookies[`beenRedeemed${_addr}`] });
     if (!util.methods)
       return swal({
         title: "Something isn't right! Try refreshing the page.",
@@ -3715,6 +3730,7 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_web3, _addr) => {
+    console.log("setting up environment");
     if (!cookies[`beenRedeemed${_addr}`]) setCookie(`beenRedeemed${_addr}`, []);
 
     let _rootManager = new _web3.eth.Contract(Root_Mgr_ABI, Root_Mgr_ADDRESS);
@@ -3899,51 +3915,54 @@ export default function Dashboard(props) {
                         </div>
                       </Tooltip>
                       {currentChain === "Ethereum" &&
-                      redeemList.length > 0 &&
-                      !findingTxs ? (
-                        <div className="inlineFlex">
-                          <Tooltip
-                            id="tooltip-top"
-                            title="Info"
-                            placement="bottom"
-                            classes={{ tooltip: userClasses.toolTip }}
-                          >
-                            <InfoOutlined
-                              className="info"
-                              onClick={() => {
-                                swal({
-                                  title: `You have a Polygon -> PRUF withdrawal available.`,
-                                  text: `Please click to redeem tokens.`,
-                                  icon: "warning",
-                                  button: "Close",
-                                });
-                              }}
-                            />
-                          </Tooltip>
-                          {redeeming ? (
-                            <Button
-                              className="redeemButton"
-                              onClick={() => redeem(redeemList)}
-                              disabled
+                        redeemList.length > 0 &&
+                        findingTxs === false && (
+                          <div className="inlineFlex">
+                            <Tooltip
+                              id="tooltip-top"
+                              title="Info"
+                              placement="bottom"
+                              classes={{ tooltip: userClasses.toolTip }}
                             >
-                              Redeeming tokens...
-                            </Button>
-                          ) : (
-                            <Button
-                              className="redeemButton"
-                              onClick={() => redeem(redeemList)}
-                            >
-                              Redeem pending balance
-                            </Button>
-                          )}
-                        </div>
-                      ) : currentChain === "Ethereum" && findingTxs ? (
+                              <InfoOutlined
+                                className="info"
+                                onClick={() => {
+                                  swal({
+                                    title: `You have ü${redeemAmount} PRUF available for withdrawal from Polygon.`,
+                                    text: `Please click to redeem tokens.`,
+                                    icon: "warning",
+                                    button: "Close",
+                                  });
+                                }}
+                              />
+                            </Tooltip>
+                            {redeeming === true && (
+                              <Button
+                                className="redeemButton"
+                                onClick={() => redeem(redeemList)}
+                                disabled
+                              >
+                                Redeeming tokens...
+                              </Button>
+                            )}
+                            {redeeming === false && (
+                              <Button
+                                className="redeemButton"
+                                onClick={() => redeem(redeemList)}
+                              >
+                                Redeem tokens
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                      {currentChain === "Ethereum" && findingTxs === true && (
                         <div className="lds-ellipsisCard">
                           <div></div>
                           <div></div>
                           <div></div>
                         </div>
-                      ) : currentChain === "Ethereum" ? (
+                      )}
+                      {currentChain === "Ethereum" && findingTxs === false && redeemList.length === 0 && (
                         <div className="inlineFlex">
                           <Tooltip
                             id="tooltip-top"
@@ -3955,15 +3974,13 @@ export default function Dashboard(props) {
                               className="info"
                               onClick={() => {
                                 swal(
-                                  "You do not have any pending Polygon PRUF withdrawals."
+                                  "You do not have any pending Polygon -> PRUF withdrawals."
                                 );
                               }}
                             />
                           </Tooltip>
                           <h5 className="pendingBal">No pending balance</h5>
                         </div>
-                      ) : (
-                        <> </>
                       )}
                     </>
                   )}
