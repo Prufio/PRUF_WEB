@@ -3022,16 +3022,13 @@ export default function Dashboard(props) {
             })
             .on("receipt", () => {
               console.log("Got tokens");
-              refreshBalances("both", addr);
-              return redeem(list);
+              return refreshBalances("both", addr);
             })
             .on("error", () => {
               console.log("Error redeeming");
-              return redeem(list);
             })
             .catch(() => {
               console.log("Already redeemed or invalid");
-              return redeem(list);
             })
             .catch(() => {
               console.log("Error encountered");
