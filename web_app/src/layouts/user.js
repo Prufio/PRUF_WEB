@@ -2905,6 +2905,8 @@ export default function Dashboard(props) {
             !cookies[`beenRedeemed${_addr}`].includes(e.hash)
           ) {
             withdrawals.push(e.hash);
+          } else if (!cookies[`beenRedeemed${_addr}`] || cookies[`beenRedeemed${_addr}`] === undefined) {
+            withdrawals.push(e.hash);
           } else console.log("skipped cached tx");
         }
       });
@@ -2926,20 +2928,15 @@ export default function Dashboard(props) {
     };
   };
 
-  const checkTxs = (
-    _web3,
-    _addr,
-    withdrawals,
-    erc20Txs,
-    discards,
-    iteration
-  ) => {
+  const checkTxs = (_web3, _addr, withdrawals, erc20Txs, discards, iteration) => {
+    console.log(cookies)
     //console.trace("Running checkTxs")
     if (!withdrawals || withdrawals.length < 1) {
       setFindingTxs(false);
       if (discards && discards.length > 0) {
         discards.pop();
         setCookie(`beenRedeemed${_addr}`, discards);
+        console.log({discards: discards})
       }
       console.log("Bad or empty props", { withdrawList: withdrawals });
       return setRedeemList([]);
@@ -2948,11 +2945,15 @@ export default function Dashboard(props) {
     //console.log(cookies[`beenRedeemed${_addr}`])
 
     if (
-      discards === undefined &&
+      !discards &&
+      cookies[`beenRedeemed${_addr}`] &&
       cookies[`beenRedeemed${_addr}`] !== "undefined"
     ) {
+      console.log("Discards undefined and set full")
       discards = JSON.parse(JSON.stringify(cookies[`beenRedeemed${_addr}`]));
-    } else if (discards === undefined) {
+    } else if (!discards) {
+      console.log("Discards undefined but set empty")
+      console.log({Cookies: cookies[`beenRedeemed${_addr}`]})
       discards = [];
     }
     if (!iteration) iteration = 0;
@@ -2966,6 +2967,7 @@ export default function Dashboard(props) {
       if (discards && discards.length > 0) {
         discards.pop();
         setCookie(`beenRedeemed${_addr}`, discards);
+        console.log({discards: discards})
       }
       for (let tx of erc20Txs) {
         if (tx.hash === withdrawals[withdrawals.length - 1]) {
@@ -3009,6 +3011,7 @@ export default function Dashboard(props) {
             console.log("Found already redeemed");
             if (!discards.includes(withdrawals[iteration]))
               discards.push(withdrawals[iteration]);
+              console.log({discards: discards})
           } else {
             console.error("SOMETHING WENT WRONG: ", e.message);
           }
@@ -3668,6 +3671,7 @@ export default function Dashboard(props) {
   };
 
   const refreshBalances = (job, _web3, _addr) => {
+    console.log({redeemed: cookies[`beenRedeemed${_addr}`]})
     if (!util.methods)
       return swal({
         title: "Something isn't right! Try refreshing the page.",
