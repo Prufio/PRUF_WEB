@@ -3576,7 +3576,7 @@ export default function Dashboard(props) {
           } else {
             console.log(_web3.utils.toChecksumAddress(accounts[0]));
             setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-            setUpEnvironment(_web3, accounts[0]);
+            setUpEnvironment(_web3, _web3.utils.toChecksumAddress(accounts[0]));
           }
         });
     } else {
