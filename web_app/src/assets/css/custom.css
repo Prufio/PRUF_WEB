@@ -1356,6 +1356,17 @@ max-width: 80px !important;
   font-weight: bold;
 }
 
+.redeemButton {
+  margin-top: -5px !important;
+  background-color: transparent !important;
+  color: #002a40 !important;
+}
+
+.redeemButton:hover {
+  background-color: white;
+  color: #00a8ff !important;
+}
+
 .alertTextSm {
   font-size: 12px;
   margin-left: 5px;
