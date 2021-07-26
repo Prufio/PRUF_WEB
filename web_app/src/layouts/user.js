@@ -2734,12 +2734,12 @@ export default function Dashboard(props) {
       },
     ];
 
-  const mainWeb3 = new Web3(
-    "https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
-  );
-  const maticWeb3 = new Web3(
-    "https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
-  );
+  // const mainWeb3 = new Web3(
+  //   "https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+  // );
+  // const maticWeb3 = new Web3(
+  //   "https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
+  // );
 
   const maticPOSClient = new MaticPOSClient({
     network: "testnet",
@@ -3037,8 +3037,6 @@ export default function Dashboard(props) {
         });
     }
   };
-
-  const getPendingTxInfo = async (txHash) => {};
 
   const redeem = (list) => {
     list = JSON.parse(JSON.stringify(list))
