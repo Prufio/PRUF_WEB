@@ -18,7 +18,6 @@ import TextField from "@material-ui/core/TextField";
 
 // @material-ui/icons
 import Category from "@material-ui/icons/Category";
-import AccountBox from "@material-ui/icons/AccountBox";
 import { DashboardOutlined } from "@material-ui/icons";
 
 // core components
@@ -36,8 +35,6 @@ import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsSt
 
 import ARweavePNG from "../../assets/img/arweave.png";
 import IPFSPNG from "../../assets/img/ipfs.png";
-import { createNoSubstitutionTemplateLiteral, setSourceMapRange } from "typescript";
-import { Canvas } from "@react-pdf/renderer";
 
 const useStyles = makeStyles(styles);
 // const useExtStyles = makeStyles(extStyles)
@@ -729,6 +726,13 @@ export default function NewRecord(props) {
   };
 
   const _newRecord = (dataTransaction, extDataA, extDataB, idx, ipfsObj) => {
+    if (NRCost > props.pruf) {
+      return swal({
+        title: "Insufficient PRUF balance!",
+        icon: "warning",
+        button: "Close",
+      });
+    }
     console.log(extDataA, extDataB, idx, ipfsObj)
     var extendedDataHash, idxHash, rgtHash
 
