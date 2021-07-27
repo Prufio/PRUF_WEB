@@ -1521,6 +1521,15 @@ export default function Dashboard(props) {
                   assetsWithEngravings,
                   iteration + 1
                 );
+              }).catch(e=>{
+                console.log(e)
+                return getEngravings(
+                  _arweave,
+                  assetHeap,
+                  _prufClient,
+                  assetsWithEngravings,
+                  iteration + 1
+                );
               });
             } catch {
               console.log("In arweave catch clause");

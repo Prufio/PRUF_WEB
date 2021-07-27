@@ -521,11 +521,11 @@ export default function NewRecord(props) {
       loginType === "" ||
       loginMake === "" ||
       loginModel === "" ||
-      loginSerial === "" ||
-      loginFirst === "" ||
-      loginLast === "" ||
-      loginID === "" ||
-      loginPassword === ""
+      loginSerial === "" 
+      // loginFirst === "" ||
+      // loginLast === "" ||
+      // loginID === "" ||
+      // loginPassword === ""
     ) {
       if (loginType === "") {
         setloginTypeState("error");
@@ -780,11 +780,11 @@ export default function NewRecord(props) {
       props.prufClient.utils.generateSecureRgt(
         idx,
         {
-          first: first,
-          middle: middle,
-          last: last,
-          id: ID,
-          password: password
+          first: "0",
+          middle: "0",
+          last: "0",
+          id: "0",
+          password: "0"
         }
       ).then(rgtHash => {
 
@@ -908,11 +908,11 @@ export default function NewRecord(props) {
       props.prufClient.utils.generateSecureRgt(
         idx,
         {
-          first: first,
-          middle: middle,
-          last: last,
-          id: ID,
-          password: password
+          first: "0",
+          middle: "0",
+          last: "0",
+          id: "0",
+          password: "0"
         }
       ).then(rgtHash => {
 
@@ -1326,7 +1326,7 @@ export default function NewRecord(props) {
                                   handleClick();
                                 }}
                               >
-                                Upload Display Image
+                                Upload Token Content
                               </Button>
                             )}
                           {!transactionActive &&
@@ -1339,7 +1339,7 @@ export default function NewRecord(props) {
                                     handleClick();
                                   }}
                                 >
-                                  Change Display Image
+                                  Change Token Content
                                 </Button>
                                 <Button
                                   color="danger"
@@ -1347,7 +1347,7 @@ export default function NewRecord(props) {
                                     removeDisplayImage();
                                   }}
                                 >
-                                  Remove Image
+                                  Remove Content
                                 </Button>
                               </>
                             )}
@@ -1636,11 +1636,50 @@ export default function NewRecord(props) {
                               </a>
                             </h6>
                           )}
+                          {!transactionActive && !isUploading && !ipfsActive && (
+                            <>
+                              <h4 className="costsText">Cost: ü{NRCost}</h4>
+                              <div className="MLBGradientSubmit">
+                                <Button
+                                  color="info"
+                                  className="MLBGradient"
+                                  onClick={() => checkAsset()}
+                                >
+                                  Create New Asset
+                                </Button>
+                              </div>
+                            </>
+                          )}
+                          {!transactionActive && ipfsActive && (
+                            <h3>
+                              Sending extended data to
+                              {storageProvider === "2"
+                                ? ` Arweave`
+                                : storageProvider === "1"
+                                  ? ` IPFS`
+                                  : ` Unknown Client`}
+                              <div className="lds-ellipsisIF">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
+                            </h3>
+                          )}
+                          {!ipfsActive && transactionActive && (
+                            <h3>
+                              Minting Asset Token
+                              <div className="lds-ellipsisIF">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                              </div>
+                            </h3>
+                          )}
                         </form>
                       </CardBody>
                     </Card>
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={6}>
+                  {/* <GridItem xs={12} sm={12} md={6}>
                     <Card>
                       <CardHeader icon>
                         <CardIcon className="headerIconBack">
@@ -1906,7 +1945,7 @@ export default function NewRecord(props) {
                         </form>
                       </CardBody>
                     </Card>
-                  </GridItem>
+                  </GridItem> */}
                 </>
               )}
             </>

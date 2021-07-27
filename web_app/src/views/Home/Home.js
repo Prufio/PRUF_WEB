@@ -373,7 +373,7 @@ export default function Home(props) {
                                     className="homeCardText"
                                     href="/#/user/new-asset"
                                 >
-                                    Create New Record
+                                    Mint New Asset
                                 </a>
                             </div>
                         </CardFooter>

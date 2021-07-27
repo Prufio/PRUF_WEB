@@ -1905,8 +1905,10 @@ export default function Search(props) {
           } else if (this.response.includes("application")) {
             console.log("app")
             obj.DisplayImage = placeholder
-            finalizedAssets.push(obj);
-            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+            setAsset(obj);
+            setSelectedImage(placeholder);
+            setRetrieving(false);
+            setMoreInfo(true);
           }
         };
 
