@@ -30,11 +30,6 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
-import {
-  AirlineSeatLegroomExtraSharp,
-  IndeterminateCheckBox,
-  WrapText,
-} from "@material-ui/icons";
 import defaultBGImage from "../assets/img/Sidebar Backgrounds/TracesWB.jpg";
 
 window.populatedListeners = false
