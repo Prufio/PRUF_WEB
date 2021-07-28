@@ -343,7 +343,7 @@ export default function Dashboard(props) {
               method: "eth_accounts",
               params: {},
             })
-            .then(async (accounts) => {
+            .then((accounts) => {
               if (accounts[0] !== undefined) {
                 setAddr(window.web3.utils.toChecksumAddress(accounts[0]))
                 let _addr = window.web3.utils.toChecksumAddress(accounts[0])
@@ -421,6 +421,96 @@ export default function Dashboard(props) {
 
   const refreshHandler = () => {
     setReplaceAssetData(replaceAssetData+1)
+    setWinKey(String(Math.round(Math.random() * 100000)))
+    if (isMounted || !isMounted) {
+      if (
+        !window.replaceAssetData ||
+        Object.values(window.replaceAssetData).length === 0
+      ) {
+      }
+      if (window.replaceAssetData.assetsPerPage) {
+        setAssetsPerPage(window.replaceAssetData.assetsPerPage)
+        setCookieTo(`assetsPerPage`, window.replaceAssetData.assetsPerPage)
+      }
+      if (window.replaceAssetData.refreshBals === true) {
+        console.log("Resetting token value")
+        setupTokenVals(arweaveClient, addr, prufClient, { justCount: true })
+        buildRoots(addr, prufClient)
+        forceUpdate();
+      } if (window.replaceAssetData.refreshAssets) {
+        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true })
+      } if (
+        window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
+      ) {
+        console.log("Invalid key passed. Aborted call to replace.")
+      } if (window.replaceAssetData.nodeList) {
+        console.log("Resetting node data...")
+        let newData = JSON.parse(JSON.stringify(window.replaceAssetData.nodeList))
+
+        if (newData.extData) {
+          setNodeExtData(newData.extData)
+        }
+
+        if (newData.data) {
+          setHeldNodeData(newData.data)
+        }
+
+        if (newData.setAddition) {
+          let tempSets = JSON.parse(JSON.stringify(nodeSets))
+          tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
+          setNodeSets(tempSets)
+        }
+        setupTokenVals(arweaveClient, addr, prufClient, { justNodes: true })
+      }
+
+      if (window.replaceAssetData.newAsset || window.replaceAssetData.dBIndex) {
+        console.log(
+          "Object is defined. index: ",
+          window.replaceAssetData.dBIndex,
+          " new asset: ",
+          window.replaceAssetData.newAsset
+        );
+        let newAsset = window.replaceAssetData.newAsset;
+        let dBIndex = window.replaceAssetData.dBIndex;
+        let tempArr = JSON.parse(JSON.stringify(assetArr));
+        let idArr = JSON.parse(JSON.stringify(assetIds));
+        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
+
+        if (newAsset && dBIndex > -1) {
+          idArr.push(newAsset.id);
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
+          console.log("Replacing asset at index: ", dBIndex);
+          console.log("Old Assets", tempArr);
+          tempArr.splice(dBIndex, 1, newAsset);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
+          getAssetIds(addr, prufClient, assetIds.length);
+        }
+
+        else if (dBIndex > -1 && !newAsset) {
+          console.log("Deleting asset at index: ", dBIndex);
+          console.log("Old Assets", tempArr);
+          tempArr.splice(dBIndex, 1);
+          idArr.splice(dBIndex, 1);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
+          getAssetIds(addr, prufClient, assetIds.length - 1);
+        }
+
+        else if (newAsset && !dBIndex) {
+          idArr.push(newAsset.id);
+          console.log("Adding asset: ", newAsset);
+          console.log("Old Assets", tempArr);
+          tempArr.push(newAsset);
+          console.log("New Assets", tempArr);
+          setAssetArr(tempArr);
+          getAssetIds(addr, prufClient, assetIds.length + 1);
+        }
+
+        window.replaceAssetData = {}
+        forceUpdate();
+      }
+    } else console.log("!ISMOUNTED")
   }
 
   const connectArweave = () => {
@@ -581,7 +671,7 @@ export default function Dashboard(props) {
       ) {
         console.log("Invalid key passed. Aborted call to replace.")
       } if (window.replaceAssetData.nodeList) {
-
+        console.log("Resetting node data...")
         let newData = JSON.parse(JSON.stringify(window.replaceAssetData.nodeList))
 
         if (newData.extData) {
@@ -648,7 +738,7 @@ export default function Dashboard(props) {
         forceUpdate();
       }
     }
-  }, [replaceAssetData]);
+  }, [logo]);
 
   const handleImageClick = (image) => {
     setImage(image);
@@ -802,7 +892,7 @@ export default function Dashboard(props) {
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
   const setupTokenVals = (_arweave, _addr, _prufClient, options) => {
-
+    console.log({addr: addr})
     if (!_addr) return swal("Unable to reach user's wallet.");
     if (!options) options = {}
 
@@ -878,6 +968,7 @@ export default function Dashboard(props) {
       _prufClient.get.nodePricing().then(e => {
         setCurrentACIndex(e.currentNodeIndex);
         setCurrentACPrice(e.currentNodePrice);
+        console.log(e)
       });
     }
   };

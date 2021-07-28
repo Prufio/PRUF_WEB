@@ -407,6 +407,7 @@ export default function CreateNode(props) {
             return swal("Please input node name")
         }
         if (Number(props.pruf) < Number(props.currentACPrice)) {
+            console.log(props.pruf)
             return swal("Insufficient PRUF Balance!")
         }
         setTransactionActive(true)
