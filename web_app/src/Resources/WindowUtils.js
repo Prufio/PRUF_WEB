@@ -42,7 +42,7 @@ function buildWindowUtils() {
               </div>
               <p className="cardNamePrint">Name : {obj.name}</p>
               <p className="cardAcPrint">Node : {obj.nodeName}</p>
-              <h4 className="cardIdxPrint">Asset ID : {obj.idxHash}</h4>
+              <h4 className="cardIdxPrint">Asset ID : {obj.id}</h4>
             </div>
           </>
         )}

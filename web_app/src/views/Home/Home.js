@@ -447,7 +447,7 @@ export default function Home(props) {
                                         <>
                                             <button
                                                 className="homeCardText"
-                                                onClick={() => mintID}
+                                                onClick={() => mintID()}
                                             >
                                                 No ID held by user
                                         </button>
