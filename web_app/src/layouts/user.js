@@ -338,10 +338,12 @@ export default function Dashboard(props) {
               method: "eth_accounts",
               params: {},
             })
-            .then((accounts) => {
+            .then(async (accounts) => {
+              console.log({accounts: accounts})
               if (accounts[0] !== undefined) {
-                setAddr(window.web3.utils.toChecksumAddress(accounts[0]))
-                let _addr = window.web3.utils.toChecksumAddress(accounts[0])
+                console.log("SETTING ADDRESS")
+                let _addr = await window.web3.utils.toChecksumAddress(accounts[0])
+                setAddr(_addr)
                 if (cookies[`${_addr}sideBarLogo`]) {
                   setLogo(cookies[`${_addr}sideBarLogo`])
                 } if (cookies[`${_addr}sideBarColor`]) {
@@ -354,10 +356,15 @@ export default function Dashboard(props) {
                 awaitPrufInit(_prufClient, _addr)
                 setIsMounted(true);
               } else {
-                ethereum.send('eth_requestAccounts').then((accounts) => {
+                ethereum.request({
+                  method: "eth_requestAccounts",
+                  params: {},
+                }).then(async (accounts) => {
+                  console.log({accounts: accounts})
                   if (accounts[0] !== undefined) {
-                    setAddr(window.web3.utils.toChecksumAddress(accounts[0]))
-                    let _addr = window.web3.utils.toChecksumAddress(accounts[0])
+                    console.log("SETTING ADDRESS")
+                    let _addr = await window.web3.utils.toChecksumAddress(accounts[0])
+                    setAddr(_addr)
                     if (cookies[`${_addr}sideBarLogo`]) {
                       setLogo(cookies[`${_addr}sideBarLogo`])
                     } if (cookies[`${_addr}sideBarColor`]) {
@@ -414,98 +421,8 @@ export default function Dashboard(props) {
     });
   };
 
-  const refreshHandler = () => {
-    setReplaceAssetData(replaceAssetData+1)
-    setWinKey(String(Math.round(Math.random() * 100000)))
-    if (isMounted || !isMounted) {
-      if (
-        !window.replaceAssetData ||
-        Object.values(window.replaceAssetData).length === 0
-      ) {
-      }
-      if (window.replaceAssetData.assetsPerPage) {
-        setAssetsPerPage(window.replaceAssetData.assetsPerPage)
-        setCookieTo(`assetsPerPage`, window.replaceAssetData.assetsPerPage)
-      }
-      if (window.replaceAssetData.refreshBals === true) {
-        console.log("Resetting token value")
-        setupTokenVals(arweaveClient, addr, prufClient, { justCount: true })
-        buildRoots(addr, prufClient)
-        forceUpdate();
-      } if (window.replaceAssetData.refreshAssets) {
-        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true })
-      } if (
-        window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
-      ) {
-        console.log("Invalid key passed. Aborted call to replace.")
-      } if (window.replaceAssetData.nodeList) {
-        console.log("Resetting node data...")
-        let newData = JSON.parse(JSON.stringify(window.replaceAssetData.nodeList))
-
-        if (newData.extData) {
-          setNodeExtData(newData.extData)
-        }
-
-        if (newData.data) {
-          setHeldNodeData(newData.data)
-        }
-
-        if (newData.setAddition) {
-          let tempSets = JSON.parse(JSON.stringify(nodeSets))
-          tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
-          setNodeSets(tempSets)
-        }
-        setupTokenVals(arweaveClient, addr, prufClient, { justNodes: true })
-      }
-
-      if (window.replaceAssetData.newAsset || window.replaceAssetData.dBIndex) {
-        console.log(
-          "Object is defined. index: ",
-          window.replaceAssetData.dBIndex,
-          " new asset: ",
-          window.replaceAssetData.newAsset
-        );
-        let newAsset = window.replaceAssetData.newAsset;
-        let dBIndex = window.replaceAssetData.dBIndex;
-        let tempArr = JSON.parse(JSON.stringify(assetArr));
-        let idArr = JSON.parse(JSON.stringify(assetIds));
-        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
-
-        if (newAsset && dBIndex > -1) {
-          idArr.push(newAsset.id);
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
-          console.log("Replacing asset at index: ", dBIndex);
-          console.log("Old Assets", tempArr);
-          tempArr.splice(dBIndex, 1, newAsset);
-          console.log("New Assets", tempArr);
-          setAssetArr(tempArr);
-          getAssetIds(addr, prufClient, assetIds.length);
-        }
-
-        else if (dBIndex > -1 && !newAsset) {
-          console.log("Deleting asset at index: ", dBIndex);
-          console.log("Old Assets", tempArr);
-          tempArr.splice(dBIndex, 1);
-          idArr.splice(dBIndex, 1);
-          console.log("New Assets", tempArr);
-          setAssetArr(tempArr);
-          getAssetIds(addr, prufClient, assetIds.length - 1);
-        }
-
-        else if (newAsset && !dBIndex) {
-          idArr.push(newAsset.id);
-          console.log("Adding asset: ", newAsset);
-          console.log("Old Assets", tempArr);
-          tempArr.push(newAsset);
-          console.log("New Assets", tempArr);
-          setAssetArr(tempArr);
-          getAssetIds(addr, prufClient, assetIds.length + 1);
-        }
-
-        window.replaceAssetData = {}
-        forceUpdate();
-      }
-    } else console.log("!ISMOUNTED")
+  const refreshHandler = async () => {
+    await setReplaceAssetData(replaceAssetData+1)
   }
 
   const connectArweave = () => {
@@ -733,7 +650,7 @@ export default function Dashboard(props) {
         forceUpdate();
       }
     }
-  }, [logo]);
+  }, [replaceAssetData]);
 
   const handleImageClick = (image) => {
     setImage(image);

@@ -135,6 +135,7 @@ export default function Home(props) {
     // }
 
     const purchasePRUF = async () => {
+        console.log(props.addr)
         // eslint-disable-next-line react/prop-types
         let etherBal = updatedEther || props.ether
         let tempTxHash
