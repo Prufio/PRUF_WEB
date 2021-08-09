@@ -94,11 +94,11 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
-  const Util_Child_ADDRESS = "0x45f7c1eC0F0e19674A699577F9d89fB5424Acf1F",
-    Util_Parent_ADDRESS = "0x045a323B95Cc3a8cB0497fa8e0Aeca1500DdD7A1",
-    Root_Mgr_ADDRESS = "0xBbD7cBFA79faee899Eaf900F13C9065bF03B1A74",
-    ERC20_Predicate_ADDRESS = "0xdD6596F2029e6233DEFfaCa316e6A95217d4Dc34",
-    Child_Mgr_ADDRESS = "0xb5505a6d998549090530911180f38aC5130101c6";
+  const Util_Child_ADDRESS = "0xAdf72D32E511eE00c6E0FF5D62Cd5C7C40A6aDEA",
+    Util_Parent_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538",
+    Root_Mgr_ADDRESS = "0xA0c68C638235ee32657e8f720a23ceC1bFc77C77",
+    ERC20_Predicate_ADDRESS = "0x40ec5B33f54e0E8A33A975908C5BA1c14e5BbbDf",
+    Child_Mgr_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa";
 
   const Util_Child_ABI = [
       {
@@ -2735,19 +2735,19 @@ export default function Dashboard(props) {
     ];
 
   // const mainWeb3 = new Web3(
-  //   "https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+  //   "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
   // );
   // const maticWeb3 = new Web3(
-  //   "https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
+  //   "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
   // );
 
   const maticPOSClient = new MaticPOSClient({
     network: "testnet",
     version: "mumbai",
     parentProvider:
-      "https://goerli.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
+      "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
     maticProvider:
-      "https://rpc-mumbai.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518",
+      "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518",
   });
 
   if (window.ethereum) {
@@ -3277,9 +3277,15 @@ export default function Dashboard(props) {
                       </h4>
                     </div>
                     <div className="delegationTips">
+                      {Number(web3.utils.fromWei(result)) > 100000000 ?
+                      <h4 className="alertText">
+                        Current allowance: Unlimited
+                      </h4>
+                      :
                       <h4 className="alertText">
                         Current allowance: ü{web3.utils.fromWei(result)}
                       </h4>
+                      }
                     </div>
                     <div className="delegationTips">
                       <h4 className="alertTextSm">From address: {addr}</h4>
@@ -3738,7 +3744,7 @@ export default function Dashboard(props) {
       let _util;
       if (e === "private") {
         _web3.eth.net.getId().then((e) => {
-          if (e === 80001) {
+          if (e === 137) {
             setTwinChain("Ethereum");
             setCurrentChain("Polygon");
 
@@ -3755,13 +3761,13 @@ export default function Dashboard(props) {
             });
           } else {
             swal({
-              title: "Please connect to the Mumbai or Goerli testnet",
+              title: "Please connect to the Ethereum or Polygon main net",
               icon: "warning",
               button: "Close",
             });
           }
         });
-      } else if (e === "goerli") {
+      } else if (e === "main") {
         setTwinChain("Polygon");
         setCurrentChain("Ethereum");
 
