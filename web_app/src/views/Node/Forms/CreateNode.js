@@ -252,7 +252,7 @@ export default function CreateNode(props) {
                                 button: 'Close',
                             }).then(() => {
                                 window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
+                                window.dispatchEvent(props.refresh)
                                 setMintedID(true)
                             })
                         })
@@ -388,8 +388,7 @@ export default function CreateNode(props) {
                     })
                 } else {
                     swal({
-                        title:
-                            'That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io',
+                        title: 'That name has already been reserved! Try a differnet one, or contact the team: support@pruf.io',
                         button: 'Okay',
                     })
                 }
