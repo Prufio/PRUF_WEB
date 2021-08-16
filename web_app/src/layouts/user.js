@@ -2742,8 +2742,8 @@ export default function Dashboard(props) {
   // );
 
   const maticPOSClient = new MaticPOSClient({
-    network: "testnet",
-    version: "mumbai",
+    network: "mainnet",
+    version: "v1",
     parentProvider:
       "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
     maticProvider:
@@ -2807,7 +2807,7 @@ export default function Dashboard(props) {
     childChainManagerProxy
   ) => {
     const ws = new WebSocket(
-      /*"wss://rpc-mumbai.maticvigil.com/ws/v1/ccb543453ee1affc879932231adcc00adb350518"*/ "wss://ws-mumbai.matic.today/"
+      /*"wss://rpc-mumbai.maticvigil.com/ws/v1/ccb543453ee1affc879932231adcc00adb350518"*/ "wss://rpc-mainnet.matic.network"
     );
 
     return new Promise((resolve, reject) => {
@@ -2879,14 +2879,14 @@ export default function Dashboard(props) {
     //txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${addr}&startblock=0&endblock=19999999&sort=asc`, true ) // false for synchronous request
     txReq.open(
       "GET",
-      `https://api-testnet.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc`,
+      `https://api.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc`,
       true
     );
     txReq.send(null);
     let erc20Req = new XMLHttpRequest();
     erc20Req.open(
       "GET",
-      `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${_addr}&startblock=0&endblock=19999999&sort=asc`,
+      `https://api.polygonscan.com/api?module=account&action=tokentx&address=${_addr}&startblock=0&endblock=19999999&sort=asc`,
       true
     );
 
@@ -3788,7 +3788,7 @@ export default function Dashboard(props) {
         setTwinChain("Polygon");
         setCurrentChain("Ethereum");
         swal({
-          title: `You are connected to the network '${e}', please connect to the Göerli or Mumbai Testnet`,
+          title: `You are connected to the network '${e}', please connect to the Ethereum or Polygon mainnet`,
           icon: "warning",
           button: "Close",
         });
