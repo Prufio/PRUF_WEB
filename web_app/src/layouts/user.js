@@ -2899,7 +2899,7 @@ export default function Dashboard(props) {
         //console.log({methodId: e.input.substring(2, 10)})
         if (
           e.input.substring(2, 10) === "2e1a7d4d" &&
-          e.to === "0x45f7c1ec0f0e19674a699577f9d89fb5424acf1f"
+          e.to.toLowerCase() === Util_Child_ADDRESS.toLowerCase()
         ) {
           if (
             cookies[`beenRedeemed${_addr}`] &&
@@ -2920,7 +2920,7 @@ export default function Dashboard(props) {
       erc20Req.send(null);
 
       erc20Req.onload = () => {
-        console.log({ rawERC20Text: erc20Req.responseText });
+        console.log({ rawERC20: JSON.parse(erc20Req.responseText) });
         let erc20Txs = JSON.parse(erc20Req.responseText).result.reverse();
         console.log({ erc20Txs: erc20Txs });
         checkTxs(
@@ -3015,7 +3015,7 @@ export default function Dashboard(props) {
             console.log("Burn transaction has not yet been checkpointed");
             swal({
               title: "We detected a pending POLYGON -> ETH transaction.",
-              text: `TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a few minutes.`,
+              text: `TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a while.`,
               icon: "warning",
               button: "Close",
             });
