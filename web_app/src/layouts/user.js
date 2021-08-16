@@ -81,6 +81,7 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
+  const apiSecret = "F9GZM22PSKBBCI3YZ21CK8B3DC9C5DRKXF"
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -2879,14 +2880,14 @@ export default function Dashboard(props) {
     //txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${addr}&startblock=0&endblock=19999999&sort=asc`, true ) // false for synchronous request
     txReq.open(
       "GET",
-      `https://api.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc`,
+      `https://api.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc&apikey=${apiSecret}`,
       true
     );
     txReq.send(null);
     let erc20Req = new XMLHttpRequest();
     erc20Req.open(
       "GET",
-      `https://api.polygonscan.com/api?module=account&action=tokentx&address=${_addr}&startblock=0&endblock=19999999&sort=asc`,
+      `https://api.polygonscan.com/api?module=account&action=tokentx&address=${_addr}&startblock=0&endblock=19999999&sort=asc&apikey=${apiSecret}`,
       true
     );
 
