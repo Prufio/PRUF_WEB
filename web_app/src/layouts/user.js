@@ -2919,6 +2919,7 @@ export default function Dashboard(props) {
       erc20Req.send(null);
 
       erc20Req.onload = () => {
+        console.log({ rawERC20Text: erc20Req.responseText });
         let erc20Txs = JSON.parse(erc20Req.responseText).result.reverse();
         console.log({ erc20Txs: erc20Txs });
         checkTxs(
