@@ -3736,60 +3736,60 @@ export default function Dashboard(props) {
     let _rootManager = new _web3.eth.Contract(Root_Mgr_ABI, Root_Mgr_ADDRESS);
     setRootManager(_rootManager);
 
-    _web3.eth.net.getNetworkType().then((e) => {
-      let _util;
-      if (e === "private") {
-        _web3.eth.net.getId().then((e) => {
-          if (e === 137) {
-            setTwinChain("Ethereum");
-            setCurrentChain("Polygon");
+    // _web3.eth.net.getNetworkType().then((e) => {
+    //   let _util;
+    //   if (e === "private") {
+    //     _web3.eth.net.getId().then((e) => {
+    //       if (e === 137) {
+    //         setTwinChain("Ethereum");
+    //         setCurrentChain("Polygon");
 
-            _util = new _web3.eth.Contract(Util_Child_ABI, Util_Child_ADDRESS);
-            setUtil(_util);
-            setIsRefreshingPruf(true);
-            _util.methods.balanceOf(_addr).call(async (error, result) => {
-              if (!error) {
-                setPrufBalance(
-                  Number(_web3.utils.fromWei(result)).toFixed(5).toString()
-                );
-              }
-              setIsRefreshingPruf(false);
-            });
-          } else {
-            swal({
-              title: "Please connect to the Ethereum or Polygon main net",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-        });
-      } else if (e === "main") {
-        setTwinChain("Polygon");
-        setCurrentChain("Ethereum");
+    //         _util = new _web3.eth.Contract(Util_Child_ABI, Util_Child_ADDRESS);
+    //         setUtil(_util);
+    //         setIsRefreshingPruf(true);
+    //         _util.methods.balanceOf(_addr).call(async (error, result) => {
+    //           if (!error) {
+    //             setPrufBalance(
+    //               Number(_web3.utils.fromWei(result)).toFixed(5).toString()
+    //             );
+    //           }
+    //           setIsRefreshingPruf(false);
+    //         });
+    //       } else {
+    //         swal({
+    //           title: "Please connect to the Ethereum or Polygon main net",
+    //           icon: "warning",
+    //           button: "Close",
+    //         });
+    //       }
+    //     });
+    //   } else if (e === "main") {
+    //     setTwinChain("Polygon");
+    //     setCurrentChain("Ethereum");
 
-        _util = new _web3.eth.Contract(Util_Parent_ABI, Util_Parent_ADDRESS);
-        setUtil(_util);
-        setIsRefreshingPruf(true);
-        setFindingTxs(true);
-        getMaticWithdrawals(_web3, _addr);
-        _util.methods.balanceOf(_addr).call(async (error, result) => {
-          if (!error) {
-            setPrufBalance(
-              Number(_web3.utils.fromWei(result)).toFixed(5).toString()
-            );
-          }
-          setIsRefreshingPruf(false);
-        });
-      } else {
-        setTwinChain("Polygon");
-        setCurrentChain("Ethereum");
-        swal({
-          title: `You are connected to the network '${e}', please connect to the Ethereum or Polygon mainnet`,
-          icon: "warning",
-          button: "Close",
-        });
-      }
-    });
+    //     _util = new _web3.eth.Contract(Util_Parent_ABI, Util_Parent_ADDRESS);
+    //     setUtil(_util);
+    //     setIsRefreshingPruf(true);
+    //     setFindingTxs(true);
+    //     getMaticWithdrawals(_web3, _addr);
+    //     _util.methods.balanceOf(_addr).call(async (error, result) => {
+    //       if (!error) {
+    //         setPrufBalance(
+    //           Number(_web3.utils.fromWei(result)).toFixed(5).toString()
+    //         );
+    //       }
+    //       setIsRefreshingPruf(false);
+    //     });
+    //   } else {
+    //     setTwinChain("Polygon");
+    //     setCurrentChain("Ethereum");
+    //     swal({
+    //       title: `You are connected to the network '${e}', please connect to the Ethereum or Polygon mainnet`,
+    //       icon: "warning",
+    //       button: "Close",
+    //     });
+    //   }
+    // });
     // console.log("Getting things set up...");
     setIsRefreshingEther(true);
     _web3.eth.getBalance(_addr).then(async (e) => {
