@@ -2742,14 +2742,18 @@ export default function Dashboard(props) {
   //   "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
   // );
 
-  const maticPOSClient = new MaticPOSClient({
-    network: "mainnet",
-    version: "v1",
-    parentProvider:
-      "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
-    maticProvider:
-      "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518",
-  });
+  if(!window.maticPOSClient) {
+    const maticPOSClient = new MaticPOSClient({
+      network: "mainnet",
+      version: "v1",
+      parentProvider:
+        "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
+      maticProvider:
+        "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518",
+    });
+    console.log("Setting POSClient")
+    window.maticPOSClient = maticPOSClient;
+  }
 
   if (window.ethereum) {
     window.ethereum.on("chainChanged", (chainId) => {
@@ -2933,7 +2937,7 @@ export default function Dashboard(props) {
     };
   };
 
-  const checkTxs = (
+  const checkTxs = async (
     _web3,
     _addr,
     withdrawals,
@@ -2995,48 +2999,20 @@ export default function Dashboard(props) {
         return setRedeemList(withdrawals);
       }
     } else {
-      maticPOSClient
-        .exitERC20(withdrawals[iteration], { from: _addr, encodeAbi: true })
-        .then(() => {
-          checkTxs(
-            _web3,
-            _addr,
-            withdrawals,
-            erc20Txs,
-            discards,
-            iteration + 1
-          );
-        })
-        .catch((e) => {
-          console.log(e.message);
-          if (
-            e.message.includes("Burn transaction has not been checkpointed")
-          ) {
-            console.log("Burn transaction has not yet been checkpointed");
-            swal({
-              title: "We detected a pending POLYGON -> ETH transaction.",
-              text: `TxID: ${withdrawals[iteration]}\n\n It will be available to redeem once it has been checkpointed on Polygon. This may take a while.`,
-              icon: "warning",
-              button: "Close",
-            });
-          } else if (e.message.includes("EXIT_ALREADY_PROCESSED")) {
-            console.log("Found already redeemed");
-            if (!discards.includes(withdrawals[iteration]))
-              discards.push(withdrawals[iteration]);
-            console.log({ discards: discards });
-          } else {
-            console.error("SOMETHING WENT WRONG: ", e.message);
-          }
-          withdrawals.shift();
-          return checkTxs(
-            _web3,
-            _addr,
-            withdrawals,
-            erc20Txs,
-            discards,
-            iteration
-          );
-        });
+      withdrawals.forEach(e=>{
+        if (cookies[`beenRedeemed${_addr}`].includes(e)){
+          withdrawals.shift()
+        }
+        checkTxs
+        (
+          _web3,
+          _addr,
+          withdrawals,
+          erc20Txs,
+          discards,
+          iteration + 1
+        )
+      })
     }
   };
 
@@ -3048,7 +3024,7 @@ export default function Dashboard(props) {
       let current = list.shift();
       console.log(current);
       setRedeeming(true);
-      maticPOSClient
+      window.maticPOSClient
         .exitERC20(current, { from: addr, encodeAbi: true })
         .then(async (e) => {
           console.log(currentChain, redeemList.length, findingTxs);
@@ -3067,10 +3043,28 @@ export default function Dashboard(props) {
               setRedeeming(false);
               console.log("Error redeeming");
             })
-            .catch(() => {
-              setRedeeming(false);
-              console.log("Already redeemed or invalid");
-            });
+            .catch((e) => {
+              console.log(e.message);
+              if (
+                e.message.includes("Burn transaction has not been checkpointed")
+              ) {
+                console.log("Burn transaction has not yet been checkpointed");
+                swal({
+                  title: "Pending POLYGON -> ETH swap detected.",
+                  text: `TxID: ${withdrawals[iteration]}\n\n Tokens will be available to redeem once it has been checkpointed on Polygon. This may take a while.`,
+                  icon: "warning",
+                  button: "Close",
+                });
+              } else if (e.message.includes("EXIT_ALREADY_PROCESSED")) {
+                console.log("Found already redeemed");
+                if (!discards.includes(withdrawals[iteration]))
+                  discards.push(withdrawals[iteration]);
+                console.log({ discards: discards });
+              } else {
+                console.error("SOMETHING WENT WRONG: ", e.message);
+              }
+              setRedeeming(false)
+            })
         });
     } else return console.log("Done redeeming");
   };
