@@ -14,7 +14,7 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
-import { Cached, InfoOutlined } from "@material-ui/icons";
+import { Cached, DashboardOutlined, InfoOutlined, Refresh } from "@material-ui/icons";
 
 // core components
 import Footer from "components/Footer/Footer.js";
@@ -37,6 +37,7 @@ import routes from "routes.js";
 
 import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
+import { Icon } from "@material-ui/core";
 
 var ps;
 
@@ -3817,7 +3818,7 @@ export default function Dashboard(props) {
             <GridItem xs={12} sm={6} md={6} lg={3}>
               <Card>
                 <CardHeader stats icon>
-                  {currentChain === "Ethereum" ? (
+                  {/* {currentChain === "Ethereum" ? ( */}
                     <>
                       <CardIcon
                         className="headerIconBack"
@@ -3827,8 +3828,8 @@ export default function Dashboard(props) {
                       </CardIcon>
                       <p className={classes.cardCategory}>ETH Balance</p>
                     </>
-                  ) : (
-                    <>
+                  {/* ) : ( */}
+                    {/* <>
                       <CardIcon
                         className="headerIconBack"
                         onClick={() => window.open("https://ethereum.org/en/")}
@@ -3837,7 +3838,7 @@ export default function Dashboard(props) {
                       </CardIcon>
                       <p className={classes.cardCategory}>Matic Balance</p>
                     </>
-                  )}
+                  )} */}
                   {etherBalance ? (
                     <h3 className={classes.cardTitle}>
                       {etherBalance.substring(0, 7)}{" "}
@@ -3996,100 +3997,42 @@ export default function Dashboard(props) {
                 </CardFooter>
               </Card>
             </GridItem>
-          </GridContainer>
-          <Card>
-            <CardHeader color="info" icon>
-              <CardIcon className="headerIconBack">
-                <span className="material-icons"> toll </span>
-              </CardIcon>
-              <h5 className={classes.cardIconTitle}>Token Bridge</h5>
-            </CardHeader>
-            {/* eslint-disable-next-line react/prop-types */}
-            {!addr && (
-              <CardBody>
-                <form>
-                  <h3 className="bump">
-                    <br />
-                    Please{" "}
-                    <a
-                      className="splitterA"
-                      onClick={() => {
-                        getAddress(web3);
-                      }}
-                    >
-                      connect
-                    </a>{" "}
-                    to an Ethereum provider.
-                  </h3>
-                </form>
-              </CardBody>
-            )}
-            {/* eslint-disable-next-line react/prop-types */}
-            {addr && (
-              <CardBody>
-                <form>
-                  <CustomInput
-                    formControlProps={{
-                      fullWidth: true,
+          </GridContainer><Card>
+          <CardHeader icon>
+            <CardIcon
+              className="headerIconBack"
+              onClick={() => {
+                moreInfo("back");
+              }}
+            >
+              <DashboardOutlined />
+            </CardIcon>
+            <div className="dashboardHeader">
+              <div className="flexRowWithGap">
+                <h4 className={classes.cardIconTitle}>Staking Dashboard</h4>
+                <Tooltip title="Refresh">
+                  <Icon
+                    className="MLBGradientRefresh"
+                    onClick={() => {
+                      window.replaceAssetData.refreshAssets = true
+                      window.dispatchEvent(props.refresh)
                     }}
-                    inputProps={{
-                      value: amountToSwap,
-                      type: "number",
-                      onChange: (e) => {
-                        setAmountToSwap(e.target.value); // Set undefined to remove entirely
-                      },
-                      placeholder: `0`,
-                    }}
-                  />
-                  {!transacting ? (
-                    <Button
-                      color="info"
-                      className="MLBGradient"
-                      onClick={() => swap()}
-                    >
-                      {`Send to ${twinChain}`}
-                    </Button>
-                  ) : allowance ? (
-                    <>
-                      Setting allowance
-                      <div className="lds-ellipsisIF">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
-                      <br />
-                      <br />
-                      <Button
-                        className="MLBGradient"
-                        disabled
-                        onClick={() => swap()}
-                      >
-                        {`Send to ${twinChain}`}
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      Sending tokens to {twinChain} wallet
-                      <div className="lds-ellipsisIF">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
-                      <br />
-                      <br />
-                      <Button
-                        className="MLBGradient"
-                        disabled
-                        onClick={() => swap()}
-                      >
-                        {`Send to ${twinChain}`}
-                      </Button>
-                    </>
-                  )}
-                </form>
-              </CardBody>
-            )}
-          </Card>
+                  >
+                    <Refresh />
+                  </Icon>
+                </Tooltip>
+              </div>
+            </div>
+            <br />
+          </CardHeader>
+          {/* eslint-disable-next-line react/prop-types*/}
+          {!props.addr && props.isMounted && (
+            <h3 className="bump">
+              <br />
+              Please connect to an Ethereum provider.
+            </h3>
+          )}
+        </Card>
         </div>
         <Footer fluid />
       </div>
