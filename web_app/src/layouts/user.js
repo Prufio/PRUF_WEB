@@ -5,16 +5,24 @@ import Web3 from "web3";
 import { MaticPOSClient } from "@maticnetwork/maticjs";
 import { useCookies } from "react-cookie";
 import { Route } from "react-router-dom";
+import { isMobile, isAndroid } from "react-device-detect";
 import swalReact from "@sweetalert/with-react";
 // creates a beautiful scrollbar
 
 import PerfectScrollbar from "perfect-scrollbar";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 // @material-ui/core components
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
-import { Cached, DashboardOutlined, InfoOutlined, Refresh } from "@material-ui/icons";
+import {
+  Cached,
+  DashboardOutlined,
+  InfoOutlined,
+  Refresh,
+} from "@material-ui/icons";
 
 // core components
 import Footer from "components/Footer/Footer.js";
@@ -82,7 +90,7 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
-  const apiSecret = "F9GZM22PSKBBCI3YZ21CK8B3DC9C5DRKXF"
+  const apiSecret = "F9GZM22PSKBBCI3YZ21CK8B3DC9C5DRKXF";
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -101,6 +109,101 @@ export default function Dashboard(props) {
     Root_Mgr_ADDRESS = "0xA0c68C638235ee32657e8f720a23ceC1bFc77C77",
     ERC20_Predicate_ADDRESS = "0x40ec5B33f54e0E8A33A975908C5BA1c14e5BbbDf",
     Child_Mgr_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa";
+
+  const generateStakingDash = () => {
+    let component = [];
+
+    component.push(
+      <GridItem xs={12} sm={6} md={6} lg={3}>
+        <Card chart className={classes.cardHover}>
+          <>
+            {!isMobile && (
+              <CardHeader
+              // className={classes.cardHeaderHoverDashboard}
+              >
+                <CircularProgressbar
+                  value={12}
+                  text={`${4}%`}
+                  styles={buildStyles({
+                    strokeLinecap: "butt",
+                    textSize: "8px",
+                    pathColor: `rgba(0, 0, 0)`,
+                    textColor: "black",
+                    trailColor: "#00a8ff",
+                    backgroundColor: "#3e98c7",
+                  })}
+                />
+                ;
+              </CardHeader>
+            )}
+            {isMobile && (
+              <CardHeader image className={classes.cardHeaderHover}>
+                <button className={classes.cardHeaderHoverJdenticon}>
+                  {/* {arr[i].DisplayImage !== "" &&
+                          arr[i].DisplayImage !== undefined && (
+                            <img
+                              title="View Asset"
+                              src={arr[i].DisplayImage}
+                              alt=""
+                            />
+                          )} */}
+
+                  {/* {arr[i].DisplayImage !== "" &&
+                          arr[i].DisplayImage === undefined && (
+                            <>
+                              <Jdenticon value={arr[i].id} />
+                            </>
+                          )} */}
+                  {/* {arr[i].DisplayImage === "" &&
+                          arr[i].DisplayImage !== undefined && (
+                            <>
+                              <Jdenticon value={arr[i].id} />
+                            </>
+                          )} */}
+                </button>
+              </CardHeader>
+            )}
+          </>
+
+          <CardBody>
+            {!isMobile && <div className={classes.cardHover}></div>}
+            {isMobile && (
+              <div className={classes.cardHoverUnder}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="View/Edit"
+                  placement="bottom"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <Button
+                    color="success"
+                    simple
+                    justIcon
+                    // onClick={() =>
+                    //   moreInfo(Object.assign(arr[i], { dBIndex: i }))
+                    // }
+                  >
+                    <Icon>login</Icon>
+                  </Button>
+                </Tooltip>
+              </div>
+            )}
+            <h4 className={classes.cardTitle}>???</h4>
+            <h5 className={classes.cardTitle}>Status:&nbsp;;???</h5>
+          </CardBody>
+          {/* <CardFooter chart>
+                  <div className={classes.stats}>
+                    <AccessTime /> updated 4 minutes ago
+                  </div>
+                </CardFooter> */}
+        </Card>
+      </GridItem>
+    );
+    //}
+
+    return component;
+    // eslint-disable-next-line react/prop-types
+  };
 
   const Util_Child_ABI = [
       {
@@ -2743,7 +2846,7 @@ export default function Dashboard(props) {
   //   "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
   // );
 
-  if(!window.maticPOSClient) {
+  if (!window.maticPOSClient) {
     const maticPOSClient = new MaticPOSClient({
       network: "mainnet",
       version: "v1",
@@ -2752,7 +2855,7 @@ export default function Dashboard(props) {
       maticProvider:
         "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518",
     });
-    console.log("Setting POSClient")
+    console.log("Setting POSClient");
     window.maticPOSClient = maticPOSClient;
   }
 
@@ -3000,25 +3103,17 @@ export default function Dashboard(props) {
         return setRedeemList(withdrawals);
       }
     } else {
-      withdrawals.forEach(e=>{
-        if (cookies[`beenRedeemed${_addr}`].includes(e)){
-          withdrawals.shift()
+      withdrawals.forEach((e) => {
+        if (cookies[`beenRedeemed${_addr}`].includes(e)) {
+          withdrawals.shift();
         }
-        checkTxs
-        (
-          _web3,
-          _addr,
-          withdrawals,
-          erc20Txs,
-          discards,
-          iteration + 1
-        )
-      })
+        checkTxs(_web3, _addr, withdrawals, erc20Txs, discards, iteration + 1);
+      });
     }
   };
 
   const redeem = (list) => {
-    list = JSON.parse(JSON.stringify(list))
+    list = JSON.parse(JSON.stringify(list));
     console.log(currentChain, redeemList.length, findingTxs);
     console.log(list);
     if (list.length > 0) {
@@ -3064,557 +3159,10 @@ export default function Dashboard(props) {
               } else {
                 console.error("SOMETHING WENT WRONG: ", e.message);
               }
-              setRedeeming(false)
-            })
+              setRedeeming(false);
+            });
         });
     } else return console.log("Done redeeming");
-  };
-
-  const swap = () => {
-    if (!amountToSwap || amountToSwap <= 0)
-      return swal({
-        title: "Please input a number greater than zero.",
-        icon: "warning",
-        button: "Close",
-      });
-    else if (Number(amountToSwap) > Number(prufBalance))
-      return swal({
-        title: "Submitted amount exceeds PRUF balance",
-        icon: "warning",
-        button: "Close",
-      });
-    console.log(`Amount: ${amountToSwap}`);
-    if (currentChain === "Ethereum") {
-      util.methods
-        .allowance(addr, ERC20_Predicate_ADDRESS)
-        .call(async (error, result) => {
-          if (!error) {
-            if (web3.utils.fromWei(result) === "0") {
-              swalReact({
-                icon: "warning",
-                content: (
-                  <Card className="delegationCard">
-                    <h4 className="delegationTitle">Authorize Token Bridge</h4>
-                    <h5 className="finalizingTipsContent">
-                      In order to authorize a token bridge, you must confirm the
-                      amount to be transferred, and that the address authorizing
-                      the bridge is correct.
-                    </h5>
-                    <h5 className="finalizingTipsContent">
-                      Please review below.
-                    </h5>
-                    <div className="delegationTips">
-                      <h4 className="alertText">
-                        Amount to Send: ü{amountToSwap}
-                      </h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertTextSm">From address: {addr}</h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">From Chain: {currentChain}</h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">To Chain: Polygon</h4>
-                    </div>
-                  </Card>
-                ),
-                buttons: {
-                  back: {
-                    text: "Go Back",
-                    value: "back",
-                    className: "delegationButtonBack",
-                  },
-                  confirm: {
-                    text: "Confirm",
-                    value: "confirm",
-                    className: "delegationButtonBack",
-                  },
-                },
-              }).then((value) => {
-                switch (value) {
-                  case "confirm":
-                    setTransacting(true);
-                    setAllowance(true);
-                    const amount = web3.utils.toWei(amountToSwap);
-                    const depositData = web3.eth.abi.encodeParameter(
-                      "uint256",
-                      amount
-                    );
-                    util.methods
-                      .approve(ERC20_Predicate_ADDRESS, amount)
-                      .send({ from: addr })
-                      .on("error", () => {
-                        console.log("ERROR INCREASING ALLOWANCE");
-                        setTransacting(false);
-                        setAllowance(false);
-                      })
-                      .on("receipt", () => {
-                        swalReact({
-                          icon: "warning",
-                          content: (
-                            <Card className="delegationCard">
-                              <h4 className="delegationTitle">
-                                Authorize Send
-                              </h4>
-                              <h5 className="finalizingTipsContent">
-                                Now that the bridge has been authorized, you
-                                must confirm the transfer of tokens to be sent.
-                              </h5>
-                              <h5 className="finalizingTipsContent">
-                                Please review below.
-                              </h5>
-                              <div className="delegationTips">
-                                <h4 className="alertText">
-                                  Amount to Send: ü{amountToSwap}
-                                </h4>
-                              </div>
-                              <div className="delegationTips">
-                                <h4 className="alertTextSm">
-                                  From address: {addr}
-                                </h4>
-                              </div>
-                              <div className="delegationTips">
-                                <h4 className="alertText">
-                                  From Chain: {currentChain}
-                                </h4>
-                              </div>
-                              <div className="delegationTips">
-                                <h4 className="alertText">To Chain: Polygon</h4>
-                              </div>
-                            </Card>
-                          ),
-                          buttons: {
-                            back: {
-                              text: "Go Back",
-                              value: "back",
-                              className: "delegationButtonBack",
-                            },
-                            confirm: {
-                              text: "Confirm",
-                              value: "confirm",
-                              className: "delegationButtonBack",
-                            },
-                          },
-                        }).then((value) => {
-                          switch (value) {
-                            case "confirm":
-                              refreshBalances("eth", web3, addr);
-                              setAllowance(false);
-                              rootManager.methods
-                                .depositFor(
-                                  addr,
-                                  web3.utils.toChecksumAddress(
-                                    Util_Parent_ADDRESS
-                                  ),
-                                  depositData
-                                )
-                                .send({ from: addr })
-                                .on("error", () => {
-                                  console.log("ERROR DEPOSITING");
-                                  setTransacting(false);
-                                })
-                                .on("receipt", () => {
-                                  swal({
-                                    title: `Successfully sent ü${amountToSwap} to polygon wallet`,
-                                    icon: "success",
-                                    button: "Close",
-                                  });
-                                  setTransacting(false);
-                                  refreshBalances("both", web3, addr);
-                                });
-                              break;
-
-                            case "back":
-                              console.log("ERROR DEPOSITING");
-                              setTransacting(false);
-                              break;
-
-                            default:
-                              break;
-                          }
-                        });
-                      });
-                    break;
-
-                  case "back":
-                    console.log("ERROR INCREASING ALLOWANCE");
-                    setTransacting(false);
-                    setAllowance(false);
-                    break;
-
-                  default:
-                    break;
-                }
-              });
-            } else if (
-              web3.utils.fromWei(result) !== "0" &&
-              Number(web3.utils.fromWei(result)) >= Number(amountToSwap)
-            ) {
-              const amount = web3.utils.toWei(amountToSwap);
-              const depositData = web3.eth.abi.encodeParameter(
-                "uint256",
-                amount
-              );
-              swalReact({
-                icon: "warning",
-                content: (
-                  <Card className="delegationCard">
-                    <h4 className="delegationTitle">Authorize Send</h4>
-                    <h5 className="finalizingTipsContent">
-                      Now that the bridge has been authorized, you must confirm
-                      the transfer of tokens to be sent.
-                    </h5>
-                    <h5 className="finalizingTipsContent">
-                      Please review below.
-                    </h5>
-                    <div className="delegationTips">
-                      <h4 className="alertText">
-                        Amount to Send: ü{amountToSwap}
-                      </h4>
-                    </div>
-                    <div className="delegationTips">
-                      {Number(web3.utils.fromWei(result)) > 100000000 ?
-                      <h4 className="alertText">
-                        Current allowance: Unlimited
-                      </h4>
-                      :
-                      <h4 className="alertText">
-                        Current allowance: ü{web3.utils.fromWei(result)}
-                      </h4>
-                      }
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertTextSm">From address: {addr}</h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">From chain: {currentChain}</h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">To chain: Polygon</h4>
-                    </div>
-                  </Card>
-                ),
-                buttons: {
-                  back: {
-                    text: "Go Back",
-                    value: "back",
-                    className: "delegationButtonBack",
-                  },
-                  confirm: {
-                    text: "Confirm",
-                    value: "confirm",
-                    className: "delegationButtonBack",
-                  },
-                },
-              }).then((value) => {
-                switch (value) {
-                  case "confirm":
-                    setTransacting(true);
-                    setAllowance(false);
-                    rootManager.methods
-                      .depositFor(
-                        addr,
-                        web3.utils.toChecksumAddress(Util_Parent_ADDRESS),
-                        depositData
-                      )
-                      .send({ from: addr })
-                      .on("error", () => {
-                        console.log("ERROR DEPOSITING");
-                        setTransacting(false);
-                      })
-                      .on("receipt", () => {
-                        swal({
-                          title: `Successfully sent ü${amountToSwap} to polygon wallet`,
-                          icon: "success",
-                          button: "Close",
-                        });
-                        setTransacting(false);
-                        refreshBalances("both", web3, addr);
-                      });
-                    break;
-
-                  case "back":
-                    console.log("ERROR DEPOSITING");
-                    setTransacting(false);
-                    break;
-
-                  default:
-                    break;
-                }
-              });
-            } else if (
-              web3.utils.fromWei(result) !== "0" &&
-              Number(web3.utils.fromWei(result)) < Number(amountToSwap)
-            ) {
-              swalReact({
-                icon: "warning",
-                content: (
-                  <Card className="delegationCard">
-                    <h4 className="delegationTitle">Authorize Token Bridge</h4>
-                    <h5 className="finalizingTipsContent">
-                      In order to authorize a token bridge, you must confirm the
-                      amount to be transferred, and that the address authorizing
-                      the bridge is correct.
-                    </h5>
-                    <h5 className="finalizingTipsContent">
-                      Please review below.
-                    </h5>
-                    <div className="delegationTips">
-                      <h4 className="alertText">
-                        Current allowance: ü{web3.utils.fromWei(result)}
-                      </h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">
-                        Amount to Send: ü{amountToSwap}
-                      </h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">
-                        Additional Allowance Required: ü
-                        {Number(amountToSwap) -
-                          Number(web3.utils.fromWei(result))}
-                      </h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertTextSm">From address: {addr}</h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">From Chain: {currentChain}</h4>
-                    </div>
-                    <div className="delegationTips">
-                      <h4 className="alertText">To Chain: Polygon</h4>
-                    </div>
-                  </Card>
-                ),
-                buttons: {
-                  back: {
-                    text: "Go Back",
-                    value: "back",
-                    className: "delegationButtonBack",
-                  },
-                  confirm: {
-                    text: "Confirm",
-                    value: "confirm",
-                    className: "delegationButtonBack",
-                  },
-                },
-              }).then((value) => {
-                switch (value) {
-                  case "confirm":
-                    setTransacting(true);
-                    setAllowance(true);
-                    const amount = web3.utils.toWei(
-                      `${
-                        Number(amountToSwap) -
-                        Number(web3.utils.fromWei(result))
-                      }`
-                    );
-                    const depositData = web3.eth.abi.encodeParameter(
-                      "uint256",
-                      amount
-                    );
-                    util.methods
-                      .increaseAllowance(ERC20_Predicate_ADDRESS, amount)
-                      .send({ from: addr })
-                      .on("error", () => {
-                        console.log("ERROR INCREASING ALLOWANCE");
-                        setAllowance(false);
-                        setTransacting(false);
-                      })
-                      .on("receipt", () => {
-                        swalReact({
-                          icon: "warning",
-                          content: (
-                            <Card className="delegationCard">
-                              <h4 className="delegationTitle">
-                                Authorize Send
-                              </h4>
-                              <h5 className="finalizingTipsContent">
-                                Now that the bridge has been authorized, you
-                                must confirm the transfer of tokens to be sent.
-                              </h5>
-                              <h5 className="finalizingTipsContent">
-                                Please review below.
-                              </h5>
-                              <div className="delegationTips">
-                                <h4 className="alertText">
-                                  Current allowance: ü
-                                  {web3.utils.fromWei(result)}
-                                </h4>
-                              </div>
-                              <div className="delegationTips">
-                                <h4 className="alertText">
-                                  Amount to Send: ü{amountToSwap}
-                                </h4>
-                              </div>
-                              <div className="delegationTips">
-                                <h4 className="alertTextSm">
-                                  From address: {addr}
-                                </h4>
-                              </div>
-                              <div className="delegationTips">
-                                <h4 className="alertText">
-                                  From Chain: {currentChain}
-                                </h4>
-                              </div>
-                              <div className="delegationTips">
-                                <h4 className="alertText">To Chain: Polygon</h4>
-                              </div>
-                            </Card>
-                          ),
-                          buttons: {
-                            back: {
-                              text: "Go Back",
-                              value: "back",
-                              className: "delegationButtonBack",
-                            },
-                            confirm: {
-                              text: "Confirm",
-                              value: "confirm",
-                              className: "delegationButtonBack",
-                            },
-                          },
-                        }).then((value) => {
-                          switch (value) {
-                            case "confirm":
-                              refreshBalances("eth", web3, addr);
-                              setAllowance(false);
-                              rootManager.methods
-                                .depositFor(
-                                  addr,
-                                  web3.utils.toChecksumAddress(
-                                    Util_Parent_ADDRESS
-                                  ),
-                                  depositData
-                                )
-                                .send({ from: addr })
-                                .on("error", () => {
-                                  console.log("ERROR DEPOSITING");
-                                  setTransacting(false);
-                                })
-                                .on("receipt", () => {
-                                  swal({
-                                    title: `Successfully sent ü${amountToSwap} to polygon wallet`,
-                                    icon: "success",
-                                    button: "Close",
-                                  });
-                                  setTransacting(false);
-                                  refreshBalances("both", web3, addr);
-                                });
-                              break;
-
-                            case "back":
-                              console.log("ERROR DEPOSITING");
-                              setTransacting(false);
-                              break;
-
-                            default:
-                              break;
-                          }
-                        });
-                      });
-                    break;
-
-                  case "back":
-                    console.log("ERROR INCREASING ALLOWANCE");
-                    setAllowance(false);
-                    break;
-
-                  default:
-                    break;
-                }
-              });
-            }
-          } else {
-            return console.log("ERR");
-          }
-        });
-    } else if (currentChain === "Polygon") {
-      swalReact({
-        icon: "warning",
-        content: (
-          <Card className="delegationCard">
-            <h4 className="delegationTitle">Authorize Send</h4>
-            <h5 className="finalizingTipsContent">
-              Please confrm the token transfer you are attempting to send.
-            </h5>
-            <h5 className="finalizingTipsContent">Please review below.</h5>
-            <div className="delegationTips">
-              <h4 className="alertText">Amount to Send: ü{amountToSwap}</h4>
-            </div>
-            <div className="delegationTips">
-              <h4 className="alertTextSm">From address: {addr}</h4>
-            </div>
-            <div className="delegationTips">
-              <h4 className="alertText">From Chain: {currentChain}</h4>
-            </div>
-            <div className="delegationTips">
-              <h4 className="alertText">To Chain: Ethereum</h4>
-            </div>
-          </Card>
-        ),
-        buttons: {
-          back: {
-            text: "Go Back",
-            value: "back",
-            className: "delegationButtonBack",
-          },
-          confirm: {
-            text: "Confirm",
-            value: "confirm",
-            className: "delegationButtonBack",
-          },
-        },
-      }).then((value) => {
-        switch (value) {
-          case "confirm":
-            setTransacting(true);
-            const amount = web3.utils.toWei(String(amountToSwap));
-            util.methods
-              .withdraw(amount)
-              .send({ from: addr })
-              .on("error", () => {
-                swal({
-                  title: "Error attempting withdrawal.",
-                  icon: "warning",
-                  button: "Close",
-                });
-                setTransacting(false);
-              })
-              .on("receipt", () => {
-                setTransacting(false);
-                setAmountToSwap();
-                swal({
-                  title: `Successfully sent ü${amountToSwap} to bridge.`,
-                  icon: "success",
-                  button: "Close",
-                });
-                refreshBalances("both", web3, addr);
-              });
-            break;
-
-          case "back":
-            swal({
-              title: "Error attempting withdrawal.",
-              icon: "warning",
-              button: "Close",
-            });
-            setTransacting(false);
-            break;
-
-          default:
-            break;
-        }
-      });
-    } else {
-      swal({
-        title: "Something went wrong",
-        icon: "warning",
-        button: "Close",
-      });
-    }
   };
 
   const getAddress = (_web3) => {
@@ -3810,6 +3358,11 @@ export default function Dashboard(props) {
         {...rest}
       />{" "}
       <br />
+      <ui-progress-circle
+        shape="round"
+        color="#0f0000"
+        radius="90"
+      ></ui-progress-circle>
       <br />
       <div className={mainPanelClasses} ref={mainPanel}>
         <div className="splitterForm">
@@ -3819,17 +3372,17 @@ export default function Dashboard(props) {
               <Card>
                 <CardHeader stats icon>
                   {/* {currentChain === "Ethereum" ? ( */}
-                    <>
-                      <CardIcon
-                        className="headerIconBack"
-                        onClick={() => window.open("https://ethereum.org/en/")}
-                      >
-                        <img className="Icon" src={Eth} alt=""></img>
-                      </CardIcon>
-                      <p className={classes.cardCategory}>ETH Balance</p>
-                    </>
+                  <>
+                    <CardIcon
+                      className="headerIconBack"
+                      onClick={() => window.open("https://ethereum.org/en/")}
+                    >
+                      <img className="Icon" src={Eth} alt=""></img>
+                    </CardIcon>
+                    <p className={classes.cardCategory}>ETH Balance</p>
+                  </>
                   {/* ) : ( */}
-                    {/* <>
+                  {/* <>
                       <CardIcon
                         className="headerIconBack"
                         onClick={() => window.open("https://ethereum.org/en/")}
@@ -3963,26 +3516,28 @@ export default function Dashboard(props) {
                           <div></div>
                         </div>
                       )}
-                      {currentChain === "Ethereum" && findingTxs === false && redeemList.length === 0 && (
-                        <div className="inlineFlex">
-                          <Tooltip
-                            id="tooltip-top"
-                            title="Info"
-                            placement="bottom"
-                            classes={{ tooltip: userClasses.toolTip }}
-                          >
-                            <InfoOutlined
-                              className="info"
-                              onClick={() => {
-                                swal(
-                                  "You do not have any pending Polygon -> PRUF withdrawals."
-                                );
-                              }}
-                            />
-                          </Tooltip>
-                          <h5 className="pendingBal">No pending balance</h5>
-                        </div>
-                      )}
+                      {currentChain === "Ethereum" &&
+                        findingTxs === false &&
+                        redeemList.length === 0 && (
+                          <div className="inlineFlex">
+                            <Tooltip
+                              id="tooltip-top"
+                              title="Info"
+                              placement="bottom"
+                              classes={{ tooltip: userClasses.toolTip }}
+                            >
+                              <InfoOutlined
+                                className="info"
+                                onClick={() => {
+                                  swal(
+                                    "You do not have any pending Polygon -> PRUF withdrawals."
+                                  );
+                                }}
+                              />
+                            </Tooltip>
+                            <h5 className="pendingBal">No pending balance</h5>
+                          </div>
+                        )}
                     </>
                   )}
                   {isRefreshingPruf && (
@@ -3997,42 +3552,44 @@ export default function Dashboard(props) {
                 </CardFooter>
               </Card>
             </GridItem>
-          </GridContainer><Card>
-          <CardHeader icon>
-            <CardIcon
-              className="headerIconBack"
-              onClick={() => {
-                moreInfo("back");
-              }}
-            >
-              <DashboardOutlined />
-            </CardIcon>
-            <div className="dashboardHeader">
-              <div className="flexRowWithGap">
-                <h4 className={classes.cardIconTitle}>Staking Dashboard</h4>
-                <Tooltip title="Refresh">
-                  <Icon
-                    className="MLBGradientRefresh"
-                    onClick={() => {
-                      window.replaceAssetData.refreshAssets = true
-                      window.dispatchEvent(props.refresh)
-                    }}
-                  >
-                    <Refresh />
-                  </Icon>
-                </Tooltip>
+          </GridContainer>
+          <Card>
+            <CardHeader icon>
+              <CardIcon
+                className="headerIconBack"
+                onClick={() => {
+                  moreInfo("back");
+                }}
+              >
+                <DashboardOutlined />
+              </CardIcon>
+              <div className="dashboardHeader">
+                <div className="flexRowWithGap">
+                  <h4 className={classes.cardIconTitle}>Staking Dashboard</h4>
+                  <Tooltip title="Refresh">
+                    <Icon
+                      className="MLBGradientRefresh"
+                      onClick={() => {
+                        window.replaceAssetData.refreshAssets = true;
+                        window.dispatchEvent(props.refresh);
+                      }}
+                    >
+                      <Refresh />
+                    </Icon>
+                  </Tooltip>
+                </div>
               </div>
-            </div>
-            <br />
-          </CardHeader>
-          {/* eslint-disable-next-line react/prop-types*/}
-          {!props.addr && props.isMounted && (
-            <h3 className="bump">
               <br />
-              Please connect to an Ethereum provider.
-            </h3>
-          )}
-        </Card>
+            </CardHeader>
+            {/* eslint-disable-next-line react/prop-types*/}
+            {!props.addr && props.isMounted && (
+              <h3 className="bump">
+                <br />
+                Please connect to an Ethereum provider.
+              </h3>
+            )}
+            <GridContainer>{generateStakingDash()}</GridContainer>
+          </Card>
         </div>
         <Footer fluid />
       </div>
