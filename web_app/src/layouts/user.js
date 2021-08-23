@@ -5,7 +5,7 @@ import Web3 from "web3";
 import { MaticPOSClient } from "@maticnetwork/maticjs";
 import { useCookies } from "react-cookie";
 import { Route } from "react-router-dom";
-import ReactTable from 'components/ReactTable/ReactTable.js'
+import ReactTable from "../components/ReactTable/ReactTable.js";
 import { isMobile, isAndroid } from "react-device-detect";
 import swalReact from "@sweetalert/with-react";
 // creates a beautiful scrollbar
@@ -80,6 +80,7 @@ export default function Dashboard(props) {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [rootManager, setRootManager] = React.useState();
   const [redeemList, setRedeemList] = React.useState([]);
+  const [delegationList, setDelegationList] = React.useState([['Loading Nodes...', '~', '~', '~']]);
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
@@ -113,93 +114,11 @@ export default function Dashboard(props) {
 
   const generateStakingDash = () => {
     let component = [];
+    let data = JSON.parse(data);
 
     component.push(
       <GridItem xs={12} sm={6} md={6} lg={3}>
         <Card chart className={classes.cardHover}>
-         <ReactTable
-                                columns={[
-                                    {
-                                        Header: 'Root',
-                                        accessor: 'root',
-                                    },
-                                    {
-                                        Header: 'Name',
-                                        accessor: 'name',
-                                    },
-                                    {
-                                        Header: 'Node ID',
-                                        accessor: 'nodeId',
-                                    },
-                                    {
-                                        Header: 'Total Delegated',
-                                        accessor: 'totalStaked',
-                                    },
-                                    {
-                                        Header: 'Transaction Count',
-                                        accessor: 'transactionsPerEpoch',
-                                    },
-                                    {
-                                        Header: 'Actions',
-                                        accessor: 'actions',
-                                    },
-                                ]}
-                                /> 
-                                {/*
-                                // data={((prop, key) => {
-                                //     return {
-                                //         // id: key,
-                                //         // root: prop[0],
-                                //         // name: prop[1],
-                                //         // nodeId: prop[2],
-                                //         // totalStaked: prop[3],
-                                //         // transactionsPerEpoch: prop[4],
-                                //         actions: (
-                                //             // we've added some custom button actions
-                                //             <div className="actions-right">
-                                //                 {prop[0] !==
-                                //                     'Loading Nodes...' && (
-                                //                         <Button
-                                //                             // justIcon
-                                //                             // round
-                                //                             // simple
-                                //                             // onClick={() => {
-                                //                             //     handleDelegation({
-                                //                             //         name: prop[1],
-                                //                             //         id: prop[2],
-                                //                             //         totalDelegated:
-                                //                             //             prop[3],
-                                //                             //     })
-                                //                             // }}
-                                //                             color="info"
-                                //                             className="delegateButton"
-                                //                         >
-                                //                             Delegate
-                                //                         </Button>
-                                //                     )}
-                                //                 {/* {prop[0] === 
-                                                     'Loading Nodes...' && (
-                                //                         <Button
-                                //                             disabled
-                                //                             // onClick={() => {
-                                //                             //     handleDelegation({
-                                //                             //         name: prop[1],
-                                //                             //         id: prop[2],
-                                //                             //         totalDelegated:
-                                //                             //             prop[3],
-                                //                             //     })
-                                //                             // }}
-                                //                             color="info"
-                                //                             className="delegateButton"
-                                //                         >
-                                //                             Delegate
-                                //                         </Button>
-                                //                     )}
-                                //             </div>
-                                //         ),
-                                //     }
-                                // })} */}
-                           
         </Card>
       </GridItem>
     );
@@ -957,7 +876,90 @@ export default function Dashboard(props) {
                 Please connect to an Ethereum provider.
               </h3>
             )}
-            <GridContainer>{generateStakingDash()}</GridContainer>
+            <CardBody>
+                            <ReactTable
+                                columns={[
+                                    {
+                                        Header: 'Root',
+                                        accessor: 'root',
+                                    },
+                                    {
+                                        Header: 'Name',
+                                        accessor: 'name',
+                                    },
+                                    {
+                                        Header: 'Node ID',
+                                        accessor: 'nodeId',
+                                    },
+                                    {
+                                        Header: 'Total Delegated',
+                                        accessor: 'totalStaked',
+                                    },
+                                    {
+                                        Header: 'Transaction Count',
+                                        accessor: 'transactionsPerEpoch',
+                                    },
+                                    {
+                                        Header: 'Actions',
+                                        accessor: 'actions',
+                                    },
+                                ]}
+                                data={delegationList.map((prop, key) => {
+                                    return {
+                                        id: key,
+                                        root: prop[0],
+                                        name: prop[1],
+                                        nodeId: prop[2],
+                                        totalStaked: prop[3],
+                                        transactionsPerEpoch: prop[4],
+                                        actions: (
+                                            // we've added some custom button actions
+                                            <div className="actions-right">
+                                                {/* use this button to add a like kind of action */}
+                                                {prop[0] !==
+                                                    'Loading Nodes...' && (
+                                                        <Button
+                                                            // justIcon
+                                                            // round
+                                                            // simple
+                                                            onClick={() => {
+                                                                handleDelegation({
+                                                                    name: prop[1],
+                                                                    id: prop[2],
+                                                                    totalDelegated:
+                                                                        prop[3],
+                                                                })
+                                                            }}
+                                                            color="info"
+                                                            className="delegateButton"
+                                                        >
+                                                            Delegate
+                                                        </Button>
+                                                    )}
+                                                {prop[0] ===
+                                                    'Loading Nodes...' && (
+                                                        <Button
+                                                            disabled
+                                                            onClick={() => {
+                                                                handleDelegation({
+                                                                    name: prop[1],
+                                                                    id: prop[2],
+                                                                    totalDelegated:
+                                                                        prop[3],
+                                                                })
+                                                            }}
+                                                            color="info"
+                                                            className="delegateButton"
+                                                        >
+                                                            Delegate
+                                                        </Button>
+                                                    )}
+                                            </div>
+                                        ),
+                                    }
+                                })}
+                            />
+                            </CardBody>
           </Card>
         </div>
         <Footer fluid />
