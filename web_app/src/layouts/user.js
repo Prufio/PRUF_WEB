@@ -48,11 +48,12 @@ import routes from "routes.js";
 import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { Icon } from "@material-ui/core";
+import { intToBuffer } from "arweave/node/lib/merkle";
 
 var ps;
 const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
-const STAKE_ADDRESS = "0x328C08D4cBe8933D6Ca63DfCE0194207820e8540";
-const STAKE_TKN_ADDRESS = "0x5e3c24CeaCdD288b0a89ff544713619Ba42e546B";
+const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee";
+const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2";
 
 const UTIL_ABI = [
   {
@@ -944,11 +945,6 @@ const UTIL_ABI = [
 
 const STAKE_ABI = [
   {
-    inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -1050,6 +1046,207 @@ const STAKE_ABI = [
     type: "event",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "breakStake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "claimBonus",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "renounceRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "revokeRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_stakeTier",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_min",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_max",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_interval",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_bonus",
+        type: "uint256",
+      },
+    ],
+    name: "setStakeLevels",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_utilAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_stakeAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_stakeVaultAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_rewardsVaultAddress",
+        type: "address",
+      },
+    ],
+    name: "setTokenContracts",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_stakeTier",
+        type: "uint256",
+      },
+    ],
+    name: "stakeMyTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_ERC721Contract",
+        type: "address",
+      },
+    ],
+    name: "transferERC721Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
     inputs: [],
     name: "ASSET_TXFR_ROLE",
     outputs: [
@@ -1057,6 +1254,30 @@ const STAKE_ABI = [
         internalType: "bytes32",
         name: "",
         type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "checkEligibleRewards",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1086,69 +1307,6 @@ const STAKE_ABI = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "PAUSER_ROLE",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "breakStake",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "checkEligibleRewards",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "claimBonus",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1279,24 +1437,6 @@ const STAKE_ABI = [
         type: "address",
       },
     ],
-    name: "grantRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
     name: "hasRole",
     outputs: [
       {
@@ -1306,13 +1446,6 @@ const STAKE_ABI = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pause",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1329,100 +1462,16 @@ const STAKE_ABI = [
     type: "function",
   },
   {
-    inputs: [
+    inputs: [],
+    name: "PAUSER_ROLE",
+    outputs: [
       {
         internalType: "bytes32",
-        name: "role",
+        name: "",
         type: "bytes32",
       },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
     ],
-    name: "renounceRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "revokeRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_stakeTier",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_min",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_max",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_interval",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_bonus",
-        type: "uint256",
-      },
-    ],
-    name: "setStakeLevels",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_utilAddress",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_stakeAddress",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_stakeVaultAddress",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_rewardsVaultAddress",
-        type: "address",
-      },
-    ],
-    name: "setTokenContracts",
-    outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -1462,54 +1511,6 @@ const STAKE_ABI = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_stakeTier",
-        type: "uint256",
-      },
-    ],
-    name: "stakeMyTokens",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "_ERC721Contract",
-        type: "address",
-      },
-    ],
-    name: "transferERC721Token",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "unpause",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
 ];
@@ -2407,9 +2408,7 @@ export default function Dashboard(props) {
     };
   }, []);
 
-  const refreshDash = () => {
-    
-  }
+  const refreshDash = () => {};
 
   const getAddress = (_web3) => {
     if (window.ethereum) {
@@ -2513,15 +2512,72 @@ export default function Dashboard(props) {
     });
   };
 
-  const getHeldStake = (_tkn, _addr) => {
+  const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
+
+    let currentBlock = await _web3.eth.getBlock("latest")
+
+    const getStakeIds = (bal, ids, iteration) => {
+      if(!bal) {setDelegationList([[``,``,``,``,``]]); return console.log(`Balances undefined`)}
+      if(!iteration) iteration = 0
+      if(!ids) ids = []
+
+      if (ids.length >= bal) return getStakeData (ids, [])
+
+      _tkn.tokenOfOwnerByIndex(_addr, iteration).call(async (error, result) => {
+        if (!error) {
+          console.log(result)
+          ids.push(result)
+          return getStakeIds(bal, ids, iteration + 1)
+        } else {
+          console.error(error)
+          bal--
+          return getStakeIds(bal, ids, iteration + 1)
+        }
+      })
+    }
+
+    const getStakeData = (ids, arr, iteration) => {
+      if (!iteration) iteration = 0;
+      if (ids.length <= arr.length) {
+        arr.push([``,``,``,``,``])
+        return setDelegationList(arr)
+      }
+
+      _stake.stakeInfo(ids[iteration]).call(async (error, result) => {
+        if(!error) {
+          console.log(result)
+          let amount = Number(_web3.utils.fromWei(result["0"]))
+          let timeRemaining = -(Number(result["2"]) - Number(currentBlock.timestamp))
+          let interval = Number(result["3"])
+          let bonus = Number(_web3.utils.fromWei(result["4"]))
+          _stake.checkEligibleRewards(ids[iteration]).call(async (error, result) => {
+            if(!error){
+              console.log(result)
+              // //@dev overflow date case
+              // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
+              // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
+              let intervalToYear = 365/interval
+              let apy = (bonus/amount) * intervalToYear * 100
+              let percentComplete = Number(result["1"])/10000
+              arr.push([`${ids[iteration]}`,`${apy}%`,`ü${amount}`,`ü${_web3.utils.fromWei(result["0"])}`,`~${percentComplete}%`])
+              getStakeData(ids, arr, iteration + 1)
+              
+            }
+          })
+        } else {
+          console.error(error)
+        }
+      })
+    }
+
     _tkn.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
-        console.log(result)
+        getStakeIds(result)
       } else {
-        console.error(error)
+        console.error(error);
       }
-    })
-  }
+    });
+  };
 
   const sidebarMinimize = () => {
     setMiniActive(!miniActive);
@@ -2549,12 +2605,12 @@ export default function Dashboard(props) {
       setIsRefreshingEther(false);
     });
 
-    getHeldStake(_stakeTkn.methods, _addr)
+    getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
   };
 
   const newStake = () => {
-    swal("Here we build a new stake, step-by-step!")
-  }
+    swal("Here we build a new stake, step-by-step!");
+  };
 
   return (
     <div className={userClasses.wrapper}>
@@ -2777,7 +2833,7 @@ export default function Dashboard(props) {
                     <Icon
                       className="MLBGradientRefresh"
                       onClick={() => {
-                        refreshDash()
+                        refreshDash();
                       }}
                     >
                       <Refresh />
@@ -2802,7 +2858,7 @@ export default function Dashboard(props) {
                     accessor: "id",
                   },
                   {
-                    Header: "Stake Level",
+                    Header: "Staking Yield (APY)",
                     accessor: "lvl",
                   },
                   {
@@ -2814,7 +2870,7 @@ export default function Dashboard(props) {
                     accessor: "rewards",
                   },
                   {
-                    Header: "Completion Date",
+                    Header: "Unlock Progress",
                     accessor: "date",
                   },
                   {
