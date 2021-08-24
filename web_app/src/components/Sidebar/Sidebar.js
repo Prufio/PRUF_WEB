@@ -592,12 +592,12 @@ class Sidebar extends React.Component {
                   )}
 
                   {addr === undefined && bgColor !== "white" && (
-                    <h5 className="addressText">bridge Address Unavailable</h5>
+                    <h5 className="addressText">User Address Unavailable</h5>
                   )}
 
                   {addr === undefined && bgColor === "white" && (
                     <h5 className="addressTextBlack">
-                      bridge Address Unavailable
+                      User Address Unavailable
                     </h5>
                   )}
                 </>
@@ -704,12 +704,12 @@ class Sidebar extends React.Component {
                   )}
 
                   {addr === undefined && bgColor !== "white" && (
-                    <h5 className="addressText">bridge Address Unavailable</h5>
+                    <h5 className="addressText">User Address Unavailable</h5>
                   )}
 
                   {addr === undefined && bgColor === "white" && (
                     <h5 className="addressTextBlack">
-                      bridge Address Unavailable
+                      User Address Unavailable
                     </h5>
                   )}
                 </>
@@ -748,7 +748,7 @@ class Sidebar extends React.Component {
       });
     var brand = (
       <div className={logoClasses}>
-        <a href="/#/bridge/home" className={logoMini}>
+        <a href="/#/stake" className={logoMini}>
           {bgColor !== "white" && (
             <img src={pruftoken} alt="logo" className={classes.img} />
           )}
@@ -756,7 +756,7 @@ class Sidebar extends React.Component {
             <img src={pruftokenblk} alt="logo" className={classes.img} />
           )}
         </a>
-        <a href="/#/bridge/home" className={logoNormal}>
+        <a href="/#/stake" className={logoNormal}>
           PRüF DASHBOARD
         </a>
       </div>

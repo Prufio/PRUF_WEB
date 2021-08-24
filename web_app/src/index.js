@@ -26,11 +26,11 @@ ReactDOM.render(
   <CookiesProvider>
     <HashRouter>
       <Switch>
-        <Route path="/bridge" component={AdminLayout} />
+        <Route path="/stake" component={AdminLayout} />
         {
           /* fullUrl ? <Redirect from="/" to={fullUrl} /> :   */ <Redirect
             from="/"
-            to="/bridge"
+            to="/stake"
           />
         }
       </Switch>

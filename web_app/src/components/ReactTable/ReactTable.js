@@ -94,7 +94,7 @@ function Table({ columns, data }) {
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter,
+      Filter: <></>,
     }),
     []
   );

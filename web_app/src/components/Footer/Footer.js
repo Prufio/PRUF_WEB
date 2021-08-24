@@ -38,7 +38,7 @@ export default function Footer(props) {
 
   const copy2 = () => {
     document.body.style.cursor = 'auto'
-    window.location.href = "/#/bridge/counter"
+    window.location.href = "/#/stake/counter"
     setCounter(0)
   }
 

@@ -23,6 +23,7 @@ import {
   DashboardOutlined,
   InfoOutlined,
   Refresh,
+  SettingsBackupRestore,
 } from "@material-ui/icons";
 
 // core components
@@ -49,6 +50,2252 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import { Icon } from "@material-ui/core";
 
 var ps;
+const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
+const STAKE_ADDRESS = "0x328C08D4cBe8933D6Ca63DfCE0194207820e8540";
+const STAKE_TKN_ADDRESS = "0x5e3c24CeaCdD288b0a89ff544713619Ba42e546B";
+
+const UTIL_ABI = [
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "Approval",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "previousAdminRole",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "newAdminRole",
+        type: "bytes32",
+      },
+    ],
+    name: "RoleAdminChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleGranted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleRevoked",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "Snapshot",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "Transfer",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_paymentAddress",
+        type: "address",
+      },
+    ],
+    name: "AdminSetSharesAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "DEFAULT_ADMIN_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MINTER_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "PAUSER_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "PAYABLE_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "SNAPSHOT_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "TRUSTED_AGENT_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_key",
+        type: "uint256",
+      },
+    ],
+    name: "adminKillTrustedAgent",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+    ],
+    name: "allowance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "approve",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "snapshotId",
+        type: "uint256",
+      },
+    ],
+    name: "balanceOfAt",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "burn",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "burnFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "cap",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "decimals",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "subtractedValue",
+        type: "uint256",
+      },
+    ],
+    name: "decreaseAllowance",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+    ],
+    name: "getRoleAdmin",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "getRoleMember",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+    ],
+    name: "getRoleMemberCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "hasRole",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "addedValue",
+        type: "uint256",
+      },
+    ],
+    name: "increaseAllowance",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_addr",
+        type: "address",
+      },
+    ],
+    name: "isColdWallet",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "mint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "name",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_senderAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_rootAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_rootPrice",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_NTHaddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_NTHprice",
+        type: "uint256",
+      },
+    ],
+    name: "payForService",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "renounceRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "revokeRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "setColdWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "symbol",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "takeSnapshot",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "snapshotId",
+        type: "uint256",
+      },
+    ],
+    name: "totalSupplyAt",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "recipient",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "transfer",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "recipient",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "transferFrom",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_addr",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "trustedAgentBurn",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "trustedAgentTransfer",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unSetColdWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+const STAKE_ABI = [
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "previousAdminRole",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "newAdminRole",
+        type: "bytes32",
+      },
+    ],
+    name: "RoleAdminChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleGranted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleRevoked",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "ASSET_TXFR_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "CONTRACT_ADMIN_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "DEFAULT_ADMIN_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "PAUSER_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "breakStake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "checkEligibleRewards",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "claimBonus",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "eligibleRewards",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+    ],
+    name: "getRoleAdmin",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "getRoleMember",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+    ],
+    name: "getRoleMemberCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_stakeTier",
+        type: "uint256",
+      },
+    ],
+    name: "getStakeLevel",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "hasRole",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "renounceRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "revokeRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_stakeTier",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_min",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_max",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_interval",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_bonus",
+        type: "uint256",
+      },
+    ],
+    name: "setStakeLevels",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_utilAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_stakeAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_stakeVaultAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_rewardsVaultAddress",
+        type: "address",
+      },
+    ],
+    name: "setTokenContracts",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "stakeInfo",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_stakeTier",
+        type: "uint256",
+      },
+    ],
+    name: "stakeMyTokens",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_ERC721Contract",
+        type: "address",
+      },
+    ],
+    name: "transferERC721Token",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+const STAKE_TKN_ABI = [
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "approved",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "Approval",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "approved",
+        type: "bool",
+      },
+    ],
+    name: "ApprovalForAll",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Paused",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "previousAdminRole",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "newAdminRole",
+        type: "bytes32",
+      },
+    ],
+    name: "RoleAdminChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleGranted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleRevoked",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "Transfer",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "Unpaused",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "CONTRACT_ADMIN_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "DEFAULT_ADMIN_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "MINTER_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "PAUSER_ROLE",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "approve",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "baseURI",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "burn",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "burnStakeToken",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "getApproved",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+    ],
+    name: "getRoleAdmin",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "getRoleMember",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+    ],
+    name: "getRoleMemberCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "hasRole",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+    ],
+    name: "isApprovedForAll",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_recipientAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "mintStakeToken",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "name",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "ownerOf",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "paused",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "renounceRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "revokeRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "safeTransferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
+      },
+    ],
+    name: "safeTransferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "approved",
+        type: "bool",
+      },
+    ],
+    name: "setApprovalForAll",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes4",
+        name: "interfaceId",
+        type: "bytes4",
+      },
+    ],
+    name: "supportsInterface",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "symbol",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "tokenByIndex",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "tokenOfOwnerByIndex",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "tokenURI",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "transferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
 
 const useStyles = makeStyles(styles);
 const userStyles = makeStyles(userStyle);
@@ -80,7 +2327,9 @@ export default function Dashboard(props) {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [rootManager, setRootManager] = React.useState();
   const [redeemList, setRedeemList] = React.useState([]);
-  const [delegationList, setDelegationList] = React.useState([['Loading Nodes...', '~', '~', '~']]);
+  const [delegationList, setDelegationList] = React.useState([
+    ["Loading Balances...", "~", "~", "~"],
+  ]);
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
@@ -89,6 +2338,8 @@ export default function Dashboard(props) {
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   const [splitter, setSplitter] = React.useState({});
   const [util, setUtil] = React.useState({});
+  const [stake, setStake] = React.useState({});
+  const [stakeTkn, setStakeTkn] = React.useState({});
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
@@ -105,47 +2356,6 @@ export default function Dashboard(props) {
 
   // ref for main panel div
   const mainPanel = React.createRef();
-
-  const Util_Child_ADDRESS = "0xAdf72D32E511eE00c6E0FF5D62Cd5C7C40A6aDEA",
-    Util_Parent_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538",
-    Root_Mgr_ADDRESS = "0xA0c68C638235ee32657e8f720a23ceC1bFc77C77",
-    ERC20_Predicate_ADDRESS = "0x40ec5B33f54e0E8A33A975908C5BA1c14e5BbbDf",
-    Child_Mgr_ADDRESS = "0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa";
-
-  const generateStakingDash = () => {
-    let component = [];
-    let data = JSON.parse(data);
-
-    component.push(
-      <GridItem xs={12} sm={6} md={6} lg={3}>
-        <Card chart className={classes.cardHover}>
-        </Card>
-      </GridItem>
-    );
-    //}
-
-    return component;
-    // eslint-disable-next-line react/prop-types
-  };
-  // const mainWeb3 = new Web3(
-  //   "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
-  // );
-  // const maticWeb3 = new Web3(
-  //   "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518"
-  // );
-
-  if (!window.maticPOSClient) {
-    const maticPOSClient = new MaticPOSClient({
-      network: "mainnet",
-      version: "v1",
-      parentProvider:
-        "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959",
-      maticProvider:
-        "https://rpc-mainnet.maticvigil.com/v1/ccb543453ee1affc879932231adcc00adb350518",
-    });
-    console.log("Setting POSClient");
-    window.maticPOSClient = maticPOSClient;
-  }
 
   if (window.ethereum) {
     window.ethereum.on("chainChanged", (chainId) => {
@@ -197,261 +2407,9 @@ export default function Dashboard(props) {
     };
   }, []);
 
-  const checkDepositStatus = async (
-    userAccount,
-    rootToken,
-    depositAmount,
-    childChainManagerProxy
-  ) => {
-    const ws = new WebSocket(
-      /*"wss://rpc-mumbai.maticvigil.com/ws/v1/ccb543453ee1affc879932231adcc00adb350518"*/ "wss://rpc-mainnet.matic.network"
-    );
-
-    return new Promise((resolve, reject) => {
-      ws.onopen = () => {
-        ws.send(
-          `{"id": 1, "method": "eth_subscribe", "params": ["newDeposits", {"Contract": ${childChainManagerProxy}}]}`
-        );
-
-        ws.onmessage = (msg) => {
-          const parsedMsg = JSON.parse(msg);
-          console.log(parsedMsg);
-          if (
-            parsedMsg &&
-            parsedMsg.params &&
-            parsedMsg.params.result &&
-            parsedMsg.params.result.Data
-          ) {
-            const fullData = parsedMsg.params.result.Data;
-            const { 0: syncType, 1: syncData } = web3.eth.abi.decodeParameters(
-              ["bytes32", "bytes"],
-              fullData
-            );
-
-            // check if sync is of deposit type (keccak256("DEPOSIT"))
-            const depositType =
-              "0x87a7811f4bfedea3d341ad165680ae306b01aaeacc205d227629cf157dd9f821";
-            if (syncType.toLowerCase() === depositType.toLowerCase()) {
-              const {
-                0: userAddress,
-                1: rootTokenAddress,
-                2: depositData,
-              } = web3.eth.abi.decodeParameters(
-                ["address", "address", "bytes"],
-                syncData
-              );
-
-              // depositData can be further decoded to get amount, tokenId etc. based on token type
-              // For ERC20 tokens
-              const { 0: amount } = web3.eth.abi.decodeParameters(
-                ["uint256"],
-                depositData
-              );
-              if (
-                userAddress.toLowerCase() === userAccount.toLowerCase() &&
-                rootToken.toLowerCase() === rootTokenAddress.toLowerCase() //&&
-                //depositAmount === amount
-              ) {
-                resolve(true);
-              }
-            }
-          }
-        };
-
-        ws.onerror = (e) => {
-          console.log("ERROR", e);
-          reject(false);
-        };
-
-        ws.onclose = (e) => {
-          console.log("CLOSE", e);
-          reject(false);
-        };
-      };
-    });
-  };
-
-  const getMaticWithdrawals = (_web3, _addr) => {
-    var txReq = new XMLHttpRequest();
-    //txReq.open( "GET", `https://api-testnet.polygonscan.com/api?module=account&action=tokentx&address=${addr}&startblock=0&endblock=19999999&sort=asc`, true ) // false for synchronous request
-    txReq.open(
-      "GET",
-      `https://api.polygonscan.com/api?module=account&action=txlist&address=${_addr}&startblock=16385793&endblock=99999999&sort=asc&apikey=${apiSecret}`,
-      true
-    );
-    txReq.send(null);
-    let erc20Req = new XMLHttpRequest();
-    erc20Req.open(
-      "GET",
-      `https://api.polygonscan.com/api?module=account&action=tokentx&address=${_addr}&startblock=0&endblock=19999999&sort=asc&apikey=${apiSecret}`,
-      true
-    );
-
-    txReq.onload = async () => {
-      let txns = JSON.parse(txReq.responseText).result,
-        withdrawals = [];
-      console.log({ txns: txns });
-      txns.forEach((e) => {
-        //console.log({methodId: e.input.substring(2, 10)})
-        if (
-          e.input.substring(2, 10) === "2e1a7d4d" &&
-          e.to.toLowerCase() === Util_Child_ADDRESS.toLowerCase()
-        ) {
-          if (
-            cookies[`beenRedeemed${_addr}`] &&
-            !cookies[`beenRedeemed${_addr}`].includes(e.hash)
-          ) {
-            withdrawals.push(e.hash);
-          } else if (
-            !cookies[`beenRedeemed${_addr}`] ||
-            cookies[`beenRedeemed${_addr}`] === undefined
-          ) {
-            withdrawals.push(e.hash);
-          } else console.log("skipped cached tx");
-        }
-      });
-
-      //web3.eth.abi.decodeParameters(Util_Child_ABI, "0x2e1a7d4d00000000000000000000000000000000000000000000001dd0c885f9a0d80000")
-      console.log({ withdrawals: withdrawals });
-      erc20Req.send(null);
-
-      erc20Req.onload = () => {
-        console.log({ rawERC20: JSON.parse(erc20Req.responseText) });
-        let erc20Txs = JSON.parse(erc20Req.responseText).result.reverse();
-        console.log({ erc20Txs: erc20Txs });
-        checkTxs(
-          _web3,
-          _addr,
-          JSON.parse(JSON.stringify(withdrawals)),
-          JSON.parse(JSON.stringify(erc20Txs))
-        );
-      };
-    };
-  };
-
-  const checkTxs = async (
-    _web3,
-    _addr,
-    withdrawals,
-    erc20Txs,
-    discards,
-    iteration
-  ) => {
-    console.log(cookies);
-    //console.trace("Running checkTxs")
-    if (!withdrawals || withdrawals.length < 1) {
-      setFindingTxs(false);
-      if (discards && discards.length > 0) {
-        discards.pop();
-        setCookie(`beenRedeemed${_addr}`, discards);
-        console.log({ discards: discards });
-      }
-      console.log("Bad or empty props", { withdrawList: withdrawals });
-      return setRedeemList([]);
-    }
-
-    //console.log(cookies[`beenRedeemed${_addr}`])
-
-    if (
-      !discards &&
-      cookies[`beenRedeemed${_addr}`] &&
-      cookies[`beenRedeemed${_addr}`] !== "undefined"
-    ) {
-      console.log("Discards undefined and set full");
-      discards = JSON.parse(JSON.stringify(cookies[`beenRedeemed${_addr}`]));
-    } else if (!discards) {
-      console.log("Discards undefined but set empty");
-      console.log({ Cookies: cookies[`beenRedeemed${_addr}`] });
-      discards = [];
-    }
-    if (!iteration) iteration = 0;
-
-    //console.log(discards)
-
-    if (iteration >= withdrawals.length) {
-      console.log("Exit with redeemable tx(s)", withdrawals.length);
-      setFindingTxs(false);
-      setRedeemAmount();
-      if (discards && discards.length > 0) {
-        discards.pop();
-        setCookie(`beenRedeemed${_addr}`, discards);
-        console.log({ discards: discards });
-      }
-      for (let tx of erc20Txs) {
-        if (tx.hash === withdrawals[withdrawals.length - 1]) {
-          setRedeemAmount(_web3.utils.fromWei(tx.value));
-          console.log(
-            `Match found for erc20tx. Setting redeem val to ${_web3.utils.fromWei(
-              tx.value
-            )}`
-          );
-        } else {
-          console.log("No Dice...");
-        }
-        return setRedeemList(withdrawals);
-      }
-    } else {
-      withdrawals.forEach((e) => {
-        if (cookies[`beenRedeemed${_addr}`].includes(e)) {
-          withdrawals.shift();
-        }
-        checkTxs(_web3, _addr, withdrawals, erc20Txs, discards, iteration + 1);
-      });
-    }
-  };
-
-  const redeem = (list) => {
-    list = JSON.parse(JSON.stringify(list));
-    console.log(currentChain, redeemList.length, findingTxs);
-    console.log(list);
-    if (list.length > 0) {
-      let current = list.shift();
-      console.log(current);
-      setRedeeming(true);
-      window.maticPOSClient
-        .exitERC20(current, { from: addr, encodeAbi: true })
-        .then(async (e) => {
-          console.log(currentChain, redeemList.length, findingTxs);
-          await web3.eth
-            .sendTransaction({
-              from: addr,
-              to: Root_Mgr_ADDRESS,
-              data: e.data,
-            })
-            .on("receipt", () => {
-              setRedeeming(false);
-              console.log("Got tokens");
-              return refreshBalances("both", web3, addr);
-            })
-            .on("error", () => {
-              setRedeeming(false);
-              console.log("Error redeeming");
-            })
-            .catch((e) => {
-              console.log(e.message);
-              if (
-                e.message.includes("Burn transaction has not been checkpointed")
-              ) {
-                console.log("Burn transaction has not yet been checkpointed");
-                swal({
-                  title: "Pending POLYGON -> ETH swap detected.",
-                  text: `TxID: ${withdrawals[iteration]}\n\n Tokens will be available to redeem once it has been checkpointed on Polygon. This may take a while.`,
-                  icon: "warning",
-                  button: "Close",
-                });
-              } else if (e.message.includes("EXIT_ALREADY_PROCESSED")) {
-                console.log("Found already redeemed");
-                if (!discards.includes(withdrawals[iteration]))
-                  discards.push(withdrawals[iteration]);
-                console.log({ discards: discards });
-              } else {
-                console.error("SOMETHING WENT WRONG: ", e.message);
-              }
-              setRedeeming(false);
-            });
-        });
-    } else return console.log("Done redeeming");
-  };
+  const refreshDash = () => {
+    
+  }
 
   const getAddress = (_web3) => {
     if (window.ethereum) {
@@ -485,7 +2443,7 @@ export default function Dashboard(props) {
   };
 
   const getActiveRoute = (routes) => {
-    let activeRoute = "PRüF / Matic Token Bridge";
+    let activeRoute = "PRüF Staking";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
         let collapseActiveRoute = getActiveRoute(routes[i].views);
@@ -508,11 +2466,11 @@ export default function Dashboard(props) {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
-      if (prop.layout === "/split") {
+      if (prop.layout === "/stake") {
         return (
           <Route
             path={prop.layout + prop.path}
-            render={() => <prop.component splitter={splitter.methods} />}
+            render={() => <prop.component />}
             key={key}
           />
         );
@@ -523,8 +2481,7 @@ export default function Dashboard(props) {
   };
 
   const refreshBalances = (job, _web3, _addr) => {
-    console.log({ redeemed: cookies[`beenRedeemed${_addr}`] });
-    if (!util.methods)
+    if (!util.balanceOf)
       return swal({
         title: "Something isn't right! Try refreshing the page.",
         icon: "warning",
@@ -546,7 +2503,7 @@ export default function Dashboard(props) {
     setIsRefreshingPruf(true);
     setFindingTxs(true);
     if (currentChain === "Ethereum") getMaticWithdrawals(_web3, _addr);
-    util.methods.balanceOf(_addr).call(async (error, result) => {
+    util.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
           Number(web3.utils.fromWei(result)).toFixed(5).toString()
@@ -555,6 +2512,16 @@ export default function Dashboard(props) {
       setIsRefreshingPruf(false);
     });
   };
+
+  const getHeldStake = (_tkn, _addr) => {
+    _tkn.balanceOf(_addr).call(async (error, result) => {
+      if (!error) {
+        console.log(result)
+      } else {
+        console.error(error)
+      }
+    })
+  }
 
   const sidebarMinimize = () => {
     setMiniActive(!miniActive);
@@ -568,74 +2535,26 @@ export default function Dashboard(props) {
 
   const setUpEnvironment = (_web3, _addr) => {
     console.log("setting up environment");
-    if (!cookies[`beenRedeemed${_addr}`]) setCookie(`beenRedeemed${_addr}`, []);
-
-    // let _rootManager = new _web3.eth.Contract(Root_Mgr_ABI, Root_Mgr_ADDRESS);
-    // setRootManager(_rootManager);
-
-    // _web3.eth.net.getNetworkType().then((e) => {
-    //   let _util;
-    //   if (e === "private") {
-    //     _web3.eth.net.getId().then((e) => {
-    //       if (e === 137) {
-    //         setTwinChain("Ethereum");
-    //         setCurrentChain("Polygon");
-
-    //         _util = new _web3.eth.Contract(Util_Child_ABI, Util_Child_ADDRESS);
-    //         setUtil(_util);
-    //         setIsRefreshingPruf(true);
-    //         _util.methods.balanceOf(_addr).call(async (error, result) => {
-    //           if (!error) {
-    //             setPrufBalance(
-    //               Number(_web3.utils.fromWei(result)).toFixed(5).toString()
-    //             );
-    //           }
-    //           setIsRefreshingPruf(false);
-    //         });
-    //       } else {
-    //         swal({
-    //           title: "Please connect to the Ethereum or Polygon main net",
-    //           icon: "warning",
-    //           button: "Close",
-    //         });
-    //       }
-    //     });
-    //   } else if (e === "main") {
-    //     setTwinChain("Polygon");
-    //     setCurrentChain("Ethereum");
-
-    //     _util = new _web3.eth.Contract(Util_Parent_ABI, Util_Parent_ADDRESS);
-    //     setUtil(_util);
-    //     setIsRefreshingPruf(true);
-    //     setFindingTxs(true);
-    //     getMaticWithdrawals(_web3, _addr);
-    //     _util.methods.balanceOf(_addr).call(async (error, result) => {
-    //       if (!error) {
-    //         setPrufBalance(
-    //           Number(_web3.utils.fromWei(result)).toFixed(5).toString()
-    //         );
-    //       }
-    //       setIsRefreshingPruf(false);
-    //     });
-    //   } else {
-    //     setTwinChain("Polygon");
-    //     setCurrentChain("Ethereum");
-    //     swal({
-    //       title: `You are connected to the network '${e}', please connect to the Ethereum or Polygon mainnet`,
-    //       icon: "warning",
-    //       button: "Close",
-    //     });
-    //   }
-    // });
-    // console.log("Getting things set up...");
     setIsRefreshingEther(true);
+    let _util = new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
+    let _stake = new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
+    let _stakeTkn = new _web3.eth.Contract(STAKE_TKN_ABI, STAKE_TKN_ADDRESS);
+
+    setStake(_stake.methods);
+    setStakeTkn(_stakeTkn.methods);
+    setUtil(_util.methods);
+
     _web3.eth.getBalance(_addr).then(async (e) => {
       setEtherBalance(Number(_web3.utils.fromWei(e)).toFixed(5).toString());
       setIsRefreshingEther(false);
     });
+
+    getHeldStake(_stakeTkn.methods, _addr)
   };
 
-  //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
+  const newStake = () => {
+    swal("Here we build a new stake, step-by-step!")
+  }
 
   return (
     <div className={userClasses.wrapper}>
@@ -858,8 +2777,7 @@ export default function Dashboard(props) {
                     <Icon
                       className="MLBGradientRefresh"
                       onClick={() => {
-                        window.replaceAssetData.refreshAssets = true;
-                        window.dispatchEvent(props.refresh);
+                        refreshDash()
                       }}
                     >
                       <Refresh />
@@ -877,89 +2795,95 @@ export default function Dashboard(props) {
               </h3>
             )}
             <CardBody>
-                            <ReactTable
-                                columns={[
-                                    {
-                                        Header: 'Root',
-                                        accessor: 'root',
-                                    },
-                                    {
-                                        Header: 'Name',
-                                        accessor: 'name',
-                                    },
-                                    {
-                                        Header: 'Node ID',
-                                        accessor: 'nodeId',
-                                    },
-                                    {
-                                        Header: 'Total Delegated',
-                                        accessor: 'totalStaked',
-                                    },
-                                    {
-                                        Header: 'Transaction Count',
-                                        accessor: 'transactionsPerEpoch',
-                                    },
-                                    {
-                                        Header: 'Actions',
-                                        accessor: 'actions',
-                                    },
-                                ]}
-                                data={delegationList.map((prop, key) => {
-                                    return {
-                                        id: key,
-                                        root: prop[0],
-                                        name: prop[1],
-                                        nodeId: prop[2],
-                                        totalStaked: prop[3],
-                                        transactionsPerEpoch: prop[4],
-                                        actions: (
-                                            // we've added some custom button actions
-                                            <div className="actions-right">
-                                                {/* use this button to add a like kind of action */}
-                                                {prop[0] !==
-                                                    'Loading Nodes...' && (
-                                                        <Button
-                                                            // justIcon
-                                                            // round
-                                                            // simple
-                                                            onClick={() => {
-                                                                handleDelegation({
-                                                                    name: prop[1],
-                                                                    id: prop[2],
-                                                                    totalDelegated:
-                                                                        prop[3],
-                                                                })
-                                                            }}
-                                                            color="info"
-                                                            className="delegateButton"
-                                                        >
-                                                            Delegate
-                                                        </Button>
-                                                    )}
-                                                {prop[0] ===
-                                                    'Loading Nodes...' && (
-                                                        <Button
-                                                            disabled
-                                                            onClick={() => {
-                                                                handleDelegation({
-                                                                    name: prop[1],
-                                                                    id: prop[2],
-                                                                    totalDelegated:
-                                                                        prop[3],
-                                                                })
-                                                            }}
-                                                            color="info"
-                                                            className="delegateButton"
-                                                        >
-                                                            Delegate
-                                                        </Button>
-                                                    )}
-                                            </div>
-                                        ),
-                                    }
-                                })}
-                            />
-                            </CardBody>
+              <ReactTable
+                columns={[
+                  {
+                    Header: "Stake ID",
+                    accessor: "id",
+                  },
+                  {
+                    Header: "Stake Level",
+                    accessor: "lvl",
+                  },
+                  {
+                    Header: "Delegated Balance",
+                    accessor: "balance",
+                  },
+                  {
+                    Header: "Rewards Balance",
+                    accessor: "rewards",
+                  },
+                  {
+                    Header: "Completion Date",
+                    accessor: "date",
+                  },
+                  {
+                    Header: "View",
+                    accessor: "actions",
+                  },
+                ]}
+                data={delegationList.map((prop, key) => {
+                  return {
+                    id: prop[0],
+                    lvl: prop[1],
+                    balance: prop[2],
+                    rewards: prop[3],
+                    date: prop[4],
+                    actions: (
+                      // we've added some custom button actions
+                      <div className="actions-right">
+                        {/* use this button to add a like kind of action */}
+                        {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
+                          <Button
+                            // justIcon
+                            // round
+                            // simple
+                            onClick={() => {
+                              newStake({
+                                name: prop[1],
+                                id: prop[2],
+                                totalDelegated: prop[3],
+                              });
+                            }}
+                            color="info"
+                            className="delegateButton"
+                          >
+                            View
+                          </Button>
+                        )}
+                        {prop[0] === "" && (
+                          <Button
+                            onClick={() => {
+                              newStake({
+                                name: prop[1],
+                                id: prop[2],
+                                totalDelegated: prop[3],
+                              });
+                            }}
+                            color="info"
+                            className="delegateButton"
+                          >
+                            New Stake
+                          </Button>
+                        )}
+                        {prop[0] === "Loading Balances..." && (
+                          <Button
+                            disabled
+                            onClick={() => {
+                              newStake();
+                            }}
+                            color="info"
+                            className="delegateButton"
+                          >
+                            New Stake
+                          </Button>
+                        )}
+                      </div>
+                    ),
+                  };
+                })}
+              />
+            </CardBody>
           </Card>
         </div>
         <Footer fluid />
