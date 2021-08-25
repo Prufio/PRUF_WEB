@@ -61,10 +61,11 @@ import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle
 import { Icon } from "@material-ui/core";
 import { isConstructorDeclaration } from "typescript";
 
-var ps;
-const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
-const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee";
-const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2";
+var ps
+
+const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381"
+const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee"
+const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2"
 
 const UTIL_ABI = ABIs.UTIL_ABI
 const STAKE_ABI = ABIs.STAKE_ABI
