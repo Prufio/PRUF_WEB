@@ -3373,7 +3373,7 @@ export default function Dashboard(props) {
                                 viewStake(key);
                               }}
                               color="info"
-                              className="delegateButton"
+                              className="MLBGradient"
                             >
                               View
                             </Button>
