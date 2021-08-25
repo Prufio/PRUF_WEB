@@ -2608,7 +2608,7 @@ export default function Dashboard(props) {
                 // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
                 let intervalToYear = 365 / interval;
-                let apy = (bonus / amount * 100) * intervalToYear;
+                let apy = (bonus / amount) * 100 * intervalToYear;
                 let percentComplete = Number(result["1"]) / 10000;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
@@ -2815,7 +2815,7 @@ export default function Dashboard(props) {
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">APY: {props.apy}</h5>
                 </div>
-                </div>
+              </div>
             </AccordionDetails>
           </Accordion>
         );
@@ -2891,28 +2891,23 @@ export default function Dashboard(props) {
         },
       },
     }).then((value) => {
-
       if (typeof value !== "object" || value === null) {
         return;
-      } 
-      
+      }
+
       let trues = [];
-      let vals = Object.values(value)
+      let vals = Object.values(value);
 
-      vals.forEach(e=>{
-        if (e === true) trues.push(true)
-      })
+      vals.forEach((e) => {
+        if (e === true) trues.push(true);
+      });
 
-      if (
-        trues.length > 1
-      ) {
+      if (trues.length > 1) {
         return swalReact({
           icon: "warning",
           text: "Please select only 1 option!",
         }).then(() => newStake());
-      } else if (
-        trues.length === 0
-      ) {
+      } else if (trues.length === 0) {
         return swalReact({
           icon: "warning",
           text: "Please select an option!",
@@ -2922,14 +2917,26 @@ export default function Dashboard(props) {
         swalReact({
           content: (
             <Card className="delegationCard">
-              <h4 className="delegationTitle">Delegate Funds</h4>
+              <h4 className="delegationTitle">Stake Details</h4>
+              <div className="left-margin">
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    Lock Duration: {tierOptions[Number(id) - 1].interval} Days
+                  </h5>
+                </div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    APY: {tierOptions[Number(id) - 1].apy}%
+                  </h5>
+                </div>
+              </div>
               <h5 className="delegateText">
-                Now, input the amount you want to stake:
+                Input the amount you want to stake:
               </h5>
               <CustomInput
-                labelText={`Minimum: ${
-                  tierOptions[Number(id) - 1].min
-                }`}
+                labelText={`Minimum: ${tierOptions[Number(id) - 1].min}`}
                 id="CI1"
                 inputProps={{
                   type: "number",
