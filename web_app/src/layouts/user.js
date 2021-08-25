@@ -371,6 +371,7 @@ export default function Dashboard(props) {
                 let intervalToYear = 365 / interval;
                 let apy = (bonus / amount * 100) * intervalToYear;
                 let percentComplete = timeElapsed / interval * 100;
+                let timeTilRedeem = Number(result["1"]) / 10000;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
                   `${ids[iteration]}`,
@@ -383,6 +384,7 @@ export default function Dashboard(props) {
                   percentComplete,
                   amount,
                   rewards,
+                  timeTilRedeem
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -442,9 +444,9 @@ export default function Dashboard(props) {
   const claimRewards = (index, id) => {
     console.log((delegationList[index][7] / 100) * delegationList[index][5]);
     let isReady =
-      (delegationList[index][7] / 100) * delegationList[index][5] > 1;
+      (delegationList[index][10] / 100) * delegationList[index][5] > 1;
     let timeLeft =
-      24 - (delegationList[index][7] / 100) * delegationList[index][5] * 24;
+      24 - (delegationList[index][10] / 100) * delegationList[index][5] * 24;
     let timeUnit = "hours"
     timeLeft = timeLeft.toFixed(2);
 
@@ -473,6 +475,21 @@ export default function Dashboard(props) {
       });
     }
   };
+
+  const breakStake = (id) => {
+    if (!id) return
+
+    stake
+        .breakStake(id)
+        .send({ from: addr })
+        .on("reciept", () => {
+          swalReact({
+            icon: "success",
+            text: `Successfully broke stake!`,
+          });
+          refreshDash()
+        });
+  }
 
   const viewStake = (index) => {
     console.log("view me!", index);
@@ -507,6 +524,10 @@ export default function Dashboard(props) {
             {`
                 Unlock percent complete: ${delegationList[index][4]}
               `}
+              {Number(delegationList[index][4].substring(0, delegationList[index][4].length-1)) > 10 
+              ? <a onClick = {()=>{return breakStake(String(delegationList[index][0]))}}> Withdraw Stake  </a>
+              : <></>
+              }
           </h5>
         </Card>
       ),
@@ -517,7 +538,7 @@ export default function Dashboard(props) {
           className: "delegationButtonBack",
         },
         confirm: {
-          text: "Redeem Rewards",
+          text: "Redeem Rewards 💰",
           value: "Redeem",
           className: "delegationButtonBack",
         },
@@ -846,7 +867,7 @@ export default function Dashboard(props) {
                   {prufBalance ? (
                     <h3 className={classes.cardTitle}>
                       <>
-                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                        {"ü"}{String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
                       </>
                     </h3>
                   ) : (
@@ -936,10 +957,10 @@ export default function Dashboard(props) {
                   </CardIcon>
                   <p
                     className={classes.cardCategory}
-                  >{`Total Redeemable Rewards`}</p>
+                  >{`Current Reward Pool`}</p>
                   {totalRewards ? (
                     <h3 className={classes.cardTitle}>
-                      <>{String(totalRewards)} </>
+                      <>{"ü"}{String(totalRewards)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
@@ -1029,7 +1050,7 @@ export default function Dashboard(props) {
                   <p className={classes.cardCategory}>{`Total Staked`}</p>
                   {totalStaked ? (
                     <h3 className={classes.cardTitle}>
-                      <>{String(totalStaked)} </>
+                      <>{"ü"}{String(totalStaked)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
@@ -1147,23 +1168,23 @@ export default function Dashboard(props) {
                 <ReactTable
                   columns={[
                     {
-                      Header: "Stake ID",
+                      Header: "Stake ID #️⃣",
                       accessor: "id",
                     },
                     {
-                      Header: "Staking Yield (APY)",
+                      Header: "Staking Yield (APY) 📈",
                       accessor: "lvl",
                     },
                     {
-                      Header: "Delegated Balance",
+                      Header: "Delegated Balance 🏛️",
                       accessor: "balance",
                     },
                     {
-                      Header: "Rewards Balance",
+                      Header: "Rewards Balance 🎁",
                       accessor: "rewards",
                     },
                     {
-                      Header: "Unlock Progress",
+                      Header: "Unlock Progress ⏳",
                       accessor: "date",
                     },
                     {
