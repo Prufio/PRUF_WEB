@@ -22,6 +22,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   Cached,
   DashboardOutlined,
+  FiberManualRecordTwoTone,
   InfoOutlined,
   Refresh,
   SettingsBackupRestore,
@@ -2798,33 +2799,28 @@ export default function Dashboard(props) {
                       (isChecked[`chk${props.id}`] =
                         !isChecked[`chk${props.id}`])
                     }
+                    classes={{
+                      checked: classes.checked,
+                      root: classes.checkRoot,
+                    }}
                   />
                 }
                 label={`Tier ${props.id}`}
               />
             </AccordionSummary>
             <AccordionDetails>
-              {/* <Typography color="textSecondary">
-                {`
-                  Minimum allocation: ${props.min}
-                  `}
-              </Typography>
-              <Typography color="textSecondary">
-                {`
-                  Maximum allocation: ${props.max}
-                  `}
-              </Typography> */}
-              <Typography color="textSecondary">
-                {`
-                  Lock duration: ${props.interval} days
-                  `}
-              </Typography>
-              <br />
-              <Typography color="textSecondary">
-                {`
-                  APY: ${props.apy}%
-                  `}
-              </Typography>
+              <div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    Lock duration: {props.interval} days
+                  </h5>
+                </div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">APY: {props.apy}</h5>
+                </div>
+                </div>
             </AccordionDetails>
           </Accordion>
         );
@@ -2881,7 +2877,7 @@ export default function Dashboard(props) {
       content: (
         <Card className="delegationCard">
           <h4 className="delegationTitle">Delegate Funds</h4>
-          <h5 className="finalizingTipsContent">
+          <h5 className="delegateText">
             First, select your preferred staking tier:
           </h5>
           {showOptions()}
@@ -2932,7 +2928,7 @@ export default function Dashboard(props) {
           content: (
             <Card className="delegationCard">
               <h4 className="delegationTitle">Delegate Funds</h4>
-              <h5 className="finalizingTipsContent">
+              <h5 className="delegateText">
                 Now, input the amount you want to stake:
               </h5>
               <CustomInput
