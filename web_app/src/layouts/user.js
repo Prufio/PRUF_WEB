@@ -526,7 +526,7 @@ export default function Dashboard(props) {
             {`
                 Unlock percent complete: ${delegationList[index][4]}
               `}
-              {Number(delegationList[index][4].substring(0, delegationList[index][4].length-1)) > 10 
+              {Number(delegationList[index][4].substring(0, delegationList[index][4].length-1)) >= 100 
               ? <a onClick = {()=>{return breakStake(String(delegationList[index][0]))}}> Withdraw Stake  </a>
               : <></>
               }
@@ -545,7 +545,7 @@ export default function Dashboard(props) {
       ),
       buttons: {
         back: {
-          text: "Go Back",
+          text: "⬅️ Go Back",
           value: "back",
           className: "delegationButtonBack",
         },
@@ -601,7 +601,7 @@ export default function Dashboard(props) {
                     }}
                   />
                 }
-                label={`Tier ${props.id}`}
+                label={`Tier ${props.id} ${props.emoji}`}
               />
             </AccordionSummary>
             <AccordionDetails>
@@ -614,7 +614,7 @@ export default function Dashboard(props) {
                 </div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">APY: {props.apy}</h5>
+                  <h5 className="delegationTipsContent">APY: {props.apy}%</h5>
                 </div>
               </div>
             </AccordionDetails>
@@ -633,6 +633,7 @@ export default function Dashboard(props) {
         min: 100,
         interval: 3,
         eligible: prufBalance > 100,
+        emoji: "🥉"
       },
       {
         id: 2,
@@ -641,6 +642,7 @@ export default function Dashboard(props) {
         min: 100,
         interval: 3,
         eligible: prufBalance > 100,
+        emoji: "🥈"
       },
       {
         id: 3,
@@ -649,6 +651,7 @@ export default function Dashboard(props) {
         min: 100,
         interval: 3,
         eligible: prufBalance > 100,
+        emoji: "🥇"
       },
       {
         id: 4,
@@ -657,6 +660,7 @@ export default function Dashboard(props) {
         min: 100,
         interval: 3,
         eligible: prufBalance > 100,
+        emoji: "💎"
       },
       {
         id: 5,
@@ -665,6 +669,7 @@ export default function Dashboard(props) {
         min: 100,
         interval: 3,
         eligible: prufBalance > 100,
+        emoji: "🚀"
       },
     ];
 
@@ -681,12 +686,12 @@ export default function Dashboard(props) {
       ),
       buttons: {
         back: {
-          text: "Go Back",
+          text: "⬅️ Go Back",
           value: "back",
           className: "delegationButtonBack",
         },
         confirm: {
-          text: "Next",
+          text: "Next ✅",
           value: isChecked,
           className: "delegationButtonBack",
         },
@@ -752,12 +757,12 @@ export default function Dashboard(props) {
           ),
           buttons: {
             back: {
-              text: "Go Back",
+              text: "⬅️ Go Back",
               value: "back",
               className: "delegationButtonBack",
             },
             confirm: {
-              text: "Stake Tokens",
+              text: "Stake Tokens 🏛️",
               value: "confirm",
               className: "delegationButtonBack",
             },
