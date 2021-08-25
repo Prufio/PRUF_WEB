@@ -56,6 +56,7 @@ import routes from "routes.js";
 import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { Icon } from "@material-ui/core";
+import { isConstructorDeclaration } from "typescript";
 
 var ps;
 const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
@@ -2314,7 +2315,7 @@ export default function Dashboard(props) {
   // states and functions
   const [miniActive, setMiniActive] = React.useState(true);
   const [mobileOpen, setMobileOpen] = React.useState(true);
-  const [addr, setAddr] = React.useState();
+  const [addr, setAddr] = React.useState("");
   const [etherBalance, setEtherBalance] = React.useState("");
   const [prufBalance, setPrufBalance] = React.useState("");
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
@@ -2368,29 +2369,30 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
-  if (window.ethereum) {
-    window.ethereum.on("chainChanged", (chainId) => {
-      console.log(chainId);
-      window.location.reload();
-    });
+  React.useEffect(() => {
 
-    window.ethereum.on("accountsChanged", (e) => {
-      console.log("Accounts changed");
-      if (e[0] === undefined || e[0] === null) {
-        if (e[0] !== addr) {
+    if (window.ethereum) {
+      window.ethereum.on("chainChanged", (chainId) => {
+        console.log(chainId);
+        window.location.reload();
+      });
+  
+      window.ethereum.on("accountsChanged", (e) => {
+        console.log("Accounts changed");
+        if (e[0] === undefined || e[0] === null) {
+          if (e[0] !== addr) {
+            window.location.reload();
+          }
+        } else if (e[0].toLowerCase() !== addr.toLowerCase()) {
           window.location.reload();
         }
-      } else if (web3.utils.toChecksumAddress(e[0]) !== addr) {
-        window.location.reload();
-      }
-    });
-  }
+      });
+    }
 
-  React.useEffect(() => {
     let _web3 = require("web3");
     _web3 = new Web3(
       _web3.givenProvider ||
-        "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     setWeb3(_web3);
     setTimeout(getAddress(_web3), 1000);
@@ -2419,34 +2421,43 @@ export default function Dashboard(props) {
   }, []);
 
   const getAddress = (_web3) => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({
-          method: "eth_accounts",
-        })
-        .then(async (accounts) => {
-          if (accounts[0] === undefined) {
-            window.ethereum
-              .request({ method: "eth_requestAccounts" })
-              .then(async (accounts) => {
-                if (accounts[0] === undefined)
-                  return swal({
-                    title: "Can't connect to wallet.",
-                    icon: "warning",
-                    button: "Close",
+
+    _web3.eth.net.getId().then(e=>{
+      if (e === 42) {
+        if (window.ethereum) {
+          window.ethereum
+            .request({
+              method: "eth_accounts",
+            })
+            .then(async (accounts) => {
+              if (accounts[0] === undefined) {
+                window.ethereum
+                  .request({ method: "eth_requestAccounts" })
+                  .then(async (accounts) => {
+                    if (accounts[0] === undefined)
+                      return swal({
+                        title: "Can't connect to wallet.",
+                        icon: "warning",
+                        button: "Close",
+                      });
+                    console.log(_web3.utils.toChecksumAddress(accounts[0]));
+                    setAddr(_web3.utils.toChecksumAddress(accounts[0]));
+                    setUpEnvironment(_web3, accounts[0]);
                   });
+              } else {
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-                setUpEnvironment(_web3, accounts[0]);
-              });
-          } else {
-            console.log(_web3.utils.toChecksumAddress(accounts[0]));
-            setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-            setUpEnvironment(_web3, _web3.utils.toChecksumAddress(accounts[0]));
-          }
-        });
-    } else {
-    }
+                setUpEnvironment(_web3, _web3.utils.toChecksumAddress(accounts[0]));
+              }
+            });
+        } else {
+        }
+      } else {
+        swalReact({icon:`warning`, text:`You are connected to network ID ${e}. Please connect to the ethereum kovan testnet`})
+      }
+    })
+
+
   };
 
   const getActiveRoute = (routes) => {
@@ -3123,7 +3134,7 @@ export default function Dashboard(props) {
                     className="headerIconBack"
                     onClick={() => window.open("https://pruf.io/")}
                   >
-                    <span class="material-icons">redeem</span>
+                    <span className="material-icons">redeem</span>
                   </CardIcon>
                   <p
                     className={classes.cardCategory}
