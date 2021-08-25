@@ -7,6 +7,7 @@ import { MaticPOSClient } from "@maticnetwork/maticjs";
 import { useCookies } from "react-cookie";
 import { Route } from "react-router-dom";
 import ReactTable from "../components/ReactTable/ReactTable.js";
+import CustomLinearProgress from "../components/CustomLinearProgress/CustomLinearProgress.js";
 import { isMobile, isAndroid } from "react-device-detect";
 import swalReact from "@sweetalert/with-react";
 // creates a beautiful scrollbar
@@ -52,7 +53,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Eth from "../assets/img/eth-logo2.png";
 import Polygon from "../assets/img/matic-token-inverted-icon.png";
-import ABIs from "./ABIs"
+import ABIs from "./ABIs";
 
 import routes from "routes.js";
 
@@ -66,9 +67,9 @@ const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
 const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee";
 const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2";
 
-const UTIL_ABI = ABIs.UTIL_ABI
-const STAKE_ABI = ABIs.STAKE_ABI
-const STAKE_TKN_ABI = ABIs.STAKE_TKN_ABI
+const UTIL_ABI = ABIs.UTIL_ABI;
+const STAKE_ABI = ABIs.STAKE_ABI;
+const STAKE_TKN_ABI = ABIs.STAKE_TKN_ABI;
 
 const useStyles = makeStyles(styles);
 const userStyles = makeStyles(userStyle);
@@ -356,7 +357,8 @@ export default function Dashboard(props) {
         if (!error) {
           console.log(result);
           let amount = Number(_web3.utils.fromWei(result["0"]));
-          let timeElapsed = (Number(currentBlock.timestamp) - Number(result["1"]))/86400
+          let timeElapsed =
+            (Number(currentBlock.timestamp) - Number(result["1"])) / 86400;
           let interval = Number(result["3"]);
           let bonus = Number(_web3.utils.fromWei(result["4"]));
           _stake
@@ -368,8 +370,8 @@ export default function Dashboard(props) {
                 // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
                 let intervalToYear = 365 / interval;
-                let apy = (bonus / amount * 100) * intervalToYear;
-                let percentComplete = timeElapsed / interval * 100;
+                let apy = (bonus / amount) * 100 * intervalToYear;
+                let percentComplete = (timeElapsed / interval) * 100;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
                   `${ids[iteration]}`,
@@ -444,12 +446,12 @@ export default function Dashboard(props) {
       (delegationList[index][7] / 100) * delegationList[index][5] > 1;
     let timeLeft =
       24 - (delegationList[index][7] / 100) * delegationList[index][5] * 24;
-    let timeUnit = "hours"
+    let timeUnit = "hours";
     timeLeft = timeLeft.toFixed(2);
 
-    if(timeLeft < 1) {
-      timeLeft = timeLeft * 60
-      timeUnit = "minutes"
+    if (timeLeft < 1) {
+      timeLeft = timeLeft * 60;
+      timeUnit = "minutes";
     }
 
     if (isReady) {
@@ -461,7 +463,7 @@ export default function Dashboard(props) {
             icon: "success",
             text: `Successfully redeemed PRUF rewards!`,
           });
-          refreshDash()
+          refreshDash();
         });
     } else {
       return swalReact({
@@ -507,6 +509,16 @@ export default function Dashboard(props) {
                 Unlock percent complete: ${delegationList[index][4]}
               `}
           </h5>
+          <CustomLinearProgress
+            variant="determinate"
+            color="info"
+            value={Number(
+              delegationList[index][4].substring(
+                0,
+                delegationList[index][4].length - 1
+              )
+            )}
+          />
         </Card>
       ),
       buttons: {
@@ -730,26 +742,92 @@ export default function Dashboard(props) {
           },
         }).then((value) => {
           if (value === "confirm") {
-            if (delegateAmount < tierOptions[Number(id) - 1].min) {
-              return swalReact(
-                `The minimum value for this staking tier is ${
-                  tierOptions[Number(id) - 1].min
-                }`
-              ).then(() => newStake());
-            }
-            let amount = web3.utils.toWei(delegateAmount);
-            console.log(amount);
-            stake
-              .stakeMyTokens(amount, id)
-              .send({ from: addr })
-              .on("receipt", () => {
-                swalReact({
-                  icon: "success",
-                  text: "Your PRUF has been staked successfully!",
-                });
-                refreshDash();
-                return refreshBalances("both", web3, addr);
-              });
+            swalReact({
+              icon: "warning",
+              content: (
+                <Card className="delegationCard">
+                  <h5 className="delegationTitle">Wait!</h5>
+                  <h5 className="delegationTitleSm">
+                    Before you submit your stake, we would like to inform you on
+                    how this process works.
+                  </h5>
+                  <div className="left-margin">
+                    <div className="delegationTips">
+                      <FiberManualRecordTwoTone className="delegationPin" />
+                      <h5 className="delegationTipsContent">
+                        You may begin to claim rewards 24 hours after staking
+                        begins.
+                      </h5>
+                    </div>
+                    <div className="delegationTips">
+                      <FiberManualRecordTwoTone className="delegationPin" />
+                      <h5 className="delegationTipsContent">
+                        Your staked tokens will be locked for the Lock Duration
+                        ({tierOptions[Number(id) - 1].interval} Days) listed
+                        above, but will be able to be withdrawn after the chosen
+                        period expires.
+                      </h5>
+                    </div>
+                    <div className="delegationTips">
+                      <FiberManualRecordTwoTone className="delegationPin" />
+                      <h5 className="delegationTipsContent">
+                        Once the Lock Duration (
+                        {tierOptions[Number(id) - 1].interval} Days) has
+                        expired, upon viewing your stake information you will be
+                        given the option to cancel your stake, and withdraw.
+                      </h5>
+                    </div>
+                    <div className="delegationTips">
+                      <FiberManualRecordTwoTone className="delegationPin" />
+                      <h5 className="delegationTipsContent">
+                        If you do not cancel your stake after the Lock Period (
+                        {tierOptions[Number(id) - 1].interval} Days) expires,
+                        your stake will continue to earn rewards at the same APY
+                        rate ({tierOptions[Number(id) - 1].apy}%), until the
+                        stake is cancelled.
+                      </h5>
+                    </div>
+                  </div>
+                </Card>
+              ),
+              buttons: {
+                back: {
+                  text: "Go Back",
+                  value: "back",
+                  className: "delegationButtonBack",
+                },
+                confirm: {
+                  text: "Confirm",
+                  value: "confirm",
+                  className: "delegationButtonBack",
+                },
+              },
+            }).then((value) => {
+              if (value === "confirm") {
+                if (delegateAmount < tierOptions[Number(id) - 1].min) {
+                  return swalReact(
+                    `The minimum value for this staking tier is ${
+                      tierOptions[Number(id) - 1].min
+                    }`
+                  ).then(() => newStake());
+                }
+                let amount = web3.utils.toWei(delegateAmount);
+                console.log(amount);
+                stake
+                  .stakeMyTokens(amount, id)
+                  .send({ from: addr })
+                  .on("receipt", () => {
+                    swalReact({
+                      icon: "success",
+                      text: "Your PRUF has been staked successfully!",
+                    });
+                    refreshDash();
+                    return refreshBalances("both", web3, addr);
+                  });
+              } else {
+                return newStake();
+              }
+            });
           } else {
             return newStake();
           }
@@ -845,7 +923,7 @@ export default function Dashboard(props) {
                   {prufBalance ? (
                     <h3 className={classes.cardTitle}>
                       <>
-                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                        ü{String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
                       </>
                     </h3>
                   ) : (
@@ -938,7 +1016,7 @@ export default function Dashboard(props) {
                   >{`Total Redeemable Rewards`}</p>
                   {totalRewards ? (
                     <h3 className={classes.cardTitle}>
-                      <>{String(totalRewards)} </>
+                      <>ü{String(totalRewards)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
@@ -1028,7 +1106,7 @@ export default function Dashboard(props) {
                   <p className={classes.cardCategory}>{`Total Staked`}</p>
                   {totalStaked ? (
                     <h3 className={classes.cardTitle}>
-                      <>{String(totalStaked)} </>
+                      <>ü{String(totalStaked)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
