@@ -39,6 +39,13 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CardFooter from "components/Card/CardFooter.js";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Accordion from "@material-ui/core/Accordion";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Eth from "../assets/img/eth-logo.png";
 import Polygon from "../assets/img/matic-token-inverted-icon.png";
@@ -48,7 +55,6 @@ import routes from "routes.js";
 import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { Icon } from "@material-ui/core";
-import { intToBuffer } from "arweave/node/lib/merkle";
 
 var ps;
 const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
@@ -2408,7 +2414,9 @@ export default function Dashboard(props) {
     };
   }, []);
 
-  const refreshDash = () => {};
+  const refreshDash = () => {
+    getHeldStake(web3, stake, stakeTkn, addr)
+  };
 
   const getAddress = (_web3) => {
     if (window.ethereum) {
@@ -2513,66 +2521,78 @@ export default function Dashboard(props) {
   };
 
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
-
-    let currentBlock = await _web3.eth.getBlock("latest")
+    let currentBlock = await _web3.eth.getBlock("latest");
 
     const getStakeIds = (bal, ids, iteration) => {
-      if(!bal) {setDelegationList([[``,``,``,``,``]]); return console.log(`Balances undefined`)}
-      if(!iteration) iteration = 0
-      if(!ids) ids = []
+      if (!bal) {
+        setDelegationList([[``, ``, ``, ``, ``]]);
+        return console.log(`Balances undefined`);
+      }
+      if (!iteration) iteration = 0;
+      if (!ids) ids = [];
 
-      if (ids.length >= bal) return getStakeData (ids, [])
+      if (ids.length >= bal) return getStakeData(ids, []);
 
       _tkn.tokenOfOwnerByIndex(_addr, iteration).call(async (error, result) => {
         if (!error) {
-          console.log(result)
-          ids.push(result)
-          return getStakeIds(bal, ids, iteration + 1)
+          console.log(result);
+          ids.push(result);
+          return getStakeIds(bal, ids, iteration + 1);
         } else {
-          console.error(error)
-          bal--
-          return getStakeIds(bal, ids, iteration + 1)
+          console.error(error);
+          bal--;
+          return getStakeIds(bal, ids, iteration + 1);
         }
-      })
-    }
+      });
+    };
 
     const getStakeData = (ids, arr, iteration) => {
       if (!iteration) iteration = 0;
       if (ids.length <= arr.length) {
-        arr.push([``,``,``,``,``])
-        return setDelegationList(arr)
+        arr.push([``, ``, ``, ``, ``]);
+        return setDelegationList(arr);
       }
 
       _stake.stakeInfo(ids[iteration]).call(async (error, result) => {
-        if(!error) {
-          console.log(result)
-          let amount = Number(_web3.utils.fromWei(result["0"]))
-          let timeRemaining = -(Number(result["2"]) - Number(currentBlock.timestamp))
-          let interval = Number(result["3"])
-          let bonus = Number(_web3.utils.fromWei(result["4"]))
-          _stake.checkEligibleRewards(ids[iteration]).call(async (error, result) => {
-            if(!error){
-              console.log(result)
-              // //@dev overflow date case
-              // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
-              // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
-              let intervalToYear = 365/interval
-              let apy = (bonus/amount) * intervalToYear * 100
-              let percentComplete = Number(result["1"])/10000
-              arr.push([`${ids[iteration]}`,`${apy}%`,`ü${amount}`,`ü${_web3.utils.fromWei(result["0"])}`,`~${percentComplete}%`])
-              getStakeData(ids, arr, iteration + 1)
-              
-            }
-          })
+        if (!error) {
+          console.log(result);
+          let amount = Number(_web3.utils.fromWei(result["0"]));
+          let timeRemaining = -(
+            Number(result["2"]) - Number(currentBlock.timestamp)
+          );
+          let interval = Number(result["3"]);
+          let bonus = Number(_web3.utils.fromWei(result["4"]));
+          _stake
+            .checkEligibleRewards(ids[iteration])
+            .call(async (error, result) => {
+              if (!error) {
+                console.log(result);
+                // //@dev overflow date case
+                // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
+                // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
+                let intervalToYear = 365 / interval;
+                let apy = (bonus / amount) * intervalToYear * 100;
+                let percentComplete = Number(result["1"]) / 10000;
+                let rewards = Number(_web3.utils.fromWei(result["0"]))
+                arr.push([
+                  `${ids[iteration]}`,
+                  `${apy.toFixed(0)}%`,
+                  `ü${amount.toFixed(0)}`,
+                  `ü${rewards.toFixed(2)}`,
+                  `~${percentComplete.toFixed(2)}%`,
+                ]);
+                getStakeData(ids, arr, iteration + 1);
+              }
+            });
         } else {
-          console.error(error)
+          console.error(error);
         }
-      })
-    }
+      });
+    };
 
     _tkn.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
-        getStakeIds(result)
+        getStakeIds(result);
       } else {
         console.error(error);
       }
@@ -2591,7 +2611,9 @@ export default function Dashboard(props) {
 
   const setUpEnvironment = (_web3, _addr) => {
     console.log("setting up environment");
-    setIsRefreshingEther(true);
+    setIsRefreshingEther(true)
+    setIsRefreshingPruf(true)
+
     let _util = new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
     let _stake = new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
     let _stakeTkn = new _web3.eth.Contract(STAKE_TKN_ABI, STAKE_TKN_ADDRESS);
@@ -2605,11 +2627,180 @@ export default function Dashboard(props) {
       setIsRefreshingEther(false);
     });
 
+    _util.methods.balanceOf(_addr).call(async (error, result) => {
+      setIsRefreshingPruf(false)
+      setPrufBalance(_web3.utils.fromWei(result))
+    })
+
     getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
   };
 
+  const viewStake = (index) => {
+    console.log("view me!", index)
+  }
+
   const newStake = () => {
-    swal("Here we build a new stake, step-by-step!");
+    let delegateAmount;
+    let isChecked = {
+      chk1: false,
+      chk2: false,
+      chk3: false
+    }
+    const showOptions = () => {
+    
+
+    let component = []
+
+
+      tierOptions.forEach((props) => {
+        component.push (
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-label="Expand"
+              aria-controls="additional-actions1-content"
+              id={`additional-actions1-header-${props.id}`}
+            >
+              <FormControlLabel
+                aria-label="Acknowledge"
+                onClick={(event) => {event.stopPropagation()}}
+                onFocus={(event) => {event.stopPropagation()}}
+                control={<Checkbox onClick = {()=>isChecked[`chk${props.id}`] = !isChecked[`chk${props.id}`]}/>}
+                label={`Tier ${props.id}`}
+              />
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography color="textSecondary">
+                {`
+                  Minimum allocation: ${props.min}\n\n
+                  Maximum allocation: ${props.max}\n\n
+                  Lock duration: ${props.interval} days\n\n
+                  APY: ${props.apy}%
+                  `}
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        );
+      })
+
+      return component
+    }
+
+    const tierOptions = [
+      { 
+        id: 1, 
+        apy: 12.5, 
+        max: 100000, 
+        min: 100,
+        interval: 3,
+        eligible: prufBalance > 100 },
+      {
+        id: 2,
+        apy: 15,
+        max: 8000000,
+        min: 100000,
+        interval: 3,
+        eligible: prufBalance > 100000,
+      },
+      {
+        id: 3,
+        apy: 18,
+        max: 80000000,
+        min: 500000,
+        interval: 3,
+        eligible: prufBalance > 500000,
+      },
+    ];
+
+    swalReact({
+      //icon: "warning",
+      content: (
+        <Card className="delegationCard">
+          <h4 className="delegationTitle">Delegate Funds</h4>
+          <h5 className="finalizingTipsContent">
+            First, select your preferred staking tier:
+          </h5>
+          {showOptions()}
+        </Card>
+      ),
+      buttons: {
+        back: {
+          text: "Go Back",
+          value: "back",
+          className: "delegationButtonBack",
+        },
+        confirm: {
+          text: "Next",
+          value: isChecked,
+          className: "delegationButtonBack",
+        },
+      },
+    }).then((value) => {
+      if (typeof(value) !== "object" || value === null) {
+        return;
+      } else if (value.chk1 === true && value.chk2 === true || 
+        value.chk2 === true && value.chk3 === true || 
+        value.chk1 === true && value.chk3 === true) {
+        return swalReact("Please select only 1 option!").then(()=>newStake()) 
+      } else if (value.chk1 === false && value.chk2 === false && value.chk3 === false) {
+        return swalReact("Please select an option!").then(()=>newStake()) 
+      } else {
+        let id = String(Object.values(value).indexOf(true) + 1)
+        swalReact({
+          content: (
+            <Card className="delegationCard">
+              <h4 className="delegationTitle">Delegate Funds</h4>
+              <h5 className="finalizingTipsContent">
+                Now, input the amount you want to stake:
+              </h5>
+              <CustomInput
+                labelText="Amount to delegate"
+                id="CI1"
+                inputProps={{
+                  type: "number",
+                  maxLength: 9,
+                  onChange: (event) => {
+                    delegateAmount = event.target.value.trim();
+                    console.log(delegateAmount);
+                  },
+                }}
+              />
+            </Card>
+          ),
+          buttons: {
+            back: {
+              text: "Go Back",
+              value: "back",
+              className: "delegationButtonBack",
+            },
+            confirm: {
+              text: "Stake Tokens",
+              value: "confirm",
+              className: "delegationButtonBack",
+            },
+          },
+        }).then((value) => {
+          if (value === undefined) {
+            console.log("undefined...")
+          } else if (value === null) {
+            return newStake()
+          } else {
+            if (delegateAmount < tierOptions[Number(id)-1].min) {
+              return swalReact(`The minimum value for this staking tier is ${tierOptions[Number(id)-1].min}`).then(()=>newStake())
+            }
+            let amount = web3.utils.toWei(delegateAmount)
+            console.log(amount)
+            stake.stakeMyTokens(amount, id)
+            .send({from: addr})
+            .on("receipt", ()=>{
+              swalReact("Your PRUF has been staked successfully!")
+              refreshDash()
+              return refreshBalances("both", web3, addr)
+            })
+          }
+        });
+      }
+    });
   };
 
   return (
@@ -2620,12 +2811,6 @@ export default function Dashboard(props) {
         brandText={getActiveRoute(routes)}
         {...rest}
       />{" "}
-      <br />
-      <ui-progress-circle
-        shape="round"
-        color="#0f0000"
-        radius="90"
-      ></ui-progress-circle>
       <br />
       <div className={mainPanelClasses} ref={mainPanel}>
         <div className="splitterForm">
@@ -2703,7 +2888,7 @@ export default function Dashboard(props) {
                   </CardIcon>
                   <p
                     className={classes.cardCategory}
-                  >{`PRUF Balance (${currentChain})`}</p>
+                  >{`PRUF Balance`}</p>
                   {prufBalance ? (
                     <h3 className={classes.cardTitle}>
                       <>
@@ -2770,35 +2955,6 @@ export default function Dashboard(props) {
                                 Redeem tokens
                               </Button>
                             )}
-                          </div>
-                        )}
-                      {currentChain === "Ethereum" && findingTxs === true && (
-                        <div className="lds-ellipsisCard">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                        </div>
-                      )}
-                      {currentChain === "Ethereum" &&
-                        findingTxs === false &&
-                        redeemList.length === 0 && (
-                          <div className="inlineFlex">
-                            <Tooltip
-                              id="tooltip-top"
-                              title="Info"
-                              placement="bottom"
-                              classes={{ tooltip: userClasses.toolTip }}
-                            >
-                              <InfoOutlined
-                                className="info"
-                                onClick={() => {
-                                  swal(
-                                    "You do not have any pending Polygon -> PRUF withdrawals."
-                                  );
-                                }}
-                              />
-                            </Tooltip>
-                            <h5 className="pendingBal">No pending balance</h5>
                           </div>
                         )}
                     </>
@@ -2874,7 +3030,7 @@ export default function Dashboard(props) {
                     accessor: "date",
                   },
                   {
-                    Header: "View",
+                    Header: "",
                     accessor: "actions",
                   },
                 ]}
@@ -2890,31 +3046,24 @@ export default function Dashboard(props) {
                       <div className="actions-right">
                         {/* use this button to add a like kind of action */}
                         {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
-                          <Button
-                            // justIcon
-                            // round
-                            // simple
-                            onClick={() => {
-                              newStake({
-                                name: prop[1],
-                                id: prop[2],
-                                totalDelegated: prop[3],
-                              });
-                            }}
-                            color="info"
-                            className="delegateButton"
-                          >
-                            View
-                          </Button>
+                          <></>
+                          // <Button
+                          //   // justIcon
+                          //   // round
+                          //   // simple
+                          //   onClick={() => {
+                          //     viewStake(key);
+                          //   }}
+                          //   color="info"
+                          //   className="delegateButton"
+                          // >
+                          //   View
+                          // </Button>
                         )}
                         {prop[0] === "" && (
                           <Button
                             onClick={() => {
-                              newStake({
-                                name: prop[1],
-                                id: prop[2],
-                                totalDelegated: prop[3],
-                              });
+                              newStake();
                             }}
                             color="info"
                             className="delegateButton"
