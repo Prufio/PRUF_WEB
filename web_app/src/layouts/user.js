@@ -2351,7 +2351,7 @@ export default function Dashboard(props) {
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
   const [stakeTkn, setStakeTkn] = React.useState({});
-  const [loadingSums, setLoadingSums] = React.useState(false)
+  const [loadingSums, setLoadingSums] = React.useState(false);
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
@@ -2370,13 +2370,12 @@ export default function Dashboard(props) {
   const mainPanel = React.createRef();
 
   React.useEffect(() => {
-
     if (window.ethereum) {
       window.ethereum.on("chainChanged", (chainId) => {
         console.log(chainId);
         window.location.reload();
       });
-  
+
       window.ethereum.on("accountsChanged", (e) => {
         console.log("Accounts changed");
         if (e[0] === undefined || e[0] === null) {
@@ -2421,8 +2420,7 @@ export default function Dashboard(props) {
   }, []);
 
   const getAddress = (_web3) => {
-
-    _web3.eth.net.getId().then(e=>{
+    _web3.eth.net.getId().then((e) => {
       if (e === 42) {
         if (window.ethereum) {
           window.ethereum
@@ -2447,17 +2445,21 @@ export default function Dashboard(props) {
               } else {
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-                setUpEnvironment(_web3, _web3.utils.toChecksumAddress(accounts[0]));
+                setUpEnvironment(
+                  _web3,
+                  _web3.utils.toChecksumAddress(accounts[0])
+                );
               }
             });
         } else {
         }
       } else {
-        swalReact({icon:`warning`, text:`You are connected to network ID ${e}. Please connect to the ethereum kovan testnet`})
+        swalReact({
+          icon: `warning`,
+          text: `You are connected to network ID ${e}. Please connect to the ethereum kovan testnet`,
+        });
       }
-    })
-
-
+    });
   };
 
   const getActiveRoute = (routes) => {
@@ -2532,7 +2534,7 @@ export default function Dashboard(props) {
   };
 
   const refreshDash = () => {
-    setLoadingSums(true)
+    setLoadingSums(true);
     getHeldStake(web3, stake, stakeTkn, addr);
   };
 
@@ -2540,16 +2542,16 @@ export default function Dashboard(props) {
     let _totalRewards = 0;
     let _totalStaked = 0;
 
-    arr.forEach(props=>{
-      if(props[9]){
-        _totalRewards+=Number(props[9])
-        _totalStaked+=Number(props[8])
+    arr.forEach((props) => {
+      if (props[9]) {
+        _totalRewards += Number(props[9]);
+        _totalStaked += Number(props[8]);
       }
-    })
+    });
 
-    setTotalRewards(_totalRewards.toFixed(2))
-    setTotalStaked(_totalStaked.toFixed(2))
-    setLoadingSums(false)
+    setTotalRewards(_totalRewards.toFixed(2));
+    setTotalStaked(_totalStaked.toFixed(2));
+    setLoadingSums(false);
   };
 
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
@@ -2617,7 +2619,7 @@ export default function Dashboard(props) {
                   bonus,
                   percentComplete,
                   amount,
-                  rewards
+                  rewards,
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -2651,7 +2653,7 @@ export default function Dashboard(props) {
     console.log("setting up environment");
     setIsRefreshingEther(true);
     setIsRefreshingPruf(true);
-    setLoadingSums(true)
+    setLoadingSums(true);
 
     let _util = new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
     let _stake = new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
@@ -2811,7 +2813,7 @@ export default function Dashboard(props) {
                   Lock duration: ${props.interval} days
                   `}
               </Typography>
-              <br/>
+              <br />
               <Typography color="textSecondary">
                 {`
                   APY: ${props.apy}%
@@ -2906,7 +2908,9 @@ export default function Dashboard(props) {
                 Now, input the amount you want to stake:
               </h5>
               <CustomInput
-                labelText={`Minimum: ${tierOptions[Number(id) - 1].min}, Maximum: ${tierOptions[Number(id) - 1].max}`}
+                labelText={`Minimum: ${
+                  tierOptions[Number(id) - 1].min
+                }, Maximum: ${tierOptions[Number(id) - 1].max}`}
                 id="CI1"
                 inputProps={{
                   type: "number",
@@ -3141,9 +3145,7 @@ export default function Dashboard(props) {
                   >{`Total Redeemable Rewards`}</p>
                   {totalRewards ? (
                     <h3 className={classes.cardTitle}>
-                      <>
-                        {String(totalRewards)}{" "}
-                      </>
+                      <>{String(totalRewards)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
@@ -3233,9 +3235,7 @@ export default function Dashboard(props) {
                   <p className={classes.cardCategory}>{`Total Staked`}</p>
                   {totalStaked ? (
                     <h3 className={classes.cardTitle}>
-                      <>
-                        {String(totalStaked)}{" "}
-                      </>
+                      <>{String(totalStaked)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
