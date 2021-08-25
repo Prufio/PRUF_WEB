@@ -2584,7 +2584,11 @@ export default function Dashboard(props) {
                   `${apy.toFixed(0)}%`,
                   `ü${amount.toFixed(0)}`,
                   `ü${rewards.toFixed(2)}`,
-                  `~${percentComplete.toFixed(2)}%`,
+                  `${percentComplete.toFixed(2)}%`,
+                  interval,
+                  bonus,
+                  percentComplete
+
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -2640,17 +2644,67 @@ export default function Dashboard(props) {
     getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
   };
 
+  const claimRewards = (index, id) => {
+    console.log((delegationList[index][7]/100) * delegationList[index][5])
+    let isReady = (delegationList[index][7]/100) * delegationList[index][5] >= 1
+    let hoursLeft = 24 - ((delegationList[index][7]/100) * delegationList[index][5] * 24)
+    hoursLeft = hoursLeft.toFixed(1)
+
+    if(isReady){
+      stake.claimBonus(id)
+      .send({from: addr})
+      .on("reciept", ()=>{
+        swalReact({
+          icon: "success",
+          text: `Successfully redeemed PRUF rewards!`
+          }
+        )
+        })
+    } else {
+      return swalReact({icon: "warning", text:`Holders must wait 24 hours after staking rewards. Please wait ~${hoursLeft} hours before redeeming.`})
+      .then(()=>{
+        viewStake(index)
+      })
+    }
+    
+  }
+
   const viewStake = (index) => {
     console.log("view me!", index)
+
+    
 
     swalReact({
       //icon: "warning",
       content: (
         <Card className="delegationCard">
           <h4 className="delegationTitle">Delegation Details</h4>
-          <h5 className="finalizingTipsContent">
-            
-          </h5>
+
+              <h5 className="">
+                {`
+                  Stake token ID: ${delegationList[index][0]}
+                `}
+              </h5>
+              <h5 className="">
+                {`
+                Annual percentage yield: ${delegationList[index][1]}
+              `}
+              </h5>
+              <h5 className="">
+                {`
+                Amount delegated: ${delegationList[index][2]}
+              `}
+              </h5>
+              <h5 className="">
+                {`
+                Redeemable rewards: ${delegationList[index][3]}
+              `}
+              </h5>
+              <h5 className="">
+                {`
+                Unlock percent complete: ${delegationList[index][4]}%
+              `}
+              </h5>
         </Card>
       ),
       buttons: {
@@ -2665,6 +2719,10 @@ export default function Dashboard(props) {
           className: "delegationButtonBack",
         },
       },
+    }).then(value=>{
+      if (value === "Redeem") {
+        claimRewards(index, String(delegationList[index][0]))
+      } else return
     })
   }
 
@@ -2770,9 +2828,9 @@ export default function Dashboard(props) {
       } else if (value.chk1 === true && value.chk2 === true || 
         value.chk2 === true && value.chk3 === true || 
         value.chk1 === true && value.chk3 === true) {
-        return swalReact("Please select only 1 option!").then(()=>newStake()) 
+        return swalReact({icon: "warning", text: "Please select only 1 option!"}).then(()=>newStake()) 
       } else if (value.chk1 === false && value.chk2 === false && value.chk3 === false) {
-        return swalReact("Please select an option!").then(()=>newStake()) 
+        return swalReact({icon: "warning", text:"Please select an option!"}).then(()=>newStake()) 
       } else {
         let id = String(Object.values(value).indexOf(true) + 1)
         swalReact({
@@ -2822,7 +2880,7 @@ export default function Dashboard(props) {
             stake.stakeMyTokens(amount, id)
             .send({from: addr})
             .on("receipt", ()=>{
-              swalReact("Your PRUF has been staked successfully!")
+              swalReact({icon: "success", text:"Your PRUF has been staked successfully!"})
               refreshDash()
               return refreshBalances("both", web3, addr)
             })
