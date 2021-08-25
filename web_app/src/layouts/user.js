@@ -2335,6 +2335,8 @@ export default function Dashboard(props) {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [rootManager, setRootManager] = React.useState();
   const [redeemList, setRedeemList] = React.useState([]);
+  const [totalRewards, setTotalRewards] = React.useState(0);
+  const [totalStaked, setTotalStaked] = React.useState(0);
   const [delegationList, setDelegationList] = React.useState([
     ["Loading Balances...", "~", "~", "~"],
   ]);
@@ -2348,6 +2350,7 @@ export default function Dashboard(props) {
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
   const [stakeTkn, setStakeTkn] = React.useState({});
+  const [loadingSums, setLoadingSums] = React.useState(false)
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
@@ -2414,10 +2417,6 @@ export default function Dashboard(props) {
       }
     };
   }, []);
-
-  const refreshDash = () => {
-    getHeldStake(web3, stake, stakeTkn, addr);
-  };
 
   const getAddress = (_web3) => {
     if (window.ethereum) {
@@ -2521,8 +2520,25 @@ export default function Dashboard(props) {
     });
   };
 
+  const refreshDash = () => {
+    setLoadingSums(true)
+    getHeldStake(web3, stake, stakeTkn, addr);
+  };
+
   const parseTotalRedeemable = (arr) => {
-    //get each reward bal and return sum
+    let _totalRewards = 0;
+    let _totalStaked = 0;
+
+    arr.forEach(props=>{
+      if(props[9]){
+        _totalRewards+=Number(props[9])
+        _totalStaked+=Number(props[8])
+      }
+    })
+
+    setTotalRewards(_totalRewards.toFixed(2))
+    setTotalStaked(_totalStaked.toFixed(2))
+    setLoadingSums(false)
   };
 
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
@@ -2554,8 +2570,8 @@ export default function Dashboard(props) {
     const getStakeData = (ids, arr, iteration) => {
       if (!iteration) iteration = 0;
       if (ids.length <= arr.length) {
-        arr.push([``, ``, ``, ``, ``]);
         parseTotalRedeemable(arr);
+        arr.push([``, ``, ``, ``, ``]);
         return setDelegationList(arr);
       }
 
@@ -2589,6 +2605,8 @@ export default function Dashboard(props) {
                   interval,
                   bonus,
                   percentComplete,
+                  amount,
+                  rewards
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -2622,6 +2640,7 @@ export default function Dashboard(props) {
     console.log("setting up environment");
     setIsRefreshingEther(true);
     setIsRefreshingPruf(true);
+    setLoadingSums(true)
 
     let _util = new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
     let _stake = new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
@@ -2647,7 +2666,7 @@ export default function Dashboard(props) {
   const claimRewards = (index, id) => {
     console.log((delegationList[index][7] / 100) * delegationList[index][5]);
     let isReady =
-      (delegationList[index][7] / 100) * delegationList[index][5] >= 1;
+      (delegationList[index][7] / 100) * delegationList[index][5] > 1;
     let hoursLeft =
       24 - (delegationList[index][7] / 100) * delegationList[index][5] * 24;
     hoursLeft = hoursLeft.toFixed(1);
@@ -2703,7 +2722,7 @@ export default function Dashboard(props) {
           </h5>
           <h5 className="">
             {`
-                Unlock percent complete: ${delegationList[index][4]}%
+                Unlock percent complete: ${delegationList[index][4]}
               `}
           </h5>
         </Card>
@@ -2863,7 +2882,7 @@ export default function Dashboard(props) {
                 Now, input the amount you want to stake:
               </h5>
               <CustomInput
-                labelText="Amount to delegate"
+                labelText={`Minimum: ${tierOptions[Number(id) - 1].min}, Maximum: ${tierOptions[Number(id) - 1].max}`}
                 id="CI1"
                 inputProps={{
                   type: "number",
@@ -2889,11 +2908,7 @@ export default function Dashboard(props) {
             },
           },
         }).then((value) => {
-          if (value === undefined) {
-            console.log("undefined...");
-          } else if (value === null) {
-            return newStake();
-          } else {
+          if (value === "confirm") {
             if (delegateAmount < tierOptions[Number(id) - 1].min) {
               return swalReact(
                 `The minimum value for this staking tier is ${
@@ -2914,6 +2929,8 @@ export default function Dashboard(props) {
                 refreshDash();
                 return refreshBalances("both", web3, addr);
               });
+          } else {
+            return newStake();
           }
         });
       }
@@ -3098,10 +3115,10 @@ export default function Dashboard(props) {
                   <p
                     className={classes.cardCategory}
                   >{`Total Redeemable Rewards`}</p>
-                  {prufBalance ? (
+                  {totalRewards ? (
                     <h3 className={classes.cardTitle}>
                       <>
-                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                        {String(totalRewards)}{" "}
                       </>
                     </h3>
                   ) : (
@@ -3109,7 +3126,7 @@ export default function Dashboard(props) {
                   )}
                 </CardHeader>
                 <CardFooter stats>
-                  {!isRefreshingPruf && (
+                  {!loadingSums && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -3120,7 +3137,7 @@ export default function Dashboard(props) {
                         <div className="refresh">
                           <Cached
                             onClick={() => {
-                              refreshBalances("pruf", web3, addr);
+                              refreshDash();
                             }}
                           />
                         </div>
@@ -3190,10 +3207,10 @@ export default function Dashboard(props) {
                     <span class="material-icons">savings</span>
                   </CardIcon>
                   <p className={classes.cardCategory}>{`Total Staked`}</p>
-                  {prufBalance ? (
+                  {totalStaked ? (
                     <h3 className={classes.cardTitle}>
                       <>
-                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                        {String(totalStaked)}{" "}
                       </>
                     </h3>
                   ) : (
@@ -3201,7 +3218,7 @@ export default function Dashboard(props) {
                   )}
                 </CardHeader>
                 <CardFooter stats>
-                  {!isRefreshingPruf && (
+                  {!loadingSums && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -3212,7 +3229,7 @@ export default function Dashboard(props) {
                         <div className="refresh">
                           <Cached
                             onClick={() => {
-                              refreshBalances("pruf", web3, addr);
+                              refreshDash();
                             }}
                           />
                         </div>
