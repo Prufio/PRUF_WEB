@@ -1295,7 +1295,7 @@ export default function Dashboard(props) {
                               View
                             </Button>
                           )}
-                          {prop[0] === "" && (
+                          {/* {prop[0] === "" && (
                             <Button
                               onClick={() => {
                                 newStake();
@@ -1317,12 +1317,21 @@ export default function Dashboard(props) {
                             >
                               New Stake
                             </Button>
-                          )}
+                          )} */}
                         </div>
                       ),
                     };
                   })}
                 />
+                <Button
+                  onClick={() => {
+                    newStake();
+                  }}
+                  color="info"
+                  className="MLBGradient"
+                >
+                  New Stake
+                </Button>
               </CardBody>
             )}
             {isMobile && (
