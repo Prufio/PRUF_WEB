@@ -2785,11 +2785,24 @@ export default function Dashboard(props) {
               />
             </AccordionSummary>
             <AccordionDetails>
+              {/* <Typography color="textSecondary">
+                {`
+                  Minimum allocation: ${props.min}
+                  `}
+              </Typography>
               <Typography color="textSecondary">
                 {`
-                  Minimum allocation: ${props.min}\n\n
-                  Maximum allocation: ${props.max}\n\n
-                  Lock duration: ${props.interval} days\n\n
+                  Maximum allocation: ${props.max}
+                  `}
+              </Typography> */}
+              <Typography color="textSecondary">
+                {`
+                  Lock duration: ${props.interval} days
+                  `}
+              </Typography>
+              <br/>
+              <Typography color="textSecondary">
+                {`
                   APY: ${props.apy}%
                   `}
               </Typography>
