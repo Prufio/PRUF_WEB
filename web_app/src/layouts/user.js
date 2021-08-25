@@ -26,6 +26,7 @@ import {
   InfoOutlined,
   Refresh,
   SettingsBackupRestore,
+  TrendingUpSharp,
 } from "@material-ui/icons";
 
 // core components
@@ -2607,7 +2608,7 @@ export default function Dashboard(props) {
                 // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
                 let intervalToYear = 365 / interval;
-                let apy = (bonus / amount) * intervalToYear * 100;
+                let apy = (bonus / amount * 100) * intervalToYear;
                 let percentComplete = Number(result["1"]) / 10000;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
@@ -2826,27 +2827,43 @@ export default function Dashboard(props) {
     const tierOptions = [
       {
         id: 1,
-        apy: 12.5,
+        apy: 8.52,
         max: 100000,
         min: 100,
-        interval: 3,
+        interval: 60,
         eligible: prufBalance > 100,
       },
       {
         id: 2,
-        apy: 15,
+        apy: 12.57,
         max: 8000000,
-        min: 100000,
-        interval: 3,
-        eligible: prufBalance > 100000,
+        min: 100,
+        interval: 90,
+        eligible: prufBalance > 100,
       },
       {
         id: 3,
-        apy: 18,
+        apy: 15.01,
         max: 80000000,
-        min: 500000,
+        min: 100,
+        interval: 180,
+        eligible: prufBalance > 100,
+      },
+      {
+        id: 4,
+        apy: 18.05,
+        max: 80000000,
+        min: 100,
+        interval: 360,
+        eligible: prufBalance > 100,
+      },
+      {
+        id: 5,
+        apy: 5000,
+        max: 80000000,
+        min: 100,
         interval: 3,
-        eligible: prufBalance > 500000,
+        eligible: prufBalance > 100,
       },
     ];
 
@@ -2874,21 +2891,27 @@ export default function Dashboard(props) {
         },
       },
     }).then((value) => {
+
       if (typeof value !== "object" || value === null) {
         return;
-      } else if (
-        (value.chk1 === true && value.chk2 === true) ||
-        (value.chk2 === true && value.chk3 === true) ||
-        (value.chk1 === true && value.chk3 === true)
+      } 
+      
+      let trues = [];
+      let vals = Object.values(value)
+
+      vals.forEach(e=>{
+        if (e === true) trues.push(true)
+      })
+
+      if (
+        trues.length > 1
       ) {
         return swalReact({
           icon: "warning",
           text: "Please select only 1 option!",
         }).then(() => newStake());
       } else if (
-        value.chk1 === false &&
-        value.chk2 === false &&
-        value.chk3 === false
+        trues.length === 0
       ) {
         return swalReact({
           icon: "warning",
@@ -2906,7 +2929,7 @@ export default function Dashboard(props) {
               <CustomInput
                 labelText={`Minimum: ${
                   tierOptions[Number(id) - 1].min
-                }, Maximum: ${tierOptions[Number(id) - 1].max}`}
+                }`}
                 id="CI1"
                 inputProps={{
                   type: "number",
