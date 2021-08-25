@@ -2593,9 +2593,7 @@ export default function Dashboard(props) {
         if (!error) {
           console.log(result);
           let amount = Number(_web3.utils.fromWei(result["0"]));
-          let timeRemaining = -(
-            Number(result["2"]) - Number(currentBlock.timestamp)
-          );
+          let timeElapsed = (Number(currentBlock.timestamp) - Number(result["1"]))/86400
           let interval = Number(result["3"]);
           let bonus = Number(_web3.utils.fromWei(result["4"]));
           _stake
@@ -2608,7 +2606,7 @@ export default function Dashboard(props) {
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
                 let intervalToYear = 365 / interval;
                 let apy = (bonus / amount * 100) * intervalToYear;
-                let percentComplete = Number(result["1"]) / 10000;
+                let percentComplete = timeElapsed / interval * 100;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
                   `${ids[iteration]}`,
@@ -2681,9 +2679,15 @@ export default function Dashboard(props) {
     console.log((delegationList[index][7] / 100) * delegationList[index][5]);
     let isReady =
       (delegationList[index][7] / 100) * delegationList[index][5] > 1;
-    let hoursLeft =
+    let timeLeft =
       24 - (delegationList[index][7] / 100) * delegationList[index][5] * 24;
-    hoursLeft = hoursLeft.toFixed(1);
+    let timeUnit = "hours"
+    timeLeft = timeLeft.toFixed(2);
+
+    if(timeLeft < 1) {
+      timeLeft = timeLeft * 60
+      timeUnit = "minutes"
+    }
 
     if (isReady) {
       stake
@@ -2694,11 +2698,12 @@ export default function Dashboard(props) {
             icon: "success",
             text: `Successfully redeemed PRUF rewards!`,
           });
+          refreshDash()
         });
     } else {
       return swalReact({
         icon: "warning",
-        text: `Holders must wait 24 hours after staking rewards. Please wait ~${hoursLeft} hours before redeeming.`,
+        text: `Holders must wait 24 hours after initial stake or redeeming thier balance before claiming rewards. Please wait ~${timeLeft} ${timeUnit} before redeeming.`,
       }).then(() => {
         viewStake(index);
       });
@@ -2831,40 +2836,40 @@ export default function Dashboard(props) {
     const tierOptions = [
       {
         id: 1,
-        apy: 8.52,
-        max: 100000,
+        apy: 608,
+        max: 100000000,
         min: 100,
-        interval: 60,
+        interval: 3,
         eligible: prufBalance > 100,
       },
       {
         id: 2,
-        apy: 12.57,
-        max: 8000000,
+        apy: 1217,
+        max: 100000000,
         min: 100,
-        interval: 90,
+        interval: 3,
         eligible: prufBalance > 100,
       },
       {
         id: 3,
-        apy: 15.01,
-        max: 80000000,
+        apy: 2190,
+        max: 100000000,
         min: 100,
-        interval: 180,
+        interval: 3,
         eligible: prufBalance > 100,
       },
       {
         id: 4,
-        apy: 18.05,
-        max: 80000000,
+        apy: 1825,
+        max: 100000000,
         min: 100,
-        interval: 360,
+        interval: 3,
         eligible: prufBalance > 100,
       },
       {
         id: 5,
-        apy: 5000,
-        max: 80000000,
+        apy: 1825,
+        max: 100000000,
         min: 100,
         interval: 3,
         eligible: prufBalance > 100,
