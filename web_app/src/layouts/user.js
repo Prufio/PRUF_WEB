@@ -56,6 +56,7 @@ import routes from "routes.js";
 import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { Icon } from "@material-ui/core";
+import { isConstructorDeclaration } from "typescript";
 
 var ps;
 const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
@@ -2314,7 +2315,7 @@ export default function Dashboard(props) {
   // states and functions
   const [miniActive, setMiniActive] = React.useState(true);
   const [mobileOpen, setMobileOpen] = React.useState(true);
-  const [addr, setAddr] = React.useState();
+  const [addr, setAddr] = React.useState("");
   const [etherBalance, setEtherBalance] = React.useState("");
   const [prufBalance, setPrufBalance] = React.useState("");
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
@@ -2335,6 +2336,8 @@ export default function Dashboard(props) {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [rootManager, setRootManager] = React.useState();
   const [redeemList, setRedeemList] = React.useState([]);
+  const [totalRewards, setTotalRewards] = React.useState(0);
+  const [totalStaked, setTotalStaked] = React.useState(0);
   const [delegationList, setDelegationList] = React.useState([
     ["Loading Balances...", "~", "~", "~"],
   ]);
@@ -2348,6 +2351,7 @@ export default function Dashboard(props) {
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
   const [stakeTkn, setStakeTkn] = React.useState({});
+  const [loadingSums, setLoadingSums] = React.useState(false)
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
@@ -2365,29 +2369,30 @@ export default function Dashboard(props) {
   // ref for main panel div
   const mainPanel = React.createRef();
 
-  if (window.ethereum) {
-    window.ethereum.on("chainChanged", (chainId) => {
-      console.log(chainId);
-      window.location.reload();
-    });
+  React.useEffect(() => {
 
-    window.ethereum.on("accountsChanged", (e) => {
-      console.log("Accounts changed");
-      if (e[0] === undefined || e[0] === null) {
-        if (e[0] !== addr) {
+    if (window.ethereum) {
+      window.ethereum.on("chainChanged", (chainId) => {
+        console.log(chainId);
+        window.location.reload();
+      });
+  
+      window.ethereum.on("accountsChanged", (e) => {
+        console.log("Accounts changed");
+        if (e[0] === undefined || e[0] === null) {
+          if (e[0] !== addr) {
+            window.location.reload();
+          }
+        } else if (e[0].toLowerCase() !== addr.toLowerCase()) {
           window.location.reload();
         }
-      } else if (web3.utils.toChecksumAddress(e[0]) !== addr) {
-        window.location.reload();
-      }
-    });
-  }
+      });
+    }
 
-  React.useEffect(() => {
     let _web3 = require("web3");
     _web3 = new Web3(
       _web3.givenProvider ||
-        "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     setWeb3(_web3);
     setTimeout(getAddress(_web3), 1000);
@@ -2415,39 +2420,44 @@ export default function Dashboard(props) {
     };
   }, []);
 
-  const refreshDash = () => {
-    getHeldStake(web3, stake, stakeTkn, addr);
-  };
-
   const getAddress = (_web3) => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({
-          method: "eth_accounts",
-        })
-        .then(async (accounts) => {
-          if (accounts[0] === undefined) {
-            window.ethereum
-              .request({ method: "eth_requestAccounts" })
-              .then(async (accounts) => {
-                if (accounts[0] === undefined)
-                  return swal({
-                    title: "Can't connect to wallet.",
-                    icon: "warning",
-                    button: "Close",
+
+    _web3.eth.net.getId().then(e=>{
+      if (e === 42) {
+        if (window.ethereum) {
+          window.ethereum
+            .request({
+              method: "eth_accounts",
+            })
+            .then(async (accounts) => {
+              if (accounts[0] === undefined) {
+                window.ethereum
+                  .request({ method: "eth_requestAccounts" })
+                  .then(async (accounts) => {
+                    if (accounts[0] === undefined)
+                      return swal({
+                        title: "Can't connect to wallet.",
+                        icon: "warning",
+                        button: "Close",
+                      });
+                    console.log(_web3.utils.toChecksumAddress(accounts[0]));
+                    setAddr(_web3.utils.toChecksumAddress(accounts[0]));
+                    setUpEnvironment(_web3, accounts[0]);
                   });
+              } else {
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-                setUpEnvironment(_web3, accounts[0]);
-              });
-          } else {
-            console.log(_web3.utils.toChecksumAddress(accounts[0]));
-            setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-            setUpEnvironment(_web3, _web3.utils.toChecksumAddress(accounts[0]));
-          }
-        });
-    } else {
-    }
+                setUpEnvironment(_web3, _web3.utils.toChecksumAddress(accounts[0]));
+              }
+            });
+        } else {
+        }
+      } else {
+        swalReact({icon:`warning`, text:`You are connected to network ID ${e}. Please connect to the ethereum kovan testnet`})
+      }
+    })
+
+
   };
 
   const getActiveRoute = (routes) => {
@@ -2521,8 +2531,25 @@ export default function Dashboard(props) {
     });
   };
 
+  const refreshDash = () => {
+    setLoadingSums(true)
+    getHeldStake(web3, stake, stakeTkn, addr);
+  };
+
   const parseTotalRedeemable = (arr) => {
-    //get each reward bal and return sum
+    let _totalRewards = 0;
+    let _totalStaked = 0;
+
+    arr.forEach(props=>{
+      if(props[9]){
+        _totalRewards+=Number(props[9])
+        _totalStaked+=Number(props[8])
+      }
+    })
+
+    setTotalRewards(_totalRewards.toFixed(2))
+    setTotalStaked(_totalStaked.toFixed(2))
+    setLoadingSums(false)
   };
 
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
@@ -2554,8 +2581,8 @@ export default function Dashboard(props) {
     const getStakeData = (ids, arr, iteration) => {
       if (!iteration) iteration = 0;
       if (ids.length <= arr.length) {
-        arr.push([``, ``, ``, ``, ``]);
         parseTotalRedeemable(arr);
+        arr.push([``, ``, ``, ``, ``]);
         return setDelegationList(arr);
       }
 
@@ -2589,6 +2616,8 @@ export default function Dashboard(props) {
                   interval,
                   bonus,
                   percentComplete,
+                  amount,
+                  rewards
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -2622,6 +2651,7 @@ export default function Dashboard(props) {
     console.log("setting up environment");
     setIsRefreshingEther(true);
     setIsRefreshingPruf(true);
+    setLoadingSums(true)
 
     let _util = new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
     let _stake = new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
@@ -2647,7 +2677,7 @@ export default function Dashboard(props) {
   const claimRewards = (index, id) => {
     console.log((delegationList[index][7] / 100) * delegationList[index][5]);
     let isReady =
-      (delegationList[index][7] / 100) * delegationList[index][5] >= 1;
+      (delegationList[index][7] / 100) * delegationList[index][5] > 1;
     let hoursLeft =
       24 - (delegationList[index][7] / 100) * delegationList[index][5] * 24;
     hoursLeft = hoursLeft.toFixed(1);
@@ -2703,7 +2733,7 @@ export default function Dashboard(props) {
           </h5>
           <h5 className="">
             {`
-                Unlock percent complete: ${delegationList[index][4]}%
+                Unlock percent complete: ${delegationList[index][4]}
               `}
           </h5>
         </Card>
@@ -2766,11 +2796,24 @@ export default function Dashboard(props) {
               />
             </AccordionSummary>
             <AccordionDetails>
+              {/* <Typography color="textSecondary">
+                {`
+                  Minimum allocation: ${props.min}
+                  `}
+              </Typography>
               <Typography color="textSecondary">
                 {`
-                  Minimum allocation: ${props.min}\n\n
-                  Maximum allocation: ${props.max}\n\n
-                  Lock duration: ${props.interval} days\n\n
+                  Maximum allocation: ${props.max}
+                  `}
+              </Typography> */}
+              <Typography color="textSecondary">
+                {`
+                  Lock duration: ${props.interval} days
+                  `}
+              </Typography>
+              <br/>
+              <Typography color="textSecondary">
+                {`
                   APY: ${props.apy}%
                   `}
               </Typography>
@@ -2863,7 +2906,7 @@ export default function Dashboard(props) {
                 Now, input the amount you want to stake:
               </h5>
               <CustomInput
-                labelText="Amount to delegate"
+                labelText={`Minimum: ${tierOptions[Number(id) - 1].min}, Maximum: ${tierOptions[Number(id) - 1].max}`}
                 id="CI1"
                 inputProps={{
                   type: "number",
@@ -2889,11 +2932,7 @@ export default function Dashboard(props) {
             },
           },
         }).then((value) => {
-          if (value === undefined) {
-            console.log("undefined...");
-          } else if (value === null) {
-            return newStake();
-          } else {
+          if (value === "confirm") {
             if (delegateAmount < tierOptions[Number(id) - 1].min) {
               return swalReact(
                 `The minimum value for this staking tier is ${
@@ -2914,6 +2953,8 @@ export default function Dashboard(props) {
                 refreshDash();
                 return refreshBalances("both", web3, addr);
               });
+          } else {
+            return newStake();
           }
         });
       }
@@ -3093,15 +3134,15 @@ export default function Dashboard(props) {
                     className="headerIconBack"
                     onClick={() => window.open("https://pruf.io/")}
                   >
-                    <span class="material-icons">redeem</span>
+                    <span className="material-icons">redeem</span>
                   </CardIcon>
                   <p
                     className={classes.cardCategory}
                   >{`Total Redeemable Rewards`}</p>
-                  {prufBalance ? (
+                  {totalRewards ? (
                     <h3 className={classes.cardTitle}>
                       <>
-                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                        {String(totalRewards)}{" "}
                       </>
                     </h3>
                   ) : (
@@ -3109,7 +3150,7 @@ export default function Dashboard(props) {
                   )}
                 </CardHeader>
                 <CardFooter stats>
-                  {!isRefreshingPruf && (
+                  {!loadingSums && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -3120,7 +3161,7 @@ export default function Dashboard(props) {
                         <div className="refresh">
                           <Cached
                             onClick={() => {
-                              refreshBalances("pruf", web3, addr);
+                              refreshDash();
                             }}
                           />
                         </div>
@@ -3187,13 +3228,13 @@ export default function Dashboard(props) {
                     className="headerIconBack"
                     onClick={() => window.open("https://pruf.io/")}
                   >
-                    <span class="material-icons">savings</span>
+                    <span className="material-icons">savings</span>
                   </CardIcon>
                   <p className={classes.cardCategory}>{`Total Staked`}</p>
-                  {prufBalance ? (
+                  {totalStaked ? (
                     <h3 className={classes.cardTitle}>
                       <>
-                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                        {String(totalStaked)}{" "}
                       </>
                     </h3>
                   ) : (
@@ -3201,7 +3242,7 @@ export default function Dashboard(props) {
                   )}
                 </CardHeader>
                 <CardFooter stats>
-                  {!isRefreshingPruf && (
+                  {!loadingSums && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -3212,7 +3253,7 @@ export default function Dashboard(props) {
                         <div className="refresh">
                           <Cached
                             onClick={() => {
-                              refreshBalances("pruf", web3, addr);
+                              refreshDash();
                             }}
                           />
                         </div>
