@@ -2520,6 +2520,10 @@ export default function Dashboard(props) {
     });
   };
 
+  const parseTotalRedeemable = (arr) => {
+    //get each reward bal and return sum
+  } 
+
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
     let currentBlock = await _web3.eth.getBlock("latest");
 
@@ -2550,6 +2554,7 @@ export default function Dashboard(props) {
       if (!iteration) iteration = 0;
       if (ids.length <= arr.length) {
         arr.push([``, ``, ``, ``, ``]);
+        parseTotalRedeemable(arr);
         return setDelegationList(arr);
       }
 
@@ -2637,6 +2642,30 @@ export default function Dashboard(props) {
 
   const viewStake = (index) => {
     console.log("view me!", index)
+
+    swalReact({
+      //icon: "warning",
+      content: (
+        <Card className="delegationCard">
+          <h4 className="delegationTitle">Delegation Details</h4>
+          <h5 className="finalizingTipsContent">
+            
+          </h5>
+        </Card>
+      ),
+      buttons: {
+        back: {
+          text: "Go Back",
+          value: "back",
+          className: "delegationButtonBack",
+        },
+        confirm: {
+          text: "Redeem Rewards",
+          value: "Redeem",
+          className: "delegationButtonBack",
+        },
+      },
+    })
   }
 
   const newStake = () => {
@@ -3046,19 +3075,18 @@ export default function Dashboard(props) {
                       <div className="actions-right">
                         {/* use this button to add a like kind of action */}
                         {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
-                          <></>
-                          // <Button
-                          //   // justIcon
-                          //   // round
-                          //   // simple
-                          //   onClick={() => {
-                          //     viewStake(key);
-                          //   }}
-                          //   color="info"
-                          //   className="delegateButton"
-                          // >
-                          //   View
-                          // </Button>
+                          <Button
+                            //justIcon
+                            //round
+                            //simple
+                            onClick={() => {
+                              viewStake(key);
+                            }}
+                            color="info"
+                            className="delegateButton"
+                          >
+                            View
+                          </Button>
                         )}
                         {prop[0] === "" && (
                           <Button
