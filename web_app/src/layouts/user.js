@@ -2932,7 +2932,7 @@ export default function Dashboard(props) {
       <div className={mainPanelClasses} ref={mainPanel}>
         <div className="splitterForm">
           <br />
-          <GridContainer>
+          <GridContainer className="top-margin">
             <GridItem xs={12} sm={6} md={6} lg={3}>
               <Card>
                 <CardHeader stats icon>

@@ -1495,3 +1495,7 @@ max-width: 80px !important;
   text-decoration: underline;
   cursor: pointer;
 }
+
+.top-margin {
+  margin-top: 35px !important;
+}
