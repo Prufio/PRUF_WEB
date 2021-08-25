@@ -1387,6 +1387,12 @@ max-width: 80px !important;
   font-weight: bold;
 }
 
+.delegateText {
+  color: black;
+  font-size: 14px;
+  font-weight: 500 !important;
+}
+
 .finalizingTipsContent {
   color: #ff1500;
   font-size: 12px;
