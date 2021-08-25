@@ -1,7 +1,9 @@
 import React from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
+import Pruf from "../../assets/img/pruftoken.png";
 import cx from "classnames";
+import '../../assets/css/custom.css'
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -62,6 +64,8 @@ export default function AdminNavbar(props) {
         </Hidden>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
+                    <img className="iconMini" src={Pruf} alt=""
+                    onClick={() => window.open("https://pruf.io/")}></img>
           <Button className={classes.title} color="transparent">
             {brandText}
           </Button>

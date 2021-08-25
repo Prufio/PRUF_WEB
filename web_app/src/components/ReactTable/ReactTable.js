@@ -68,8 +68,8 @@ fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
 function Table({ columns, data }) {
-  const [numberOfRows, setNumberOfRows] = React.useState(10);
-  const [pageSelect, handlePageSelect] = React.useState(0);
+  // const [numberOfRows, setNumberOfRows] = React.useState(100);
+  // const [pageSelect, handlePageSelect] = React.useState(0);
   const classes = useStyles();
   const filterTypes = React.useMemo(
     () => ({
@@ -194,7 +194,7 @@ function Table({ columns, data }) {
           </tbody>
         </table>
 
-        <div className="-pagination">
+        {/* <div className="-pagination">
           <div className="-previous">
             <button
               type="button"
@@ -302,7 +302,7 @@ function Table({ columns, data }) {
             </button>
           </div>
         </div>
-        <div className="pagination-bottom"></div>
+        <div className="pagination-bottom"></div> */}
       </div>
     </>
   );

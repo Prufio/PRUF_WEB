@@ -222,6 +222,15 @@ body {
     height: 55px;
 }
 
+.iconMini {
+    width: 35px;
+    height: 35px;
+}
+
+.iconMini:hover {
+  cursor: pointer;
+}
+
 .icons {
   display: flex;
   flex-direction: row;

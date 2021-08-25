@@ -1,6 +1,7 @@
 import React from "react";
 import cx from "classnames";
 import swal from "sweetalert";
+import '../assets/css/custom.css'
 import Web3 from "web3";
 import { MaticPOSClient } from "@maticnetwork/maticjs";
 import { useCookies } from "react-cookie";
@@ -47,7 +48,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import Eth from "../assets/img/eth-logo.png";
+import Eth from "../assets/img/eth-logo2.png";
 import Polygon from "../assets/img/matic-token-inverted-icon.png";
 
 import routes from "routes.js";
@@ -2415,7 +2416,7 @@ export default function Dashboard(props) {
   }, []);
 
   const refreshDash = () => {
-    getHeldStake(web3, stake, stakeTkn, addr)
+    getHeldStake(web3, stake, stakeTkn, addr);
   };
 
   const getAddress = (_web3) => {
@@ -2573,7 +2574,7 @@ export default function Dashboard(props) {
                 let intervalToYear = 365 / interval;
                 let apy = (bonus / amount) * intervalToYear * 100;
                 let percentComplete = Number(result["1"]) / 10000;
-                let rewards = Number(_web3.utils.fromWei(result["0"]))
+                let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
                   `${ids[iteration]}`,
                   `${apy.toFixed(0)}%`,
@@ -2611,8 +2612,8 @@ export default function Dashboard(props) {
 
   const setUpEnvironment = (_web3, _addr) => {
     console.log("setting up environment");
-    setIsRefreshingEther(true)
-    setIsRefreshingPruf(true)
+    setIsRefreshingEther(true);
+    setIsRefreshingPruf(true);
 
     let _util = new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
     let _stake = new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
@@ -2628,32 +2629,29 @@ export default function Dashboard(props) {
     });
 
     _util.methods.balanceOf(_addr).call(async (error, result) => {
-      setIsRefreshingPruf(false)
-      setPrufBalance(_web3.utils.fromWei(result))
-    })
+      setIsRefreshingPruf(false);
+      setPrufBalance(_web3.utils.fromWei(result));
+    });
 
     getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
   };
 
   const viewStake = (index) => {
-    console.log("view me!", index)
-  }
+    console.log("view me!", index);
+  };
 
   const newStake = () => {
     let delegateAmount;
     let isChecked = {
       chk1: false,
       chk2: false,
-      chk3: false
-    }
+      chk3: false,
+    };
     const showOptions = () => {
-    
-
-    let component = []
-
+      let component = [];
 
       tierOptions.forEach((props) => {
-        component.push (
+        component.push(
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -2663,9 +2661,20 @@ export default function Dashboard(props) {
             >
               <FormControlLabel
                 aria-label="Acknowledge"
-                onClick={(event) => {event.stopPropagation()}}
-                onFocus={(event) => {event.stopPropagation()}}
-                control={<Checkbox onClick = {()=>isChecked[`chk${props.id}`] = !isChecked[`chk${props.id}`]}/>}
+                onClick={(event) => {
+                  event.stopPropagation();
+                }}
+                onFocus={(event) => {
+                  event.stopPropagation();
+                }}
+                control={
+                  <Checkbox
+                    onClick={() =>
+                      (isChecked[`chk${props.id}`] =
+                        !isChecked[`chk${props.id}`])
+                    }
+                  />
+                }
                 label={`Tier ${props.id}`}
               />
             </AccordionSummary>
@@ -2681,19 +2690,20 @@ export default function Dashboard(props) {
             </AccordionDetails>
           </Accordion>
         );
-      })
+      });
 
-      return component
-    }
+      return component;
+    };
 
     const tierOptions = [
-      { 
-        id: 1, 
-        apy: 12.5, 
-        max: 100000, 
+      {
+        id: 1,
+        apy: 12.5,
+        max: 100000,
         min: 100,
         interval: 3,
-        eligible: prufBalance > 100 },
+        eligible: prufBalance > 100,
+      },
       {
         id: 2,
         apy: 15,
@@ -2736,16 +2746,22 @@ export default function Dashboard(props) {
         },
       },
     }).then((value) => {
-      if (typeof(value) !== "object" || value === null) {
+      if (typeof value !== "object" || value === null) {
         return;
-      } else if (value.chk1 === true && value.chk2 === true || 
-        value.chk2 === true && value.chk3 === true || 
-        value.chk1 === true && value.chk3 === true) {
-        return swalReact("Please select only 1 option!").then(()=>newStake()) 
-      } else if (value.chk1 === false && value.chk2 === false && value.chk3 === false) {
-        return swalReact("Please select an option!").then(()=>newStake()) 
+      } else if (
+        (value.chk1 === true && value.chk2 === true) ||
+        (value.chk2 === true && value.chk3 === true) ||
+        (value.chk1 === true && value.chk3 === true)
+      ) {
+        return swalReact("Please select only 1 option!").then(() => newStake());
+      } else if (
+        value.chk1 === false &&
+        value.chk2 === false &&
+        value.chk3 === false
+      ) {
+        return swalReact("Please select an option!").then(() => newStake());
       } else {
-        let id = String(Object.values(value).indexOf(true) + 1)
+        let id = String(Object.values(value).indexOf(true) + 1);
         swalReact({
           content: (
             <Card className="delegationCard">
@@ -2781,22 +2797,27 @@ export default function Dashboard(props) {
           },
         }).then((value) => {
           if (value === undefined) {
-            console.log("undefined...")
+            console.log("undefined...");
           } else if (value === null) {
-            return newStake()
+            return newStake();
           } else {
-            if (delegateAmount < tierOptions[Number(id)-1].min) {
-              return swalReact(`The minimum value for this staking tier is ${tierOptions[Number(id)-1].min}`).then(()=>newStake())
+            if (delegateAmount < tierOptions[Number(id) - 1].min) {
+              return swalReact(
+                `The minimum value for this staking tier is ${
+                  tierOptions[Number(id) - 1].min
+                }`
+              ).then(() => newStake());
             }
-            let amount = web3.utils.toWei(delegateAmount)
-            console.log(amount)
-            stake.stakeMyTokens(amount, id)
-            .send({from: addr})
-            .on("receipt", ()=>{
-              swalReact("Your PRUF has been staked successfully!")
-              refreshDash()
-              return refreshBalances("both", web3, addr)
-            })
+            let amount = web3.utils.toWei(delegateAmount);
+            console.log(amount);
+            stake
+              .stakeMyTokens(amount, id)
+              .send({ from: addr })
+              .on("receipt", () => {
+                swalReact("Your PRUF has been staked successfully!");
+                refreshDash();
+                return refreshBalances("both", web3, addr);
+              });
           }
         });
       }
@@ -2886,9 +2907,193 @@ export default function Dashboard(props) {
                   >
                     <img className="Icon" src={Pruf} alt=""></img>
                   </CardIcon>
+                  <p className={classes.cardCategory}>{`PRUF Balance`}</p>
+                  {prufBalance ? (
+                    <h3 className={classes.cardTitle}>
+                      <>
+                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                      </>
+                    </h3>
+                  ) : (
+                    <h3 className={classes.cardTitle}>~</h3>
+                  )}
+                </CardHeader>
+                <CardFooter stats>
+                  {!isRefreshingPruf && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Refresh Balances"
+                        placement="bottom"
+                        classes={{ tooltip: userClasses.toolTip }}
+                      >
+                        <div className="refresh">
+                          <Cached
+                            onClick={() => {
+                              refreshBalances("pruf", web3, addr);
+                            }}
+                          />
+                        </div>
+                      </Tooltip>
+                      {currentChain === "Ethereum" &&
+                        redeemList.length > 0 &&
+                        findingTxs === false && (
+                          <div className="inlineFlex">
+                            <Tooltip
+                              id="tooltip-top"
+                              title="Info"
+                              placement="bottom"
+                              classes={{ tooltip: userClasses.toolTip }}
+                            >
+                              <InfoOutlined
+                                className="info"
+                                onClick={() => {
+                                  swal({
+                                    title: `You have ü${redeemAmount} PRUF available for withdrawal from Polygon.`,
+                                    text: `Please click to redeem tokens.`,
+                                    icon: "warning",
+                                    button: "Close",
+                                  });
+                                }}
+                              />
+                            </Tooltip>
+                            {redeeming === true && (
+                              <Button
+                                className="redeemButton"
+                                onClick={() => redeem(redeemList)}
+                                disabled
+                              >
+                                Redeeming tokens...
+                              </Button>
+                            )}
+                            {redeeming === false && (
+                              <Button
+                                className="redeemButton"
+                                onClick={() => redeem(redeemList)}
+                              >
+                                Redeem tokens
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                    </>
+                  )}
+                  {isRefreshingPruf && (
+                    <div className={classes.stats}>
+                      <div className="lds-ellipsisCard">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  )}
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card>
+                <CardHeader color="danger" stats icon>
+                  <CardIcon
+                    className="headerIconBack"
+                    onClick={() => window.open("https://pruf.io/")}
+                  >
+                    <span class="material-icons">redeem</span>
+                  </CardIcon>
                   <p
                     className={classes.cardCategory}
-                  >{`PRUF Balance`}</p>
+                  >{`Total Redeemable Rewards`}</p>
+                  {prufBalance ? (
+                    <h3 className={classes.cardTitle}>
+                      <>
+                        {String(Math.round(Number(prufBalance) * 100) / 100)}{" "}
+                      </>
+                    </h3>
+                  ) : (
+                    <h3 className={classes.cardTitle}>~</h3>
+                  )}
+                </CardHeader>
+                <CardFooter stats>
+                  {!isRefreshingPruf && (
+                    <>
+                      <Tooltip
+                        id="tooltip-top"
+                        title="Refresh Balances"
+                        placement="bottom"
+                        classes={{ tooltip: userClasses.toolTip }}
+                      >
+                        <div className="refresh">
+                          <Cached
+                            onClick={() => {
+                              refreshBalances("pruf", web3, addr);
+                            }}
+                          />
+                        </div>
+                      </Tooltip>
+                      {currentChain === "Ethereum" &&
+                        redeemList.length > 0 &&
+                        findingTxs === false && (
+                          <div className="inlineFlex">
+                            <Tooltip
+                              id="tooltip-top"
+                              title="Info"
+                              placement="bottom"
+                              classes={{ tooltip: userClasses.toolTip }}
+                            >
+                              <InfoOutlined
+                                className="info"
+                                onClick={() => {
+                                  swal({
+                                    title: `You have ü${redeemAmount} PRUF available for withdrawal from Polygon.`,
+                                    text: `Please click to redeem tokens.`,
+                                    icon: "warning",
+                                    button: "Close",
+                                  });
+                                }}
+                              />
+                            </Tooltip>
+                            {redeeming === true && (
+                              <Button
+                                className="redeemButton"
+                                onClick={() => redeem(redeemList)}
+                                disabled
+                              >
+                                Redeeming tokens...
+                              </Button>
+                            )}
+                            {redeeming === false && (
+                              <Button
+                                className="redeemButton"
+                                onClick={() => redeem(redeemList)}
+                              >
+                                Redeem tokens
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                    </>
+                  )}
+                  {isRefreshingPruf && (
+                    <div className={classes.stats}>
+                      <div className="lds-ellipsisCard">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  )}
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={6} lg={3}>
+              <Card>
+                <CardHeader color="danger" stats icon>
+                  <CardIcon
+                    className="headerIconBack"
+                    onClick={() => window.open("https://pruf.io/")}
+                  >
+                    <span class="material-icons">savings</span>
+                  </CardIcon>
+                  <p className={classes.cardCategory}>{`Total Staked`}</p>
                   {prufBalance ? (
                     <h3 className={classes.cardTitle}>
                       <>
@@ -2992,7 +3197,7 @@ export default function Dashboard(props) {
                         refreshDash();
                       }}
                     >
-                      <Refresh />
+                      <Cached />
                     </Icon>
                   </Tooltip>
                 </div>
@@ -3006,6 +3211,7 @@ export default function Dashboard(props) {
                 Please connect to an Ethereum provider.
               </h3>
             )}
+            {!isMobile && (
             <CardBody>
               <ReactTable
                 columns={[
@@ -3047,18 +3253,6 @@ export default function Dashboard(props) {
                         {/* use this button to add a like kind of action */}
                         {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
                           <></>
-                          // <Button
-                          //   // justIcon
-                          //   // round
-                          //   // simple
-                          //   onClick={() => {
-                          //     viewStake(key);
-                          //   }}
-                          //   color="info"
-                          //   className="delegateButton"
-                          // >
-                          //   View
-                          // </Button>
                         )}
                         {prop[0] === "" && (
                           <Button
@@ -3066,7 +3260,7 @@ export default function Dashboard(props) {
                               newStake();
                             }}
                             color="info"
-                            className="delegateButton"
+                            className="MLBGradient"
                           >
                             New Stake
                           </Button>
@@ -3078,7 +3272,7 @@ export default function Dashboard(props) {
                               newStake();
                             }}
                             color="info"
-                            className="delegateButton"
+                            className="MLBGradient"
                           >
                             New Stake
                           </Button>
@@ -3089,6 +3283,70 @@ export default function Dashboard(props) {
                 })}
               />
             </CardBody>
+            )}
+            {isMobile && (
+            <CardBody>
+              <ReactTable
+                columns={[
+                  {
+                    Header: "ID",
+                    accessor: "id",
+                  },
+                  {
+                    Header: "Delegated",
+                    accessor: "balance",
+                  },
+                  {
+                    Header: "Rewards",
+                    accessor: "rewards",
+                  },
+                  {
+                    Header: "",
+                    accessor: "actions",
+                  },
+                ]}
+                data={delegationList.map((prop, key) => {
+                  return {
+                    id: prop[0],
+                    balance: prop[2],
+                    rewards: prop[3],
+                    actions: (
+                      // we've added some custom button actions
+                      <div className="actions-right">
+                        {/* use this button to add a like kind of action */}
+                        {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
+                          <></>
+                        )}
+                        {prop[0] === "" && (
+                          <Button
+                            onClick={() => {
+                              newStake();
+                            }}
+                            color="info"
+                            className="MLBGradient"
+                          >
+                            New Stake
+                          </Button>
+                        )}
+                        {prop[0] === "Loading Balances..." && (
+                          <Button
+                            disabled
+                            onClick={() => {
+                              newStake();
+                            }}
+                            color="info"
+                            className="MLBGradient"
+                          >
+                            New Stake
+                          </Button>
+                        )}
+                      </div>
+                    ),
+                  };
+                })}
+              />
+            </CardBody>
+            )}
           </Card>
         </div>
         <Footer fluid />
