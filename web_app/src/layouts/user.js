@@ -3228,7 +3228,7 @@ export default function Dashboard(props) {
                     className="headerIconBack"
                     onClick={() => window.open("https://pruf.io/")}
                   >
-                    <span class="material-icons">savings</span>
+                    <span className="material-icons">savings</span>
                   </CardIcon>
                   <p className={classes.cardCategory}>{`Total Staked`}</p>
                   {totalStaked ? (
