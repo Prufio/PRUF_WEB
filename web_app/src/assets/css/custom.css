@@ -1164,6 +1164,12 @@ cursor:pointer;
   font-weight: bold !important;
 }
 
+.delegationTitleSm {
+  text-decoration: underline;
+  font-size: 17.5px;
+  font-weight: bold !important;
+}
+
 .delegationPin {
   width: 12px !important;
   margin-right: 3px !important;
@@ -1504,4 +1510,8 @@ max-width: 80px !important;
 
 .top-margin {
   margin-top: 35px !important;
+}
+
+.left-margin {
+  margin-left: 10px;
 }
