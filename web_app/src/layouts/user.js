@@ -1,7 +1,7 @@
 import React from "react";
 import cx from "classnames";
 import swal from "sweetalert";
-import '../assets/css/custom.css'
+import "../assets/css/custom.css";
 import Web3 from "web3";
 import { MaticPOSClient } from "@maticnetwork/maticjs";
 import { useCookies } from "react-cookie";
@@ -2523,7 +2523,7 @@ export default function Dashboard(props) {
 
   const parseTotalRedeemable = (arr) => {
     //get each reward bal and return sum
-  } 
+  };
 
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
     let currentBlock = await _web3.eth.getBlock("latest");
@@ -2588,8 +2588,7 @@ export default function Dashboard(props) {
                   `${percentComplete.toFixed(2)}%`,
                   interval,
                   bonus,
-                  percentComplete
-
+                  percentComplete,
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -2646,34 +2645,35 @@ export default function Dashboard(props) {
   };
 
   const claimRewards = (index, id) => {
-    console.log((delegationList[index][7]/100) * delegationList[index][5])
-    let isReady = (delegationList[index][7]/100) * delegationList[index][5] >= 1
-    let hoursLeft = 24 - ((delegationList[index][7]/100) * delegationList[index][5] * 24)
-    hoursLeft = hoursLeft.toFixed(1)
+    console.log((delegationList[index][7] / 100) * delegationList[index][5]);
+    let isReady =
+      (delegationList[index][7] / 100) * delegationList[index][5] >= 1;
+    let hoursLeft =
+      24 - (delegationList[index][7] / 100) * delegationList[index][5] * 24;
+    hoursLeft = hoursLeft.toFixed(1);
 
-    if(isReady){
-      stake.claimBonus(id)
-      .send({from: addr})
-      .on("reciept", ()=>{
-        swalReact({
-          icon: "success",
-          text: `Successfully redeemed PRUF rewards!`
-          }
-        )
-        })
+    if (isReady) {
+      stake
+        .claimBonus(id)
+        .send({ from: addr })
+        .on("reciept", () => {
+          swalReact({
+            icon: "success",
+            text: `Successfully redeemed PRUF rewards!`,
+          });
+        });
     } else {
-      return swalReact({icon: "warning", text:`Holders must wait 24 hours after staking rewards. Please wait ~${hoursLeft} hours before redeeming.`})
-      .then(()=>{
-        viewStake(index)
-      })
+      return swalReact({
+        icon: "warning",
+        text: `Holders must wait 24 hours after staking rewards. Please wait ~${hoursLeft} hours before redeeming.`,
+      }).then(() => {
+        viewStake(index);
+      });
     }
-    
-  }
+  };
 
   const viewStake = (index) => {
-    console.log("view me!", index)
-
-    
+    console.log("view me!", index);
 
     swalReact({
       //icon: "warning",
@@ -2681,31 +2681,31 @@ export default function Dashboard(props) {
         <Card className="delegationCard">
           <h4 className="delegationTitle">Delegation Details</h4>
 
-              <h5 className="">
-                {`
+          <h5 className="">
+            {`
                   Stake token ID: ${delegationList[index][0]}
                 `}
-              </h5>
-              <h5 className="">
-                {`
+          </h5>
+          <h5 className="">
+            {`
                 Annual percentage yield: ${delegationList[index][1]}
               `}
-              </h5>
-              <h5 className="">
-                {`
+          </h5>
+          <h5 className="">
+            {`
                 Amount delegated: ${delegationList[index][2]}
               `}
-              </h5>
-              <h5 className="">
-                {`
+          </h5>
+          <h5 className="">
+            {`
                 Redeemable rewards: ${delegationList[index][3]}
               `}
-              </h5>
-              <h5 className="">
-                {`
+          </h5>
+          <h5 className="">
+            {`
                 Unlock percent complete: ${delegationList[index][4]}%
               `}
-              </h5>
+          </h5>
         </Card>
       ),
       buttons: {
@@ -2720,12 +2720,12 @@ export default function Dashboard(props) {
           className: "delegationButtonBack",
         },
       },
-    }).then(value=>{
+    }).then((value) => {
       if (value === "Redeem") {
-        claimRewards(index, String(delegationList[index][0]))
-      } else return
-    })
-  }
+        claimRewards(index, String(delegationList[index][0]));
+      } else return;
+    });
+  };
 
   const newStake = () => {
     let delegateAmount;
@@ -2835,12 +2835,24 @@ export default function Dashboard(props) {
     }).then((value) => {
       if (typeof value !== "object" || value === null) {
         return;
-      } else if (value.chk1 === true && value.chk2 === true || 
-        value.chk2 === true && value.chk3 === true || 
-        value.chk1 === true && value.chk3 === true) {
-        return swalReact({icon: "warning", text: "Please select only 1 option!"}).then(()=>newStake()) 
-      } else if (value.chk1 === false && value.chk2 === false && value.chk3 === false) {
-        return swalReact({icon: "warning", text:"Please select an option!"}).then(()=>newStake()) 
+      } else if (
+        (value.chk1 === true && value.chk2 === true) ||
+        (value.chk2 === true && value.chk3 === true) ||
+        (value.chk1 === true && value.chk3 === true)
+      ) {
+        return swalReact({
+          icon: "warning",
+          text: "Please select only 1 option!",
+        }).then(() => newStake());
+      } else if (
+        value.chk1 === false &&
+        value.chk2 === false &&
+        value.chk3 === false
+      ) {
+        return swalReact({
+          icon: "warning",
+          text: "Please select an option!",
+        }).then(() => newStake());
       } else {
         let id = String(Object.values(value).indexOf(true) + 1);
         swalReact({
@@ -2889,15 +2901,19 @@ export default function Dashboard(props) {
                 }`
               ).then(() => newStake());
             }
-            let amount = web3.utils.toWei(delegateAmount)
-            console.log(amount)
-            stake.stakeMyTokens(amount, id)
-            .send({from: addr})
-            .on("receipt", ()=>{
-              swalReact({icon: "success", text:"Your PRUF has been staked successfully!"})
-              refreshDash()
-              return refreshBalances("both", web3, addr)
-            })
+            let amount = web3.utils.toWei(delegateAmount);
+            console.log(amount);
+            stake
+              .stakeMyTokens(amount, id)
+              .send({ from: addr })
+              .on("receipt", () => {
+                swalReact({
+                  icon: "success",
+                  text: "Your PRUF has been staked successfully!",
+                });
+                refreshDash();
+                return refreshBalances("both", web3, addr);
+              });
           }
         });
       }
@@ -3292,151 +3308,150 @@ export default function Dashboard(props) {
               </h3>
             )}
             {!isMobile && (
-            <CardBody>
-              <ReactTable
-                columns={[
-                  {
-                    Header: "Stake ID",
-                    accessor: "id",
-                  },
-                  {
-                    Header: "Staking Yield (APY)",
-                    accessor: "lvl",
-                  },
-                  {
-                    Header: "Delegated Balance",
-                    accessor: "balance",
-                  },
-                  {
-                    Header: "Rewards Balance",
-                    accessor: "rewards",
-                  },
-                  {
-                    Header: "Unlock Progress",
-                    accessor: "date",
-                  },
-                  {
-                    Header: "",
-                    accessor: "actions",
-                  },
-                ]}
-                data={delegationList.map((prop, key) => {
-                  return {
-                    id: prop[0],
-                    lvl: prop[1],
-                    balance: prop[2],
-                    rewards: prop[3],
-                    date: prop[4],
-                    actions: (
-                      // we've added some custom button actions
-                      <div className="actions-right">
-                        {/* use this button to add a like kind of action */}
-                        {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
-                          <Button
-                            //justIcon
-                            //round
-                            //simple
-                            onClick={() => {
-                              viewStake(key);
-                            }}
-                            color="info"
-                            className="delegateButton"
-                          >
-                            View
-                          </Button>
-                        )}
-                        {prop[0] === "" && (
-                          <Button
-                            onClick={() => {
-                              newStake();
-                            }}
-                            color="info"
-                            className="MLBGradient"
-                          >
-                            New Stake
-                          </Button>
-                        )}
-                        {prop[0] === "Loading Balances..." && (
-                          <Button
-                            disabled
-                            onClick={() => {
-                              newStake();
-                            }}
-                            color="info"
-                            className="MLBGradient"
-                          >
-                            New Stake
-                          </Button>
-                        )}
-                      </div>
-                    ),
-                  };
-                })}
-              />
-            </CardBody>
+              <CardBody>
+                <ReactTable
+                  columns={[
+                    {
+                      Header: "Stake ID",
+                      accessor: "id",
+                    },
+                    {
+                      Header: "Staking Yield (APY)",
+                      accessor: "lvl",
+                    },
+                    {
+                      Header: "Delegated Balance",
+                      accessor: "balance",
+                    },
+                    {
+                      Header: "Rewards Balance",
+                      accessor: "rewards",
+                    },
+                    {
+                      Header: "Unlock Progress",
+                      accessor: "date",
+                    },
+                    {
+                      Header: "",
+                      accessor: "actions",
+                    },
+                  ]}
+                  data={delegationList.map((prop, key) => {
+                    return {
+                      id: prop[0],
+                      lvl: prop[1],
+                      balance: prop[2],
+                      rewards: prop[3],
+                      date: prop[4],
+                      actions: (
+                        // we've added some custom button actions
+                        <div className="actions-right">
+                          {/* use this button to add a like kind of action */}
+                          {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
+                            <Button
+                              //justIcon
+                              //round
+                              //simple
+                              onClick={() => {
+                                viewStake(key);
+                              }}
+                              color="info"
+                              className="delegateButton"
+                            >
+                              View
+                            </Button>
+                          )}
+                          {prop[0] === "" && (
+                            <Button
+                              onClick={() => {
+                                newStake();
+                              }}
+                              color="info"
+                              className="MLBGradient"
+                            >
+                              New Stake
+                            </Button>
+                          )}
+                          {prop[0] === "Loading Balances..." && (
+                            <Button
+                              disabled
+                              onClick={() => {
+                                newStake();
+                              }}
+                              color="info"
+                              className="MLBGradient"
+                            >
+                              New Stake
+                            </Button>
+                          )}
+                        </div>
+                      ),
+                    };
+                  })}
+                />
+              </CardBody>
             )}
             {isMobile && (
-            <CardBody>
-              <ReactTable
-                columns={[
-                  {
-                    Header: "ID",
-                    accessor: "id",
-                  },
-                  {
-                    Header: "Delegated",
-                    accessor: "balance",
-                  },
-                  {
-                    Header: "Rewards",
-                    accessor: "rewards",
-                  },
-                  {
-                    Header: "",
-                    accessor: "actions",
-                  },
-                ]}
-                data={delegationList.map((prop, key) => {
-                  return {
-                    id: prop[0],
-                    balance: prop[2],
-                    rewards: prop[3],
-                    actions: (
-                      // we've added some custom button actions
-                      <div className="actions-right">
-                        {/* use this button to add a like kind of action */}
-                        {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
-                          <></>
-                        )}
-                        {prop[0] === "" && (
-                          <Button
-                            onClick={() => {
-                              newStake();
-                            }}
-                            color="info"
-                            className="MLBGradient"
-                          >
-                            New Stake
-                          </Button>
-                        )}
-                        {prop[0] === "Loading Balances..." && (
-                          <Button
-                            disabled
-                            onClick={() => {
-                              newStake();
-                            }}
-                            color="info"
-                            className="MLBGradient"
-                          >
-                            New Stake
-                          </Button>
-                        )}
-                      </div>
-                    ),
-                  };
-                })}
-              />
-            </CardBody>
+              <CardBody>
+                <ReactTable
+                  columns={[
+                    {
+                      Header: "ID",
+                      accessor: "id",
+                    },
+                    {
+                      Header: "Delegated",
+                      accessor: "balance",
+                    },
+                    {
+                      Header: "Rewards",
+                      accessor: "rewards",
+                    },
+                    {
+                      Header: "",
+                      accessor: "actions",
+                    },
+                  ]}
+                  data={delegationList.map((prop, key) => {
+                    return {
+                      id: prop[0],
+                      balance: prop[2],
+                      rewards: prop[3],
+                      actions: (
+                        // we've added some custom button actions
+                        <div className="actions-right">
+                          {/* use this button to add a like kind of action */}
+                          {prop[0] !== "Loading Balances..." &&
+                            prop[0] !== "" && <></>}
+                          {prop[0] === "" && (
+                            <Button
+                              onClick={() => {
+                                newStake();
+                              }}
+                              color="info"
+                              className="MLBGradient"
+                            >
+                              New Stake
+                            </Button>
+                          )}
+                          {prop[0] === "Loading Balances..." && (
+                            <Button
+                              disabled
+                              onClick={() => {
+                                newStake();
+                              }}
+                              color="info"
+                              className="MLBGradient"
+                            >
+                              New Stake
+                            </Button>
+                          )}
+                        </div>
+                      ),
+                    };
+                  })}
+                />
+              </CardBody>
             )}
           </Card>
         </div>
