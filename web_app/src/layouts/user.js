@@ -1,3 +1,5 @@
+//PRUF STAKING INTERFACE
+
 import React from "react";
 import cx from "classnames";
 import swal from "sweetalert";
