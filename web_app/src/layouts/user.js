@@ -774,6 +774,7 @@ export default function Dashboard(props) {
                 labelText={`Minimum: ${tierOptions[Number(id) - 1].min}`}
                 id="CI1"
                 inputProps={{
+                  id:"CI1Input",
                   type: "number",
                   maxLength: 9,
                   onChange: (event) => {
@@ -782,6 +783,17 @@ export default function Dashboard(props) {
                   },
                 }}
               />
+              
+              {/* {document.getElementById("CI1Input") >= tierOptions[Number(id) - 1].min 
+              ? 
+              (<h5 className="delegateText">
+                Projected Rewards: ü{delegateAmount*tierOptions[Number(id) - 1].apy/52}/week
+              </h5>) 
+              : 
+              (<h5 className="delegateText">
+                Projected Rewards: ü~/week
+              </h5>)} */}
+              
             </Card>
           ),
           buttons: {
@@ -802,7 +814,7 @@ export default function Dashboard(props) {
               icon: "warning",
               content: (
                 <Card className="delegationCard">
-                  <h5 className="delegationTitle">Wait!</h5>
+                  <h5 className="delegationTitle">Just a moment...</h5>
                   <h5 className="delegationTitleSm">
                     Before you submit your stake, please read ahead: 
                   </h5>
@@ -810,34 +822,39 @@ export default function Dashboard(props) {
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                      {" "}You may begin to claim rewards 24 hours after opening
-                        your stake.
+                      {" "}Once you have created a stake, no additional steps are needed. You may 
+                      begin to claim staking rewards 24 hours after creating
+                      your stake.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        Your staked tokens will be locked for the Stake Lock Period
-                        ({tierOptions[Number(id) - 1].interval} Days), 
-                        and will only be able to be withdrawn after this
-                        period has concluded. 
+                        Your staked PRUF tokens will be locked until the 
+                        stake unlock period ends ({tierOptions[Number(id) - 1].interval} Days).
+                        Your stake will continue to earn rewards even after the staking period
+                        has ended. No action is required.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        Once the Stake Lock Period (
+                        Once the stake unlock period (
                         {tierOptions[Number(id) - 1].interval} Days) has
-                        concluded, you will be able to unlock and reclaim your 
-                        PRUF tokens.
+                        concluded, you may break your stake if you wish. This
+                        is optional. Once your stake is broken, your PRUF tokens 
+                        will be refunded.
+
+                        NOTE: IF YOU BREAK YOUR STAKE, THE STAKE ID IS BURNED,
+                        AND IT WILL STOP EARNING REWARDS.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        Tokens will continue to earn rewards, even after the
-                        Stake Lock Period has ended! Holders are free to stake as long as they 
-                        choose. 
+                        Remember, your stake will continue to earn rewards, even after the
+                        stake unlock period has ended! Holders are free to stake as 
+                        long as they want. 
                       </h5>
                     </div>
                     <div className="delegationTips">
@@ -1209,7 +1226,7 @@ export default function Dashboard(props) {
                       accessor: "lvl",
                     },
                     {
-                      Header: "Delegated Balance 🏛️",
+                      Header: "Amount Staked 🏛️",
                       accessor: "balance",
                     },
                     {
@@ -1217,7 +1234,7 @@ export default function Dashboard(props) {
                       accessor: "rewards",
                     },
                     {
-                      Header: "Unlock Progress ⏳",
+                      Header: "Unlock Status ⏳",
                       accessor: "date",
                     },
                     {
