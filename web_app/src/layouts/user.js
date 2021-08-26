@@ -5,17 +5,14 @@ import cx from "classnames";
 import swal from "sweetalert";
 import "../assets/css/custom.css";
 import Web3 from "web3";
-import { MaticPOSClient } from "@maticnetwork/maticjs";
-import { useCookies } from "react-cookie";
 import { Route } from "react-router-dom";
 import ReactTable from "../components/ReactTable/ReactTable.js";
 import CustomLinearProgress from "../components/CustomLinearProgress/CustomLinearProgress.js";
-import { isMobile, isAndroid } from "react-device-detect";
+import { isMobile } from "react-device-detect";
 import swalReact from "@sweetalert/with-react";
 // creates a beautiful scrollbar
 
 import PerfectScrollbar from "perfect-scrollbar";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
@@ -27,9 +24,6 @@ import {
   DashboardOutlined,
   FiberManualRecordTwoTone,
   InfoOutlined,
-  Refresh,
-  SettingsBackupRestore,
-  TrendingUpSharp,
 } from "@material-ui/icons";
 
 // core components
@@ -50,7 +44,6 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Accordion from "@material-ui/core/Accordion";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Eth from "../assets/img/eth-logo2.png";
@@ -62,7 +55,6 @@ import routes from "routes.js";
 import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { Icon } from "@material-ui/core";
-import { isConstructorDeclaration } from "typescript";
 
 var ps
 
@@ -92,21 +84,10 @@ export default function Dashboard(props) {
   const [prufBalance, setPrufBalance] = React.useState("");
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
   const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false);
-  const [useConnected, setUseConnected] = React.useState(false);
-  const [transacting, setTransacting] = React.useState(false);
   const [redeeming, setRedeeming] = React.useState(false);
-  const [allowance, setAllowance] = React.useState(false);
-  const [customAddress, setCustomAddress] = React.useState("");
-  const [walletInfo, setWalletInfo] = React.useState("0");
-  const [isEligible, setIsEligible] = React.useState(false);
-  const [amountToSwap, setAmountToSwap] = React.useState();
-  const [twinChain, setTwinChain] = React.useState("");
   const [currentChain, setCurrentChain] = React.useState("");
   const [web3, setWeb3] = React.useState();
-  const [maticClient, setMaticClient] = React.useState();
   const [redeemAmount, setRedeemAmount] = React.useState("0");
-  const [cookies, setCookie, removeCookie] = useCookies([]);
-  const [rootManager, setRootManager] = React.useState();
   const [redeemList, setRedeemList] = React.useState([]);
   const [totalRewards, setTotalRewards] = React.useState(0);
   const [totalStaked, setTotalStaked] = React.useState(0);
@@ -116,9 +97,6 @@ export default function Dashboard(props) {
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
-  // const [hasImage, setHasImage] = React.useState(true);
-  const [fixedClasses, setFixedClasses] = React.useState("dropdown");
-  const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
@@ -181,7 +159,6 @@ export default function Dashboard(props) {
       //console.log(ps);
     }
 
-    window.addEventListener("resize", resizeFunction);
 
     // Specify how to clean up after this effect:
     return function cleanup() {
@@ -412,16 +389,6 @@ export default function Dashboard(props) {
         console.error(error);
       }
     });
-  };
-
-  const sidebarMinimize = () => {
-    setMiniActive(!miniActive);
-  };
-
-  const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
-    }
   };
 
   const setUpEnvironment = async (_web3, _addr, _chainId) => {
@@ -916,8 +883,6 @@ export default function Dashboard(props) {
   return (
     <div className={userClasses.wrapper}>
       <AdminNavbar
-        sidebarMinimize={sidebarMinimize.bind(this)}
-        miniActive={miniActive}
         brandText={getActiveRoute(routes)}
         {...rest}
       />{" "}
@@ -1084,7 +1049,7 @@ export default function Dashboard(props) {
                 <CardHeader color="danger" stats icon>
                   <CardIcon
                     className="headerIconBack"
-                    onClick={() => window.open("https://pruf.io/")}
+                    onClick={() => window.open("https://prufio.medium.com/the-pr%C3%BCf-staking-protocol-c7a710fbf2ca")}
                   >
                     <span className="material-icons">redeem</span>
                   </CardIcon>
@@ -1135,7 +1100,7 @@ export default function Dashboard(props) {
                 <CardHeader color="danger" stats icon>
                   <CardIcon
                     className="headerIconBack"
-                    onClick={() => window.open("https://pruf.io/")}
+                    onClick={() => window.open("https://prufio.medium.com/the-pr%C3%BCf-staking-protocol-c7a710fbf2ca")}
                   >
                     <span className="material-icons">savings</span>
                   </CardIcon>
@@ -1184,9 +1149,6 @@ export default function Dashboard(props) {
             <CardHeader icon>
               <CardIcon
                 className="headerIconBack"
-                onClick={() => {
-                  moreInfo("back");
-                }}
               >
                 <DashboardOutlined />
               </CardIcon>
@@ -1268,29 +1230,6 @@ export default function Dashboard(props) {
                               View
                             </Button>
                           )}
-                          {/* {prop[0] === "" && (
-                            <Button
-                              onClick={() => {
-                                newStake();
-                              }}
-                              color="info"
-                              className="MLBGradient"
-                            >
-                              New Stake
-                            </Button>
-                          )}
-                          {prop[0] === "Loading Balances..." && (
-                            <Button
-                              disabled
-                              onClick={() => {
-                                newStake();
-                              }}
-                              color="info"
-                              className="MLBGradient"
-                            >
-                              New Stake
-                            </Button>
-                          )} */}
                         </div>
                       ),
                     };
@@ -1302,7 +1241,7 @@ export default function Dashboard(props) {
                     newStake();
                   }}
                   color="info"
-                  className="MLBGradient"
+                  className="delegateButton"
                 >
                   New Stake
                 </Button>
@@ -1340,30 +1279,16 @@ export default function Dashboard(props) {
                           {/* use this button to add a like kind of action */}
                           {prop[0] !== "Loading Balances..." &&
                             prop[0] !== "" && <></>}
-                          {prop[0] === "" && (
                             <Button
                               disabled = {!(prufBalance >= 100)}
                               onClick={() => {
                                 newStake();
                               }}
                               color="info"
-                              className="MLBGradient"
+                              className="delegateButton"
                             >
                               New Stake
                             </Button>
-                          )}
-                          {prop[0] === "Loading Balances..." && (
-                            <Button
-                              disabled
-                              onClick={() => {
-                                newStake();
-                              }}
-                              color="info"
-                              className="MLBGradient"
-                            >
-                              New Stake
-                            </Button>
-                          )}
                         </div>
                       ),
                     };
