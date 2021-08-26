@@ -97,6 +97,10 @@ export default function Dashboard(props) {
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
+  const [tierOptions, setTierOptions] = React.useState([])
+  const startAfter = 0
+  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "💎", "🚀"]
+
   const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
@@ -304,6 +308,30 @@ export default function Dashboard(props) {
     setLoadingSums(false);
   };
 
+  const getStakeOffers = (_web3, _stake, arr, iteration) => {
+    if(!iteration) iteration = 1
+    if(!arr) arr = []
+    if(iteration > 5) return setTierOptions(arr)
+          _stake
+            .getStakeLevel(iteration + startAfter)
+            .call(async (error, result) => {
+              if (!error) {
+                arr.push(
+                  {
+                    id: iteration + startAfter,
+                    apr: (Number(result["3"])*365/Number(result["2"])/10).toFixed(2),
+                    max: Number(_web3.utils.fromWei(result["1"])),
+                    min: Number(_web3.utils.fromWei(result["0"])),
+                    interval: Number(result["2"]),
+                    eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+                    emoji: tierEmojis[iteration]
+                  }
+                )
+                getStakeOffers(_web3, _stake, arr, iteration + 1);
+              }
+            });
+  }
+
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
     let currentBlock = await _web3.eth.getBlock("latest");
 
@@ -432,12 +460,12 @@ export default function Dashboard(props) {
         setPrufBalance("NaN")
       }
     });
-
+    getStakeOffers(_web3, _stake.methods)
     getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
   };
 
   const claimRewards = (index, id) => {
-    console.log((delegationList[index][7] / 100) * delegationList[index][5]);
+    //console.log((delegationList[index][7] / 100) * delegationList[index][5]);
     let isReady =
       (delegationList[index][10] / 100) * delegationList[index][5] > 1;
     let timeLeft =
@@ -477,17 +505,38 @@ export default function Dashboard(props) {
   const breakStake = (id) => {
     if (!id) return
 
-    stake
+    swalReact({
+      icon: "warning",
+      text: `Are you sure you want to break your stake? This action cannot be undone, and you will no longer be able to earn rewards on this ID if you do.`,
+      buttons: {
+        back: {
+          text: "⬅️ Go Back",
+          value: "back",
+          className: "delegationButtonBack",
+        },
+        confirm: {
+          text: "Break Stake ❌",
+          value: "break",
+          className: "delegationButtonBack",
+        },
+      },
+    }).then(value=>{
+      if(value === "break"){
+        stake
         .breakStake(id)
         .send({ from: addr })
         .on("reciept", () => {
           swalReact({
             icon: "success",
-            text: `Successfully broke stake!`,
+            text: `Successfully broke stake and refunded PRUF!`,
           });
           refreshDash()
           return refreshBalances("both", web3, addr)
         });
+      } 
+    })
+
+    
   }
 
   const viewStake = (index) => {
@@ -522,10 +571,6 @@ export default function Dashboard(props) {
             {`
                 Unlock percent complete: ${delegationList[index][4]}
               `}
-              {Number(delegationList[index][4].substring(0, delegationList[index][4].length-1)) >= 100 
-              ? <a onClick = {()=>{return breakStake(String(delegationList[index][0]))}}> 🗑️ </a>
-              : <></>
-              }
           </h5>
           <CustomLinearProgress
             variant="determinate"
@@ -537,6 +582,10 @@ export default function Dashboard(props) {
               )
             )}
           />
+          {Number(delegationList[index][4].substring(0, delegationList[index][4].length-1)) >= 100
+              ? <Button className="MLBGradient" onClick = {()=>{return breakStake(String(delegationList[index][0]))}}> Stop Earning ❌ </Button>
+              : <></>
+              }
         </Card>
       ),
       buttons: {
@@ -622,54 +671,6 @@ export default function Dashboard(props) {
       return component;
     };
 
-    const tierOptions = [
-      {
-        id: 1,
-        apr: 608,
-        max: 100000000,
-        min: 100,
-        interval: 3,
-        eligible: prufBalance > 100,
-        emoji: "🥉"
-      },
-      {
-        id: 2,
-        apr: 1217,
-        max: 100000000,
-        min: 10000,
-        interval: 3,
-        eligible: prufBalance > 100,
-        emoji: "🥈"
-      },
-      {
-        id: 3,
-        apr: 2190,
-        max: 100000000,
-        min: 100000,
-        interval: 3,
-        eligible: prufBalance > 100,
-        emoji: "🥇"
-      },
-      {
-        id: 4,
-        apr: 1825,
-        max: 100000000,
-        min: 300000,
-        interval: 3,
-        eligible: prufBalance > 100,
-        emoji: "💎"
-      },
-      {
-        id: 5,
-        apr: 1825,
-        max: 100000000,
-        min: 1000000,
-        interval: 3,
-        eligible: prufBalance > 100,
-        emoji: "🚀"
-      },
-    ];
-
     swalReact({
       //icon: "warning",
       content: (
@@ -716,7 +717,7 @@ export default function Dashboard(props) {
           text: "Please select an option!",
         }).then(() => newStake());
       } else {
-        let id = String(Object.values(value).indexOf(true) + 1);
+        let id = String(Object.values(value).indexOf(true) + 1 + startAfter);
         swalReact({
           content: (
             <Card className="delegationCard">
@@ -725,13 +726,13 @@ export default function Dashboard(props) {
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Lock Duration: {tierOptions[Number(id) - 1].interval} Days
+                    Lock Duration: {tierOptions[Number(id)].interval} Days
                   </h5>
                 </div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    APR: {tierOptions[Number(id) - 1].apr}%
+                    APR: {tierOptions[Number(id)].apr}%
                   </h5>
                 </div>
               </div>
@@ -739,7 +740,7 @@ export default function Dashboard(props) {
                 Input the amount you want to stake:
               </h5>
               <CustomInput
-                labelText={`Minimum: ${tierOptions[Number(id) - 1].min}`}
+                labelText={`Minimum: ${tierOptions[Number(id)].min}`}
                 id="CI1"
                 inputProps={{
                   id:"CI1Input",
@@ -777,7 +778,13 @@ export default function Dashboard(props) {
             },
           },
         }).then((value) => {
-          if (value === "confirm") {
+          if(delegateAmount > prufBalance) {
+            swalReact({
+              icon: "error",
+              text: "Insufficient PRUF!"
+            })
+          }
+          else if (value === "confirm") {
             swalReact({
               icon: "warning",
               content: (
@@ -1225,6 +1232,7 @@ export default function Dashboard(props) {
                                 viewStake(key);
                               }}
                               color="info"
+                              //className="delegateButton"
                               className="MLBGradient"
                             >
                               View
