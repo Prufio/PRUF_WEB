@@ -56,19 +56,19 @@ import userStyle from "assets/jss/material-dashboard-pro-react/layouts/userStyle
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import { Icon } from "@material-ui/core";
 
-var ps
+var ps;
 
-const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381"
-const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee"
-const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2"
+const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
+const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee";
+const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2";
 
-const POLY_UTIL_ADDRESS = "0x45f7c1eC0F0e19674A699577F9d89fB5424Acf1F"
-const POLY_STAKE_ADDRESS = "0xB30c01fC29f97339E1eb6890a56CA1a907ca961D"
-const POLY_STAKE_TKN_ADDRESS = "0x8Cea13A98a0143cfab5336fF5103C41f874d64Ea"
+const POLY_UTIL_ADDRESS = "0x45f7c1eC0F0e19674A699577F9d89fB5424Acf1F";
+const POLY_STAKE_ADDRESS = "0xB30c01fC29f97339E1eb6890a56CA1a907ca961D";
+const POLY_STAKE_TKN_ADDRESS = "0x8Cea13A98a0143cfab5336fF5103C41f874d64Ea";
 
-const UTIL_ABI = ABIs.UTIL_ABI
-const STAKE_ABI = ABIs.STAKE_ABI
-const STAKE_TKN_ABI = ABIs.STAKE_TKN_ABI
+const UTIL_ABI = ABIs.UTIL_ABI;
+const STAKE_ABI = ABIs.STAKE_ABI;
+const STAKE_TKN_ABI = ABIs.STAKE_TKN_ABI;
 
 const useStyles = makeStyles(styles);
 const userStyles = makeStyles(userStyle);
@@ -97,9 +97,9 @@ export default function Dashboard(props) {
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
-  const [tierOptions, setTierOptions] = React.useState([])
-  const startAfter = 0
-  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "💎", "🚀"]
+  const [tierOptions, setTierOptions] = React.useState([]);
+  const startAfter = 0;
+  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "💎", "🚀"];
 
   const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
@@ -162,7 +162,6 @@ export default function Dashboard(props) {
       setSps(ps);
       //console.log(ps);
     }
-
 
     // Specify how to clean up after this effect:
     return function cleanup() {
@@ -309,28 +308,26 @@ export default function Dashboard(props) {
   };
 
   const getStakeOffers = (_web3, _stake, arr, iteration) => {
-    if(!iteration) iteration = 1
-    if(!arr) arr = []
-    if(iteration > 5) return setTierOptions(arr)
-          _stake
-            .getStakeLevel(iteration + startAfter)
-            .call(async (error, result) => {
-              if (!error) {
-                arr.push(
-                  {
-                    id: iteration + startAfter,
-                    apr: (Number(result["3"])*365/Number(result["2"])/10).toFixed(2),
-                    max: Number(_web3.utils.fromWei(result["1"])),
-                    min: Number(_web3.utils.fromWei(result["0"])),
-                    interval: Number(result["2"]),
-                    eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
-                    emoji: tierEmojis[iteration]
-                  }
-                )
-                getStakeOffers(_web3, _stake, arr, iteration + 1);
-              }
-            });
-  }
+    if (!iteration) iteration = 1;
+    if (!arr) arr = [];
+    if (iteration > 5) return setTierOptions(arr);
+    _stake.getStakeLevel(iteration + startAfter).call(async (error, result) => {
+      if (!error) {
+        arr.push({
+          id: iteration + startAfter,
+          apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
+            2
+          ),
+          max: Number(_web3.utils.fromWei(result["1"])),
+          min: Number(_web3.utils.fromWei(result["0"])),
+          interval: Number(result["2"]),
+          eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+          emoji: tierEmojis[iteration],
+        });
+        getStakeOffers(_web3, _stake, arr, iteration + 1);
+      }
+    });
+  };
 
   const getHeldStake = async (_web3, _stake, _tkn, _addr) => {
     let currentBlock = await _web3.eth.getBlock("latest");
@@ -383,9 +380,9 @@ export default function Dashboard(props) {
                 // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
                 let intervalToYear = 365 / interval;
-                let apr = (bonus / amount * 100) * intervalToYear;
-                let percentComplete = timeElapsed / interval * 100;
-                if(percentComplete>100) percentComplete = 100
+                let apr = (bonus / amount) * 100 * intervalToYear;
+                let percentComplete = (timeElapsed / interval) * 100;
+                if (percentComplete > 100) percentComplete = 100;
                 let timeTilRedeem = Number(result["1"]) / 10000;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
@@ -399,7 +396,7 @@ export default function Dashboard(props) {
                   percentComplete,
                   amount,
                   rewards,
-                  timeTilRedeem
+                  timeTilRedeem,
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -424,20 +421,26 @@ export default function Dashboard(props) {
     setIsRefreshingEther(true);
     setIsRefreshingPruf(true);
     setLoadingSums(true);
-    setChainId(_chainId)
+    setChainId(_chainId);
 
-    let _util
-    let _stake
-    let _stakeTkn
+    let _util;
+    let _stake;
+    let _stakeTkn;
 
-    if(_chainId === 42){
+    if (_chainId === 42) {
       _util = await new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, STAKE_TKN_ADDRESS);
+      _stakeTkn = await new _web3.eth.Contract(
+        STAKE_TKN_ABI,
+        STAKE_TKN_ADDRESS
+      );
     } else {
       _util = await new _web3.eth.Contract(UTIL_ABI, POLY_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, POLY_STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, POLY_STAKE_TKN_ADDRESS);
+      _stakeTkn = await new _web3.eth.Contract(
+        STAKE_TKN_ABI,
+        POLY_STAKE_TKN_ADDRESS
+      );
     }
 
     setStake(_stake.methods);
@@ -451,16 +454,15 @@ export default function Dashboard(props) {
 
     _util.methods.balanceOf(_addr).call(async (error, result) => {
       setIsRefreshingPruf(false);
-      if(!error){
-        if(Number(result) > 0)
-        setPrufBalance(_web3.utils.fromWei(result));
-        else setPrufBalance(0)
+      if (!error) {
+        if (Number(result) > 0) setPrufBalance(_web3.utils.fromWei(result));
+        else setPrufBalance(0);
       } else {
-        console.error(error)
-        setPrufBalance("NaN")
+        console.error(error);
+        setPrufBalance("NaN");
       }
     });
-    getStakeOffers(_web3, _stake.methods)
+    getStakeOffers(_web3, _stake.methods);
     getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
   };
 
@@ -470,7 +472,7 @@ export default function Dashboard(props) {
       (delegationList[index][10] / 100) * delegationList[index][5] > 1;
     let timeLeft =
       24 - (delegationList[index][10] / 100) * delegationList[index][5] * 24;
-    let timeUnit = "hours"
+    let timeUnit = "hours";
     timeLeft = timeLeft.toFixed(2);
 
     if (timeLeft < 1) {
@@ -488,7 +490,7 @@ export default function Dashboard(props) {
             text: `Successfully redeemed PRUF rewards!`,
           });
           refreshDash();
-          return refreshBalances("both", web3, addr)
+          return refreshBalances("both", web3, addr);
         });
     } else {
       return swalReact({
@@ -503,7 +505,7 @@ export default function Dashboard(props) {
   };
 
   const breakStake = (id) => {
-    if (!id) return
+    if (!id) return;
 
     swalReact({
       icon: "warning",
@@ -520,27 +522,24 @@ export default function Dashboard(props) {
           className: "delegationButtonBack",
         },
       },
-    }).then(value=>{
-      if(value === "break"){
+    }).then((value) => {
+      if (value === "break") {
         stake
-        .breakStake(id)
-        .send({ from: addr })
-        .on("reciept", () => {
-          swalReact({
-            icon: "success",
-            text: `Successfully broke stake and refunded PRUF!`,
+          .breakStake(id)
+          .send({ from: addr })
+          .on("reciept", () => {
+            swalReact({
+              icon: "success",
+              text: `Successfully broke stake and refunded PRUF!`,
+            });
+            refreshDash();
+            return refreshBalances("both", web3, addr);
           });
-          refreshDash()
-          return refreshBalances("both", web3, addr)
-        });
-      } 
-    })
-
-    
-  }
+      }
+    });
+  };
 
   const viewStake = (index) => {
-
     swalReact({
       //icon: "warning",
       content: (
@@ -582,10 +581,24 @@ export default function Dashboard(props) {
               )
             )}
           />
-          {Number(delegationList[index][4].substring(0, delegationList[index][4].length-1)) >= 100
-              ? <Button className="MLBGradient" onClick = {()=>{return breakStake(String(delegationList[index][0]))}}> Stop Earning ❌ </Button>
-              : <></>
-              }
+          {Number(
+            delegationList[index][4].substring(
+              0,
+              delegationList[index][4].length - 1
+            )
+          ) >= 100 ? (
+            <Button
+              className="MLBGradient"
+              onClick={() => {
+                return breakStake(String(delegationList[index][0]));
+              }}
+            >
+              {" "}
+              Stop Earning ❌{" "}
+            </Button>
+          ) : (
+            <></>
+          )}
         </Card>
       ),
       buttons: {
@@ -636,7 +649,7 @@ export default function Dashboard(props) {
                 }}
                 control={
                   <Checkbox
-                  disabled = {!(prufBalance > props.min)}
+                    disabled={!(prufBalance > props.min)}
                     onClick={() =>
                       (isChecked[`chk${props.id}`] =
                         !isChecked[`chk${props.id}`])
@@ -743,7 +756,7 @@ export default function Dashboard(props) {
                 labelText={`Minimum: ${tierOptions[Number(id)].min}`}
                 id="CI1"
                 inputProps={{
-                  id:"CI1Input",
+                  id: "CI1Input",
                   type: "number",
                   maxLength: 9,
                   onChange: (event) => {
@@ -752,7 +765,7 @@ export default function Dashboard(props) {
                   },
                 }}
               />
-              
+
               {/* {document.getElementById("CI1Input") >= tierOptions[Number(id) - 1].min 
               ? 
               (<h5 className="delegateText">
@@ -762,7 +775,6 @@ export default function Dashboard(props) {
               (<h5 className="delegateText">
                 Projected Rewards: ü~/week
               </h5>)} */}
-              
             </Card>
           ),
           buttons: {
@@ -778,37 +790,38 @@ export default function Dashboard(props) {
             },
           },
         }).then((value) => {
-          if(delegateAmount > prufBalance) {
+          if (delegateAmount > prufBalance) {
             swalReact({
               icon: "error",
-              text: "Insufficient PRUF!"
-            })
-          }
-          else if (value === "confirm") {
+              text: "Insufficient PRUF!",
+            });
+          } else if (value === "confirm") {
             swalReact({
               icon: "warning",
               content: (
                 <Card className="delegationCard">
                   <h5 className="delegationTitle">Just a moment...</h5>
                   <h5 className="delegationTitleSm">
-                    Before you submit your stake, please read ahead: 
+                    Before you submit your stake, please read ahead:
                   </h5>
                   <div className="left-margin">
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                      {" "}Once you have created a stake, no additional steps are needed. You may 
-                      begin to claim staking rewards 24 hours after creating
-                      your stake.
+                        {" "}
+                        Once you have created a stake, no additional steps are
+                        needed. You may begin to claim staking rewards 24 hours
+                        after creating your stake.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        Your staked PRUF tokens will be locked until the 
-                        stake unlock period ends ({tierOptions[Number(id) - 1].interval} Days).
-                        Your stake will continue to earn rewards even after the staking period
-                        has ended. No action is required.
+                        Your staked PRUF tokens will be locked until the stake
+                        unlock period ends (
+                        {tierOptions[Number(id) - 1].interval} Days). Your stake
+                        will continue to earn rewards even after the staking
+                        period has ended. No action is required.
                       </h5>
                     </div>
                     <div className="delegationTips">
@@ -816,26 +829,25 @@ export default function Dashboard(props) {
                       <h5 className="delegationTipsContent">
                         Once the stake unlock period (
                         {tierOptions[Number(id) - 1].interval} Days) has
-                        concluded, you may break your stake if you wish. This
-                        is optional. Once your stake is broken, your PRUF tokens 
-                        will be refunded.
-
-                        NOTE: IF YOU BREAK YOUR STAKE, THE STAKE ID IS BURNED,
-                        AND IT WILL STOP EARNING REWARDS.
+                        concluded, you may break your stake if you wish. This is
+                        optional. Once your stake is broken, your PRUF tokens
+                        will be refunded. NOTE: IF YOU BREAK YOUR STAKE, THE
+                        STAKE ID IS BURNED, AND IT WILL STOP EARNING REWARDS.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        Remember, your stake will continue to earn rewards, even after the
-                        stake unlock period has ended! Holders are free to stake as 
-                        long as they want. 
+                        Remember, your stake will continue to earn rewards, even
+                        after the stake unlock period has ended! Holders are
+                        free to stake as long as they want.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        {" "}You are about to stake ü{delegateAmount} 
+                        {" "}
+                        You are about to stake ü{delegateAmount}
                       </h5>
                     </div>
                   </div>
@@ -889,11 +901,7 @@ export default function Dashboard(props) {
 
   return (
     <div className={userClasses.wrapper}>
-      <AdminNavbar
-        brandText={getActiveRoute(routes)}
-        {...rest}
-      />{" "}
-      <br />
+      <AdminNavbar brandText={getActiveRoute(routes)} {...rest} /> <br />
       <div className={mainPanelClasses} ref={mainPanel}>
         <div className="splitterForm">
           <br />
@@ -907,9 +915,17 @@ export default function Dashboard(props) {
                       className="headerIconBack"
                       onClick={() => window.open("https://ethereum.org/en/")}
                     >
-                      {chainId === 42 ? <img className="Icon" src={Eth} alt=""></img> : <img className="Icon" src={Polygon} alt=""></img>}
+                      {chainId === 42 ? (
+                        <img className="Icon" src={Eth} alt=""></img>
+                      ) : (
+                        <img className="Icon" src={Polygon} alt=""></img>
+                      )}
                     </CardIcon>
-                    {chainId === 42 ? <p className={classes.cardCategory}>ETH Balance</p> : <p className={classes.cardCategory}>Matic Balance</p>}
+                    {chainId === 42 ? (
+                      <p className={classes.cardCategory}>ETH Balance</p>
+                    ) : (
+                      <p className={classes.cardCategory}>Matic Balance</p>
+                    )}
                   </>
                   {/* ) : ( */}
                   {/* <>
@@ -1056,7 +1072,11 @@ export default function Dashboard(props) {
                 <CardHeader color="danger" stats icon>
                   <CardIcon
                     className="headerIconBack"
-                    onClick={() => window.open("https://prufio.medium.com/the-pr%C3%BCf-staking-protocol-c7a710fbf2ca")}
+                    onClick={() =>
+                      window.open(
+                        "https://prufio.medium.com/the-pr%C3%BCf-staking-protocol-c7a710fbf2ca"
+                      )
+                    }
                   >
                     <span className="material-icons">redeem</span>
                   </CardIcon>
@@ -1107,7 +1127,11 @@ export default function Dashboard(props) {
                 <CardHeader color="danger" stats icon>
                   <CardIcon
                     className="headerIconBack"
-                    onClick={() => window.open("https://prufio.medium.com/the-pr%C3%BCf-staking-protocol-c7a710fbf2ca")}
+                    onClick={() =>
+                      window.open(
+                        "https://prufio.medium.com/the-pr%C3%BCf-staking-protocol-c7a710fbf2ca"
+                      )
+                    }
                   >
                     <span className="material-icons">savings</span>
                   </CardIcon>
@@ -1154,9 +1178,7 @@ export default function Dashboard(props) {
           </GridContainer>
           <Card>
             <CardHeader icon>
-              <CardIcon
-                className="headerIconBack"
-              >
+              <CardIcon className="headerIconBack">
                 <DashboardOutlined />
               </CardIcon>
               <div className="dashboardHeader">
@@ -1244,7 +1266,7 @@ export default function Dashboard(props) {
                   })}
                 />
                 <Button
-                  disabled = {!(prufBalance >= 100)}
+                  disabled={!(prufBalance >= 100)}
                   onClick={() => {
                     newStake();
                   }}
@@ -1293,7 +1315,7 @@ export default function Dashboard(props) {
                   })}
                 />
                 <Button
-                  disabled = {!(prufBalance >= 100)}
+                  disabled={!(prufBalance >= 100)}
                   onClick={() => {
                     newStake();
                   }}
