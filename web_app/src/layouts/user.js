@@ -676,7 +676,7 @@ export default function Dashboard(props) {
         <Card className="delegationCard">
           <h4 className="delegationTitle">Delegate Funds</h4>
           <h5 className="delegateText">
-            Select your preferred EO staking tier:
+            Select your preferred staking tier:
           </h5>
           {showOptions()}
         </Card>
