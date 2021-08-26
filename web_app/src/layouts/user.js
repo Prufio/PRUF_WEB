@@ -206,7 +206,7 @@ export default function Dashboard(props) {
       } else {
         swalReact({
           icon: `warning`,
-          text: `You are connected to network ID ${e}. Please connect to the ethereum kovan testnet`,
+          text: `You are connected to network ID ${chainId}. Please connect to the ethereum kovan testnet`,
         });
       }
     });
@@ -340,7 +340,7 @@ export default function Dashboard(props) {
 
       _stake.stakeInfo(ids[iteration]).call(async (error, result) => {
         if (!error) {
-          console.log(result);
+          //console.log(result);
           let amount = Number(_web3.utils.fromWei(result["0"]));
           let timeElapsed =
             (Number(currentBlock.timestamp) - Number(result["1"])) / 86400;
@@ -350,18 +350,19 @@ export default function Dashboard(props) {
             .checkEligibleRewards(ids[iteration])
             .call(async (error, result) => {
               if (!error) {
-                console.log(result);
+                //console.log(result);
                 // //@dev overflow date case
                 // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
                 let intervalToYear = 365 / interval;
-                let apy = (bonus / amount * 100) * intervalToYear;
+                let apr = (bonus / amount * 100) * intervalToYear;
                 let percentComplete = timeElapsed / interval * 100;
+                if(percentComplete>100) percentComplete = 100
                 let timeTilRedeem = Number(result["1"]) / 10000;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
                   `${ids[iteration]}`,
-                  `${apy.toFixed(0)}%`,
+                  `${apr.toFixed(0)}%`,
                   `ü${amount.toFixed(0)}`,
                   `ü${rewards.toFixed(2)}`,
                   `${percentComplete.toFixed(2)}%`,
@@ -522,7 +523,7 @@ export default function Dashboard(props) {
                 Unlock percent complete: ${delegationList[index][4]}
               `}
               {Number(delegationList[index][4].substring(0, delegationList[index][4].length-1)) >= 100 
-              ? <a onClick = {()=>{return breakStake(String(delegationList[index][0]))}}> Withdraw Stake  </a>
+              ? <a onClick = {()=>{return breakStake(String(delegationList[index][0]))}}> 🗑️ </a>
               : <></>
               }
           </h5>
@@ -610,7 +611,7 @@ export default function Dashboard(props) {
                 </div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
-                  <h5 className="delegationTipsContent">APY: {props.apy}%</h5>
+                  <h5 className="delegationTipsContent">APR: {props.apr}%</h5>
                 </div>
               </div>
             </AccordionDetails>
@@ -624,7 +625,7 @@ export default function Dashboard(props) {
     const tierOptions = [
       {
         id: 1,
-        apy: 608,
+        apr: 608,
         max: 100000000,
         min: 100,
         interval: 3,
@@ -633,7 +634,7 @@ export default function Dashboard(props) {
       },
       {
         id: 2,
-        apy: 1217,
+        apr: 1217,
         max: 100000000,
         min: 10000,
         interval: 3,
@@ -642,7 +643,7 @@ export default function Dashboard(props) {
       },
       {
         id: 3,
-        apy: 2190,
+        apr: 2190,
         max: 100000000,
         min: 100000,
         interval: 3,
@@ -651,7 +652,7 @@ export default function Dashboard(props) {
       },
       {
         id: 4,
-        apy: 1825,
+        apr: 1825,
         max: 100000000,
         min: 300000,
         interval: 3,
@@ -660,7 +661,7 @@ export default function Dashboard(props) {
       },
       {
         id: 5,
-        apy: 1825,
+        apr: 1825,
         max: 100000000,
         min: 1000000,
         interval: 3,
@@ -730,7 +731,7 @@ export default function Dashboard(props) {
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    APY: {tierOptions[Number(id) - 1].apy}%
+                    APR: {tierOptions[Number(id) - 1].apr}%
                   </h5>
                 </div>
               </div>
@@ -754,7 +755,7 @@ export default function Dashboard(props) {
               {/* {document.getElementById("CI1Input") >= tierOptions[Number(id) - 1].min 
               ? 
               (<h5 className="delegateText">
-                Projected Rewards: ü{delegateAmount*tierOptions[Number(id) - 1].apy/52}/week
+                Projected Rewards: ü{delegateAmount*tierOptions[Number(id) - 1].apr/52}/week
               </h5>) 
               : 
               (<h5 className="delegateText">
@@ -1184,7 +1185,7 @@ export default function Dashboard(props) {
                       accessor: "id",
                     },
                     {
-                      Header: "Staking Yield (APY) 📈",
+                      Header: "Staking Yield (APR) 📈",
                       accessor: "lvl",
                     },
                     {
