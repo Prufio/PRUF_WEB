@@ -1078,14 +1078,12 @@ export default function Dashboard(props) {
                       )
                     }
                   >
-                    <span className="material-icons">redeem</span>
+                    <span className="material-icons">savings</span>
                   </CardIcon>
-                  <p
-                    className={classes.cardCategory}
-                  >{`Current Reward Pool`}</p>
-                  {totalRewards ? (
+                  <p className={classes.cardCategory}>{`PRUF Staked`}</p>
+                  {totalStaked ? (
                     <h3 className={classes.cardTitle}>
-                      <>ü{String(totalRewards)} </>
+                      <>ü{String(totalStaked)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
@@ -1133,12 +1131,14 @@ export default function Dashboard(props) {
                       )
                     }
                   >
-                    <span className="material-icons">savings</span>
+                    <span className="material-icons">redeem</span>
                   </CardIcon>
-                  <p className={classes.cardCategory}>{`Total Staked`}</p>
-                  {totalStaked ? (
+                  <p
+                    className={classes.cardCategory}
+                  >{`Current Reward Pool`}</p>
+                  {totalRewards ? (
                     <h3 className={classes.cardTitle}>
-                      <>ü{String(totalStaked)} </>
+                      <>ü{String(totalRewards)} </>
                     </h3>
                   ) : (
                     <h3 className={classes.cardTitle}>~</h3>
