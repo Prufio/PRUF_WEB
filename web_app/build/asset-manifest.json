@@ -1,28 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.10593331.chunk.css",
-    "main.js": "/static/js/main.38b5c10b.chunk.js",
-    "main.js.map": "/static/js/main.38b5c10b.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.957c7afc.js",
-    "runtime-main.js.map": "/static/js/runtime-main.957c7afc.js.map",
+    "main.css": "/static/css/main.56b5cd00.chunk.css",
+    "main.js": "/static/js/main.8dbb1fb0.chunk.js",
+    "main.js.map": "/static/js/main.8dbb1fb0.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.1df65969.js",
+    "runtime-main.js.map": "/static/js/runtime-main.1df65969.js.map",
     "static/css/2.121b3ca3.chunk.css": "/static/css/2.121b3ca3.chunk.css",
-    "static/js/2.e7aa7e6a.chunk.js": "/static/js/2.e7aa7e6a.chunk.js",
-    "static/js/2.e7aa7e6a.chunk.js.map": "/static/js/2.e7aa7e6a.chunk.js.map",
+    "static/js/2.b4ff0465.chunk.js": "/static/js/2.b4ff0465.chunk.js",
+    "static/js/2.b4ff0465.chunk.js.map": "/static/js/2.b4ff0465.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.121b3ca3.chunk.css.map": "/static/css/2.121b3ca3.chunk.css.map",
-    "static/css/main.10593331.chunk.css.map": "/static/css/main.10593331.chunk.css.map",
-    "static/js/2.e7aa7e6a.chunk.js.LICENSE.txt": "/static/js/2.e7aa7e6a.chunk.js.LICENSE.txt",
-    "static/js/main.38b5c10b.chunk.js.LICENSE.txt": "/static/js/main.38b5c10b.chunk.js.LICENSE.txt",
+    "static/css/main.56b5cd00.chunk.css.map": "/static/css/main.56b5cd00.chunk.css.map",
+    "static/js/2.b4ff0465.chunk.js.LICENSE.txt": "/static/js/2.b4ff0465.chunk.js.LICENSE.txt",
+    "static/js/main.8dbb1fb0.chunk.js.LICENSE.txt": "/static/js/main.8dbb1fb0.chunk.js.LICENSE.txt",
     "static/media/custom.css": "/static/media/TracesWB.ba7ad1a4.jpg",
-    "static/media/eth-logo.a85b6de0.png": "/static/media/eth-logo.a85b6de0.png",
+    "static/media/eth-logo2.6bbc2303.png": "/static/media/eth-logo2.6bbc2303.png",
     "static/media/logo-white.svg": "/static/media/logo-white.6a2b2982.svg",
     "static/media/matic-token-inverted-icon.26e39f24.png": "/static/media/matic-token-inverted-icon.26e39f24.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.957c7afc.js",
+    "static/js/runtime-main.1df65969.js",
     "static/css/2.121b3ca3.chunk.css",
-    "static/js/2.e7aa7e6a.chunk.js",
-    "static/css/main.10593331.chunk.css",
-    "static/js/main.38b5c10b.chunk.js"
+    "static/js/2.b4ff0465.chunk.js",
+    "static/css/main.56b5cd00.chunk.css",
+    "static/js/main.8dbb1fb0.chunk.js"
   ]
 }

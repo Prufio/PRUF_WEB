@@ -68,6 +68,10 @@ const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381"
 const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee"
 const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2"
 
+const POLY_UTIL_ADDRESS = "0x45f7c1eC0F0e19674A699577F9d89fB5424Acf1F"
+const POLY_STAKE_ADDRESS = "0xB30c01fC29f97339E1eb6890a56CA1a907ca961D"
+const POLY_STAKE_TKN_ADDRESS = "0x8Cea13A98a0143cfab5336fF5103C41f874d64Ea"
+
 const UTIL_ABI = ABIs.UTIL_ABI
 const STAKE_ABI = ABIs.STAKE_ABI
 const STAKE_TKN_ABI = ABIs.STAKE_TKN_ABI
@@ -113,7 +117,7 @@ export default function Dashboard(props) {
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
-  const [splitter, setSplitter] = React.useState({});
+  const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
   const [stakeTkn, setStakeTkn] = React.useState({});
@@ -186,8 +190,8 @@ export default function Dashboard(props) {
   }, []);
 
   const getAddress = (_web3) => {
-    _web3.eth.net.getId().then((e) => {
-      if (e === 42) {
+    _web3.eth.net.getId().then((chainId) => {
+      if (chainId === 42 || chainId === 80001) {
         if (window.ethereum) {
           window.ethereum
             .request({
@@ -206,14 +210,15 @@ export default function Dashboard(props) {
                       });
                     console.log(_web3.utils.toChecksumAddress(accounts[0]));
                     setAddr(_web3.utils.toChecksumAddress(accounts[0]));
-                    setUpEnvironment(_web3, accounts[0]);
+                    setUpEnvironment(_web3, accounts[0], chainId);
                   });
               } else {
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
                 setUpEnvironment(
                   _web3,
-                  _web3.utils.toChecksumAddress(accounts[0])
+                  _web3.utils.toChecksumAddress(accounts[0]),
+                  chainId
                 );
               }
             });
@@ -416,15 +421,26 @@ export default function Dashboard(props) {
     }
   };
 
-  const setUpEnvironment = (_web3, _addr) => {
+  const setUpEnvironment = async (_web3, _addr, _chainId) => {
     console.log("setting up environment");
     setIsRefreshingEther(true);
     setIsRefreshingPruf(true);
     setLoadingSums(true);
+    setChainId(_chainId)
 
-    let _util = new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
-    let _stake = new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
-    let _stakeTkn = new _web3.eth.Contract(STAKE_TKN_ABI, STAKE_TKN_ADDRESS);
+    let _util
+    let _stake
+    let _stakeTkn
+
+    if(_chainId === 42){
+      _util = await new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
+      _stake = await new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
+      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, STAKE_TKN_ADDRESS);
+    } else {
+      _util = await new _web3.eth.Contract(UTIL_ABI, POLY_UTIL_ADDRESS);
+      _stake = await new _web3.eth.Contract(STAKE_ABI, POLY_STAKE_ADDRESS);
+      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, POLY_STAKE_TKN_ADDRESS);
+    }
 
     setStake(_stake.methods);
     setStakeTkn(_stakeTkn.methods);
@@ -437,7 +453,14 @@ export default function Dashboard(props) {
 
     _util.methods.balanceOf(_addr).call(async (error, result) => {
       setIsRefreshingPruf(false);
-      setPrufBalance(_web3.utils.fromWei(result));
+      if(!error){
+        if(Number(result) > 0)
+        setPrufBalance(_web3.utils.fromWei(result));
+        else setPrufBalance(0)
+      } else {
+        console.error(error)
+        setPrufBalance("NaN")
+      }
     });
 
     getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
@@ -467,11 +490,14 @@ export default function Dashboard(props) {
             text: `Successfully redeemed PRUF rewards!`,
           });
           refreshDash();
+          return refreshBalances("both", web3, addr)
         });
     } else {
       return swalReact({
         icon: "warning",
-        text: `Holders must wait 24 hours after initial stake or redeeming thier balance before claiming rewards. Please wait ~${timeLeft} ${timeUnit} before redeeming.`,
+        text: `Holders must wait 24 hours after initial stake 
+        or reward redemption before claiming rewards. 
+        Please wait ~${timeLeft} ${timeUnit} and try again.`,
       }).then(() => {
         viewStake(index);
       });
@@ -490,11 +516,11 @@ export default function Dashboard(props) {
             text: `Successfully broke stake!`,
           });
           refreshDash()
+          return refreshBalances("both", web3, addr)
         });
   }
 
   const viewStake = (index) => {
-    console.log("view me!", index);
 
     swalReact({
       //icon: "warning",
@@ -591,6 +617,7 @@ export default function Dashboard(props) {
                 }}
                 control={
                   <Checkbox
+                  disabled = {!(prufBalance > props.min)}
                     onClick={() =>
                       (isChecked[`chk${props.id}`] =
                         !isChecked[`chk${props.id}`])
@@ -601,7 +628,7 @@ export default function Dashboard(props) {
                     }}
                   />
                 }
-                label={`Tier ${props.id} ${props.emoji}`}
+                label={`Tier ${props.id} ${props.emoji} Minimum ü${props.min}`}
               />
             </AccordionSummary>
             <AccordionDetails>
@@ -639,7 +666,7 @@ export default function Dashboard(props) {
         id: 2,
         apy: 1217,
         max: 100000000,
-        min: 100,
+        min: 10000,
         interval: 3,
         eligible: prufBalance > 100,
         emoji: "🥈"
@@ -648,7 +675,7 @@ export default function Dashboard(props) {
         id: 3,
         apy: 2190,
         max: 100000000,
-        min: 100,
+        min: 100000,
         interval: 3,
         eligible: prufBalance > 100,
         emoji: "🥇"
@@ -657,7 +684,7 @@ export default function Dashboard(props) {
         id: 4,
         apy: 1825,
         max: 100000000,
-        min: 100,
+        min: 300000,
         interval: 3,
         eligible: prufBalance > 100,
         emoji: "💎"
@@ -666,7 +693,7 @@ export default function Dashboard(props) {
         id: 5,
         apy: 1825,
         max: 100000000,
-        min: 100,
+        min: 1000000,
         interval: 3,
         eligible: prufBalance > 100,
         emoji: "🚀"
@@ -679,7 +706,7 @@ export default function Dashboard(props) {
         <Card className="delegationCard">
           <h4 className="delegationTitle">Delegate Funds</h4>
           <h5 className="delegateText">
-            First, select your preferred staking tier:
+            First, select your preferred EO staking tier:
           </h5>
           {showOptions()}
         </Card>
@@ -775,43 +802,46 @@ export default function Dashboard(props) {
                 <Card className="delegationCard">
                   <h5 className="delegationTitle">Wait!</h5>
                   <h5 className="delegationTitleSm">
-                    Before you submit your stake, we would like to inform you on
-                    how this process works.
+                    Before you submit your stake, please read ahead: 
                   </h5>
                   <div className="left-margin">
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        You may begin to claim rewards 24 hours after staking
-                        begins.
+                      {" "}You may begin to claim rewards 24 hours after opening
+                        your stake.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        Your staked tokens will be locked for the Lock Duration
-                        ({tierOptions[Number(id) - 1].interval} Days) listed
-                        above, but will be able to be withdrawn after the chosen
-                        period expires.
+                        Your staked tokens will be locked for the Stake Lock Period
+                        ({tierOptions[Number(id) - 1].interval} Days), 
+                        and will only be able to be withdrawn after this
+                        period has concluded. 
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        Once the Lock Duration (
+                        Once the Stake Lock Period (
                         {tierOptions[Number(id) - 1].interval} Days) has
-                        expired, upon viewing your stake information you will be
-                        given the option to cancel your stake, and withdraw.
+                        concluded, you will be able to unlock and reclaim your 
+                        PRUF tokens.
                       </h5>
                     </div>
                     <div className="delegationTips">
                       <FiberManualRecordTwoTone className="delegationPin" />
                       <h5 className="delegationTipsContent">
-                        If you do not cancel your stake after the Lock Period (
-                        {tierOptions[Number(id) - 1].interval} Days) expires,
-                        your stake will continue to earn rewards at the same APY
-                        rate ({tierOptions[Number(id) - 1].apy}%), until the
-                        stake is cancelled.
+                        Tokens will continue to earn rewards, even after the
+                        Stake Lock Period has ended! Holders are free to stake as long as they 
+                        choose. 
+                      </h5>
+                    </div>
+                    <div className="delegationTips">
+                      <FiberManualRecordTwoTone className="delegationPin" />
+                      <h5 className="delegationTipsContent">
+                        {" "}You are about to stake ü{delegateAmount} 
                       </h5>
                     </div>
                   </div>
@@ -819,12 +849,12 @@ export default function Dashboard(props) {
               ),
               buttons: {
                 back: {
-                  text: "Go Back",
+                  text: "⬅️ Go Back",
                   value: "back",
                   className: "delegationButtonBack",
                 },
                 confirm: {
-                  text: "Confirm",
+                  text: "I Understand 👍",
                   value: "confirm",
                   className: "delegationButtonBack",
                 },
@@ -885,9 +915,9 @@ export default function Dashboard(props) {
                       className="headerIconBack"
                       onClick={() => window.open("https://ethereum.org/en/")}
                     >
-                      <img className="Icon" src={Eth} alt=""></img>
+                      {chainId === 42 ? <img className="Icon" src={Eth} alt=""></img> : <img className="Icon" src={Polygon} alt=""></img>}
                     </CardIcon>
-                    <p className={classes.cardCategory}>ETH Balance</p>
+                    {chainId === 42 ? <p className={classes.cardCategory}>ETH Balance</p> : <p className={classes.cardCategory}>Matic Balance</p>}
                   </>
                   {/* ) : ( */}
                   {/* <>
@@ -1066,50 +1096,9 @@ export default function Dashboard(props) {
                           />
                         </div>
                       </Tooltip>
-                      {currentChain === "Ethereum" &&
-                        redeemList.length > 0 &&
-                        findingTxs === false && (
-                          <div className="inlineFlex">
-                            <Tooltip
-                              id="tooltip-top"
-                              title="Info"
-                              placement="bottom"
-                              classes={{ tooltip: userClasses.toolTip }}
-                            >
-                              <InfoOutlined
-                                className="info"
-                                onClick={() => {
-                                  swal({
-                                    title: `You have ü${redeemAmount} PRUF available for withdrawal from Polygon.`,
-                                    text: `Please click to redeem tokens.`,
-                                    icon: "warning",
-                                    button: "Close",
-                                  });
-                                }}
-                              />
-                            </Tooltip>
-                            {redeeming === true && (
-                              <Button
-                                className="redeemButton"
-                                onClick={() => redeem(redeemList)}
-                                disabled
-                              >
-                                Redeeming tokens...
-                              </Button>
-                            )}
-                            {redeeming === false && (
-                              <Button
-                                className="redeemButton"
-                                onClick={() => redeem(redeemList)}
-                              >
-                                Redeem tokens
-                              </Button>
-                            )}
-                          </div>
-                        )}
                     </>
                   )}
-                  {isRefreshingPruf && (
+                  {loadingSums && (
                     <div className={classes.stats}>
                       <div className="lds-ellipsisCard">
                         <div></div>
@@ -1156,50 +1145,9 @@ export default function Dashboard(props) {
                           />
                         </div>
                       </Tooltip>
-                      {currentChain === "Ethereum" &&
-                        redeemList.length > 0 &&
-                        findingTxs === false && (
-                          <div className="inlineFlex">
-                            <Tooltip
-                              id="tooltip-top"
-                              title="Info"
-                              placement="bottom"
-                              classes={{ tooltip: userClasses.toolTip }}
-                            >
-                              <InfoOutlined
-                                className="info"
-                                onClick={() => {
-                                  swal({
-                                    title: `You have ü${redeemAmount} PRUF available for withdrawal from Polygon.`,
-                                    text: `Please click to redeem tokens.`,
-                                    icon: "warning",
-                                    button: "Close",
-                                  });
-                                }}
-                              />
-                            </Tooltip>
-                            {redeeming === true && (
-                              <Button
-                                className="redeemButton"
-                                onClick={() => redeem(redeemList)}
-                                disabled
-                              >
-                                Redeeming tokens...
-                              </Button>
-                            )}
-                            {redeeming === false && (
-                              <Button
-                                className="redeemButton"
-                                onClick={() => redeem(redeemList)}
-                              >
-                                Redeem tokens
-                              </Button>
-                            )}
-                          </div>
-                        )}
                     </>
                   )}
-                  {isRefreshingPruf && (
+                  {loadingSums && (
                     <div className={classes.stats}>
                       <div className="lds-ellipsisCard">
                         <div></div>
@@ -1271,7 +1219,7 @@ export default function Dashboard(props) {
                       accessor: "date",
                     },
                     {
-                      Header: "",
+                      Header: "Details 🕵️‍♀️",
                       accessor: "actions",
                     },
                   ]}
@@ -1329,6 +1277,7 @@ export default function Dashboard(props) {
                   })}
                 />
                 <Button
+                  disabled = {!(prufBalance >= 100)}
                   onClick={() => {
                     newStake();
                   }}
@@ -1373,6 +1322,7 @@ export default function Dashboard(props) {
                             prop[0] !== "" && <></>}
                           {prop[0] === "" && (
                             <Button
+                              disabled = {!(prufBalance >= 100)}
                               onClick={() => {
                                 newStake();
                               }}
