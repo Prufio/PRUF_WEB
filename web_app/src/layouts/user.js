@@ -1249,7 +1249,7 @@ export default function Dashboard(props) {
                     newStake();
                   }}
                   color="info"
-                  className="delegateButton"
+                  className="delegateButtonCentered"
                 >
                   New Stake
                 </Button>
@@ -1287,21 +1287,21 @@ export default function Dashboard(props) {
                           {/* use this button to add a like kind of action */}
                           {prop[0] !== "Loading Balances..." &&
                             prop[0] !== "" && <></>}
-                            <Button
-                              disabled = {!(prufBalance >= 100)}
-                              onClick={() => {
-                                newStake();
-                              }}
-                              color="info"
-                              className="delegateButton"
-                            >
-                              New Stake
-                            </Button>
                         </div>
                       ),
                     };
                   })}
                 />
+                <Button
+                  disabled = {!(prufBalance >= 100)}
+                  onClick={() => {
+                    newStake();
+                  }}
+                  color="info"
+                  className="delegateButtonMobile"
+                >
+                  New Stake
+                </Button>
               </CardBody>
             )}
           </Card>

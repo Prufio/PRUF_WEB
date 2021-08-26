@@ -1155,6 +1155,30 @@ cursor:pointer;
   border-radius: 10px !important;
 }
 
+.delegateButtonCentered {
+  background-color: transparent !important;
+  font-weight: 550 !important;
+  font-size: 13px !important;
+  color:#00c3ff !important;
+  border-width: 3px !important;
+  border-style: outset !important;
+  border-color: #00c3ff !important;
+  border-radius: 10px !important;
+  margin-left: 45% !important;
+}
+
+.delegateButtonMobile {
+  background-color: transparent !important;
+  font-weight: 550 !important;
+  font-size: 13px !important;
+  color:#00c3ff !important;
+  border-width: 3px !important;
+  border-style: outset !important;
+  border-color: #00c3ff !important;
+  border-radius: 10px !important;
+  width: 100%;
+}
+
 .delegationCard {
   padding: 10px;
 }
