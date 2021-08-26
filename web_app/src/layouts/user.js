@@ -1235,8 +1235,12 @@ export default function Dashboard(props) {
                     },
                   ]}
                   data={delegationList.map((prop, key) => {
+                    let _id = "";
+                    if (Number(prop[0]) > 0) {
+                      _id = `${"# 0000".substring(0, 6-String(prop[0]).length)}${prop[0]}`
+                    }
                     return {
-                      id: prop[0],
+                      id: _id,
                       lvl: prop[1],
                       balance: prop[2],
                       rewards: prop[3],
