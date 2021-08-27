@@ -58,13 +58,21 @@ import { Icon } from "@material-ui/core";
 
 var ps;
 
-const UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381";
-const STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee";
-const STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2";
+const KOVAN_UTIL_ADDRESS = "0xf9393D7ce74A8089A4f317Eb6a63623275DeD381",
+KOVAN_STAKE_ADDRESS = "0x1e8Fd4587b5Fe06A205E9c9e010274cFE6A367ee",
+KOVAN_STAKE_TKN_ADDRESS = "0x36F717F8430D51580E1E02Cd452Ab71584Be6eF2"
 
-const POLY_UTIL_ADDRESS = "0x45f7c1eC0F0e19674A699577F9d89fB5424Acf1F";
-const POLY_STAKE_ADDRESS = "0xB30c01fC29f97339E1eb6890a56CA1a907ca961D";
-const POLY_STAKE_TKN_ADDRESS = "0x8Cea13A98a0143cfab5336fF5103C41f874d64Ea";
+const MUMBAI_UTIL_ADDRESS = "0x45f7c1eC0F0e19674A699577F9d89fB5424Acf1F",
+MUMBAI_STAKE_ADDRESS = "0xB30c01fC29f97339E1eb6890a56CA1a907ca961D",
+MUMBAI_STAKE_TKN_ADDRESS = "0x8Cea13A98a0143cfab5336fF5103C41f874d64Ea"
+
+const ETH_UTIL_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538",
+ETH_STAKE_ADDRESS = "",
+ETH_STAKE_TKN_ADDRESS = ""
+
+const POLY_UTIL_ADDRESS = "0xAdf72D32E511eE00c6E0FF5D62Cd5C7C40A6aDEA",
+POLY_STAKE_ADDRESS = "",
+POLY_STAKE_TKN_ADDRESS = ""
 
 const UTIL_ABI = ABIs.UTIL_ABI;
 const STAKE_ABI = ABIs.STAKE_ABI;
@@ -73,12 +81,11 @@ const STAKE_TKN_ABI = ABIs.STAKE_TKN_ABI;
 const useStyles = makeStyles(styles);
 const userStyles = makeStyles(userStyle);
 
-export default function Dashboard(props) {
+export default function Dashboard (props) {
   const { ...rest } = props;
 
   // states and functions
   const [miniActive, setMiniActive] = React.useState(true);
-  const [mobileOpen, setMobileOpen] = React.useState(true);
   const [addr, setAddr] = React.useState("");
   const [etherBalance, setEtherBalance] = React.useState("");
   const [prufBalance, setPrufBalance] = React.useState("");
@@ -91,16 +98,10 @@ export default function Dashboard(props) {
   const [redeemList, setRedeemList] = React.useState([]);
   const [totalRewards, setTotalRewards] = React.useState(0);
   const [totalStaked, setTotalStaked] = React.useState(0);
-  const [delegationList, setDelegationList] = React.useState([
-    ["Loading Balances...", "~", "~", "~"],
-  ]);
+  const [delegationList, setDelegationList] = React.useState([["Loading Balances...", "~", "~", "~"]]);
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
-
   const [tierOptions, setTierOptions] = React.useState([]);
-  const startAfter = 0;
-  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "💎", "🚀"];
-
   const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
@@ -109,7 +110,8 @@ export default function Dashboard(props) {
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
-  const apiSecret = "F9GZM22PSKBBCI3YZ21CK8B3DC9C5DRKXF";
+  const startAfter = 0;
+  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "💎", "🚀"];
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -173,7 +175,7 @@ export default function Dashboard(props) {
 
   const getAddress = (_web3) => {
     _web3.eth.net.getId().then((chainId) => {
-      if (chainId === 42 || chainId === 80001) {
+      if (chainId === 42 || chainId === 80001 || chainId === 1 || chainId === 137) {
         if (window.ethereum) {
           window.ethereum
             .request({
@@ -427,20 +429,24 @@ export default function Dashboard(props) {
     let _stake;
     let _stakeTkn;
 
-    if (_chainId === 42) {
-      _util = await new _web3.eth.Contract(UTIL_ABI, UTIL_ADDRESS);
-      _stake = await new _web3.eth.Contract(STAKE_ABI, STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(
-        STAKE_TKN_ABI,
-        STAKE_TKN_ADDRESS
-      );
-    } else {
+    if (_chainId === 1) {
+      _util = await new _web3.eth.Contract(UTIL_ABI, ETH_UTIL_ADDRESS);
+      _stake = await new _web3.eth.Contract(STAKE_ABI, ETH_STAKE_ADDRESS);
+      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, ETH_STAKE_TKN_ADDRESS);
+    } else if (_chainId === 42) {
+      _util = await new _web3.eth.Contract(UTIL_ABI, KOVAN_UTIL_ADDRESS);
+      _stake = await new _web3.eth.Contract(STAKE_ABI, KOVAN_STAKE_ADDRESS);
+      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, KOVAN_STAKE_TKN_ADDRESS);
+    } else if (_chainId === 137) {
       _util = await new _web3.eth.Contract(UTIL_ABI, POLY_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, POLY_STAKE_ADDRESS);
-      _stakeTkn = await new _web3.eth.Contract(
-        STAKE_TKN_ABI,
-        POLY_STAKE_TKN_ADDRESS
-      );
+      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, POLY_STAKE_TKN_ADDRESS);
+    } else if (_chainId === 80001) {
+      _util = await new _web3.eth.Contract(UTIL_ABI, MUMBAI_UTIL_ADDRESS);
+      _stake = await new _web3.eth.Contract(STAKE_ABI, MUMBAI_STAKE_ADDRESS);
+      _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, MUMBAI_STAKE_TKN_ADDRESS);
+    } else {
+      return swalReact(`Unsupported chainId: ${_chainId}. Please connect to a supported chain.`)
     }
 
     setStake(_stake.methods);
@@ -462,6 +468,7 @@ export default function Dashboard(props) {
         setPrufBalance("NaN");
       }
     });
+
     getStakeOffers(_web3, _stake.methods);
     getHeldStake(_web3, _stake.methods, _stakeTkn.methods, _addr);
   };
@@ -765,16 +772,6 @@ export default function Dashboard(props) {
                   },
                 }}
               />
-
-              {/* {document.getElementById("CI1Input") >= tierOptions[Number(id) - 1].min 
-              ? 
-              (<h5 className="delegateText">
-                Projected Rewards: ü{delegateAmount*tierOptions[Number(id) - 1].apr/52}/week
-              </h5>) 
-              : 
-              (<h5 className="delegateText">
-                Projected Rewards: ü~/week
-              </h5>)} */}
             </Card>
           ),
           buttons: {
@@ -1135,7 +1132,7 @@ export default function Dashboard(props) {
                   </CardIcon>
                   <p
                     className={classes.cardCategory}
-                  >{`Current Reward Pool`}</p>
+                  >{`Your Rewards`}</p>
                   {totalRewards ? (
                     <h3 className={classes.cardTitle}>
                       <>ü{String(totalRewards)} </>
