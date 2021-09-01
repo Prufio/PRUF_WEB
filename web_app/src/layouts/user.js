@@ -101,7 +101,8 @@ export default function Dashboard (props) {
   const [delegationList, setDelegationList] = React.useState([["Loading Balances...", "~", "~", "~"]]);
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
-  const [tierOptions, setTierOptions] = React.useState([]);
+  const [tierOptions, setTierOptions] = React.useState([[],[],[],[]]);
+  //const [tierOptions, setTierOptions] = React.useState([]);
   const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
   const [stake, setStake] = React.useState({});
@@ -110,8 +111,25 @@ export default function Dashboard (props) {
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
-  const startAfter = 0;
-  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "💎", "🚀"];
+  const startAfter = 5;
+  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "🚀", "💎"];
+  const tierDescriptions = [
+    "",
+    "Lowest EO staking tier. For those who prefer a flexible arrangement.",
+    "One month of token lock for generous staking rewards.",
+    "60 days of stake lock means high rewards. For the entry-level HODLer.",
+    "Second highest staking tier. For true believers in the ecosystem.",
+    "Highest EO staking tier. For serious HODLers who want serious rewards."
+  ]
+  const tierNames = [
+    "",
+    "Bronze Tier",
+    "Silver Tier",
+    "Gold Tier",
+    "Moon Tier",
+    "Diamond Hands"
+  ]
+  
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -311,21 +329,78 @@ export default function Dashboard (props) {
 
   const getStakeOffers = (_web3, _stake, arr, iteration) => {
     if (!iteration) iteration = 1;
-    if (!arr) arr = [];
-    if (iteration > 5) return setTierOptions(arr);
+    if (!arr) arr = [[],[],[],[]];
+    if (iteration > 5) return setTierOptions(JSON.parse(JSON.stringify(arr)));
     _stake.getStakeLevel(iteration + startAfter).call(async (error, result) => {
       if (!error) {
-        arr.push({
-          id: iteration + startAfter,
-          apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
-            2
-          ),
-          max: Number(_web3.utils.fromWei(result["1"])),
-          min: Number(_web3.utils.fromWei(result["0"])),
-          interval: Number(result["2"]),
-          eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
-          emoji: tierEmojis[iteration],
-        });
+        console.log(result)
+          arr[0].push({
+            pos: iteration,
+            id: iteration + startAfter,
+            apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
+              2
+            ),
+            max: Number(_web3.utils.fromWei(result["1"])),
+            min: Number(_web3.utils.fromWei(result["0"])),
+            interval: Number(result["2"]),
+            eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+            emoji: tierEmojis[iteration],
+            description: tierDescriptions[iteration],
+            tierName: tierNames[iteration],
+          })
+
+        // if(Number(result["2"]) === 7){
+        //   arr[0].push({
+        //     id: iteration + startAfter,
+        //     apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
+        //       2
+        //     ),
+        //     max: Number(_web3.utils.fromWei(result["1"])),
+        //     min: Number(_web3.utils.fromWei(result["0"])),
+        //     interval: Number(result["2"]),
+        //     eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+        //     emoji: tierEmojis[iteration],
+        //   });
+        // }
+        // else if(Number(result["2"]) === 30){
+        //   arr[1].push({
+        //     id: iteration + startAfter,
+        //     apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
+        //       2
+        //     ),
+        //     max: Number(_web3.utils.fromWei(result["1"])),
+        //     min: Number(_web3.utils.fromWei(result["0"])),
+        //     interval: Number(result["2"]),
+        //     eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+        //     emoji: tierEmojis[iteration],
+        //   });
+        // }
+        // else if(Number(result["2"]) === 60){
+        //   arr[2].push({
+        //     id: iteration + startAfter,
+        //     apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
+        //       2
+        //     ),
+        //     max: Number(_web3.utils.fromWei(result["1"])),
+        //     min: Number(_web3.utils.fromWei(result["0"])),
+        //     interval: Number(result["2"]),
+        //     eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+        //     emoji: tierEmojis[iteration],
+        //   });
+        // }
+        // else if(Number(result["2"]) === 90){
+        //   arr[3].push({
+        //     id: iteration + startAfter,
+        //     apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
+        //       2
+        //     ),
+        //     max: Number(_web3.utils.fromWei(result["1"])),
+        //     min: Number(_web3.utils.fromWei(result["0"])),
+        //     interval: Number(result["2"]),
+        //     eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+        //     emoji: tierEmojis[iteration],
+        //   });
+        // }
         getStakeOffers(_web3, _stake, arr, iteration + 1);
       }
     });
@@ -389,9 +464,9 @@ export default function Dashboard (props) {
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
                   `${ids[iteration]}`,
-                  `${apr.toFixed(0)}%`,
-                  `ü${amount.toFixed(0)}`,
-                  `ü${rewards.toFixed(2)}`,
+                  `${Math.round(apr*100)/100}%`,
+                  `ü${amount.toFixed(1)}`,
+                  `ü${rewards.toFixed(0)}`,
                   `${percentComplete.toFixed(2)}%`,
                   interval,
                   bonus,
@@ -479,19 +554,19 @@ export default function Dashboard (props) {
       (delegationList[index][10] / 100) * delegationList[index][5] > 1;
     let timeLeft =
       24 - (delegationList[index][10] / 100) * delegationList[index][5] * 24;
-    let timeUnit = "hours";
     timeLeft = timeLeft.toFixed(2);
 
     if (timeLeft < 1) {
-      timeLeft = timeLeft * 60;
-      timeUnit = "minutes";
+      timeLeft = `${timeLeft * 60} minutes`;
+    } else {
+      timeLeft = `${String(timeLeft).substring(0,2)} hours and ${Number(String(timeLeft).substring(2,4)) * 60} minutes `
     }
 
     if (isReady) {
       stake
         .claimBonus(id)
         .send({ from: addr })
-        .on("reciept", () => {
+        .on("receipt", () => {
           swalReact({
             icon: "success",
             text: `Successfully redeemed PRUF rewards!`,
@@ -504,16 +579,30 @@ export default function Dashboard (props) {
         icon: "warning",
         text: `Holders must wait 24 hours after initial stake 
         or reward redemption before claiming rewards. 
-        Please wait ~${timeLeft} ${timeUnit} and try again.`,
+        Please try again after ~${timeLeft}.`,
       }).then(() => {
         viewStake(index);
       });
     }
   };
 
-  const breakStake = (id) => {
+  const breakStake = (id, index) => {
     if (!id) return;
 
+    let isReady =
+      (delegationList[index][10] / 100) * delegationList[index][5] > 1;
+    let timeLeft =
+      24 - (delegationList[index][10] / 100) * delegationList[index][5] * 24;
+    let timeUnit = "hours";
+    timeLeft = timeLeft.toFixed(2);
+
+    if (timeLeft < 1) {
+      timeLeft = `${timeLeft * 60} minutes`;
+    } else {
+      timeLeft = `${String(timeLeft).substring(0,2)} hours and ${Number(String(timeLeft).substring(2,4)) * 60} minutes `
+    }
+
+    if (isReady){
     swalReact({
       icon: "warning",
       text: `Are you sure you want to break your stake? This action cannot be undone, and you will no longer be able to earn rewards on this ID if you do.`,
@@ -534,7 +623,7 @@ export default function Dashboard (props) {
         stake
           .breakStake(id)
           .send({ from: addr })
-          .on("reciept", () => {
+          .on("receipt", () => {
             swalReact({
               icon: "success",
               text: `Successfully broke stake and refunded PRUF!`,
@@ -542,11 +631,30 @@ export default function Dashboard (props) {
             refreshDash();
             return refreshBalances("both", web3, addr);
           });
+      } else if (value === "back") {
+        return viewStake(index)
       }
+    })
+  } else {
+    return swalReact({
+      icon: "warning",
+      text: `Holders must wait 24 hours after initial stake 
+      or reward redemption before breaking their stake. 
+      Please try again after ~${timeLeft}.`,
+    }).then(() => {
+      viewStake(index);
     });
+  } ;
   };
 
   const viewStake = (index) => {
+    let confirmText = "Redeem Rewards", tooEarly = false;
+    if ((delegationList[index][10] / 100) * delegationList[index][5] > 1){
+      confirmText += "💰"
+    } else {
+      confirmText += "⏳"
+      tooEarly = true;
+    }
     swalReact({
       //icon: "warning",
       content: (
@@ -595,13 +703,13 @@ export default function Dashboard (props) {
             )
           ) >= 100 ? (
             <Button
-              className="MLBGradient"
+              className="transparentButton"
               onClick={() => {
-                return breakStake(String(delegationList[index][0]));
+                return breakStake(String(delegationList[index][0]), index);
               }}
             >
               {" "}
-              Stop Earning ❌{" "}
+              Stop Earning {" "}
             </Button>
           ) : (
             <></>
@@ -615,7 +723,7 @@ export default function Dashboard (props) {
           className: "delegationButtonBack",
         },
         confirm: {
-          text: "Redeem Rewards 💰",
+          text: confirmText,
           value: "Redeem",
           className: "delegationButtonBack",
         },
@@ -628,16 +736,56 @@ export default function Dashboard (props) {
   };
 
   const newStake = () => {
-    let delegateAmount;
-    let isChecked = {
+    let delegateAmount = 0;
+    let isTierChecked = {
       chk1: false,
       chk2: false,
       chk3: false,
+      chk4: false,
+      chk5: false
     };
-    const showOptions = () => {
+
+    let isDurationChecked = {
+      chk1: false,
+      chk2: false,
+      chk3: false,
+      chk4: false,
+      chk5: false
+    };
+
+    const showDurationOptions = (row) => {
+      //@DEV Rebuild to matrix spec
       let component = [];
 
       tierOptions.forEach((props) => {
+        component.push(
+          <FormControlLabel
+        control={
+          <Checkbox
+            onChange={() =>
+              (isDurationChecked[`chk${props.pos}`] =
+                !isDurationChecked[`chk${props.pos}`])
+            }
+            name={`chkBox${props.id}`}
+            color="primary"
+            classes={{
+              checked: classes.checked,
+              root: classes.checkRoot,
+            }}
+          />
+        }
+        label={`${props.interval} Days`}
+      />
+        );
+      });
+
+      return component;
+    };
+
+    const showTierOptions = (row) => {
+      let component = [];
+
+      tierOptions[row].forEach((props) => {
         component.push(
           <Accordion>
             <AccordionSummary
@@ -658,8 +806,8 @@ export default function Dashboard (props) {
                   <Checkbox
                     disabled={!(prufBalance > props.min)}
                     onClick={() =>
-                      (isChecked[`chk${props.id}`] =
-                        !isChecked[`chk${props.id}`])
+                      (isTierChecked[`chk${props.pos}`] =
+                        !isTierChecked[`chk${props.pos}`])
                     }
                     classes={{
                       checked: classes.checked,
@@ -667,15 +815,19 @@ export default function Dashboard (props) {
                     }}
                   />
                 }
-                label={`Tier ${props.id} ${props.emoji} Minimum ü${props.min}`}
+                label={`${props.emoji} ${props.tierName} (${props.interval} days)`}
               />
             </AccordionSummary>
             <AccordionDetails>
               <div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">{props.description.trim()}</h5>
+                </div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Lock duration: {props.interval} days
+                    Stake Lock Duration: {props.interval} days
                   </h5>
                 </div>
                 <div className="delegationTips">
@@ -691,87 +843,255 @@ export default function Dashboard (props) {
       return component;
     };
 
-    swalReact({
-      //icon: "warning",
-      content: (
-        <Card className="delegationCard">
-          <h4 className="delegationTitle">Delegate Funds</h4>
-          <h5 className="delegateText">
-            Select your preferred staking tier:
-          </h5>
-          {showOptions()}
-        </Card>
-      ),
-      buttons: {
-        back: {
-          text: "⬅️ Go Back",
-          value: "back",
-          className: "delegationButtonBack",
+    const durationPopup = () => {
+      swalReact({
+        //icon: "warning",
+        content: (
+          <Card className="delegationCard">
+            <h4 className="delegationTitle">Delegate Funds</h4>
+            <h5 className="delegateText">
+              How long do you want to stake?
+            </h5>
+            {showDurationOptions()}
+          </Card>
+        ),
+        buttons: {
+          back: {
+            text: "⬅️ Go Back",
+            value: "back",
+            className: "delegationButtonBack",
+          },
+          confirm: {
+            text: "Next ✅",
+            value: isDurationChecked,
+            className: "delegationButtonBack",
+          },
         },
-        confirm: {
-          text: "Next ✅",
-          value: isChecked,
-          className: "delegationButtonBack",
+      }).then(value=>{if (value !== "back") tiersPopup(value)})
+    }
+
+    const tiersPopup = (value) => {
+
+      isTierChecked = {
+        chk1: false,
+        chk2: false,
+        chk3: false,
+        chk4: false,
+        chk5: false
+      };
+
+      // if (typeof value !== "object" || value === null) {
+      //   return;
+      // }
+      // let trues = [];
+      // let vals = Object.values(value);
+
+      // vals.forEach((e) => {
+      //   if (e === true) trues.push(true);
+      // });
+
+      // if (trues.length > 1) {
+      //   return swalReact({
+      //     icon: "warning",
+      //     text: "Please select only 1 option!",
+      //   }).then(() => newStake());
+      // } else if (trues.length === 0) {
+      //   return swalReact({
+      //     icon: "warning",
+      //     text: "Please select an option!",
+      //   }).then(() => newStake());
+      // }
+      // else{
+      //let row = String(Object.values(value).indexOf(true));
+
+      swalReact({
+        //icon: "warning",
+        content: (
+          <Card className="delegationCard">
+            <h4 className="delegationTitle">Delegate Funds</h4>
+            <h5 className="delegateText">
+              Select your preferred staking tier:
+            </h5>
+            {showTierOptions(0)}
+          </Card>
+        ),
+
+        buttons: {
+          back: {
+            text: "⬅️ Go Back",
+            value: "back",
+            className: "delegationButtonBack",
+          },
+
+          confirm: {
+            text: "Next ✅",
+            value: {isTierChecked, last: value},
+            className: "delegationButtonBack",
+          },
+
         },
-      },
-    }).then((value) => {
-      if (typeof value !== "object" || value === null) {
-        return;
-      }
+      }).then(value=>{if (value === "back") return; else amountPopup(value)})
+    // }
+    }
 
-      let trues = [];
-      let vals = Object.values(value);
+    const amountPopup = (value) => {
+        if (typeof value !== "object" || value === null) {
+          return;
+        }
+        delegateAmount = 0;
+        let last = value.last
+        let trues = [];
+        let vals = Object.values(value.isTierChecked);
+  
+        vals.forEach((e) => {
+          if (e === true) trues.push(true);
+        });
+  
+        if (trues.length > 1) {
+          return swalReact({
+            icon: "warning",
+            text: "Please select only 1 option!",
+          }).then(() => tiersPopup(value.last));
+        } else if (trues.length === 0) {
+          return swalReact({
+            icon: "warning",
+            text: "Please select an option!",
+          }).then(() => tiersPopup(value.last));
+        } else {
+          console.log(vals.indexOf(true))
+          let id = String(vals.indexOf(true));
+          swalReact({
+            content: (
+              <Card className="delegationCard">
+                <h4 className="delegationTitle">Stake Details</h4>
+                <div className="left-margin">
+                  <div className="delegationTips">
+                    <FiberManualRecordTwoTone className="delegationPin" />
+                    <h5 className="delegationTipsContent">
+                      Lock Duration: {tierOptions[0][Number(id)].interval} Days
+                    </h5>
+                  </div>
+                  <div className="delegationTips">
+                    <FiberManualRecordTwoTone className="delegationPin" />
+                    <h5 className="delegationTipsContent">
+                      APR: {tierOptions[0][Number(id)].apr}%
+                    </h5>
+                  </div>
+                </div>
+                <h5 className="delegateText">
+                  Input the amount you want to stake:
+                </h5>
+                <CustomInput
+                  labelText={`Minimum: ${tierOptions[0][Number(id)].min}`}
+                  id="CI1"
+                  inputProps={{
+                    id: "CI1Input",
+                    type: "number",
+                    maxLength: "9",
+                    onChange: (event) => {
+                      delegateAmount = Math.round(Number(event.target.value)*1000000)/1000000;
+                      console.log(delegateAmount);
+                    },
+                  }}
+                />
+              </Card>
+            ),
+            buttons: {
+              back: {
+                text: "⬅️ Go Back",
+                value: "back",
+                className: "delegationButtonBack",
+              },
+              confirm: {
+                text: "Stake Tokens 🏛️",
+                value: {id, this: "confirm", last: value},
+                className: "delegationButtonBack",
+              },
+            },
+          }).then( value => {if (value === "back") tiersPopup(last); disclaimerPopup (value)})
+        }
+    }
 
-      vals.forEach((e) => {
-        if (e === true) trues.push(true);
-      });
-
-      if (trues.length > 1) {
-        return swalReact({
-          icon: "warning",
-          text: "Please select only 1 option!",
-        }).then(() => newStake());
-      } else if (trues.length === 0) {
-        return swalReact({
-          icon: "warning",
-          text: "Please select an option!",
-        }).then(() => newStake());
-      } else {
-        let id = String(Object.values(value).indexOf(true) + 1 + startAfter);
+    const disclaimerPopup = (value) => {
+      if(!value) return
+      if (delegateAmount > Number(prufBalance)) {
         swalReact({
+          icon: "warning",
+          text: `Insufficient PRUF!\n\n You are trying to stake ü${delegateAmount}, but you only hold ü${Math.round(Number(prufBalance)*1000000)/1000000}.`,
+        });
+      } else if (value.this === "confirm") {
+        let last = value.last
+        let id = value.id
+        if (delegateAmount < Number(tierOptions[0][Number(id)].min)) {
+          return swalReact({
+            icon: "warning",
+            text: `The minimum value for this staking tier is ${
+              tierOptions[0][Number(id)].min
+            }`
+          }).then(() => amountPopup(last));
+        }
+        swalReact({
+          icon: "warning",
           content: (
             <Card className="delegationCard">
-              <h4 className="delegationTitle">Stake Details</h4>
+              <h5 className="delegationTitle">Just a moment...</h5>
+              <h5 className="delegationTitleSm">
+                Before you submit your stake, please read ahead:
+              </h5>
               <div className="left-margin">
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    Lock Duration: {tierOptions[Number(id)].interval} Days
+                    {" "}
+                    Once you have created a stake, no additional steps are
+                    needed. You may begin to claim staking rewards 24 hours
+                    after creating your stake.
                   </h5>
                 </div>
                 <div className="delegationTips">
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
-                    APR: {tierOptions[Number(id)].apr}%
+                    Your staked PRUF tokens will be locked until the stake
+                    unlock period ends (
+                    {tierOptions[0][Number(id)].interval} Days). Your stake
+                    will continue to earn rewards even after the staking
+                    period has ended. No action is required after you stake.
+                  </h5>
+                </div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    Once the stake unlock period (
+                    {tierOptions[0][Number(id)].interval} Days) has
+                    concluded, you may break your stake if you wish. This is
+                    optional. Once your stake is broken, your PRUF tokens
+                    will be refunded. NOTE: IF YOU BREAK YOUR STAKE, THE
+                    STAKE ID IS BURNED, AND IT WILL STOP EARNING REWARDS.
+                  </h5>
+                </div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    Remember, your stake will continue to earn rewards, even
+                    after the stake unlock period has ended! Holders are
+                    free to stake as long as they want.
+                  </h5>
+                </div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    {" "}
+                    You are about to stake ü{delegateAmount} at an APR of {tierOptions[0][Number(id)].apr}%
+                  </h5>
+                </div>
+                <div className="delegationTips">
+                  <FiberManualRecordTwoTone className="delegationPin" />
+                  <h5 className="delegationTipsContent">
+                    {" "}
+                    Estimated yearly return: ü{Math.round(delegateAmount * Number(tierOptions[0][Number(id)].apr / 100)*1000000)/1000000}
                   </h5>
                 </div>
               </div>
-              <h5 className="delegateText">
-                Input the amount you want to stake:
-              </h5>
-              <CustomInput
-                labelText={`Minimum: ${tierOptions[Number(id)].min}`}
-                id="CI1"
-                inputProps={{
-                  id: "CI1Input",
-                  type: "number",
-                  maxLength: 9,
-                  onChange: (event) => {
-                    delegateAmount = event.target.value.trim();
-                    console.log(delegateAmount);
-                  },
-                }}
-              />
             </Card>
           ),
           buttons: {
@@ -781,119 +1101,35 @@ export default function Dashboard (props) {
               className: "delegationButtonBack",
             },
             confirm: {
-              text: "Stake Tokens 🏛️",
+              text: "I Understand 👍",
               value: "confirm",
               className: "delegationButtonBack",
             },
           },
         }).then((value) => {
-          if (delegateAmount > prufBalance) {
-            swalReact({
-              icon: "error",
-              text: "Insufficient PRUF!",
-            });
-          } else if (value === "confirm") {
-            swalReact({
-              icon: "warning",
-              content: (
-                <Card className="delegationCard">
-                  <h5 className="delegationTitle">Just a moment...</h5>
-                  <h5 className="delegationTitleSm">
-                    Before you submit your stake, please read ahead:
-                  </h5>
-                  <div className="left-margin">
-                    <div className="delegationTips">
-                      <FiberManualRecordTwoTone className="delegationPin" />
-                      <h5 className="delegationTipsContent">
-                        {" "}
-                        Once you have created a stake, no additional steps are
-                        needed. You may begin to claim staking rewards 24 hours
-                        after creating your stake.
-                      </h5>
-                    </div>
-                    <div className="delegationTips">
-                      <FiberManualRecordTwoTone className="delegationPin" />
-                      <h5 className="delegationTipsContent">
-                        Your staked PRUF tokens will be locked until the stake
-                        unlock period ends (
-                        {tierOptions[Number(id) - 1].interval} Days). Your stake
-                        will continue to earn rewards even after the staking
-                        period has ended. No action is required.
-                      </h5>
-                    </div>
-                    <div className="delegationTips">
-                      <FiberManualRecordTwoTone className="delegationPin" />
-                      <h5 className="delegationTipsContent">
-                        Once the stake unlock period (
-                        {tierOptions[Number(id) - 1].interval} Days) has
-                        concluded, you may break your stake if you wish. This is
-                        optional. Once your stake is broken, your PRUF tokens
-                        will be refunded. NOTE: IF YOU BREAK YOUR STAKE, THE
-                        STAKE ID IS BURNED, AND IT WILL STOP EARNING REWARDS.
-                      </h5>
-                    </div>
-                    <div className="delegationTips">
-                      <FiberManualRecordTwoTone className="delegationPin" />
-                      <h5 className="delegationTipsContent">
-                        Remember, your stake will continue to earn rewards, even
-                        after the stake unlock period has ended! Holders are
-                        free to stake as long as they want.
-                      </h5>
-                    </div>
-                    <div className="delegationTips">
-                      <FiberManualRecordTwoTone className="delegationPin" />
-                      <h5 className="delegationTipsContent">
-                        {" "}
-                        You are about to stake ü{delegateAmount}
-                      </h5>
-                    </div>
-                  </div>
-                </Card>
-              ),
-              buttons: {
-                back: {
-                  text: "⬅️ Go Back",
-                  value: "back",
-                  className: "delegationButtonBack",
-                },
-                confirm: {
-                  text: "I Understand 👍",
-                  value: "confirm",
-                  className: "delegationButtonBack",
-                },
-              },
-            }).then((value) => {
-              if (value === "confirm") {
-                if (delegateAmount < tierOptions[Number(id) - 1].min) {
-                  return swalReact(
-                    `The minimum value for this staking tier is ${
-                      tierOptions[Number(id) - 1].min
-                    }`
-                  ).then(() => newStake());
-                }
-                let amount = web3.utils.toWei(delegateAmount);
-                console.log(amount);
-                stake
-                  .stakeMyTokens(amount, id)
-                  .send({ from: addr })
-                  .on("receipt", () => {
-                    swalReact({
-                      icon: "success",
-                      text: "Your PRUF has been staked successfully!",
-                    });
-                    refreshDash();
-                    return refreshBalances("both", web3, addr);
-                  });
-              } else {
-                return newStake();
-              }
-            });
-          } else {
-            return newStake();
-          }
+          if (value === "confirm") {
+            let amount = web3.utils.toWei(String(delegateAmount));
+            console.log(amount);
+            stake
+              .stakeMyTokens(amount, tierOptions[0][Number(id)].id)
+              .send({ from: addr })
+              .on("receipt", () => {
+                swalReact({
+                  icon: "success",
+                  text: "Your PRUF has been staked successfully!",
+                });
+                refreshDash();
+                return refreshBalances("both", web3, addr);
+              });
+          } else if (value === "back") {
+            return amountPopup(last);
+          } else {return}
         });
+      } else {
+        return 
       }
-    });
+    }
+    tiersPopup()
   };
 
   return (
@@ -1223,7 +1459,7 @@ export default function Dashboard (props) {
                       accessor: "rewards",
                     },
                     {
-                      Header: "Unlock Status ⏳",
+                      Header: "Unlock Status ⏱️",
                       accessor: "date",
                     },
                     {

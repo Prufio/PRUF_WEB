@@ -85,6 +85,12 @@ body {
   background-color: #002a40 !important;
 }
 
+.transparentButton {
+  color: black !important;
+    background: transparent !important;
+    /* object-fit: cover !important; */
+}
+
 .flexRowWithGap {
   display: inline-flex;
   gap: 20px;
