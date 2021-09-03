@@ -111,7 +111,7 @@ export default function Dashboard (props) {
   // styles
   const classes = useStyles();
   const userClasses = userStyles();
-  const startAfter = 5;
+  const startAfter = 0;
   const tierEmojis = ["💩", "🥉", "🥈", "🥇", "🚀", "💎"];
   const tierDescriptions = [
     "",
@@ -411,9 +411,9 @@ export default function Dashboard (props) {
     let currentBlock = await _web3.eth.getBlock("latest");
 
     const getStakeIds = (bal, ids, iteration) => {
-      if (!bal) {
+      if (!bal || String(bal) === "0") {
         setDelegationList([[``, ``, ``, ``, ``]]);
-        return console.log(`Balances undefined`);
+        return console.log(`Balances undefined or zero`);
       }
       if (!iteration) iteration = 0;
       if (!ids) ids = [];
@@ -488,6 +488,7 @@ export default function Dashboard (props) {
     _tkn.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         getStakeIds(result);
+        console.log(`User holds ${result} stake tokens`)
       } else {
         console.error(error);
       }
@@ -703,17 +704,17 @@ export default function Dashboard (props) {
       }).then(value=>{
       if(value === "confirm"){
         console.log(`Adding ü${amount} to stake ID ${id}`)
-        // stake
-        //   .increaseStake(id, web3.utils.toWei(amount))
-        //   .send({ from: addr })
-        //   .on("receipt", () => {
-        //     swalReact({
-        //       icon: "success",
-        //       text: `Successfully increased your stake on ID ${id}!`,
-        //     });
-        //     refreshDash();
-        //     return refreshBalances("both", web3, addr);
-        //   });
+        stake
+          .increaseMyStake(id, web3.utils.toWei(String(amount)))
+          .send({ from: addr })
+          .on("receipt", () => {
+            swalReact({
+              icon: "success",
+              text: `Successfully increased your stake on ID ${id}!`,
+            });
+            refreshDash();
+            return refreshBalances("both", web3, addr);
+          });
       } else {
         return viewStake(index)
       }
@@ -915,9 +916,10 @@ export default function Dashboard (props) {
       //@DEV Rebuild to matrix spec
       let component = [];
 
-      tierOptions.forEach((props) => {
+      tierOptions[row].forEach((props) => {
         component.push(
           <FormControlLabel
+          key={`formControl${props.pos}`}
         control={
           <Checkbox
             onChange={() =>
@@ -1010,7 +1012,7 @@ export default function Dashboard (props) {
             <h5 className="delegateText">
               How long do you want to stake?
             </h5>
-            {showDurationOptions()}
+            {showDurationOptions(0)}
           </Card>
         ),
         buttons: {
