@@ -322,8 +322,8 @@ export default function Dashboard (props) {
       }
     });
 
-    setTotalRewards(Math.round(_totalRewards*1000)/1000);
-    setTotalStaked(Math.round(_totalStaked*1000)/1000);
+    setTotalRewards(Math.floor(_totalRewards*1000)/1000);
+    setTotalStaked(Math.floor(_totalStaked*1000)/1000);
     setLoadingSums(false);
   };
 
@@ -413,6 +413,9 @@ export default function Dashboard (props) {
     const getStakeIds = (bal, ids, iteration) => {
       if (!bal || String(bal) === "0") {
         setDelegationList([[``, ``, ``, ``, ``]]);
+        setTotalRewards(0);
+        setTotalStaked(0);
+        setLoadingSums(false);
         return console.log(`Balances undefined or zero`);
       }
       if (!iteration) iteration = 0;
@@ -443,31 +446,30 @@ export default function Dashboard (props) {
 
       _stake.stakeInfo(ids[iteration]).call(async (error, result) => {
         if (!error) {
-          //console.log(result);
+          console.log(result);
           let amount = Number(_web3.utils.fromWei(result["0"]));
-          let timeElapsed =
-            (Number(currentBlock.timestamp) - Number(result["1"])) / 86400;
+          let timeElapsed = (Number(currentBlock.timestamp) - Number(result["1"])) / 86400;
           let interval = Number(result["3"]);
-          let bonus = Number(_web3.utils.fromWei(result["4"]));
+          let bonus = Number(result["4"]);
           _stake
             .checkEligibleRewards(ids[iteration])
             .call(async (error, result) => {
               if (!error) {
-                //console.log(result);
+                console.log(result);
                 // //@dev overflow date case
                 // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
                 let intervalToYear = 365 / interval;
-                let apr = (bonus / amount) * 100 * intervalToYear;
+                let apr = bonus/10 * intervalToYear;
                 let percentComplete = (timeElapsed / interval) * 100;
                 if (percentComplete > 100) percentComplete = 100;
                 let timeTilRedeem = Number(result["1"]) / 10000;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
                 arr.push([
                   `${ids[iteration]}`,
-                  `${Math.round(apr*100)/100}%`,
+                  `${Math.floor(apr*100)/100}%`,
                   `ü${Math.round(amount*100)/100}`,
-                  `ü${Math.round(rewards*100)/100}`,
+                  `ü${Math.floor(rewards*100)/100}`,
                   `${Math.round(percentComplete*100)/100}%`,
                   interval,
                   bonus,
@@ -728,7 +730,7 @@ export default function Dashboard (props) {
   return swalReact({
     icon: "warning",
     text: `Holders must wait 24 hours after initial stake 
-    or reward redemption before breaking their stake. 
+    or reward redemption before increasing their stake. 
     Please try again after ~${timeLeft}.`,
   }).then(() => {
     viewStake(index);
@@ -823,7 +825,7 @@ export default function Dashboard (props) {
           </h5>
           <h5 className="">
             {`
-                Amount delegated: ${delegationList[index][2]}
+                Amount staked: ${delegationList[index][2]}
               `}
           </h5>
           <h5 className="">
@@ -1008,7 +1010,7 @@ export default function Dashboard (props) {
         //icon: "warning",
         content: (
           <Card className="delegationCard">
-            <h4 className="delegationTitle">Delegate Funds</h4>
+            <h4 className="delegationTitle">Stake Your PRUF</h4>
             <h5 className="delegateText">
               How long do you want to stake?
             </h5>
@@ -1068,7 +1070,7 @@ export default function Dashboard (props) {
         //icon: "warning",
         content: (
           <Card className="delegationCard">
-            <h4 className="delegationTitle">Delegate Funds</h4>
+            <h4 className="delegationTitle"> Stake Your PRUF</h4>
             <h5 className="delegateText">
               Select your preferred staking tier:
             </h5>
@@ -1248,7 +1250,7 @@ export default function Dashboard (props) {
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
                     {" "}
-                    Estimated yearly return: ü{Math.round(delegateAmount * Number(tierOptions[0][Number(id)].apr / 100)*1000000)/1000000}
+                    Estimated yearly return: ü{Math.floor(delegateAmount * Number(tierOptions[0][Number(id)].apr / 100)*1000000)/1000000}
                   </h5>
                 </div>
               </div>
