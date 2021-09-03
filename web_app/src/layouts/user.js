@@ -1,4 +1,4 @@
-//PRUF SPLITTER APP
+//PRUF SPLITTER
 import React from "react";
 import cx from "classnames";
 import swal from "sweetalert";
