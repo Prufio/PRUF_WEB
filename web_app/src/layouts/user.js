@@ -411,9 +411,9 @@ export default function Dashboard (props) {
     let currentBlock = await _web3.eth.getBlock("latest");
 
     const getStakeIds = (bal, ids, iteration) => {
-      if (!bal) {
+      if (!bal || String(bal) === "0") {
         setDelegationList([[``, ``, ``, ``, ``]]);
-        return console.log(`Balances undefined`);
+        return console.log(`Balances undefined or zero`);
       }
       if (!iteration) iteration = 0;
       if (!ids) ids = [];
@@ -488,6 +488,7 @@ export default function Dashboard (props) {
     _tkn.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         getStakeIds(result);
+        console.log(`User holds ${result} stake tokens`)
       } else {
         console.error(error);
       }
