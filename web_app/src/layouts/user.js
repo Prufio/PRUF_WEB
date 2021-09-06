@@ -190,7 +190,7 @@ export default function Dashboard (props) {
       }
     };
   }, []);
-
+ 
   const getAddress = (_web3) => {
     _web3.eth.net.getId().then((chainId) => {
       if (chainId === 42 || chainId === 80001 || chainId === 1 || chainId === 137) {
@@ -705,11 +705,13 @@ export default function Dashboard (props) {
         },
       }).then(value=>{
       if(value === "confirm"){
+        document.body.style.cursor = 'progress'
         console.log(`Adding ü${amount} to stake ID ${id}`)
         stake
           .increaseMyStake(id, web3.utils.toWei(String(amount)))
           .send({ from: addr })
           .on("receipt", () => {
+            document.body.style.cursor = 'auto'
             swalReact({
               icon: "success",
               text: `Successfully increased your stake on ID ${id}!`,
@@ -1270,12 +1272,14 @@ export default function Dashboard (props) {
           },
         }).then((value) => {
           if (value === "confirm") {
+            document.body.style.cursor = 'progress'
             let amount = web3.utils.toWei(String(delegateAmount));
             console.log(amount);
             stake
               .stakeMyTokens(amount, tierOptions[0][Number(id)].id)
               .send({ from: addr })
               .on("receipt", () => {
+                document.body.style.cursor = 'auto'
                 swalReact({
                   icon: "success",
                   text: "Your PRUF has been staked successfully!",
