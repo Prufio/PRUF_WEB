@@ -567,10 +567,12 @@ export default function Dashboard (props) {
     }
 
     if (isReady) {
+      document.body.style.cursor = 'progress'
       stake
         .claimBonus(id)
         .send({ from: addr })
         .on("receipt", () => {
+          document.body.style.cursor = 'auto'
           swalReact({
             icon: "success",
             text: `Successfully redeemed PRUF rewards!`,
@@ -774,10 +776,12 @@ export default function Dashboard (props) {
       },
     }).then((value) => {
       if (value === "break") {
+        document.body.style.cursor = 'progress'
         stake
           .breakStake(id)
           .send({ from: addr })
           .on("receipt", () => {
+            document.body.style.cursor = 'progress'
             swalReact({
               icon: "success",
               text: `Successfully broke stake and refunded PRUF!`,
