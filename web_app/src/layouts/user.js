@@ -1250,7 +1250,7 @@ export default function Dashboard (props) {
                   <FiberManualRecordTwoTone className="delegationPin" />
                   <h5 className="delegationTipsContent">
                     {" "}
-                    Estimated yearly return: ü{Math.floor(delegateAmount * Number(tierOptions[0][Number(id)].apr / 100)*1000000)/1000000}
+                    Estimated monthly return: ü{Math.floor(delegateAmount * Number(tierOptions[0][Number(id)].apr / 100 / 12)*1000)/1000}
                   </h5>
                 </div>
               </div>
