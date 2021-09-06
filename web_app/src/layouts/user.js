@@ -402,6 +402,7 @@ export default function Dashboard (props) {
         //     emoji: tierEmojis[iteration],
         //   });
         // }
+        
         getStakeOffers(_web3, _stake, arr, iteration + 1);
       }
     });
@@ -685,7 +686,7 @@ export default function Dashboard (props) {
               <div className="delegationTips">
                 <FiberManualRecordTwoTone className="delegationPin" />
                 <h5 className="delegationTipsContent">
-                  When a stake balance is increased, the stake unlock timer of the selected ID will be reset, and current rewards 
+                  When a stake balance is increased, the stake unlock timer of the selected ID will be reset, and the current rewards 
                   will be sent to your wallet. The selected ID will begin accumilating rewards which reflect your new balance as 
                   soon as the increase has been processed.
                 </h5>
