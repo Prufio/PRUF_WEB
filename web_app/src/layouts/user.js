@@ -903,6 +903,13 @@ export default function Dashboard (props) {
   };
 
   const newStake = () => {
+    if(Number(prufBalance) < 100) {
+      return swalReact({
+        icon: "warning",
+        text: "You don't hold enough PRUF to create a stake!"
+      })
+    }
+
     let delegateAmount = 0;
     let isTierChecked = {
       chk1: false,
@@ -1693,16 +1700,12 @@ export default function Dashboard (props) {
                       accessor: "id",
                     },
                     {
-                      Header: "Delegated",
+                      Header: "Stake",
                       accessor: "balance",
                     },
                     {
                       Header: "Rewards",
                       accessor: "rewards",
-                    },
-                    {
-                      Header: "",
-                      accessor: "actions",
                     },
                   ]}
                   data={delegationList.map((prop, key) => {
@@ -1722,7 +1725,6 @@ export default function Dashboard (props) {
                   })}
                 />
                 <Button
-                  disabled={!(prufBalance >= 100)}
                   onClick={() => {
                     newStake();
                   }}
