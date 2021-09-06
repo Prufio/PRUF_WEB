@@ -440,7 +440,7 @@ export default function Dashboard (props) {
       if (!iteration) iteration = 0;
       if (ids.length <= arr.length) {
         parseTotalRedeemable(arr);
-        arr.push([``, ``, ``, ``, ``]);
+        //arr.push([``, ``, ``, ``, ``]);
         return setDelegationList(arr);
       }
 
