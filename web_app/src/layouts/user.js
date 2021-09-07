@@ -1708,6 +1708,10 @@ export default function Dashboard (props) {
                       Header: "Rewards",
                       accessor: "rewards",
                     },
+                    {
+                      Header: "",
+                      accessor: "actions",
+                    },
                   ]}
                   data={delegationList.map((prop, key) => {
                     return {
@@ -1718,8 +1722,21 @@ export default function Dashboard (props) {
                         // we've added some custom button actions
                         <div className="actions-right">
                           {/* use this button to add a like kind of action */}
-                          {prop[0] !== "Loading Balances..." &&
-                            prop[0] !== "" && <></>}
+                          {prop[0] !== "Loading Balances..." && prop[0] !== "" && (
+                            <Button
+                              //justIcon
+                              //round
+                              //simple
+                              onClick={() => {
+                                viewStake(key);
+                              }}
+                              color="info"
+                              //className="delegateButton"
+                              className="MLBGradient"
+                            >
+                              View
+                            </Button>
+                          )}
                         </div>
                       ),
                     };
