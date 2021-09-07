@@ -1709,7 +1709,7 @@ export default function Dashboard (props) {
                       accessor: "rewards",
                     },
                     {
-                      Header: "",
+                      Header: "🔍",
                       accessor: "actions",
                     },
                   ]}
