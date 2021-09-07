@@ -86,10 +86,10 @@ body {
 }
 
 .MLBGradientSm {
-  font-size: 10px !important;
-  padding: 5px !important;
-    background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
-    /* object-fit: cover !important; */
+  font-size: 12px !important;
+  font-weight: bold !important;
+  padding: 8px !important;
+  background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
 }
 
 .MLBGradientSm:active {
