@@ -1616,7 +1616,7 @@ export default function Dashboard (props) {
                 Please connect to an Ethereum provider.
               </h3>
             )}
-            {!!isMobile && (
+            {!isMobile && (
               <CardBody>
                 <ReactTable
                   columns={[
@@ -1692,7 +1692,7 @@ export default function Dashboard (props) {
                 </Button>
               </CardBody>
             )}
-            {!isMobile && (
+            {isMobile && (
               <CardBody>
                 <ReactTable
                   columns={[
