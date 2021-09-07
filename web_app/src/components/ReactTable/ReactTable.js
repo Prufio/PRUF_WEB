@@ -148,7 +148,7 @@ function Table({ columns, data }) {
                   <th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     className={classnames("rt-th rt-resizable-header", {
-                      "-cursor-pointer": headerGroup.headers.length - 1 !== key,
+                      // "-cursor-pointer": headerGroup.headers.length - 1 !== key,
                       "-sort-asc": column.isSorted && !column.isSortedDesc,
                       "-sort-desc": column.isSorted && column.isSortedDesc,
                     })}
@@ -162,7 +162,8 @@ function Table({ columns, data }) {
                         ? null
                         : column.canFilter
                         ? column.render("Filter")
-                        : null}
+                        : null
+                        }
                     </div>
                   </th>
                 ))}
