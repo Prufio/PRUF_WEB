@@ -85,6 +85,17 @@ body {
   background-color: #002a40 !important;
 }
 
+.MLBGradientSm {
+  font-size: 10px !important;
+  padding: 5px !important;
+    background: linear-gradient(0deg, #017ec0, #02a1f7) !important;
+    /* object-fit: cover !important; */
+}
+
+.MLBGradientSm:active {
+  background-color: #002a40 !important;
+}
+
 .transparentButton {
   color: black !important;
     background: transparent !important;
