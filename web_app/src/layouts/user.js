@@ -71,8 +71,8 @@ ETH_STAKE_ADDRESS = "",
 ETH_STAKE_TKN_ADDRESS = ""
 
 const POLY_UTIL_ADDRESS = "0xAdf72D32E511eE00c6E0FF5D62Cd5C7C40A6aDEA",
-POLY_STAKE_ADDRESS = "",
-POLY_STAKE_TKN_ADDRESS = ""
+POLY_STAKE_ADDRESS = "0x388878e143b0c4ae2637d81bec6e173cace9b1ed",
+POLY_STAKE_TKN_ADDRESS = "0xd68bc9a69343dde6ebef1546bd09f3f43fe308c8"
 
 const UTIL_ABI = ABIs.UTIL_ABI;
 const STAKE_ABI = ABIs.STAKE_ABI;
@@ -904,7 +904,7 @@ export default function Dashboard (props) {
   };
 
   const newStake = () => {
-    if(Number(prufBalance) < 100) {
+    if(Number(prufBalance) < 1) {
       return swalReact({
         icon: "warning",
         text: "You don't hold enough PRUF to create a stake!"
@@ -1087,6 +1087,9 @@ export default function Dashboard (props) {
             <h4 className="delegationTitle"> Stake Your PRUF</h4>
             <h5 className="delegateText">
               Select your preferred staking tier:
+            </h5>
+            <h5 className="delegateText">
+              Minimum stake: 5,000 -- Maximum stake: 10,000,000
             </h5>
             {showTierOptions(0)}
           </Card>
@@ -1681,7 +1684,6 @@ export default function Dashboard (props) {
                   })}
                 />
                 <Button
-                  disabled={!(prufBalance >= 100)}
                   onClick={() => {
                     newStake();
                   }}
