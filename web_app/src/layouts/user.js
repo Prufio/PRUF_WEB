@@ -67,8 +67,8 @@ MUMBAI_STAKE_ADDRESS = "0xB30c01fC29f97339E1eb6890a56CA1a907ca961D",
 MUMBAI_STAKE_TKN_ADDRESS = "0x8Cea13A98a0143cfab5336fF5103C41f874d64Ea"
 
 const ETH_UTIL_ADDRESS = "0xa49811140E1d6f653dEc28037Be0924C811C4538",
-ETH_STAKE_ADDRESS = "",
-ETH_STAKE_TKN_ADDRESS = ""
+ETH_STAKE_ADDRESS = "0x8B7e69886b944BC7456b4CAB471BFe99e61Dd1Be",
+ETH_STAKE_TKN_ADDRESS = "0xA39E7b9EFd9801A8da6B1F2d3bf7c381599D06bc"
 
 const POLY_UTIL_ADDRESS = "0xAdf72D32E511eE00c6E0FF5D62Cd5C7C40A6aDEA",
 POLY_STAKE_ADDRESS = "0x388878e143b0c4ae2637d81bec6e173cace9b1ed",
@@ -1331,7 +1331,7 @@ export default function Dashboard (props) {
                     >
                       {chainId === 42 ? (
                         <img className="Icon" src={Eth} alt=""></img>
-                      ) : (
+                      ) : chainId === 1 ? <img className="Icon" src={Eth} alt=""></img> : (
                         <img className="Icon" src={Polygon} alt=""></img>
                       )}
                     </CardIcon>
