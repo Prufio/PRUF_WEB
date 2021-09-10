@@ -1336,8 +1336,8 @@ export default function Dashboard (props) {
                       )}
                     </CardIcon>
                     {chainId === 42 ? (
-                      <p className={classes.cardCategory}>ETH Balance</p>
-                    ) : (
+                      <p className={classes.cardCategory}>KETH Balance</p>
+                    ) : chainId === 1 ? <p className={classes.cardCategory}>ETH Balance</p> : (
                       <p className={classes.cardCategory}>Matic Balance</p>
                     )}
                   </>
