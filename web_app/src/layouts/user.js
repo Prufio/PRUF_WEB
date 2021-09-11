@@ -102,6 +102,7 @@ export default function Dashboard (props) {
   const [findingTxs, setFindingTxs] = React.useState(false);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
   const [tierOptions, setTierOptions] = React.useState([[],[],[],[]]);
+  const [sps, setSps] = React.useState(undefined)
   //const [tierOptions, setTierOptions] = React.useState([]);
   const [chainId, setChainId] = React.useState();
   const [util, setUtil] = React.useState({});
