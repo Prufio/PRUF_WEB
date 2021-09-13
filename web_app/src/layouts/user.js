@@ -100,6 +100,7 @@ export default function Dashboard (props) {
   const [totalStaked, setTotalStaked] = React.useState(0);
   const [delegationList, setDelegationList] = React.useState([["Loading Balances...", "~", "~", "~"]]);
   const [findingTxs, setFindingTxs] = React.useState(false);
+  const [tokenAddress, setTokenAddress] = React.useState("")
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
   const [tierOptions, setTierOptions] = React.useState([[],[],[],[]]);
   const [sps, setSps] = React.useState(undefined)
@@ -113,7 +114,7 @@ export default function Dashboard (props) {
   const classes = useStyles();
   const userClasses = userStyles();
   const startAfter = 0;
-  const tierEmojis = ["💩", "🥉", "🥈", "🥇", "🚀", "💎"];
+  const tierEmojis = ["", "🥉", "🥈", "🥇", "🚀", "💎"];
   const tierDescriptions = [
     "",
     "Lowest EO staking tier. For those who prefer a flexible arrangement.",
@@ -151,6 +152,10 @@ export default function Dashboard (props) {
         window.location.reload();
       });
 
+      document.addEventListener("visibilitychange", function() {
+        refreshDash();
+      });
+
       window.ethereum.on("accountsChanged", (e) => {
         console.log("Accounts changed");
         if (e[0] === undefined || e[0] === null) {
@@ -166,10 +171,10 @@ export default function Dashboard (props) {
     let _web3 = require("web3");
     _web3 = new Web3(
       _web3.givenProvider ||
-        "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+        "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
     setWeb3(_web3);
-    setTimeout(getAddress(_web3), 1000);
+    setTimeout(getAddress(_web3), 500);
 
     console.log({ _web3 });
 
@@ -191,6 +196,32 @@ export default function Dashboard (props) {
       }
     };
   }, []);
+
+  const addUtil = async () => {
+    try {
+      // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+      const wasAdded = await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', // Initially only supports ERC20, but eventually more!
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
+            decimals: "18", // The number of decimals in the token
+            image: "", // A string url of the token logo
+          },
+        },
+      });
+    
+      if (wasAdded) {
+        console.log('PRUF token added to wallet!');
+      } else {
+        console.log('Token not added!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
  
   const getAddress = (_web3) => {
     _web3.eth.net.getId().then((chainId) => {
@@ -307,7 +338,8 @@ export default function Dashboard (props) {
     });
   };
 
-  const refreshDash = () => {
+  const refreshDash = async () => {
+    if(!web3 || !addr || !stake) return
     setLoadingSums(true);
     getHeldStake(web3, stake, stakeTkn, addr);
   };
@@ -334,7 +366,7 @@ export default function Dashboard (props) {
     if (iteration > 5) return setTierOptions(JSON.parse(JSON.stringify(arr)));
     _stake.getStakeLevel(iteration + startAfter).call(async (error, result) => {
       if (!error) {
-        console.log(result)
+        console.log(`Stake offer for ID ${iteration + startAfter}: `, result)
 
           let obj = {
             pos: iteration,
@@ -351,7 +383,7 @@ export default function Dashboard (props) {
 
           arr[0].push(obj)
 
-        // if(Number(result["2"]) === 7){
+        // if(Number(result["2"]) === 14){
         //   arr[0].push({
         //     id: iteration + startAfter,
         //     apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
@@ -392,6 +424,19 @@ export default function Dashboard (props) {
         // }
         // else if(Number(result["2"]) === 90){
         //   arr[3].push({
+        //     id: iteration + startAfter,
+        //     apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
+        //       2
+        //     ),
+        //     max: Number(_web3.utils.fromWei(result["1"])),
+        //     min: Number(_web3.utils.fromWei(result["0"])),
+        //     interval: Number(result["2"]),
+        //     eligible: prufBalance > Number(_web3.utils.fromWei(result["0"])),
+        //     emoji: tierEmojis[iteration],
+        //   });
+        // }
+        // else if(Number(result["2"]) === 180){
+        //   arr[4].push({
         //     id: iteration + startAfter,
         //     apr: ((Number(result["3"]) * 365) / Number(result["2"]) / 10).toFixed(
         //       2
@@ -448,7 +493,7 @@ export default function Dashboard (props) {
 
       _stake.stakeInfo(ids[iteration]).call(async (error, result) => {
         if (!error) {
-          console.log(result);
+          console.log(`stakeInfo at index ${iteration}: `, result);
           let amount = Number(_web3.utils.fromWei(result["0"]));
           let timeElapsed = (Number(currentBlock.timestamp) - Number(result["1"])) / 86400;
           let interval = Number(result["3"]);
@@ -457,7 +502,8 @@ export default function Dashboard (props) {
             .checkEligibleRewards(ids[iteration])
             .call(async (error, result) => {
               if (!error) {
-                console.log(result);
+                console.log(`eligibleRewards at index ${iteration}: `, result);
+                let readyEmoji = ""
                 // //@dev overflow date case
                 // let percentComplete = timeElapsed / (Number(result["3"]) * 86400)
                 // let rewardsBalance = percentComplete * Number(_web3.utils.fromWei(result["4"]))
@@ -467,11 +513,14 @@ export default function Dashboard (props) {
                 if (percentComplete > 100) percentComplete = 100;
                 let timeTilRedeem = Number(result["1"]) / 10000;
                 let rewards = Number(_web3.utils.fromWei(result["0"]));
+                let isReady = (timeTilRedeem / 100) * interval > 1
+                if (!isReady) readyEmoji = "⏳"
+
                 arr.push([
                   `${ids[iteration]}`,
                   `${Math.floor(apr*100)/100}%`,
                   `ü${Math.round(amount*100)/100}`,
-                  `ü${Math.floor(rewards*100)/100}`,
+                  `ü${Math.floor(rewards*100)/100}${readyEmoji}`,
                   `${Math.round(percentComplete*100)/100}%`,
                   interval,
                   bonus,
@@ -479,6 +528,7 @@ export default function Dashboard (props) {
                   amount,
                   rewards,
                   timeTilRedeem,
+                  isReady
                 ]);
                 getStakeData(ids, arr, iteration + 1);
               }
@@ -514,18 +564,22 @@ export default function Dashboard (props) {
       _util = await new _web3.eth.Contract(UTIL_ABI, ETH_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, ETH_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, ETH_STAKE_TKN_ADDRESS);
+      setTokenAddress(ETH_UTIL_ADDRESS)
     } else if (_chainId === 42) {
       _util = await new _web3.eth.Contract(UTIL_ABI, KOVAN_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, KOVAN_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, KOVAN_STAKE_TKN_ADDRESS);
+      setTokenAddress(KOVAN_UTIL_ADDRESS)
     } else if (_chainId === 137) {
       _util = await new _web3.eth.Contract(UTIL_ABI, POLY_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, POLY_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, POLY_STAKE_TKN_ADDRESS);
+      setTokenAddress(POLY_UTIL_ADDRESS)
     } else if (_chainId === 80001) {
       _util = await new _web3.eth.Contract(UTIL_ABI, MUMBAI_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, MUMBAI_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, MUMBAI_STAKE_TKN_ADDRESS);
+      setTokenAddress(MUMBAI_UTIL_ADDRESS)
     } else {
       return swalReact(`Unsupported chainId: ${_chainId}. Please connect to a supported chain.`)
     }
@@ -593,6 +647,68 @@ export default function Dashboard (props) {
       });
     }
   };
+
+  const stakeRewards = (index) => {
+    if (index < 0) return 
+    let amount = Number(delegationList[index][9]);
+    console.log(amount)
+    let id = String(delegationList[Number(index)][0])
+
+      swalReact({
+        icon: "warning",
+        content: (
+          <Card className="delegationCard">
+            <h5 className="delegationTitle">Just a moment...</h5>
+            <h5 className="delegationTitleSm">
+              Before you increase your stake, please read ahead:
+            </h5>
+            <div className="left-margin">
+              <div className="delegationTips">
+                <FiberManualRecordTwoTone className="delegationPin" />
+                <h5 className="delegationTipsContent">
+                  When a stake balance is increased, the stake period will be reset, and the current rewards 
+                  will be sent to your wallet. The selected ID will begin accumilating rewards which reflect your new balance as 
+                  soon as the increase has been processed.
+                </h5>
+              </div>
+            </div>
+          </Card>
+        ),
+        buttons: {
+          back: {
+            text: "⬅️ Go Back",
+            value: "back",
+            className: "delegationButtonBack",
+          },
+          confirm: {
+            text: "Got it 👍",
+            value: "confirm",
+            className: "delegationButtonBack",
+          },
+        },
+      }).then(value=>{
+      if(value === "confirm"){
+        document.body.style.cursor = 'progress'
+        console.log(`Adding ü${amount} to stake ID ${id}`)
+        stake
+          .increaseMyStake(id, web3.utils.toWei(String(amount)))
+          .send({ from: addr })
+          .on("receipt", () => {
+            document.body.style.cursor = 'auto'
+            swalReact({
+              icon: "success",
+              text: `Successfully increased your stake on ID ${id}!`,
+            });
+            refreshDash();
+            return refreshBalances("both", web3, addr);
+          });
+      } else {
+        return viewStake(index)
+      }
+      
+    })
+
+  }
 
   const increaseStake = (index) => {
     if (index < 0) return 
@@ -687,7 +803,7 @@ export default function Dashboard (props) {
               <div className="delegationTips">
                 <FiberManualRecordTwoTone className="delegationPin" />
                 <h5 className="delegationTipsContent">
-                  When a stake balance is increased, the stake unlock timer of the selected ID will be reset, and the current rewards 
+                  When a stake balance is increased, the stake period will be reset, and the current rewards 
                   will be sent to your wallet. The selected ID will begin accumilating rewards which reflect your new balance as 
                   soon as the increase has been processed.
                 </h5>
@@ -808,19 +924,54 @@ export default function Dashboard (props) {
   };
 
   const viewStake = (index) => {
-    let confirmText = "Redeem Rewards", tooEarly = false;
-    if ((delegationList[index][10] / 100) * delegationList[index][5] > 1){
-      confirmText += "💰"
+    let confirmText = "Redeem Rewards", swalButtons;
+    
+    let timeLeft =
+      24 - (delegationList[index][10] / 100) * delegationList[index][5] * 24;
+    timeLeft = timeLeft.toFixed(2);
+
+    if (timeLeft < 1) {
+      timeLeft = `${timeLeft * 60} minutes`;
     } else {
-      confirmText += "⏳"
-      tooEarly = true;
+      timeLeft = `${String(timeLeft).substring(0,2)} hours and ${Number(String(timeLeft).substring(2,4)) * 60} minutes `
+    }
+
+    //console.log(delegationList[index][11])
+    if (delegationList[index][11]){
+      confirmText += "💰"
+      swalButtons = {
+        back: {
+          text: "⬅️ Go Back",
+          value: "back",
+          className: "delegationButtonBack",
+        },
+        confirm: {
+          text: confirmText,
+          value: "Redeem",
+          className: "delegationButtonBack",
+        },
+      }
+    } else {
+      swalButtons = {
+        back: {
+          text: "⬅️ Go Back",
+          value: "back",
+          className: "delegateButtonBackCentered",
+        },
+      }
+      confirmText = "Pending ⏳"
     }
     swalReact({
       //icon: "warning",
       content: (
         <Card className="delegationCard">
           <h4 className="delegationTitle">Delegation Details</h4>
-
+          {
+          delegationList[index][11] ? <></> : <h5 className="">
+            {`
+                  Action Timeout: ${timeLeft}
+                `}
+          </h5>}
           <h5 className="">
             {`
                   Stake token ID: ${delegationList[index][0]}
@@ -846,6 +997,7 @@ export default function Dashboard (props) {
                 Unlock percent complete: ${delegationList[index][4]}
               `}
           </h5>
+
           <CustomLinearProgress
             variant="determinate"
             color="info"
@@ -855,17 +1007,34 @@ export default function Dashboard (props) {
                 delegationList[index][4].length - 1
               )
             )}
-          />
-          <Button
-              className="MLBGradient"
-              onClick={() => {
-                return increaseStake(index);
-              }}
-            >
-              {" "}
-              Increase Stake 🏛️{" "}
-            </Button>
-          {Number(
+          /> 
+          
+          {
+            delegationList[index][11] ? (
+            Number(prufBalance) > 100 ? <Button
+            className="MLBGradient"
+            onClick={() => {
+              return increaseStake(index);
+            }}
+          >
+            {" "}
+            Increase Stake 🏛️{" "}
+          </Button> : <></>) : <></>
+          }
+          { 
+            delegationList[index][11] ? (
+            Number(delegationList[index][3].substring(1, delegationList[index][3].length)) > 100 ? <Button
+            className="MLBGradient"
+            onClick={() => {
+              return stakeRewards(index);
+            }}
+          >
+            {" "}
+            Stake Rewards Balance 💰{" "}
+          </Button> : <></>) : <></>
+          }
+          
+          {delegationList[index][11] ? (Number(
             delegationList[index][4].substring(
               0,
               delegationList[index][4].length - 1
@@ -882,25 +1051,14 @@ export default function Dashboard (props) {
             </Button>
           ) : (
             <></>
-          )}
+          )) : <></>}
         </Card>
       ),
-      buttons: {
-        back: {
-          text: "⬅️ Go Back",
-          value: "back",
-          className: "delegationButtonBack",
-        },
-        confirm: {
-          text: confirmText,
-          value: "Redeem",
-          className: "delegationButtonBack",
-        },
-      },
+      buttons: swalButtons
     }).then((value) => {
       if (value === "Redeem") {
         claimRewards(index, String(delegationList[index][0]));
-      } else return;
+      } else return refreshDash();
     });
   };
 
@@ -964,7 +1122,7 @@ export default function Dashboard (props) {
 
       tierOptions[row].forEach((props) => {
         component.push(
-          <Accordion>
+          <Accordion key = {`AccordionStack${props.id}`}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-label="Expand"
@@ -1395,7 +1553,7 @@ export default function Dashboard (props) {
                 <CardHeader color="danger" stats icon>
                   <CardIcon
                     className="headerIconBack"
-                    onClick={() => window.open("https://pruf.io/")}
+                    onClick={() => addUtil()}
                   >
                     <img className="Icon" src={Pruf} alt=""></img>
                   </CardIcon>

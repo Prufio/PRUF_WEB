@@ -1171,6 +1171,12 @@ cursor:pointer;
   border-color: #00c3ff !important;
   border-radius: 10px !important;
 }
+.delegateButtonBackCentered {
+  width: 435px !important;
+  height: 50px !important;
+  justify-self: center !important;
+  background-color: #002a40 !important;
+}
 
 .delegateButtonCentered {
   background-color: transparent !important;
