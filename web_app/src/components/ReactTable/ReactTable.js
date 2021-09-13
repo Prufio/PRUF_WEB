@@ -121,7 +121,7 @@ function Table({ columns, data }) {
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
-      initialState: { pageSize: 50, pageIndex: 0 },
+      initialState: { pageSize: 100, pageIndex: 0 },
     },
     useFilters, // useFilters!
     useSortBy,
