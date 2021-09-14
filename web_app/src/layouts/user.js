@@ -965,7 +965,7 @@ export default function Dashboard (props) {
       //icon: "warning",
       content: (
         <Card className="delegationCard">
-          <h4 className="delegationTitle">Delegation Details</h4>
+          <h4 className="delegationTitle">Stake Details</h4>
           {
           delegationList[index][11] ? <></> : <h5 className="">
             {`
