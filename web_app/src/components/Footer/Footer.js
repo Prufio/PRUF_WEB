@@ -110,7 +110,7 @@ export default function Footer(props) {
           <p className={classes.right}>
             <button
               className="clearButton"
-              onClick={() => { copy() }}>
+              >
               &copy;
                       </button>
             {counter === 0 && (

@@ -70,7 +70,7 @@ export default function HeaderLinks(props) {
                         aria-label="edit"
                         className="info"
                     >
-                        Add $PRUF to wallet
+                        Configure PRUF Token
                     </Button>
                 </div>
             )}
