@@ -92,7 +92,8 @@ export default function Dashboard (props) {
   const [isRefreshingEther, setIsRefreshingEther] = React.useState(false);
   const [isRefreshingPruf, setIsRefreshingPruf] = React.useState(false);
   const [redeeming, setRedeeming] = React.useState(false);
-  const [currentChain, setCurrentChain] = React.useState("");
+  const [currentChainExplorer, setCurrentChainExplorer] = React.useState("");
+  const [tokenInfo, setTokenInfo] = React.useState({})
   const [web3, setWeb3] = React.useState();
   const [redeemAmount, setRedeemAmount] = React.useState("0");
   const [redeemList, setRedeemList] = React.useState([]);
@@ -147,6 +148,7 @@ export default function Dashboard (props) {
 
   React.useEffect(() => {
     if (window.ethereum) {
+      console.log(window.ethereum)
       window.ethereum.on("chainChanged", (chainId) => {
         console.log(chainId);
         window.location.reload();
@@ -240,7 +242,13 @@ export default function Dashboard (props) {
                       return swal({
                         title: "Can't connect to wallet.",
                         icon: "warning",
-                        button: "Close",
+                        buttons: {
+                          back: {
+                          text: "Okay",
+                          value: "back",
+                          className: "delegateButtonBackCentered",
+                        },
+                      },
                       });
                     console.log(_web3.utils.toChecksumAddress(accounts[0]));
                     setAddr(_web3.utils.toChecksumAddress(accounts[0]));
@@ -262,6 +270,13 @@ export default function Dashboard (props) {
         swalReact({
           icon: `warning`,
           text: `You are connected to network ID ${chainId}. Please connect to the ethereum kovan testnet`,
+          buttons: {
+            back: {
+            text: "Okay",
+            value: "back",
+            className: "delegateButtonBackCentered",
+          },
+        },
         });
       }
     });
@@ -310,7 +325,13 @@ export default function Dashboard (props) {
       return swal({
         title: "Something isn't right! Try refreshing the page.",
         icon: "warning",
-        button: "Close",
+        buttons: {
+          back: {
+          text: "Okay",
+          value: "back",
+          className: "delegateButtonBackCentered",
+        },
+      },
       });
     if (!_addr) return console.error("No address is connected!");
 
@@ -327,7 +348,6 @@ export default function Dashboard (props) {
     if (job === "eth") return;
     setIsRefreshingPruf(true);
     setFindingTxs(true);
-    if (currentChain === "Ethereum") getMaticWithdrawals(_web3, _addr);
     util.balanceOf(_addr).call(async (error, result) => {
       if (!error) {
         setPrufBalance(
@@ -564,24 +584,37 @@ export default function Dashboard (props) {
       _util = await new _web3.eth.Contract(UTIL_ABI, ETH_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, ETH_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, ETH_STAKE_TKN_ADDRESS);
+      setCurrentChainExplorer("etherscan.io")
       setTokenAddress(ETH_UTIL_ADDRESS)
     } else if (_chainId === 42) {
       _util = await new _web3.eth.Contract(UTIL_ABI, KOVAN_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, KOVAN_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, KOVAN_STAKE_TKN_ADDRESS);
+      setCurrentChainExplorer("kovan.etherscan.io")
       setTokenAddress(KOVAN_UTIL_ADDRESS)
     } else if (_chainId === 137) {
       _util = await new _web3.eth.Contract(UTIL_ABI, POLY_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, POLY_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, POLY_STAKE_TKN_ADDRESS);
+      setCurrentChainExplorer("polygonscan.com")
       setTokenAddress(POLY_UTIL_ADDRESS)
     } else if (_chainId === 80001) {
       _util = await new _web3.eth.Contract(UTIL_ABI, MUMBAI_UTIL_ADDRESS);
       _stake = await new _web3.eth.Contract(STAKE_ABI, MUMBAI_STAKE_ADDRESS);
       _stakeTkn = await new _web3.eth.Contract(STAKE_TKN_ABI, MUMBAI_STAKE_TKN_ADDRESS);
+      setCurrentChainExplorer("mumbai.polygonscan.com")
       setTokenAddress(MUMBAI_UTIL_ADDRESS)
     } else {
-      return swalReact(`Unsupported chainId: ${_chainId}. Please connect to a supported chain.`)
+      return swalReact({
+        buttons: {
+          back: {
+          text: "Okay",
+          value: "back",
+          className: "delegateButtonBackCentered",
+        },
+      },
+        text:`Unsupported chainId: ${_chainId}. Please connect to a supported chain.`
+      })
     }
 
     setStake(_stake.methods);
@@ -632,6 +665,13 @@ export default function Dashboard (props) {
           swalReact({
             icon: "success",
             text: `Successfully redeemed PRUF rewards!`,
+            buttons: {
+              back: {
+              text: "Okay",
+              value: "back",
+              className: "delegateButtonBackCentered",
+            },
+          },
           });
           refreshDash();
           return refreshBalances("both", web3, addr);
@@ -642,6 +682,13 @@ export default function Dashboard (props) {
         text: `Holders must wait 24 hours after initial stake 
         or reward redemption before claiming rewards. 
         Please try again after ~${timeLeft}.`,
+        buttons: {
+          back: {
+          text: "Okay",
+          value: "back",
+          className: "delegateButtonBackCentered",
+        },
+      },
       }).then(() => {
         viewStake(index);
       });
@@ -698,6 +745,13 @@ export default function Dashboard (props) {
             swalReact({
               icon: "success",
               text: `Successfully increased your stake on ID ${id}!`,
+              buttons: {
+                back: {
+                text: "Okay",
+                value: "back",
+                className: "delegateButtonBackCentered",
+              },
+            },
             });
             refreshDash();
             return refreshBalances("both", web3, addr);
@@ -782,12 +836,26 @@ export default function Dashboard (props) {
         return swalReact({
           icon: "warning",
           text: `The minimum increase is ü100!`,
+          buttons: {
+            back: {
+            text: "Okay",
+            value: "back",
+            className: "delegateButtonBackCentered",
+          },
+        },
         }).then(()=>{increaseStake(index)});
       } 
       else if (amount > Number(prufBalance)) {
         return swalReact({
           icon: "warning",
           text: `Insufficient PRUF!\n\n You are trying to add ü${amount}, but you only hold ü${Math.round(Number(prufBalance)*1000000)/1000000}.`,
+          buttons: {
+            back: {
+            text: "Okay",
+            value: "back",
+            className: "delegateButtonBackCentered",
+          },
+        },
         }).then(()=>{increaseStake(index)});
       }
 
@@ -835,6 +903,13 @@ export default function Dashboard (props) {
             swalReact({
               icon: "success",
               text: `Successfully increased your stake on ID ${id}!`,
+              buttons: {
+                back: {
+                text: "Okay",
+                value: "back",
+                className: "delegateButtonBackCentered",
+              },
+            },
             });
             refreshDash();
             return refreshBalances("both", web3, addr);
@@ -854,6 +929,13 @@ export default function Dashboard (props) {
     text: `Holders must wait 24 hours after initial stake 
     or reward redemption before increasing their stake. 
     Please try again after ~${timeLeft}.`,
+    buttons: {
+      back: {
+      text: "Okay",
+      value: "back",
+      className: "delegateButtonBackCentered",
+    },
+  },
   }).then(() => {
     viewStake(index);
   });
@@ -903,6 +985,13 @@ export default function Dashboard (props) {
             swalReact({
               icon: "success",
               text: `Successfully broke stake and refunded PRUF!`,
+              buttons: {
+                back: {
+                text: "Okay",
+                value: "back",
+                className: "delegateButtonBackCentered",
+              },
+            },
             });
             refreshDash();
             return refreshBalances("both", web3, addr);
@@ -917,6 +1006,13 @@ export default function Dashboard (props) {
       text: `Holders must wait 24 hours after initial stake 
       or reward redemption before breaking their stake. 
       Please try again after ~${timeLeft}.`,
+      buttons: {
+        back: {
+        text: "Okay",
+        value: "back",
+        className: "delegateButtonBackCentered",
+      },
+    },
     }).then(() => {
       viewStake(index);
     });
@@ -1066,7 +1162,14 @@ export default function Dashboard (props) {
     if(Number(prufBalance) < 1) {
       return swalReact({
         icon: "warning",
-        text: "You don't hold enough PRUF to create a stake!"
+        text: "You don't hold enough PRUF to create a stake!",
+        buttons: {
+          back: {
+          text: "Okay",
+          value: "back",
+          className: "delegateButtonBackCentered",
+        },
+      },
       })
     }
 
@@ -1289,11 +1392,25 @@ export default function Dashboard (props) {
           return swalReact({
             icon: "warning",
             text: "Please select only 1 option!",
+            buttons: {
+              back: {
+              text: "Okay",
+              value: "back",
+              className: "delegateButtonBackCentered",
+            },
+          },
           }).then(() => tiersPopup(value.last));
         } else if (trues.length === 0) {
           return swalReact({
             icon: "warning",
             text: "Please select an option!",
+            buttons: {
+              back: {
+              text: "Okay",
+              value: "back",
+              className: "delegateButtonBackCentered",
+            },
+          },
           }).then(() => tiersPopup(value.last));
         } else {
           console.log(vals.indexOf(true))
@@ -1356,6 +1473,13 @@ export default function Dashboard (props) {
         swalReact({
           icon: "warning",
           text: `Insufficient PRUF!\n\n You are trying to stake ü${delegateAmount}, but you only hold ü${Math.round(Number(prufBalance)*1000000)/1000000}.`,
+          buttons: {
+            back: {
+            text: "Okay",
+            value: "back",
+            className: "delegateButtonBackCentered",
+          },
+        },
         });
       } else if (value.this === "confirm") {
         let last = value.last
@@ -1365,7 +1489,14 @@ export default function Dashboard (props) {
             icon: "warning",
             text: `The minimum value for this staking tier is ${
               tierOptions[0][Number(id)].min
-            }`
+            }`,
+            buttons: {
+              back: {
+              text: "Okay",
+              value: "back",
+              className: "delegateButtonBackCentered",
+            },
+          },
           }).then(() => amountPopup(last));
         }
         swalReact({
@@ -1457,6 +1588,13 @@ export default function Dashboard (props) {
                 swalReact({
                   icon: "success",
                   text: "Your PRUF has been staked successfully!",
+                  buttons: {
+                    back: {
+                    text: "Okay",
+                    value: "back",
+                    className: "delegateButtonBackCentered",
+                  },
+                },
                 });
                 refreshDash();
                 return refreshBalances("both", web3, addr);
@@ -1474,7 +1612,7 @@ export default function Dashboard (props) {
 
   return (
     <div className={userClasses.wrapper}>
-      <AdminNavbar brandText={getActiveRoute(routes)} {...rest} /> <br />
+      <AdminNavbar tokenAddress={tokenAddress} brandText={getActiveRoute(routes)} {...rest}/> <br />
       <div className={mainPanelClasses} ref={mainPanel}>
         <div className="splitterForm">
           <br />
@@ -1486,7 +1624,7 @@ export default function Dashboard (props) {
                   <>
                     <CardIcon
                       className="headerIconBack"
-                      onClick={() => window.open("https://ethereum.org/en/")}
+                      onClick={() => {if(chainId === 42 || chainId === 1) window.open("https://ethereum.org/en/"); else window.open("https://polygon.technology/")}}
                     >
                       {chainId === 42 ? (
                         <img className="Icon" src={Eth} alt=""></img>
@@ -1553,7 +1691,7 @@ export default function Dashboard (props) {
                 <CardHeader color="danger" stats icon>
                   <CardIcon
                     className="headerIconBack"
-                    onClick={() => addUtil()}
+                    onClick={() => window.open(`https://${currentChainExplorer}/token/${tokenAddress}`)}
                   >
                     <img className="Icon" src={Pruf} alt=""></img>
                   </CardIcon>
@@ -1585,47 +1723,6 @@ export default function Dashboard (props) {
                           />
                         </div>
                       </Tooltip>
-                      {currentChain === "Ethereum" &&
-                        redeemList.length > 0 &&
-                        findingTxs === false && (
-                          <div className="inlineFlex">
-                            <Tooltip
-                              id="tooltip-top"
-                              title="Info"
-                              placement="bottom"
-                              classes={{ tooltip: userClasses.toolTip }}
-                            >
-                              <InfoOutlined
-                                className="info"
-                                onClick={() => {
-                                  swal({
-                                    title: `You have ü${redeemAmount} PRUF available for withdrawal from Polygon.`,
-                                    text: `Please click to redeem tokens.`,
-                                    icon: "warning",
-                                    button: "Close",
-                                  });
-                                }}
-                              />
-                            </Tooltip>
-                            {redeeming === true && (
-                              <Button
-                                className="redeemButton"
-                                onClick={() => redeem(redeemList)}
-                                disabled
-                              >
-                                Redeeming tokens...
-                              </Button>
-                            )}
-                            {redeeming === false && (
-                              <Button
-                                className="redeemButton"
-                                onClick={() => redeem(redeemList)}
-                              >
-                                Redeem tokens
-                              </Button>
-                            )}
-                          </div>
-                        )}
                     </>
                   )}
                   {isRefreshingPruf && (

@@ -25,35 +25,20 @@ export default function HeaderLinks(props) {
     //   console.log(e.target.value);
     //   setSearchBarVal(e.target.value);
     // };
-    const handleSearch = () => {
-        console.log(searchBarVal.includes('0x'))
-        console.log(
-            searchBarVal.substring(
-                searchBarVal.trim().indexOf('0x'),
-                searchBarVal.trim().length
-            ).length === 66
-        )
-        if (
-            searchBarVal.includes('0x') &&
-            searchBarVal.substring(
-                searchBarVal.trim().indexOf('0x'),
-                searchBarVal.trim().length
-            ).length === 66
-        ) {
-            window.location.href =
-                '/#/stake/search/' +
-                searchBarVal.substring(
-                    searchBarVal.indexOf('0x'),
-                    searchBarVal.trim().length
-                )
-            return window.location.reload()
-        } else {
-            return swal({
-                title: 'Not a valid asset ID!',
-                text: 'Please submit a valid asset ID.',
-                icon: 'warning',
-                button: 'Close',
-            })
+    const addToken = async () => {
+        if(props.tokenAddress && window.ethereum){
+            await window.ethereum.request({
+                method: 'wallet_watchAsset',
+                params: {
+                  type: 'ERC20', // Initially only supports ERC20, but eventually more!
+                  options: {
+                    address: props.tokenAddress, // The address that the token is at.
+                    symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
+                    decimals: "18", // The number of decimals in the token
+                    image: "https://preview.redd.it/2yzbaaqa0f361.png?auto=webp&s=b4dcb15cb4a27dd5262116618f4d6f4b9d723d64", // A string url of the token logo
+                  },
+                },
+              });
         }
     }
     const classes = useStyles()
@@ -79,33 +64,13 @@ export default function HeaderLinks(props) {
         <>
             {!isMobile && (
                 <div className={wrapper}>
-                    <CustomInput
-                        rtlActive={rtlActive}
-                        formControlProps={{
-                            className: classes.top + ' ' + classes.search,
-                        }}
-                        inputProps={{
-                            onChange: (e) => setSearchBarVal(e.target.value),
-                            placeholder: 'Search Asset ID',
-                            inputProps: {
-                                'aria-label': 'Search Asset ID',
-                                className: classes.searchInput,
-                            },
-                        }}
-                    />
                     <Button
                         color="white"
-                        onClick={() => handleSearch()}
+                        onClick={() => addToken()}
                         aria-label="edit"
-                        justIcon
-                        round
-                        className={searchButton}
+                        className="info"
                     >
-                        <Search
-                            className={
-                                classes.headerLinksSvg + ' ' + classes.searchIcon
-                            }
-                        />
+                        Add $PRUF to wallet
                     </Button>
                 </div>
             )}
