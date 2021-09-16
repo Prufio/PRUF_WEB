@@ -62,7 +62,6 @@ export default function HeaderLinks(props) {
     // });
     return (
         <>
-            {!isMobile && (
                 <div className={wrapper}>
                     <Button
                         color="white"
@@ -73,7 +72,6 @@ export default function HeaderLinks(props) {
                         Configure PRUF Token
                     </Button>
                 </div>
-            )}
         </>
     )
 }

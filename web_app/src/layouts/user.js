@@ -199,31 +199,31 @@ export default function Dashboard (props) {
     };
   }, []);
 
-  const addUtil = async () => {
-    try {
-      // wasAdded is a boolean. Like any RPC method, an error may be thrown.
-      const wasAdded = await window.ethereum.request({
-        method: 'wallet_watchAsset',
-        params: {
-          type: 'ERC20', // Initially only supports ERC20, but eventually more!
-          options: {
-            address: tokenAddress, // The address that the token is at.
-            symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
-            decimals: "18", // The number of decimals in the token
-            image: "", // A string url of the token logo
-          },
-        },
-      });
+  // const addUtil = async () => {
+  //   try {
+  //     // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+  //     const wasAdded = await window.ethereum.request({
+  //       method: 'wallet_watchAsset',
+  //       params: {
+  //         type: 'ERC20', // Initially only supports ERC20, but eventually more!
+  //         options: {
+  //           address: tokenAddress, // The address that the token is at.
+  //           symbol: "PRUF", // A ticker symbol or shorthand, up to 5 chars.
+  //           decimals: "18", // The number of decimals in the token
+  //           image: "", // A string url of the token logo
+  //         },
+  //       },
+  //     });
     
-      if (wasAdded) {
-        console.log('PRUF token added to wallet!');
-      } else {
-        console.log('Token not added!');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     if (wasAdded) {
+  //       console.log('PRUF token added to wallet!');
+  //     } else {
+  //       console.log('Token not added!');
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
  
   const getAddress = (_web3) => {
     _web3.eth.net.getId().then((chainId) => {
@@ -1029,10 +1029,9 @@ export default function Dashboard (props) {
     if (timeLeft < 1) {
       timeLeft = `${timeLeft * 60} minutes`;
     } else {
-      timeLeft = `${String(timeLeft).substring(0,2)} hours and ${Number(String(timeLeft).substring(2,4)) * 60} minutes `
+      timeLeft = `${String(timeLeft).substring(0,String(timeLeft).indexOf("."))} hours and ${(Number(String(timeLeft).substring(String(timeLeft).indexOf("."),4)) * 60).toFixed(0)} minutes `
     }
 
-    //console.log(delegationList[index][11])
     if (delegationList[index][11]){
       confirmText += "💰"
       swalButtons = {
@@ -1764,7 +1763,7 @@ export default function Dashboard (props) {
                     <>
                       <Tooltip
                         id="tooltip-top"
-                        title="Refresh Balances"
+                        title="Refresh Stake"
                         placement="bottom"
                         classes={{ tooltip: userClasses.toolTip }}
                       >
@@ -1819,7 +1818,7 @@ export default function Dashboard (props) {
                     <>
                       <Tooltip
                         id="tooltip-top"
-                        title="Refresh Balances"
+                        title="Refresh Stake"
                         placement="bottom"
                         classes={{ tooltip: userClasses.toolTip }}
                       >
