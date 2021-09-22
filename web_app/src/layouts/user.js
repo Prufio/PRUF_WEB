@@ -53,7 +53,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Eth from "../assets/img/eth-logo2.png";
-import ChangeCircle from "../assets/img/2.png";
 import Polygon from "../assets/img/matic-token-inverted-icon.png";
 import ABIs from "./ABIs";
 
