@@ -804,6 +804,17 @@ cursor:pointer;
   font-weight: medium;
 }
 
+.spanSmallTextSelect { 
+  font-size: 12px;
+  font-weight: medium;
+  color: #00a8ff;
+}
+
+.spanSmallTextSelect:hover {
+  cursor: pointer;
+  color: #01476d;
+}
+
 .addressTextAndroid{
   border: none !important;
   background-color: transparent !important;

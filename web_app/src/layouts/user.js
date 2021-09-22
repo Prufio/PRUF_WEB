@@ -1121,7 +1121,7 @@ export default function Dashboard(props) {
       content: (
         <Card className="delegationCard">
           <h4 className="delegationTitle">Stake Details</h4>
-          <Accordion key={`AccordionStack${index}`}>
+          {/* <Accordion key={`AccordionStack${index}`}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-label="Expand"
@@ -1162,7 +1162,7 @@ export default function Dashboard(props) {
                 </div>
               </div>
             </AccordionDetails>
-          </Accordion>
+          </Accordion> */}
           <h5 className="">
             {`
                   Token ID: ${delegationList[index][0]}
@@ -1194,15 +1194,12 @@ export default function Dashboard(props) {
           </h5>
           <h5 className="">
             {`
-                Unlock percent complete: ${delegationList[index][4]}
+                Unlock Completion: ${delegationList[index][4]}
               `}
           </h5>
           <CustomLinearProgress
             variant="determinate"
             color="info"
-            text={`
-            Unlock percent complete: ${delegationList[index][4]}
-          `}
             value={Number(
               delegationList[index][4].substring(
                 0,
@@ -1939,14 +1936,18 @@ export default function Dashboard(props) {
                         </div>
                       </Tooltip>
                       <span
-                        ref={anchorRef}
-                        onClick={() => handleToggle()}
                         className="spanSmallText"
                       >
                         Currently Earning: ü
                         {Math.floor((yearlyRewards / rewardsDivisor) * 100) /
                           100}{" "}
-                        / {rewardsUnit}
+                        / 
+                      <span
+                        ref={anchorRef}
+                        onClick={() => handleToggle()}
+                        className="spanSmallTextSelect"
+                      >{" "}{rewardsUnit}
+                      </span>
                       </span>
                       <Popper
                         className="highZPopper"
