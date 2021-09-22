@@ -100,6 +100,13 @@ body {
   background-color: #002a40 !important;
 }
 
+.transparentButtonSmall {
+  color: black !important;
+  background: transparent !important;
+  padding: none !important;
+  font-size: 12px !important;
+}
+
 .transparentButton {
   color: black !important;
     background: transparent !important;
@@ -597,6 +604,10 @@ body {
   margin-left: 4px;
 }
 
+.highZPopper {
+  z-index:999 !important;
+}
+
 .assetImageSelectorButton:Hover {
   background-color: rgb(0, 168, 255, 0.25) ;
   position:relative;
@@ -786,6 +797,11 @@ cursor:pointer;
 .QRScanner:hover {
   cursor: pointer;
   color: rgb(141, 129, 129);
+}
+
+.spanSmallText { 
+  font-size: 12px;
+  font-weight: medium;
 }
 
 .addressTextAndroid{
