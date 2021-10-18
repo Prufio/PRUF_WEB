@@ -2,7 +2,6 @@
 
 import React from "react";
 import cx from "classnames";
-import swal from "sweetalert";
 import "../assets/css/custom.css";
 import Web3 from "web3";
 import { Route } from "react-router-dom";
@@ -194,9 +193,9 @@ export default function Dashboard(props) {
 
     let _web3 = require("web3");
     _web3 = new Web3(
-      _web3.givenProvider ||
-        "https://mainnet.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+      _web3.givenProvider
     );
+
     setWeb3(_web3);
     setTimeout(getAddress(_web3), 500);
 
@@ -239,8 +238,8 @@ export default function Dashboard(props) {
                 window.ethereum
                   .request({ method: "eth_requestAccounts" })
                   .then(async (accounts) => {
-                    if (accounts[0] === undefined)
-                      return swal({
+                    if (accounts[0] === undefined) {
+                      return swalReact({
                         title: "Can't connect to wallet.",
                         icon: "warning",
                         buttons: {
@@ -251,21 +250,34 @@ export default function Dashboard(props) {
                           },
                         },
                       });
+                    } else {
                     console.log(_web3.utils.toChecksumAddress(accounts[0]));
                     setAddr(_web3.utils.toChecksumAddress(accounts[0]));
                     setUpEnvironment(_web3, accounts[0], chainId);
+                    }
                   });
               } else {
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
                 setUpEnvironment(
                   _web3,
-                  _web3.utils.toChecksumAddress(accounts[0]),
+                  accounts[0],
                   chainId
                 );
               }
             });
         } else {
+          // return swalReact({
+          //   title: "No ethereum provider detected.",
+          //   icon: "warning",
+          //   buttons: {
+          //     back: {
+          //       text: "Okay",
+          //       value: "back",
+          //       className: "delegateButtonBackCentered",
+          //     },
+          //   },
+          // });
         }
       } else {
         swalReact({
@@ -323,7 +335,7 @@ export default function Dashboard(props) {
 
   const refreshBalances = (job, _web3, _addr) => {
     if (!util.balanceOf)
-      return swal({
+      return swalReact({
         title: "Something isn't right! Try refreshing the page.",
         icon: "warning",
         buttons: {
@@ -675,6 +687,7 @@ export default function Dashboard(props) {
         else setPrufBalance(0);
       } else {
         console.error(error);
+        swalReact({text: error})
         setPrufBalance("NaN");
       }
     });
@@ -995,7 +1008,10 @@ export default function Dashboard(props) {
   };
 
   const breakStake = (id, index) => {
-    if (!index || !id) return;
+    console.log(`BreakStake inputs: id: '${id}' index: '${index}'`);
+
+    if (index < 0 || id < 0) return
+    //if (!index || !id) return
 
     let isReady =
       (delegationList[index][10] / 100) * delegationList[index][5] > 1;
@@ -1231,7 +1247,7 @@ export default function Dashboard(props) {
                 1,
                 delegationList[index][3].length
               )
-            ) > 100 ? (
+            ) >= 100 ? (
               <Button
                 className="MLBGradient"
                 onClick={() => {
