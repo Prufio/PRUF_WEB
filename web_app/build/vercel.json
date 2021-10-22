@@ -2,7 +2,7 @@
 "_": "This is your Vercel config file. For more information see the global configuration documentation: https://vercel.com/docs/configuration#global",
   "collectMetrics": true,
   "redirects": [
-      { "source": "/callback", "destination": "/api/callback", "permanent" : true}
+      { "source": "/callback(?<id>[^/]+)", "destination": "/api/callback?id=$id", "permanent" : true}
     ],
     "routes": [
         { "src": "/callback/(?<id>[^/]+)", "dest": "/api/callback?id=$id" }
