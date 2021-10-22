@@ -168,8 +168,8 @@ export default function Dashboard(props) {
     // scope: 'openid email wallet',
   
     // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
-    redirectUri: "https://staking.pruf.io/callback",
-    postLogoutRedirectUri: "https://staking.pruf.io",
+    redirectUri: "https://staking.pruf.io/callback#/",
+    postLogoutRedirectUri: "https://staking.pruf.io/#/",
   })
 
   //classes for main panel

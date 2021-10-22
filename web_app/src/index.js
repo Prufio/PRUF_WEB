@@ -22,14 +22,16 @@ import { CookiesProvider } from "react-cookie";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 
+console.log(window.location.href)
+
 ReactDOM.render(
   <CookiesProvider>
     <HashRouter>
       <Switch>
         <Route path="/stake" component={AdminLayout} />
         {
-          /* fullUrl ? <Redirect from="/" to={fullUrl} /> :   */ <Redirect
-            from="/"
+          <Redirect
+            from="/*"
             to="/stake"
           />
         }
