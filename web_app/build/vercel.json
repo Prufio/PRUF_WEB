@@ -5,7 +5,7 @@
       { "source": "/callback(?<id>[^/]+)", "destination": "/api/callback?id=$id", "permanent" : true}
     ],
     "routes": [
-        { "src": "/callback/(?<id>[^/]+)", "dest": "/api/callback?id=$id" }
+        { "src": "/callback(?<id>[^/]+)", "dest": "/api/callback?id=$id" }
     ],
   "headers": [
     {
