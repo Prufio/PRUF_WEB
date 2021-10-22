@@ -56,7 +56,7 @@ const Callback = () => {
   }, [])
 
   if (redirectTo) {
-    <Redirect
+   return <Redirect
             from="/callback"
             to="/stake"
           />
@@ -67,35 +67,35 @@ const Callback = () => {
   ReactDOM.render(
     // <>
     // {window.location.href.includes("callback") ? 
-      <React.StrictMode>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/callback" component={Callback} />
-          <Route path="/stake" component={AdminLayout} />
-          {
+    //   <React.StrictMode>
+    //   <BrowserRouter>
+    //     <Switch>
+    //       <Route path="/callback" component={Callback} />
+    //       <Route path="/stake" component={AdminLayout} />
+    //       {
+    //       <Redirect
+    //         from="/"
+    //         to="/stake"
+    //       />
+    //     }
+    //     </Switch>
+    //   </BrowserRouter>
+    // </React.StrictMode>
+
+    <CookiesProvider>
+    <HashRouter>
+      <Switch>
+        <Route path="/stake" component={AdminLayout} />
+        {
           <Redirect
-            from="/"
+            from="/*"
             to="/stake"
           />
         }
-        </Switch>
-      </BrowserRouter>
-    </React.StrictMode>
-  //     :
-  //   <CookiesProvider>
-  //   <HashRouter>
-  //     <Switch>
-  //       <Route path="/stake" component={AdminLayout} />
-  //       {
-  //         <Redirect
-  //           from="/*"
-  //           to="/stake"
-  //         />
-  //       }
-  //     </Switch>
-  //   </HashRouter>
-  // </CookiesProvider>
-  //   }</>
+      </Switch>
+    </HashRouter>
+  </CookiesProvider>
+ 
   ,
     document.getElementById("root")
   );
