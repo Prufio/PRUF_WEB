@@ -23,6 +23,13 @@ import { CookiesProvider } from "react-cookie";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 
+if (window.location.href.includes("callback")) {
+  return <Redirect
+           from="/callback"
+           to="/api/callback"
+         />
+ }
+
 const uauth = new UAuth({
   // Client credentials copied from https://unstoppabledomains.com/app-dashboard
   clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
