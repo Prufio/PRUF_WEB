@@ -46,17 +46,20 @@ const Callback = () => {
       // Successfully logged and cached user in `window.localStorage`
       .then(response => {
         console.log('loginCallback ->', response)
-        setRedirectTo('/#/stake')
+        setRedirectTo('/stake')
       })
       // Failed to exchange authorization code for token.
       .catch(error => {
         console.error('callback error:', error)
-        setRedirectTo('/#/stake')
+        setRedirectTo('/stake')
       })
   }, [])
 
   if (redirectTo) {
-    window.location.replace("https://staking.pruf.io/stake")
+    <Redirect
+            from="/callback"
+            to="/stake"
+          />
   }
 
   return <>Loading...</>
