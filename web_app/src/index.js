@@ -83,23 +83,31 @@ const Callback = () => {
     // </React.StrictMode>
 
     <CookiesProvider>
-    {window.location.href.includes("callback") ? 
+    {/* {window.location.href.includes("callback") ? 
     <BrowserRouter>
          <Switch>
            <Route path="/callback" component={Callback} />
+           {
+          <Redirect
+            from="/#/callback"
+            to="/callback"
+          />
+        }
         </Switch>
-      </BrowserRouter> :
+      </BrowserRouter> : */}
     <HashRouter>
       <Switch>
+        <Route path="/callback" component={Callback} />
         <Route path="/stake" component={AdminLayout} />
         {
           <Redirect
-            from="/*"
+            from="/"
             to="/stake"
           />
         }
       </Switch>
-    </HashRouter>}
+    </HashRouter>
+    {/* } */}
   </CookiesProvider>
  
   ,
