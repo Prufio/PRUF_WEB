@@ -23,13 +23,6 @@ import { CookiesProvider } from "react-cookie";
 
 import "assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 
-if (window.location.href.includes("callback")) {
-  return <Redirect
-           from="/callback"
-           to="/api/callback"
-         />
- }
-
 const uauth = new UAuth({
   // Client credentials copied from https://unstoppabledomains.com/app-dashboard
   clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
@@ -65,7 +58,7 @@ const Callback = () => {
   if (redirectTo) {
    return <Redirect
             from="/callback"
-            to="/stake"
+            to="/#/stake"
           />
   }
 
@@ -90,6 +83,12 @@ const Callback = () => {
     // </React.StrictMode>
 
     <CookiesProvider>
+    {window.location.href.includes("callback") ? 
+    <BrowserRouter>
+         <Switch>
+           <Route path="/callback" component={Callback} />
+        </Switch>
+      </BrowserRouter> :
     <HashRouter>
       <Switch>
         <Route path="/stake" component={AdminLayout} />
@@ -100,7 +99,7 @@ const Callback = () => {
           />
         }
       </Switch>
-    </HashRouter>
+    </HashRouter>}
   </CookiesProvider>
  
   ,
