@@ -56,36 +56,44 @@ const Callback = () => {
   }, [])
 
   if (redirectTo) {
-    window.location.replace("https://staking.pruf.io/#/stake")
+    window.location.replace("https://staking.pruf.io/stake")
   }
 
   return <>Loading...</>
 }
   ReactDOM.render(
-    <>
-    {window.location.href.includes("callback") ? 
+    // <>
+    // {window.location.href.includes("callback") ? 
       <React.StrictMode>
       <BrowserRouter>
         <Switch>
           <Route path="/callback" component={Callback} />
-        </Switch>
-      </BrowserRouter>
-    </React.StrictMode>
-      :
-    <CookiesProvider>
-    <HashRouter>
-      <Switch>
-        <Route path="/stake" component={AdminLayout} />
-        {
+          <Route path="/stake" component={AdminLayout} />
+          {
           <Redirect
-            from="/*"
+            from="/"
             to="/stake"
           />
         }
-      </Switch>
-    </HashRouter>
-  </CookiesProvider>
-    }</>,
+        </Switch>
+      </BrowserRouter>
+    </React.StrictMode>
+  //     :
+  //   <CookiesProvider>
+  //   <HashRouter>
+  //     <Switch>
+  //       <Route path="/stake" component={AdminLayout} />
+  //       {
+  //         <Redirect
+  //           from="/*"
+  //           to="/stake"
+  //         />
+  //       }
+  //     </Switch>
+  //   </HashRouter>
+  // </CookiesProvider>
+  //   }</>
+  ,
     document.getElementById("root")
   );
 
