@@ -61,34 +61,32 @@ const Callback = () => {
 
   return <>Loading...</>
 }
-
-if(!window.location.href.includes("callback")){
   ReactDOM.render(
+    <>
+    { window.location.href.includes("callback") ? 
     <CookiesProvider>
-      <HashRouter>
-        <Switch>
-          <Route path="/stake" component={AdminLayout} />
-          {
-            <Redirect
-              from="/*"
-              to="/stake"
-            />
-          }
-        </Switch>
-      </HashRouter>
-    </CookiesProvider>,
-    document.getElementById("root")
-  );
-} else {
-  ReactDOM.render(
-    <React.StrictMode>
+    <HashRouter>
+      <Switch>
+        <Route path="/stake" component={AdminLayout} />
+        {
+          <Redirect
+            from="/*"
+            to="/stake"
+          />
+        }
+      </Switch>
+    </HashRouter>
+  </CookiesProvider>
+  :
+  <React.StrictMode>
       <BrowserRouter>
         <Switch>
           <Route path="/callback" component={Callback} />
         </Switch>
       </BrowserRouter>
-    </React.StrictMode>,
-    document.getElementById('root'),
-  )
-}
+    </React.StrictMode>
+    }</>,
+    document.getElementById("root")
+  );
+
 
