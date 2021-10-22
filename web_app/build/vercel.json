@@ -10,7 +10,7 @@
   },
   "redirects": [
     {
-      "source":"/callback", 
+      "source":"/callback",
       "destination":"/api/callback", 
       "permanent": true
     }
