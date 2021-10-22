@@ -9,6 +9,8 @@ import { isMobile } from "react-device-detect";
 import { makeStyles } from '@material-ui/core/styles'
 import swal from 'sweetalert'
 import Search from '@material-ui/icons/Search'
+import uaDefault from '../../assets/img/default-icon.png'
+import mmDefault from '../../assets/img/mm-icon.png'
 
 // core components
 import CustomInput from 'components/CustomInput/CustomInput.js'
@@ -25,6 +27,18 @@ export default function HeaderLinks(props) {
     //   console.log(e.target.value);
     //   setSearchBarVal(e.target.value);
     // };
+    const udLogin = () => {
+        if(props.ud){
+            props.ud.login()
+        }
+        console.log(props.ud)
+        console.log("Here")
+    }
+
+    const connectMM = () => {
+
+    }
+
     const addToken = async () => {
         if(props.tokenAddress && window.ethereum){
             await window.ethereum.request({
@@ -63,6 +77,20 @@ export default function HeaderLinks(props) {
     return (
         <>
                 <div className={wrapper}>
+                    <span
+                        onClick={() => window.dispatchEvent(props.udLogin)}
+                        className="udButton"
+                    >
+                        <img className="udButton" src={uaDefault}>
+                        </img>
+                    </span>
+                    <span
+                        onClick={() => window.dispatchEvent(props.mmLogin)}
+                        className="udButton"
+                    >
+                        <img className="udButton" src={mmDefault}>
+                        </img>
+                    </span>
                     <Button
                         color="white"
                         onClick={() => addToken()}

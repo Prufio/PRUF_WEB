@@ -9,6 +9,7 @@ import ReactTable from "../components/ReactTable/ReactTable.js";
 import CustomLinearProgress from "../components/CustomLinearProgress/CustomLinearProgress.js";
 import { isMobile } from "react-device-detect";
 import swalReact from "@sweetalert/with-react";
+import Web3Modal from "web3modal";
 // creates a beautiful scrollbar
 
 import PerfectScrollbar from "perfect-scrollbar";
@@ -50,6 +51,7 @@ import Accordion from "@material-ui/core/Accordion";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import UAuth from '@uauth/js'
 
 import Eth from "../assets/img/eth-logo2.png";
 import Polygon from "../assets/img/matic-token-inverted-icon.png";
@@ -120,6 +122,7 @@ export default function Dashboard(props) {
   const [loadingSums, setLoadingSums] = React.useState(false);
   const [yearlyRewards, setYearlyRewards] = React.useState(0);
   const [rewardsDivisor, setRewardsDivisor] = React.useState(1);
+  //const [uauth, setUauth] = React.useState();
   const [rewardsUnit, setRewardsUnit] = React.useState("Year");
   const unitOptions = [
     "Create a merge commit",
@@ -154,6 +157,21 @@ export default function Dashboard(props) {
     "Diamond Tier",
   ];
 
+  const udLoginEvent = new Event("udLogin")
+  const mmLoginEvent = new Event("mmLogin")
+  const uauth = new UAuth({
+    // Client credentials copied from https://unstoppabledomains.com/app-dashboard
+    clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
+    clientSecret: "+2Kdmv50Sl3zGxhV2ZnfCuDYmPfpbE5ulPRHPtzIoO4=",
+  
+    // Requested scopes.
+    // scope: 'openid email wallet',
+  
+    // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
+    redirectUri: "https://staking.pruf.io/callback",
+    postLogoutRedirectUri: "https://staking.pruf.io",
+  })
+
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -183,23 +201,17 @@ export default function Dashboard(props) {
         console.log("Accounts changed");
         if (e[0] === undefined || e[0] === null) {
           if (e[0] !== addr) {
-            window.location.reload();
+            clearPage();
           }
         } else if (e[0].toLowerCase() !== addr.toLowerCase()) {
-          window.location.reload();
+          getMMAddress();
         }
       });
     }
 
-    let _web3 = require("web3");
-    _web3 = new Web3(
-      _web3.givenProvider
-    );
-
-    setWeb3(_web3);
-    setTimeout(getAddress(_web3), 500);
-
-    console.log({ _web3 });
+    window.addEventListener('udLogin', udHandle)
+    window.addEventListener('mmLogin', mmHandle)
+    //console.log({ _web3 });
 
     if (navigator.platform.indexOf("Win") > -1) {
       //console.log("*****Using ps*****");
@@ -214,13 +226,58 @@ export default function Dashboard(props) {
 
     // Specify how to clean up after this effect:
     return function cleanup() {
+      window.removeEventListener('udLogin', udHandle)
+      window.removeEventListener('mmLogin', mmHandle)
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
     };
   }, []);
 
-  const getAddress = (_web3) => {
+
+  const mmHandle = () => {
+    getMMAddress()
+  }
+
+  const udHandle = () => {
+    uauth.login()
+    .catch("Error")
+  }
+
+  const determineProvider = async () => {  
+    let _web3 = require("web3");
+
+    _web3 = new Web3(
+      _web3.givenProvider
+    );
+
+    setWeb3(_web3)
+  }
+
+  const clearPage = () => {
+    setAddr(null)
+    setChainId(0)
+    setEtherBalance("")
+    setPrufBalance("")
+    setTotalStaked(0)
+    setTotalRewards(0)
+    setUtil({})
+    setStake({})
+    setStakeTkn({})
+    setTokenAddress("") 
+
+  }
+
+  const getMMAddress = () => {
+
+    let _web3 = require("web3");
+
+    _web3 = new Web3(
+      _web3.givenProvider
+    );
+
+    setWeb3(_web3)
+
     _web3.eth.net.getId().then((chainId) => {
       if (
         chainId === 42 ||
@@ -251,12 +308,14 @@ export default function Dashboard(props) {
                         },
                       });
                     } else {
+                    //if(addr.toLowerCase === accounts[0].toLowerCase) return
                     console.log(_web3.utils.toChecksumAddress(accounts[0]));
                     setAddr(_web3.utils.toChecksumAddress(accounts[0]));
                     setUpEnvironment(_web3, accounts[0], chainId);
                     }
                   });
               } else {
+                //if(addr.toLowerCase === accounts[0].toLowerCase) return
                 console.log(_web3.utils.toChecksumAddress(accounts[0]));
                 setAddr(_web3.utils.toChecksumAddress(accounts[0]));
                 setUpEnvironment(
@@ -279,10 +338,12 @@ export default function Dashboard(props) {
           //   },
           // });
         }
+      } else if (chainId === 100000000) {
+
       } else {
         swalReact({
           icon: `warning`,
-          text: `You are connected to network ID ${chainId}. Please connect to the ethereum kovan testnet`,
+          text: `You are connected to network ID ${chainId}. Please connect to a supported chain`,
           buttons: {
             back: {
               text: "Okay",
@@ -1769,6 +1830,8 @@ export default function Dashboard(props) {
   return (
     <div className={userClasses.wrapper}>
       <AdminNavbar
+        udLogin={udLoginEvent}
+        mmLogin={mmLoginEvent}
         tokenAddress={tokenAddress}
         brandText={getActiveRoute(routes)}
         {...rest}
