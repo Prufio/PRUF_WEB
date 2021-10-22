@@ -63,7 +63,15 @@ const Callback = () => {
 }
   ReactDOM.render(
     <>
-    { window.location.href.includes("callback") ? 
+    {window.location.href.includes("callback") ? 
+      <React.StrictMode>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/callback" component={Callback} />
+        </Switch>
+      </BrowserRouter>
+    </React.StrictMode>
+      :
     <CookiesProvider>
     <HashRouter>
       <Switch>
@@ -77,14 +85,6 @@ const Callback = () => {
       </Switch>
     </HashRouter>
   </CookiesProvider>
-  :
-  <React.StrictMode>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/callback" component={Callback} />
-        </Switch>
-      </BrowserRouter>
-    </React.StrictMode>
     }</>,
     document.getElementById("root")
   );
