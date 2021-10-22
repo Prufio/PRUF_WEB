@@ -159,8 +159,7 @@ export default function Dashboard(props) {
 
   const udLoginEvent = new Event("udLogin")
   const mmLoginEvent = new Event("mmLogin")
-  const clearEvent = new Event("clear")
-  
+
   const uauth = new UAuth({
     // Client credentials copied from https://unstoppabledomains.com/app-dashboard
     clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
