@@ -27,13 +27,14 @@ const uauth = new UAuth({
   // Client credentials copied from https://unstoppabledomains.com/app-dashboard
   clientID: "Q2pO03hsT5gMk0IxAacVZoloemjGBzvVEzxaofTHnmA=",
   clientSecret: "+2Kdmv50Sl3zGxhV2ZnfCuDYmPfpbE5ulPRHPtzIoO4=",
+  responseMode: "query",
 
   // Requested scopes.
   // scope: 'openid email wallet',
 
   // Redirect Uris copied from https://unstoppabledomains.com/app-dashboard
-  redirectUri: "https://staking.pruf.io/callback",
-  postLogoutRedirectUri: "https://staking.pruf.io/",
+  redirectUri: "https://staking.pruf.io/callback#/",
+  postLogoutRedirectUri: "https://staking.pruf.io/#/",
 })
 
 const Callback = () => {
