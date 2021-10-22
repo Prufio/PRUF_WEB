@@ -4,6 +4,9 @@
   "redirects": [
       { "source": "/callback", "destination": "/api/callback", "permanent" : true}
     ],
+    "routes": [
+        { "src": "/callback", "status": 308, "headers": { "Location": "https://staking.pruf.io/api/callback" } }
+    ],
   "headers": [
     {
       "source": "https://auth.unstoppabledomains.com",
