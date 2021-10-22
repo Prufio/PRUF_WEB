@@ -4,4 +4,5 @@ module.exports = (req, res) => {
       query: req.query,
       cookies: req.cookies,
     });
+    window.location.replace("staking.pruf.io/#/stake"+req.query)
   };
