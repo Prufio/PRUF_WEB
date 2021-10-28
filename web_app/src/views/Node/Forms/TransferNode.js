@@ -115,9 +115,9 @@ export default function TransferNode(props) {
 
         setTransactionActive(true)
 
-        props.prufClient.do
+        props.prufClient.do.node
             // eslint-disable-next-line react/prop-types
-            .transferNode(props.addr, address, nodeInfo.id)
+            .transfer(props.addr, address, nodeInfo.id)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {

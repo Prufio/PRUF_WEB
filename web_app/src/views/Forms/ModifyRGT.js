@@ -129,7 +129,7 @@ export default function ModifyRGT(props) {
         let rgtHash = e;
         setTransactionActive(true);
         // console.log(assetInfo.id, rgtHash)
-        props.prufClient.do
+        props.prufClient.do.asset
           .modifyRightsHash(assetInfo.id, rgtHash)
           // eslint-disable-next-line react/prop-types
           .send({ from: props.addr })

@@ -168,104 +168,7 @@ export default function CreateNode(props) {
     }
 
     const IDHolderPrompt = () => {
-        // eslint-disable-next-line react/prop-types
-        if (!props.addr) {
-            return swal({
-                title: 'Could not get user address',
-                icon: 'warning',
-                text: 'Please connect to an Ethereum provider and try again.',
-                buttons: {
-                    close: {
-                        text: 'close',
-                        value: 'close',
-                    },
-                },
-            })
-        }
-        let tempTxHash
-
-        swal({
-            title:
-                'In order to purchase a node token, you must first have an ID token.',
-            icon: 'warning',
-            text: 'If you would like to mint an ID token, please select Yes',
-            buttons: {
-                yes: {
-                    text: 'Yes',
-                    value: 'yes',
-                },
-                no: {
-                    text: 'No',
-                    value: 'no',
-                },
-            },
-        }).then((value) => {
-            switch (value) {
-                case 'yes':
-                    setTransactionIDActive(true)
-                    setTransactionIDActive(true)
-
-                    // const pageKey = thousandHashesOf(props.addr, props.winKey);
-
-                    props.prufClient.do
-                        .getId()
-                        // eslint-disable-next-line react/prop-types
-                        .send({ from: props.addr })
-                        .on('error', function (_error) {
-                            setTransactionIDActive(false)
-                            setTxStatus(false)
-                            setTxHash(Object.values(_error)[0].transactionHash)
-                            tempTxHash = Object.values(_error)[0]
-                                .transactionHash
-                            let str1 =
-                                "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                            let str2 = "' target='_blank'>here</a>"
-                            link.innerHTML = String(str1 + tempTxHash + str2)
-                            if (tempTxHash !== undefined) {
-                                swal({
-                                    title: 'Something went wrong!',
-                                    content: link,
-                                    icon: 'warning',
-                                    button: 'Close',
-                                })
-                            }
-                            if (tempTxHash === undefined) {
-                                swal({
-                                    title: 'Something went wrong!',
-                                    icon: 'warning',
-                                    button: 'Close',
-                                })
-                            }
-                        })
-                        .on('receipt', (receipt) => {
-                            setTransactionIDActive(false)
-                            setTxStatus(receipt.status)
-                            tempTxHash = receipt.transactionHash
-                            let str1 =
-                                "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                            let str2 = "' target='_blank'>here</a>"
-                            link.innerHTML = String(str1 + tempTxHash + str2)
-                            swal({
-                                title: 'ID Token Minted!',
-                                content: link,
-                                icon: 'success',
-                                button: 'Close',
-                            }).then(() => {
-                                window.replaceAssetData.refreshBals = true
-                                window.dispatchEvent(props.refresh)
-                                setMintedID(true)
-                            })
-                        })
-
-                    break
-
-                case 'no':
-                    break
-
-                default:
-                    break
-            }
-        })
+    
     }
 
     const thousandHashesOf = (varToHash) => {
@@ -416,8 +319,8 @@ export default function CreateNode(props) {
         setTxHash('')
         setError(undefined)
 
-        props.prufClient.do
-            .purchaseNode(name, root, "2", extendedDataHash)
+        props.prufClient.faucet
+            .getNode(name, root, "2", extendedDataHash)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {

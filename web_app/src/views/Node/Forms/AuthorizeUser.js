@@ -150,7 +150,7 @@ export default function AuthorizeUser(props) {
                     }
                     setTransactionActive(true)
 
-                    props.prufClient.do
+                    props.prufClient.do.node
                         .authorizeUser(nodeInfo.id, addressHash, '1')
                         // eslint-disable-next-line react/prop-types
                         .send({ from: props.addr })

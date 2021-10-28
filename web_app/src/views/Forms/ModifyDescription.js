@@ -325,7 +325,7 @@ export default function ModifyDescription(props) {
 
     setTransactionActive(true);
     props.prufClient.do
-      .modifyAssetExtData(id, hash)
+      .asset.modifyMutableStorage(id, hash)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {

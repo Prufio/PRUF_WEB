@@ -135,47 +135,11 @@ export default function Home(props) {
     // }
 
     const purchasePRUF = async () => {
-        console.log(props.addr)
-        // eslint-disable-next-line react/prop-types
-        let etherBal = updatedEther || props.ether
+        setPrufTransactionActive(true)
         let tempTxHash
 
-        if (loginDeposit === '' || loginDeposit < 10000) {
-            setloginDepositState('error')
-            return
-        }
-        let amount
-
-        if (deposit < 10000) {
-            swal({
-                title: 'PRUF Amount must be > 10000',
-                icon: 'warning',
-                button: 'Close',
-            })
-            return setloginDepositState('error')
-        }
-
-        if (deposit > etherBal * 100000) {
-            //console.log(props.ether)
-            swal({
-                title: 'Insufficient KΞ',
-                icon: 'warning',
-                button: 'Close',
-            })
-            return setloginDepositState('error')
-        } else {
-            amount = window.web3.utils.toWei(String(Math.round(deposit)))
-        }
-
-        setPrufTransactionActive(true)
-
-        await window.web3.eth
-            .sendTransaction({
-                // eslint-disable-next-line react/prop-types
-                from: props.addr,
-                to: '0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468',
-                value: amount / 100000,
-            })
+        props.prufClient.faucet.getPRUF()
+        .send({from: props.addr})
             .on('error', function (_error) {
                 setPrufTransactionActive(false)
                 setTxStatus(false)
@@ -232,63 +196,7 @@ export default function Home(props) {
     }
 
     const mintID = () => {
-        if (!props.prufClient) return
 
-        // const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-        let tempTxHash
-        setIsMinting(true)
-
-        props.prufClient.do
-            .getId()
-            // eslint-disable-next-line react/prop-types
-            .send({ from: props.addr })
-            .on('error', function (_error) {
-                setIsMinting(false)
-                //setTransactionActive(false);
-                //setTxStatus(false);
-                //setTxHash(Object.values(_error)[0].transactionHash);
-                tempTxHash = Object.values(_error)[0].transactionHash
-                let str1 =
-                    "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                let str2 = "' target='_blank'>here</a>"
-                link.innerHTML = String(str1 + tempTxHash + str2)
-                if (tempTxHash !== undefined) {
-                    swal({
-                        title: 'Something went wrong!',
-                        content: link,
-                        icon: 'warning',
-                        button: 'Close',
-                    })
-                }
-                if (tempTxHash === undefined) {
-                    swal({
-                        title: 'Something went wrong!',
-                        icon: 'warning',
-                        button: 'Close',
-                    })
-                }
-            })
-            .on('receipt', (receipt) => {
-                setIsMinting(false)
-                //setTransactionActive(false);
-                //setTxStatus(receipt.status);
-                tempTxHash = receipt.transactionHash
-                let str1 =
-                    "Check out your TX <a href='https://kovan.etherscan.io/tx/"
-                let str2 = "' target='_blank'>here</a>"
-                link.innerHTML = String(str1 + tempTxHash + str2)
-                swal({
-                    title: 'ID Token Minted!',
-                    content: link,
-                    icon: 'success',
-                    button: 'Close',
-                }).then(() => {
-                    window.replaceAssetData.refreshBals = true
-                    refreshBalances()
-                    setHasMinted(true)
-                    forceUpdate()
-                })
-            })
     }
 
     const refreshBalances = () => {
@@ -307,17 +215,17 @@ export default function Home(props) {
             })
 
             // eslint-disable-next-line react/prop-types
-            props.prufClient.get
+            props.prufClient.get.asset
                 // eslint-disable-next-line react/prop-types
-                .assetBalance(props.addr)
+                .balanceOf(props.addr)
                 .then(e => {
                     setUpdatedAssets(e)
                 })
 
             // eslint-disable-next-line react/prop-types
-            props.prufClient.get
+            props.prufClient.get.pruf
                 // eslint-disable-next-line react/prop-types
-                .prufBalance(props.addr)
+                .balanceOf(props.addr)
                 .then(e => {
                     setUpdatedPruf(e)
                 })
@@ -637,64 +545,6 @@ export default function Home(props) {
                 {props.prufClient !== undefined && props.prufClient !== {} && props.addr && (
                     <CardBody>
                         <form>
-                            <h4>Conversion Rate: ü100,000/1 Kovan Ether</h4>
-                            <h5>Minimum Purchase Amount is ü10,000</h5>
-                            {!prufTransactionActive && (
-                                <>
-                                    <CustomInput
-                                        success={
-                                            loginDepositState === 'success'
-                                        }
-                                        error={loginDepositState === 'error'}
-                                        labelText="PRUF Amount Request *"
-                                        id="pruf"
-                                        formControlProps={{
-                                            fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                            onChange: (event) => {
-                                                setDeposit(
-                                                    event.target.value.trim()
-                                                )
-                                                if (
-                                                    event.target.value !== '' &&
-                                                    event.target.value >= 10000
-                                                ) {
-                                                    setloginDepositState(
-                                                        'success'
-                                                    )
-                                                } else {
-                                                    setloginDepositState(
-                                                        'error'
-                                                    )
-                                                }
-                                                setloginDeposit(
-                                                    event.target.value
-                                                )
-                                            },
-                                            type: 'number',
-                                            defaultValue: deposit,
-                                        }}
-                                    />
-                                    <div className={classes.formCategory}>
-                                        <small>*</small> Required fields
-                                    </div>
-                                </>
-                            )}
-                            {prufTransactionActive && (
-                                <>
-                                    <CustomInput
-                                        labelText={deposit}
-                                        id="deposit"
-                                        formControlProps={{
-                                            fullWidth: true,
-                                        }}
-                                        inputProps={{
-                                            disabled: true,
-                                        }}
-                                    />
-                                </>
-                            )}
                             {!prufTransactionActive && (
                                 <div className="MLBGradientSubmit">
                                     <Button

@@ -239,7 +239,7 @@ export default function NewRecord(props) {
     console.log(event.target.value);
     props.prufClient.get
       // eslint-disable-next-line react/prop-types
-      .nodeData(event.target.value.id)
+      node.record(event.target.value.id)
       .then(e => {
         setNodeExtendedData(e);
         setStorageProvider(e.storageProvider);
@@ -267,99 +267,99 @@ export default function NewRecord(props) {
   };
 
   const IDHolderPrompt = () => {
-    // eslint-disable-next-line react/prop-types
-    if (!props.addr) {
-      return swal({
-        title: "Could not get user address",
-        icon: "warning",
-        text: "Please connect to an Ethereum provider and try again.",
-        buttons: {
-          close: {
-            text: "close",
-            value: "close",
-          },
-        },
-      });
-    }
-    let tempTxHash;
+    // // eslint-disable-next-line react/prop-types
+    // if (!props.addr) {
+    //   return swal({
+    //     title: "Could not get user address",
+    //     icon: "warning",
+    //     text: "Please connect to an Ethereum provider and try again.",
+    //     buttons: {
+    //       close: {
+    //         text: "close",
+    //         value: "close",
+    //       },
+    //     },
+    //   });
+    // }
+    // let tempTxHash;
 
-    swal({
-      title: "In order to mint asset tokens, you must first have an ID token.",
-      icon: "warning",
-      text: "If you would like to mint an ID token, please select Yes",
-      buttons: {
-        yes: {
-          text: "Yes",
-          value: "yes",
-        },
-        no: {
-          text: "No",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "yes":
-          setIDTransactionActive(true);
-          props.prufClient.do
-            .getId()
-            // eslint-disable-next-line react/prop-types
-            .send({ from: props.addr })
-            .on("error", function (_error) {
-              setIDTransactionActive(false);
-              setTxStatus(false);
-              setTxHash(Object.values(_error)[0].transactionHash);
-              tempTxHash = Object.values(_error)[0].transactionHash;
-              let str1 =
-                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-              let str2 = "' target='_blank'>here</a>";
-              link.innerHTML = String(str1 + tempTxHash + str2);
-              if (tempTxHash !== undefined) {
-                swal({
-                  title: "Something went wrong!",
-                  content: link,
-                  icon: "warning",
-                  button: "Close",
-                });
-              }
-              if (tempTxHash === undefined) {
-                swal({
-                  title: "Something went wrong!",
-                  icon: "warning",
-                  button: "Close",
-                });
-              }
-            })
-            .on("receipt", (receipt) => {
-              setIDTransactionActive(false);
-              setTxStatus(receipt.status);
-              tempTxHash = receipt.transactionHash;
-              let str1 =
-                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-              let str2 = "' target='_blank'>here</a>";
-              link.innerHTML = String(str1 + tempTxHash + str2);
-              swal({
-                title: "ID Token Minted!",
-                content: link,
-                icon: "success",
-                button: "Close",
-              }).then(() => {
-                window.replaceAssetData.refreshBals = true
-                window.dispatchEvent(props.refresh)
-                setMintedID(true);
-                forceUpdate();
-              });
-            });
+    // swal({
+    //   title: "In order to mint asset tokens, you must first have an ID token.",
+    //   icon: "warning",
+    //   text: "If you would like to mint an ID token, please select Yes",
+    //   buttons: {
+    //     yes: {
+    //       text: "Yes",
+    //       value: "yes",
+    //     },
+    //     no: {
+    //       text: "No",
+    //       value: "no",
+    //     },
+    //   },
+    // }).then((value) => {
+    //   switch (value) {
+    //     case "yes":
+    //       setIDTransactionActive(true);
+    //       props.prufClient.do
+    //         .getId()
+    //         // eslint-disable-next-line react/prop-types
+    //         .send({ from: props.addr })
+    //         .on("error", function (_error) {
+    //           setIDTransactionActive(false);
+    //           setTxStatus(false);
+    //           setTxHash(Object.values(_error)[0].transactionHash);
+    //           tempTxHash = Object.values(_error)[0].transactionHash;
+    //           let str1 =
+    //             "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+    //           let str2 = "' target='_blank'>here</a>";
+    //           link.innerHTML = String(str1 + tempTxHash + str2);
+    //           if (tempTxHash !== undefined) {
+    //             swal({
+    //               title: "Something went wrong!",
+    //               content: link,
+    //               icon: "warning",
+    //               button: "Close",
+    //             });
+    //           }
+    //           if (tempTxHash === undefined) {
+    //             swal({
+    //               title: "Something went wrong!",
+    //               icon: "warning",
+    //               button: "Close",
+    //             });
+    //           }
+    //         })
+    //         .on("receipt", (receipt) => {
+    //           setIDTransactionActive(false);
+    //           setTxStatus(receipt.status);
+    //           tempTxHash = receipt.transactionHash;
+    //           let str1 =
+    //             "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+    //           let str2 = "' target='_blank'>here</a>";
+    //           link.innerHTML = String(str1 + tempTxHash + str2);
+    //           swal({
+    //             title: "ID Token Minted!",
+    //             content: link,
+    //             icon: "success",
+    //             button: "Close",
+    //           }).then(() => {
+    //             window.replaceAssetData.refreshBals = true
+    //             window.dispatchEvent(props.refresh)
+    //             setMintedID(true);
+    //             forceUpdate();
+    //           });
+    //         });
 
-          break;
+    //       break;
 
-        case "no":
-          break;
+    //     case "no":
+    //       break;
 
-        default:
-          break;
-      }
-    });
+    //     default:
+    //       break;
+    //   }
+    // });
   };
 
   const handleClick = () => {
@@ -551,7 +551,7 @@ export default function NewRecord(props) {
       return;
     }
     console.log(type, make, model, serial)
-    props.prufClient.utils.generateAssetID(
+    props.prufClient.utils.generateRawAssetID(
       {
         type: type,
         make: make,
@@ -560,7 +560,7 @@ export default function NewRecord(props) {
       }
     ).then(idxHash => {
 
-      props.prufClient.get.assetRecordExists(idxHash).then(doesExist => {
+      props.prufClient.get.asset.recordExists(idxHash).then(doesExist => {
 
         if (doesExist) {
           return swal({
@@ -754,7 +754,7 @@ export default function NewRecord(props) {
             nodeName.substring(1, nodeName.length).toLowerCase(),
           id: nodeId,
         },
-        idxHash: idx,
+        idxHash: props.web3.utils.soliditySha3(idx, nodeId), 
         currency: "0",
         id: idx,
         ipfs: extendedDataHash,
@@ -806,8 +806,8 @@ export default function NewRecord(props) {
 
         //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
         console.log("IPFS bytes32: ", extendedDataHash);
-        props.prufClient.do
-          .mintAsset(
+        props.prufClient.do.asset
+          .mint(
             idxHash,
             rgtHash,
             nodeId,
@@ -935,8 +935,8 @@ export default function NewRecord(props) {
         //console.log("IPFS bs58: ", window.rawIPFSHashTemp);
         console.log("IPFS bytes32: ", extendedDataHash);
 
-        props.prufClient.do
-          .mintAsset(
+        props.prufClient.do.asset
+          .mint(
             idxHash,
             rgtHash,
             nodeId,

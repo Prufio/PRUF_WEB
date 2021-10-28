@@ -212,7 +212,7 @@ export default function ChangeNodeCosts(props) {
             String(index),
             window.web3.utils.toWei(String(newCost)),
             _beneficiaryAddress)
-        props.prufClient.do
+        props.prufClient.do.node
             .setOperationCost(
                 nodeInfo.id,
                 String(index),

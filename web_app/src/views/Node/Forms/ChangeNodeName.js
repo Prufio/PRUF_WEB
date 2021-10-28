@@ -1,3 +1,4 @@
+/*DS DEPRECATE*/
 import React from 'react'
 import '../../../assets/css/custom.css'
 import swal from 'sweetalert'
@@ -78,7 +79,7 @@ export default function ChangeNodeName(props) {
 
     const changeName = () => {
         const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
-        props.prufClient.get.nodeNameAvailable(loginName).then(nameAvailable=>{
+        props.prufClient.get.node.nameAvailable(loginName).then(nameAvailable=>{
             console.log(nameAvailable)
             console.log(loginName)
             if (nameAvailable) {
@@ -90,7 +91,7 @@ export default function ChangeNodeName(props) {
     
                 setTransactionActive(true)
     
-                props.prufClient.do
+                props.prufClient.do.node
                     .modifyNodeName(nodeInfo.id, name)
                     // eslint-disable-next-line react/prop-types
                     .send({ from: props.addr })

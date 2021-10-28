@@ -148,8 +148,8 @@ export default function ModifyStatus(props) {
             console.log('Got past the json stuff')
             console.log(assetInfo.id)
 
-            props.prufClient.do
-                .modifyAssetStatus(assetInfo.id, String(status))
+            props.prufClient.do.asset
+                .modifyStatus(assetInfo.id, String(status))
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })
                 .on('error', function (_error) {
@@ -242,7 +242,7 @@ export default function ModifyStatus(props) {
             newAsset.status = e
             newAsset.statusNum = status
 
-            props.prufClient.do
+            props.prufClient.do.asset
                 .markAssetLostOrStolen(assetInfo.id, String(status))
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })

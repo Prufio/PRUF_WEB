@@ -1,3 +1,4 @@
+/*DS DEPRECATE*/
 import React from "react";
 import "../../assets/css/custom.css";
 import swal from "sweetalert";

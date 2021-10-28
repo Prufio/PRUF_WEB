@@ -195,7 +195,7 @@ export default function Search(props) {
       IDHolderPrompt();
     } else {
       try {
-        props.prufClient.get.nodeName(event.target.value).then((x) => {
+        props.prufClient.get.node.name(event.target.value).then((x) => {
           let str = x
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
@@ -222,72 +222,7 @@ export default function Search(props) {
   };
 
   const IDHolderPrompt = () => {
-    let tempTxHash;
 
-    swal({
-      title: "In order to mint asset tokens, you must first have an ID token.",
-      icon: "warning",
-      text:
-        "If you would like to mint asset tokens, please select Yes, it will mint you an ID token",
-      buttons: {
-        yes: {
-          text: "Yes",
-          value: "yes",
-        },
-        no: {
-          text: "No",
-          value: "no",
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case "yes":
-          setTransactionActive(true);
-          props.prufClient.do
-            .getId()
-            .send({ from: props.addr })
-            .on("error", function (_error) {
-              setTransactionActive(false);
-              setTxStatus(false);
-              setTxHash(Object.values(_error)[0].transactionHash);
-              tempTxHash = Object.values(_error)[0].transactionHash;
-              let str1 =
-                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-              let str2 = "' target='_blank'>here</a>";
-              link.innerHTML = String(str1 + tempTxHash + str2);
-              swal({
-                title: "Something went wrong!",
-                content: link,
-                icon: "warning",
-                button: "Close",
-              });
-            })
-            .on("receipt", (receipt) => {
-              setTransactionActive(false);
-              setTxStatus(receipt.status);
-              tempTxHash = receipt.transactionHash;
-              let str1 =
-                "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-              let str2 = "' target='_blank'>here</a>";
-              link.innerHTML = String(str1 + tempTxHash + str2);
-              swal({
-                title: "ID Token Minted!",
-                content: link,
-                icon: "success",
-                button: "Close",
-              });
-              window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
-            });
-          break;
-
-        case "no":
-          break;
-
-        default:
-          break;
-      }
-    });
   };
 
   const showImage = (e) => {
@@ -1086,174 +1021,174 @@ export default function Search(props) {
   };
 
   const purchaseAsset = () => {
-    if (!props.addr) return swal("No address detected")
-    let newAsset = JSON.parse(JSON.stringify(asset));
-    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
-    let tempTxHash;
-    console.log("Purchasing Asset");
+    // if (!props.addr) return swal("No address detected")
+    // let newAsset = JSON.parse(JSON.stringify(asset));
+    // const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+    // let tempTxHash;
+    // console.log("Purchasing Asset");
 
-    if (Number(props.pruf) < Number(price)) {
-      swal({
-        title: "Insufficient balance!",
-        icon: "warning",
-        button: "Close",
-      });
-      return console.log(price), console.log(props.pruf);
-    }
-    setTransaction(true);
-    props.prufClient.do
-      .buyAsset(asset.id)
-      .send({ from: props.addr })
-      .on("error", function (_error) {
-        setTransaction(false);
-        tempTxHash = Object.values(_error)[0].transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        if (tempTxHash !== undefined) {
-          swal({
-            title: "Something went wrong!",
-            content: link,
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        if (tempTxHash === undefined) {
-          swal({
-            title: "Something went wrong!",
-            icon: "warning",
-            button: "Close",
-          });
-        }
-        console.log("Verification conf");
-        setTxHash(Object.values(_error)[0].transactionHash);
-        console.log(Object.values(_error)[0].transactionHash);
-        console.log(_error);
-        setError(_error);
-      })
-      .on("receipt", (receipt) => {
-        setTransactionActive(false);
-        setTxStatus(receipt.status);
-        newAsset.currency = "0"
-        newAsset.price = "0"
-        tempTxHash = receipt.transactionHash;
-        let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-        let str2 = "' target='_blank'>here</a>";
-        link.innerHTML = String(str1 + tempTxHash + str2);
-        swal({
-          title: "Purchase Success!",
-          content: link,
-          icon: "success",
-          button: "Close",
-        }).then(() => {
-          window.location.href = "/#/user/dashboard";
-          window.replaceAssetData = { key: pageKey, newAsset: newAsset };
-          window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
-        });
-      });
+    // if (Number(props.pruf) < Number(price)) {
+    //   swal({
+    //     title: "Insufficient balance!",
+    //     icon: "warning",
+    //     button: "Close",
+    //   });
+    //   return console.log(price), console.log(props.pruf);
+    // }
+    // setTransaction(true);
+    // props.prufClient.do
+    //   .buyAsset(asset.id)
+    //   .send({ from: props.addr })
+    //   .on("error", function (_error) {
+    //     setTransaction(false);
+    //     tempTxHash = Object.values(_error)[0].transactionHash;
+    //     let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+    //     let str2 = "' target='_blank'>here</a>";
+    //     link.innerHTML = String(str1 + tempTxHash + str2);
+    //     if (tempTxHash !== undefined) {
+    //       swal({
+    //         title: "Something went wrong!",
+    //         content: link,
+    //         icon: "warning",
+    //         button: "Close",
+    //       });
+    //     }
+    //     if (tempTxHash === undefined) {
+    //       swal({
+    //         title: "Something went wrong!",
+    //         icon: "warning",
+    //         button: "Close",
+    //       });
+    //     }
+    //     console.log("Verification conf");
+    //     setTxHash(Object.values(_error)[0].transactionHash);
+    //     console.log(Object.values(_error)[0].transactionHash);
+    //     console.log(_error);
+    //     setError(_error);
+    //   })
+    //   .on("receipt", (receipt) => {
+    //     setTransactionActive(false);
+    //     setTxStatus(receipt.status);
+    //     newAsset.currency = "0"
+    //     newAsset.price = "0"
+    //     tempTxHash = receipt.transactionHash;
+    //     let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+    //     let str2 = "' target='_blank'>here</a>";
+    //     link.innerHTML = String(str1 + tempTxHash + str2);
+    //     swal({
+    //       title: "Purchase Success!",
+    //       content: link,
+    //       icon: "success",
+    //       button: "Close",
+    //     }).then(() => {
+    //       window.location.href = "/#/user/dashboard";
+    //       window.replaceAssetData = { key: pageKey, newAsset: newAsset };
+    //       window.replaceAssetData.refreshBals = true
+    //     window.dispatchEvent(props.refresh)
+    //     });
+    //   });
   };
 
   const recycleAsset = () => {
-    if (
-      loginFirst === "" ||
-      loginLast === "" ||
-      loginID === "" ||
-      loginPassword === ""
-    ) {
-      if (loginFirst === "") {
-        setloginFirstState("error");
-      }
-      if (loginLast === "") {
-        setloginLastState("error");
-      }
-      if (loginID === "") {
-        setloginIDState("error");
-      }
-      if (loginPassword === "") {
-        setloginPasswordState("error");
-      }
-      return;
-    }
+    // if (
+    //   loginFirst === "" ||
+    //   loginLast === "" ||
+    //   loginID === "" ||
+    //   loginPassword === ""
+    // ) {
+    //   if (loginFirst === "") {
+    //     setloginFirstState("error");
+    //   }
+    //   if (loginLast === "") {
+    //     setloginLastState("error");
+    //   }
+    //   if (loginID === "") {
+    //     setloginIDState("error");
+    //   }
+    //   if (loginPassword === "") {
+    //     setloginPasswordState("error");
+    //   }
+    //   return;
+    // }
 
-    const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
+    // const pageKey = thousandHashesOf(props.addr, props.winKey); //thousandHashesOf(props.addr, props.winKey)
 
-    console.log("in RA");
-    let idxHash = asset.id;
-    let rgtHash;
-    let rgtHashRaw;
-    let tempTxHash;
+    // console.log("in RA");
+    // let idxHash = asset.id;
+    // let rgtHash;
+    // let rgtHashRaw;
+    // let tempTxHash;
 
-    let newAsset = JSON.parse(JSON.stringify(asset));
-    newAsset.status = "Out of Escrow";
-    newAsset.statusNum = "58";
+    // let newAsset = JSON.parse(JSON.stringify(asset));
+    // newAsset.status = "Out of Escrow";
+    // newAsset.statusNum = "58";
 
-    props.prufClient.utils.generateSecureRgt(
-      asset.id,
-      {
-        first: first,
-        middle: middle,
-        last: last,
-        id: ID,
-        password: password
-      }
-    ).then(rgtHash => {
-      console.log("idxHash", idxHash);
-      console.log("rgtHash", rgtHash);
-      console.log("addr: ", props.addr);
-      setTransaction(true);
+    // props.prufClient.utils.generateSecureRgt(
+    //   asset.id,
+    //   {
+    //     first: first,
+    //     middle: middle,
+    //     last: last,
+    //     id: ID,
+    //     password: password
+    //   }
+    // ).then(rgtHash => {
+    //   console.log("idxHash", idxHash);
+    //   console.log("rgtHash", rgtHash);
+    //   console.log("addr: ", props.addr);
+    //   setTransaction(true);
 
-      props.prufClient.do
-        .recycleAsset(idxHash, rgtHash, nodeId)
-        .send({ from: props.addr })
-        .on("error", function (_error) {
-          setTransaction(false);
-          tempTxHash = Object.values(_error)[0].transactionHash;
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          if (tempTxHash !== undefined) {
-            swal({
-              title: "Something went wrong!",
-              content: link,
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          if (tempTxHash === undefined) {
-            swal({
-              title: "Something went wrong!",
-              icon: "warning",
-              button: "Close",
-            });
-          }
-          console.log("Verification conf");
-          setTxHash(Object.values(_error)[0].transactionHash);
-          console.log(Object.values(_error)[0].transactionHash);
-          console.log(_error);
-          setError(_error);
-        })
-        .on("receipt", (receipt) => {
-          setTransactionActive(false);
-          setTxStatus(receipt.status);
-          tempTxHash = receipt.transactionHash;
-          let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
-          let str2 = "' target='_blank'>here</a>";
-          link.innerHTML = String(str1 + tempTxHash + str2);
-          swal({
-            title: "Recycle Success!",
-            content: link,
-            icon: "success",
-            button: "Close",
-          }).then(() => {
-            window.newStat = { num: "58", str: "Out of Escrow" };
-            window.location.href = "/#/user/dashboard";
-            window.replaceAssetData = { key: pageKey, newAsset: newAsset };
-            window.replaceAssetData.refreshBals = true
-        window.dispatchEvent(props.refresh)
-          });
-        });
-    })
+    //   props.prufClient.do
+    //     .recycleAsset(idxHash, rgtHash, nodeId)
+    //     .send({ from: props.addr })
+    //     .on("error", function (_error) {
+    //       setTransaction(false);
+    //       tempTxHash = Object.values(_error)[0].transactionHash;
+    //       let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+    //       let str2 = "' target='_blank'>here</a>";
+    //       link.innerHTML = String(str1 + tempTxHash + str2);
+    //       if (tempTxHash !== undefined) {
+    //         swal({
+    //           title: "Something went wrong!",
+    //           content: link,
+    //           icon: "warning",
+    //           button: "Close",
+    //         });
+    //       }
+    //       if (tempTxHash === undefined) {
+    //         swal({
+    //           title: "Something went wrong!",
+    //           icon: "warning",
+    //           button: "Close",
+    //         });
+    //       }
+    //       console.log("Verification conf");
+    //       setTxHash(Object.values(_error)[0].transactionHash);
+    //       console.log(Object.values(_error)[0].transactionHash);
+    //       console.log(_error);
+    //       setError(_error);
+    //     })
+    //     .on("receipt", (receipt) => {
+    //       setTransactionActive(false);
+    //       setTxStatus(receipt.status);
+    //       tempTxHash = receipt.transactionHash;
+    //       let str1 = "Check out your TX <a href='https://kovan.etherscan.io/tx/";
+    //       let str2 = "' target='_blank'>here</a>";
+    //       link.innerHTML = String(str1 + tempTxHash + str2);
+    //       swal({
+    //         title: "Recycle Success!",
+    //         content: link,
+    //         icon: "success",
+    //         button: "Close",
+    //       }).then(() => {
+    //         window.newStat = { num: "58", str: "Out of Escrow" };
+    //         window.location.href = "/#/user/dashboard";
+    //         window.replaceAssetData = { key: pageKey, newAsset: newAsset };
+    //         window.replaceAssetData.refreshBals = true
+    //     window.dispatchEvent(props.refresh)
+    //       });
+    //     });
+    // })
 
 
     //return;
@@ -1397,7 +1332,7 @@ export default function Search(props) {
       console.log("addr: ", props.addr);
       setTransaction(true);
 
-      props.prufClient.do
+      props.prufClient.do.asset
         .verifyRightsHash(idxHash, rgtHash)
         .send({ from: props.addr })
         .on("error", (_error) => {
@@ -1570,7 +1505,7 @@ export default function Search(props) {
     setRetrieving(true);
 
     //Call to the API for an asset with assetId 'id'
-    props.prufClient.get.assetRecord(id).then(e => {
+    props.prufClient.get.asset.record(id).then(e => {
       setScanQR(false);
       setResult(Object.values(e));
       setError("");
@@ -1602,7 +1537,7 @@ export default function Search(props) {
 
         //get data on the node in which the asset resides
         props.prufClient.get
-          .nodeData(obj.nodeId)
+          node.record(obj.nodeId)
           .then(e => {
             obj.nodeName = e.name.toLowerCase()
               .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
@@ -1610,9 +1545,9 @@ export default function Search(props) {
               );
             setSelectedRootID(e.root)
             obj.nodeData = Object.assign({}, e)
-            props.prufClient.get.ownerOfNode(obj.nodeId).then(e => {
+            props.prufClient.get.node.ownerOf(obj.nodeId).then(e => {
               obj.nodeAdmin = e
-              props.prufClient.get.userType(window.web3.utils.soliditySha3(props.addr), obj.nodeId).then(e => {
+              props.prufClient.get.node.userType(window.web3.utils.soliditySha3(props.addr), obj.nodeId).then(e => {
                 obj.userAuthLevel = e
                 console.log("HERE", e.root);
                 return getMutableData(obj);

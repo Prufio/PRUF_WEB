@@ -6,7 +6,7 @@ import swal from "sweetalert";
 import Web3 from "web3";
 import Arweave from "arweave";
 import TestWeave from "testweave-sdk";
-import arconf from "../Resources/arconf";
+//import arconf from "../Resources/arconf";
 import placeholder from "../assets/img/placeholder.jpg";
 
 import PRUF from "pruf-js";
@@ -33,7 +33,7 @@ import routes from "routes.js";
 import styles from "assets/jss/material-dashboard-pro-react/layouts/userStyle.js";
 import defaultBGImage from "../assets/img/Sidebar Backgrounds/TracesWB.jpg";
 
-window.populatedListeners = false
+window.populatedListeners = false;
 
 var ps;
 
@@ -68,8 +68,8 @@ export default function Dashboard(props) {
   ]);
   const [sps, setSps] = React.useState(undefined);
   const [assetIds, setAssetIds] = React.useState([]);
-  const [assetsPerPage, setAssetsPerPage] = React.useState(8)
-  const [listenersLaunched, setListenersLaunched] = React.useState(false)
+  const [assetsPerPage, setAssetsPerPage] = React.useState(8);
+  const [listenersLaunched, setListenersLaunched] = React.useState(false);
   const [prufBalance, setPrufBalance] = React.useState("~");
   const [prufClient, setPrufClient] = React.useState();
   const [roots, setRoots] = React.useState(undefined);
@@ -80,7 +80,9 @@ export default function Dashboard(props) {
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [nodeIdBalance, setNodeBalance] = React.useState("~");
-  const [heldNodeData, setHeldNodeData] = React.useState([['Loading Nodes...', '~', '~', '~']]);
+  const [heldNodeData, setHeldNodeData] = React.useState([
+    ["Loading Nodes...", "~", "~", "~"],
+  ]);
   const [nodeExtData, setNodeExtData] = React.useState();
   const [IDBalance, setIDBalance] = React.useState("0");
   const [cookies, setCookie, removeCookie] = useCookies(["nodeList"]);
@@ -104,9 +106,9 @@ export default function Dashboard(props) {
   const [logo, setLogo] = React.useState(require("assets/img/logo-white.svg"));
   // styles
   const classes = useStyles();
-  const refreshEvent = new Event('refresh')
-  const connectArweaveEvent = new Event('connectArweave')
-  
+  const refreshEvent = new Event("refresh");
+  const connectArweaveEvent = new Event("connectArweave");
+
   //classes for main panel
   const mainPanelClasses =
     classes.mainPanel +
@@ -129,7 +131,11 @@ export default function Dashboard(props) {
   //console.log("pre-load href", window.location.href)
   const initArweave = async () => {
     const _arweave = Arweave;
-    const arweave = _arweave.init(arconf);
+    const arweave = _arweave.init({
+      host: "arweave.net",
+      port: 443,
+      protocol: "https",
+    });
 
     setArweaveClient(arweave);
 
@@ -138,7 +144,7 @@ export default function Dashboard(props) {
     // if(window.arweaveWallet) {
     //   window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
     //   //window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
-    // } 
+    // }
 
     //const testWeave = await TestWeave.init(arweave);
 
@@ -159,35 +165,28 @@ export default function Dashboard(props) {
     web3 = new Web3(
       "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
     );
-    const _prufClient = new PRUF(
-      web3, 
-      {
-      storageAddress: "0x5ab04B13729245F7023f76d0FEDEed482e3e60bd", 
-      partyAddress: "0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468", 
-      defaultNetwork: true
-      }
-    );
+    web3.eth.net.getId().then(async (chainId) => {
+      const _prufClient = new PRUF(web3, chainId, false, true);
+      await _prufClient.init();
 
-    console.log(_prufClient);
-    setPrufClient(_prufClient);
-    setUpEnvironment(_prufClient)
-    awaitPrufInitNoAddress(_prufClient)
-    setIsIDHolder(false)
+      console.log(_prufClient);
+      setPrufClient(_prufClient);
+      setUpEnvironment(_prufClient);
+      awaitPrufInitNoAddress(_prufClient);
+      setIsIDHolder(false);
 
-    window.web3 = web3;
-    return setIsMounted(true);
+      window.web3 = web3;
+      return setIsMounted(true);
+    });
   };
 
   const checkForCookies = () => {
-
     if (!cookies.hasBeenNotified) {
       swal({
         title: "Cookies on app.pruf.io",
-        text:
-          "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
+        text: "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
         icon: "warning",
         buttons: {
-
           moreInfo: {
             text: "Learn more",
             value: "moreInfo",
@@ -205,7 +204,6 @@ export default function Dashboard(props) {
             value: "accept",
             className: "acceptCookies",
           },
-
         },
       }).then((value) => {
         switch (value) {
@@ -258,7 +256,7 @@ export default function Dashboard(props) {
   };
 
   const setCookieTo = (job, val) => {
-    if (cookies["hasBeenNotified"] === false) return
+    if (cookies["hasBeenNotified"] === false) return;
     //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
     console.log("Setting cookie", job, "to", val);
     setCookie(String(job), JSON.stringify(val), {
@@ -268,31 +266,45 @@ export default function Dashboard(props) {
   };
 
   const readCookie = async (job) => {
-    if (cookies["hasBeenNotified"] === false) return
+    if (cookies["hasBeenNotified"] === false) return;
     if (!cookies[job]) return console.log("Referenced nonexistant cookie");
     return cookies[job];
   };
 
   const awaitPrufInit = async (_prufClient, _addr) => {
     //console.log("Waiting for init...", _prufClient.get)
-    setTimeout(() => {
-      if (_prufClient.get) { console.log(_prufClient.get); setUpEnvironment(_prufClient, _addr); if (window.idxQuery) { window.location.href = "/#/user/search"; forceUpdate() } }
-      else { awaitPrufInit(_prufClient, _addr) }
-    }, 100)
-  }
+    // setTimeout(() => {
+    //   if (_prufClient.get) {
+    //     console.log(_prufClient.get);
+    //     setUpEnvironment(_prufClient, _addr);
+    //     if (window.idxQuery) {
+    //       window.location.href = "/#/user/search";
+    //       forceUpdate();
+    //     }
+    //   } else {
+    //     awaitPrufInit(_prufClient, _addr);
+    //   }
+    // }, 100);
+    if (window.idxQuery) {
+      window.location.href = "/#/user/search";
+      forceUpdate();
+    }
+  };
 
   const awaitPrufInitNoAddress = async (_prufClient) => {
-    //console.log("Waiting for init...", _prufClient.get)
-    setTimeout(() => {
-      if (_prufClient.get) { console.log(_prufClient.get); setPrufClient(_prufClient); if (window.idxQuery) { window.location.href = "/#/user/search"; forceUpdate() } }
-      else { awaitPrufInitNoAddress(_prufClient) }
-    }, 100)
-  }
+    // //console.log("Waiting for init...", _prufClient.get)
+    // setTimeout(() => {
+    //   if (_prufClient.get) { console.log(_prufClient.get); setPrufClient(_prufClient); if (window.idxQuery) { window.location.href = "/#/user/search"; forceUpdate() } }
+    //   else { awaitPrufInitNoAddress(_prufClient) }
+    // }, 100)
+    if (window.idxQuery) {
+      window.location.href = "/#/user/search";
+      forceUpdate();
+    }
+  };
 
   const handleEthereum = () => {
-
     if (window.ethereum) {
-
       window.ethereum.on("chainChanged", (chainId) => {
         console.log(chainId);
         window.location.reload();
@@ -314,25 +326,17 @@ export default function Dashboard(props) {
       const ethereum = window.ethereum;
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
-      const _prufClient = new PRUF(
-        web3, 
-        {
-        storageAddress: "0x5ab04B13729245F7023f76d0FEDEed482e3e60bd", 
-        partyAddress: "0x50c09a55a18Bb2474bB6025b24B5A8de6aB16468", 
-        defaultNetwork: true
-        }
-      );
-      //console.log(_prufClient);
-      setPrufClient(_prufClient);
-      window.costs = {};
-      window.additionalElementArrays = {
-        photo: [],
-        text: [],
-        name: "",
-      };
+      web3.eth.net.getId().then(async (chainId) => {
+        const _prufClient = new PRUF(web3, chainId, false, true);
+        await _prufClient.init();
 
-      web3.eth.net.getNetworkType().then((e) => {
-        if (e === "kovan") {
+        console.log(_prufClient);
+        setPrufClient(_prufClient);
+        setUpEnvironment(_prufClient);
+        awaitPrufInitNoAddress(_prufClient);
+        setIsIDHolder(false);
+
+        if (_prufClient.network.name === "kovan") {
           window.isKovan = true;
           ethereum
             .request({
@@ -340,63 +344,74 @@ export default function Dashboard(props) {
               params: {},
             })
             .then(async (accounts) => {
-              console.log({accounts: accounts})
+              console.log({ accounts: accounts });
               if (accounts[0] !== undefined) {
-                console.log("SETTING ADDRESS")
-                let _addr = await window.web3.utils.toChecksumAddress(accounts[0])
-                setAddr(_addr)
+                console.log("SETTING ADDRESS");
+                let _addr = await window.web3.utils.toChecksumAddress(
+                  accounts[0]
+                );
+                setAddr(_addr);
                 if (cookies[`${_addr}sideBarLogo`]) {
-                  setLogo(cookies[`${_addr}sideBarLogo`])
-                } if (cookies[`${_addr}sideBarColor`]) {
-                  setColor(cookies[`${_addr}sideBarColor`])
-                } if (cookies[`${_addr}sideBarBackground`]) {
-                  setBgColor(cookies[`${_addr}sideBarBackground`])
-                } if (cookies[`${_addr}sideBarImage`]) {
-                  setImage(cookies[`${_addr}sideBarImage`])
+                  setLogo(cookies[`${_addr}sideBarLogo`]);
                 }
-                awaitPrufInit(_prufClient, _addr)
+                if (cookies[`${_addr}sideBarColor`]) {
+                  setColor(cookies[`${_addr}sideBarColor`]);
+                }
+                if (cookies[`${_addr}sideBarBackground`]) {
+                  setBgColor(cookies[`${_addr}sideBarBackground`]);
+                }
+                if (cookies[`${_addr}sideBarImage`]) {
+                  setImage(cookies[`${_addr}sideBarImage`]);
+                }
+                awaitPrufInit(_prufClient, _addr);
                 setIsMounted(true);
               } else {
-                ethereum.request({
-                  method: "eth_requestAccounts",
-                  params: {},
-                }).then(async (accounts) => {
-                  console.log({accounts: accounts})
-                  if (accounts[0] !== undefined) {
-                    console.log("SETTING ADDRESS")
-                    let _addr = await window.web3.utils.toChecksumAddress(accounts[0])
-                    setAddr(_addr)
-                    if (cookies[`${_addr}sideBarLogo`]) {
-                      setLogo(cookies[`${_addr}sideBarLogo`])
-                    } if (cookies[`${_addr}sideBarColor`]) {
-                      setColor(cookies[`${_addr}sideBarColor`])
-                    } if (cookies[`${_addr}sideBarBackground`]) {
-                      setBgColor(cookies[`${_addr}sideBarBackground`])
-                    } if (cookies[`${_addr}sideBarImage`]) {
-                      setImage(cookies[`${_addr}sideBarImage`])
+                ethereum
+                  .request({
+                    method: "eth_requestAccounts",
+                    params: {},
+                  })
+                  .then(async (accounts) => {
+                    console.log({ accounts: accounts });
+                    if (accounts[0] !== undefined) {
+                      console.log("SETTING ADDRESS");
+                      let _addr = await window.web3.utils.toChecksumAddress(
+                        accounts[0]
+                      );
+                      setAddr(_addr);
+                      if (cookies[`${_addr}sideBarLogo`]) {
+                        setLogo(cookies[`${_addr}sideBarLogo`]);
+                      }
+                      if (cookies[`${_addr}sideBarColor`]) {
+                        setColor(cookies[`${_addr}sideBarColor`]);
+                      }
+                      if (cookies[`${_addr}sideBarBackground`]) {
+                        setBgColor(cookies[`${_addr}sideBarBackground`]);
+                      }
+                      if (cookies[`${_addr}sideBarImage`]) {
+                        setImage(cookies[`${_addr}sideBarImage`]);
+                      }
+                      window.addr = _addr;
+                      awaitPrufInit(_prufClient, _addr);
+                      setIsMounted(true);
                     }
-                    window.addr = _addr
-                    awaitPrufInit(_prufClient, _addr)
-                    setIsMounted(true);
-                  }
-                });
+                  });
               }
             });
 
-          return setIsKovan(true);
+          setIsKovan(true);
+          return setIsMounted(true);
         } else {
           window.isKovan = false;
           setIsKovan(false);
           return swal({
             title: "Connect to the Kovan Testnet!",
-            text:
-              "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
+            text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
             icon: "warning",
             button: "Okay",
           });
         }
       });
-
     } else {
       return handleNoEthereum();
     }
@@ -409,7 +424,7 @@ export default function Dashboard(props) {
     });
   };
 
-  const  acctListener = () => {
+  const acctListener = () => {
     window.ethereum.on("accountsChanged", (e) => {
       console.log("Accounts changed");
       if (e[0] === undefined || e[0] === null) {
@@ -423,40 +438,44 @@ export default function Dashboard(props) {
   };
 
   const refreshHandler = async () => {
-    await setReplaceAssetData(replaceAssetData+1)
-  }
+    await setReplaceAssetData(replaceAssetData + 1);
+  };
 
   const connectArweave = () => {
-
-    if(!window.arweaveWallet) {
-      return swal("We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back.")
+    if (!window.arweaveWallet) {
+      return swal(
+        "We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back."
+      );
     }
 
-    swal("You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet.").then(()=>{
-      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
-    })
-    
-  }
+    swal(
+      "You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet."
+    ).then(() => {
+      window.arweaveWallet.connect([
+        `ACCESS_ADDRESS`,
+        `SIGN_TRANSACTION`,
+        `ENCRYPT`,
+        `DECRYPT`,
+      ]);
+    });
+  };
 
   if (window.ethereum && !window.populatedListeners) {
-    window.addEventListener("chainListener", chainListener, {once: true});
-    window.addEventListener("accountListener", acctListener, {once: true});
-    window.addEventListener('refresh', refreshHandler);
-    window.addEventListener('connectArweave', connectArweave);
+    window.addEventListener("chainListener", chainListener, { once: true });
+    window.addEventListener("accountListener", acctListener, { once: true });
+    window.addEventListener("refresh", refreshHandler);
+    window.addEventListener("connectArweave", connectArweave);
     window.populatedListeners = true;
   }
 
-  
-
   window.onload = () => {
-
     window.balances = {};
     window.replaceAssetData = {};
     window.recount = false;
     let _ipfs;
 
-    if(cookies[`assetsPerPage`]) {
-      setAssetsPerPage(cookies[`assetsPerPage`])
+    if (cookies[`assetsPerPage`]) {
+      setAssetsPerPage(cookies[`assetsPerPage`]);
     }
 
     _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"));
@@ -483,7 +502,7 @@ export default function Dashboard(props) {
         );
         window.location.href = String(
           "/#/user/search/" +
-          hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
+            hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
         );
       }
     } else if (
@@ -534,7 +553,6 @@ export default function Dashboard(props) {
   };
 
   React.useEffect(() => {
-
     if (navigator.platform.indexOf("Win") > -1) {
       //console.log("*****Using ps*****");
       ps = new PerfectScrollbar(mainPanel.current, {
@@ -557,11 +575,11 @@ export default function Dashboard(props) {
       if (navigator.platform.indexOf("Win") > -1) {
         ps.destroy();
       }
-    }
-  }, [])
+    };
+  }, []);
 
   React.useEffect(() => {
-    setWinKey(String(Math.round(Math.random() * 100000)))
+    setWinKey(String(Math.round(Math.random() * 100000)));
     if (isMounted) {
       if (
         !window.replaceAssetData ||
@@ -569,38 +587,44 @@ export default function Dashboard(props) {
       ) {
       }
       if (window.replaceAssetData.assetsPerPage) {
-        setAssetsPerPage(window.replaceAssetData.assetsPerPage)
-        setCookieTo(`assetsPerPage`, window.replaceAssetData.assetsPerPage)
+        setAssetsPerPage(window.replaceAssetData.assetsPerPage);
+        setCookieTo(`assetsPerPage`, window.replaceAssetData.assetsPerPage);
       }
       if (window.replaceAssetData.refreshBals === true) {
-        console.log("Resetting token value")
-        setupTokenVals(arweaveClient, addr, prufClient, { justCount: true })
-        buildRoots(addr, prufClient)
+        console.log("Resetting token value");
+        setupTokenVals(arweaveClient, addr, prufClient, { justCount: true });
+        buildRoots(addr, prufClient);
         forceUpdate();
-      } if (window.replaceAssetData.refreshAssets) {
-        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true })
-      } if (
-        window.replaceAssetData.key !== thousandHashesOf(addr, winKey)
-      ) {
-        console.log("Invalid key passed. Aborted call to replace.")
-      } if (window.replaceAssetData.nodeList) {
-        console.log("Resetting node data...")
-        let newData = JSON.parse(JSON.stringify(window.replaceAssetData.nodeList))
+      }
+      if (window.replaceAssetData.refreshAssets) {
+        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
+      }
+      if (window.replaceAssetData.key !== thousandHashesOf(addr, winKey)) {
+        console.log("Invalid key passed. Aborted call to replace.");
+      }
+      if (window.replaceAssetData.nodeList) {
+        console.log("Resetting node data...");
+        let newData = JSON.parse(
+          JSON.stringify(window.replaceAssetData.nodeList)
+        );
 
         if (newData.extData) {
-          setNodeExtData(newData.extData)
+          setNodeExtData(newData.extData);
         }
 
         if (newData.data) {
-          setHeldNodeData(newData.data)
+          setHeldNodeData(newData.data);
         }
 
         if (newData.setAddition) {
-          let tempSets = JSON.parse(JSON.stringify(nodeSets))
-          tempSets[newData.setAddition.root].push({ id: newData.setAddition.id, name: newData.setAddition.name })
-          setNodeSets(tempSets)
+          let tempSets = JSON.parse(JSON.stringify(nodeSets));
+          tempSets[newData.setAddition.root].push({
+            id: newData.setAddition.id,
+            name: newData.setAddition.name,
+          });
+          setNodeSets(tempSets);
         }
-        setupTokenVals(arweaveClient, addr, prufClient, { justNodes: true })
+        setupTokenVals(arweaveClient, addr, prufClient, { justNodes: true });
       }
 
       if (window.replaceAssetData.newAsset || window.replaceAssetData.dBIndex) {
@@ -618,16 +642,14 @@ export default function Dashboard(props) {
 
         if (newAsset && dBIndex > -1) {
           idArr.push(newAsset.id);
-          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />
+          newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
           console.log("Replacing asset at index: ", dBIndex);
           console.log("Old Assets", tempArr);
           tempArr.splice(dBIndex, 1, newAsset);
           console.log("New Assets", tempArr);
           setAssetArr(tempArr);
           getAssetIds(addr, prufClient, assetIds.length);
-        }
-
-        else if (dBIndex > -1 && !newAsset) {
+        } else if (dBIndex > -1 && !newAsset) {
           console.log("Deleting asset at index: ", dBIndex);
           console.log("Old Assets", tempArr);
           tempArr.splice(dBIndex, 1);
@@ -635,9 +657,7 @@ export default function Dashboard(props) {
           console.log("New Assets", tempArr);
           setAssetArr(tempArr);
           getAssetIds(addr, prufClient, assetIds.length - 1);
-        }
-
-        else if (newAsset && !dBIndex) {
+        } else if (newAsset && !dBIndex) {
           idArr.push(newAsset.id);
           console.log("Adding asset: ", newAsset);
           console.log("Old Assets", tempArr);
@@ -647,7 +667,7 @@ export default function Dashboard(props) {
           getAssetIds(addr, prufClient, assetIds.length + 1);
         }
 
-        window.replaceAssetData = {}
+        window.replaceAssetData = {};
         forceUpdate();
       }
     }
@@ -655,27 +675,27 @@ export default function Dashboard(props) {
 
   const handleImageClick = (image) => {
     setImage(image);
-    setCookieTo(`${addr}sideBarImage`, image)
+    setCookieTo(`${addr}sideBarImage`, image);
   };
 
   const handleColorClick = (color) => {
     setColor(color);
-    setCookieTo(`${addr}sideBarColor`, color)
+    setCookieTo(`${addr}sideBarColor`, color);
   };
 
   const handleBgColorClick = (bgColor) => {
-    let logo
-    
-    if (bgColor === "white"){
-      logo = require("assets/img/logo.svg")
+    let logo;
+
+    if (bgColor === "white") {
+      logo = require("assets/img/logo.svg");
     } else {
-      logo = require("assets/img/logo-white.svg")
+      logo = require("assets/img/logo-white.svg");
     }
 
-    setLogo(logo)
+    setLogo(logo);
     setBgColor(bgColor);
-    setCookieTo(`${addr}sideBarLogo`, logo)
-    setCookieTo(`${addr}sideBarBackground`, bgColor)
+    setCookieTo(`${addr}sideBarLogo`, logo);
+    setCookieTo(`${addr}sideBarBackground`, bgColor);
   };
 
   const handleFixedClick = () => {
@@ -780,20 +800,19 @@ export default function Dashboard(props) {
   };
 
   const setUpEnvironment = (_prufClient, _addr) => {
-
     //console.log(_prufClient)
 
-    console.log("Getting things set up...")
+    console.log("Getting things set up...");
 
     if (window.isKovan === false) {
       return;
     }
 
-    initArweave().then(e=>{
+    initArweave().then((e) => {
       if (window.ethereum) {
         if (_addr) {
-          setupTokenVals(e, _addr, _prufClient)
-          buildRoots(_addr, _prufClient)
+          setupTokenVals(e, _addr, _prufClient);
+          buildRoots(_addr, _prufClient);
         }
       }
     });
@@ -805,83 +824,70 @@ export default function Dashboard(props) {
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
   const setupTokenVals = (_arweave, _addr, _prufClient, options) => {
-    console.log({addr: addr})
+    console.log({ addr: addr });
     if (!_addr) return swal("Unable to reach user's wallet.");
-    if (!options) options = {}
+    if (!options) options = {};
 
     if (options.justNodes) {
-      _prufClient.get.nodeBalance(_addr).then(e => {
-
+      _prufClient.get.node.balanceOf(_addr).then((e) => {
         setNodeBalance(e);
         if (Number(e) > 0) {
           setIsAssetClassHolder(true);
-          if (!options.justCount) getNodeIds(_addr, _prufClient, e)
+          if (!options.justCount) getNodeIds(_addr, _prufClient, e);
         } else {
-          setHeldNodeData([['No nodes held by user', '~', '~', '~']])
+          setHeldNodeData([["No nodes held by user", "~", "~", "~"]]);
           setIsAssetClassHolder(false);
         }
-
       });
     } else if (options.justAssets) {
-      _prufClient.get.assetBalance(_addr).then(e => {
-        setAssetArr([])
+      _prufClient.get.asset.balanceOf(_addr).then((e) => {
+        setAssetArr([]);
         setAssetBalance(e);
         if (Number(e) > 0) {
           setIsAssetHolder(true);
-          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e)
+          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e);
         } else {
           setIsAssetHolder(false);
         }
-
       });
     } else {
-
-
       window.web3.eth.getBalance(_addr, (error, result) => {
         if (error) {
         } else {
-          console.log(window.web3.utils.fromWei(result, "ether"))
+          console.log(window.web3.utils.fromWei(result, "ether"));
           setETHBalance(window.web3.utils.fromWei(result, "ether"));
         }
       });
 
-      _prufClient.get.assetBalance(_addr).then(e => {
-
+      _prufClient.get.asset.balanceOf(_addr).then((e) => {
         setAssetBalance(e);
         if (Number(e) > 0) {
           setIsAssetHolder(true);
-          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e)
+          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e);
         } else {
           setIsAssetHolder(false);
         }
-
       });
 
-      _prufClient.get.nodeBalance(_addr).then(e => {
-
+      _prufClient.get.node.balanceOf(_addr).then((e) => {
         setNodeBalance(e);
         if (Number(e) > 0) {
           setIsAssetClassHolder(true);
-          if (!options.justCount) getNodeIds(_addr, _prufClient, e)
+          if (!options.justCount) getNodeIds(_addr, _prufClient, e);
         } else {
-          setHeldNodeData([['No nodes held by user', '~', '~', '~']])
+          setHeldNodeData([["No nodes held by user", "~", "~", "~"]]);
           setIsAssetClassHolder(false);
         }
-
       });
 
-      _prufClient.get.holdsId(_addr).then(e => {
-        setIsIDHolder(e);
-      });
-
-      _prufClient.get.prufBalance(_addr).then(e => {
+      _prufClient.get.pruf.balanceOf(_addr).then((e) => {
         setPrufBalance(e);
       });
 
-      _prufClient.get.nodePricing().then(e => {
+      _prufClient.get.node.priceData().then((e) => {
         setCurrentACIndex(e.currentNodeIndex);
         setCurrentACPrice(e.currentNodePrice);
-        console.log(e)
+        console.log(e);
       });
     }
   };
@@ -889,70 +895,102 @@ export default function Dashboard(props) {
   const buildRoots = (_addr, _prufClient, iteration, arr) => {
     if (!_prufClient) return;
     if (!arr) arr = cookies[`${_addr}roots`] || [];
-    if (!iteration && cookies[`${_addr}roots`]) iteration = cookies[`${_addr}roots`].length + 1; else if (!iteration) iteration = 1;
+    if (!iteration && cookies[`${_addr}roots`])
+      iteration = cookies[`${_addr}roots`].length + 1;
+    else if (!iteration) iteration = 1;
 
-    _prufClient.get
-      .nodeExists(String(iteration))
-      .then(e => {
-        if (e) {
-          arr.push(iteration);
-          setCookieTo(`${_addr}roots`, arr)
-          return buildRoots(_addr, _prufClient, iteration + 1, arr);
-        } else {
-          //noMore = true;
-          console.log(`Broke rootGet recursion at: ${iteration} because node doesn't exist at index`)
-          return buildSubNodes(_addr, _prufClient, undefined, undefined, undefined, arr);
-        }
-      });
+    _prufClient.get.node.tokenExists(String(iteration)).then((e) => {
+      if (e) {
+        arr.push(iteration);
+        setCookieTo(`${_addr}roots`, arr);
+        return buildRoots(_addr, _prufClient, iteration + 1, arr);
+      } else {
+        //noMore = true;
+        console.log(
+          `Broke rootGet recursion at: ${iteration} because node doesn't exist at index`
+        );
+        return buildSubNodes(
+          _addr,
+          _prufClient,
+          undefined,
+          undefined,
+          undefined,
+          arr
+        );
+      }
+    });
   };
 
-  const buildSubNodes = (_addr, _prufClient, iteration, arr, subNodes, roots) => {
+  const buildSubNodes = (
+    _addr,
+    _prufClient,
+    iteration,
+    arr,
+    subNodes,
+    roots
+  ) => {
     if (!_prufClient) return;
 
     if (!iteration) {
-      iteration = 1000001
+      iteration = 1000001;
       if (cookies[`${_addr}subNodes`]) {
-        iteration += cookies[`${_addr}subNodes`].length
+        iteration += cookies[`${_addr}subNodes`].length;
       }
     }
 
     if (!arr) {
-      arr = roots || []
-      subNodes = cookies[`${_addr}subNodes`] || []
+      arr = roots || [];
+      subNodes = cookies[`${_addr}subNodes`] || [];
       if (cookies[`${_addr}subNodes`]) {
-        arr = arr.concat(cookies[`${_addr}subNodes`])
+        arr = arr.concat(cookies[`${_addr}subNodes`]);
       }
-      console.log(`Cached nodes: ${arr}`)
+      console.log(`Cached nodes: ${arr}`);
     }
 
-    if (cookies[`${_addr}dontCount`] && cookies[`${_addr}dontCount`].includes(iteration)) {
-      console.log(`Caught count exception ${iteration}`)
+    if (
+      cookies[`${_addr}dontCount`] &&
+      cookies[`${_addr}dontCount`].includes(iteration)
+    ) {
+      console.log(`Caught count exception ${iteration}`);
       return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
     } else {
-      console.log({ iteration }, cookies[`${_addr}subNodes`])
+      console.log({ iteration }, cookies[`${_addr}subNodes`]);
     }
 
-    _prufClient.get
-      .nodeExists(String(iteration))
-      .then(e => {
-        if (e) {
-          if (!arr.includes(iteration)) {
-            arr.push(iteration);
-            subNodes.push(iteration)
-            setCookieTo(`${_addr}subNodes`, subNodes)
-          }
-          return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes)
-        } else {
-          console.log(`Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`)
-          console.log(`All nodes: ${arr}`)
-          return getACsFromDB(_addr, _prufClient, arr)
+    _prufClient.get.node.tokenExists(String(iteration)).then((e) => {
+      if (e) {
+        if (!arr.includes(iteration)) {
+          arr.push(iteration);
+          subNodes.push(iteration);
+          setCookieTo(`${_addr}subNodes`, subNodes);
         }
-      });
+        return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
+      } else {
+        console.log(
+          `Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`
+        );
+        console.log(`All nodes: ${arr}`);
+        return getACsFromDB(_addr, _prufClient, arr);
+      }
+    });
+  };
 
-  }
-
-  const getACsFromDB = (_addr, _prufClient, acArray, iteration, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount) => {
-    if (!dontCount) { dontCount = cookies[`${_addr}dontCount`] || []; console.log({ dontCount }) }
+  const getACsFromDB = (
+    _addr,
+    _prufClient,
+    acArray,
+    iteration,
+    _nodeSets,
+    rootArray,
+    rootNameArray,
+    allClasses,
+    allClassNames,
+    dontCount
+  ) => {
+    if (!dontCount) {
+      dontCount = cookies[`${_addr}dontCount`] || [];
+      console.log({ dontCount });
+    }
     if (!iteration) iteration = 0;
     if (!rootArray) rootArray = [];
     if (!rootNameArray) rootNameArray = [];
@@ -961,65 +999,108 @@ export default function Dashboard(props) {
     if (!_nodeSets) _nodeSets = {};
 
     if (iteration >= acArray.length)
-      return setUpNodeInformation(
-        _prufClient,
-        {
-          sets: _nodeSets,
-          rArr: rootArray,
-          rnArr: rootNameArray,
-          allCArr: allClasses,
-          allCNArr: allClassNames,
-        });
+      return setUpNodeInformation(_prufClient, {
+        sets: _nodeSets,
+        rArr: rootArray,
+        rnArr: rootNameArray,
+        allCArr: allClasses,
+        allCNArr: allClassNames,
+      });
 
     if (acArray[iteration] < 100000) {
-      _prufClient.get.nodeName(String(acArray[iteration])).then(e => {
+      _prufClient.get.node.name(String(acArray[iteration])).then((e) => {
         rootArray.push(acArray[iteration]);
         rootNameArray.push(
           e
             .toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-              letter.toUpperCase()
-            )
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
         );
         _nodeSets[String(acArray[iteration])] = [];
-        return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
-      })
+        return getACsFromDB(
+          _addr,
+          _prufClient,
+          acArray,
+          iteration + 1,
+          _nodeSets,
+          rootArray,
+          rootNameArray,
+          allClasses,
+          allClassNames,
+          dontCount
+        );
+      });
     } else {
-      _prufClient.get
-        .nodeData(String(acArray[iteration]))
-        .then(e => {
-          if (e.managementType === "255") {
-            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
-          } else if (e.managementType === "1" || e.managementType === "2") {
-            _prufClient.get.ownerOfNode(String(acArray[iteration])).then(x => {
-              if (window.web3.utils.toChecksumAddress(x) === _addr) {
-                allClasses.push(String(acArray[iteration]));
-                allClassNames.push(
-                  e.name
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    )
-                );
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+      _prufClient.get;
+      node.record(String(acArray[iteration])).then((e) => {
+        if (e.managementType === "255") {
+          return getACsFromDB(
+            _addr,
+            _prufClient,
+            acArray,
+            iteration + 1,
+            _nodeSets,
+            rootArray,
+            rootNameArray,
+            allClasses,
+            allClassNames,
+            dontCount
+          );
+        } else if (e.managementType === "1" || e.managementType === "2") {
+          _prufClient.get.node.ownerOf(String(acArray[iteration])).then((x) => {
+            if (window.web3.utils.toChecksumAddress(x) === _addr) {
+              allClasses.push(String(acArray[iteration]));
+              allClassNames.push(
+                e.name
+                  .toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  )
+              );
+              return getACsFromDB(
+                _addr,
+                _prufClient,
+                acArray,
+                iteration + 1,
+                _nodeSets,
+                rootArray,
+                rootNameArray,
+                allClasses,
+                allClassNames,
+                dontCount
+              );
+            } else {
+              if (!dontCount.includes(acArray[iteration])) {
+                console.log({ iteration, dontCount });
+                dontCount.push(acArray[iteration]);
+                setCookieTo(`${_addr}dontCount`, dontCount);
               } else {
-                if (!dontCount.includes(acArray[iteration])) {
-                  console.log({ iteration, dontCount })
-                  dontCount.push(acArray[iteration])
-                  setCookieTo(`${_addr}dontCount`, dontCount)
-                } else {
-                  console.log("Counted when should not have... Removing cached values")
-                  let temp = cookies[`${_addr}subNodes`];
-                  temp.splice(temp.indexOf(acArray[iteration]), 1)
-                  setCookieTo(`${_addr}subNodes`, temp)
-                }
-
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+                console.log(
+                  "Counted when should not have... Removing cached values"
+                );
+                let temp = cookies[`${_addr}subNodes`];
+                temp.splice(temp.indexOf(acArray[iteration]), 1);
+                setCookieTo(`${_addr}subNodes`, temp);
               }
-            })
-            //getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
-          } else if (e.managementType === "3") {
-            _prufClient.get.userType(_addr, String(acArray[iteration])).then(x => {
+
+              return getACsFromDB(
+                _addr,
+                _prufClient,
+                acArray,
+                iteration + 1,
+                _nodeSets,
+                rootArray,
+                rootNameArray,
+                allClasses,
+                allClassNames,
+                dontCount
+              );
+            }
+          });
+          //getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+        } else if (e.managementType === "3") {
+          _prufClient.get.node
+            .userType(_addr, String(acArray[iteration]))
+            .then((x) => {
               if (x === "1") {
                 allClasses.push(String(acArray[iteration]));
                 allClassNames.push(
@@ -1029,31 +1110,61 @@ export default function Dashboard(props) {
                       letter.toUpperCase()
                     )
                 );
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+                return getACsFromDB(
+                  _addr,
+                  _prufClient,
+                  acArray,
+                  iteration + 1,
+                  _nodeSets,
+                  rootArray,
+                  rootNameArray,
+                  allClasses,
+                  allClassNames,
+                  dontCount
+                );
               } else {
-                return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
+                return getACsFromDB(
+                  _addr,
+                  _prufClient,
+                  acArray,
+                  iteration + 1,
+                  _nodeSets,
+                  rootArray,
+                  rootNameArray,
+                  allClasses,
+                  allClassNames,
+                  dontCount
+                );
               }
-            })
-          } else {
-            allClasses.push(String(acArray[iteration]));
-            allClassNames.push(
-              e.name
-                .toLowerCase()
-                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                  letter.toUpperCase()
-                )
-            );
-            return getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames, dontCount)
-          }
-        });
+            });
+        } else {
+          allClasses.push(String(acArray[iteration]));
+          allClassNames.push(
+            e.name
+              .toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
+          );
+          return getACsFromDB(
+            _addr,
+            _prufClient,
+            acArray,
+            iteration + 1,
+            _nodeSets,
+            rootArray,
+            rootNameArray,
+            allClasses,
+            allClassNames,
+            dontCount
+          );
+        }
+      });
     }
   };
 
   const setUpNodeInformation = async (_prufClient, obj) => {
-    if (!obj) return
-    console.log(obj)
-    let
-      allClasses = obj.allCArr,
+    if (!obj) return;
+    console.log(obj);
+    let allClasses = obj.allCArr,
       rootArray = obj.rArr,
       _nodeSets = obj.sets,
       rootNameArray = obj.rnArr,
@@ -1062,18 +1173,15 @@ export default function Dashboard(props) {
     //console.log(allClasses, allClassNames, rootArray)
 
     for (let i = 0; i < allClasses.length; i++) {
-      _prufClient.get
-        .nodeData(String(allClasses[i]))
-        .then(e => {
-          _nodeSets[String(rootArray[Number(e.root - 1)])].push({
-            id: allClasses[i],
-            name: allClassNames[i]
-              .toLowerCase()
-              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                letter.toUpperCase()
-              ),
-          });
+      _prufClient.get;
+      node.record(String(allClasses[i])).then((e) => {
+        _nodeSets[String(rootArray[Number(e.root - 1)])].push({
+          id: allClasses[i],
+          name: allClassNames[i]
+            .toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase()),
         });
+      });
     }
 
     console.log("Class Sets: ", _nodeSets);
@@ -1084,57 +1192,69 @@ export default function Dashboard(props) {
 
   const getNodeIds = async (_addr, _prufClient, bal, ids, iteration) => {
     // eslint-disable-next-line react/prop-types
-    if (!iteration) iteration = 0
-    if (!ids) ids = []
-    if (iteration >= bal) return buildNodesInWallet(_prufClient, ids)
-    _prufClient.get
-      // eslint-disable-next-line react/prop-types
+    if (!iteration) iteration = 0;
+    if (!ids) ids = [];
+    if (iteration >= bal) return buildNodesInWallet(_prufClient, ids);
+    _prufClient.get// eslint-disable-next-line react/prop-types
+    .node
       .heldNodeAtIndex(_addr, String(iteration))
-      .then(e => {
-        ids.push(e)
-        return getNodeIds(_addr, _prufClient, bal, ids, iteration + 1)
-      })
-  }
+      .then((e) => {
+        ids.push(e);
+        return getNodeIds(_addr, _prufClient, bal, ids, iteration + 1);
+      });
+  };
 
-  const buildNodesInWallet = (_prufClient, ids, _extDataArr, _nodeData, iteration) => {
-    if (!ids) return
-    if (!iteration) iteration = 0
-    if (!_nodeData) _nodeData = []
-    if (!_extDataArr) _extDataArr = []
+  const buildNodesInWallet = (
+    _prufClient,
+    ids,
+    _extDataArr,
+    _nodeData,
+    iteration
+  ) => {
+    if (!ids) return;
+    if (!iteration) iteration = 0;
+    if (!_nodeData) _nodeData = [];
+    if (!_extDataArr) _extDataArr = [];
     //console.log({ ids })
     if (iteration < ids.length) {
       // eslint-disable-next-line react/prop-types
-      _prufClient.get
-        // eslint-disable-next-line react/prop-types
-        .nodeData(ids[iteration])
-        .then(e => {
+      _prufClient.get// eslint-disable-next-line react/prop-types
+      .node
+        .record(ids[iteration])
+        .then((e) => {
           //console.log(e)
           _nodeData.push([
             //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
-            e.name.toLowerCase()
+            e.name
+              .toLowerCase()
               .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                 letter.toUpperCase()
               ),
             String(ids[iteration]),
-            'N/A',
-            'N/A',
-          ])
-          e.nodeId = ids[iteration]
-          e.name = e.name.toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-              letter.toUpperCase()
-            )
-          _extDataArr.push(e)
-          return buildNodesInWallet(_prufClient, ids, _extDataArr, _nodeData, iteration + 1)
-        })
+            "N/A",
+            "N/A",
+          ]);
+          e.nodeId = ids[iteration];
+          e.name = e.name
+            .toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+          _extDataArr.push(e);
+          return buildNodesInWallet(
+            _prufClient,
+            ids,
+            _extDataArr,
+            _nodeData,
+            iteration + 1
+          );
+        });
     } else {
-      _nodeData.push(['', '', '', ''])
-      setNodeExtData(_extDataArr)
-      setHeldNodeData(_nodeData)
+      _nodeData.push(["", "", "", ""]);
+      setNodeExtData(_extDataArr);
+      setHeldNodeData(_nodeData);
       //console.log("HERE", _extDataArr)
-      return //console.log(_nodeData)
+      return; //console.log(_nodeData)
     }
-  }
+  };
 
   const getAssetIds = (_arweave, _addr, _prufClient, bal, ids, iteration) => {
     if (!bal) return;
@@ -1145,9 +1265,9 @@ export default function Dashboard(props) {
       setAssetIds(ids);
       return buildAssetHeap(_arweave, _addr, _prufClient, ids);
     } else {
-      _prufClient.get
+      _prufClient.get.asset
         .heldAssetAtIndex(_addr, String(iteration))
-        .then(e => {
+        .then((e) => {
           //console.log(e)
           ids.push(e);
           getAssetIds(_arweave, _addr, _prufClient, bal, ids, iteration + 1);
@@ -1155,7 +1275,14 @@ export default function Dashboard(props) {
     }
   };
 
-  const buildAssetHeap = (_arweave, _addr, _prufClient, ids, data, iteration) => {
+  const buildAssetHeap = (
+    _arweave,
+    _addr,
+    _prufClient,
+    ids,
+    data,
+    iteration
+  ) => {
     if (!ids) return;
     if (!data) data = [];
     if (!iteration) {
@@ -1163,50 +1290,46 @@ export default function Dashboard(props) {
       iteration = 0;
     }
 
-    if (iteration >= ids.length) return getMutableData(_arweave, data, _prufClient)
+    if (iteration >= ids.length)
+      return getMutableData(_arweave, data, _prufClient);
     else {
-      _prufClient.get.assetRecord(ids[iteration]).then(e => {
-        let obj = Object.assign({}, e)
+      _prufClient.get.asset.record(ids[iteration]).then((e) => {
+        let obj = Object.assign({}, e);
         //console.log(e)
-        obj.identicon = <Jdenticon value={ids[iteration]} />
-        obj.identiconLG = <Jdenticon value={ids[iteration]} />
+        obj.identicon = <Jdenticon value={ids[iteration]} />;
+        obj.identiconLG = <Jdenticon value={ids[iteration]} />;
 
         _prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
-          obj.status = e
+          obj.status = e;
         });
-
+        obj = Object.assign(obj, e);
         _prufClient.get
-          .assetPriceData(ids[iteration])
-          .then(e => {
-            obj = Object.assign(obj, e)
-            _prufClient.get
-              .nodeData(obj.nodeId)
-              .then(e => {
-                obj.nodeName = e.name.toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  );
-                obj.nodeData = Object.assign({}, e)
-                _prufClient.get.ownerOfNode(obj.nodeId).then(e => {
-                  obj.nodeAdmin = e
-                  _prufClient.get.userType(window.web3.utils.soliditySha3(_addr), obj.nodeId).then(e => {
-                    obj.userAuthLevel = e
-                    data.push(obj);
-                    return buildAssetHeap(
-                      _arweave,
-                      _addr,
-                      _prufClient,
-                      ids,
-                      data,
-                      iteration + 1
-                    )
-                  })
-                })
-              })
-          })
-      })
+        .node.record(obj.nodeId).then((e) => {
+          obj.nodeName = e.name
+            .toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+          obj.nodeData = Object.assign({}, e);
+          _prufClient.get.node.ownerOf(obj.nodeId).then((e) => {
+            obj.nodeAdmin = e;
+            _prufClient.get.node
+              .userType(window.web3.utils.soliditySha3(_addr), obj.nodeId)
+              .then((e) => {
+                obj.userAuthLevel = e;
+                data.push(obj);
+                return buildAssetHeap(
+                  _arweave,
+                  _addr,
+                  _prufClient,
+                  ids,
+                  data,
+                  iteration + 1
+                );
+              });
+          });
+        });
+      });
     }
-  }
+  };
 
   const getMutableData = (
     _arweave,
@@ -1223,10 +1346,10 @@ export default function Dashboard(props) {
     if (!assetsWithMutableData) assetsWithMutableData = [];
     if (iteration >= assetHeap.length) {
       /* console.log("EXIT"); */ return getEngravings(
-      _arweave,
-      assetsWithMutableData,
-      _prufClient
-    );
+        _arweave,
+        assetsWithMutableData,
+        _prufClient
+      );
     }
 
     let obj = assetHeap[iteration];
@@ -1235,8 +1358,8 @@ export default function Dashboard(props) {
 
     if (
       obj.mutableDataA ===
-      "0x0000000000000000000000000000000000000000000000000000000000000000"
-      || obj.nodeData.root === obj.nodeId
+        "0x0000000000000000000000000000000000000000000000000000000000000000" ||
+      obj.nodeData.root === obj.nodeId
     ) {
       obj.mutableData = "";
       assetsWithMutableData.push(obj);
@@ -1289,11 +1412,7 @@ export default function Dashboard(props) {
     } else if (storageProvider === "2") {
       console.log(obj.mutableDataA, obj.mutableDataB);
       mutableDataQuery = window.web3.utils.hexToUtf8(
-        obj.mutableDataA +
-        obj.mutableDataB.substring(
-          2,
-          24
-        )
+        obj.mutableDataA + obj.mutableDataB.substring(2, 24)
       );
       console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`);
       //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
@@ -1318,7 +1437,7 @@ export default function Dashboard(props) {
             try {
               _arweave.transactions.get(mutableDataQuery).then((e) => {
                 let tempObj = {};
-                console.log(e.get("tags"))
+                console.log(e.get("tags"));
                 e.get("tags").forEach((tag) => {
                   let key = tag.get("name", { decode: true, string: true });
                   let value = tag.get("value", { decode: true, string: true });
@@ -1425,8 +1544,8 @@ export default function Dashboard(props) {
 
     if (
       obj.engravingA ===
-      "0x0000000000000000000000000000000000000000000000000000000000000000"
-      || obj.nodeData.root === obj.nodeId
+        "0x0000000000000000000000000000000000000000000000000000000000000000" ||
+      obj.nodeData.root === obj.nodeId
     ) {
       obj.engraving = "";
       assetsWithEngravings.push(obj);
@@ -1484,13 +1603,9 @@ export default function Dashboard(props) {
       });
     } else if (storageProvider === "2") {
       engravingQuery = window.web3.utils.hexToUtf8(
-        obj.engravingA +
-        obj.engravingB.substring(
-          2,
-          24
-        )
+        obj.engravingA + obj.engravingB.substring(2, 24)
       );
-      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`)
+      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`);
       if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
         obj.engraving = cookies[window.web3.utils.soliditySha3(engravingQuery)];
         assetsWithEngravings.push(obj);
@@ -1506,40 +1621,46 @@ export default function Dashboard(props) {
 
         xhr.onload = () => {
           if (xhr.status !== 404 && xhr.status !== 202) {
-            console.log(xhr)
+            console.log(xhr);
             try {
-              _arweave.transactions.get(engravingQuery).then((e) => {
-                let tempObj = {};
-                console.log(e)
-                e.get("tags").forEach((tag) => {
-                  let key = tag.get("name", { decode: true, string: true });
-                  let value = tag.get("value", { decode: true, string: true });
-                  tempObj[key] = value;
+              _arweave.transactions
+                .get(engravingQuery)
+                .then((e) => {
+                  let tempObj = {};
+                  console.log(e);
+                  e.get("tags").forEach((tag) => {
+                    let key = tag.get("name", { decode: true, string: true });
+                    let value = tag.get("value", {
+                      decode: true,
+                      string: true,
+                    });
+                    tempObj[key] = value;
+                  });
+                  tempObj.contentUrl = `https://arweave.net/${engravingQuery}`;
+                  obj.engraving = tempObj;
+                  assetsWithEngravings.push(obj);
+                  setCookieTo(
+                    window.web3.utils.soliditySha3(engravingQuery),
+                    tempObj
+                  );
+                  return getEngravings(
+                    _arweave,
+                    assetHeap,
+                    _prufClient,
+                    assetsWithEngravings,
+                    iteration + 1
+                  );
+                })
+                .catch((e) => {
+                  console.log(e);
+                  return getEngravings(
+                    _arweave,
+                    assetHeap,
+                    _prufClient,
+                    assetsWithEngravings,
+                    iteration + 1
+                  );
                 });
-                tempObj.contentUrl = `https://arweave.net/${engravingQuery}`;
-                obj.engraving = tempObj;
-                assetsWithEngravings.push(obj);
-                setCookieTo(
-                  window.web3.utils.soliditySha3(engravingQuery),
-                  tempObj
-                );
-                return getEngravings(
-                  _arweave,
-                  assetHeap,
-                  _prufClient,
-                  assetsWithEngravings,
-                  iteration + 1
-                );
-              }).catch(e=>{
-                console.log(e)
-                return getEngravings(
-                  _arweave,
-                  assetHeap,
-                  _prufClient,
-                  assetsWithEngravings,
-                  iteration + 1
-                );
-              });
             } catch {
               console.log("In arweave catch clause");
               obj.engraving = "";
@@ -1622,15 +1743,24 @@ export default function Dashboard(props) {
     obj.urls = obj.engraving.urls || obj.mutableData.urls || {};
     obj.name = obj.engraving.name || obj.mutableData.name || "Name Unavailable";
     obj.photoUrls = obj.engraving.photo || obj.mutableData.photo || {};
-    obj.PrimaryContent = obj.engraving.PrimaryContent || obj.mutableData.PrimaryContent || ""; 
-    obj.ContentType = obj.engraving.ContentType || obj.mutableData.ContentType || obj.engraving["Content-Type"] || obj.mutableData["Content-Type"] || "";
-    obj.Description = obj.engraving.Description || obj.mutableData.Description || "";
-    obj.ContentUrl = obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
+    obj.PrimaryContent =
+      obj.engraving.PrimaryContent || obj.mutableData.PrimaryContent || "";
+    obj.ContentType =
+      obj.engraving.ContentType ||
+      obj.mutableData.ContentType ||
+      obj.engraving["Content-Type"] ||
+      obj.mutableData["Content-Type"] ||
+      "";
+    obj.Description =
+      obj.engraving.Description || obj.mutableData.Description || "";
+    obj.ContentUrl =
+      obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
 
-    let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
+    let vals = Object.values(obj.photo),
+      keys = Object.keys(obj.photo);
 
     if (obj.nodeData.storageProvider === "2") {
-      console.log("2")
+      console.log("2");
       if (
         obj.engraving.contentUrl &&
         obj.engraving["Content-Type"].includes("image")
@@ -1646,19 +1776,19 @@ export default function Dashboard(props) {
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       } else if (obj.engraving["Content-Type"].includes("pdf")) {
-        obj.DisplayImage = placeholder
+        obj.DisplayImage = placeholder;
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       } else if (obj.engraving["Content-Type"].includes("zip")) {
-        obj.DisplayImage = placeholder
+        obj.DisplayImage = placeholder;
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       } else if (obj.mutableData["Content-Type"].includes("pdf")) {
-        obj.DisplayImage = placeholder
+        obj.DisplayImage = placeholder;
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       } else if (obj.mutableData["Content-Type"].includes("zip")) {
-        obj.DisplayImage = placeholder
+        obj.DisplayImage = placeholder;
         finalizedAssets.push(obj);
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       } else if (keys.length === 0) {
@@ -1667,7 +1797,7 @@ export default function Dashboard(props) {
         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       }
     } else if (obj.nodeData.storageProvider === "1") {
-      console.log("1")
+      console.log("1");
       const getAndSet = (url) => {
         if (!url || url === "") {
           obj.DisplayImage = "";
@@ -1680,15 +1810,13 @@ export default function Dashboard(props) {
         req.onload = function () {
           //console.log("response", this.response);
           if (this.response.includes("image")) {
-            console.log("image")
+            console.log("image");
             obj.DisplayImage = this.response;
             finalizedAssets.push(obj);
             finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-          }
-
-          else if (this.response.includes("application")) {
-            console.log("app")
-            obj.DisplayImage = placeholder
+          } else if (this.response.includes("application")) {
+            console.log("app");
+            obj.DisplayImage = placeholder;
             finalizedAssets.push(obj);
             finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
           }
@@ -1696,7 +1824,7 @@ export default function Dashboard(props) {
 
         req.onerror = function (e) {
           //console.log("http request error")
-          console.log("error")
+          console.log("error");
           obj.DisplayImage = "";
           finalizedAssets.push(obj);
           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
@@ -1712,9 +1840,8 @@ export default function Dashboard(props) {
       };
 
       if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
-        getAndSet(obj.engraving.PrimaryContent)
-      }
-      else if (
+        getAndSet(obj.engraving.PrimaryContent);
+      } else if (
         obj.engraving !== "" &&
         obj.engraving.DisplayImage !== "" &&
         obj.engraving.DisplayImage !== undefined
@@ -1727,9 +1854,9 @@ export default function Dashboard(props) {
       ) {
         getAndSet(obj.mutableData.DisplayImage);
       } else {
-        obj.DisplayImage = ""
+        obj.DisplayImage = "";
         finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1)
+        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
       }
     } else if (keys.length > 0) {
       for (let i = 0; i < keys.length; i++) {
@@ -1801,7 +1928,7 @@ export default function Dashboard(props) {
         get();
       }
     } else {
-      console.log("in else")
+      console.log("in else");
       obj.DisplayImage = "";
       finalizedAssets.push(obj);
       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);

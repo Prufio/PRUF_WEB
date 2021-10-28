@@ -1,3 +1,4 @@
+/*DS DEPRECATE*/
 import React from "react";
 import "../../assets/css/custom.css";
 import swal from "sweetalert";
@@ -97,7 +98,7 @@ export default function Discard(props) {
 
     setTransactionActive(true);
 
-    props.prufClient.do
+    props.prufClient.do.asset
       .discardAsset(assetInfo.id)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })

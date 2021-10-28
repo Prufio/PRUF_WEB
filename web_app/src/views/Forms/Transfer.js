@@ -118,9 +118,9 @@ export default function Transfer(props) {
 
         setTransactionActive(true)
 
-        props.prufClient.do
+        props.prufClient.do.asset
             // eslint-disable-next-line react/prop-types
-            .transferAsset(props.addr, address, assetInfo.id)
+            .transfer(props.addr, address, assetInfo.id)
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
             .on('error', function (_error) {

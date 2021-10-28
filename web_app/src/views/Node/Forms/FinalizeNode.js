@@ -210,8 +210,8 @@ export default function FinalizeNode(props) {
                     setTransactionActive(true)
                     const pageKey = thousandHashesOf(props.addr, props.winKey)
 
-                    props.prufClient.do
-                        .finalizeNode(
+                    props.prufClient.do.node
+                        .finalize(
                             nodeInfo.id,
                             managementType,
                             storageProvider,

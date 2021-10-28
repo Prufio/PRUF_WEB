@@ -299,8 +299,8 @@ export default function ChangeNodeData(props) {
 
         setTransactionActive(true)
 
-        props.prufClient.do
-            .modifyExtendedConfig(extendedDataHash, nodeInfo.id)
+        props.prufClient.do.node
+            .updateCAS(extendedDataHash, nodeInfo.id)
             .send({ from: props.addr })
             .on('error', function (_error) {
                 setTransactionActive(false)
