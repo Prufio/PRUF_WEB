@@ -1016,8 +1016,7 @@ export default function Dashboard(props) {
         );
       });
     } else {
-      _prufClient.get;
-      node.record(String(nodeArray[iteration])).then((e) => {
+      _prufClient.get.node.record(String(nodeArray[iteration])).then((e) => {
         if (e.managementType === "255") {
           return getACsFromDB(
             _addr,
@@ -1131,15 +1130,14 @@ export default function Dashboard(props) {
   const setUpNodeInformation = async (_prufClient, obj) => {
     if (!obj) return;
     console.log(obj);
-    let allNodes = obj.allCArr,
+    let allNodes = obj.allNArr,
       rootArray = obj.rArr,
-      _nodeSets = obj.sets,
+      _nodeSets = obj.sets
 
     //console.log(allNodes, allClassNames, rootArray)
 
     for (let i = 0; i < allNodes.length; i++) {
-      _prufClient.get;
-      node.record(String(allNodes[i])).then((e) => {
+      _prufClient.get.node.record(String(allNodes[i])).then((e) => {
         _nodeSets[String(rootArray[Number(e.root - 1)])].push({
           id: allNodes[i].id,
           name: allNodes[i].name

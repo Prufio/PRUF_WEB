@@ -4,6 +4,7 @@ import swal from "sweetalert";
 import swalReact from "@sweetalert/with-react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Check from "@material-ui/icons/Check";
 
 // core components
 import Card from "components/Card/Card.js";
@@ -14,6 +15,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "components/CustomButtons/Button.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import {
@@ -43,15 +45,13 @@ export default function FinalizeNode(props) {
   // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
-  const [managementType, setManagementType] = React.useState("1");
-  const [managementType1, setManagementType1] = React.useState(true);
-  const [managementType2, setManagementType2] = React.useState(false);
-  const [managementType3, setManagementType3] = React.useState(false);
-  const [managementType4, setManagementType4] = React.useState(false);
+//   const [managementType, setManagementType] = React.useState("1");
+//   const [managementType1, setManagementType1] = React.useState(true);
+//   const [managementType2, setManagementType2] = React.useState(false);
   const [storageProvider, setstorageProvider] = React.useState("1");
   const [storageProvider1, setstorageProvider1] = React.useState(true);
   const [storageProvider2, setstorageProvider2] = React.useState(false);
-  const advancedNodePreferences = React.useState("2");
+  const [advancedNodePreferences, setAdvancedNodePreferences] = React.useState("2");
   const [advancedNodePreferences1, setAdvancedNodePreferences1] =
     React.useState(true);
   const [advancedNodePreferences2, setAdvancedNodePreferences2] =
@@ -66,7 +66,7 @@ export default function FinalizeNode(props) {
     React.useState(false);
   const [card1, setCard1] = React.useState(true);
   const [card2, setCard2] = React.useState(false);
-  const [card3, setCard3] = React.useState(false);
+//   const [card3, setCard3] = React.useState(false);
 
   const [nodeInfo] = React.useState(
     JSON.parse(JSON.stringify(window.sentPacket))
@@ -77,15 +77,15 @@ export default function FinalizeNode(props) {
 
   React.useEffect(() => {
     // eslint-disable-next-line react/prop-types
-    if (props.ps) {
-      // eslint-disable-next-line react/prop-types
-      props.ps.element.scrollTop = 0;
-      //console.log("Scrolled to ", props.ps.element.scrollTop);
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-    }
+    // if (props.ps) {
+    //   // eslint-disable-next-line react/prop-types
+    //   props.ps.element.scrollTop = 0;
+    //   //console.log("Scrolled to ", props.ps.element.scrollTop);
+    // } else {
+    //   window.scrollTo({ top: 0, behavior: "smooth" });
+    //   document.documentElement.scrollTop = 0;
+    //   document.scrollingElement.scrollTop = 0;
+    // }
   }, []);
 
   const classes = useStyles();
@@ -111,37 +111,17 @@ export default function FinalizeNode(props) {
     window.location.href = nodeInfo.lastRef;
   };
 
-  const setManagementType1Button = () => {
-    setManagementType("1");
-    setManagementType1(true);
-    setManagementType2(false);
-    setManagementType3(false);
-    setManagementType4(false);
-  };
+//   const setManagementType1Button = () => {
+//     setManagementType("1");
+//     setManagementType1(true);
+//     setManagementType2(false);
+//   };
 
-  const setManagementType2Button = () => {
-    setManagementType("2");
-    setManagementType1(false);
-    setManagementType2(true);
-    setManagementType3(false);
-    setManagementType4(false);
-  };
-
-  const setManagementType3Button = () => {
-    setManagementType("3");
-    setManagementType1(false);
-    setManagementType2(false);
-    setManagementType3(true);
-    setManagementType4(false);
-  };
-
-  const setManagementType4Button = () => {
-    setManagementType("4");
-    setManagementType1(false);
-    setManagementType2(false);
-    setManagementType3(false);
-    setManagementType4(true);
-  };
+//   const setManagementType2Button = () => {
+//     setManagementType("2");
+//     setManagementType1(false);
+//     setManagementType2(true);
+//   };
 
   const setstorageProvider1Button = () => {
     setstorageProvider("1");
@@ -173,58 +153,62 @@ export default function FinalizeNode(props) {
     setAdvancedNodePreferencesHover3(true);
   };
 
-  const setAdvancedNodePreferences = (pos) => {
+  const setNodePreferences = (pos) => {
     if (pos === 1 && advancedNodePreferences1 === true) {
-      advancedNodePreferences = React.useState(advancedNodePreferences - 2);
+      setAdvancedNodePreferences(advancedNodePreferences - 2);
       setAdvancedNodePreferences1(false);
       console.log(advancedNodePreferences);
     } else if (pos === 1 && advancedNodePreferences1 === false) {
-      advancedNodePreferences = React.useState(advancedNodePreferences + 2);
+      setAdvancedNodePreferences(advancedNodePreferences + 2);
       setAdvancedNodePreferences1(true);
       console.log(advancedNodePreferences);
     }
 
     if (pos === 2 && advancedNodePreferences2 === true) {
-      advancedNodePreferences = React.useState(advancedNodePreferences - 64);
+      setAdvancedNodePreferences(advancedNodePreferences - 64);
       setAdvancedNodePreferences2(false);
       console.log(advancedNodePreferences);
     } else if (pos === 2 && advancedNodePreferences2 === false) {
-      advancedNodePreferences = React.useState(advancedNodePreferences + 64);
+      setAdvancedNodePreferences(advancedNodePreferences + 64);
       setAdvancedNodePreferences2(true);
       console.log(advancedNodePreferences);
     }
 
     if (pos === 3 && advancedNodePreferences3 === true) {
-      advancedNodePreferences = React.useState(advancedNodePreferences - 128);
+      setAdvancedNodePreferences(advancedNodePreferences - 128);
       setAdvancedNodePreferences3(false);
       console.log(advancedNodePreferences);
     } else if (pos === 3 && advancedNodePreferences3 === false) {
-      advancedNodePreferences = React.useState(advancedNodePreferences + 128);
+      setAdvancedNodePreferences(advancedNodePreferences + 128);
       setAdvancedNodePreferences3(true);
       console.log(advancedNodePreferences);
     }
   };
 
   const nextCard = () => {
-    if (card1 === true) {
-      setCard1(false);
-      setCard2(true);
-    } else {
-      setCard2(false);
-      setCard3(true);
-    }
-    props.ps.element.scrollTop = 0;
+    // if (card1 === true) {
+    //   setCard1(false);
+    //   setCard2(true);
+    // } else {
+    //   setCard2(false);
+    //   setCard3(true);
+    // }
+    setCard1(false)
+    setCard2(true)
+    // props.ps.element.scrollTop = 0;
   };
 
   const previousCard = () => {
-    if (card2 === true) {
-      setCard2(false);
-      setCard1(true);
-    } else {
-      setCard3(false);
-      setCard2(true);
-    }
-    props.ps.element.scrollTop = 0;
+    // if (card2 === true) {
+    //   setCard2(false);
+    //   setCard1(true);
+    // } else {
+    //   setCard3(false);
+    //   setCard2(true);
+    // }
+    setCard2(false)
+    setCard1(true)
+    // props.ps.element.scrollTop = 0;
   };
 
   const finalizeNode = () => {
@@ -243,15 +227,13 @@ export default function FinalizeNode(props) {
             These settings cannot be changed, and you can only finalize a node
             once!
           </h5>
-          <div className="delegationTips">
+          {/* <div className="delegationTips">
             <h4 className="alertText">
               Management Type: &nbsp;
               {managementType === "1" && <>Private</>}
               {managementType === "2" && <>Permissive</>}
-              {managementType === "3" && <>Authorized</>}
-              {managementType === "4" && <>Public</>}
             </h4>
-          </div>
+          </div> */}
           <div className="delegationTips">
             <h4 className="alertText">
               Storage Type:
@@ -308,9 +290,10 @@ export default function FinalizeNode(props) {
           props.prufClient.do.node
             .finalize(
               nodeInfo.id,
-              managementType,
+              "2",
               storageProvider,
-              "0x0000000000000000000000000000000000000000"
+              "0x0000000000000000000000000000000000000000",
+              advancedNodePreferences
             )
             // eslint-disable-next-line react/prop-types
             .send({ from: props.addr })
@@ -360,7 +343,7 @@ export default function FinalizeNode(props) {
               let tempExtArr = JSON.parse(JSON.stringify(props.nodeExtData));
 
               newNodeInfo.storageProvider = storageProvider;
-              newNodeInfo.managementType = managementType;
+              newNodeInfo.managementType = "2";
 
               tempExtArr.splice(nodeInfo.index, 1, newNodeInfo);
               console.log({
@@ -431,7 +414,7 @@ export default function FinalizeNode(props) {
           Finalize Node: {nodeInfo.name}, ID: ({nodeInfo.id})
         </h4>
       </CardHeader>
-      {card1 && (
+      {/* {card1 && (
         <Card className="Slider">
           <CardHeader>
             <h2 className={classes.cardIconTitle}>Select Management Type</h2>
@@ -476,44 +459,6 @@ export default function FinalizeNode(props) {
                   Permissive
                 </Button>
               )}
-              {!managementType3 && (
-                <Button
-                  className="managementType"
-                  color="info"
-                  onClick={() => setManagementType3Button()}
-                >
-                  <AssignmentTurnedIn />
-                  Authorized
-                </Button>
-              )}
-              {managementType3 && (
-                <Button
-                  className="managementTypeSelected"
-                  onClick={() => setManagementType3Button()}
-                >
-                  <AssignmentTurnedIn />
-                  Authorized
-                </Button>
-              )}
-              {!managementType4 && (
-                <Button
-                  className="managementType"
-                  color="info"
-                  onClick={() => setManagementType4Button()}
-                >
-                  <VerifiedUser />
-                  Public
-                </Button>
-              )}
-              {managementType4 && (
-                <Button
-                  className="managementTypeSelected"
-                  onClick={() => setManagementType4Button()}
-                >
-                  <VerifiedUser />
-                  Public
-                </Button>
-              )}
             </GridItem>
             <GridItem xs={12} sm={8}>
               <Card className="slide-right">
@@ -543,38 +488,12 @@ export default function FinalizeNode(props) {
                     </p>
                   </>
                 )}
-                {managementType3 && (
-                  <>
-                    <h3>Authorized</h3>
-                    <p>Dynamic Control.</p>
-                    <p>
-                      The Authorized management type is a robust and secure
-                      option, designed for private businesses or enterprises.
-                      Authorized management allows the node owner to specify
-                      addresses which can mint, import, and export assets.
-                      Address authorization can be granted or revoked by the
-                      node owner at any time.
-                    </p>
-                  </>
-                )}
-                {managementType4 && (
-                  <>
-                    <h3>Public</h3>
-                    <p>User-First</p>
-                    <p>
-                      Public management is the user-sovereign approach. Any user
-                      who holds a verified ID Token may mint, import, and export
-                      assets. Could apply to the management of any common goods
-                      or services.
-                    </p>
-                  </>
-                )}
               </Card>
             </GridItem>
           </GridContainer>
         </Card>
-      )}
-      {card2 && (
+      )} */}
+      {card1 && (
         <Card>
           <CardHeader>
             <h2 className={classes.cardIconTitle}>Select Storage Provider</h2>
@@ -655,7 +574,7 @@ export default function FinalizeNode(props) {
           </GridContainer>
         </Card>
       )}
-      {card3 && (
+      {card2 && (
         <Card>
           <CardHeader>
             <h2 className={classes.cardIconTitle}>Advanced Node Preferences</h2>
@@ -671,7 +590,7 @@ export default function FinalizeNode(props) {
                     control={
                       <Checkbox
                         tabIndex={-1}
-                        onClick={() => setAdvancedNodePreferences(1)}
+                        onClick={() => setNodePreferences(1)}
                         checked={
                           advancedNodePreferences1 === true ? true : false
                         }
@@ -703,7 +622,7 @@ export default function FinalizeNode(props) {
                         checked={
                           advancedNodePreferences2 === true ? true : false
                         }
-                        onClick={() => setAdvancedNodePreferences(2)}
+                        onClick={() => setNodePreferences(2)}
                         checkedIcon={<Check className={classes.checkedIcon} />}
                         icon={<Check className={classes.uncheckedIcon} />}
                         classes={{
@@ -732,7 +651,7 @@ export default function FinalizeNode(props) {
                         checked={
                           advancedNodePreferences3 === true ? true : false
                         }
-                        onClick={() => setAdvancedNodePreferences(3)}
+                        onClick={() => setNodePreferences(3)}
                         checkedIcon={<Check className={classes.checkedIcon} />}
                         icon={<Check className={classes.uncheckedIcon} />}
                         classes={{
@@ -791,7 +710,7 @@ export default function FinalizeNode(props) {
               </Button>
             </div>
           )}
-          {card2 && (
+          {/* {card2 && (
             <div className="MLBGradientSubmit">
               <Button
                 className="MLBGradient"
@@ -806,8 +725,8 @@ export default function FinalizeNode(props) {
                 Next <KeyboardArrowRight />{" "}
               </Button>
             </div>
-          )}
-          {card3 && (
+          )} */}
+          {card2 && (
             <div className="MLBGradientSubmit">
               <Button
                 className="MLBGradient"

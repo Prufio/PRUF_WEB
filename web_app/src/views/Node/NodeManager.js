@@ -323,7 +323,7 @@ export default function NodeManager(props) {
             return (window.location.href = obj.href)
         }
 
-        props.prufClient.get.operationCost(String(obj.id), String(iteration)).then((e) => {
+        props.prufClient.get.node.invoiceForOperation(String(obj.id), String(iteration)).then((e) => {
             costs.push(e)
             return getAllCosts(obj, costs, iteration + 1)
         })
