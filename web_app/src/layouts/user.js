@@ -141,16 +141,10 @@ export default function Dashboard(props) {
 
     console.log(arweave);
 
-    // if(window.arweaveWallet) {
-    //   window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
-    //   //window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
-    // }
-
-    //const testWeave = await TestWeave.init(arweave);
-
-    //setTestWeave(testWeave);
-
-    //console.log(testWeave);
+    if(window.arweaveWallet) {
+      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
+      window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
+    }
 
     window.arweaveClient = arweave;
 
@@ -183,7 +177,7 @@ export default function Dashboard(props) {
   const checkForCookies = () => {
     if (!cookies.hasBeenNotified) {
       swal({
-        title: "Cookies on app.pruf.io",
+        title: "Cookies on pruf.io",
         text: "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
         icon: "warning",
         buttons: {
@@ -670,7 +664,6 @@ export default function Dashboard(props) {
           setAssetArr(tempArr);
           getAssetIds(addr, prufClient, assetIds.length + 1);
         }
-
         window.replaceAssetData = {};
         forceUpdate();
       }
