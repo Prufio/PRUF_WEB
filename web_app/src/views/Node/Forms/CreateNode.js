@@ -288,7 +288,7 @@ export default function CreateNode(props) {
     setError(undefined);
 
     props.prufClient.faucet
-      .getNode(name, root, "2", extendedDataHash)
+      .getNode(name, root, "2", extendedDataHash, extendedDataHash, props.addr)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
