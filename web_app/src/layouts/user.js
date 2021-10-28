@@ -287,8 +287,10 @@ export default function Dashboard(props) {
     // }, 100);
     if (window.idxQuery) {
       window.location.href = "/#/user/search";
-      forceUpdate();
+      return forceUpdate();
     }
+
+    setUpEnvironment(_prufClient, _addr);
   };
 
   const awaitPrufInitNoAddress = async (_prufClient) => {
@@ -332,8 +334,6 @@ export default function Dashboard(props) {
 
         console.log(_prufClient);
         setPrufClient(_prufClient);
-        setUpEnvironment(_prufClient);
-        awaitPrufInitNoAddress(_prufClient);
         setIsIDHolder(false);
 
         if (_prufClient.network.name === "kovan") {
@@ -363,7 +363,11 @@ export default function Dashboard(props) {
                 if (cookies[`${_addr}sideBarImage`]) {
                   setImage(cookies[`${_addr}sideBarImage`]);
                 }
-                awaitPrufInit(_prufClient, _addr);
+                if (window.idxQuery) {
+                  window.location.href = "/#/user/search";
+                  return forceUpdate();
+                }
+                setUpEnvironment(_prufClient, _addr)
                 setIsMounted(true);
               } else {
                 ethereum
@@ -546,7 +550,7 @@ export default function Dashboard(props) {
         once: true,
       });
 
-      setTimeout(handleEthereum, 3000); // 3 seconds
+      setTimeout(handleEthereum, 2000); // 2 seconds
     }
 
     //initOrbitDB()
@@ -852,8 +856,7 @@ export default function Dashboard(props) {
       });
     } else {
       window.web3.eth.getBalance(_addr, (error, result) => {
-        if (error) {
-        } else {
+        if (!error) {
           console.log(window.web3.utils.fromWei(result, "ether"));
           setETHBalance(window.web3.utils.fromWei(result, "ether"));
         }
