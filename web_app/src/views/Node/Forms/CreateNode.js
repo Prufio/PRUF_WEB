@@ -120,14 +120,14 @@ export default function CreateNode(props) {
     for (let i = 0; i < arr.length; i++) {
       rootSelection.push(
         <MenuItem
-          key={"key" + String(arr[i])}
+          key={"key" + String(arr[i].id)}
           classes={{
             root: classes.selectMenuItem,
             selected: classes.selectMenuItemSelected,
           }}
-          value={String(arr[i])}
+          value={String(arr[i].id)}
         >
-          {rootNames[i]}
+          {arr[i].name}
         </MenuItem>
       );
     }
@@ -137,29 +137,7 @@ export default function CreateNode(props) {
 
   const rootLogin = (e) => {
     console.log(props.roots);
-    if (!e.target.value) return setRoot("");
-    // eslint-disable-next-line react/prop-types
-    if (e.target.value === "1") {
-      setRootName("Art");
-    }
-    if (e.target.value === "2") {
-      setRootName("Apparel");
-    }
-    if (e.target.value === "3") {
-      setRootName("Ticketing");
-    }
-    if (e.target.value === "4") {
-      setRootName("Consumables");
-    }
-    if (e.target.value === "5") {
-      setRootName("Transportation");
-    }
-    if (e.target.value === "6") {
-      setRootName("Industrial");
-    }
-    if (e.target.value === "7") {
-      setRootName("Miscellaneous");
-    }
+    setRootName("Non-motor Vehicles");
     setRoot(e.target.value);
     setSelectedRootID(e.target.value);
   };

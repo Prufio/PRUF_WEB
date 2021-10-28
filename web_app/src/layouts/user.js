@@ -974,13 +974,11 @@ export default function Dashboard(props) {
   const getACsFromDB = (
     _addr,
     _prufClient,
-    acArray,
+    nodeArray,
     iteration,
     _nodeSets,
     rootArray,
-    rootNameArray,
-    allClasses,
-    allClassNames,
+    allNodes,
     dontCount
   ) => {
     if (!dontCount) {
@@ -989,167 +987,140 @@ export default function Dashboard(props) {
     }
     if (!iteration) iteration = 0;
     if (!rootArray) rootArray = [];
-    if (!rootNameArray) rootNameArray = [];
-    if (!allClasses) allClasses = [];
-    if (!allClassNames) allClassNames = [];
+    if (!allNodes) allNodes = [];
     if (!_nodeSets) _nodeSets = {};
 
-    if (iteration >= acArray.length)
+    if (iteration >= nodeArray.length)
       return setUpNodeInformation(_prufClient, {
         sets: _nodeSets,
         rArr: rootArray,
-        rnArr: rootNameArray,
-        allCArr: allClasses,
-        allCNArr: allClassNames,
+        allNArr: allNodes,
       });
 
-    if (acArray[iteration] < 100000) {
-      _prufClient.get.node.name(String(acArray[iteration])).then((e) => {
-        rootArray.push(acArray[iteration]);
-        rootNameArray.push(
-          e
-            .toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
-        );
-        _nodeSets[String(acArray[iteration])] = [];
+    if (nodeArray[iteration] < 100000) {
+      _prufClient.get.node.name(String(nodeArray[iteration])).then((e) => {
+        rootArray.push({id: nodeArray[iteration], name: e
+          .toLowerCase()
+          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
+      });
+        _nodeSets[String(nodeArray[iteration])] = [];
         return getACsFromDB(
           _addr,
           _prufClient,
-          acArray,
+          nodeArray,
           iteration + 1,
           _nodeSets,
           rootArray,
-          rootNameArray,
-          allClasses,
-          allClassNames,
+          allNodes,
           dontCount
         );
       });
     } else {
       _prufClient.get;
-      node.record(String(acArray[iteration])).then((e) => {
+      node.record(String(nodeArray[iteration])).then((e) => {
         if (e.managementType === "255") {
           return getACsFromDB(
             _addr,
             _prufClient,
-            acArray,
+            nodeArray,
             iteration + 1,
             _nodeSets,
             rootArray,
-            rootNameArray,
-            allClasses,
-            allClassNames,
+            allNodes,
             dontCount
           );
         } else if (e.managementType === "1" || e.managementType === "2") {
-          _prufClient.get.node.ownerOf(String(acArray[iteration])).then((x) => {
+          _prufClient.get.node.ownerOf(String(nodeArray[iteration])).then((x) => {
             if (window.web3.utils.toChecksumAddress(x) === _addr) {
-              allClasses.push(String(acArray[iteration]));
-              allClassNames.push(
-                e.name
-                  .toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  )
-              );
+              allNodes.push({id: String(nodeArray[iteration]), name: e.name
+                .toLowerCase()
+                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                  letter.toUpperCase()
+                )});
+
               return getACsFromDB(
                 _addr,
                 _prufClient,
-                acArray,
+                nodeArray,
                 iteration + 1,
                 _nodeSets,
                 rootArray,
-                rootNameArray,
-                allClasses,
-                allClassNames,
+                allNodes,
                 dontCount
               );
             } else {
-              if (!dontCount.includes(acArray[iteration])) {
+              if (!dontCount.includes(nodeArray[iteration])) {
                 console.log({ iteration, dontCount });
-                dontCount.push(acArray[iteration]);
+                dontCount.push(nodeArray[iteration]);
                 setCookieTo(`${_addr}dontCount`, dontCount);
               } else {
                 console.log(
                   "Counted when should not have... Removing cached values"
                 );
                 let temp = cookies[`${_addr}subNodes`];
-                temp.splice(temp.indexOf(acArray[iteration]), 1);
+                temp.splice(temp.indexOf(nodeArray[iteration]), 1);
                 setCookieTo(`${_addr}subNodes`, temp);
               }
 
               return getACsFromDB(
                 _addr,
                 _prufClient,
-                acArray,
+                nodeArray,
                 iteration + 1,
                 _nodeSets,
                 rootArray,
-                rootNameArray,
-                allClasses,
-                allClassNames,
+                allNodes,
                 dontCount
               );
             }
           });
-          //getACsFromDB(_addr, _prufClient, acArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allClasses, allClassNames)
+          //getACsFromDB(_addr, _prufClient, nodeArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allNodes, allClassNames)
         } else if (e.managementType === "3") {
           _prufClient.get.node
-            .userType(_addr, String(acArray[iteration]))
+            .userType(_addr, String(nodeArray[iteration]))
             .then((x) => {
               if (x === "1") {
-                allClasses.push(String(acArray[iteration]));
-                allClassNames.push(
-                  e.name
-                    .toLowerCase()
-                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                      letter.toUpperCase()
-                    )
-                );
+                allNodes.push({id: String(nodeArray[iteration]), name: e.name
+                  .toLowerCase()
+                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                    letter.toUpperCase()
+                  )});
                 return getACsFromDB(
                   _addr,
                   _prufClient,
-                  acArray,
+                  nodeArray,
                   iteration + 1,
                   _nodeSets,
                   rootArray,
-                  rootNameArray,
-                  allClasses,
-                  allClassNames,
+                  allNodes,
                   dontCount
                 );
               } else {
                 return getACsFromDB(
                   _addr,
                   _prufClient,
-                  acArray,
+                  nodeArray,
                   iteration + 1,
                   _nodeSets,
                   rootArray,
-                  rootNameArray,
-                  allClasses,
-                  allClassNames,
+                  allNodes,
                   dontCount
                 );
               }
             });
         } else {
-          allClasses.push(String(acArray[iteration]));
-          allClassNames.push(
-            e.name
-              .toLowerCase()
-              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
-          );
+          allNodes.push({id: String(nodeArray[iteration]), name: e.name
+            .toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
+          });
           return getACsFromDB(
             _addr,
             _prufClient,
-            acArray,
+            nodeArray,
             iteration + 1,
             _nodeSets,
             rootArray,
-            rootNameArray,
-            allClasses,
-            allClassNames,
+            allNodes,
             dontCount
           );
         }
@@ -1160,20 +1131,18 @@ export default function Dashboard(props) {
   const setUpNodeInformation = async (_prufClient, obj) => {
     if (!obj) return;
     console.log(obj);
-    let allClasses = obj.allCArr,
+    let allNodes = obj.allCArr,
       rootArray = obj.rArr,
       _nodeSets = obj.sets,
-      rootNameArray = obj.rnArr,
-      allClassNames = obj.allCNArr;
 
-    //console.log(allClasses, allClassNames, rootArray)
+    //console.log(allNodes, allClassNames, rootArray)
 
-    for (let i = 0; i < allClasses.length; i++) {
+    for (let i = 0; i < allNodes.length; i++) {
       _prufClient.get;
-      node.record(String(allClasses[i])).then((e) => {
+      node.record(String(allNodes[i])).then((e) => {
         _nodeSets[String(rootArray[Number(e.root - 1)])].push({
-          id: allClasses[i],
-          name: allClassNames[i]
+          id: allNodes[i].id,
+          name: allNodes[i].name
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase()),
         });
@@ -1182,7 +1151,6 @@ export default function Dashboard(props) {
 
     console.log("Class Sets: ", _nodeSets);
     setRoots(rootArray);
-    setRootNames(rootNameArray);
     setNodeSets(_nodeSets);
   };
 
