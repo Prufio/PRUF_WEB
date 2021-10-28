@@ -143,22 +143,22 @@ export default function CreateNode(props) {
       setRootName("Art");
     }
     if (e.target.value === "2") {
-      setRootName("Digital Art");
-    }
-    if (e.target.value === "3") {
-      setRootName("Trinkets");
-    }
-    if (e.target.value === "4") {
-      setRootName("Musical instrumnts");
-    }
-    if (e.target.value === "5") {
       setRootName("Apparel");
     }
+    if (e.target.value === "3") {
+      setRootName("Ticketing");
+    }
+    if (e.target.value === "4") {
+      setRootName("Consumables");
+    }
+    if (e.target.value === "5") {
+      setRootName("Transportation");
+    }
     if (e.target.value === "6") {
-      setRootName("Mobile Electronics");
+      setRootName("Industrial");
     }
     if (e.target.value === "7") {
-      setRootName("Non-motor Vehicles");
+      setRootName("Miscellaneous");
     }
     setRoot(e.target.value);
     setSelectedRootID(e.target.value);
@@ -308,7 +308,7 @@ export default function CreateNode(props) {
     setError(undefined);
 
     props.prufClient.faucet
-      .getNode(name, root, "2", extendedDataHash)
+      .getNode(name, root, "2", extendedDataHash, extendedDataHash, props.addr)
       // eslint-disable-next-line react/prop-types
       .send({ from: props.addr })
       .on("error", function (_error) {
