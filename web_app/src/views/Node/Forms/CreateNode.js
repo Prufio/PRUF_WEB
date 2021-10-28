@@ -137,7 +137,9 @@ export default function CreateNode(props) {
 
   const rootLogin = (e) => {
     console.log(props.roots);
-    setRootName("Non-motor Vehicles");
+    props.roots.forEach (obj => {
+        if (String(obj.id) === String(e.target.value)) setRootName(obj.name);
+    })
     setRoot(e.target.value);
     setSelectedRootID(e.target.value);
   };
