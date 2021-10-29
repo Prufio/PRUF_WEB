@@ -128,428 +128,6 @@ export default function Dashboard(props) {
     return date;
   };
 
-  //console.log("pre-load href", window.location.href)
-  const initArweave = async () => {
-    const _arweave = Arweave;
-    const arweave = _arweave.init({
-      host: "arweave.net",
-      port: 443,
-      protocol: "https",
-    });
-
-    setArweaveClient(arweave);
-
-    console.log(arweave);
-
-    if(window.arweaveWallet) {
-      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
-      window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
-    }
-
-    window.arweaveClient = arweave;
-
-    return arweave;
-  };
-
-  const handleNoEthereum = () => {
-    //if(isMobile) swal("No ethereum detected")
-    console.log("No ethereum object available");
-    let web3;
-    web3 = require("web3");
-    web3 = new Web3(
-      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
-    );
-    web3.eth.net.getId().then(async (chainId) => {
-      const _prufClient = new PRUF(web3, chainId, false, true);
-      await _prufClient.init();
-
-      console.log(_prufClient);
-      setPrufClient(_prufClient);
-      setUpEnvironment(_prufClient);
-      awaitPrufInitNoAddress(_prufClient);
-      setIsIDHolder(false);
-
-      window.web3 = web3;
-      return setIsMounted(true);
-    });
-  };
-
-  const checkForCookies = () => {
-    if (!cookies.hasBeenNotified) {
-      swal({
-        title: "Cookies on pruf.io",
-        text: "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
-        icon: "warning",
-        buttons: {
-          moreInfo: {
-            text: "Learn more",
-            value: "moreInfo",
-            className: "moreCookieInfo",
-          },
-
-          /* decline: {
-            text: "Decline Use",
-            value: "decline",
-            className: "declineCookies",
-          }, */
-
-          accept: {
-            text: "Accept and continue",
-            value: "accept",
-            className: "acceptCookies",
-          },
-        },
-      }).then((value) => {
-        switch (value) {
-          case "accept":
-            setCookieTo("hasBeenNotified", true);
-            break;
-
-          case "moreInfo":
-            swal({
-              title: "Cookies on app.pruf.io",
-              text: "Cookies are small packets of user data that are created and stored in the browser. We use cookes to provide a seamless and fast dApp experience while maintaining user privacy. We do not store or share your data with anyone.",
-              buttons: {
-                decline: {
-                  text: "Decline Use",
-                  value: "decline",
-                  className: "declineCookies",
-                },
-                accept: {
-                  text: "Accept and continue",
-                  value: "accept",
-                  className: "acceptCookies",
-                },
-              },
-            }).then((value) => {
-              switch (value) {
-                case "accept":
-                  setCookieTo("hasBeenNotified", true);
-                  break;
-
-                case "decline":
-                  setCookieTo("hasBeenNotified", false);
-                  break;
-
-                default:
-                  break;
-              }
-            });
-            break;
-
-          case "decline":
-            setCookieTo("hasBeenNotified", false);
-            break;
-
-          default:
-            break;
-        }
-      });
-    }
-    //console.log("Cookies:", cookies);
-  };
-
-  const setCookieTo = (job, val) => {
-    if (cookies["hasBeenNotified"] === false) return;
-    //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
-    console.log("Setting cookie", job, "to", val);
-    setCookie(String(job), JSON.stringify(val), {
-      path: "/",
-      expires: new Date().addDays(10),
-    });
-  };
-
-  const readCookie = async (job) => {
-    if (cookies["hasBeenNotified"] === false) return;
-    if (!cookies[job]) return console.log("Referenced nonexistant cookie");
-    return cookies[job];
-  };
-
-  const awaitPrufInit = async (_prufClient, _addr) => {
-    //console.log("Waiting for init...", _prufClient.get)
-    // setTimeout(() => {
-    //   if (_prufClient.get) {
-    //     console.log(_prufClient.get);
-    //     setUpEnvironment(_prufClient, _addr);
-    //     if (window.idxQuery) {
-    //       window.location.href = "/#/user/search";
-    //       forceUpdate();
-    //     }
-    //   } else {
-    //     awaitPrufInit(_prufClient, _addr);
-    //   }
-    // }, 100);
-    if (window.idxQuery) {
-      window.location.href = "/#/user/search";
-      return forceUpdate();
-    }
-
-    setUpEnvironment(_prufClient, _addr);
-  };
-
-  const awaitPrufInitNoAddress = async (_prufClient) => {
-    // //console.log("Waiting for init...", _prufClient.get)
-    // setTimeout(() => {
-    //   if (_prufClient.get) { console.log(_prufClient.get); setPrufClient(_prufClient); if (window.idxQuery) { window.location.href = "/#/user/search"; forceUpdate() } }
-    //   else { awaitPrufInitNoAddress(_prufClient) }
-    // }, 100)
-    if (window.idxQuery) {
-      window.location.href = "/#/user/search";
-      forceUpdate();
-    }
-  };
-
-  const handleEthereum = () => {
-    if (window.ethereum) {
-      window.ethereum.on("chainChanged", (chainId) => {
-        console.log(chainId);
-        window.location.reload();
-      });
-
-      window.ethereum.on("accountsChanged", (e) => {
-        console.log("Accounts changed");
-        if (e[0] === undefined || e[0] === null) {
-          if (e[0] !== addr) {
-            window.location.reload();
-          }
-        } else if (e[0] !== addr) {
-          window.location.reload();
-        }
-      });
-
-      let web3;
-      web3 = require("web3");
-      const ethereum = window.ethereum;
-      web3 = new Web3(web3.givenProvider);
-      window.web3 = web3;
-      web3.eth.net.getId().then(async (chainId) => {
-        const _prufClient = new PRUF(web3, chainId, false, true);
-        await _prufClient.init();
-
-        console.log(_prufClient);
-        setPrufClient(_prufClient);
-        setIsIDHolder(false);
-
-        if (_prufClient.network.name === "kovan") {
-          window.isKovan = true;
-          ethereum
-            .request({
-              method: "eth_accounts",
-              params: {},
-            })
-            .then(async (accounts) => {
-              console.log({ accounts: accounts });
-              if (accounts[0] !== undefined) {
-                console.log("SETTING ADDRESS");
-                let _addr = await window.web3.utils.toChecksumAddress(
-                  accounts[0]
-                );
-                setAddr(_addr);
-                if (cookies[`${_addr}sideBarLogo`]) {
-                  setLogo(cookies[`${_addr}sideBarLogo`]);
-                }
-                if (cookies[`${_addr}sideBarColor`]) {
-                  setColor(cookies[`${_addr}sideBarColor`]);
-                }
-                if (cookies[`${_addr}sideBarBackground`]) {
-                  setBgColor(cookies[`${_addr}sideBarBackground`]);
-                }
-                if (cookies[`${_addr}sideBarImage`]) {
-                  setImage(cookies[`${_addr}sideBarImage`]);
-                }
-                if (window.idxQuery) {
-                  window.location.href = "/#/user/search";
-                  return forceUpdate();
-                }
-                setUpEnvironment(_prufClient, _addr)
-                setIsMounted(true);
-              } else {
-                ethereum
-                  .request({
-                    method: "eth_requestAccounts",
-                    params: {},
-                  })
-                  .then(async (accounts) => {
-                    console.log({ accounts: accounts });
-                    if (accounts[0] !== undefined) {
-                      console.log("SETTING ADDRESS");
-                      let _addr = await window.web3.utils.toChecksumAddress(
-                        accounts[0]
-                      );
-                      setAddr(_addr);
-                      if (cookies[`${_addr}sideBarLogo`]) {
-                        setLogo(cookies[`${_addr}sideBarLogo`]);
-                      }
-                      if (cookies[`${_addr}sideBarColor`]) {
-                        setColor(cookies[`${_addr}sideBarColor`]);
-                      }
-                      if (cookies[`${_addr}sideBarBackground`]) {
-                        setBgColor(cookies[`${_addr}sideBarBackground`]);
-                      }
-                      if (cookies[`${_addr}sideBarImage`]) {
-                        setImage(cookies[`${_addr}sideBarImage`]);
-                      }
-                      window.addr = _addr;
-                      awaitPrufInit(_prufClient, _addr);
-                      setIsMounted(true);
-                    }
-                  });
-              }
-            });
-
-          setIsKovan(true);
-          return setIsMounted(true);
-        } else {
-          window.isKovan = false;
-          setIsKovan(false);
-          return swal({
-            title: "Connect to the Kovan Testnet!",
-            text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
-            icon: "warning",
-            button: "Okay",
-          });
-        }
-      });
-    } else {
-      return handleNoEthereum();
-    }
-  };
-
-  const chainListener = () => {
-    window.ethereum.on("chainChanged", (chainId) => {
-      console.log(chainId);
-      window.location.reload();
-    });
-  };
-
-  const acctListener = () => {
-    window.ethereum.on("accountsChanged", (e) => {
-      console.log("Accounts changed");
-      if (e[0] === undefined || e[0] === null) {
-        if (e[0] !== addr) {
-          window.location.reload();
-        }
-      } else if (e[0] !== addr) {
-        window.location.reload();
-      }
-    });
-  };
-
-  const refreshHandler = async () => {
-    await setReplaceAssetData(replaceAssetData + 1);
-  };
-
-  const connectArweave = () => {
-    if (!window.arweaveWallet) {
-      return swal(
-        "We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back."
-      );
-    }
-
-    swal(
-      "You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet."
-    ).then(() => {
-      window.arweaveWallet.connect([
-        `ACCESS_ADDRESS`,
-        `SIGN_TRANSACTION`,
-        `ENCRYPT`,
-        `DECRYPT`,
-      ]);
-    });
-  };
-
-  if (window.ethereum && !window.populatedListeners) {
-    window.addEventListener("chainListener", chainListener, { once: true });
-    window.addEventListener("accountListener", acctListener, { once: true });
-    window.addEventListener("refresh", refreshHandler);
-    window.addEventListener("connectArweave", connectArweave);
-    window.populatedListeners = true;
-  }
-
-  window.onload = () => {
-    window.balances = {};
-    window.replaceAssetData = {};
-    window.recount = false;
-    let _ipfs;
-
-    if (cookies[`assetsPerPage`]) {
-      setAssetsPerPage(cookies[`assetsPerPage`]);
-    }
-
-    _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"));
-
-    let hrefStr = String(
-      window.location.href.substring(
-        window.location.href.indexOf("/#/"),
-        window.location.href.length
-      )
-    );
-    //console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
-    if (
-      hrefStr.includes("0x") &&
-      hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length).length === 66
-    ) {
-      if (!window.location.href.includes("/#/user/search")) {
-        window.idxQuery = hrefStr.substring(
-          hrefStr.indexOf("0x"),
-          hrefStr.indexOf("0x") + 66
-        );
-        console.log(
-          "query detected for idx: ",
-          hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.indexOf("0x") + 66)
-        );
-        window.location.href = String(
-          "/#/user/search/" +
-            hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
-        );
-      }
-    } else if (
-      hrefStr !== "/#/user/dashboard" &&
-      hrefStr !== "/#/user/home" &&
-      hrefStr !== "/#/user/search" &&
-      hrefStr !== "/#/user/node-manager" &&
-      hrefStr !== "/#/user/new-asset"
-    ) {
-      console.log("Rerouting...");
-      window.location.href = "/#/user/home";
-    }
-
-    window.ipfs = _ipfs;
-
-    buildWindowUtils(); // get the utils object and make it globally accessible
-
-    window.jdenticon_config = {
-      hues: [196],
-      lightness: {
-        color: [0.36, 0.7],
-        grayscale: [0.24, 0.82],
-      },
-      saturation: {
-        color: 0.75,
-        grayscale: 0.1,
-      },
-      backColor: "#ffffffff",
-    };
-
-    //Declare a few globals
-    window.sentPacket = {};
-
-    //Give me the desktop version
-    if (window.ethereum) {
-      handleEthereum();
-    } else {
-      console.log("In startup else clause");
-
-      window.addEventListener("ethereum#initialized", handleEthereum, {
-        once: true,
-      });
-
-      setTimeout(handleEthereum, 2000); // 2 seconds
-    }
-
-    //initOrbitDB()
-  };
-
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       //console.log("*****Using ps*****");
@@ -670,6 +248,382 @@ export default function Dashboard(props) {
     }
   }, [replaceAssetData]);
 
+  //console.log("pre-load href", window.location.href)
+  const initArweave = async () => {
+    const _arweave = Arweave;
+    const arweave = _arweave.init({
+      host: "arweave.net",
+      port: 443,
+      protocol: "https",
+    });
+
+    setArweaveClient(arweave);
+
+    console.log(arweave);
+
+    if(window.arweaveWallet) {
+      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
+      window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
+    }
+
+    window.arweaveClient = arweave;
+
+    return arweave;
+  };
+
+  const handleNoEthereum = () => {
+    //if(isMobile) swal("No ethereum detected")
+    console.log("No ethereum object available");
+    let web3;
+    web3 = require("web3");
+    web3 = new Web3(
+      "https://kovan.infura.io/v3/ab9233de7c4b4adea39fcf3c41914959"
+    );
+
+    web3.eth.net.getId().then(async (chainId) => {
+      const _prufClient = new PRUF(web3, chainId, false, true);
+      await _prufClient.init();
+  
+      console.log(_prufClient);
+      setPrufClient(_prufClient);
+      setUpEnvironment(_prufClient);
+      awaitPrufInitNoAddress(_prufClient);
+      setIsIDHolder(false);
+
+      window.prufClient = _prufClient;
+      window.web3 = web3;
+      return setIsMounted(true);
+    });
+  };
+
+  const checkForCookies = () => {
+    if (!cookies.hasBeenNotified) {
+      swal({
+        title: "Cookies on pruf.io",
+        text: "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
+        icon: "warning",
+        buttons: {
+          moreInfo: {
+            text: "Learn more",
+            value: "moreInfo",
+            className: "moreCookieInfo",
+          },
+
+          /* decline: {
+            text: "Decline Use",
+            value: "decline",
+            className: "declineCookies",
+          }, */
+
+          accept: {
+            text: "Accept and continue",
+            value: "accept",
+            className: "acceptCookies",
+          },
+        },
+      }).then((value) => {
+        switch (value) {
+          case "accept":
+            setCookieTo("hasBeenNotified", true);
+            break;
+
+          case "moreInfo":
+            swal({
+              title: "Cookies on app.pruf.io",
+              text: "Cookies are small packets of user data that are created and stored in the browser. We use cookes to provide a seamless and fast dApp experience while maintaining user privacy. We do not store or share your data with anyone.",
+              buttons: {
+                decline: {
+                  text: "Decline Use",
+                  value: "decline",
+                  className: "declineCookies",
+                },
+                accept: {
+                  text: "Accept and continue",
+                  value: "accept",
+                  className: "acceptCookies",
+                },
+              },
+            }).then((value) => {
+              switch (value) {
+                case "accept":
+                  setCookieTo("hasBeenNotified", true);
+                  break;
+
+                case "decline":
+                  setCookieTo("hasBeenNotified", false);
+                  break;
+
+                default:
+                  break;
+              }
+            });
+            break;
+
+          case "decline":
+            setCookieTo("hasBeenNotified", false);
+            break;
+
+          default:
+            break;
+        }
+      });
+    }
+    //console.log("Cookies:", cookies);
+  };
+
+  const setCookieTo = (job, val) => {
+    if (cookies["hasBeenNotified"] === false) return;
+    //if(!cookies[job]) return console.log("Referenced nonexistant cookie")
+    console.log("Setting cookie", job, "to", val);
+    setCookie(String(job), JSON.stringify(val), {
+      path: "/",
+      expires: new Date().addDays(10),
+    });
+  };
+
+  const readCookie = async (job) => {
+    if (cookies["hasBeenNotified"] === false) return;
+    if (!cookies[job]) return console.log("Referenced nonexistant cookie");
+    return cookies[job];
+  };
+
+  const handleEthereum = () => {
+    if (window.ethereum) {
+
+      let web3;
+      web3 = require("web3");
+      const ethereum = window.ethereum;
+      web3 = new Web3(web3.givenProvider);
+      window.web3 = web3;
+      web3.eth.net.getId().then(async (chainId) => {
+
+        window.ethereum.on("chainChanged", (chainId) => {
+          console.log(chainId);
+          window.location.reload();
+        });
+
+        const _prufClient = new PRUF(web3, chainId, false, true);
+        await _prufClient.init();
+
+        window.ethereum.on("accountsChanged", (e) => {
+          console.log("Accounts changed");
+          if (e[0] === undefined || e[0] === null) {
+            if (e[0]!== addr) {
+              window.location.reload()
+            }
+          } else if (e[0].toLowerCase() !== addr.toLowerCase()) {
+            setAddr(web3.utils.toChecksumAddress(e[0]))
+            if(_prufClient.get){
+              setUpEnvironment(_prufClient, e[0])
+            } else {
+              window.location.reload()
+            }
+            
+          }
+        });
+
+        console.log(_prufClient);
+        setPrufClient(_prufClient);
+        setIsIDHolder(false);
+
+        if (_prufClient.network.name === "kovan") {
+          window.isKovan = true;
+          ethereum
+            .request({
+              method: "eth_accounts",
+              params: {},
+            })
+            .then(async (accounts) => {
+              console.log({ accounts: accounts });
+              if (accounts[0] !== undefined) {
+                console.log("SETTING ADDRESS");
+                let _addr = await window.web3.utils.toChecksumAddress(
+                  accounts[0]
+                );
+                setAddr(_addr);
+                if (cookies[`${_addr}sideBarLogo`]) {
+                  setLogo(cookies[`${_addr}sideBarLogo`]);
+                }
+                if (cookies[`${_addr}sideBarColor`]) {
+                  setColor(cookies[`${_addr}sideBarColor`]);
+                }
+                if (cookies[`${_addr}sideBarBackground`]) {
+                  setBgColor(cookies[`${_addr}sideBarBackground`]);
+                }
+                if (cookies[`${_addr}sideBarImage`]) {
+                  setImage(cookies[`${_addr}sideBarImage`]);
+                }
+                if (window.idxQuery) {
+                  window.location.href = "/#/user/search";
+                  return forceUpdate();
+                }
+                setUpEnvironment(_prufClient, _addr)
+                setIsMounted(true);
+              } else {
+                ethereum
+                  .request({
+                    method: "eth_requestAccounts",
+                    params: {},
+                  })
+                  .then(async (accounts) => {
+                    console.log({ accounts: accounts });
+                    if (accounts[0] !== undefined) {
+                      console.log("SETTING ADDRESS");
+                      let _addr = await window.web3.utils.toChecksumAddress(
+                        accounts[0]
+                      );
+                      setAddr(_addr);
+                      if (cookies[`${_addr}sideBarLogo`]) {
+                        setLogo(cookies[`${_addr}sideBarLogo`]);
+                      }
+                      if (cookies[`${_addr}sideBarColor`]) {
+                        setColor(cookies[`${_addr}sideBarColor`]);
+                      }
+                      if (cookies[`${_addr}sideBarBackground`]) {
+                        setBgColor(cookies[`${_addr}sideBarBackground`]);
+                      }
+                      if (cookies[`${_addr}sideBarImage`]) {
+                        setImage(cookies[`${_addr}sideBarImage`]);
+                      }
+                      window.addr = _addr;
+                      awaitPrufInit(_prufClient, _addr);
+                      setIsMounted(true);
+                    }
+                  });
+              }
+            });
+
+          setIsKovan(true);
+          return setIsMounted(true);
+        } else {
+          window.isKovan = false;
+          setIsKovan(false);
+          return swal({
+            title: "Connect to the Kovan Testnet!",
+            text: "Please connect your ethereum provider to the Kovan Testnet and reload the page to access page functionality.",
+            icon: "warning",
+            button: "Okay",
+          });
+        }
+      });
+    } else {
+      return handleNoEthereum();
+    }
+  };
+
+  const refreshHandler = async () => {
+    await setReplaceAssetData(replaceAssetData + 1);
+  };
+
+  // const connectArweave = () => {
+  //   if (!window.arweaveWallet) {
+  //     return swal(
+  //       "We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back."
+  //     );
+  //   }
+
+  //   swal(
+  //     "You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet."
+  //   ).then(() => {
+  //     window.arweaveWallet.connect([
+  //       `ACCESS_ADDRESS`,
+  //       `SIGN_TRANSACTION`,
+  //       `ENCRYPT`,
+  //       `DECRYPT`,
+  //     ]);
+  //   });
+  // };
+
+  // if (window.ethereum && !window.populatedListeners) {
+  //   window.addEventListener("chainListener", chainListener, { once: true });
+  //   window.addEventListener("accountListener", acctListener, { once: true });
+  //   window.addEventListener("refresh", refreshHandler);
+  //   window.addEventListener("connectArweave", connectArweave);
+  //   window.populatedListeners = true;
+  // }
+
+  window.onload = () => {
+    window.balances = {};
+    window.replaceAssetData = {};
+    window.recount = false;
+    let _ipfs;
+
+    if (cookies[`assetsPerPage`]) {
+      setAssetsPerPage(cookies[`assetsPerPage`]);
+    }
+
+    _ipfs = new IPFS(new URL("https://ipfs.infura.io:5001"));
+
+    let hrefStr = String(
+      window.location.href.substring(
+        window.location.href.indexOf("/#/"),
+        window.location.href.length
+      )
+    );
+    //console.log(hrefStr.includes("0x") && hrefStr.substring(hrefStr.indexOf('0x'), hrefStr.length).length === 66)
+    if (
+      hrefStr.includes("0x") &&
+      hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length).length === 66
+    ) {
+      if (!window.location.href.includes("/#/user/search")) {
+        window.idxQuery = hrefStr.substring(
+          hrefStr.indexOf("0x"),
+          hrefStr.indexOf("0x") + 66
+        );
+        console.log(
+          "query detected for idx: ",
+          hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.indexOf("0x") + 66)
+        );
+        window.location.href = String(
+          "/#/user/search/" +
+            hrefStr.substring(hrefStr.indexOf("0x"), hrefStr.length)
+        );
+      }
+    } else if (
+      hrefStr !== "/#/user/dashboard" &&
+      hrefStr !== "/#/user/home" &&
+      hrefStr !== "/#/user/search" &&
+      hrefStr !== "/#/user/node-manager" &&
+      hrefStr !== "/#/user/new-asset"
+    ) {
+      console.log("Rerouting...");
+      window.location.href = "/#/user/home";
+    }
+
+    window.ipfs = _ipfs;
+
+    buildWindowUtils(); // get the utils object and make it globally accessible
+
+    window.jdenticon_config = {
+      hues: [196],
+      lightness: {
+        color: [0.36, 0.7],
+        grayscale: [0.24, 0.82],
+      },
+      saturation: {
+        color: 0.75,
+        grayscale: 0.1,
+      },
+      backColor: "#ffffffff",
+    };
+
+    //Declare a few globals
+    window.sentPacket = {};
+
+    //Give me the desktop version
+    if (window.ethereum) {
+      handleEthereum();
+    } else {
+      console.log("In startup else clause");
+
+      window.addEventListener("ethereum#initialized", handleEthereum, {
+        once: true,
+      });
+
+      setTimeout(handleEthereum, 2000); // 2 seconds
+    }
+  };
+
   const handleImageClick = (image) => {
     setImage(image);
     setCookieTo(`${addr}sideBarImage`, image);
@@ -705,6 +659,17 @@ export default function Dashboard(props) {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+
+  const sidebarMinimize = () => {
+    setMiniActive(!miniActive);
+  };
+
+  const resizeFunction = () => {
+    if (window.innerWidth >= 960) {
+      setMobileOpen(false);
+    }
   };
 
   const getRoute = () => {
@@ -776,16 +741,6 @@ export default function Dashboard(props) {
     });
   };
 
-  const sidebarMinimize = () => {
-    setMiniActive(!miniActive);
-  };
-
-  const resizeFunction = () => {
-    if (window.innerWidth >= 960) {
-      setMobileOpen(false);
-    }
-  };
-
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return;
     let tempHash = varToHash;
@@ -821,7 +776,7 @@ export default function Dashboard(props) {
 
   //Count up user tokens, takes  "willSetup" bool to determine whether to call setupAssets() after count
   const setupTokenVals = (_arweave, _addr, _prufClient, options) => {
-    console.log({ addr: addr });
+    console.log({ addr: _addr });
     if (!_addr) return swal("Unable to reach user's wallet.");
     if (!options) options = {};
 
@@ -858,21 +813,16 @@ export default function Dashboard(props) {
       _prufClient.get.asset.balanceOf(_addr).then((e) => {
         setAssetBalance(e);
         if (Number(e) > 0) {
-          setIsAssetHolder(true);
           if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e);
-        } else {
-          setIsAssetHolder(false);
-        }
+        } 
       });
 
       _prufClient.get.node.balanceOf(_addr).then((e) => {
         setNodeBalance(e);
         if (Number(e) > 0) {
-          setIsAssetClassHolder(true);
           if (!options.justCount) getNodeIds(_addr, _prufClient, e);
         } else {
           setHeldNodeData([["No nodes held by user", "~", "~", "~"]]);
-          setIsAssetClassHolder(false);
         }
       });
 
@@ -947,10 +897,10 @@ export default function Dashboard(props) {
       cookies[`${_addr}dontCount`] &&
       cookies[`${_addr}dontCount`].includes(iteration)
     ) {
-      console.log(`Caught count exception ${iteration}`);
+      //console.log(`Caught count exception ${iteration}`);
       return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
     } else {
-      console.log({ iteration }, cookies[`${_addr}subNodes`]);
+      //console.log({ iteration }, cookies[`${_addr}subNodes`]);
     }
 
     _prufClient.get.node.tokenExists(String(iteration)).then((e) => {
@@ -962,9 +912,9 @@ export default function Dashboard(props) {
         }
         return buildSubNodes(_addr, _prufClient, iteration + 1, arr, subNodes);
       } else {
-        console.log(
-          `Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`
-        );
+        //console.log(
+        //  `Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`
+        //);
         console.log(`All nodes: ${arr}`);
         return getACsFromDB(_addr, _prufClient, arr);
       }
