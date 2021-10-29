@@ -1068,16 +1068,16 @@ export default function Dashboard(props) {
 
     //console.log(allNodes, allClassNames, rootArray)
 
-    for (let i = 0; i < allNodes.length; i++) {
-      _prufClient.get.node.record(String(allNodes[i])).then((e) => {
+    allNodes.forEach(node => {
+      _prufClient.get.node.record(String(node.id)).then((e) => {
         _nodeSets[String(rootArray[Number(e.root - 1)])].push({
-          id: allNodes[i].id,
-          name: allNodes[i].name
+          id: node.id,
+          name: node.name
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase()),
         });
       });
-    }
+    })
 
     console.log("Class Sets: ", _nodeSets);
     setRoots(rootArray);
