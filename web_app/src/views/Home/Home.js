@@ -91,47 +91,8 @@ export default function Home(props) {
     }
   }, []);
 
-  // const rootLogin = event => {
-  //   setRoot(event.target.value)
-  //   if (event.target.value !== "") {
-  //     setloginRootState("success");
-  //   } else {
-  //     setloginRootState("error");
-  //   }
-
-  //   setloginRoot(event.target.value);
-
-  //   if (event.target.value === "101") {
-  //     setRootName("Electronics")
-  //   }
-  //   if (event.target.value === "102") {
-  //     setRootName("Collectables")
-  //   }
-  //   if (event.target.value === "103") {
-  //     setRootName("Transportation")
-  //   }
-  //   if (event.target.value === "104") {
-  //     setRootName("Virtual")
-  //   }
-  //   if (event.target.value === "105") {
-  //     setRootName("Other")
-  //   }
-  // };
-
   const clearPRUFForm = () => {
-    setDeposit(10000);
-
-    setloginDepositState("");
   };
-
-  // const clearACFrom = () => {
-  //     setRoot('')
-  //     setRootName('')
-  //     setACName('')
-
-  //     setloginRootState('')
-  //     setloginACNameState('')
-  // }
 
   const purchasePRUF = async () => {
     setPrufTransactionActive(true);
@@ -191,8 +152,6 @@ export default function Home(props) {
 
     return clearPRUFForm();
   };
-
-  // const mintID = () => {};
 
   const refreshBalances = () => {
     if (!props.addr) return;
