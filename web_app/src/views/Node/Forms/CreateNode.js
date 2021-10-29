@@ -34,7 +34,7 @@ export default function CreateNode(props) {
   if (!window.sentPacket) window.sentPacket = {};
 
   const [transactionActive, setTransactionActive] = React.useState(false);
-  const [transactionActiveID, setTransactionIDActive] = React.useState(false);
+  // const [transactionActiveID, setTransactionIDActive] = React.useState(false);
 
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState("");
@@ -44,7 +44,7 @@ export default function CreateNode(props) {
   const [txStatus, setTxStatus] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
-  const [mintedID, setMintedID] = React.useState(false);
+  // const [mintedID, setMintedID] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
   const [selectedRootID, setSelectedRootID] = React.useState("");
   const [extDataUploading, setExtDataUploading] = React.useState(false);
@@ -144,7 +144,7 @@ export default function CreateNode(props) {
     setSelectedRootID(e.target.value);
   };
 
-  const IDHolderPrompt = () => {};
+  // const IDHolderPrompt = () => {};
 
   const thousandHashesOf = (varToHash) => {
     if (!window.web3) return (window.location.href = "/#/user/home");
@@ -380,7 +380,7 @@ export default function CreateNode(props) {
             <form>
               {/* eslint-disable-next-line react/prop-types */}
               <>
-                {!transactionActive && !transactionActiveID && (
+                {!transactionActive && (
                   <>
                     <h5 className="costsText">Cost: ü{props.currentACPrice}</h5>
                     <CustomInput
@@ -436,7 +436,7 @@ export default function CreateNode(props) {
                     </div>
                   </>
                 )}
-                {transactionActive && !transactionActiveID && (
+                {transactionActive && (
                   <>
                     <CustomInput
                       labelText={name}
@@ -461,7 +461,7 @@ export default function CreateNode(props) {
                   </>
                 )}
               </>
-              {!transactionActive && !transactionActiveID && (
+              {!transactionActive && (
                 <div className="MLBGradientSubmit">
                   <Button
                     color="info"
@@ -472,7 +472,7 @@ export default function CreateNode(props) {
                   </Button>
                 </div>
               )}
-              {transactionActive && !transactionActiveID && (
+              {transactionActive && (
                 <h3>
                   Purchasing Node
                   <div className="lds-ellipsisIF">
@@ -482,7 +482,7 @@ export default function CreateNode(props) {
                   </div>
                 </h3>
               )}
-              {transactionActiveID && (
+              {/* {transactionActiveID && (
                 <h3>
                   Minting ID
                   <div className="lds-ellipsisIF">
@@ -491,7 +491,7 @@ export default function CreateNode(props) {
                     <div></div>
                   </div>
                 </h3>
-              )}
+              )} */}
             </form>
           </CardBody>
         </>

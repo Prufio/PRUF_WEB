@@ -49,7 +49,7 @@ export default function NewRecord(props) {
   const [rootSelect, setRootSelect] = React.useState("");
   const [classSelect, setClassSelect] = React.useState("");
   const [transactionActive, setTransactionActive] = React.useState(false);
-  const [IDtransactionActive, setIDtransactionActive] = React.useState(false);
+  // const [IDtransactionActive, setIDtransactionActive] = React.useState(false);
   const [ipfsActive, setIpfsActive] = React.useState(false);
   // eslint-disable-next-line no-unused-vars
   const [txStatus, setTxStatus] = React.useState(false);
@@ -59,7 +59,7 @@ export default function NewRecord(props) {
   const [submittedIdxHash, setSubmittedIdxHash] = React.useState("");
   const [isUploading, setIsUploading] = React.useState(false);
   const [NRCost, setNRCost] = React.useState("~");
-  const [mintedID, setMintedID] = React.useState(false);
+  // const [mintedID, setMintedID] = React.useState(false);
   const [selectedRootID, setSelectedRootID] = React.useState("");
   // eslint-disable-next-line no-unused-vars
   const [publicNode, setPublicNode] = React.useState(true);
@@ -226,12 +226,12 @@ export default function NewRecord(props) {
   const rootLogin = (e) => {
     if (!e.target.value) return setRootSelect("");
     // eslint-disable-next-line react/prop-types
-    if (!props.IDHolder && !mintedID) {
-      IDHolderPrompt();
-    } else {
+    // if (!props.IDHolder && !mintedID) {
+    //   IDHolderPrompt();
+    // } else {
       setRootSelect(e.target.value);
       setSelectedRootID(e.target.value);
-    }
+    // }
   };
 
   const ACLogin = (event) => {
@@ -266,7 +266,7 @@ export default function NewRecord(props) {
         });
   };
 
-  const IDHolderPrompt = () => {
+  // const IDHolderPrompt = () => {
     // // eslint-disable-next-line react/prop-types
     // if (!props.addr) {
     //   return swal({
@@ -360,7 +360,7 @@ export default function NewRecord(props) {
     //       break;
     //   }
     // });
-  };
+  // };
 
   const handleClick = () => {
     setIsUploading(true)
@@ -518,11 +518,11 @@ export default function NewRecord(props) {
       loginType === "" ||
       loginMake === "" ||
       loginModel === "" ||
-      loginSerial === "" 
-      // loginFirst === "" ||
-      // loginLast === "" ||
-      // loginID === "" ||
-      // loginPassword === ""
+      loginSerial === "" ||
+      loginFirst === "" ||
+      loginLast === "" ||
+      loginID === "" ||
+      loginPassword === ""
     ) {
       if (loginType === "") {
         setloginTypeState("error");
@@ -1035,7 +1035,7 @@ export default function NewRecord(props) {
         </Card>
       )}
       {/* eslint-disable-next-line react/prop-types */}
-      {props.IDHolder === undefined && props.prufClient !== undefined && (
+      {props.prufClient !== undefined && (
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
@@ -1059,8 +1059,7 @@ export default function NewRecord(props) {
         </Card>
       )}
       {/* eslint-disable-next-line react/prop-types */}
-      {props.IDHolder !== undefined &&
-        props.prufClient !== undefined &&
+      {props.prufClient !== undefined &&
         // eslint-disable-next-line react/prop-types
         props.nodeSets === undefined && (
           <Card>
@@ -1086,8 +1085,6 @@ export default function NewRecord(props) {
           </Card>
         )}
       {props.prufClient !== undefined &&
-        // eslint-disable-next-line react/prop-types
-        props.IDHolder !== undefined &&
         // eslint-disable-next-line react/prop-types
         props.nodeSets !== undefined && (
           <GridContainer>
@@ -1209,7 +1206,7 @@ export default function NewRecord(props) {
                   <br />
                 </Card>
               )}
-              {nodeId === "" && IDtransactionActive && (
+              {/* {nodeId === "" && IDtransactionActive && (
                 <Card>
                   <CardHeader icon>
                     <CardIcon className="headerIconBack">
@@ -1233,7 +1230,7 @@ export default function NewRecord(props) {
                   </CardBody>
                   <br />
                 </Card>
-              )}
+              )} */}
               {nodeId !== "" && (
                 <>
                   <GridItem xs={12} sm={12} md={6}>

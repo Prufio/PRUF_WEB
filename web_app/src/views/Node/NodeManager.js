@@ -638,7 +638,7 @@ export default function NodeManager(props) {
                                                                             selected:
                                                                                 classes.selectMenuItemSelected,
                                                                         }}
-                                                                        value={'/#/user/change-data'}
+                                                                        value={'/#/user/change-node-data'}
                                                                     >
                                                                         Update
                                                                         Data
