@@ -5,6 +5,7 @@ import swalReact from "@sweetalert/with-react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Check from "@material-ui/icons/Check";
+import { FiberManualRecordTwoTone } from "@material-ui/icons";
 
 // core components
 import Card from "components/Card/Card.js";
@@ -15,7 +16,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "components/CustomButtons/Button.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
-import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
 import {
@@ -45,13 +46,14 @@ export default function FinalizeNode(props) {
   // eslint-disable-next-line no-unused-vars
   const [txHash, setTxHash] = React.useState("");
 
-//   const [managementType, setManagementType] = React.useState("1");
-//   const [managementType1, setManagementType1] = React.useState(true);
-//   const [managementType2, setManagementType2] = React.useState(false);
+  //   const [managementType, setManagementType] = React.useState("1");
+  //   const [managementType1, setManagementType1] = React.useState(true);
+  //   const [managementType2, setManagementType2] = React.useState(false);
   const [storageProvider, setstorageProvider] = React.useState("1");
   const [storageProvider1, setstorageProvider1] = React.useState(true);
   const [storageProvider2, setstorageProvider2] = React.useState(false);
-  const [advancedNodePreferences, setAdvancedNodePreferences] = React.useState("2");
+  const [advancedNodePreferences, setAdvancedNodePreferences] =
+    React.useState(2);
   const [advancedNodePreferences1, setAdvancedNodePreferences1] =
     React.useState(true);
   const [advancedNodePreferences2, setAdvancedNodePreferences2] =
@@ -66,7 +68,7 @@ export default function FinalizeNode(props) {
     React.useState(false);
   const [card1, setCard1] = React.useState(true);
   const [card2, setCard2] = React.useState(false);
-//   const [card3, setCard3] = React.useState(false);
+  //   const [card3, setCard3] = React.useState(false);
 
   const [nodeInfo] = React.useState(
     JSON.parse(JSON.stringify(window.sentPacket))
@@ -111,17 +113,17 @@ export default function FinalizeNode(props) {
     window.location.href = nodeInfo.lastRef;
   };
 
-//   const setManagementType1Button = () => {
-//     setManagementType("1");
-//     setManagementType1(true);
-//     setManagementType2(false);
-//   };
+  //   const setManagementType1Button = () => {
+  //     setManagementType("1");
+  //     setManagementType1(true);
+  //     setManagementType2(false);
+  //   };
 
-//   const setManagementType2Button = () => {
-//     setManagementType("2");
-//     setManagementType1(false);
-//     setManagementType2(true);
-//   };
+  //   const setManagementType2Button = () => {
+  //     setManagementType("2");
+  //     setManagementType1(false);
+  //     setManagementType2(true);
+  //   };
 
   const setstorageProvider1Button = () => {
     setstorageProvider("1");
@@ -155,33 +157,33 @@ export default function FinalizeNode(props) {
 
   const setNodePreferences = (pos) => {
     if (pos === 1 && advancedNodePreferences1 === true) {
-      setAdvancedNodePreferences(advancedNodePreferences - 2);
+      setAdvancedNodePreferences(Number(advancedNodePreferences - 2));
       setAdvancedNodePreferences1(false);
-      console.log(advancedNodePreferences);
+      console.log(advancedNodePreferences - 2);
     } else if (pos === 1 && advancedNodePreferences1 === false) {
-      setAdvancedNodePreferences(advancedNodePreferences + 2);
+      setAdvancedNodePreferences(Number(advancedNodePreferences + 2));
       setAdvancedNodePreferences1(true);
-      console.log(advancedNodePreferences);
+      console.log(advancedNodePreferences + 2);
     }
 
     if (pos === 2 && advancedNodePreferences2 === true) {
-      setAdvancedNodePreferences(advancedNodePreferences - 64);
+      setAdvancedNodePreferences(Number(advancedNodePreferences - 64));
       setAdvancedNodePreferences2(false);
-      console.log(advancedNodePreferences);
+      console.log(advancedNodePreferences - 64);
     } else if (pos === 2 && advancedNodePreferences2 === false) {
-      setAdvancedNodePreferences(advancedNodePreferences + 64);
+      setAdvancedNodePreferences(Number(advancedNodePreferences + 64));
       setAdvancedNodePreferences2(true);
-      console.log(advancedNodePreferences);
+      console.log(advancedNodePreferences + 64);
     }
 
     if (pos === 3 && advancedNodePreferences3 === true) {
-      setAdvancedNodePreferences(advancedNodePreferences - 128);
+      setAdvancedNodePreferences(Number(advancedNodePreferences - 128));
       setAdvancedNodePreferences3(false);
-      console.log(advancedNodePreferences);
+      console.log(advancedNodePreferences - 128);
     } else if (pos === 3 && advancedNodePreferences3 === false) {
-      setAdvancedNodePreferences(advancedNodePreferences + 128);
+      setAdvancedNodePreferences(Number(advancedNodePreferences + 128));
       setAdvancedNodePreferences3(true);
-      console.log(advancedNodePreferences);
+      console.log(advancedNodePreferences + 128);
     }
   };
 
@@ -193,8 +195,9 @@ export default function FinalizeNode(props) {
     //   setCard2(false);
     //   setCard3(true);
     // }
-    setCard1(false)
-    setCard2(true)
+    console.log(advancedNodePreferences);
+    setCard1(false);
+    setCard2(true);
     // props.ps.element.scrollTop = 0;
   };
 
@@ -206,8 +209,8 @@ export default function FinalizeNode(props) {
     //   setCard3(false);
     //   setCard2(true);
     // }
-    setCard2(false)
-    setCard1(true)
+    setCard2(false);
+    setCard1(true);
     // props.ps.element.scrollTop = 0;
   };
 
@@ -245,30 +248,33 @@ export default function FinalizeNode(props) {
               )}
             </h4>
           </div>
-          <h4 className="alertText">
-            Advanced Node data selected:
-            {advancedNodePreferences1 === true && (
-              <div className="delegationTips">
-                <h4 className="alertText">
-                  Allow users to set their own permanent data to their assets.
-                </h4>
-              </div>
-            )}
-            {advancedNodePreferences2 === true && (
-              <div className="delegationTips">
-                <h4 className="alertText">
-                  Allow assigned addresses to be asset minters.
-                </h4>
-              </div>
-            )}
-            {advancedNodePreferences3 === true && (
-              <div className="delegationTips">
-                <h4 className="alertText">
-                  Allow assets to be minted to assigned asset minters.
-                </h4>
-              </div>
-            )}
-          </h4>
+          <div className="delegationTips">
+            <h4 className="alertText">Advanced Node Data Selected:</h4>
+          </div>
+          {advancedNodePreferences1 === true && (
+            <div className="delegationTips">
+              <FiberManualRecordTwoTone className="delegationPin" />
+              <h4 className="alertTextSm">
+                Allow users to set their own permanent data to their assets.
+              </h4>
+            </div>
+          )}
+          {advancedNodePreferences2 === true && (
+            <div className="delegationTips">
+              <FiberManualRecordTwoTone className="delegationPin" />
+              <h4 className="alertTextSm">
+                Allow assigned addresses to be asset minters.
+              </h4>
+            </div>
+          )}
+          {advancedNodePreferences3 === true && (
+            <div className="delegationTips">
+              <FiberManualRecordTwoTone className="delegationPin" />
+              <h4 className="alertTextSm">
+                Allow assets to be minted to assigned asset minters.
+              </h4>
+            </div>
+          )}
         </Card>
       ),
       buttons: {
@@ -581,11 +587,8 @@ export default function FinalizeNode(props) {
           </CardHeader>
           <GridContainer>
             <GridItem xs={12} sm={4}>
-              <Card>
-                <div
-                  className={classes.checkboxAndRadio}
-                  onmouseover={hover1()}
-                >
+              <Card className="bumpLeft">
+                <div className={classes.checkboxAndRadio} onMouseOver={hover1}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -594,6 +597,7 @@ export default function FinalizeNode(props) {
                         checked={
                           advancedNodePreferences1 === true ? true : false
                         }
+                        className="bumpLeft"
                         checkedIcon={<Check className={classes.checkedIcon} />}
                         icon={<Check className={classes.uncheckedIcon} />}
                         classes={{
@@ -610,11 +614,8 @@ export default function FinalizeNode(props) {
                   />
                 </div>
               </Card>
-              <Card>
-                <div
-                  className={classes.checkboxAndRadio}
-                  onmouseover={hover2()}
-                >
+              <Card className="bumpLeft">
+                <div className={classes.checkboxAndRadio} onMouseOver={hover2}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -622,6 +623,7 @@ export default function FinalizeNode(props) {
                         checked={
                           advancedNodePreferences2 === true ? true : false
                         }
+                        className="bumpLeft"
                         onClick={() => setNodePreferences(2)}
                         checkedIcon={<Check className={classes.checkedIcon} />}
                         icon={<Check className={classes.uncheckedIcon} />}
@@ -639,11 +641,8 @@ export default function FinalizeNode(props) {
                   />
                 </div>
               </Card>
-              <Card>
-                <div
-                  className={classes.checkboxAndRadio}
-                  onmouseover={hover3()}
-                >
+              <Card className="bumpLeft">
+                <div className={classes.checkboxAndRadio} onMouseOver={hover3}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -651,6 +650,7 @@ export default function FinalizeNode(props) {
                         checked={
                           advancedNodePreferences3 === true ? true : false
                         }
+                        className="bumpLeft"
                         onClick={() => setNodePreferences(3)}
                         checkedIcon={<Check className={classes.checkedIcon} />}
                         icon={<Check className={classes.uncheckedIcon} />}
@@ -672,29 +672,45 @@ export default function FinalizeNode(props) {
             <GridItem xs={12} sm={8}>
               <Card className="slide-right">
                 {advancedNodePreferencesHover1 && (
-                  <p>
-                    If set, under the condition that permanent data is not
-                    attatched to an asset upon minting, the holder of the asset
-                    will be permitted to set their own permanent data at their
-                    leisure. Otherwise, the permanent data attatched to an asset
-                    must be done so upon the minting of an asset. Once the
-                    permanent data fields are set, they cannot be edited or
-                    removed from an asset unless under extraneous circumstances.
-                  </p>
+                  <>
+                    <h3>
+                      Allow users to set their own permanent data to their
+                      assets.
+                    </h3>
+                    <p>
+                      If set, under the condition that permanent data is not
+                      attatched to an asset upon minting, the holder of the
+                      asset will be permitted to set their own permanent data at
+                      their leisure. Otherwise, the permanent data attatched to
+                      an asset must be done so upon the minting of an asset.
+                      Once the permanent data fields are set, they cannot be
+                      edited or removed from an asset unless under extraneous
+                      circumstances.
+                    </p>
+                  </>
                 )}
                 {advancedNodePreferencesHover2 && (
-                  <p>
-                    If set, only permitted addresses will be allowed to mint
-                    tokens under this node. Otherwise the Node holder will be
-                    the only authorized minter.
-                  </p>
+                  <>
+                    <h3>Allow assigned addresses to be asset minters.</h3>
+                    <p>
+                      If set, only permitted addresses will be allowed to mint
+                      tokens under this node. Otherwise the Node holder will be
+                      the only authorized minter.
+                    </p>
+                  </>
                 )}
                 {advancedNodePreferencesHover3 && (
-                  <p>
-                    If set, permissioned minting addresses under this node will
-                    be the reciever of any assets they mint. Otherwise all
-                    assets will mint to the Node holder address upon minting.
-                  </p>
+                  <>
+                    <h3>
+                      Allow assets to be minted to assigned asset minters.
+                    </h3>
+                    <p>
+                      If set, permissioned minting addresses under this node
+                      will be the reciever of any assets they mint. Otherwise
+                      all assets will mint to the Node holder address upon
+                      minting.
+                    </p>
+                  </>
                 )}
               </Card>
             </GridItem>
@@ -738,9 +754,9 @@ export default function FinalizeNode(props) {
               <Button
                 className="MLBGradient"
                 onClick={() => previousCard()}
-                icon
+                // icon
               >
-                {" "}
+                {/* {" "} */}
                 <KeyboardArrowLeft />
                 Back
               </Button>

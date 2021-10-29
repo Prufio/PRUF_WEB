@@ -980,8 +980,12 @@ cursor:pointer;
 }
 
 .bump {
-  margin-left: 15px;
+  margin-left: 15px !important;
   margin-top: -20px;
+}
+
+.bumpLeft {
+  margin-left: 15px !important;
 }
 
 .dashboardAssetImage {
@@ -1403,6 +1407,10 @@ max-width: 80px !important;
 .alertText {
   margin-left: 5px;
   font-weight: bold;
+}
+
+.alertTextSm {
+  font-size: 12px;
 }
 
 .space {
