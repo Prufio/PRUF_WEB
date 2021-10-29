@@ -65,61 +65,61 @@ var dashRoutes = [
     component: NodeManager,
     layout: "/user",
   },
-  {
-    name: "Recycle Asset",
-    path: "/recycle-asset",
-    component: Recycle,
-    layout: "/user",
-  },
+  // {
+  //   name: "Recycle Asset",
+  //   path: "/recycle-asset",
+  //   component: Recycle,
+  //   layout: "/user",
+  // },
 
-  {
-    name: "Discard Asset",
-    path: "/discard-asset",
-    component: Discard,
-    layout: "/user",
-  },
+  // {
+  //   name: "Discard Asset",
+  //   path: "/discard-asset",
+  //   component: Discard,
+  //   layout: "/user",
+  // },
   // {
   //   name: "New Asset",
   //   path: "/escrow-manager",
   //   component: EscrowManager,
   //   layout: "/user"
   // },
-  {
-    name: "Export Asset",
-    path: "/export-asset",
-    component: Export,
-    layout: "/user",
-  },
-  {
-    name: "Import Asset",
-    path: "/import-asset",
-    component: Import,
-    layout: "/user",
-  },
+  // {
+  //   name: "Export Asset",
+  //   path: "/export-asset",
+  //   component: Export,
+  //   layout: "/user",
+  // },
+  // {
+  //   name: "Import Asset",
+  //   path: "/import-asset",
+  //   component: Import,
+  //   layout: "/user",
+  // },
   {
     name: "Update Asset Info",
     path: "/modify-description",
     component: ModifyDescription,
     layout: "/user",
   },
-  {
-    name: "Set For Sale",
-    path: "/set-for-sale",
-    component: SetForSale,
-    layout: "/user",
-  },
+  // {
+  //   name: "Set For Sale",
+  //   path: "/set-for-sale",
+  //   component: SetForSale,
+  //   layout: "/user",
+  // },
   {
     name: "Update Status",
     path: "/modify-status",
     component: ModifyStatus,
     layout: "/user",
   },
-  {
-    name: "Update Owner",
-    path: "/modify-rightsholder",
-    component: ModifyRGT,
-    layout: "/user",
-  },
+  // {
+  //   name: "Update Owner",
+  //   path: "/modify-rightsholder",
+  //   component: ModifyRGT,
+  //   layout: "/user",
+  // },
   {
     name: "Transfer Asset",
     path: "/transfer-asset",
@@ -140,7 +140,7 @@ var dashRoutes = [
   },
   {
     name: "Change Data",
-    path: "/change-data",
+    path: "/change-node-data",
     component: ChangeNodeData,
     layout: "/user",
   },

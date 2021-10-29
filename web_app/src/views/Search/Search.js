@@ -191,9 +191,9 @@ export default function Search(props) {
   }, [props.prufClient, query, window.location.href]);
 
   const ACLogin = (event) => {
-    if (!props.IDHolder) {
-      IDHolderPrompt();
-    } else {
+    // if (!props.IDHolder) {
+    //   IDHolderPrompt();
+    // } else {
       try {
         props.prufClient.get.node.name(event.target.value).then((x) => {
           let str = x
@@ -218,12 +218,12 @@ export default function Search(props) {
           },
         });
       }
-    }
+    // }
   };
 
-  const IDHolderPrompt = () => {
+  // const IDHolderPrompt = () => {
 
-  };
+  // };
 
   const showImage = (e) => {
     setSelectedImage(e);
@@ -2796,7 +2796,7 @@ export default function Search(props) {
                           </Card>
                         )}
                         {/* eslint-disable-next-line react/prop-types */}
-                        {props.IDHolder === undefined && props.prufClient !== undefined && props.addr && (
+                        {props.prufClient !== undefined && props.addr && (
                           <Card>
                             <CardHeader icon>
                               <CardIcon className="headerIconBack">
@@ -2820,8 +2820,7 @@ export default function Search(props) {
                           </Card>
                         )}
                         {/* eslint-disable-next-line react/prop-types */}
-                        {props.IDHolder !== undefined &&
-                          props.prufClient !== undefined &&
+                        {props.prufClient !== undefined &&
                           // eslint-disable-next-line react/prop-types
                           props.nodeSets === undefined && (
                             <Card>
@@ -2846,109 +2845,11 @@ export default function Search(props) {
                               <br />
                             </Card>
                           )}
-                        {props.IDHolder !== undefined &&
-                          props.prufClient !== undefined &&
+                        {props.prufClient !== undefined &&
                           props.nodeSets !== undefined && (
                             <>
                               <>
-                                {nodeId === "" && transactionActive && (
-                                  <Card>
-                                    <CardHeader icon>
-                                      <CardIcon className="headerIconBack">
-                                        <Category />
-                                      </CardIcon>
-                                      <h4 className={classes.cardIconTitle}>
-                                        Select Node
-                                  </h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                      <form>
-                                        <h3>
-                                          Creating ID
-                                      <div className="lds-ellipsisIF">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                          </div>
-                                        </h3>
-                                      </form>
-                                    </CardBody>
-                                    <br />
-                                  </Card>
-                                )}
-                                {nodeId === "" && !transactionActive && props.IDHolder === false && (
-                                  <Card>
-                                    <CardHeader icon>
-                                      <CardIcon className="headerIconBack">
-                                        <Category />
-                                      </CardIcon>
-                                      <h4 className={classes.cardIconTitle}>
-                                        Select Node
-                                  </h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                      <form>
-                                        <FormControl
-                                          fullWidth
-                                          className={classes.selectFormControl}
-                                        >
-                                          {selectedRootID === "" ? (
-                                            <>
-                                              <InputLabel>
-                                                Select Node
-                                          </InputLabel>
-                                              <Select
-                                                disabled
-                                                MenuProps={{
-                                                  className: classes.selectMenu,
-                                                }}
-                                                classes={{
-                                                  select: classes.select,
-                                                }}
-                                                value={classSelect}
-                                                onChange={() => { }}
-                                                inputProps={{
-                                                  name: "classSelect",
-                                                  id: "class-select",
-                                                }}
-                                              ></Select>
-                                            </>
-                                          ) : (
-                                            <>
-                                              <InputLabel>
-                                                Select Node
-                                          </InputLabel>
-                                              <Select
-                                                MenuProps={{
-                                                  className: classes.selectMenu,
-                                                }}
-                                                classes={{
-                                                  select: classes.select,
-                                                }}
-                                                value={classSelect}
-                                                onChange={(e) => {
-                                                  ACLogin(e);
-                                                }}
-                                                inputProps={{
-                                                  name: "classSelect",
-                                                  id: "class-select",
-                                                }}
-                                              >
-                                                {generateSubCatList(
-                                                  props.nodeSets[
-                                                  selectedRootID
-                                                  ]
-                                                )}
-                                              </Select>
-                                            </>
-                                          )}
-                                        </FormControl>
-                                      </form>
-                                    </CardBody>
-                                    <br />
-                                  </Card>
-                                )}
-                                {nodeId === "" && !transactionActive && props.IDHolder === true && (
+                                {nodeId === "" && !transactionActive &&(
                                   <Card>
                                     <CardHeader icon>
                                       <CardIcon className="headerIconBack">
@@ -3021,7 +2922,7 @@ export default function Search(props) {
                                   </Card>
                                 )}
                               </>
-                              {props.IDHolder === true && nodeId !== "" && (
+                              {nodeId !== "" && (
                                 <Card>
                                   <CardHeader icon>
                                     <CardIcon className="headerIconBack">

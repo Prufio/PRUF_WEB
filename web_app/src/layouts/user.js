@@ -58,7 +58,7 @@ export default function Dashboard(props) {
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
-  const [isIDHolder, setIsIDHolder] = React.useState();
+  // const [isIDHolder, setIsIDHolder] = React.useState();
   const [sidebarRoutes, setSidebarRoutes] = React.useState([
     routes[0],
     routes[1],
@@ -84,7 +84,7 @@ export default function Dashboard(props) {
     ["Loading Nodes...", "~", "~", "~"],
   ]);
   const [nodeExtData, setNodeExtData] = React.useState();
-  const [IDBalance, setIDBalance] = React.useState("0");
+  // const [IDBalance, setIDBalance] = React.useState("0");
   const [cookies, setCookie, removeCookie] = useCookies(["nodeList"]);
   const [hasFetchedBalances, setHasFetchedBalances] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(false);
@@ -167,7 +167,7 @@ export default function Dashboard(props) {
       setPrufClient(_prufClient);
       setUpEnvironment(_prufClient);
       awaitPrufInitNoAddress(_prufClient);
-      setIsIDHolder(false);
+      // setIsIDHolder(false);
 
       window.web3 = web3;
       return setIsMounted(true);
@@ -328,7 +328,7 @@ export default function Dashboard(props) {
 
         console.log(_prufClient);
         setPrufClient(_prufClient);
-        setIsIDHolder(false);
+        // setIsIDHolder(false);
 
         if (_prufClient.network.name === "kovan") {
           window.isKovan = true;
@@ -760,7 +760,7 @@ export default function Dashboard(props) {
                 assets={assetBalance}
                 nodes={nodeIdBalance}
                 currentACPrice={currentACPrice}
-                IDHolder={isIDHolder}
+                // IDHolder={isIDHolder}
                 simpleAssetView={simpleAssetView}
                 winKey={winKey}
                 prufClient={prufClient}

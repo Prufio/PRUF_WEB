@@ -192,7 +192,7 @@ export default function Home(props) {
     return clearPRUFForm();
   };
 
-  const mintID = () => {};
+  // const mintID = () => {};
 
   const refreshBalances = () => {
     if (!props.addr) return;
