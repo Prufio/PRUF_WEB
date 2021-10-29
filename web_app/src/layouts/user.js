@@ -58,6 +58,7 @@ export default function Dashboard(props) {
   const [isAssetHolder, setIsAssetHolder] = React.useState(false);
   const [isAssetClassHolder, setIsAssetClassHolder] = React.useState(false);
   const [simpleAssetView, setSimpleAssetView] = React.useState(false);
+  const [hasBeenNotified, setHasBeenNotified] = React.useState(false);
   // const [isIDHolder, setIsIDHolder] = React.useState();
   const [sidebarRoutes, setSidebarRoutes] = React.useState([
     routes[0],
@@ -141,6 +142,26 @@ export default function Dashboard(props) {
     }
 
     if (cookies) checkForCookies();
+
+    window.addEventListener("refresh", () => setReplaceAssetData(replaceAssetData + 1));
+    window.addEventListener("connectArweave", () => {
+      if (!window.arweaveWallet) {
+        return swal(
+          "We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back."
+        );
+      }
+  
+      swal(
+        "You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet."
+      ).then(() => {
+        window.arweaveWallet.connect([
+          `ACCESS_ADDRESS`,
+          `SIGN_TRANSACTION`,
+          `ENCRYPT`,
+          `DECRYPT`,
+        ]);
+      });
+    });
 
     if (!isMobile)
       setSidebarRoutes([routes[0], routes[2], routes[1], routes[3], routes[4]]);
@@ -297,7 +318,7 @@ export default function Dashboard(props) {
   };
 
   const checkForCookies = () => {
-    if (!cookies.hasBeenNotified) {
+    if (!cookies.hasBeenNotified && !hasBeenNotified) {
       swal({
         title: "Cookies on pruf.io",
         text: "This site uses minimal cookies to offer you optimal performance and loading times. By using this application you agree to their use.",
@@ -309,11 +330,6 @@ export default function Dashboard(props) {
             className: "moreCookieInfo",
           },
 
-          /* decline: {
-            text: "Decline Use",
-            value: "decline",
-            className: "declineCookies",
-          }, */
 
           accept: {
             text: "Accept and continue",
@@ -325,6 +341,7 @@ export default function Dashboard(props) {
         switch (value) {
           case "accept":
             setCookieTo("hasBeenNotified", true);
+            setHasBeenNotified(true)
             break;
 
           case "moreInfo":
@@ -332,11 +349,6 @@ export default function Dashboard(props) {
               title: "Cookies on app.pruf.io",
               text: "Cookies are small packets of user data that are created and stored in the browser. We use cookes to provide a seamless and fast dApp experience while maintaining user privacy. We do not store or share your data with anyone.",
               buttons: {
-                decline: {
-                  text: "Decline Use",
-                  value: "decline",
-                  className: "declineCookies",
-                },
                 accept: {
                   text: "Accept and continue",
                   value: "accept",
@@ -347,20 +359,13 @@ export default function Dashboard(props) {
               switch (value) {
                 case "accept":
                   setCookieTo("hasBeenNotified", true);
-                  break;
-
-                case "decline":
-                  setCookieTo("hasBeenNotified", false);
+                  setHasBeenNotified(true)
                   break;
 
                 default:
                   break;
               }
             });
-            break;
-
-          case "decline":
-            setCookieTo("hasBeenNotified", false);
             break;
 
           default:
@@ -510,29 +515,6 @@ export default function Dashboard(props) {
       return handleNoEthereum();
     }
   };
-
-  const refreshHandler = async () => {
-    await setReplaceAssetData(replaceAssetData + 1);
-  };
-
-  // const connectArweave = () => {
-  //   if (!window.arweaveWallet) {
-  //     return swal(
-  //       "We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back."
-  //     );
-  //   }
-
-  //   swal(
-  //     "You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet."
-  //   ).then(() => {
-  //     window.arweaveWallet.connect([
-  //       `ACCESS_ADDRESS`,
-  //       `SIGN_TRANSACTION`,
-  //       `ENCRYPT`,
-  //       `DECRYPT`,
-  //     ]);
-  //   });
-  // };
 
   // if (window.ethereum && !window.populatedListeners) {
   //   window.addEventListener("chainListener", chainListener, { once: true });
