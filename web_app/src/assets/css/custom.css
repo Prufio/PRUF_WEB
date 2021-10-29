@@ -189,6 +189,7 @@ body {
 }
 
 .functionSelectorIcon {
+  color:black !important;
   left: -25px !important;
   bottom: -2px !important;
     position: absolute !important;
