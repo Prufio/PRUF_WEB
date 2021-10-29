@@ -55,13 +55,13 @@ export default function FinalizeNode(props) {
   const [advancedNodePreferences, setAdvancedNodePreferences] =
     React.useState(2);
   const [advancedNodePreferences1, setAdvancedNodePreferences1] =
-    React.useState(true);
+    React.useState(false);
   const [advancedNodePreferences2, setAdvancedNodePreferences2] =
     React.useState(false);
   const [advancedNodePreferences3, setAdvancedNodePreferences3] =
     React.useState(false);
   const [advancedNodePreferencesHover1, setAdvancedNodePreferencesHover1] =
-    React.useState(true);
+    React.useState(false);
   const [advancedNodePreferencesHover2, setAdvancedNodePreferencesHover2] =
     React.useState(false);
   const [advancedNodePreferencesHover3, setAdvancedNodePreferencesHover3] =
@@ -587,7 +587,7 @@ export default function FinalizeNode(props) {
           </CardHeader>
           <GridContainer>
             <GridItem xs={12} sm={4}>
-              <Card className="bumpLeft">
+              <Card className="anpCard">
                 <div className={classes.checkboxAndRadio} onMouseOver={hover1}>
                   <FormControlLabel
                     control={
@@ -607,14 +607,14 @@ export default function FinalizeNode(props) {
                       />
                     }
                     classes={{
-                      label: classes.label,
+                      label: classes.labelANP,
                       root: classes.labelRoot,
                     }}
                     label="Allow users to set their own permanent data."
                   />
                 </div>
               </Card>
-              <Card className="bumpLeft">
+              <Card className="anpCard">
                 <div className={classes.checkboxAndRadio} onMouseOver={hover2}>
                   <FormControlLabel
                     control={
@@ -634,14 +634,14 @@ export default function FinalizeNode(props) {
                       />
                     }
                     classes={{
-                      label: classes.label,
+                      label: classes.labelANP,
                       root: classes.labelRoot,
                     }}
                     label="Delegate minting authority to other accounts."
                   />
                 </div>
               </Card>
-              <Card className="bumpLeft">
+              <Card className="anpCard">
                 <div className={classes.checkboxAndRadio} onMouseOver={hover3}>
                   <FormControlLabel
                     control={
@@ -661,7 +661,7 @@ export default function FinalizeNode(props) {
                       />
                     }
                     classes={{
-                      label: classes.label,
+                      label: classes.labelANP,
                       root: classes.labelRoot,
                     }}
                     label="Mint to delegated minters"

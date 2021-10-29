@@ -792,9 +792,9 @@ export default function NodeManager(props) {
                                                         <form>
                                                             <FormControl className="nodeOptions">
                                                                 <InputLabel className="functionSelectorText">
-                                                                    <Danger>
+                                                                    {/* <Danger> */}
                                                                         <Settings className="functionSelectorIcon" />
-                                                                    </Danger>
+                                                                    {/* </Danger> */}
                                                                     Options
                                                                 </InputLabel>
                                                                 <Select

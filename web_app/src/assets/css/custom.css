@@ -989,6 +989,15 @@ cursor:pointer;
   margin-left: 15px !important;
 }
 
+.anpCard {
+  margin-left: 15px !important;
+}
+
+.anpCard:hover {
+  background: #00aaff2f !important;
+  margin-left: 15px !important;
+}
+
 .dashboardAssetImage {
   object-fit: cover !important;
   padding: none !important;
