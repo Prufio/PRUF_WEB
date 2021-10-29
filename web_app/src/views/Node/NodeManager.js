@@ -214,9 +214,7 @@ export default function NodeManager(props) {
             console.log('props.nodeExtData', props.nodeExtData)
 
             // eslint-disable-next-line react/prop-types
-            props.prufClient.get
-                // eslint-disable-next-line react/prop-types
-                .nodeName(props.nodeExtData[index].root)
+            props.prufClient.get.node.name(props.nodeExtData[index].root)
                 .then(e => {
                     tempObj.name = props.nodeExtData[index].name
                     tempObj.id = props.nodeExtData[index].id
