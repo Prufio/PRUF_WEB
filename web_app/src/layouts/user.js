@@ -1227,13 +1227,13 @@ export default function Dashboard(props) {
                   let str = new TextDecoder("utf-8").decode(chunk);
                   try {
                     rec.nonmutableStorage = JSON.parse(str);
+                    setCookieTo(
+                      window.web3.utils.soliditySha3(query),
+                      rec.nonmutableStorage
+                    );
                   } catch {
                     rec.nonmutableStorage = str;
                   }
-                  setCookieTo(
-                    window.web3.utils.soliditySha3(query),
-                    JSON.parse(str)
-                  );
                   getMutableOf(rec, _prufClient, _arweave);
                 }
               }

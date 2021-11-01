@@ -360,6 +360,7 @@ export default function Dashboard(props) {
   };
 
   const generateThumbs = (obj) => {
+    return []
     let component = [],
       photos = Object.values(obj.photo);
     //console.log("photos", photos)
@@ -435,12 +436,12 @@ export default function Dashboard(props) {
     switch(status) {
       case "50" : {
         opt = [
-          {
-            dis: true,
-            msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -492,12 +493,12 @@ export default function Dashboard(props) {
         ]; break
       } case "51" : {
         opt = [
-          {
-            dis: false,
-            msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: false,
             msg: `Transfer`,
@@ -549,12 +550,12 @@ export default function Dashboard(props) {
         ]; break
       } case "52" : {
         opt = [
-          {
-            dis: false,
-            msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -606,12 +607,12 @@ export default function Dashboard(props) {
         ]; break
       } case "53" : {
         opt = [
-          {
-            dis: true,
-            msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -663,12 +664,12 @@ export default function Dashboard(props) {
         ]; break
       } case "54" : {
         opt = [
-          {
-            dis: true,
-            msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -720,12 +721,12 @@ export default function Dashboard(props) {
         ]; break
       } case "56" : {
         opt = [
-          {
-            dis: true,
-            msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -777,12 +778,12 @@ export default function Dashboard(props) {
         ]; break
       } case "57" : {
         opt = [
-          {
-            dis: false,
-            msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -834,12 +835,12 @@ export default function Dashboard(props) {
         ]; break
       } case "58" : {
         opt = [
-          {
-            dis: false,
-            msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -891,12 +892,12 @@ export default function Dashboard(props) {
         ]; break
       } case "59" : {
         opt = [
-          {
-            dis: false,
-            msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -948,12 +949,12 @@ export default function Dashboard(props) {
         ]; break
       } case "70" : {
         opt = [
-          {
-            dis: false,
-            msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -1119,8 +1120,8 @@ export default function Dashboard(props) {
       }
     }
     if (costId !== null) {
-      props.prufClient.get
-        .operationCost(selectedAssetObj.nodeId, costId)
+      props.prufClient.get.node
+        .invoiceForOperation(selectedAssetObj.nodeId, costId)
         .then(e => {
             tempObj.opCost = e.total
             window.sentPacket = JSON.parse(JSON.stringify(tempObj))
@@ -1243,7 +1244,7 @@ export default function Dashboard(props) {
                       {selectedAssetObj.nodeData.storageProvider === "2" && (
                         <Tooltip title="See it on ARweave">
                           <a
-                            href={`${selectedAssetObj.ContentUrl}`}
+                            href={`${selectedAssetObj.displayImage}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -1332,17 +1333,17 @@ export default function Dashboard(props) {
               )}
             </>
             <CardBody>
-              {Object.values(selectedAssetObj.photo).length > 1 && (
+              {/* {Object.values(selectedAssetObj.photo).length > 1 && (
                 <div className="imageSelector">
                   {generateThumbs(selectedAssetObj)}
                 </div>
-              )}
+              )} */}
               <div className="horizontal">
                 <h4 className={classes.cardTitleContent}>
                   Name:&nbsp;
             </h4>
                 <h4 className={classes.cardTitle}>
-                  {selectedAssetObj.name}
+                  {selectedAssetObj.nonMutableStorage.name}
                 </h4>
               </div>
               <div className="horizontal">
@@ -1354,7 +1355,7 @@ export default function Dashboard(props) {
                 </h4>
               </div>
 
-              {selectedAssetObj.currency === "0" && (
+              {/* {selectedAssetObj.currency === "0" && (
                 <div className="horizontal">
                   <h4 className={classes.cardTitleContent}>
                     Status:&nbsp;
@@ -1394,8 +1395,8 @@ export default function Dashboard(props) {
                       </h4>
                     </div>
                   </>
-                )}
-              {selectedAssetObj.Description !== undefined && (
+                )} */}
+              {selectedAssetObj.nonMutableStorage.Description !== undefined && (
                 <>
                   <br />
                   <TextField
@@ -1403,14 +1404,14 @@ export default function Dashboard(props) {
                     label="Description"
                     multiline
                     rows={4}
-                    defaultValue={selectedAssetObj.Description}
+                    defaultValue={selectedAssetObj.nonMutableStorage.Description}
                     variant="outlined"
                     fullWidth
                     disabled
                   />
                 </>
               )}
-              {selectedAssetObj.Description === undefined && (
+              {selectedAssetObj.nonMutableStorage.Description === undefined && (
                 <TextField
                   id="outlined-multiline-static"
                   label="Description"
@@ -1426,7 +1427,7 @@ export default function Dashboard(props) {
                 <h6 className="storageProviderText">
                   See it on&nbsp;
                   <a
-                    href={`${selectedAssetObj.ContentUrl}`}
+                    href={`${selectedAssetObj.displayImage}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -1562,7 +1563,7 @@ export default function Dashboard(props) {
                 {!isMobile && (
                   <Printer
                     obj={{
-                      name: selectedAssetObj.name,
+                      name: selectedAssetObj.nonMutableStorage.name,
                       id: selectedAssetObj.id,
                       nodeName: selectedAssetObj.nodeName,
                     }}
