@@ -192,7 +192,7 @@ export default function Verify(props) {
       let idxHash = assetInfo.id;
   
       props.prufClient.utils.generateSecureRgt(
-        assetInfo.id,
+        idxHash,
         {
           first: first,
           middle: middle,
@@ -205,7 +205,7 @@ export default function Verify(props) {
         console.log("rgtHash", rgtHash);
         console.log("addr: ", window.addr);
         setTransaction(true);
-        props.prufClient.get
+        props.prufClient.get.asset
           .isRightsHolder(idxHash, rgtHash)
           .then(e => {
             if (e) {
@@ -279,7 +279,7 @@ export default function Verify(props) {
         console.log("addr: ", props.addr);
         setTransaction(true);
   
-        props.prufClient.do
+        props.prufClient.do.asset
           .verifyRightsHash(idxHash, rgtHash)
           .send({ from: props.addr })
           .on("error", (_error) => {
