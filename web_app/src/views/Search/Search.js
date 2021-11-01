@@ -236,12 +236,12 @@ export default function Search(props) {
     switch(status) {
       case "50" : {
         opt = [
-          {
-            dis: true,
-            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -254,24 +254,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: true,
             msg: `Change Status ${na}`,
@@ -293,12 +293,12 @@ export default function Search(props) {
         ]; break
       } case "51" : {
         opt = [
-          {
-            dis: false,
-            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: false,
             msg: `Transfer`,
@@ -311,24 +311,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: false,
-            msg: `Export`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: false,
+          //   msg: `Export`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -350,12 +350,12 @@ export default function Search(props) {
         ]; break
       } case "52" : {
         opt = [
-          {
-            dis: false,
-            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -368,24 +368,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -407,12 +407,12 @@ export default function Search(props) {
         ]; break
       } case "53" : {
         opt = [
-          {
-            dis: true,
-            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -425,24 +425,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -464,12 +464,12 @@ export default function Search(props) {
         ]; break
       } case "54" : {
         opt = [
-          {
-            dis: true,
-            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -482,24 +482,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -521,12 +521,12 @@ export default function Search(props) {
         ]; break
       } case "56" : {
         opt = [
-          {
-            dis: true,
-            msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: true,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -539,24 +539,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: true,
             msg: `Change Status ${na}`,
@@ -578,12 +578,12 @@ export default function Search(props) {
         ]; break
       } case "57" : {
         opt = [
-          {
-            dis: false,
-            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -596,24 +596,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -635,12 +635,12 @@ export default function Search(props) {
         ]; break
       } case "58" : {
         opt = [
-          {
-            dis: false,
-            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -653,24 +653,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -692,12 +692,12 @@ export default function Search(props) {
         ]; break
       } case "59" : {
         opt = [
-          {
-            dis: false,
-            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -710,24 +710,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: false,
-            msg: `Discard`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: false,
+          //   msg: `Discard`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -749,12 +749,12 @@ export default function Search(props) {
         ]; break
       } case "70" : {
         opt = [
-          {
-            dis: false,
-            msg: asset.price === "0" ? `Set for sale` : `Update Price`,
-            key: "sfsOption",
-            val: "sell"
-          },
+          // {
+          //   dis: false,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
+          //   key: "sfsOption",
+          //   val: "sell"
+          // },
           {
             dis: true,
             msg: `Transfer ${na}`,
@@ -767,24 +767,24 @@ export default function Search(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: false,
-            msg: `Import`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: false,
+          //   msg: `Import`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: true,
             msg: `Change Status ${na}`,
@@ -923,8 +923,8 @@ export default function Search(props) {
       }
     }
     if (costId !== null) {
-      props.prufClient.get
-        .operationCost(asset.nodeId, costId)
+      props.prufClient.get.node
+        .invoiceForOperation(asset.nodeId, costId)
         .then(e => {
           tempObj.opCost = e.total;
           console.log(tempObj);
@@ -1445,9 +1445,9 @@ export default function Search(props) {
         button: "Close",
       });
 
-      props.prufClient.get.assetRecordExists(id).then(e => {
+      props.prufClient.get.asset.tokenExists(id).then(e => {
         if (e) {
-          buildAsset(id);
+          getAsset(id);
         } else {
           setIDXRaw("");
           setIDXRawInput(false);
@@ -1464,7 +1464,7 @@ export default function Search(props) {
   const checkIsHolder = async (id) => {
     if (!id) return;
     if (!props.addr) return setOwnerOf(false);
-    props.prufClient.get.ownerOfAsset(id).then(e => {
+    props.prufClient.get.asset.ownerOf(id).then(e => {
       window.web3.utils.toChecksumAddress(e) ===
         window.web3.utils.toChecksumAddress(props.addr)
         ? setOwnerOf(true)
@@ -1472,488 +1472,718 @@ export default function Search(props) {
     });
   };
 
-  const buildAsset = (id) => { 
-    if (!id) return;
-
-    setURL(`${baseURL}${id}`);
-
-    if (props.ps) {
-      //console.log(props.ps)
-      props.ps.element.scrollTop = 0;
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      document.documentElement.scrollTop = 0;
-      document.scrollingElement.scrollTop = 0;
-    }
-
-    setRetrieving(true);
-
-    //Call to the API for an asset with assetId 'id'
-    props.prufClient.get.asset.record(id).then(e => {
+  const getAsset = (
+    id,
+    _arweaveClient = props.arweaveClient,
+    _addr = props.addr,
+    _prufClient = props.prufClient
+  ) => {
+    _prufClient.get.asset.record(id).then((rec) => {
+      console.log({ rec });
       setScanQR(false);
-      setResult(Object.values(e));
+      setResult(rec);
       setError("");
+      checkIsHolder(id);
+      rec.id = id;
+      getNonMutableOf(rec, _prufClient, _arweaveClient);
+    });
+  };
 
-      //If asset is in status 60, allow for recycling
-      e.statusNum === "60" ? setRecycled(true) : checkIsHolder(id);
+  const getNonMutableOf = async (rec, _prufClient, _arweave) => {
+    rec.identicon = <Jdenticon value={rec.id} />;
+    rec.statusNum = rec.status;
+    rec.status = await _prufClient.utils.stringifyStatus(rec.status);
+    _prufClient.get.node.record(rec.nodeId).then((nodeData) => {
+      rec.nodeData = nodeData;
+      rec.nodeName = nodeData.name
+        .toLowerCase()
+        .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+      _prufClient.get.node.ownerOf(rec.nodeId).then((admin) => {
+        rec.nodeAdmin = admin;
+        if (
+          rec.nonMutableStorage1 ===
+          "0x0000000000000000000000000000000000000000000000000000000000000000"
+        ) {
+          rec.nonMutableStorage = "";
+          getMutableOf(rec, _prufClient, _arweave);
+        } else if (rec.nodeData.storageProvider === "1") {
+          _prufClient.utils
+            .ipfsFromB32(rec.nonMutableStorage1)
+            .then(async (query) => {
+              console.log("MDQ", query);
 
-      let obj = Object.assign({}, e);
+                for await (const chunk of window.ipfs.cat(query)) {
+                  let str = new TextDecoder("utf-8").decode(chunk);
+                  try {
+                    rec.nonMutableStorage = JSON.parse(str);
+                    setCookieTo(
+                      window.web3.utils.soliditySha3(query),
+                      rec.nonMutableStorage
+                    );
+                  } catch {
+                    rec.nonMutableStorage = str;
+                  }
+                  getMutableOf(rec, _prufClient, _arweave);
+                }
 
-      //Some jdenticons for default placeholders
-      obj.identicon = <Jdenticon value={id} />;
-      obj.identiconLG = <Jdenticon value={id} />;
+            });
+        } else if (rec.nodeData.storageProvider === "2") {
+          _prufClient.utils
+            .arweaveTxFromB32(rec.nonMutableStorage1, rec.nonMutableStorage2)
+            .then((query) => {
+              rec.contentUrl = `https://arweave.net/${query}`;
+                let xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                  if (xhr.status !== 404 && xhr.status !== 202) {
+                    rec.nonMutableStorage = {};
+                    _arweave.transactions
+                      .get(query)
+                      .then((e) => {
+                        console.log(e);
+                        e.get("tags").forEach((tag) => {
+                          let key = tag.get("name", {
+                            decode: true,
+                            string: true,
+                          });
+                          let value = tag.get("value", {
+                            decode: true,
+                            string: true,
+                          });
+                          rec.nonMutableStorage[key] = value;
+                        });
+                        setCookieTo(
+                          window.web3.utils.soliditySha3(query),
+                          rec.nonMutableStorage
+                        );
+                        getMutableOf(rec, _prufClient, _arweave);
+                      })
+                      .catch((e) => {
+                        console.log(e);
+                        rec.nonMutableStorage = "";
+                        getMutableOf(rec, _prufClient, _arweave);
+                      });
+                  } else {
+                    console.log("Id returned 404");
+                    rec.nonMutableStorage = "";
+                    getMutableOf(rec, _prufClient, _arweave);
+                  }
+                };
 
-      //util call for status string
-      props.prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
-        obj.status = e;
-      });
+                xhr.onerror = () => {
+                  console.log("Gateway returned 404");
+                  rec.nonMutableStorage = "";
+                  getMutableOf(rec, _prufClient, _arweave);
+                };
 
-      //retreive price data set by holder
-      props.prufClient.get.assetPriceData(id).then(e => {
-        obj = Object.assign(obj, e)
-
-        e.price !== "0"
-          ? setPrice(e.price)
-          : setPrice("");
-        e.currency === "2"
-          ? setCurrency("ü")
-          : setCurrency("");
-
-        //get data on the node in which the asset resides
-        props.prufClient.get
-          node.record(obj.nodeId)
-          .then(e => {
-            obj.nodeName = e.name.toLowerCase()
-              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                letter.toUpperCase()
-              );
-            setSelectedRootID(e.root)
-            obj.nodeData = Object.assign({}, e)
-            props.prufClient.get.node.ownerOf(obj.nodeId).then(e => {
-              obj.nodeAdmin = e
-              props.prufClient.get.node.userType(window.web3.utils.soliditySha3(props.addr), obj.nodeId).then(e => {
-                obj.userAuthLevel = e
-                console.log("HERE", e.root);
-                return getMutableStorage(obj);
-              })
-            })
-          });
+                xhr.open("GET", `https://arweave.net/${query}`);
+                xhr.send(null);
+            });
+        }
       });
     });
   };
 
-  const getMutableStorage = (asset) => {
-    if (!asset) return console.log("Failed upon reception of:", asset);
-
-    let obj = JSON.parse(JSON.stringify(asset));
-    let storageProvider = obj.nodeData.storageProvider;
-    let mutableStorageQuery;
-
+  const getMutableOf = async (rec, _prufClient, _arweave) => {
     if (
-      obj.mutableStorageA ===
+      rec.mutableStorage1 ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
-      || obj.nodeData.root === obj.nodeId
     ) {
-      obj.mutableStorage = "";
-      return getnonMutableStorage(obj);
-    } else if (storageProvider === "1") {
-      //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
-      props.prufClient.utils.ipfsFromB32(obj.mutableStorageA).then(async (e) => {
-        let mutableStorageQuery = e;
-        console.log("MDQ", e);
-        //fetch mutableStorage from IPFS if storageProvider === '1'
-        for await (const chunk of window.ipfs.cat(mutableStorageQuery)) {
-          let str = new TextDecoder("utf-8").decode(chunk);
-          console.log(str);
-          try {
-            obj.mutableStorage = JSON.parse(str);
-          } catch {
-            obj.mutableStorage = str;
+      rec.mutableStorage = "";
+      finalize(rec, _prufClient);
+    } else if (rec.nodeData.storageProvider === "1") {
+      _prufClient.utils.ipfsFromB32(rec.mutableStorage1).then(async (query) => {
+        console.log("MDQ", query);
+          for await (const chunk of window.ipfs.cat(query)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            rec.mutableStorage = JSON.parse(str);
+            setCookieTo(window.web3.utils.soliditySha3(query), JSON.parse(str));
+            finalize(rec, _prufClient);
           }
-          return getnonMutableStorage(obj);
-        }
       });
-    } else if (storageProvider === "2") {
-      console.log(obj.mutableStorageA, obj.mutableStorageB);
+    } else if (rec.nodeData.storageProvider === "2") {
+      _prufClient.utils
+        .arweaveTxFromB32(rec.mutableStorage1, rec.mutableStorage2)
+        .then((query) => {
+          rec.contentUrl = `https://arweave.net/${query}`;
+            let xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+              if (xhr.status !== 404 && xhr.status !== 202) {
+                rec.mutableStorage = {};
+                _arweave.transactions
+                  .get(query)
+                  .then((e) => {
+                    console.log(e);
+                    e.get("tags").forEach((tag) => {
+                      let key = tag.get("name", {
+                        decode: true,
+                        string: true,
+                      });
+                      let value = tag.get("value", {
+                        decode: true,
+                        string: true,
+                      });
+                      rec.mutableStorage[key] = value;
+                    });
+                    setCookieTo(
+                      window.web3.utils.soliditySha3(query),
+                      rec.mutableStorage
+                    );
+                    finalize(rec, _prufClient);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    rec.mutableStorage = "";
+                    finalize(rec, _prufClient, _arweave);
+                  });
+              } else {
+                console.log("Id returned 404");
+                rec.mutableStorage = "";
+                finalize(rec, _prufClient);
+              }
+            };
 
-      //Convert b32 stored on chain to a valid Arweave txId
-      mutableStorageQuery = window.web3.utils.hexToUtf8(
-        obj.mutableStorageA +
-        obj.mutableStorageB.substring(2, 24)
-      );
+            xhr.onerror = () => {
+              console.log("Gateway returned 404");
+              rec.mutableStorage = "";
+              finalize(rec, _prufClient);
+            };
 
-      //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
-      let xhr = new XMLHttpRequest();
-      
-      xhr.onload = () => {
-        if (xhr.status !== 404) {
-          try {
-            //fetch mutableStorage from Arweave if storageProvider === '2'
-            props.arweaveClient.transactions.get(mutableStorageQuery).then((e) => {
-              let tempObj = {};
-              e.get("tags").forEach((tag) => {
-                let key = tag.get("name", { decode: true, string: true });
-                let value = tag.get("value", { decode: true, string: true });
-                tempObj[key] = value;
-                //console.log(`${key} : ${value}`);
-              });
-              //tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`
-              tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-              obj.mutableStorage = tempObj;
-              obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-              return getnonMutableStorage(obj);
-            });
-          } catch {
-            console.log("Id returned 404");
-            obj.mutableStorage = "";
-            obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-            return getnonMutableStorage(obj);
-          }
-        } else {
-          console.log("Gateway returned 404");
-          obj.mutableStorage = "";
-          obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-          return getnonMutableStorage(obj);
-        }
-      };
-
-      xhr.onerror = () => {
-        console.log("Gateway returned 404");
-        obj.mutableStorage = "";
-        obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-        return getnonMutableStorage(obj);
-      };
-
-      xhr.open("GET", `https://arweave.net/tx/${mutableStorageQuery}`, true);
-      try {
-        xhr.send(null);
-      } catch {
-        console.log("Gateway returned 404");
-        obj.mutableStorage = "";
-        obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
-        return getnonMutableStorage(obj);
-      }
+            xhr.open("GET", `https://arweave.net/${query}`);
+            xhr.send(null);
+        });
     }
   };
 
-  const getnonMutableStorage = (asset) => {
-    if (!asset) return console.log("Failed upon reception of:", asset);
-
-    let obj = JSON.parse(JSON.stringify(asset));
-    let storageProvider = obj.nodeData.storageProvider;
-    let nonMutableStorageQuery;
-
-    if (
-      obj.nonMutableStorageA ===
-      "0x0000000000000000000000000000000000000000000000000000000000000000"
-      || obj.nodeData.root === obj.nodeId
-    ) {
-      obj.nonMutableStorage = "";
-      return finalizeAsset(obj);
-    } else if (storageProvider === "1") {
-      //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
-      props.prufClient.utils.ipfsFromB32(obj.nonMutableStorageA).then(async (e) => {
-        nonMutableStorageQuery = e;
-        //fetch nonMutableStorage from IPFS if storageProvider === '1'
-        for await (const chunk of window.ipfs.cat(nonMutableStorageQuery)) {
-          let str = new TextDecoder("utf-8").decode(chunk);
-          console.log(str);
-          try {
-            obj.nonMutableStorage = JSON.parse(str);
-          } catch {
-            obj.nonMutableStorage = str;
-          }
-          //console.log("EXIT")
-          return finalizeAsset(obj);
-        }
-      });
-    } else if (storageProvider === "2") {
-      console.log(obj.nonMutableStorageB.indexOf("0000000000000000000000"));
-
-      //Convert b32 stored on chain to a valid Arweave txId
-      nonMutableStorageQuery = window.web3.utils.hexToUtf8(
-        obj.nonMutableStorageA +
-        obj.nonMutableStorageB.substring(
-          2,
-          24
-        )
-      );
-      
-      //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
-      let xhr = new XMLHttpRequest();
-
-      xhr.onload = () => {
-        if (xhr.status !== 404) {
-          try {
-            //fetch nonMutableStorage from Arweave if storageProvider === '2'
-            props.arweaveClient.transactions.get(nonMutableStorageQuery).then((e) => {
-              if (!e) throw "Thrown";
-              let tempObj = {};
-              e.get("tags").forEach((tag) => {
-                let key = tag.get("name", { decode: true, string: true });
-                let value = tag.get("value", { decode: true, string: true });
-                tempObj[key] = value;
-                //console.log(`${key} : ${value}`);
-              });
-              //tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`
-              tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-              obj.nonMutableStorage = tempObj;
-              return finalizeAsset(obj);
-            });
-          } catch {
-            console.log("In arweave catch clause");
-            obj.nonMutableStorage = "";
-            return finalizeAsset(obj);
-          }
-        } else {
-          console.log("Id returned 404");
-          obj.nonMutableStorage = "";
-          obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-          return finalizeAsset(obj);
-        }
-      };
-
-      xhr.onerror = () => {
-        console.log("Gateway returned 404");
-        obj.nonMutableStorage = "";
-        obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-        return finalizeAsset(obj);
-      };
-
-      xhr.open("GET", `https://arweave.net/${nonMutableStorageQuery}`, true);
-      try {
-        xhr.send(null);
-      } catch {
-        console.log("Gateway returned 404");
-        obj.nonMutableStorage = "";
-        obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
-        return finalizeAsset(obj);
-      }
-    }
-  };
-
-  const finalizeAsset = (asset) => {
-    if (!asset) return console.log("Failed upon reception of:", asset);
-
-    //In here we get all the data together and bundle it into an object, with a bias towards putting permanent data on display. 
-
-    let obj = JSON.parse(JSON.stringify(asset));
-
-    obj.photo = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
-    obj.text = obj.nonMutableStorage.text || obj.mutableStorage.text || {};
-    obj.urls = obj.nonMutableStorage.urls || obj.mutableStorage.urls || {};
-    obj.name = obj.nonMutableStorage.name || obj.mutableStorage.name || "Name Unavailable";
-    obj.photoUrls = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
-    obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
-    obj.ContentUrl = obj.nonMutableStorage.contentUrl || obj.mutableStorage.contentUrl || "";
-    obj.storageProvider = obj.nodeData.storageProvider;
-    obj.PrimaryContent = obj.nonMutableStorage.PrimaryContent || obj.mutableStorage.PrimaryContent || ""; 
-    obj.ContentType = obj.nonMutableStorage.ContentType || obj.mutableStorage.ContentType || obj.nonMutableStorage["Content-Type"] || obj.mutableStorage["Content-Type"] || "";
-    obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
-    let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
-
-    console.log("Finalizing", obj);
-    if (obj.nodeData.storageProvider === "2") {
-      console.log("detected storageProvider 2");
-      if (
-        obj.nonMutableStorage.contentUrl &&
-        obj.nonMutableStorage["Content-Type"].includes("image")
-      ) {
-        obj.displayImage = obj.nonMutableStorage.contentUrl;
-        setAsset(obj);
-        setSelectedImage(obj.displayImage);
-        setRetrieving(false);
-        setMoreInfo(true);
-        return;
-      } else if (
-        obj.mutableStorage.contentUrl &&
-        obj.mutableStorage["Content-Type"].includes("image")
-      ) {
-        obj.displayImage = obj.mutableStorage.contentUrl;
-        setAsset(obj);
-        setSelectedImage(obj.displayImage);
-        setRetrieving(false);
-        setMoreInfo(true);
-        return;
-      } else if (obj.nonMutableStorage["Content-Type"].includes("pdf")) {
-        obj.displayImage = placeholder
-        setAsset(obj);
-        setSelectedImage(obj.displayImage);
-        setRetrieving(false);
-        setMoreInfo(true);
-      } else if (obj.nonMutableStorage["Content-Type"].includes("zip")) {
-        obj.displayImage = placeholder
-        setAsset(obj);
-        setSelectedImage(obj.displayImage);
-        setRetrieving(false);
-        setMoreInfo(true);
-      } else if (obj.mutableStorage["Content-Type"].includes("pdf")) {
-        obj.displayImage = placeholder
-        setAsset(obj);
-        setSelectedImage(obj.displayImage);
-        setRetrieving(false);
-        setMoreInfo(true);
-      } else if (obj.mutableStorage["Content-Type"].includes("zip")) {
-        obj.displayImage = placeholder
-        setAsset(obj);
-        setSelectedImage(obj.displayImage);
-        setRetrieving(false);
-        setMoreInfo(true);
-      } else if (keys.length === 0) {
-        obj.displayImage = "";
-        setAsset(obj);
-        setSelectedImage(obj.displayImage);
-        setRetrieving(false);
-        setMoreInfo(true);
-        return;
-      }
-    } else if (obj.nodeData.storageProvider === "1") {
-      const getAndSet = (url) => {
-        const req = new XMLHttpRequest();
+  const finalize = async (rec, _prufClient) => {
+    if (rec.nodeData.storageProvider === "1") {
+      const req = new XMLHttpRequest();
         req.responseType = "text";
 
         req.onload = function () {
-          //console.log("response", this.response);
-          if (this.response.includes("image")) {
-            obj.displayImage = this.response;
-            setAsset(obj);
-            setSelectedImage(obj.displayImage);
+            console.log("response", this.response);
+            rec.displayImage = this.response;
+            setURL(rec.displayImage)
+            setAsset(rec);
+            setSelectedImage(rec.displayImage);
             setRetrieving(false);
             setMoreInfo(true);
-            return;
-          } else if (this.response.includes("application")) {
-            console.log("app")
-            obj.displayImage = placeholder
-            setAsset(obj);
-            setSelectedImage(placeholder);
-            setRetrieving(false);
-            setMoreInfo(true);
-          }
         };
 
         req.onerror = function (e) {
           //console.log("http request error")
-          obj.displayImage = "";
-          setAsset(obj);
-          setSelectedImage(obj.displayImage);
+          console.log("error");
+          rec.displayImage = "";
+          setURL(rec.displayImage)
+          setAsset(rec);
+          setSelectedImage(rec.displayImage);
           setRetrieving(false);
           setMoreInfo(true);
-          return;
         };
-        req.open("GET", url, true);
-        try {
-          req.send();
-        } catch {
-          obj.displayImage = "";
-          setAsset(obj);
-          setSelectedImage(obj.displayImage);
-          setRetrieving(false);
-          setMoreInfo(true);
-          return;
-        }
-      };
-      if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
-        getAndSet(obj.nonMutableStorage.PrimaryContent)
-      } else if (
-        obj.nonMutableStorage !== "" &&
-        obj.nonMutableStorage.displayImage !== "" &&
-        obj.nonMutableStorage.displayImage !== undefined
-      ) {
-        getAndSet(obj.nonMutableStorage.displayImage);
-      } else if (
-        obj.mutableStorage !== "" &&
-        obj.mutableStorage.displayImage !== "" &&
-        obj.mutableStorage.displayImage !== undefined
-      ) {
-        getAndSet(obj.mutableStorage.displayImage);
-      }
-    } else if (keys.length > 0) {
-      for (let i = 0; i < keys.length; i++) {
-
-        // We call this function repeatedly until all options for displayImage have been exhausted.
-        const get = () => {
-          if (vals[i].includes("data") && vals[i].includes("base64")) {
-            obj.photo[keys[i]] = vals[i];
-            if (keys[i] === "displayImage") {
-              obj.displayImage = obj.photo[keys[i]];
-            } else if (i === keys.length - 1) {
-              //console.log("Setting Display Image")
-              obj.displayImage = obj.photo[keys[0]];
-            }
-            setAsset(obj);
-            setSelectedImage(obj.displayImage);
-            forceUpdate();
-            setRetrieving(false);
-            setMoreInfo(true);
-            return;
-          } else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-            obj.photo[keys[i]] = vals[i];
-            if (keys[i] === "displayImage") {
-              //console.log("Setting Display Image")
-              obj.displayImage = obj.photo[keys[i]];
-            } else if (i === keys.length - 1) {
-              //console.log("Setting Display Image")
-              obj.displayImage = obj.photo[keys[0]];
-            }
-            setAsset(obj);
-            setSelectedImage(obj.displayImage);
-            forceUpdate();
-            setRetrieving(false);
-            setMoreInfo(true);
-            return;
-          } else {
-            const req = new XMLHttpRequest();
-            req.responseType = "text";
-
-            req.onload = function (e) {
-              //console.log("in onload")
-              if (this.response.includes("base64")) {
-                obj.photo[keys[i]] = this.response;
-                if (keys[i] === "displayImage") {
-                  //console.log("Setting Display Image")
-                  obj.displayImage = obj.photo[keys[i]];
-                } else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  obj.displayImage = obj.photo[keys[0]];
-                }
-                setAsset(obj);
-                setSelectedImage(obj.displayImage);
-                forceUpdate();
-                setRetrieving(false);
-                setMoreInfo(true);
-                return;
-              }
-            };
-
-            req.onerror = function (e) {
-              //console.log("http request error")
-              if (vals[i].includes("http")) {
-                obj.photo[keys[i]] = vals[i];
-                if (keys[i] === "displayImage") {
-                  //console.log("Setting Display Image")
-                  obj.displayImage = obj.photo[keys[i]];
-                } else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  obj.displayImage = obj.photo[keys[0]];
-                }
-                setAsset(obj);
-                setSelectedImage(obj.displayImage);
-                forceUpdate();
-                setRetrieving(false);
-                setMoreInfo(true);
-                return;
-              }
-            };
-            req.open("GET", vals[i], true);
-            req.send();
-          }
-        };
-        get();
-      }
+        req.open("GET", rec.nonMutableStorage.displayImage, true);
+        req.send();
+    } else if (rec.nodeData.storageProvider === "2") {
+      _prufClient.get.asset.URI(rec.id).then((uri) => {
+        rec.displayImage = uri;
+        setURL(rec.displayImage)
+        setAsset(rec);
+        setSelectedImage(rec.displayImage);
+        setRetrieving(false);
+        setMoreInfo(true);
+      });
     } else {
-      console.log("No conditions met");
+      _prufClient.get.asset.URI(rec.id).then((uri) => {
+        rec.displayImage = uri
+        setURL(rec.displayImage)
+        setAsset(rec);
+        setSelectedImage(rec.displayImage);
+        setRetrieving(false);
+        setMoreInfo(true);
+      });
     }
   };
+
+  // const buildAsset = (id) => { 
+  //   if (!id) return;
+
+  //   setURL(`${baseURL}${id}`);
+
+  //   if (props.ps) {
+  //     //console.log(props.ps)
+  //     props.ps.element.scrollTop = 0;
+  //   } else {
+  //     window.scrollTo({ top: 0, behavior: "smooth" });
+  //     document.documentElement.scrollTop = 0;
+  //     document.scrollingElement.scrollTop = 0;
+  //   }
+
+  //   setRetrieving(true);
+
+  //   //Call to the API for an asset with assetId 'id'
+  //   props.prufClient.get.asset.record(id).then(e => {
+  //     setScanQR(false);
+  //     setResult(Object.values(e));
+  //     setError("");
+
+  //     //If asset is in status 60, allow for recycling
+  //     e.statusNum === "60" ? setRecycled(true) : checkIsHolder(id);
+
+  //     let obj = Object.assign({}, e);
+
+  //     //Some jdenticons for default placeholders
+  //     obj.identicon = <Jdenticon value={id} />;
+  //     obj.identiconLG = <Jdenticon value={id} />;
+
+  //     //util call for status string
+  //     props.prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
+  //       obj.status = e;
+  //     });
+
+  //     //retreive price data set by holder
+  //     props.prufClient.get.assetPriceData(id).then(e => {
+  //       obj = Object.assign(obj, e)
+
+  //       e.price !== "0"
+  //         ? setPrice(e.price)
+  //         : setPrice("");
+  //       e.currency === "2"
+  //         ? setCurrency("ü")
+  //         : setCurrency("");
+
+  //       //get data on the node in which the asset resides
+  //       props.prufClient.get
+  //         node.record(obj.nodeId)
+  //         .then(e => {
+  //           obj.nodeName = e.name.toLowerCase()
+  //             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+  //               letter.toUpperCase()
+  //             );
+  //           setSelectedRootID(e.root)
+  //           obj.nodeData = Object.assign({}, e)
+  //           props.prufClient.get.node.ownerOf(obj.nodeId).then(e => {
+  //             obj.nodeAdmin = e
+  //             props.prufClient.get.node.userType(window.web3.utils.soliditySha3(props.addr), obj.nodeId).then(e => {
+  //               obj.userAuthLevel = e
+  //               console.log("HERE", e.root);
+  //               return getMutableStorage(obj);
+  //             })
+  //           })
+  //         });
+  //     });
+  //   });
+  // };
+
+  // const getMutableStorage = (asset) => {
+  //   if (!asset) return console.log("Failed upon reception of:", asset);
+
+  //   let obj = JSON.parse(JSON.stringify(asset));
+  //   let storageProvider = obj.nodeData.storageProvider;
+  //   let mutableStorageQuery;
+
+  //   if (
+  //     obj.mutableStorageA ===
+  //     "0x0000000000000000000000000000000000000000000000000000000000000000"
+  //     || obj.nodeData.root === obj.nodeId
+  //   ) {
+  //     obj.mutableStorage = "";
+  //     return getnonMutableStorage(obj);
+  //   } else if (storageProvider === "1") {
+  //     //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
+  //     props.prufClient.utils.ipfsFromB32(obj.mutableStorageA).then(async (e) => {
+  //       let mutableStorageQuery = e;
+  //       console.log("MDQ", e);
+  //       //fetch mutableStorage from IPFS if storageProvider === '1'
+  //       for await (const chunk of window.ipfs.cat(mutableStorageQuery)) {
+  //         let str = new TextDecoder("utf-8").decode(chunk);
+  //         console.log(str);
+  //         try {
+  //           obj.mutableStorage = JSON.parse(str);
+  //         } catch {
+  //           obj.mutableStorage = str;
+  //         }
+  //         return getnonMutableStorage(obj);
+  //       }
+  //     });
+  //   } else if (storageProvider === "2") {
+  //     console.log(obj.mutableStorageA, obj.mutableStorageB);
+
+  //     //Convert b32 stored on chain to a valid Arweave txId
+  //     mutableStorageQuery = window.web3.utils.hexToUtf8(
+  //       obj.mutableStorageA +
+  //       obj.mutableStorageB.substring(2, 24)
+  //     );
+
+  //     //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
+  //     let xhr = new XMLHttpRequest();
+      
+  //     xhr.onload = () => {
+  //       if (xhr.status !== 404) {
+  //         try {
+  //           //fetch mutableStorage from Arweave if storageProvider === '2'
+  //           props.arweaveClient.transactions.get(mutableStorageQuery).then((e) => {
+  //             let tempObj = {};
+  //             e.get("tags").forEach((tag) => {
+  //               let key = tag.get("name", { decode: true, string: true });
+  //               let value = tag.get("value", { decode: true, string: true });
+  //               tempObj[key] = value;
+  //               //console.log(`${key} : ${value}`);
+  //             });
+  //             //tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`
+  //             tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //             obj.mutableStorage = tempObj;
+  //             obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //             return getnonMutableStorage(obj);
+  //           });
+  //         } catch {
+  //           console.log("Id returned 404");
+  //           obj.mutableStorage = "";
+  //           obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //           return getnonMutableStorage(obj);
+  //         }
+  //       } else {
+  //         console.log("Gateway returned 404");
+  //         obj.mutableStorage = "";
+  //         obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //         return getnonMutableStorage(obj);
+  //       }
+  //     };
+
+  //     xhr.onerror = () => {
+  //       console.log("Gateway returned 404");
+  //       obj.mutableStorage = "";
+  //       obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //       return getnonMutableStorage(obj);
+  //     };
+
+  //     xhr.open("GET", `https://arweave.net/tx/${mutableStorageQuery}`, true);
+  //     try {
+  //       xhr.send(null);
+  //     } catch {
+  //       console.log("Gateway returned 404");
+  //       obj.mutableStorage = "";
+  //       obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //       return getnonMutableStorage(obj);
+  //     }
+  //   }
+  // };
+
+  // const getnonMutableStorage = (asset) => {
+  //   if (!asset) return console.log("Failed upon reception of:", asset);
+
+  //   let obj = JSON.parse(JSON.stringify(asset));
+  //   let storageProvider = obj.nodeData.storageProvider;
+  //   let nonMutableStorageQuery;
+
+  //   if (
+  //     obj.nonMutableStorageA ===
+  //     "0x0000000000000000000000000000000000000000000000000000000000000000"
+  //     || obj.nodeData.root === obj.nodeId
+  //   ) {
+  //     obj.nonMutableStorage = "";
+  //     return finalizeAsset(obj);
+  //   } else if (storageProvider === "1") {
+  //     //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
+  //     props.prufClient.utils.ipfsFromB32(obj.nonMutableStorageA).then(async (e) => {
+  //       nonMutableStorageQuery = e;
+  //       //fetch nonMutableStorage from IPFS if storageProvider === '1'
+  //       for await (const chunk of window.ipfs.cat(nonMutableStorageQuery)) {
+  //         let str = new TextDecoder("utf-8").decode(chunk);
+  //         console.log(str);
+  //         try {
+  //           obj.nonMutableStorage = JSON.parse(str);
+  //         } catch {
+  //           obj.nonMutableStorage = str;
+  //         }
+  //         //console.log("EXIT")
+  //         return finalizeAsset(obj);
+  //       }
+  //     });
+  //   } else if (storageProvider === "2") {
+  //     console.log(obj.nonMutableStorageB.indexOf("0000000000000000000000"));
+
+  //     //Convert b32 stored on chain to a valid Arweave txId
+  //     nonMutableStorageQuery = window.web3.utils.hexToUtf8(
+  //       obj.nonMutableStorageA +
+  //       obj.nonMutableStorageB.substring(
+  //         2,
+  //         24
+  //       )
+  //     );
+      
+  //     //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
+  //     let xhr = new XMLHttpRequest();
+
+  //     xhr.onload = () => {
+  //       if (xhr.status !== 404) {
+  //         try {
+  //           //fetch nonMutableStorage from Arweave if storageProvider === '2'
+  //           props.arweaveClient.transactions.get(nonMutableStorageQuery).then((e) => {
+  //             if (!e) throw "Thrown";
+  //             let tempObj = {};
+  //             e.get("tags").forEach((tag) => {
+  //               let key = tag.get("name", { decode: true, string: true });
+  //               let value = tag.get("value", { decode: true, string: true });
+  //               tempObj[key] = value;
+  //               //console.log(`${key} : ${value}`);
+  //             });
+  //             //tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`
+  //             tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //             obj.nonMutableStorage = tempObj;
+  //             return finalizeAsset(obj);
+  //           });
+  //         } catch {
+  //           console.log("In arweave catch clause");
+  //           obj.nonMutableStorage = "";
+  //           return finalizeAsset(obj);
+  //         }
+  //       } else {
+  //         console.log("Id returned 404");
+  //         obj.nonMutableStorage = "";
+  //         obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //         return finalizeAsset(obj);
+  //       }
+  //     };
+
+  //     xhr.onerror = () => {
+  //       console.log("Gateway returned 404");
+  //       obj.nonMutableStorage = "";
+  //       obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //       return finalizeAsset(obj);
+  //     };
+
+  //     xhr.open("GET", `https://arweave.net/${nonMutableStorageQuery}`, true);
+  //     try {
+  //       xhr.send(null);
+  //     } catch {
+  //       console.log("Gateway returned 404");
+  //       obj.nonMutableStorage = "";
+  //       obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //       return finalizeAsset(obj);
+  //     }
+  //   }
+  // };
+
+  // const finalizeAsset = (asset) => {
+  //   if (!asset) return console.log("Failed upon reception of:", asset);
+
+  //   //In here we get all the data together and bundle it into an object, with a bias towards putting permanent data on display. 
+
+  //   let obj = JSON.parse(JSON.stringify(asset));
+
+  //   obj.photo = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
+  //   obj.text = obj.nonMutableStorage.text || obj.mutableStorage.text || {};
+  //   obj.urls = obj.nonMutableStorage.urls || obj.mutableStorage.urls || {};
+  //   obj.name = obj.nonMutableStorage.name || obj.mutableStorage.name || "Name Unavailable";
+  //   obj.photoUrls = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
+  //   obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
+  //   obj.ContentUrl = obj.nonMutableStorage.contentUrl || obj.mutableStorage.contentUrl || "";
+  //   obj.storageProvider = obj.nodeData.storageProvider;
+  //   obj.PrimaryContent = obj.nonMutableStorage.PrimaryContent || obj.mutableStorage.PrimaryContent || ""; 
+  //   obj.ContentType = obj.nonMutableStorage.ContentType || obj.mutableStorage.ContentType || obj.nonMutableStorage["Content-Type"] || obj.mutableStorage["Content-Type"] || "";
+  //   obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
+  //   let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
+
+  //   console.log("Finalizing", obj);
+  //   if (obj.nodeData.storageProvider === "2") {
+  //     console.log("detected storageProvider 2");
+  //     if (
+  //       obj.nonMutableStorage.contentUrl &&
+  //       obj.nonMutableStorage["Content-Type"].includes("image")
+  //     ) {
+  //       obj.displayImage = obj.nonMutableStorage.contentUrl;
+  //       setAsset(obj);
+  //       setSelectedImage(obj.displayImage);
+  //       setRetrieving(false);
+  //       setMoreInfo(true);
+  //       return;
+  //     } else if (
+  //       obj.mutableStorage.contentUrl &&
+  //       obj.mutableStorage["Content-Type"].includes("image")
+  //     ) {
+  //       obj.displayImage = obj.mutableStorage.contentUrl;
+  //       setAsset(obj);
+  //       setSelectedImage(obj.displayImage);
+  //       setRetrieving(false);
+  //       setMoreInfo(true);
+  //       return;
+  //     } else if (obj.nonMutableStorage["Content-Type"].includes("pdf")) {
+  //       obj.displayImage = placeholder
+  //       setAsset(obj);
+  //       setSelectedImage(obj.displayImage);
+  //       setRetrieving(false);
+  //       setMoreInfo(true);
+  //     } else if (obj.nonMutableStorage["Content-Type"].includes("zip")) {
+  //       obj.displayImage = placeholder
+  //       setAsset(obj);
+  //       setSelectedImage(obj.displayImage);
+  //       setRetrieving(false);
+  //       setMoreInfo(true);
+  //     } else if (obj.mutableStorage["Content-Type"].includes("pdf")) {
+  //       obj.displayImage = placeholder
+  //       setAsset(obj);
+  //       setSelectedImage(obj.displayImage);
+  //       setRetrieving(false);
+  //       setMoreInfo(true);
+  //     } else if (obj.mutableStorage["Content-Type"].includes("zip")) {
+  //       obj.displayImage = placeholder
+  //       setAsset(obj);
+  //       setSelectedImage(obj.displayImage);
+  //       setRetrieving(false);
+  //       setMoreInfo(true);
+  //     } else if (keys.length === 0) {
+  //       obj.displayImage = "";
+  //       setAsset(obj);
+  //       setSelectedImage(obj.displayImage);
+  //       setRetrieving(false);
+  //       setMoreInfo(true);
+  //       return;
+  //     }
+  //   } else if (obj.nodeData.storageProvider === "1") {
+  //     const getAndSet = (url) => {
+  //       const req = new XMLHttpRequest();
+  //       req.responseType = "text";
+
+  //       req.onload = function () {
+  //         //console.log("response", this.response);
+  //         if (this.response.includes("image")) {
+  //           obj.displayImage = this.response;
+  //           setAsset(obj);
+  //           setSelectedImage(obj.displayImage);
+  //           setRetrieving(false);
+  //           setMoreInfo(true);
+  //           return;
+  //         } else if (this.response.includes("application")) {
+  //           console.log("app")
+  //           obj.displayImage = placeholder
+  //           setAsset(obj);
+  //           setSelectedImage(placeholder);
+  //           setRetrieving(false);
+  //           setMoreInfo(true);
+  //         }
+  //       };
+
+  //       req.onerror = function (e) {
+  //         //console.log("http request error")
+  //         obj.displayImage = "";
+  //         setAsset(obj);
+  //         setSelectedImage(obj.displayImage);
+  //         setRetrieving(false);
+  //         setMoreInfo(true);
+  //         return;
+  //       };
+  //       req.open("GET", url, true);
+  //       try {
+  //         req.send();
+  //       } catch {
+  //         obj.displayImage = "";
+  //         setAsset(obj);
+  //         setSelectedImage(obj.displayImage);
+  //         setRetrieving(false);
+  //         setMoreInfo(true);
+  //         return;
+  //       }
+  //     };
+  //     if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
+  //       getAndSet(obj.nonMutableStorage.PrimaryContent)
+  //     } else if (
+  //       obj.nonMutableStorage !== "" &&
+  //       obj.nonMutableStorage.displayImage !== "" &&
+  //       obj.nonMutableStorage.displayImage !== undefined
+  //     ) {
+  //       getAndSet(obj.nonMutableStorage.displayImage);
+  //     } else if (
+  //       obj.mutableStorage !== "" &&
+  //       obj.mutableStorage.displayImage !== "" &&
+  //       obj.mutableStorage.displayImage !== undefined
+  //     ) {
+  //       getAndSet(obj.mutableStorage.displayImage);
+  //     }
+  //   } else if (keys.length > 0) {
+  //     for (let i = 0; i < keys.length; i++) {
+
+  //       // We call this function repeatedly until all options for displayImage have been exhausted.
+  //       const get = () => {
+  //         if (vals[i].includes("data") && vals[i].includes("base64")) {
+  //           obj.photo[keys[i]] = vals[i];
+  //           if (keys[i] === "displayImage") {
+  //             obj.displayImage = obj.photo[keys[i]];
+  //           } else if (i === keys.length - 1) {
+  //             //console.log("Setting Display Image")
+  //             obj.displayImage = obj.photo[keys[0]];
+  //           }
+  //           setAsset(obj);
+  //           setSelectedImage(obj.displayImage);
+  //           forceUpdate();
+  //           setRetrieving(false);
+  //           setMoreInfo(true);
+  //           return;
+  //         } else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+  //           obj.photo[keys[i]] = vals[i];
+  //           if (keys[i] === "displayImage") {
+  //             //console.log("Setting Display Image")
+  //             obj.displayImage = obj.photo[keys[i]];
+  //           } else if (i === keys.length - 1) {
+  //             //console.log("Setting Display Image")
+  //             obj.displayImage = obj.photo[keys[0]];
+  //           }
+  //           setAsset(obj);
+  //           setSelectedImage(obj.displayImage);
+  //           forceUpdate();
+  //           setRetrieving(false);
+  //           setMoreInfo(true);
+  //           return;
+  //         } else {
+  //           const req = new XMLHttpRequest();
+  //           req.responseType = "text";
+
+  //           req.onload = function (e) {
+  //             //console.log("in onload")
+  //             if (this.response.includes("base64")) {
+  //               obj.photo[keys[i]] = this.response;
+  //               if (keys[i] === "displayImage") {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[i]];
+  //               } else if (i === keys.length - 1) {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[0]];
+  //               }
+  //               setAsset(obj);
+  //               setSelectedImage(obj.displayImage);
+  //               forceUpdate();
+  //               setRetrieving(false);
+  //               setMoreInfo(true);
+  //               return;
+  //             }
+  //           };
+
+  //           req.onerror = function (e) {
+  //             //console.log("http request error")
+  //             if (vals[i].includes("http")) {
+  //               obj.photo[keys[i]] = vals[i];
+  //               if (keys[i] === "displayImage") {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[i]];
+  //               } else if (i === keys.length - 1) {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[0]];
+  //               }
+  //               setAsset(obj);
+  //               setSelectedImage(obj.displayImage);
+  //               forceUpdate();
+  //               setRetrieving(false);
+  //               setMoreInfo(true);
+  //               return;
+  //             }
+  //           };
+  //           req.open("GET", vals[i], true);
+  //           req.send();
+  //         }
+  //       };
+  //       get();
+  //     }
+  //   } else {
+  //     console.log("No conditions met");
+  //   }
+  // };
 
   const generateSubCatList = (arr) => {
     let subCatSelection = [
@@ -2333,7 +2563,7 @@ export default function Search(props) {
                           <Icon fontSize="large">qr_code_scanner</Icon>
                         </Tooltip>
                       </div>
-                      <div className={classes.checkboxAndRadio}>
+                      {/* <div className={classes.checkboxAndRadio}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -2355,7 +2585,7 @@ export default function Search(props) {
                           }}
                           label="Search via asset data fields"
                         />
-                      </div>
+                      </div> */}
                     </>
                   )}
                   {!retrieving && (
@@ -2389,6 +2619,14 @@ export default function Search(props) {
                 <CardIcon className="headerIconBack">
                   <DashboardOutlined />
                 </CardIcon>
+                <Button
+                  value={scanQR}
+                  onClick={(e) => handleScanQR(e)}
+                  color="info"
+                  className="MLBGradient"
+                >
+                  Back
+                </Button>
                 <h4 className={classes.cardIconTitle}>QR Scanner</h4>
               </CardHeader>
               <CardBody>
@@ -2415,14 +2653,6 @@ export default function Search(props) {
                     </div>
                   </h3>
                 )}
-                <Button
-                  value={scanQR}
-                  onClick={(e) => handleScanQR(e)}
-                  color="info"
-                  className="MLBGradient"
-                >
-                  Back
-                </Button>
               </CardBody>
             </Card>
           )}
@@ -2435,8 +2665,6 @@ export default function Search(props) {
                       image
                       className={imgClasses.cardHeaderHoverCustom}
                     >
-                      {asset.photo !== undefined && (
-                        <>
                           {asset.displayImage !== "" && (
                             <>
                               <Tooltip
@@ -2458,7 +2686,7 @@ export default function Search(props) {
                               <img src={selectedImage} alt="..." />
                             </>
                           )}
-                          {Object.values(asset.photo).length === 0 &&
+                          {/* {Object.values(asset.photo).length === 0 &&
                             asset.displayImage === "" && (
                               <>
                                 <Tooltip
@@ -2479,15 +2707,11 @@ export default function Search(props) {
                                 </Tooltip>
                                 <Jdenticon value={asset.id} />
                               </>
-                            )}
-                        </>
-                      )}
+                            )} */}
                     </CardHeader>
                   )}
                   {isMobile && (
                     <CardHeader image className={imgClasses.cardHeaderHover}>
-                      {asset.photo !== undefined && (
-                        <>
                           {asset.displayImage !== "" && (
                             <>
                               <Tooltip
@@ -2509,7 +2733,7 @@ export default function Search(props) {
                               <img src={selectedImage} alt="..." />
                             </>
                           )}
-                          {Object.values(asset.photo).length === 0 &&
+                          {/* {Object.values(asset.photo).length === 0 &&
                             asset.displayImage === "" && (
                               <>
                                 <Tooltip
@@ -2530,9 +2754,7 @@ export default function Search(props) {
                                 </Tooltip>
                                 <Jdenticon value={asset.id} />
                               </>
-                            )}
-                        </>
-                      )}
+                            )} */}
                     </CardHeader>
                   )}
                 </>
@@ -2540,11 +2762,11 @@ export default function Search(props) {
               <CardBody>
                 {!isVerifying && !isRecycling && (
                   <>
-                    {Object.values(asset.photo).length > 1 && (
+                    {/* {Object.values(asset.photo).length > 1 && (
                       <div className="imageSelector">
                         {generateThumbs(asset)}
                       </div>
-                    )}
+                    )} */}
                     <div className="horizontal">
                       <h4 className={imgClasses.cardTitleContent}>
                         Name:&nbsp;
@@ -2561,8 +2783,6 @@ export default function Search(props) {
                         {asset.nodeName}
                       </h4>
                     </div>
-
-                    {asset.currency === "0" && (
                       <div className="horizontal">
                         <h4 className={imgClasses.cardTitleContent}>
                           Status:&nbsp;
@@ -2571,38 +2791,6 @@ export default function Search(props) {
                           {asset.status}
                         </h4>
                       </div>
-                    )}
-                    {asset.currency === undefined && (
-                      <div className="horizontal">
-                        <h4 className={imgClasses.cardTitleContent}>
-                          Status:&nbsp;
-                      </h4>
-                        <h4 className={imgClasses.cardTitle}>
-                          {asset.status}
-                        </h4>
-                      </div>
-                    )}
-                    {asset.currency !== "0" &&
-                      asset.currency !== undefined && (
-                        <>
-                          <div className="horizontal">
-                            <h4 className={imgClasses.cardTitleContent}>
-                              Status:&nbsp;
-                        </h4>
-                            <h4 className={imgClasses.cardTitle}>
-                              {asset.status}
-                            </h4>
-                          </div>
-                          <div className="horizontal">
-                            <h4 className={imgClasses.cardTitleContent}>
-                              Sale Price:&nbsp;
-                        </h4>
-                            <h4 className={imgClasses.cardTitle}>
-                              {currency}{asset.price}
-                            </h4>
-                          </div>
-                        </>
-                      )}
                     {asset.text !== undefined && (
                       <>
                         <br />
@@ -3127,6 +3315,13 @@ export default function Search(props) {
                           <CardIcon className="headerIconBack">
                             <AccountBox />
                           </CardIcon>
+                          <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
+                </Button>
                           <h4 className={classes.cardIconTitle}>
                             Verify Owner Info
                           </h4>
@@ -3331,6 +3526,13 @@ export default function Search(props) {
                       <CardIcon className="headerIconBack">
                         <AccountBox />
                       </CardIcon>
+                      <Button
+                        color="info"
+                        className="MLBGradient"
+                        onClick={() => goBack()}
+                    >
+                        Go Back
+                </Button>
                       <h4 className={classes.cardIconTitle}>
                         Verify Owner Info
                           </h4>

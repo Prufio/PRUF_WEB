@@ -557,7 +557,7 @@ export default function NewRecord(props) {
       }
     ).then(idxHash => {
 
-      props.prufClient.get.asset.recordExists(idxHash).then(doesExist => {
+      props.prufClient.get.asset.tokenExists(idxHash).then(doesExist => {
 
         if (doesExist) {
           return swal({

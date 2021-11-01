@@ -214,9 +214,6 @@ export default function Dashboard(props) {
       //console.log(obj)
 
       for (let i = start; i < end; i++) {
-        //console.log(i, "Adding: ", window.assets.descriptions[i], "and ", window.assets.ids[i])
-        //console.log(i, arr.length - start)
-        //if(i < arr.length - start){
         component.push(
           <GridItem key={"asset" + i} xs={12} sm={6} md={6} lg={3}>
             <Card chart className={classes.cardHover}>
@@ -513,7 +510,7 @@ export default function Dashboard(props) {
   };
 
   const renderOptions = (status) => {
-    if (!status || !selectedAssetObj.statusNum) return;
+    if (!status) return;
     let na = '(Not Available in this Status)'
     let opt
     switch(status) {
@@ -521,7 +518,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: true,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -537,24 +534,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: true,
             msg: `Change Status ${na}`,
@@ -578,7 +575,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: false,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -594,24 +591,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: false,
-            msg: `Export`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: false,
+          //   msg: `Export`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -635,7 +632,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: false,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -651,24 +648,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -692,7 +689,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: true,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -708,24 +705,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -749,7 +746,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: true,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -765,24 +762,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -806,7 +803,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: true,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
+          //   msg: asset.price === "0" ? `Set for sale ${na}` : `Update Price ${na}`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -822,24 +819,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: true,
             msg: `Change Status ${na}`,
@@ -863,7 +860,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: false,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -879,24 +876,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -920,7 +917,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: false,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -936,24 +933,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -977,7 +974,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: false,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -993,24 +990,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: false,
-            msg: `Discard`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: true,
-            msg: `Import ${na}`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: false,
+          //   msg: `Discard`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Import ${na}`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: false,
             msg: `Change Status`,
@@ -1034,7 +1031,7 @@ export default function Dashboard(props) {
         opt = [
           // {
           //   dis: false,
-          //   msg: selectedAssetObj.price === "0" ? `Set for sale` : `Update Price`,
+          //   msg: asset.price === "0" ? `Set for sale` : `Update Price`,
           //   key: "sfsOption",
           //   val: "sell"
           // },
@@ -1050,24 +1047,24 @@ export default function Dashboard(props) {
             key: "verOption",
             val: "verify"
           },
-          {
-            dis: true,
-            msg: `Discard ${na}`,
-            key: "dscOption",
-            val: "discard"
-          },
-          {
-            dis: false,
-            msg: `Import`,
-            key: "impOption",
-            val: "import"
-          },
-          {
-            dis: true,
-            msg: `Export ${na}`,
-            key: "expOption",
-            val: "export"
-          },
+          // {
+          //   dis: true,
+          //   msg: `Discard ${na}`,
+          //   key: "dscOption",
+          //   val: "discard"
+          // },
+          // {
+          //   dis: false,
+          //   msg: `Import`,
+          //   key: "impOption",
+          //   val: "import"
+          // },
+          // {
+          //   dis: true,
+          //   msg: `Export ${na}`,
+          //   key: "expOption",
+          //   val: "export"
+          // },
           {
             dis: true,
             msg: `Change Status ${na}`,
