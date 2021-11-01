@@ -333,6 +333,49 @@ export default function Dashboard(props) {
         //}
       }
 
+      if(props.showPlaceHolder === true) component.push(
+        <GridItem key={"loadingAsset"} xs={12} sm={6} md={6} lg={3}>
+        <Card chart className={classes.cardHover}>
+          <>
+            {!isMobile && (
+              <CardHeader
+                image
+                className={classes.cardHeaderHoverDashboard}
+              >
+                      <img
+                        title="View Asset"
+                        src={placeholder}
+                        alt=""
+                      />
+              </CardHeader>
+            )}
+            {isMobile && (
+              <CardHeader image className={classes.cardHeaderHover}>
+                <img
+                        title="View Asset"
+                        src={placeholder}
+                        alt=""
+                      />
+              </CardHeader>
+            )}
+          </>
+
+          <CardBody>
+          <div className="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          </CardBody>
+          {/* <CardFooter chart>
+            <div className={classes.stats}>
+              <AccessTime /> updated 4 minutes ago
+            </div>
+          </CardFooter> */}
+        </Card>
+      </GridItem>
+      )
+
       return component;
       // eslint-disable-next-line react/prop-types
     } else if (props.assets === "0") {
@@ -347,14 +390,54 @@ export default function Dashboard(props) {
       );
     } else {
       return (
-        <>
-          <h3>Getting Asset Data</h3>{" "}
+        // <>
+        //   <h3>Getting Asset Data</h3>{" "}
+        //   <div className="lds-ellipsis">
+        //     <div></div>
+        //     <div></div>
+        //     <div></div>
+        //   </div>
+        // </>
+        <GridItem key={"loadingAsset"} xs={12} sm={6} md={6} lg={3}>
+        <Card chart className={classes.cardHover}>
+          <>
+            {!isMobile && (
+              <CardHeader
+                image
+                className={classes.cardHeaderHoverDashboard}
+              >
+                      <img
+                        title="View Asset"
+                        src={placeholder}
+                        alt=""
+                      />
+              </CardHeader>
+            )}
+            {isMobile && (
+              <CardHeader image className={classes.cardHeaderHover}>
+                <img
+                        title="View Asset"
+                        src={placeholder}
+                        alt=""
+                      />
+              </CardHeader>
+            )}
+          </>
+
+          <CardBody>
           <div className="lds-ellipsis">
             <div></div>
             <div></div>
             <div></div>
           </div>
-        </>
+          </CardBody>
+          {/* <CardFooter chart>
+            <div className={classes.stats}>
+              <AccessTime /> updated 4 minutes ago
+            </div>
+          </CardFooter> */}
+        </Card>
+      </GridItem>
       );
     }
   };
@@ -1188,7 +1271,7 @@ export default function Dashboard(props) {
       {/* </GridItem> */}
       {/* </GridContainer> */}
       {/* eslint-disable-next-line react/prop-types */}
-      {props.addr && props.isMounted && props.assets === "~" && (
+      {/* {props.addr && props.isMounted && props.assets === "~" && (
         <GridContainer>
           <>
             <h3>Getting Token Balances</h3>
@@ -1201,7 +1284,7 @@ export default function Dashboard(props) {
         </GridContainer>
       )}
       {/* eslint-disable-next-line react/prop-types */}
-      {!props.addr && !props.isMounted && props.assets === "~" && (
+      {/* {!props.addr && !props.isMounted && props.assets === "~" && (
         <GridContainer>
           <>
             <h3>Getting User Address</h3>
@@ -1212,7 +1295,7 @@ export default function Dashboard(props) {
             </div>
           </>
         </GridContainer>
-      )}
+      )}  */}
       {/* eslint-disable-next-line react/prop-types */}
       {!viewAsset && props.addr && props.assets !== "~" && (
         // eslint-disable-next-line react/prop-types

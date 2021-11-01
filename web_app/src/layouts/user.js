@@ -81,6 +81,7 @@ export default function Dashboard(props) {
   const [currentACPrice, setCurrentACPrice] = React.useState("~");
   const [assetBalance, setAssetBalance] = React.useState("~");
   const [nodeIdBalance, setNodeBalance] = React.useState("~");
+  const [showPlaceHolder, setShowPlaceHolder] = React.useState(false)
   const [heldNodeData, setHeldNodeData] = React.useState([
     ["Loading Nodes...", "~", "~", "~"],
   ]);
@@ -182,10 +183,13 @@ export default function Dashboard(props) {
       assetBalance: assetBalance,
       assetsLen: Object.keys(assets).length,
     });
-    if (assetBalance > Object.keys(assets).length) {
+    if (Number(assetBalance) > Object.keys(assets).length) {
       getAssetAtIndex(Object.keys(assets).length);
-    } else if (assetBalance < Object.keys(assets).length) {
+    } else if (Number(assetBalance) < Object.keys(assets).length) {
       setAssetBalance(Object.keys(assets).length);
+      setShowPlaceHolder(false)
+    } else if (Number(assetBalance) === Object.keys(assets).length) {
+      setShowPlaceHolder(false)
     }
   }, [assets]);
 
@@ -724,6 +728,7 @@ export default function Dashboard(props) {
                 winKey={winKey}
                 prufClient={prufClient}
                 arweaveClient={arweaveClient}
+                showPlaceHolder={showPlaceHolder}
               />
             )}
             key={key}
@@ -1192,6 +1197,7 @@ export default function Dashboard(props) {
     _addr = addr,
     _prufClient = prufClient
   ) => {
+    if (!showPlaceHolder) setShowPlaceHolder(true)
     _prufClient.get.asset
       .heldAssetAtIndex(_addr, String(index))
       .then((id) => getAsset(id, _arweaveClient, _addr, _prufClient));
