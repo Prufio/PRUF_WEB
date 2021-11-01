@@ -177,14 +177,17 @@ export default function Dashboard(props) {
     };
   }, []);
 
-  React.useEffect(()=>{
-    console.log({assetBalance: assetBalance, assetsLen: Object.keys(assets).length})
-    if(assetBalance > Object.keys(assets).length) {
-      getAssetAtIndex(Object.keys(assets).length)
+  React.useEffect(() => {
+    console.log({
+      assetBalance: assetBalance,
+      assetsLen: Object.keys(assets).length,
+    });
+    if (assetBalance > Object.keys(assets).length) {
+      getAssetAtIndex(Object.keys(assets).length);
     } else if (assetBalance < Object.keys(assets).length) {
-      setAssetBalance(Object.keys(assets).length)
+      setAssetBalance(Object.keys(assets).length);
     }
-  }, [assets])
+  }, [assets]);
 
   React.useEffect(() => {
     setWinKey(String(Math.round(Math.random() * 100000)));
@@ -236,38 +239,38 @@ export default function Dashboard(props) {
       }
 
       if (window.replaceAssetData.getAsset) {
-        console.log("Fetching new asset")
-        let id
-        if(window.replaceAssetData.getAsset.id){
-          id = window.replaceAssetData.getAsset.id
+        console.log("Fetching new asset");
+        let id;
+        if (window.replaceAssetData.getAsset.id) {
+          id = window.replaceAssetData.getAsset.id;
 
-          prufClient.get.asset.ownerOf(id).then(owner=>{
-            if(owner.toLowerCase() === addr.toLowerCase()) getAsset(id)
-          })
+          prufClient.get.asset.ownerOf(id).then((owner) => {
+            if (owner.toLowerCase() === addr.toLowerCase()) getAsset(id);
+          });
         }
-        
-        window.replaceAssetData = {}
+
+        window.replaceAssetData = {};
       }
 
       if (window.replaceAssetData.assetAction) {
-        console.log(`about to ${action} asset`)
+        console.log(`about to ${action} asset`);
 
-        let action = window.replaceAssetData.assetAction
+        let action = window.replaceAssetData.assetAction;
         let newAsset = window.replaceAssetData.newAsset;
         let tempObj = JSON.parse(JSON.stringify(assets));
 
         setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
 
-        if (action = "mod") {
+        if ((action = "mod")) {
           newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
           console.log("Old Assets", assets);
-          tempObj[newAsset.id] = newAsset
+          tempObj[newAsset.id] = newAsset;
           console.log("New Assets", tempObj);
           setAssets(tempObj);
           getAssetAtIndex(0);
-        } else if (action = "rem") {
+        } else if ((action = "rem")) {
           console.log("Old Assets", assets);
-          tempObj[newAsset.id]
+          tempObj[newAsset.id];
           console.log("New Assets", tempObj);
           setAssetArr(tempArr);
           getAssetAtIndex(0);
@@ -788,7 +791,8 @@ export default function Dashboard(props) {
         setAssetBalance(e);
         if (Number(e) > 0) {
           setIsAssetHolder(true);
-          if (!options.justCount) getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
+          if (!options.justCount)
+            getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
         } else {
           setIsAssetHolder(false);
         }
@@ -804,7 +808,8 @@ export default function Dashboard(props) {
       _prufClient.get.asset.balanceOf(_addr).then((e) => {
         setAssetBalance(e);
         if (Number(e) > 0) {
-          if (!options.justCount) getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
+          if (!options.justCount)
+            getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
         }
       });
 
@@ -1181,19 +1186,29 @@ export default function Dashboard(props) {
 
   //ASSET GETTERS
   /*******************************************************************************************************************************************************/
-  const getAssetAtIndex = (index, _arweaveClient=arweaveClient, _addr=addr, _prufClient=prufClient) => {
+  const getAssetAtIndex = (
+    index,
+    _arweaveClient = arweaveClient,
+    _addr = addr,
+    _prufClient = prufClient
+  ) => {
     _prufClient.get.asset
       .heldAssetAtIndex(_addr, String(index))
-      .then(id => getAsset(id, _arweaveClient, _addr, _prufClient));
+      .then((id) => getAsset(id, _arweaveClient, _addr, _prufClient));
   };
 
-  const getAsset = (id, _arweaveClient=arweaveClient, _addr=addr, _prufClient=prufClient) => {
+  const getAsset = (
+    id,
+    _arweaveClient = arweaveClient,
+    _addr = addr,
+    _prufClient = prufClient
+  ) => {
     _prufClient.get.asset.record(id).then((rec) => {
-      console.log({rec});
+      console.log({ rec });
       rec.id = id;
       getNonMutableOf(rec, _prufClient, _arweaveClient);
     });
-  }
+  };
 
   const getNonMutableOf = async (rec, _prufClient, _arweave) => {
     rec.identicon = <Jdenticon value={rec.id} />;
@@ -1274,7 +1289,7 @@ export default function Dashboard(props) {
                       })
                       .catch((e) => {
                         console.log(e);
-                        rec.nonMutableStorage = ""
+                        rec.nonMutableStorage = "";
                         getMutableOf(rec, _prufClient, _arweave);
                       });
                   } else {
@@ -1357,7 +1372,7 @@ export default function Dashboard(props) {
                   })
                   .catch((e) => {
                     console.log(e);
-                    rec.mutableStorage = ""
+                    rec.mutableStorage = "";
                     finalize(rec, _prufClient, _arweave);
                   });
               } else {
@@ -1381,45 +1396,42 @@ export default function Dashboard(props) {
   };
 
   const finalize = async (rec, _prufClient) => {
-   
-      if (rec.nodeData.storageProvider === "1") {
-        let xhr = new XMLHttpRequest();
-        xhr.responseType = "text";
-        
-        xhr.onload = () => {
-            rec.displayImage = JSON.parse(this.response);
-            let obj = JSON.parse(JSON.stringify(assets));
-            obj[rec.id] = rec;
-            setAssets(obj);
-        };
+    if (rec.nodeData.storageProvider === "1") {
+      let xhr = new XMLHttpRequest();
+      xhr.responseType = "text";
 
-        xhr.onerror = () => {
-          console.log("XHR Error");
-          rec.displayImage = "";
-          let obj = JSON.parse(JSON.stringify(assets));
-          obj[rec.id] = rec;
-          setAssets(obj);
-        };
+      xhr.onload = () => {
+        rec.displayImage = JSON.parse(this.response);
+        let obj = JSON.parse(JSON.stringify(assets));
+        obj[rec.id] = rec;
+        setAssets(obj);
+      };
 
-        xhr.open("GET", rec.nonMutableStorage.DisplayImage);
-        xhr.send(null);
+      xhr.onerror = () => {
+        console.log("XHR Error");
+        rec.displayImage = "";
+        let obj = JSON.parse(JSON.stringify(assets));
+        obj[rec.id] = rec;
+        setAssets(obj);
+      };
 
-      } else if (rec.nodeData.storageProvider === "2") {
-        _prufClient.get.asset.URI(rec.id).then((uri) => {
-          rec.displayImage = uri;
-          let obj = JSON.parse(JSON.stringify(assets));
-          obj[rec.id] = rec;
-          setAssets(obj);
-        });
-
-      } else {
-        _prufClient.get.asset.URI(rec.id).then((uri) => {
-          rec.displayImage = uri;
-          let obj = JSON.parse(JSON.stringify(assets));
-          obj[rec.id] = rec;
-          setAssets(obj);
-        });
-      }
+      xhr.open("GET", rec.nonMutableStorage.DisplayImage);
+      xhr.send(null);
+    } else if (rec.nodeData.storageProvider === "2") {
+      _prufClient.get.asset.URI(rec.id).then((uri) => {
+        rec.displayImage = uri;
+        let obj = JSON.parse(JSON.stringify(assets));
+        obj[rec.id] = rec;
+        setAssets(obj);
+      });
+    } else {
+      _prufClient.get.asset.URI(rec.id).then((uri) => {
+        rec.displayImage = uri;
+        let obj = JSON.parse(JSON.stringify(assets));
+        obj[rec.id] = rec;
+        setAssets(obj);
+      });
+    }
   };
 
   // const buildAssetHeap = (
