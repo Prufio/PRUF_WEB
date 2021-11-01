@@ -79,7 +79,7 @@ export default function ChangeNodeName(props) {
 
     const changeName = () => {
         const pageKey = thousandHashesOf(props.addr, props.winKey) //thousandHashesOf(props.addr, props.winKey)
-        props.prufClient.get.node.nameAvailable(loginName).then(nameAvailable=>{
+        props.prufClient.get.node.isNameAvailable(loginName).then(nameAvailable=>{
             console.log(nameAvailable)
             console.log(loginName)
             if (nameAvailable) {

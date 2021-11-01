@@ -114,12 +114,12 @@ var dashRoutes = [
     component: ModifyStatus,
     layout: "/user",
   },
-  // {
-  //   name: "Update Owner",
-  //   path: "/modify-rightsholder",
-  //   component: ModifyRGT,
-  //   layout: "/user",
-  // },
+  {
+    name: "Update Owner",
+    path: "/modify-rightsholder",
+    component: ModifyRGT,
+    layout: "/user",
+  },
   {
     name: "Transfer Asset",
     path: "/transfer-asset",
@@ -132,18 +132,18 @@ var dashRoutes = [
     component: Verify,
     layout: "/user",
   },
-  {
-    name: "Change Node Name",
-    path: "/change-name",
-    component: ChangeNodeName,
-    layout: "/user",
-  },
-  {
-    name: "Change Data",
-    path: "/change-node-data",
-    component: ChangeNodeData,
-    layout: "/user",
-  },
+  // {
+  //   name: "Change Node Name",
+  //   path: "/change-name",
+  //   component: ChangeNodeName,
+  //   layout: "/user",
+  // },
+  // {
+  //   name: "Change Data",
+  //   path: "/change-node-data",
+  //   component: ChangeNodeData,
+  //   layout: "/user",
+  // },
   {
     name: "Change Costs",
     path: "/change-costs",
