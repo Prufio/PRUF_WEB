@@ -21,6 +21,10 @@ const dashboardStyle = {
     width: "calc(40% - 30px)",
     height: "calc(40% - 30px)",
   },
+  cardTitleMain: {
+    ...cardTitle,
+    fontWeight: "400"
+  },
   cardIconTitle: {
     ...cardTitle,
     marginTop: "15px",

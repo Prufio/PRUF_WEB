@@ -751,7 +751,7 @@ export default function NewRecord(props) {
             nodeName.substring(1, nodeName.length).toLowerCase(),
           id: nodeId,
         },
-        idxHash: window.web3.utils.soliditySha3(idx, nodeId), 
+        idxHash: window.web3.utils.soliditySha3({t: 'bytes32', v: idx}, {t: 'uint32', v: nodeId}), 
         currency: "0",
         id: idx,
         ipfs: extendedDataHash,
@@ -776,10 +776,10 @@ export default function NewRecord(props) {
         identiconLG: [<Jdenticon value={idx} key="" />],
       };
 
-      idxHash = idx;
+      idxHash = window.web3.utils.soliditySha3({t: 'bytes32', v: idx}, {t: 'uint32', v: nodeId});
       console.log(first, middle, last, ID, password, idx)
       props.prufClient.utils.generateSecureRgt(
-        idx,
+        idxHash,
         {
           first: "0",
           middle: "0",
@@ -805,7 +805,7 @@ export default function NewRecord(props) {
         console.log("IPFS bytes32: ", extendedDataHash);
         props.prufClient.do.asset
           .mint(
-            idxHash,
+            idx,
             rgtHash,
             nodeId,
             "1000000",
@@ -860,7 +860,7 @@ export default function NewRecord(props) {
               //refreshBalances()
               window.location.href = "/#/user/dashboard";
               window.replaceAssetData.key = pageKey
-              window.replaceAssetData.getAsset = {id: window.web3.utils.soliditySha3({t: 'bytes32', v: newAsset.id}, {t: 'uint32', v: nodeId})}
+              window.replaceAssetData.getAsset = {id: idxHash}
               window.dispatchEvent(props.refresh)
             });
           });
@@ -907,9 +907,9 @@ export default function NewRecord(props) {
         identiconLG: [<Jdenticon value={idx} key="" />],
       };
 
-      idxHash = idx;
+      idxHash = window.web3.utils.soliditySha3({t: 'bytes32', v: idx}, {t: 'uint32', v: nodeId})
       props.prufClient.utils.generateSecureRgt(
-        idx,
+        idxHash,
         {
           first: "0",
           middle: "0",
@@ -936,7 +936,7 @@ export default function NewRecord(props) {
 
         props.prufClient.do.asset
           .mint(
-            idxHash,
+            idx,
             rgtHash,
             nodeId,
             "1000000",
@@ -992,7 +992,7 @@ export default function NewRecord(props) {
               window.location.href = "/#/user/dashboard";
       
               window.replaceAssetData.key = pageKey
-              window.replaceAssetData.getAsset = {id: window.web3.utils.soliditySha3({t: 'bytes32', v: newAsset.id}, {t: 'uint32', v: nodeId})}
+              window.replaceAssetData.getAsset = {id: idxHash}
               window.dispatchEvent(props.refresh)
             });
           });
