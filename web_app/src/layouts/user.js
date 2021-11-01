@@ -179,9 +179,9 @@ export default function Dashboard(props) {
 
   React.useEffect(()=>{
     console.log({assetBalance: assetBalance, assetsLen: Object.keys(assets).length})
-    if(assetBalance > Object.keys(assets).length) {
+    if(assetBalance !== "~" && assetBalance > Object.keys(assets).length) {
       getAssetAtIndex(Object.keys(assets).length)
-    } else if (assetBalance < Object.keys(assets).length) {
+    } else if (assetBalance !== "~" && assetBalance < Object.keys(assets).length) {
       setAssetBalance(Object.keys(assets).length)
     }
   }, [assets])
@@ -1188,6 +1188,7 @@ export default function Dashboard(props) {
   };
 
   const getAsset = (id, _arweaveClient=arweaveClient, _addr=addr, _prufClient=prufClient) => {
+    console.log({id})
     _prufClient.get.asset.record(id).then((rec) => {
       console.log({rec});
       rec.id = id;
@@ -1381,6 +1382,7 @@ export default function Dashboard(props) {
   };
 
   const finalize = async (rec, _prufClient) => {
+    console.log("rec", {rec})
     _prufClient.get.asset.URI(rec.id).then((uri) => {
       if (rec.nodeData.storageProvider === "1") {
         let xhr = new XMLHttpRequest();

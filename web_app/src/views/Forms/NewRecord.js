@@ -480,6 +480,7 @@ export default function NewRecord(props) {
   const handleHash = async (dataTransaction, extendedDataHash, idxHash, ipfsObj) => {
     if (storageProvider === "2") {
       let extDataA = String(extendedDataHash).substring(0, 66);
+      
       let extDataB =
         "0x" +
         String(extendedDataHash).substring(66, String(extendedDataHash).length);
@@ -808,8 +809,9 @@ export default function NewRecord(props) {
             rgtHash,
             nodeId,
             "1000000",
-            extendedDataHash,
-            extDataB
+            extDataA,
+            extDataB,
+            dataTransaction,
           )
           // eslint-disable-next-line react/prop-types
           .send({ from: props.addr })
@@ -858,7 +860,7 @@ export default function NewRecord(props) {
               //refreshBalances()
               window.location.href = "/#/user/dashboard";
               window.replaceAssetData.key = pageKey
-              window.replaceAssetData.getAsset = {id: window.web3.utils.soliditySha3(newAsset.id, nodeId)}
+              window.replaceAssetData.getAsset = {id: window.web3.utils.soliditySha3({t: 'bytes32', v: newAsset.id}, {t: 'uint32', v: nodeId})}
               window.dispatchEvent(props.refresh)
             });
           });
