@@ -255,7 +255,7 @@ export default function FinalizeNode(props) {
             <div className="delegationTips">
               <FiberManualRecordTwoTone className="delegationPin" />
               <h4 className="alertTextSm">
-                Allow users to set their own permanent data to their assets.
+              Allow users to set their own permanent data.
               </h4>
             </div>
           )}
@@ -263,7 +263,7 @@ export default function FinalizeNode(props) {
             <div className="delegationTips">
               <FiberManualRecordTwoTone className="delegationPin" />
               <h4 className="alertTextSm">
-                Allow assigned addresses to be asset minters.
+              Delegate minting authority to other accounts.
               </h4>
             </div>
           )}
@@ -271,7 +271,7 @@ export default function FinalizeNode(props) {
             <div className="delegationTips">
               <FiberManualRecordTwoTone className="delegationPin" />
               <h4 className="alertTextSm">
-                Allow assets to be minted to assigned asset minters.
+              Mint to delegated minters.
               </h4>
             </div>
           )}
