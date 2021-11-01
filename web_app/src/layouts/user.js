@@ -1409,7 +1409,7 @@ export default function Dashboard(props) {
           rec.displayImage = uri;
           let obj = JSON.parse(JSON.stringify(assets));
           obj[rec.id] = rec;
-        setAssets(obj);
+          setAssets(obj);
         });
 
       } else {
