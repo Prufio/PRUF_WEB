@@ -183,7 +183,10 @@ export default function Dashboard(props) {
       assetBalance: assetBalance,
       assetsLen: Object.keys(assets).length,
     });
-    if (Number(assetBalance) > Object.keys(assets).length) {
+    if(window.countDown) {
+      window.countDown = false
+      setAssetBalance(assetBalance - 1)
+    } else if (Number(assetBalance) > Object.keys(assets).length) {
       getAssetAtIndex(Object.keys(assets).length);
     } else if (Number(assetBalance) < Object.keys(assets).length) {
       setAssetBalance(Object.keys(assets).length);
@@ -263,21 +266,17 @@ export default function Dashboard(props) {
         let newAsset = window.replaceAssetData.newAsset;
         let tempObj = JSON.parse(JSON.stringify(assets));
 
-        setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
+        //setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
 
-        if ((action = "mod")) {
+        if ((action === "mod")) {
           newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
+          getAsset(newAsset.id)
+        } else if ((action === "rem")) {
+          window.countDown = true;
           console.log("Old Assets", assets);
-          tempObj[newAsset.id] = newAsset;
+          delete tempObj[newAsset.id];
           console.log("New Assets", tempObj);
           setAssets(tempObj);
-          getAssetAtIndex(0);
-        } else if ((action = "rem")) {
-          console.log("Old Assets", assets);
-          tempObj[newAsset.id];
-          console.log("New Assets", tempObj);
-          setAssetArr(tempArr);
-          getAssetAtIndex(0);
         }
         window.replaceAssetData = {};
         forceUpdate();
@@ -1449,7 +1448,7 @@ export default function Dashboard(props) {
       });
     }
   };
-  
+
   return (
     <div className={classes.wrapper}>
       <Sidebar
