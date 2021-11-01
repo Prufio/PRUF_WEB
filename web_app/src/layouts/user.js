@@ -1381,13 +1381,13 @@ export default function Dashboard(props) {
   };
 
   const finalize = async (rec, _prufClient) => {
-    _prufClient.get.asset.URI(rec.id).then((uri) => {
+   
       if (rec.nodeData.storageProvider === "1") {
         let xhr = new XMLHttpRequest();
         xhr.responseType = "text";
         
         xhr.onload = () => {
-            rec.displayImage = this.response;
+            rec.displayImage = JSON.parse(this.response);
             let obj = JSON.parse(JSON.stringify(assets));
             obj[rec.id] = rec;
             setAssets(obj);
@@ -1401,25 +1401,25 @@ export default function Dashboard(props) {
           setAssets(obj);
         };
 
-        xhr.open("GET", uri);
+        xhr.open("GET", rec.nonMutableStorage.DisplayImage);
         xhr.send(null);
 
       } else if (rec.nodeData.storageProvider === "2") {
-
-        rec.displayImage = uri;
-        let obj = JSON.parse(JSON.stringify(assets));
-        obj[rec.id] = rec;
+        _prufClient.get.asset.URI(rec.id).then((uri) => {
+          rec.displayImage = uri;
+          let obj = JSON.parse(JSON.stringify(assets));
+          obj[rec.id] = rec;
         setAssets(obj);
+        });
 
       } else {
-
-        rec.displayImage = uri;
-        let obj = JSON.parse(JSON.stringify(assets));
-        obj[rec.id] = rec;
-        setAssets(obj);
-
+        _prufClient.get.asset.URI(rec.id).then((uri) => {
+          rec.displayImage = uri;
+          let obj = JSON.parse(JSON.stringify(assets));
+          obj[rec.id] = rec;
+          setAssets(obj);
+        });
       }
-    });
   };
 
   // const buildAssetHeap = (
