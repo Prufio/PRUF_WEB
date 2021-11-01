@@ -1215,24 +1215,25 @@ export default function Dashboard(props) {
           getMutableOf(rec, _prufClient, _arweave);
         } else if (rec.nodeData.storageProvider === "1") {
           _prufClient.utils
-            .ipfsFromB32(rec.nonmutableStorage1)
+            .ipfsFromB32(rec.nonMutableStorage1)
             .then(async (query) => {
               console.log("MDQ", query);
 
               if (cookies[window.web3.utils.soliditySha3(query)]) {
-                rec.nonmutableStorage =
+                rec.nonMutableStorage =
                   cookies[window.web3.utils.soliditySha3(query)];
+                  getMutableOf(rec, _prufClient, _arweave);
               } else {
                 for await (const chunk of window.ipfs.cat(query)) {
                   let str = new TextDecoder("utf-8").decode(chunk);
                   try {
-                    rec.nonmutableStorage = JSON.parse(str);
+                    rec.nonMutableStorage = JSON.parse(str);
                     setCookieTo(
                       window.web3.utils.soliditySha3(query),
-                      rec.nonmutableStorage
+                      rec.nonMutableStorage
                     );
                   } catch {
-                    rec.nonmutableStorage = str;
+                    rec.nonMutableStorage = str;
                   }
                   getMutableOf(rec, _prufClient, _arweave);
                 }
@@ -1389,14 +1390,22 @@ export default function Dashboard(props) {
         xhr.responseType = "text";
         
         xhr.onload = () => {
+          if(!this){
+            console.error("XHR Error");
+            rec.displayImage = "";
+            let obj = JSON.parse(JSON.stringify(assets));
+            obj[rec.id] = rec;
+            setAssets(obj);
+          } else {
             rec.displayImage = this.response;
             let obj = JSON.parse(JSON.stringify(assets));
             obj[rec.id] = rec;
             setAssets(obj);
+          }
         };
 
         xhr.onerror = () => {
-          console.log("XHR Error");
+          console.error("XHR Error");
           rec.displayImage = "";
           let obj = JSON.parse(JSON.stringify(assets));
           obj[rec.id] = rec;
@@ -1404,7 +1413,7 @@ export default function Dashboard(props) {
         };
 
         xhr.open("GET", uri);
-        xhr.send(null);
+        xhr.send(null)
 
       } else if (rec.nodeData.storageProvider === "2") {
 
