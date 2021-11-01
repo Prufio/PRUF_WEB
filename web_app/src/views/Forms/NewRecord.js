@@ -809,7 +809,8 @@ export default function NewRecord(props) {
             nodeId,
             "1000000",
             extendedDataHash,
-            extDataB
+            extDataB,
+            dataTransaction
           )
           // eslint-disable-next-line react/prop-types
           .send({ from: props.addr })
