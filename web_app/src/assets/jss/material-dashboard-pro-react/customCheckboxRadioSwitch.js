@@ -75,6 +75,17 @@ const customCheckboxRadioSwitch = {
     transition: "0.3s ease all",
     letterSpacing: "unset",
   },
+  labelANP: {
+    cursor: "pointer",
+    paddingLeft: "0",
+    color: "black",
+    fontSize: "14px",
+    lineHeight: "1.428571429",
+    fontWeight: "500",
+    display: "inline-flex",
+    transition: "0.3s ease all",
+    letterSpacing: "unset",
+  },
   labelHorizontal: {
     color: "rgba(" + hexToRgb(blackColor) + ", 0.26)",
     cursor: "pointer",
