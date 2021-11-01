@@ -1167,8 +1167,8 @@ export default function Dashboard(props) {
           rec.name = rec.name
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
-          _prufClient.get.node.switchAt(rec.nodeId, "7").then((switch1) => {
-            switch1 === "1" ? (rec.usesAuth = true) : (rec.usesAuth = false);
+          _prufClient.get.node.switchAt(rec.nodeId, "7").then((switch7) => {
+            switch7 === "1" ? (rec.usesAuth = true) : (rec.usesAuth = false);
             _extDataArr.push(rec);
             return buildNodesInWallet(
               _prufClient,
