@@ -243,7 +243,7 @@ export default function ModifyStatus(props) {
             newAsset.statusNum = status
 
             props.prufClient.do.asset
-                .markAssetLostOrStolen(assetInfo.id, String(status))
+                .markLostOrStolen(assetInfo.id, String(status))
                 // eslint-disable-next-line react/prop-types
                 .send({ from: props.addr })
                 .on('error', function (_error) {
