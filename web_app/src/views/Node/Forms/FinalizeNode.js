@@ -609,7 +609,7 @@ export default function FinalizeNode(props) {
                       label: classes.label,
                       root: classes.labelRoot,
                     }}
-                    label="Allow users to set their own permanent data to their assets."
+                    label="Allow users to set their own permanent data."
                   />
                 </div>
               </Card>
@@ -636,7 +636,7 @@ export default function FinalizeNode(props) {
                       label: classes.label,
                       root: classes.labelRoot,
                     }}
-                    label="Allow assigned addresses to be asset minters."
+                    label="Delegate minting authority to other accounts."
                   />
                 </div>
               </Card>
@@ -663,7 +663,7 @@ export default function FinalizeNode(props) {
                       label: classes.label,
                       root: classes.labelRoot,
                     }}
-                    label="Allow assets to be minted to assigned asset minters."
+                    label="Mint to delegated minters"
                   />
                 </div>
               </Card>
@@ -672,42 +672,37 @@ export default function FinalizeNode(props) {
               <Card className="slide-right">
                 {advancedNodePreferencesHover1 && (
                   <>
-                    <h3>
-                      Allow users to set their own permanent data to their
-                      assets.
-                    </h3>
+                    <h3>Allow users to set their own permanent data.</h3>
                     <p>
-                      If set, under the condition that permanent data is not
-                      attatched to an asset upon minting, the holder of the
-                      asset will be permitted to set their own permanent data at
-                      their leisure. Otherwise, the permanent data attatched to
-                      an asset must be done so upon the minting of an asset.
-                      Once the permanent data fields are set, they cannot be
-                      edited or removed from an asset unless under extraneous
-                      circumstances.
+                      If this is left unchecked, all permanent data must be
+                      added by the node holder while they still hold the token.
+                      If this is set, assets minted without permanent data can
+                      have it added later by the user. Once permanent data is
+                      set, either by the Node holder or the user, it cannot be
+                      changed.
                     </p>
                   </>
                 )}
                 {advancedNodePreferencesHover2 && (
                   <>
-                    <h3>Allow assigned addresses to be asset minters.</h3>
+                    <h3>Delegate minting authority to other accounts.</h3>
                     <p>
-                      If set, only permitted addresses will be allowed to mint
-                      tokens under this node. Otherwise the Node holder will be
-                      the only authorized minter.
+                      If this is left unchecked, only the account that holds the
+                      Node token can mint. If this is set, you must authorize
+                      account(s) to mint tokens with this Node. With this set,
+                      holding the node token alone will not allow minting. You
+                      can approve or deauthorize as many addresses as you wish.
                     </p>
                   </>
                 )}
                 {advancedNodePreferencesHover3 && (
                   <>
-                    <h3>
-                      Allow assets to be minted to assigned asset minters.
-                    </h3>
+                    <h3>Mint to delegated minters.</h3>
                     <p>
-                      If set, permissioned minting addresses under this node
-                      will be the reciever of any assets they mint. Otherwise
-                      all assets will mint to the Node holder address upon
-                      minting.
+                      If this is left unchecked, all tokens minted with this
+                      Node will be minted into the account that holds the Node
+                      token. If this is set, delegated minters will receive the
+                      tokens they mint into their own account.
                     </p>
                   </>
                 )}
