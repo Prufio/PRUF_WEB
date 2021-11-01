@@ -103,7 +103,10 @@ export default function CreateNode(props) {
 
   const generateRootList = (arr) => {
     // eslint-disable-next-line react/prop-types
-    let rootNames = props.rootNames;
+    let rootNames = [] 
+    props.roots.forEach(root=>{
+        rootNames.push(root.name)
+    })
     if (!arr || !rootNames) return;
     let rootSelection = [
       <MenuItem
@@ -203,7 +206,7 @@ export default function CreateNode(props) {
     window.replaceAssetData.refreshBals = true;
     const pageKey = thousandHashesOf(props.addr, props.winKey);
     let id;
-    props.prufClient.get.nodeId(name).then((e) => {
+    props.prufClient.get.node.id(name).then((e) => {
       // eslint-disable-next-line react/prop-types
       let tempArr, tempExtArr;
 

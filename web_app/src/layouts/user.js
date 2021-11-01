@@ -143,14 +143,16 @@ export default function Dashboard(props) {
 
     if (cookies) checkForCookies();
 
-    window.addEventListener("refresh", () => setReplaceAssetData(replaceAssetData + 1));
+    window.addEventListener("refresh", () =>
+      setReplaceAssetData(replaceAssetData + 1)
+    );
     window.addEventListener("connectArweave", () => {
       if (!window.arweaveWallet) {
         return swal(
           "We looked, but couldn't find an arweave web wallet. You may upload a keyfile from storage using the button below, or click cancel to go back."
         );
       }
-  
+
       swal(
         "You have selected a node which uses Arweave for storage. Please sign in to your arweave wallet."
       ).then(() => {
@@ -174,6 +176,15 @@ export default function Dashboard(props) {
       }
     };
   }, []);
+
+  React.useEffect(()=>{
+    console.log({assetBalance: assetBalance, assetsLen: Object.keys(assets).length})
+    if(assetBalance > Object.keys(assets).length) {
+      getAssetAtIndex(Object.keys(assets).length)
+    } else if (assetBalance < Object.keys(assets).length) {
+      setAssetBalance(Object.keys(assets).length)
+    }
+  }, [assets])
 
   React.useEffect(() => {
     setWinKey(String(Math.round(Math.random() * 100000)));
@@ -224,44 +235,42 @@ export default function Dashboard(props) {
         setupTokenVals(arweaveClient, addr, prufClient, { justNodes: true });
       }
 
-      if (window.replaceAssetData.newAsset || window.replaceAssetData.dBIndex) {
-        console.log(
-          "Object is defined. index: ",
-          window.replaceAssetData.dBIndex,
-          " new asset: ",
-          window.replaceAssetData.newAsset
-        );
+      if (window.replaceAssetData.getAsset) {
+        console.log("Fetching new asset")
+        let id
+        if(window.replaceAssetData.getAsset.id){
+          id = window.replaceAssetData.getAsset.id
+
+          prufClient.get.asset.ownerOf(id).then(owner=>{
+            if(owner.toLowerCase() === addr.toLowerCase()) getAsset(id)
+          })
+        }
+        
+        window.replaceAssetData = {}
+      }
+
+      if (window.replaceAssetData.assetAction) {
+        console.log(`about to ${action} asset`)
+
+        let action = window.replaceAssetData.assetAction
         let newAsset = window.replaceAssetData.newAsset;
-        let dBIndex = window.replaceAssetData.dBIndex;
-        let tempArr = JSON.parse(JSON.stringify(assetArr));
-        let idArr = JSON.parse(JSON.stringify(assetIds));
+        let tempObj = JSON.parse(JSON.stringify(assets));
+
         setupTokenVals(arweaveClient, addr, prufClient, { justAssets: true });
 
-        if (newAsset && dBIndex > -1) {
-          idArr.push(newAsset.id);
+        if (action = "mod") {
           newAsset.identicon = <Jdenticon vlaue={newAsset.id} />;
-          console.log("Replacing asset at index: ", dBIndex);
-          console.log("Old Assets", tempArr);
-          tempArr.splice(dBIndex, 1, newAsset);
-          console.log("New Assets", tempArr);
+          console.log("Old Assets", assets);
+          tempObj[newAsset.id] = newAsset
+          console.log("New Assets", tempObj);
+          setAssets(tempObj);
+          getAssetAtIndex(0);
+        } else if (action = "rem") {
+          console.log("Old Assets", assets);
+          tempObj[newAsset.id]
+          console.log("New Assets", tempObj);
           setAssetArr(tempArr);
-          getAssetIds(addr, prufClient, assetIds.length);
-        } else if (dBIndex > -1 && !newAsset) {
-          console.log("Deleting asset at index: ", dBIndex);
-          console.log("Old Assets", tempArr);
-          tempArr.splice(dBIndex, 1);
-          idArr.splice(dBIndex, 1);
-          console.log("New Assets", tempArr);
-          setAssetArr(tempArr);
-          getAssetIds(addr, prufClient, assetIds.length - 1);
-        } else if (newAsset && !dBIndex) {
-          idArr.push(newAsset.id);
-          console.log("Adding asset: ", newAsset);
-          console.log("Old Assets", tempArr);
-          tempArr.push(newAsset);
-          console.log("New Assets", tempArr);
-          setAssetArr(tempArr);
-          getAssetIds(addr, prufClient, assetIds.length + 1);
+          getAssetAtIndex(0);
         }
         window.replaceAssetData = {};
         forceUpdate();
@@ -282,9 +291,14 @@ export default function Dashboard(props) {
 
     console.log(arweave);
 
-    if(window.arweaveWallet) {
-      window.arweaveWallet.connect([`ACCESS_ADDRESS`, `SIGN_TRANSACTION`, `ENCRYPT`, `DECRYPT`])
-      window.arweaveWallet.getActiveAddress().then(e=>console.log(e))
+    if (window.arweaveWallet) {
+      window.arweaveWallet.connect([
+        `ACCESS_ADDRESS`,
+        `SIGN_TRANSACTION`,
+        `ENCRYPT`,
+        `DECRYPT`,
+      ]);
+      window.arweaveWallet.getActiveAddress().then((e) => console.log(e));
     }
 
     window.arweaveClient = arweave;
@@ -304,7 +318,7 @@ export default function Dashboard(props) {
     web3.eth.net.getId().then(async (chainId) => {
       const _prufClient = new PRUF(web3, chainId, false, true);
       await _prufClient.init();
-  
+
       console.log(_prufClient);
       setPrufClient(_prufClient);
       setUpEnvironment(_prufClient);
@@ -330,7 +344,6 @@ export default function Dashboard(props) {
             className: "moreCookieInfo",
           },
 
-
           accept: {
             text: "Accept and continue",
             value: "accept",
@@ -341,7 +354,7 @@ export default function Dashboard(props) {
         switch (value) {
           case "accept":
             setCookieTo("hasBeenNotified", true);
-            setHasBeenNotified(true)
+            setHasBeenNotified(true);
             break;
 
           case "moreInfo":
@@ -359,7 +372,7 @@ export default function Dashboard(props) {
               switch (value) {
                 case "accept":
                   setCookieTo("hasBeenNotified", true);
-                  setHasBeenNotified(true)
+                  setHasBeenNotified(true);
                   break;
 
                 default:
@@ -394,14 +407,12 @@ export default function Dashboard(props) {
 
   const handleEthereum = () => {
     if (window.ethereum) {
-
       let web3;
       web3 = require("web3");
       const ethereum = window.ethereum;
       web3 = new Web3(web3.givenProvider);
       window.web3 = web3;
       web3.eth.net.getId().then(async (chainId) => {
-
         window.ethereum.on("chainChanged", (chainId) => {
           console.log(chainId);
           window.location.reload();
@@ -413,17 +424,16 @@ export default function Dashboard(props) {
         window.ethereum.on("accountsChanged", (e) => {
           console.log("Accounts changed");
           if (e[0] === undefined || e[0] === null) {
-            if (e[0]!== addr) {
-              window.location.reload()
+            if (e[0] !== addr) {
+              window.location.reload();
             }
           } else if (e[0].toLowerCase() !== addr.toLowerCase()) {
-            setAddr(web3.utils.toChecksumAddress(e[0]))
-            if(_prufClient.get){
-              setUpEnvironment(_prufClient, e[0])
+            setAddr(web3.utils.toChecksumAddress(e[0]));
+            if (_prufClient.get) {
+              setUpEnvironment(_prufClient, e[0]);
             } else {
-              window.location.reload()
+              window.location.reload();
             }
-            
           }
         });
 
@@ -462,7 +472,7 @@ export default function Dashboard(props) {
                   window.location.href = "/#/user/search";
                   return forceUpdate();
                 }
-                setUpEnvironment(_prufClient, _addr)
+                setUpEnvironment(_prufClient, _addr);
                 setIsMounted(true);
               } else {
                 ethereum
@@ -491,7 +501,7 @@ export default function Dashboard(props) {
                         setImage(cookies[`${_addr}sideBarImage`]);
                       }
                       window.addr = _addr;
-                      awaitPrufInit(_prufClient, _addr);
+                      setUpEnvironment(_prufClient, _addr);
                       setIsMounted(true);
                     }
                   });
@@ -643,7 +653,6 @@ export default function Dashboard(props) {
     setMobileOpen(!mobileOpen);
   };
 
-
   const sidebarMinimize = () => {
     setMiniActive(!miniActive);
   };
@@ -779,7 +788,7 @@ export default function Dashboard(props) {
         setAssetBalance(e);
         if (Number(e) > 0) {
           setIsAssetHolder(true);
-          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e);
+          if (!options.justCount) getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
         } else {
           setIsAssetHolder(false);
         }
@@ -795,8 +804,8 @@ export default function Dashboard(props) {
       _prufClient.get.asset.balanceOf(_addr).then((e) => {
         setAssetBalance(e);
         if (Number(e) > 0) {
-          if (!options.justCount) getAssetIds(_arweave, _addr, _prufClient, e);
-        } 
+          if (!options.justCount) getAssetAtIndex(0, _arweave, _addr, _prufClient, e);
+        }
       });
 
       _prufClient.get.node.balanceOf(_addr).then((e) => {
@@ -820,6 +829,8 @@ export default function Dashboard(props) {
     }
   };
 
+  //NODE GETTERS
+  /*******************************************************************************************************************************************************/
   const buildRoots = (_addr, _prufClient, iteration, arr) => {
     if (!_prufClient) return;
     if (!arr) arr = cookies[`${_addr}roots`] || [];
@@ -898,12 +909,12 @@ export default function Dashboard(props) {
         //  `Broke subNodeGet recursion at: ${iteration} because node doesn't exist at index`
         //);
         console.log(`All nodes: ${arr}`);
-        return getACsFromDB(_addr, _prufClient, arr);
+        return getNodesFromDB(_addr, _prufClient, arr);
       }
     });
   };
 
-  const getACsFromDB = (
+  const getNodesFromDB = (
     _addr,
     _prufClient,
     nodeArray,
@@ -931,12 +942,15 @@ export default function Dashboard(props) {
 
     if (nodeArray[iteration] < 100000) {
       _prufClient.get.node.name(String(nodeArray[iteration])).then((e) => {
-        rootArray.push({id: nodeArray[iteration], name: e
-          .toLowerCase()
-          .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
-      });
+        rootArray.push({
+          id: nodeArray[iteration],
+          name: e
+            .toLowerCase()
+            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase()),
+        });
+        console.log("Creating empty array for root");
         _nodeSets[String(nodeArray[iteration])] = [];
-        return getACsFromDB(
+        return getNodesFromDB(
           _addr,
           _prufClient,
           nodeArray,
@@ -950,7 +964,7 @@ export default function Dashboard(props) {
     } else {
       _prufClient.get.node.record(String(nodeArray[iteration])).then((e) => {
         if (e.managementType === "255") {
-          return getACsFromDB(
+          return getNodesFromDB(
             _addr,
             _prufClient,
             nodeArray,
@@ -961,62 +975,20 @@ export default function Dashboard(props) {
             dontCount
           );
         } else if (e.managementType === "1" || e.managementType === "2") {
-          _prufClient.get.node.ownerOf(String(nodeArray[iteration])).then((x) => {
-            if (window.web3.utils.toChecksumAddress(x) === _addr) {
-              allNodes.push({id: String(nodeArray[iteration]), name: e.name
-                .toLowerCase()
-                .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                  letter.toUpperCase()
-                )});
-
-              return getACsFromDB(
-                _addr,
-                _prufClient,
-                nodeArray,
-                iteration + 1,
-                _nodeSets,
-                rootArray,
-                allNodes,
-                dontCount
-              );
-            } else {
-              if (!dontCount.includes(nodeArray[iteration])) {
-                console.log({ iteration, dontCount });
-                dontCount.push(nodeArray[iteration]);
-                setCookieTo(`${_addr}dontCount`, dontCount);
-              } else {
-                console.log(
-                  "Counted when should not have... Removing cached values"
-                );
-                let temp = cookies[`${_addr}subNodes`];
-                temp.splice(temp.indexOf(nodeArray[iteration]), 1);
-                setCookieTo(`${_addr}subNodes`, temp);
-              }
-
-              return getACsFromDB(
-                _addr,
-                _prufClient,
-                nodeArray,
-                iteration + 1,
-                _nodeSets,
-                rootArray,
-                allNodes,
-                dontCount
-              );
-            }
-          });
-          //getACsFromDB(_addr, _prufClient, nodeArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allNodes, allClassNames)
-        } else if (e.managementType === "3") {
           _prufClient.get.node
-            .userType(_addr, String(nodeArray[iteration]))
+            .ownerOf(String(nodeArray[iteration]))
             .then((x) => {
-              if (x === "1") {
-                allNodes.push({id: String(nodeArray[iteration]), name: e.name
-                  .toLowerCase()
-                  .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-                    letter.toUpperCase()
-                  )});
-                return getACsFromDB(
+              if (window.web3.utils.toChecksumAddress(x) === _addr) {
+                allNodes.push({
+                  id: String(nodeArray[iteration]),
+                  name: e.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    ),
+                });
+
+                return getNodesFromDB(
                   _addr,
                   _prufClient,
                   nodeArray,
@@ -1027,7 +999,57 @@ export default function Dashboard(props) {
                   dontCount
                 );
               } else {
-                return getACsFromDB(
+                if (!dontCount.includes(nodeArray[iteration])) {
+                  console.log({ iteration, dontCount });
+                  dontCount.push(nodeArray[iteration]);
+                  setCookieTo(`${_addr}dontCount`, dontCount);
+                } else {
+                  console.log(
+                    "Counted when should not have... Removing cached values"
+                  );
+                  let temp = cookies[`${_addr}subNodes`];
+                  temp.splice(temp.indexOf(nodeArray[iteration]), 1);
+                  setCookieTo(`${_addr}subNodes`, temp);
+                }
+
+                return getNodesFromDB(
+                  _addr,
+                  _prufClient,
+                  nodeArray,
+                  iteration + 1,
+                  _nodeSets,
+                  rootArray,
+                  allNodes,
+                  dontCount
+                );
+              }
+            });
+          //getNodesFromDB(_addr, _prufClient, nodeArray, iteration + 1, _nodeSets, rootArray, rootNameArray, allNodes, allClassNames)
+        } else if (e.managementType === "3") {
+          _prufClient.get.node
+            .userType(_addr, String(nodeArray[iteration]))
+            .then((x) => {
+              if (x === "1") {
+                allNodes.push({
+                  id: String(nodeArray[iteration]),
+                  name: e.name
+                    .toLowerCase()
+                    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                      letter.toUpperCase()
+                    ),
+                });
+                return getNodesFromDB(
+                  _addr,
+                  _prufClient,
+                  nodeArray,
+                  iteration + 1,
+                  _nodeSets,
+                  rootArray,
+                  allNodes,
+                  dontCount
+                );
+              } else {
+                return getNodesFromDB(
                   _addr,
                   _prufClient,
                   nodeArray,
@@ -1040,11 +1062,15 @@ export default function Dashboard(props) {
               }
             });
         } else {
-          allNodes.push({id: String(nodeArray[iteration]), name: e.name
-            .toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
+          allNodes.push({
+            id: String(nodeArray[iteration]),
+            name: e.name
+              .toLowerCase()
+              .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+                letter.toUpperCase()
+              ),
           });
-          return getACsFromDB(
+          return getNodesFromDB(
             _addr,
             _prufClient,
             nodeArray,
@@ -1064,20 +1090,22 @@ export default function Dashboard(props) {
     console.log(obj);
     let allNodes = obj.allNArr,
       rootArray = obj.rArr,
-      _nodeSets = obj.sets
+      _nodeSets = obj.sets;
 
     //console.log(allNodes, allClassNames, rootArray)
 
-    allNodes.forEach(node => {
+    allNodes.forEach((node) => {
       _prufClient.get.node.record(String(node.id)).then((e) => {
-        _nodeSets[String(rootArray[Number(e.root - 1)])].push({
+        console.log(e);
+
+        _nodeSets[String(rootArray[Number(e.root - 1)].id)].push({
           id: node.id,
           name: node.name
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase()),
         });
       });
-    })
+    });
 
     console.log("Class Sets: ", _nodeSets);
     setRoots(rootArray);
@@ -1089,8 +1117,7 @@ export default function Dashboard(props) {
     if (!iteration) iteration = 0;
     if (!ids) ids = [];
     if (iteration >= bal) return buildNodesInWallet(_prufClient, ids);
-    _prufClient.get// eslint-disable-next-line react/prop-types
-    .node
+    _prufClient.get.node // eslint-disable-next-line react/prop-types
       .heldNodeAtIndex(_addr, String(iteration))
       .then((e) => {
         ids.push(e);
@@ -1112,14 +1139,13 @@ export default function Dashboard(props) {
     //console.log({ ids })
     if (iteration < ids.length) {
       // eslint-disable-next-line react/prop-types
-      _prufClient.get// eslint-disable-next-line react/prop-types
-      .node
+      _prufClient.get.node // eslint-disable-next-line react/prop-types
         .record(ids[iteration])
-        .then((e) => {
+        .then((rec) => {
           //console.log(e)
           _nodeData.push([
             //<button className="nodeButton2" onClick={() => handleSimple({ name: e.name, index: iteration, href: "view", id: String(ids[iteration]) })}>{` ${e.name} `}</button>,
-            e.name
+            rec.name
               .toLowerCase()
               .replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
                 letter.toUpperCase()
@@ -1128,18 +1154,21 @@ export default function Dashboard(props) {
             "N/A",
             "N/A",
           ]);
-          e.nodeId = ids[iteration];
-          e.name = e.name
+          rec.nodeId = ids[iteration];
+          rec.name = rec.name
             .toLowerCase()
             .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
-          _extDataArr.push(e);
-          return buildNodesInWallet(
-            _prufClient,
-            ids,
-            _extDataArr,
-            _nodeData,
-            iteration + 1
-          );
+          _prufClient.get.node.switchAt(rec.nodeId, "7").then((switch1) => {
+            switch1 === "1" ? (rec.usesAuth = true) : (rec.usesAuth = false);
+            _extDataArr.push(rec);
+            return buildNodesInWallet(
+              _prufClient,
+              ids,
+              _extDataArr,
+              _nodeData,
+              iteration + 1
+            );
+          });
         });
     } else {
       _nodeData.push(["", "", "", ""]);
@@ -1150,684 +1179,914 @@ export default function Dashboard(props) {
     }
   };
 
-  const getAssetIds = (_arweave, _addr, _prufClient, bal, ids, iteration) => {
-    if (!bal) return;
-    if (Number(bal) === 0) return console.log("No assets held by user");
-    if (!ids) ids = [];
-    if (!iteration) iteration = 0;
-    if (ids.length >= bal) {
-      setAssetIds(ids);
-      return buildAssetHeap(_arweave, _addr, _prufClient, ids);
-    } else {
-      _prufClient.get.asset
-        .heldAssetAtIndex(_addr, String(iteration))
-        .then((e) => {
-          //console.log(e)
-          ids.push(e);
-          getAssetIds(_arweave, _addr, _prufClient, bal, ids, iteration + 1);
-        });
-    }
+  //ASSET GETTERS
+  /*******************************************************************************************************************************************************/
+  const getAssetAtIndex = (index, _arweaveClient=arweaveClient, _addr=addr, _prufClient=prufClient) => {
+    _prufClient.get.asset
+      .heldAssetAtIndex(_addr, String(index))
+      .then(id => getAsset(id, _arweaveClient, _addr, _prufClient));
   };
 
-  const buildAssetHeap = (
-    _arweave,
-    _addr,
-    _prufClient,
-    ids,
-    data,
-    iteration
-  ) => {
-    if (!ids) return;
-    if (!data) data = [];
-    if (!iteration) {
-      console.log("ids: ", ids);
-      iteration = 0;
-    }
+  const getAsset = (id, _arweaveClient=arweaveClient, _addr=addr, _prufClient=prufClient) => {
+    _prufClient.get.asset.record(id).then((rec) => {
+      console.log({rec});
+      rec.id = id;
+      getNonMutableOf(rec, _prufClient, _arweaveClient);
+    });
+  }
 
-    if (iteration >= ids.length)
-      return getMutableData(_arweave, data, _prufClient);
-    else {
-      _prufClient.get.asset.record(ids[iteration]).then((e) => {
-        let obj = Object.assign({}, e);
-        //console.log(e)
-        obj.identicon = <Jdenticon value={ids[iteration]} />;
-        obj.identiconLG = <Jdenticon value={ids[iteration]} />;
+  const getNonMutableOf = async (rec, _prufClient, _arweave) => {
+    rec.identicon = <Jdenticon value={rec.id} />;
+    rec.statusNum = rec.status;
+    rec.status = await _prufClient.utils.stringifyStatus(rec.status);
+    _prufClient.get.node.record(rec.nodeId).then((nodeData) => {
+      rec.nodeData = nodeData;
+      rec.nodeName = nodeData.name
+        .toLowerCase()
+        .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+      _prufClient.get.node.ownerOf(rec.nodeId).then((admin) => {
+        rec.nodeAdmin = admin;
+        if (
+          rec.nonMutableStorage1 ===
+          "0x0000000000000000000000000000000000000000000000000000000000000000"
+        ) {
+          rec.nonMutableStorage = "";
+          getMutableOf(rec, _prufClient, _arweave);
+        } else if (rec.nodeData.storageProvider === "1") {
+          _prufClient.utils
+            .ipfsFromB32(rec.nonmutableStorage1)
+            .then(async (query) => {
+              console.log("MDQ", query);
 
-        _prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
-          obj.status = e;
-        });
-        obj = Object.assign(obj, e);
-        _prufClient.get
-        .node.record(obj.nodeId).then((e) => {
-          obj.nodeName = e.name
-            .toLowerCase()
-            .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
-          obj.nodeData = Object.assign({}, e);
-          _prufClient.get.node.ownerOf(obj.nodeId).then((e) => {
-            obj.nodeAdmin = e;
-            _prufClient.get.node
-              .userType(window.web3.utils.soliditySha3(_addr), obj.nodeId)
-              .then((e) => {
-                obj.userAuthLevel = e;
-                data.push(obj);
-                return buildAssetHeap(
-                  _arweave,
-                  _addr,
-                  _prufClient,
-                  ids,
-                  data,
-                  iteration + 1
-                );
-              });
-          });
-        });
-      });
-    }
-  };
-
-  const getMutableData = (
-    _arweave,
-    assetHeap,
-    _prufClient,
-    assetsWithMutableData,
-    iteration
-  ) => {
-    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
-    if (!iteration) {
-      console.log("Assets Prior to mutable data retreival:", assetHeap);
-      iteration = 0;
-    }
-    if (!assetsWithMutableData) assetsWithMutableData = [];
-    if (iteration >= assetHeap.length) {
-      /* console.log("EXIT"); */ return getEngravings(
-        _arweave,
-        assetsWithMutableData,
-        _prufClient
-      );
-    }
-
-    let obj = assetHeap[iteration];
-    let storageProvider = obj.nodeData.storageProvider;
-    let mutableDataQuery;
-
-    if (
-      obj.mutableDataA ===
-        "0x0000000000000000000000000000000000000000000000000000000000000000" ||
-      obj.nodeData.root === obj.nodeId
-    ) {
-      obj.mutableData = "";
-      assetsWithMutableData.push(obj);
-      //console.log("EXIT")
-      return getMutableData(
-        _arweave,
-        assetHeap,
-        _prufClient,
-        assetsWithMutableData,
-        iteration + 1
-      );
-    } else if (storageProvider === "1") {
-      _prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
-        console.log("MDQ", e);
-
-        if (cookies[window.web3.utils.soliditySha3(e)]) {
-          console.log("Using cached mutable data:", cookies[e]);
-          obj.mutableData = cookies[window.web3.utils.soliditySha3(e)];
-          assetsWithMutableData.push(obj);
-          console.log("EXIT");
-          return getMutableData(
-            _arweave,
-            assetHeap,
-            _prufClient,
-            assetsWithMutableData,
-            iteration + 1
-          );
-        } else {
-          for await (const chunk of window.ipfs.cat(e)) {
-            let str = new TextDecoder("utf-8").decode(chunk);
-            console.log(str);
-            try {
-              obj.mutableData = JSON.parse(str);
-            } catch {
-              obj.mutableData = str;
-            }
-            assetsWithMutableData.push(obj);
-            setCookieTo(window.web3.utils.soliditySha3(e), JSON.parse(str));
-            //console.log("EXIT")
-            return getMutableData(
-              _arweave,
-              assetHeap,
-              _prufClient,
-              assetsWithMutableData,
-              iteration + 1
-            );
-          }
-        }
-      });
-    } else if (storageProvider === "2") {
-      console.log(obj.mutableDataA, obj.mutableDataB);
-      mutableDataQuery = window.web3.utils.hexToUtf8(
-        obj.mutableDataA + obj.mutableDataB.substring(2, 24)
-      );
-      console.log(`Mutable query at pos ${iteration}: ${mutableDataQuery}`);
-      //engravingQuery =  await window.web3.utils.hexToUtf8(`${obj.engravingA}${obj.engravingB.substring(2, obj.engraving.indexOf("0000000000"))}`)
-      if (cookies[window.web3.utils.soliditySha3(mutableDataQuery)]) {
-        //console.log("Using cached mutable data:", cookies[mutableDataQuery])
-        obj.mutableData =
-          cookies[window.web3.utils.soliditySha3(mutableDataQuery)];
-        assetsWithMutableData.push(obj);
-        //console.log("EXIT")
-        return getMutableData(
-          _arweave,
-          assetHeap,
-          _prufClient,
-          assetsWithMutableData,
-          iteration + 1
-        );
-      } else {
-        let xhr = new XMLHttpRequest();
-
-        xhr.onload = () => {
-          if (xhr.status !== 404) {
-            try {
-              _arweave.transactions.get(mutableDataQuery).then((e) => {
-                let tempObj = {};
-                console.log(e.get("tags"));
-                e.get("tags").forEach((tag) => {
-                  let key = tag.get("name", { decode: true, string: true });
-                  let value = tag.get("value", { decode: true, string: true });
-                  tempObj[key] = value;
-                  //console.log(`${key} : ${value}`);
-                });
-                //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
-                tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-                obj.mutableData = tempObj;
-                assetsWithMutableData.push(obj);
-                setCookieTo(
-                  window.web3.utils.soliditySha3(mutableDataQuery),
-                  tempObj
-                );
-                //console.log("EXIT")
-                return getMutableData(
-                  _arweave,
-                  assetHeap,
-                  _prufClient,
-                  assetsWithMutableData,
-                  iteration + 1
-                );
-              });
-            } catch {
-              obj.mutableData = "";
-              assetsWithMutableData.push(obj);
-              return getMutableData(
-                _arweave,
-                assetHeap,
-                _prufClient,
-                assetsWithMutableData,
-                iteration + 1
-              );
-            }
-          } else {
-            console.log("Id returned 404");
-            obj.mutableData = "";
-            assetsWithMutableData.push(obj);
-            return getMutableData(
-              _arweave,
-              assetHeap,
-              _prufClient,
-              assetsWithMutableData,
-              iteration + 1
-            );
-          }
-        };
-
-        xhr.onerror = () => {
-          console.log("Id returned 404");
-          obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-          obj.mutableData = "";
-          assetsWithMutableData.push(obj);
-          return getMutableData(
-            _arweave,
-            assetHeap,
-            _prufClient,
-            assetsWithMutableData,
-            iteration + 1
-          );
-        };
-
-        xhr.open("GET", `https://arweave.net/${mutableDataQuery}`);
-
-        try {
-          xhr.send(null);
-        } catch {
-          console.log("Id returned 404");
-          obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-          obj.mutableData = "";
-          assetsWithMutableData.push(obj);
-          return getMutableData(
-            _arweave,
-            assetHeap,
-            _prufClient,
-            assetsWithMutableData,
-            iteration + 1
-          );
-        }
-      }
-    }
-  };
-
-  const getEngravings = (
-    _arweave,
-    assetHeap,
-    _prufClient,
-    assetsWithEngravings,
-    iteration
-  ) => {
-    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
-    if (!iteration) {
-      console.log("Assets Prior to engraving retreival:", assetHeap);
-      iteration = 0;
-    }
-    if (!assetsWithEngravings) assetsWithEngravings = [];
-    if (iteration >= assetHeap.length) {
-      /* console.log("EXIT"); */ return finalizeAssets(assetsWithEngravings);
-    }
-
-    let obj = assetHeap[iteration];
-    let storageProvider = obj.nodeData.storageProvider;
-    let engravingQuery;
-
-    if (
-      obj.engravingA ===
-        "0x0000000000000000000000000000000000000000000000000000000000000000" ||
-      obj.nodeData.root === obj.nodeId
-    ) {
-      obj.engraving = "";
-      assetsWithEngravings.push(obj);
-      //console.log("EXIT")
-      return getEngravings(
-        _arweave,
-        assetHeap,
-        _prufClient,
-        assetsWithEngravings,
-        iteration + 1
-      );
-    } else if (storageProvider === "1") {
-      _prufClient.utils.ipfsFromB32(obj.engravingA).then(async (e) => {
-        engravingQuery = e;
-        console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`);
-
-        if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
-          //console.log("Using cached engraving:", cookies[engravingQuery])
-          obj.engraving =
-            cookies[window.web3.utils.soliditySha3(engravingQuery)];
-          //console.log("EXIT")
-          assetsWithEngravings.push(obj);
-          return getEngravings(
-            _arweave,
-            assetHeap,
-            _prufClient,
-            assetsWithEngravings,
-            iteration + 1
-          );
-        } else {
-          for await (const chunk of window.ipfs.cat(engravingQuery)) {
-            let str = new TextDecoder("utf-8").decode(chunk);
-            console.log(str);
-            try {
-              obj.engraving = JSON.parse(str);
-            } catch {
-              obj.engraving = str;
-            }
-
-            assetsWithEngravings.push(obj);
-            setCookieTo(
-              window.web3.utils.soliditySha3(engravingQuery),
-              JSON.parse(str)
-            );
-            //console.log("EXIT")
-            return getEngravings(
-              _arweave,
-              assetHeap,
-              _prufClient,
-              assetsWithEngravings,
-              iteration + 1
-            );
-          }
-        }
-      });
-    } else if (storageProvider === "2") {
-      engravingQuery = window.web3.utils.hexToUtf8(
-        obj.engravingA + obj.engravingB.substring(2, 24)
-      );
-      console.log(`Engraving query at pos ${iteration}: ${engravingQuery}`);
-      if (cookies[window.web3.utils.soliditySha3(engravingQuery)]) {
-        obj.engraving = cookies[window.web3.utils.soliditySha3(engravingQuery)];
-        assetsWithEngravings.push(obj);
-        return getEngravings(
-          _arweave,
-          assetHeap,
-          _prufClient,
-          assetsWithEngravings,
-          iteration + 1
-        );
-      } else {
-        let xhr = new XMLHttpRequest();
-
-        xhr.onload = () => {
-          if (xhr.status !== 404 && xhr.status !== 202) {
-            console.log(xhr);
-            try {
-              _arweave.transactions
-                .get(engravingQuery)
-                .then((e) => {
-                  let tempObj = {};
-                  console.log(e);
-                  e.get("tags").forEach((tag) => {
-                    let key = tag.get("name", { decode: true, string: true });
-                    let value = tag.get("value", {
-                      decode: true,
-                      string: true,
-                    });
-                    tempObj[key] = value;
-                  });
-                  tempObj.contentUrl = `https://arweave.net/${engravingQuery}`;
-                  obj.engraving = tempObj;
-                  assetsWithEngravings.push(obj);
+              if (cookies[window.web3.utils.soliditySha3(query)]) {
+                rec.nonmutableStorage =
+                  cookies[window.web3.utils.soliditySha3(query)];
+              } else {
+                for await (const chunk of window.ipfs.cat(query)) {
+                  let str = new TextDecoder("utf-8").decode(chunk);
+                  try {
+                    rec.nonmutableStorage = JSON.parse(str);
+                  } catch {
+                    rec.nonmutableStorage = str;
+                  }
                   setCookieTo(
-                    window.web3.utils.soliditySha3(engravingQuery),
-                    tempObj
+                    window.web3.utils.soliditySha3(query),
+                    JSON.parse(str)
                   );
-                  return getEngravings(
-                    _arweave,
-                    assetHeap,
-                    _prufClient,
-                    assetsWithEngravings,
-                    iteration + 1
-                  );
-                })
-                .catch((e) => {
-                  console.log(e);
-                  return getEngravings(
-                    _arweave,
-                    assetHeap,
-                    _prufClient,
-                    assetsWithEngravings,
-                    iteration + 1
-                  );
-                });
-            } catch {
-              console.log("In arweave catch clause");
-              obj.engraving = "";
-              assetsWithEngravings.push(obj);
-              return getEngravings(
-                _arweave,
-                assetHeap,
-                _prufClient,
-                assetsWithEngravings,
-                iteration + 1
-              );
-            }
-          } else {
-            console.log("Id returned 404");
-            obj.engraving = "";
-            obj.contentUrl = `https://arweave.net/${engravingQuery}`;
-            assetsWithEngravings.push(obj);
-            return getEngravings(
-              _arweave,
-              assetHeap,
-              _prufClient,
-              assetsWithEngravings,
-              iteration + 1
-            );
+                  getMutableOf(rec, _prufClient, _arweave);
+                }
+              }
+            });
+        } else if (rec.nodeData.storageProvider === "2") {
+          _prufClient.utils
+            .arweaveTxFromB32(rec.nonMutableStorage1, rec.nonMutableStorage2)
+            .then((query) => {
+              rec.contentUrl = `https://arweave.net/${query}`;
+              if (cookies[window.web3.utils.soliditySha3(query)]) {
+                rec.nonMutableStorage =
+                  cookies[window.web3.utils.soliditySha3(query)];
+                getMutableOf(rec, _prufClient, _arweave);
+              } else {
+                let xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                  if (xhr.status !== 404 && xhr.status !== 202) {
+                    rec.nonMutableStorage = {};
+                    _arweave.transactions
+                      .get(query)
+                      .then((e) => {
+                        console.log(e);
+                        e.get("tags").forEach((tag) => {
+                          let key = tag.get("name", {
+                            decode: true,
+                            string: true,
+                          });
+                          let value = tag.get("value", {
+                            decode: true,
+                            string: true,
+                          });
+                          rec.nonMutableStorage[key] = value;
+                        });
+                        setCookieTo(
+                          window.web3.utils.soliditySha3(query),
+                          rec.nonMutableStorage
+                        );
+                        getMutableOf(rec, _prufClient, _arweave);
+                      })
+                      .catch((e) => {
+                        console.log(e);
+                        rec.nonMutableStorage = ""
+                        getMutableOf(rec, _prufClient, _arweave);
+                      });
+                  } else {
+                    console.log("Id returned 404");
+                    rec.nonMutableStorage = "";
+                    getMutableOf(rec, _prufClient, _arweave);
+                  }
+                };
+
+                xhr.onerror = () => {
+                  console.log("Gateway returned 404");
+                  rec.nonMutableStorage = "";
+                  getMutableOf(rec, _prufClient, _arweave);
+                };
+
+                xhr.open("GET", `https://arweave.net/${query}`);
+                xhr.send(null);
+              }
+            });
+        }
+      });
+    });
+  };
+
+  const getMutableOf = async (rec, _prufClient, _arweave) => {
+    if (
+      rec.mutableStorage1 ===
+      "0x0000000000000000000000000000000000000000000000000000000000000000"
+    ) {
+      rec.mutableStorage = "";
+      finalize(rec, _prufClient);
+    } else if (rec.nodeData.storageProvider === "1") {
+      _prufClient.utils.ipfsFromB32(rec.mutableStorage1).then(async (query) => {
+        console.log("MDQ", query);
+
+        if (cookies[window.web3.utils.soliditySha3(query)]) {
+          rec.mutableStorage = cookies[window.web3.utils.soliditySha3(query)];
+        } else {
+          for await (const chunk of window.ipfs.cat(query)) {
+            let str = new TextDecoder("utf-8").decode(chunk);
+            rec.mutableStorage = JSON.parse(str);
+            setCookieTo(window.web3.utils.soliditySha3(query), JSON.parse(str));
+            finalize(rec, _prufClient);
           }
+        }
+      });
+    } else if (rec.nodeData.storageProvider === "2") {
+      _prufClient.utils
+        .arweaveTxFromB32(rec.mutableStorage1, rec.mutableStorage2)
+        .then((query) => {
+          rec.contentUrl = `https://arweave.net/${query}`;
+          if (cookies[window.web3.utils.soliditySha3(query)]) {
+            rec.mutableStorage = cookies[window.web3.utils.soliditySha3(query)];
+            finalize(rec, _prufClient);
+          } else {
+            let xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+              if (xhr.status !== 404 && xhr.status !== 202) {
+                rec.mutableStorage = {};
+                _arweave.transactions
+                  .get(query)
+                  .then((e) => {
+                    console.log(e);
+                    e.get("tags").forEach((tag) => {
+                      let key = tag.get("name", {
+                        decode: true,
+                        string: true,
+                      });
+                      let value = tag.get("value", {
+                        decode: true,
+                        string: true,
+                      });
+                      rec.mutableStorage[key] = value;
+                    });
+                    setCookieTo(
+                      window.web3.utils.soliditySha3(query),
+                      rec.mutableStorage
+                    );
+                    finalize(rec, _prufClient);
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    rec.mutableStorage = ""
+                    finalize(rec, _prufClient, _arweave);
+                  });
+              } else {
+                console.log("Id returned 404");
+                rec.mutableStorage = "";
+                finalize(rec, _prufClient);
+              }
+            };
+
+            xhr.onerror = () => {
+              console.log("Gateway returned 404");
+              rec.mutableStorage = "";
+              finalize(rec, _prufClient);
+            };
+
+            xhr.open("GET", `https://arweave.net/${query}`);
+            xhr.send(null);
+          }
+        });
+    }
+  };
+
+  const finalize = async (rec, _prufClient) => {
+    _prufClient.get.asset.URI(rec.id).then((uri) => {
+      if (rec.nodeData.storageProvider === "1") {
+        let xhr = new XMLHttpRequest();
+        xhr.responseType = "text";
+        
+        xhr.onload = () => {
+            rec.displayImage = this.response;
+            let obj = JSON.parse(JSON.stringify(assets));
+            obj[rec.id] = rec;
+            setAssets(obj);
         };
 
         xhr.onerror = () => {
-          console.log("Gateway returned 404");
-          obj.engraving = "";
-          obj.contentUrl = `https://arweave.net/${engravingQuery}`;
-          assetsWithEngravings.push(obj);
-          return getEngravings(
-            _arweave,
-            assetHeap,
-            _prufClient,
-            assetsWithEngravings,
-            iteration + 1
-          );
+          console.log("XHR Error");
+          rec.displayImage = "";
+          let obj = JSON.parse(JSON.stringify(assets));
+          obj[rec.id] = rec;
+          setAssets(obj);
         };
 
-        xhr.open("GET", `https://arweave.net/${engravingQuery}`);
-        try {
-          xhr.send(null);
-        } catch {
-          console.log("Gateway returned 404");
-          obj.engraving = "";
-          obj.contentUrl = `https://arweave.net/${engravingQuery}`;
-          assetsWithEngravings.push(obj);
-          return getEngravings(
-            _arweave,
-            assetHeap,
-            _prufClient,
-            assetsWithEngravings,
-            iteration + 1
-          );
-        }
-      }
-    }
-  };
+        xhr.open("GET", uri);
+        xhr.send(null);
 
-  const finalizeAssets = (assetHeap, finalizedAssets, iteration) => {
-    if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
-    if (!finalizedAssets) finalizedAssets = [];
-    if (!iteration) {
-      console.log("Assets Prior to final sorting:", assetHeap);
-      iteration = 0;
-    }
-    if (iteration >= assetHeap.length) {
-      setReserveAD(assetHeap);
-      //document.body.style.cursor = 'auto'
-      console.log("Finalized assets: ", finalizedAssets);
-      return setAssetArr(finalizedAssets);
-    }
+      } else if (rec.nodeData.storageProvider === "2") {
 
-    let obj = assetHeap[iteration];
+        rec.displayImage = uri;
+        let obj = JSON.parse(JSON.stringify(assets));
+        obj[rec.id] = rec;
+        setAssets(obj);
 
-    obj.photo = obj.engraving.photo || obj.mutableData.photo || {};
-    obj.text = obj.engraving.text || obj.mutableData.text || {};
-    obj.urls = obj.engraving.urls || obj.mutableData.urls || {};
-    obj.name = obj.engraving.name || obj.mutableData.name || "Name Unavailable";
-    obj.photoUrls = obj.engraving.photo || obj.mutableData.photo || {};
-    obj.PrimaryContent =
-      obj.engraving.PrimaryContent || obj.mutableData.PrimaryContent || "";
-    obj.ContentType =
-      obj.engraving.ContentType ||
-      obj.mutableData.ContentType ||
-      obj.engraving["Content-Type"] ||
-      obj.mutableData["Content-Type"] ||
-      "";
-    obj.Description =
-      obj.engraving.Description || obj.mutableData.Description || "";
-    obj.ContentUrl =
-      obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
-
-    let vals = Object.values(obj.photo),
-      keys = Object.keys(obj.photo);
-
-    if (obj.nodeData.storageProvider === "2") {
-      console.log("2");
-      if (
-        obj.engraving.contentUrl &&
-        obj.engraving["Content-Type"].includes("image")
-      ) {
-        obj.DisplayImage = obj.engraving.contentUrl;
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      } else if (
-        obj.mutableData.contentUrl &&
-        obj.mutableData["Content-Type"].includes("image")
-      ) {
-        obj.DisplayImage = obj.mutableData.contentUrl;
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      } else if (obj.engraving["Content-Type"].includes("pdf")) {
-        obj.DisplayImage = placeholder;
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      } else if (obj.engraving["Content-Type"].includes("zip")) {
-        obj.DisplayImage = placeholder;
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      } else if (obj.mutableData["Content-Type"].includes("pdf")) {
-        obj.DisplayImage = placeholder;
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      } else if (obj.mutableData["Content-Type"].includes("zip")) {
-        obj.DisplayImage = placeholder;
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      } else if (keys.length === 0) {
-        obj.DisplayImage = "";
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      }
-    } else if (obj.nodeData.storageProvider === "1") {
-      console.log("1");
-      const getAndSet = (url) => {
-        if (!url || url === "") {
-          obj.DisplayImage = "";
-          finalizedAssets.push(obj);
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        }
-        const req = new XMLHttpRequest();
-        req.responseType = "text";
-
-        req.onload = function () {
-          //console.log("response", this.response);
-          if (this.response.includes("image")) {
-            console.log("image");
-            obj.DisplayImage = this.response;
-            finalizedAssets.push(obj);
-            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-          } else if (this.response.includes("application")) {
-            console.log("app");
-            obj.DisplayImage = placeholder;
-            finalizedAssets.push(obj);
-            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-          }
-        };
-
-        req.onerror = function (e) {
-          //console.log("http request error")
-          console.log("error");
-          obj.DisplayImage = "";
-          finalizedAssets.push(obj);
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        };
-        req.open("GET", url, true);
-        try {
-          req.send();
-        } catch {
-          obj.DisplayImage = "";
-          finalizedAssets.push(obj);
-          finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-        }
-      };
-
-      if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
-        getAndSet(obj.engraving.PrimaryContent);
-      } else if (
-        obj.engraving !== "" &&
-        obj.engraving.DisplayImage !== "" &&
-        obj.engraving.DisplayImage !== undefined
-      ) {
-        getAndSet(obj.engraving.DisplayImage);
-      } else if (
-        obj.mutableData !== "" &&
-        obj.mutableData.DisplayImage !== "" &&
-        obj.mutableData.DisplayImage !== undefined
-      ) {
-        getAndSet(obj.mutableData.DisplayImage);
       } else {
-        obj.DisplayImage = "";
-        finalizedAssets.push(obj);
-        finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-      }
-    } else if (keys.length > 0) {
-      for (let i = 0; i < keys.length; i++) {
-        const get = () => {
-          if (vals[i].includes("data") && vals[i].includes("base64")) {
-            obj.photo[keys[i]] = vals[i];
-            if (keys[i] === "DisplayImage") {
-              obj.DisplayImage = obj.photo[keys[i]];
-            } else if (i === keys.length - 1) {
-              //console.log("Setting Display Image")
-              obj.DisplayImage = obj.photo[keys[0]];
-            }
-            forceUpdate();
-            finalizedAssets.push(obj);
-            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-          } else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
-            obj.photo[keys[i]] = vals[i];
-            if (keys[i] === "DisplayImage") {
-              //console.log("Setting Display Image")
-              obj.DisplayImage = obj.photo[keys[i]];
-            } else if (i === keys.length - 1) {
-              //console.log("Setting Display Image")
-              obj.DisplayImage = obj.photo[keys[0]];
-            }
-            forceUpdate();
-            finalizedAssets.push(obj);
-            finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-          } else {
-            const req = new XMLHttpRequest();
-            req.responseType = "text";
 
-            req.onload = function (e) {
-              //console.log("in onload")
-              if (this.response.includes("base64")) {
-                obj.photo[keys[i]] = this.response;
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[i]];
-                } else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[0]];
-                }
-                forceUpdate();
-                finalizedAssets.push(obj);
-                finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-              }
-            };
+        rec.displayImage = uri;
+        let obj = JSON.parse(JSON.stringify(assets));
+        obj[rec.id] = rec;
+        setAssets(obj);
 
-            req.onerror = function () {
-              //console.log("http request error")
-              if (vals[i].includes("http")) {
-                obj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
-                  //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[i]];
-                } else if (i === keys.length - 1) {
-                  //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[0]];
-                }
-                forceUpdate();
-                finalizedAssets.push(obj);
-                finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-              }
-            };
-            req.open("GET", vals[i], true);
-            req.send();
-          }
-        };
-        get();
       }
-    } else {
-      console.log("in else");
-      obj.DisplayImage = "";
-      finalizedAssets.push(obj);
-      finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
-    }
+    });
   };
+
+  // const buildAssetHeap = (
+  //   _arweave,
+  //   _addr,
+  //   _prufClient,
+  //   ids,
+  //   data,
+  //   iteration
+  // ) => {
+  //   if (!ids) return;
+  //   if (!data) data = [];
+  //   if (!iteration) {
+  //     console.log("ids: ", ids);
+  //     iteration = 0;
+  //   }
+
+  //   if (iteration >= ids.length)
+  //     return getMutableStorage(_arweave, data, _prufClient);
+  //   else {
+  //     _prufClient.get.asset.record(ids[iteration]).then((e) => {
+  //       let obj = Object.assign({}, e);
+  //       //console.log(e)
+  //       obj.identicon = <Jdenticon value={ids[iteration]} />;
+  //       obj.identiconLG = <Jdenticon value={ids[iteration]} />;
+
+  //       _prufClient.utils.stringifyStatus(e.statusNum).then((e) => {
+  //         obj.status = e;
+  //       });
+  //       obj = Object.assign(obj, e);
+  //       _prufClient.get.node.record(obj.nodeId).then((e) => {
+  //         obj.nodeName = e.name
+  //           .toLowerCase()
+  //           .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+  //         obj.nodeData = Object.assign({}, e);
+  //         _prufClient.get.node.ownerOf(obj.nodeId).then((e) => {
+  //           obj.nodeAdmin = e;
+  //           _prufClient.get.node
+  //             .userType(window.web3.utils.soliditySha3(_addr), obj.nodeId)
+  //             .then((e) => {
+  //               obj.userAuthLevel = e;
+  //               data.push(obj);
+  //               return buildAssetHeap(
+  //                 _arweave,
+  //                 _addr,
+  //                 _prufClient,
+  //                 ids,
+  //                 data,
+  //                 iteration + 1
+  //               );
+  //             });
+  //         });
+  //       });
+  //     });
+  //   }
+  // };
+
+  // const getMutableStorage = (
+  //   _arweave,
+  //   assetHeap,
+  //   _prufClient,
+  //   assetsWithmutableStorage,
+  //   iteration
+  // ) => {
+  //   if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
+  //   if (!iteration) {
+  //     console.log("Assets Prior to mutable data retreival:", assetHeap);
+  //     iteration = 0;
+  //   }
+  //   if (!assetsWithmutableStorage) assetsWithmutableStorage = [];
+  //   if (iteration >= assetHeap.length) {
+  //     /* console.log("EXIT"); */ return getNonMutableStorages(
+  //       _arweave,
+  //       assetsWithmutableStorage,
+  //       _prufClient
+  //     );
+  //   }
+
+  //   let obj = assetHeap[iteration];
+  //   let storageProvider = obj.nodeData.storageProvider;
+  //   let mutableStorageQuery;
+
+  //   if (
+  //     obj.mutableStorageA ===
+  //       "0x0000000000000000000000000000000000000000000000000000000000000000" ||
+  //     obj.nodeData.root === obj.nodeId
+  //   ) {
+  //     obj.mutableStorage = "";
+  //     assetsWithmutableStorage.push(obj);
+  //     //console.log("EXIT")
+  //     return getMutableStorage(
+  //       _arweave,
+  //       assetHeap,
+  //       _prufClient,
+  //       assetsWithmutableStorage,
+  //       iteration + 1
+  //     );
+  //   } else if (storageProvider === "1") {
+  //     _prufClient.utils.ipfsFromB32(obj.mutableStorageA).then(async (e) => {
+  //       console.log("MDQ", e);
+
+  //       if (cookies[window.web3.utils.soliditySha3(e)]) {
+  //         console.log("Using cached mutable data:", cookies[e]);
+  //         obj.mutableStorage = cookies[window.web3.utils.soliditySha3(e)];
+  //         assetsWithmutableStorage.push(obj);
+  //         console.log("EXIT");
+  //         return getMutableStorage(
+  //           _arweave,
+  //           assetHeap,
+  //           _prufClient,
+  //           assetsWithmutableStorage,
+  //           iteration + 1
+  //         );
+  //       } else {
+  //         for await (const chunk of window.ipfs.cat(e)) {
+  //           let str = new TextDecoder("utf-8").decode(chunk);
+  //           console.log(str);
+  //           try {
+  //             obj.mutableStorage = JSON.parse(str);
+  //           } catch {
+  //             obj.mutableStorage = str;
+  //           }
+  //           assetsWithmutableStorage.push(obj);
+  //           setCookieTo(window.web3.utils.soliditySha3(e), JSON.parse(str));
+  //           //console.log("EXIT")
+  //           return getMutableStorage(
+  //             _arweave,
+  //             assetHeap,
+  //             _prufClient,
+  //             assetsWithmutableStorage,
+  //             iteration + 1
+  //           );
+  //         }
+  //       }
+  //     });
+  //   } else if (storageProvider === "2") {
+  //     console.log(obj.mutableStorageA, obj.mutableStorageB);
+  //     mutableStorageQuery = window.web3.utils.hexToUtf8(
+  //       obj.mutableStorageA + obj.mutableStorageB.substring(2, 24)
+  //     );
+  //     console.log(`Mutable query at pos ${iteration}: ${mutableStorageQuery}`);
+  //     //nonMutableStorageQuery =  await window.web3.utils.hexToUtf8(`${obj.nonMutableStorageA}${obj.nonMutableStorageB.substring(2, obj.nonMutableStorage.indexOf("0000000000"))}`)
+  //     if (cookies[window.web3.utils.soliditySha3(mutableStorageQuery)]) {
+  //       //console.log("Using cached mutable data:", cookies[mutableStorageQuery])
+  //       obj.mutableStorage =
+  //         cookies[window.web3.utils.soliditySha3(mutableStorageQuery)];
+  //       assetsWithmutableStorage.push(obj);
+  //       //console.log("EXIT")
+  //       return getMutableStorage(
+  //         _arweave,
+  //         assetHeap,
+  //         _prufClient,
+  //         assetsWithmutableStorage,
+  //         iteration + 1
+  //       );
+  //     } else {
+  //       let xhr = new XMLHttpRequest();
+
+  //       xhr.onload = () => {
+  //         if (xhr.status !== 404) {
+  //           try {
+  //             _arweave.transactions.get(mutableStorageQuery).then((e) => {
+  //               let tempObj = {};
+  //               console.log(e.get("tags"));
+  //               e.get("tags").forEach((tag) => {
+  //                 let key = tag.get("name", { decode: true, string: true });
+  //                 let value = tag.get("value", { decode: true, string: true });
+  //                 tempObj[key] = value;
+  //                 //console.log(`${key} : ${value}`);
+  //               });
+  //               //tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`
+  //               tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //               obj.mutableStorage = tempObj;
+  //               assetsWithmutableStorage.push(obj);
+  //               setCookieTo(
+  //                 window.web3.utils.soliditySha3(mutableStorageQuery),
+  //                 tempObj
+  //               );
+  //               //console.log("EXIT")
+  //               return getMutableStorage(
+  //                 _arweave,
+  //                 assetHeap,
+  //                 _prufClient,
+  //                 assetsWithmutableStorage,
+  //                 iteration + 1
+  //               );
+  //             });
+  //           } catch {
+  //             obj.mutableStorage = "";
+  //             assetsWithmutableStorage.push(obj);
+  //             return getMutableStorage(
+  //               _arweave,
+  //               assetHeap,
+  //               _prufClient,
+  //               assetsWithmutableStorage,
+  //               iteration + 1
+  //             );
+  //           }
+  //         } else {
+  //           console.log("Id returned 404");
+  //           obj.mutableStorage = "";
+  //           assetsWithmutableStorage.push(obj);
+  //           return getMutableStorage(
+  //             _arweave,
+  //             assetHeap,
+  //             _prufClient,
+  //             assetsWithmutableStorage,
+  //             iteration + 1
+  //           );
+  //         }
+  //       };
+
+  //       xhr.onerror = () => {
+  //         console.log("Id returned 404");
+  //         obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //         obj.mutableStorage = "";
+  //         assetsWithmutableStorage.push(obj);
+  //         return getMutableStorage(
+  //           _arweave,
+  //           assetHeap,
+  //           _prufClient,
+  //           assetsWithmutableStorage,
+  //           iteration + 1
+  //         );
+  //       };
+
+  //       xhr.open("GET", `https://arweave.net/${mutableStorageQuery}`);
+
+  //       try {
+  //         xhr.send(null);
+  //       } catch {
+  //         console.log("Id returned 404");
+  //         obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+  //         obj.mutableStorage = "";
+  //         assetsWithmutableStorage.push(obj);
+  //         return getMutableStorage(
+  //           _arweave,
+  //           assetHeap,
+  //           _prufClient,
+  //           assetsWithmutableStorage,
+  //           iteration + 1
+  //         );
+  //       }
+  //     }
+  //   }
+  // };
+
+  // const getNonMutableStorages = (
+  //   _arweave,
+  //   assetHeap,
+  //   _prufClient,
+  //   assetsWithnonMutableStorages,
+  //   iteration
+  // ) => {
+  //   if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
+  //   if (!iteration) {
+  //     console.log("Assets Prior to nonMutableStorage retreival:", assetHeap);
+  //     iteration = 0;
+  //   }
+  //   if (!assetsWithnonMutableStorages) assetsWithnonMutableStorages = [];
+  //   if (iteration >= assetHeap.length) {
+  //     /* console.log("EXIT"); */ return finalizeAssets(
+  //       assetsWithnonMutableStorages
+  //     );
+  //   }
+
+  //   let obj = assetHeap[iteration];
+  //   let storageProvider = obj.nodeData.storageProvider;
+  //   let nonMutableStorageQuery;
+
+  //   if (
+  //     obj.nonMutableStorageA ===
+  //       "0x0000000000000000000000000000000000000000000000000000000000000000" ||
+  //     obj.nodeData.root === obj.nodeId
+  //   ) {
+  //     obj.nonMutableStorage = "";
+  //     assetsWithnonMutableStorages.push(obj);
+  //     //console.log("EXIT")
+  //     return getNonMutableStorages(
+  //       _arweave,
+  //       assetHeap,
+  //       _prufClient,
+  //       assetsWithnonMutableStorages,
+  //       iteration + 1
+  //     );
+  //   } else if (storageProvider === "1") {
+  //     _prufClient.utils.ipfsFromB32(obj.nonMutableStorageA).then(async (e) => {
+  //       nonMutableStorageQuery = e;
+  //       console.log(
+  //         `nonMutableStorage query at pos ${iteration}: ${nonMutableStorageQuery}`
+  //       );
+
+  //       if (cookies[window.web3.utils.soliditySha3(nonMutableStorageQuery)]) {
+  //         //console.log("Using cached nonMutableStorage:", cookies[nonMutableStorageQuery])
+  //         obj.nonMutableStorage =
+  //           cookies[window.web3.utils.soliditySha3(nonMutableStorageQuery)];
+  //         //console.log("EXIT")
+  //         assetsWithnonMutableStorages.push(obj);
+  //         return getNonMutableStorages(
+  //           _arweave,
+  //           assetHeap,
+  //           _prufClient,
+  //           assetsWithnonMutableStorages,
+  //           iteration + 1
+  //         );
+  //       } else {
+  //         for await (const chunk of window.ipfs.cat(nonMutableStorageQuery)) {
+  //           let str = new TextDecoder("utf-8").decode(chunk);
+  //           console.log(str);
+  //           try {
+  //             obj.nonMutableStorage = JSON.parse(str);
+  //           } catch {
+  //             obj.nonMutableStorage = str;
+  //           }
+
+  //           assetsWithnonMutableStorages.push(obj);
+  //           setCookieTo(
+  //             window.web3.utils.soliditySha3(nonMutableStorageQuery),
+  //             JSON.parse(str)
+  //           );
+  //           //console.log("EXIT")
+  //           return getNonMutableStorages(
+  //             _arweave,
+  //             assetHeap,
+  //             _prufClient,
+  //             assetsWithnonMutableStorages,
+  //             iteration + 1
+  //           );
+  //         }
+  //       }
+  //     });
+  //   } else if (storageProvider === "2") {
+  //     nonMutableStorageQuery = window.web3.utils.hexToUtf8(
+  //       obj.nonMutableStorageA + obj.nonMutableStorageB.substring(2, 24)
+  //     );
+  //     console.log(
+  //       `nonMutableStorage query at pos ${iteration}: ${nonMutableStorageQuery}`
+  //     );
+  //     if (cookies[window.web3.utils.soliditySha3(nonMutableStorageQuery)]) {
+  //       obj.nonMutableStorage =
+  //         cookies[window.web3.utils.soliditySha3(nonMutableStorageQuery)];
+  //       assetsWithnonMutableStorages.push(obj);
+  //       return getNonMutableStorages(
+  //         _arweave,
+  //         assetHeap,
+  //         _prufClient,
+  //         assetsWithnonMutableStorages,
+  //         iteration + 1
+  //       );
+  //     } else {
+  //       let xhr = new XMLHttpRequest();
+
+  //       xhr.onload = () => {
+  //         if (xhr.status !== 404 && xhr.status !== 202) {
+  //           console.log(xhr);
+  //           try {
+  //             _arweave.transactions
+  //               .get(nonMutableStorageQuery)
+  //               .then((e) => {
+  //                 let tempObj = {};
+  //                 console.log(e);
+  //                 e.get("tags").forEach((tag) => {
+  //                   let key = tag.get("name", { decode: true, string: true });
+  //                   let value = tag.get("value", {
+  //                     decode: true,
+  //                     string: true,
+  //                   });
+  //                   tempObj[key] = value;
+  //                 });
+  //                 tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //                 obj.nonMutableStorage = tempObj;
+  //                 assetsWithnonMutableStorages.push(obj);
+  //                 setCookieTo(
+  //                   window.web3.utils.soliditySha3(nonMutableStorageQuery),
+  //                   tempObj
+  //                 );
+  //                 return getNonMutableStorages(
+  //                   _arweave,
+  //                   assetHeap,
+  //                   _prufClient,
+  //                   assetsWithnonMutableStorages,
+  //                   iteration + 1
+  //                 );
+  //               })
+  //               .catch((e) => {
+  //                 console.log(e);
+  //                 return getNonMutableStorages(
+  //                   _arweave,
+  //                   assetHeap,
+  //                   _prufClient,
+  //                   assetsWithnonMutableStorages,
+  //                   iteration + 1
+  //                 );
+  //               });
+  //           } catch {
+  //             console.log("In arweave catch clause");
+  //             obj.nonMutableStorage = "";
+  //             assetsWithnonMutableStorages.push(obj);
+  //             return getNonMutableStorages(
+  //               _arweave,
+  //               assetHeap,
+  //               _prufClient,
+  //               assetsWithnonMutableStorages,
+  //               iteration + 1
+  //             );
+  //           }
+  //         } else {
+  //           console.log("Id returned 404");
+  //           obj.nonMutableStorage = "";
+  //           obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //           assetsWithnonMutableStorages.push(obj);
+  //           return getNonMutableStorages(
+  //             _arweave,
+  //             assetHeap,
+  //             _prufClient,
+  //             assetsWithnonMutableStorages,
+  //             iteration + 1
+  //           );
+  //         }
+  //       };
+
+  //       xhr.onerror = () => {
+  //         console.log("Gateway returned 404");
+  //         obj.nonMutableStorage = "";
+  //         obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //         assetsWithnonMutableStorages.push(obj);
+  //         return getNonMutableStorages(
+  //           _arweave,
+  //           assetHeap,
+  //           _prufClient,
+  //           assetsWithnonMutableStorages,
+  //           iteration + 1
+  //         );
+  //       };
+
+  //       xhr.open("GET", `https://arweave.net/${nonMutableStorageQuery}`);
+  //       try {
+  //         xhr.send(null);
+  //       } catch {
+  //         console.log("Gateway returned 404");
+  //         obj.nonMutableStorage = "";
+  //         obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+  //         assetsWithnonMutableStorages.push(obj);
+  //         return getNonMutableStorages(
+  //           _arweave,
+  //           assetHeap,
+  //           _prufClient,
+  //           assetsWithnonMutableStorages,
+  //           iteration + 1
+  //         );
+  //       }
+  //     }
+  //   }
+  // };
+
+  // const finalizeAssets = (assetHeap, finalizedAssets, iteration) => {
+  //   if (!assetHeap) return console.log("Failed upon reception of:", assetHeap);
+  //   if (!finalizedAssets) finalizedAssets = [];
+  //   if (!iteration) {
+  //     console.log("Assets Prior to final sorting:", assetHeap);
+  //     iteration = 0;
+  //   }
+  //   if (iteration >= assetHeap.length) {
+  //     setReserveAD(assetHeap);
+  //     //document.body.style.cursor = 'auto'
+  //     console.log("Finalized assets: ", finalizedAssets);
+  //     return setAssetArr(finalizedAssets);
+  //   }
+
+  //   let obj = assetHeap[iteration];
+
+  //   obj.photo = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
+  //   obj.text = obj.nonMutableStorage.text || obj.mutableStorage.text || {};
+  //   obj.urls = obj.nonMutableStorage.urls || obj.mutableStorage.urls || {};
+  //   obj.name =
+  //     obj.nonMutableStorage.name ||
+  //     obj.mutableStorage.name ||
+  //     "Name Unavailable";
+  //   obj.photoUrls =
+  //     obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
+  //   obj.PrimaryContent =
+  //     obj.nonMutableStorage.PrimaryContent ||
+  //     obj.mutableStorage.PrimaryContent ||
+  //     "";
+  //   obj.ContentType =
+  //     obj.nonMutableStorage.ContentType ||
+  //     obj.mutableStorage.ContentType ||
+  //     obj.nonMutableStorage["Content-Type"] ||
+  //     obj.mutableStorage["Content-Type"] ||
+  //     "";
+  //   obj.Description =
+  //     obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
+  //   obj.ContentUrl =
+  //     obj.nonMutableStorage.contentUrl || obj.mutableStorage.contentUrl || "";
+
+  //   let vals = Object.values(obj.photo),
+  //     keys = Object.keys(obj.photo);
+
+  //   if (obj.nodeData.storageProvider === "2") {
+  //     console.log("2");
+  //     if (
+  //       obj.nonMutableStorage.contentUrl &&
+  //       obj.nonMutableStorage["Content-Type"].includes("image")
+  //     ) {
+  //       obj.displayImage = obj.nonMutableStorage.contentUrl;
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     } else if (
+  //       obj.mutableStorage.contentUrl &&
+  //       obj.mutableStorage["Content-Type"].includes("image")
+  //     ) {
+  //       obj.displayImage = obj.mutableStorage.contentUrl;
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     } else if (obj.nonMutableStorage["Content-Type"].includes("pdf")) {
+  //       obj.displayImage = placeholder;
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     } else if (obj.nonMutableStorage["Content-Type"].includes("zip")) {
+  //       obj.displayImage = placeholder;
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     } else if (obj.mutableStorage["Content-Type"].includes("pdf")) {
+  //       obj.displayImage = placeholder;
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     } else if (obj.mutableStorage["Content-Type"].includes("zip")) {
+  //       obj.displayImage = placeholder;
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     } else if (keys.length === 0) {
+  //       obj.displayImage = "";
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     }
+  //   } else if (obj.nodeData.storageProvider === "1") {
+  //     console.log("1");
+  //     const getAndSet = (url) => {
+  //       if (!url || url === "") {
+  //         obj.displayImage = "";
+  //         finalizedAssets.push(obj);
+  //         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //       }
+  //       const req = new XMLHttpRequest();
+  //       req.responseType = "text";
+
+  //       req.onload = function () {
+  //         //console.log("response", this.response);
+  //         if (this.response.includes("image")) {
+  //           console.log("image");
+  //           obj.displayImage = this.response;
+  //           finalizedAssets.push(obj);
+  //           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //         } else if (this.response.includes("application")) {
+  //           console.log("app");
+  //           obj.displayImage = placeholder;
+  //           finalizedAssets.push(obj);
+  //           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //         }
+  //       };
+
+  //       req.onerror = function (e) {
+  //         //console.log("http request error")
+  //         console.log("error");
+  //         obj.displayImage = "";
+  //         finalizedAssets.push(obj);
+  //         finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //       };
+  //       req.open("GET", url, true);
+  //       req.send();
+  //     };
+
+  //     if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
+  //       getAndSet(obj.nonMutableStorage.PrimaryContent);
+  //     } else if (
+  //       obj.nonMutableStorage !== "" &&
+  //       obj.nonMutableStorage.displayImage !== "" &&
+  //       obj.nonMutableStorage.displayImage !== undefined
+  //     ) {
+  //       getAndSet(obj.nonMutableStorage.displayImage);
+  //     } else if (
+  //       obj.mutableStorage !== "" &&
+  //       obj.mutableStorage.displayImage !== "" &&
+  //       obj.mutableStorage.displayImage !== undefined
+  //     ) {
+  //       getAndSet(obj.mutableStorage.displayImage);
+  //     } else {
+  //       obj.displayImage = "";
+  //       finalizedAssets.push(obj);
+  //       finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //     }
+  //   } else if (keys.length > 0) {
+  //     for (let i = 0; i < keys.length; i++) {
+  //       const get = () => {
+  //         if (vals[i].includes("data") && vals[i].includes("base64")) {
+  //           obj.photo[keys[i]] = vals[i];
+  //           if (keys[i] === "displayImage") {
+  //             obj.displayImage = obj.photo[keys[i]];
+  //           } else if (i === keys.length - 1) {
+  //             //console.log("Setting Display Image")
+  //             obj.displayImage = obj.photo[keys[0]];
+  //           }
+  //           forceUpdate();
+  //           finalizedAssets.push(obj);
+  //           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //         } else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
+  //           obj.photo[keys[i]] = vals[i];
+  //           if (keys[i] === "displayImage") {
+  //             //console.log("Setting Display Image")
+  //             obj.displayImage = obj.photo[keys[i]];
+  //           } else if (i === keys.length - 1) {
+  //             //console.log("Setting Display Image")
+  //             obj.displayImage = obj.photo[keys[0]];
+  //           }
+  //           forceUpdate();
+  //           finalizedAssets.push(obj);
+  //           finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //         } else {
+  //           const req = new XMLHttpRequest();
+  //           req.responseType = "text";
+
+  //           req.onload = function (e) {
+  //             //console.log("in onload")
+  //             if (this.response.includes("base64")) {
+  //               obj.photo[keys[i]] = this.response;
+  //               if (keys[i] === "displayImage") {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[i]];
+  //               } else if (i === keys.length - 1) {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[0]];
+  //               }
+  //               forceUpdate();
+  //               finalizedAssets.push(obj);
+  //               finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //             }
+  //           };
+
+  //           req.onerror = function () {
+  //             //console.log("http request error")
+  //             if (vals[i].includes("http")) {
+  //               obj.photo[keys[i]] = vals[i];
+  //               if (keys[i] === "displayImage") {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[i]];
+  //               } else if (i === keys.length - 1) {
+  //                 //console.log("Setting Display Image")
+  //                 obj.displayImage = obj.photo[keys[0]];
+  //               }
+  //               forceUpdate();
+  //               finalizedAssets.push(obj);
+  //               finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //             }
+  //           };
+  //           req.open("GET", vals[i], true);
+  //           req.send();
+  //         }
+  //       };
+  //       get();
+  //     }
+  //   } else {
+  //     console.log("in else");
+  //     obj.displayImage = "";
+  //     finalizedAssets.push(obj);
+  //     finalizeAssets(assetHeap, finalizedAssets, iteration + 1);
+  //   }
+  // };
 
   return (
     <div className={classes.wrapper}>

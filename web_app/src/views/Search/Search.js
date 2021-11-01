@@ -846,22 +846,6 @@ export default function Search(props) {
     )
   };
 
-  const getDBIndexOf = (e) => {
-    if (!e) {
-      return console.log("No ID given!");
-    }
-    let temp;
-
-    for (let i = 0; i < props.assetArr.length; i++) {
-      if (props.assetArr[i].id.toLowerCase() === e.toLowerCase()) {
-        temp = i;
-      }
-    }
-
-    if (temp) return setDBIndex(temp);
-    else return console.log("Could not locate ID in dash!");
-  };
-
   const handleSimple = (event) => {
     if (props.ps) {
       //console.log(props.ps)
@@ -1550,7 +1534,7 @@ export default function Search(props) {
               props.prufClient.get.node.userType(window.web3.utils.soliditySha3(props.addr), obj.nodeId).then(e => {
                 obj.userAuthLevel = e
                 console.log("HERE", e.root);
-                return getMutableData(obj);
+                return getMutableStorage(obj);
               })
             })
           });
@@ -1558,44 +1542,44 @@ export default function Search(props) {
     });
   };
 
-  const getMutableData = (asset) => {
+  const getMutableStorage = (asset) => {
     if (!asset) return console.log("Failed upon reception of:", asset);
 
     let obj = JSON.parse(JSON.stringify(asset));
     let storageProvider = obj.nodeData.storageProvider;
-    let mutableDataQuery;
+    let mutableStorageQuery;
 
     if (
-      obj.mutableDataA ===
+      obj.mutableStorageA ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
       || obj.nodeData.root === obj.nodeId
     ) {
-      obj.mutableData = "";
-      return getEngraving(obj);
+      obj.mutableStorage = "";
+      return getnonMutableStorage(obj);
     } else if (storageProvider === "1") {
       //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
-      props.prufClient.utils.ipfsFromB32(obj.mutableDataA).then(async (e) => {
-        let mutableDataQuery = e;
+      props.prufClient.utils.ipfsFromB32(obj.mutableStorageA).then(async (e) => {
+        let mutableStorageQuery = e;
         console.log("MDQ", e);
-        //fetch mutableData from IPFS if storageProvider === '1'
-        for await (const chunk of window.ipfs.cat(mutableDataQuery)) {
+        //fetch mutableStorage from IPFS if storageProvider === '1'
+        for await (const chunk of window.ipfs.cat(mutableStorageQuery)) {
           let str = new TextDecoder("utf-8").decode(chunk);
           console.log(str);
           try {
-            obj.mutableData = JSON.parse(str);
+            obj.mutableStorage = JSON.parse(str);
           } catch {
-            obj.mutableData = str;
+            obj.mutableStorage = str;
           }
-          return getEngraving(obj);
+          return getnonMutableStorage(obj);
         }
       });
     } else if (storageProvider === "2") {
-      console.log(obj.mutableDataA, obj.mutableDataB);
+      console.log(obj.mutableStorageA, obj.mutableStorageB);
 
       //Convert b32 stored on chain to a valid Arweave txId
-      mutableDataQuery = window.web3.utils.hexToUtf8(
-        obj.mutableDataA +
-        obj.mutableDataB.substring(2, 24)
+      mutableStorageQuery = window.web3.utils.hexToUtf8(
+        obj.mutableStorageA +
+        obj.mutableStorageB.substring(2, 24)
       );
 
       //We will check an arweave gateway to make sure the asset has data stored at the fetched txId
@@ -1604,8 +1588,8 @@ export default function Search(props) {
       xhr.onload = () => {
         if (xhr.status !== 404) {
           try {
-            //fetch mutableData from Arweave if storageProvider === '2'
-            props.arweaveClient.transactions.get(mutableDataQuery).then((e) => {
+            //fetch mutableStorage from Arweave if storageProvider === '2'
+            props.arweaveClient.transactions.get(mutableStorageQuery).then((e) => {
               let tempObj = {};
               e.get("tags").forEach((tag) => {
                 let key = tag.get("name", { decode: true, string: true });
@@ -1613,83 +1597,83 @@ export default function Search(props) {
                 tempObj[key] = value;
                 //console.log(`${key} : ${value}`);
               });
-              //tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`
-              tempObj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-              obj.mutableData = tempObj;
-              obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-              return getEngraving(obj);
+              //tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`
+              tempObj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+              obj.mutableStorage = tempObj;
+              obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+              return getnonMutableStorage(obj);
             });
           } catch {
             console.log("Id returned 404");
-            obj.mutableData = "";
-            obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-            return getEngraving(obj);
+            obj.mutableStorage = "";
+            obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+            return getnonMutableStorage(obj);
           }
         } else {
           console.log("Gateway returned 404");
-          obj.mutableData = "";
-          obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-          return getEngraving(obj);
+          obj.mutableStorage = "";
+          obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+          return getnonMutableStorage(obj);
         }
       };
 
       xhr.onerror = () => {
         console.log("Gateway returned 404");
-        obj.mutableData = "";
-        obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-        return getEngraving(obj);
+        obj.mutableStorage = "";
+        obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+        return getnonMutableStorage(obj);
       };
 
-      xhr.open("GET", `https://arweave.net/tx/${mutableDataQuery}`, true);
+      xhr.open("GET", `https://arweave.net/tx/${mutableStorageQuery}`, true);
       try {
         xhr.send(null);
       } catch {
         console.log("Gateway returned 404");
-        obj.mutableData = "";
-        obj.contentUrl = `https://arweave.net/${mutableDataQuery}`;
-        return getEngraving(obj);
+        obj.mutableStorage = "";
+        obj.contentUrl = `https://arweave.net/${mutableStorageQuery}`;
+        return getnonMutableStorage(obj);
       }
     }
   };
 
-  const getEngraving = (asset) => {
+  const getnonMutableStorage = (asset) => {
     if (!asset) return console.log("Failed upon reception of:", asset);
 
     let obj = JSON.parse(JSON.stringify(asset));
     let storageProvider = obj.nodeData.storageProvider;
-    let engravingQuery;
+    let nonMutableStorageQuery;
 
     if (
-      obj.engravingA ===
+      obj.nonMutableStorageA ===
       "0x0000000000000000000000000000000000000000000000000000000000000000"
       || obj.nodeData.root === obj.nodeId
     ) {
-      obj.engraving = "";
+      obj.nonMutableStorage = "";
       return finalizeAsset(obj);
     } else if (storageProvider === "1") {
       //util call to convert b32 stored on chain to a bs58 hash compatible with IPFS
-      props.prufClient.utils.ipfsFromB32(obj.engravingA).then(async (e) => {
-        engravingQuery = e;
-        //fetch engraving from IPFS if storageProvider === '1'
-        for await (const chunk of window.ipfs.cat(engravingQuery)) {
+      props.prufClient.utils.ipfsFromB32(obj.nonMutableStorageA).then(async (e) => {
+        nonMutableStorageQuery = e;
+        //fetch nonMutableStorage from IPFS if storageProvider === '1'
+        for await (const chunk of window.ipfs.cat(nonMutableStorageQuery)) {
           let str = new TextDecoder("utf-8").decode(chunk);
           console.log(str);
           try {
-            obj.engraving = JSON.parse(str);
+            obj.nonMutableStorage = JSON.parse(str);
           } catch {
-            obj.engraving = str;
+            obj.nonMutableStorage = str;
           }
           //console.log("EXIT")
           return finalizeAsset(obj);
         }
       });
     } else if (storageProvider === "2") {
-      console.log(obj.engravingB.indexOf("0000000000000000000000"));
+      console.log(obj.nonMutableStorageB.indexOf("0000000000000000000000"));
 
       //Convert b32 stored on chain to a valid Arweave txId
-      engravingQuery = window.web3.utils.hexToUtf8(
-        obj.engravingA +
-        obj.engravingB.substring(
+      nonMutableStorageQuery = window.web3.utils.hexToUtf8(
+        obj.nonMutableStorageA +
+        obj.nonMutableStorageB.substring(
           2,
           24
         )
@@ -1701,8 +1685,8 @@ export default function Search(props) {
       xhr.onload = () => {
         if (xhr.status !== 404) {
           try {
-            //fetch engraving from Arweave if storageProvider === '2'
-            props.arweaveClient.transactions.get(engravingQuery).then((e) => {
+            //fetch nonMutableStorage from Arweave if storageProvider === '2'
+            props.arweaveClient.transactions.get(nonMutableStorageQuery).then((e) => {
               if (!e) throw "Thrown";
               let tempObj = {};
               e.get("tags").forEach((tag) => {
@@ -1711,38 +1695,38 @@ export default function Search(props) {
                 tempObj[key] = value;
                 //console.log(`${key} : ${value}`);
               });
-              //tempObj.contentUrl = `https://arweave.net/${engravingQuery}`
-              tempObj.contentUrl = `https://arweave.net/${engravingQuery}`;
-              obj.engraving = tempObj;
+              //tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`
+              tempObj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
+              obj.nonMutableStorage = tempObj;
               return finalizeAsset(obj);
             });
           } catch {
             console.log("In arweave catch clause");
-            obj.engraving = "";
+            obj.nonMutableStorage = "";
             return finalizeAsset(obj);
           }
         } else {
           console.log("Id returned 404");
-          obj.engraving = "";
-          obj.contentUrl = `https://arweave.net/${engravingQuery}`;
+          obj.nonMutableStorage = "";
+          obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
           return finalizeAsset(obj);
         }
       };
 
       xhr.onerror = () => {
         console.log("Gateway returned 404");
-        obj.engraving = "";
-        obj.contentUrl = `https://arweave.net/${engravingQuery}`;
+        obj.nonMutableStorage = "";
+        obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
         return finalizeAsset(obj);
       };
 
-      xhr.open("GET", `https://arweave.net/${engravingQuery}`, true);
+      xhr.open("GET", `https://arweave.net/${nonMutableStorageQuery}`, true);
       try {
         xhr.send(null);
       } catch {
         console.log("Gateway returned 404");
-        obj.engraving = "";
-        obj.contentUrl = `https://arweave.net/${engravingQuery}`;
+        obj.nonMutableStorage = "";
+        obj.contentUrl = `https://arweave.net/${nonMutableStorageQuery}`;
         return finalizeAsset(obj);
       }
     }
@@ -1755,70 +1739,70 @@ export default function Search(props) {
 
     let obj = JSON.parse(JSON.stringify(asset));
 
-    obj.photo = obj.engraving.photo || obj.mutableData.photo || {};
-    obj.text = obj.engraving.text || obj.mutableData.text || {};
-    obj.urls = obj.engraving.urls || obj.mutableData.urls || {};
-    obj.name = obj.engraving.name || obj.mutableData.name || "Name Unavailable";
-    obj.photoUrls = obj.engraving.photo || obj.mutableData.photo || {};
-    obj.Description = obj.engraving.Description || obj.mutableData.Description || "";
-    obj.ContentUrl = obj.engraving.contentUrl || obj.mutableData.contentUrl || "";
+    obj.photo = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
+    obj.text = obj.nonMutableStorage.text || obj.mutableStorage.text || {};
+    obj.urls = obj.nonMutableStorage.urls || obj.mutableStorage.urls || {};
+    obj.name = obj.nonMutableStorage.name || obj.mutableStorage.name || "Name Unavailable";
+    obj.photoUrls = obj.nonMutableStorage.photo || obj.mutableStorage.photo || {};
+    obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
+    obj.ContentUrl = obj.nonMutableStorage.contentUrl || obj.mutableStorage.contentUrl || "";
     obj.storageProvider = obj.nodeData.storageProvider;
-    obj.PrimaryContent = obj.engraving.PrimaryContent || obj.mutableData.PrimaryContent || ""; 
-    obj.ContentType = obj.engraving.ContentType || obj.mutableData.ContentType || obj.engraving["Content-Type"] || obj.mutableData["Content-Type"] || "";
-    obj.Description = obj.engraving.Description || obj.mutableData.Description || "";
+    obj.PrimaryContent = obj.nonMutableStorage.PrimaryContent || obj.mutableStorage.PrimaryContent || ""; 
+    obj.ContentType = obj.nonMutableStorage.ContentType || obj.mutableStorage.ContentType || obj.nonMutableStorage["Content-Type"] || obj.mutableStorage["Content-Type"] || "";
+    obj.Description = obj.nonMutableStorage.Description || obj.mutableStorage.Description || "";
     let vals = Object.values(obj.photo), keys = Object.keys(obj.photo);
 
     console.log("Finalizing", obj);
     if (obj.nodeData.storageProvider === "2") {
       console.log("detected storageProvider 2");
       if (
-        obj.engraving.contentUrl &&
-        obj.engraving["Content-Type"].includes("image")
+        obj.nonMutableStorage.contentUrl &&
+        obj.nonMutableStorage["Content-Type"].includes("image")
       ) {
-        obj.DisplayImage = obj.engraving.contentUrl;
+        obj.displayImage = obj.nonMutableStorage.contentUrl;
         setAsset(obj);
-        setSelectedImage(obj.DisplayImage);
+        setSelectedImage(obj.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
         return;
       } else if (
-        obj.mutableData.contentUrl &&
-        obj.mutableData["Content-Type"].includes("image")
+        obj.mutableStorage.contentUrl &&
+        obj.mutableStorage["Content-Type"].includes("image")
       ) {
-        obj.DisplayImage = obj.mutableData.contentUrl;
+        obj.displayImage = obj.mutableStorage.contentUrl;
         setAsset(obj);
-        setSelectedImage(obj.DisplayImage);
+        setSelectedImage(obj.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
         return;
-      } else if (obj.engraving["Content-Type"].includes("pdf")) {
-        obj.DisplayImage = placeholder
+      } else if (obj.nonMutableStorage["Content-Type"].includes("pdf")) {
+        obj.displayImage = placeholder
         setAsset(obj);
-        setSelectedImage(obj.DisplayImage);
+        setSelectedImage(obj.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
-      } else if (obj.engraving["Content-Type"].includes("zip")) {
-        obj.DisplayImage = placeholder
+      } else if (obj.nonMutableStorage["Content-Type"].includes("zip")) {
+        obj.displayImage = placeholder
         setAsset(obj);
-        setSelectedImage(obj.DisplayImage);
+        setSelectedImage(obj.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
-      } else if (obj.mutableData["Content-Type"].includes("pdf")) {
-        obj.DisplayImage = placeholder
+      } else if (obj.mutableStorage["Content-Type"].includes("pdf")) {
+        obj.displayImage = placeholder
         setAsset(obj);
-        setSelectedImage(obj.DisplayImage);
+        setSelectedImage(obj.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
-      } else if (obj.mutableData["Content-Type"].includes("zip")) {
-        obj.DisplayImage = placeholder
+      } else if (obj.mutableStorage["Content-Type"].includes("zip")) {
+        obj.displayImage = placeholder
         setAsset(obj);
-        setSelectedImage(obj.DisplayImage);
+        setSelectedImage(obj.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
       } else if (keys.length === 0) {
-        obj.DisplayImage = "";
+        obj.displayImage = "";
         setAsset(obj);
-        setSelectedImage(obj.DisplayImage);
+        setSelectedImage(obj.displayImage);
         setRetrieving(false);
         setMoreInfo(true);
         return;
@@ -1831,15 +1815,15 @@ export default function Search(props) {
         req.onload = function () {
           //console.log("response", this.response);
           if (this.response.includes("image")) {
-            obj.DisplayImage = this.response;
+            obj.displayImage = this.response;
             setAsset(obj);
-            setSelectedImage(obj.DisplayImage);
+            setSelectedImage(obj.displayImage);
             setRetrieving(false);
             setMoreInfo(true);
             return;
           } else if (this.response.includes("application")) {
             console.log("app")
-            obj.DisplayImage = placeholder
+            obj.displayImage = placeholder
             setAsset(obj);
             setSelectedImage(placeholder);
             setRetrieving(false);
@@ -1849,9 +1833,9 @@ export default function Search(props) {
 
         req.onerror = function (e) {
           //console.log("http request error")
-          obj.DisplayImage = "";
+          obj.displayImage = "";
           setAsset(obj);
-          setSelectedImage(obj.DisplayImage);
+          setSelectedImage(obj.displayImage);
           setRetrieving(false);
           setMoreInfo(true);
           return;
@@ -1860,28 +1844,28 @@ export default function Search(props) {
         try {
           req.send();
         } catch {
-          obj.DisplayImage = "";
+          obj.displayImage = "";
           setAsset(obj);
-          setSelectedImage(obj.DisplayImage);
+          setSelectedImage(obj.displayImage);
           setRetrieving(false);
           setMoreInfo(true);
           return;
         }
       };
       if (obj.ContentType.includes("pdf") || obj.ContentType.includes("zip")) {
-        getAndSet(obj.engraving.PrimaryContent)
+        getAndSet(obj.nonMutableStorage.PrimaryContent)
       } else if (
-        obj.engraving !== "" &&
-        obj.engraving.DisplayImage !== "" &&
-        obj.engraving.DisplayImage !== undefined
+        obj.nonMutableStorage !== "" &&
+        obj.nonMutableStorage.displayImage !== "" &&
+        obj.nonMutableStorage.displayImage !== undefined
       ) {
-        getAndSet(obj.engraving.DisplayImage);
+        getAndSet(obj.nonMutableStorage.displayImage);
       } else if (
-        obj.mutableData !== "" &&
-        obj.mutableData.DisplayImage !== "" &&
-        obj.mutableData.DisplayImage !== undefined
+        obj.mutableStorage !== "" &&
+        obj.mutableStorage.displayImage !== "" &&
+        obj.mutableStorage.displayImage !== undefined
       ) {
-        getAndSet(obj.mutableData.DisplayImage);
+        getAndSet(obj.mutableStorage.displayImage);
       }
     } else if (keys.length > 0) {
       for (let i = 0; i < keys.length; i++) {
@@ -1890,29 +1874,29 @@ export default function Search(props) {
         const get = () => {
           if (vals[i].includes("data") && vals[i].includes("base64")) {
             obj.photo[keys[i]] = vals[i];
-            if (keys[i] === "DisplayImage") {
-              obj.DisplayImage = obj.photo[keys[i]];
+            if (keys[i] === "displayImage") {
+              obj.displayImage = obj.photo[keys[i]];
             } else if (i === keys.length - 1) {
               //console.log("Setting Display Image")
-              obj.DisplayImage = obj.photo[keys[0]];
+              obj.displayImage = obj.photo[keys[0]];
             }
             setAsset(obj);
-            setSelectedImage(obj.DisplayImage);
+            setSelectedImage(obj.displayImage);
             forceUpdate();
             setRetrieving(false);
             setMoreInfo(true);
             return;
           } else if (!vals[i].includes("ipfs") && vals[i].includes("http")) {
             obj.photo[keys[i]] = vals[i];
-            if (keys[i] === "DisplayImage") {
+            if (keys[i] === "displayImage") {
               //console.log("Setting Display Image")
-              obj.DisplayImage = obj.photo[keys[i]];
+              obj.displayImage = obj.photo[keys[i]];
             } else if (i === keys.length - 1) {
               //console.log("Setting Display Image")
-              obj.DisplayImage = obj.photo[keys[0]];
+              obj.displayImage = obj.photo[keys[0]];
             }
             setAsset(obj);
-            setSelectedImage(obj.DisplayImage);
+            setSelectedImage(obj.displayImage);
             forceUpdate();
             setRetrieving(false);
             setMoreInfo(true);
@@ -1925,15 +1909,15 @@ export default function Search(props) {
               //console.log("in onload")
               if (this.response.includes("base64")) {
                 obj.photo[keys[i]] = this.response;
-                if (keys[i] === "DisplayImage") {
+                if (keys[i] === "displayImage") {
                   //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[i]];
+                  obj.displayImage = obj.photo[keys[i]];
                 } else if (i === keys.length - 1) {
                   //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[0]];
+                  obj.displayImage = obj.photo[keys[0]];
                 }
                 setAsset(obj);
-                setSelectedImage(obj.DisplayImage);
+                setSelectedImage(obj.displayImage);
                 forceUpdate();
                 setRetrieving(false);
                 setMoreInfo(true);
@@ -1945,15 +1929,15 @@ export default function Search(props) {
               //console.log("http request error")
               if (vals[i].includes("http")) {
                 obj.photo[keys[i]] = vals[i];
-                if (keys[i] === "DisplayImage") {
+                if (keys[i] === "displayImage") {
                   //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[i]];
+                  obj.displayImage = obj.photo[keys[i]];
                 } else if (i === keys.length - 1) {
                   //console.log("Setting Display Image")
-                  obj.DisplayImage = obj.photo[keys[0]];
+                  obj.displayImage = obj.photo[keys[0]];
                 }
                 setAsset(obj);
-                setSelectedImage(obj.DisplayImage);
+                setSelectedImage(obj.displayImage);
                 forceUpdate();
                 setRetrieving(false);
                 setMoreInfo(true);
@@ -2453,7 +2437,7 @@ export default function Search(props) {
                     >
                       {asset.photo !== undefined && (
                         <>
-                          {asset.DisplayImage !== "" && (
+                          {asset.displayImage !== "" && (
                             <>
                               <Tooltip
                                 id="tooltip-top"
@@ -2475,7 +2459,7 @@ export default function Search(props) {
                             </>
                           )}
                           {Object.values(asset.photo).length === 0 &&
-                            asset.DisplayImage === "" && (
+                            asset.displayImage === "" && (
                               <>
                                 <Tooltip
                                   id="tooltip-top"
@@ -2504,7 +2488,7 @@ export default function Search(props) {
                     <CardHeader image className={imgClasses.cardHeaderHover}>
                       {asset.photo !== undefined && (
                         <>
-                          {asset.DisplayImage !== "" && (
+                          {asset.displayImage !== "" && (
                             <>
                               <Tooltip
                                 id="tooltip-top"
@@ -2526,7 +2510,7 @@ export default function Search(props) {
                             </>
                           )}
                           {Object.values(asset.photo).length === 0 &&
-                            asset.DisplayImage === "" && (
+                            asset.displayImage === "" && (
                               <>
                                 <Tooltip
                                   id="tooltip-top"
