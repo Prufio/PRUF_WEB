@@ -1397,38 +1397,47 @@ export default function Dashboard(props) {
   };
 
   const finalize = async (rec, _prufClient) => {
+    let obj = JSON.parse(JSON.stringify(assets));
+
     if (rec.nodeData.storageProvider === "1") {
-      let xhr = new XMLHttpRequest();
-      xhr.responseType = "text";
+      // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",rec.nonMutableStorage.displayImage.substring(rec.nonMutableStorage.displayImage.indexOf("/ipfs/") + 6, rec.nonMutableStorage.displayImage.length))
+      // let query = rec.nonMutableStorage.displayImage.substring(rec.nonMutableStorage.displayImage.indexOf("/ipfs/") + 6, rec.nonMutableStorage.displayImage.length)
+      // for await (const chunk of window.ipfs.cat(query)) {
+      //   console.log(str)
+      //   let str = new TextDecoder("utf-8").decode(chunk);
+      //   rec.displayImage = str
+      //   obj[rec.id] = rec;
+      //   setAssets(obj);
+      // }
 
-      xhr.onload = () => {
-        rec.displayImage = JSON.parse(this.response);
-        let obj = JSON.parse(JSON.stringify(assets));
-        obj[rec.id] = rec;
-        setAssets(obj);
-      };
+      const req = new XMLHttpRequest();
+        req.responseType = "text";
 
-      xhr.onerror = () => {
-        console.log("XHR Error");
-        rec.displayImage = "";
-        let obj = JSON.parse(JSON.stringify(assets));
-        obj[rec.id] = rec;
-        setAssets(obj);
-      };
+        req.onload = function () {
+            console.log("response", this.response);
+            rec.displayImage = this.response;
+            obj[rec.id] = rec;
+            setAssets(obj);
+        };
 
-      xhr.open("GET", rec.nonMutableStorage.DisplayImage);
-      xhr.send(null);
+        req.onerror = function (e) {
+          //console.log("http request error")
+          console.log("error");
+          rec.displayImage = "";
+          obj[rec.id] = rec;
+          setAssets(obj);
+        };
+        req.open("GET", rec.nonMutableStorage.displayImage, true);
+        req.send();
     } else if (rec.nodeData.storageProvider === "2") {
       _prufClient.get.asset.URI(rec.id).then((uri) => {
         rec.displayImage = uri;
-        let obj = JSON.parse(JSON.stringify(assets));
         obj[rec.id] = rec;
         setAssets(obj);
       });
     } else {
       _prufClient.get.asset.URI(rec.id).then((uri) => {
-        rec.displayImage = uri;
-        let obj = JSON.parse(JSON.stringify(assets));
+        rec.displayImage = uri
         obj[rec.id] = rec;
         setAssets(obj);
       });
