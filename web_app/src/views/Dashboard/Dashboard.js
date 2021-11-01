@@ -81,8 +81,10 @@ export default function Dashboard(props) {
   // eslint-disable-next-line no-unused-vars
   const [currency, setCurrency] = React.useState("ü");
 
+  const assetArr = Object.values(props.assetObj)
+
   // eslint-disable-next-line react/prop-types
-  const numOfPages = Math.ceil(props.assetArr.length / props.assetsPerPage);
+  const numOfPages = Math.ceil(assetArr.length / props.assetsPerPage);
 
   const moreInfo = (e) => {
     //console.log(e);
@@ -125,8 +127,8 @@ export default function Dashboard(props) {
       setSelectedAssetObj({});
       return setViewAsset(false);
     }
-    if (e.DisplayImage !== undefined && e.DisplayImage !== "") {
-      setSelectedImage(e.DisplayImage);
+    if (e.displayImage !== undefined && e.displayImage !== "") {
+      setSelectedImage(e.displayImage);
     } else {
       setSelectedImage("");
     }
@@ -167,12 +169,12 @@ export default function Dashboard(props) {
 
       if (window.newDescObj) {
         newObj = JSON.parse(JSON.stringify(window.newDescObj));
-        if (newObj.photo.DisplayImage) {
-          newObj.DisplayImage = newObj.photo.DisplayImage;
+        if (newObj.photo.displayImage) {
+          newObj.displayImage = newObj.photo.displayImage;
         } else if (newObj.photo && Object.values(newObj.photo).length > 0) {
-          newObj.DisplayImage = Object.values(newObj.photo)[0];
+          newObj.displayImage = Object.values(newObj.photo)[0];
         } else {
-          newObj.DisplayImage = "";
+          newObj.displayImage = "";
         }
       } else if (arr[backIndex]) {
         newObj = JSON.parse(JSON.stringify(arr[backIndex]));
@@ -230,23 +232,23 @@ export default function Dashboard(props) {
                         moreInfo(Object.assign(arr[i], { dBIndex: i }))
                       }
                     >
-                      {arr[i].DisplayImage !== "" &&
-                        arr[i].DisplayImage !== undefined && (
+                      {arr[i].displayImage !== "" &&
+                        arr[i].displayImage !== undefined && (
                           <img
                             title="View Asset"
-                            src={arr[i].DisplayImage}
+                            src={arr[i].displayImage}
                             alt=""
                           />
                         )}
 
-                      {arr[i].DisplayImage !== "" &&
-                        arr[i].DisplayImage === undefined && (
+                      {arr[i].displayImage !== "" &&
+                        arr[i].displayImage === undefined && (
                           <div className="jdenticonMoreInfo">
                             <Jdenticon value={arr[i].id} />
                           </div>
                         )}
-                      {arr[i].DisplayImage === "" &&
-                        arr[i].DisplayImage !== undefined && (
+                      {arr[i].displayImage === "" &&
+                        arr[i].displayImage !== undefined && (
                           <div className="jdenticonMoreInfo">
                             <Jdenticon value={arr[i].id} />
                           </div>
@@ -257,23 +259,23 @@ export default function Dashboard(props) {
                 {isMobile && (
                   <CardHeader image className={classes.cardHeaderHover}>
                     <button className={classes.cardHeaderHoverJdenticon}>
-                      {arr[i].DisplayImage !== "" &&
-                        arr[i].DisplayImage !== undefined && (
+                      {arr[i].displayImage !== "" &&
+                        arr[i].displayImage !== undefined && (
                           <img
                             title="View Asset"
-                            src={arr[i].DisplayImage}
+                            src={arr[i].displayImage}
                             alt=""
                           />
                         )}
 
-                      {arr[i].DisplayImage !== "" &&
-                        arr[i].DisplayImage === undefined && (
+                      {arr[i].displayImage !== "" &&
+                        arr[i].displayImage === undefined && (
                           <>
                             <Jdenticon value={arr[i].id} />
                           </>
                         )}
-                      {arr[i].DisplayImage === "" &&
-                        arr[i].DisplayImage !== undefined && (
+                      {arr[i].displayImage === "" &&
+                        arr[i].displayImage !== undefined && (
                           <>
                             <Jdenticon value={arr[i].id} />
                           </>
@@ -412,7 +414,7 @@ export default function Dashboard(props) {
 
     const getNewNum = () => {
       // eslint-disable-next-line react/prop-types
-      if (_pageNum * e > props.assetArr.length && _pageNum !== 1) {
+      if (_pageNum * e > assetArr.length && _pageNum !== 1) {
         _pageNum--;
         return getNewNum();
       }
@@ -1213,7 +1215,7 @@ export default function Dashboard(props) {
       {/* eslint-disable-next-line react/prop-types */}
       {!viewAsset && props.addr && props.assets !== "~" && (
         // eslint-disable-next-line react/prop-types
-        <GridContainer>{generateAssetDash(props.assetArr || [])}</GridContainer>
+        <GridContainer>{generateAssetDash(assetArr || [])}</GridContainer>
       )}
       {viewAsset && (
         <div>
@@ -1221,7 +1223,7 @@ export default function Dashboard(props) {
             <>
               {!isMobile && (
                 <CardHeader image className={classes.cardHeaderHoverCustom}>
-                  {selectedAssetObj.DisplayImage !== "" && (
+                  {selectedAssetObj.displayImage !== "" && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -1254,7 +1256,7 @@ export default function Dashboard(props) {
                       )}
                     </>
                   )}
-                  {selectedAssetObj.DisplayImage === "" && (
+                  {selectedAssetObj.displayImage === "" && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -1284,7 +1286,7 @@ export default function Dashboard(props) {
                   onClick={() => moreInfo("back")}
                   className={classes.cardHeaderHover}
                 >
-                  {selectedAssetObj.DisplayImage !== "" && (
+                  {selectedAssetObj.displayImage !== "" && (
                     <>
                       <Tooltip
                         id="tooltip-top"
@@ -1304,7 +1306,7 @@ export default function Dashboard(props) {
                       <img src={selectedImage} alt="..." />
                     </>
                   )}
-                  {selectedAssetObj.DisplayImage === "" && (
+                  {selectedAssetObj.displayImage === "" && (
                     <>
                       <Tooltip
                         id="tooltip-top"

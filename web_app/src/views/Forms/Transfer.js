@@ -171,7 +171,8 @@ export default function Transfer(props) {
                     window.replaceAssetData.refreshBals = true
                     window.replaceAssetData = {
                         key: pageKey,
-                        dBIndex: assetInfo.dBIndex,
+                        newAsset: assetInfo,
+                        assetAction: "rem"
                     }
                     window.dispatchEvent(props.refresh)
                 })

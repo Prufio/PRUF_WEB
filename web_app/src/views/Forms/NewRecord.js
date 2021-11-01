@@ -124,6 +124,7 @@ export default function NewRecord(props) {
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   const maxImageSize = 1000;
+  const assetArr = Object.values(props.assetObj)
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
   const link = document.createElement("div");
@@ -194,15 +195,10 @@ export default function NewRecord(props) {
     ///console.log(statusAfterPost); // this will return 202
     mineTx(dataTransaction).then(async () => {
       // eslint-disable-next-line react/prop-types
-      const statusAfterMine = await props.arweaveClient.transactions.getStatus(
-        dataTransaction.id
-      );
-
-      console.log(statusAfterMine);
 
       setIpfsActive(false);
 
-      ipfsObj.DisplayImage = `https://arweave.net/${dataTransaction.id}`
+      ipfsObj.displayImage = `https://arweave.net/${dataTransaction.id}`
 
       handleHash(
         dataTransaction.id,
@@ -239,7 +235,7 @@ export default function NewRecord(props) {
     console.log(event.target.value);
     props.prufClient.get
       // eslint-disable-next-line react/prop-types
-      node.record(event.target.value.id)
+      .node.record(event.target.value.id)
       .then(e => {
         setNodeExtendedData(e);
         setStorageProvider(e.storageProvider);
@@ -258,9 +254,9 @@ export default function NewRecord(props) {
     setNodeId(event.target.value.id);
     setClassSelect(event.target.value.id);
     document.body.style.cursor = 'auto',
-      props.prufClient.get
+      props.prufClient.get.node
         // eslint-disable-next-line react/prop-types
-        .operationCost(event.target.value.id, "1")
+        .invoiceForOperation(event.target.value.id, "1")
         .then(e => {
           setNRCost(e.total);
         });
@@ -492,7 +488,7 @@ export default function NewRecord(props) {
       props.prufClient.utils.ipfsToB32(
         String(extendedDataHash)
       ).then(e => {
-        console.log(`b32 of ipfs bs58 hash: ${e}\n Asset id: ${idxHash}\n Engraving object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
+        console.log(`b32 of ipfs bs58 hash: ${e}\n Asset id: ${idxHash}\n nonMutableStorage object: ${ipfsObj}\n Storage provider: ${storageProvider}`);
         _newRecord(
           dataTransaction,
           e,
@@ -504,7 +500,7 @@ export default function NewRecord(props) {
     }
   };
 
-  const removeDisplayImage = () => {
+  const removedisplayImage = () => {
     setDisplayImageUrl("");
     setDisplayImage("");
     setRawFile();
@@ -514,42 +510,42 @@ export default function NewRecord(props) {
 
     console.log(storageProvider)
 
-    if (
-      loginType === "" ||
-      loginMake === "" ||
-      loginModel === "" ||
-      loginSerial === "" ||
-      loginFirst === "" ||
-      loginLast === "" ||
-      loginID === "" ||
-      loginPassword === ""
-    ) {
-      if (loginType === "") {
-        setloginTypeState("error");
-      }
-      if (loginMake === "") {
-        setloginMakeState("error");
-      }
-      if (loginModel === "") {
-        setloginModelState("error");
-      }
-      if (loginSerial === "") {
-        setloginSerialState("error");
-      }
-      if (loginFirst === "") {
-        setloginFirstState("error");
-      }
-      if (loginLast === "") {
-        setloginLastState("error");
-      }
-      if (loginID === "") {
-        setloginIDState("error");
-      }
-      if (loginPassword === "") {
-        setloginPasswordState("error");
-      }
-      return;
-    }
+    // if (
+    //   loginType === "" ||
+    //   loginMake === "" ||
+    //   loginModel === "" ||
+    //   loginSerial === "" ||
+    //   loginFirst === "" ||
+    //   loginLast === "" ||
+    //   loginID === "" ||
+    //   loginPassword === ""
+    // ) {
+    //   if (loginType === "") {
+    //     setloginTypeState("error");
+    //   }
+    //   if (loginMake === "") {
+    //     setloginMakeState("error");
+    //   }
+    //   if (loginModel === "") {
+    //     setloginModelState("error");
+    //   }
+    //   if (loginSerial === "") {
+    //     setloginSerialState("error");
+    //   }
+    //   if (loginFirst === "") {
+    //     setloginFirstState("error");
+    //   }
+    //   if (loginLast === "") {
+    //     setloginLastState("error");
+    //   }
+    //   if (loginID === "") {
+    //     setloginIDState("error");
+    //   }
+    //   if (loginPassword === "") {
+    //     setloginPasswordState("error");
+    //   }
+    //   return;
+    // }
     console.log(type, make, model, serial)
     props.prufClient.utils.generateRawAssetID(
       {
@@ -580,7 +576,7 @@ export default function NewRecord(props) {
           text: {},
           urls: {},
           Description: "",
-          DisplayImage: "",
+          displayImage: "",
           PrimaryContent: contentUrl,
           ContentType: fileType,
           name: String(nameTag),
@@ -591,7 +587,7 @@ export default function NewRecord(props) {
           text: {},
           urls: {},
           Description: "",
-          DisplayImage: "",
+          displayImage: "",
           PrimaryContent: contentUrl,
           ContentType: fileType,
           name: "",
@@ -603,8 +599,8 @@ export default function NewRecord(props) {
       }
 
       if (displayImage !== "") {
-        ipfsObj.DisplayImage = storageProvider === "1" ? displayImageUrl : "";
-        ipfsObj.photo.DisplayImage = storageProvider === "1" ? displayImageUrl : "";
+        ipfsObj.displayImage = storageProvider === "1" ? displayImageUrl : "";
+        ipfsObj.photo.displayImage = storageProvider === "1" ? displayImageUrl : "";
       }
 
       let payload = JSON.stringify(ipfsObj);
@@ -703,24 +699,24 @@ export default function NewRecord(props) {
           root: classes.selectMenuItem,
         }}
       >
-        Select a Class
+        Select a Root
       </MenuItem>,
     ];
 
-    for (let i = 0; i < arr.length; i++) {
+    arr.forEach(root => {
       rootSelection.push(
         <MenuItem
-          key={"key" + String(arr[i])}
+          key={"key" + String(root.id)}
           classes={{
             root: classes.selectMenuItem,
             selected: classes.selectMenuItemSelected,
           }}
-          value={String(arr[i])}
+          value={String(root.id)}
         >
-          {rootNames[i]}
+          {root.name}
         </MenuItem>
       );
-    }
+    })
 
     return rootSelection;
   };
@@ -754,13 +750,13 @@ export default function NewRecord(props) {
             nodeName.substring(1, nodeName.length).toLowerCase(),
           id: nodeId,
         },
-        idxHash: props.web3.utils.soliditySha3(idx, nodeId), 
+        idxHash: window.web3.utils.soliditySha3(idx, nodeId), 
         currency: "0",
         id: idx,
         ipfs: extendedDataHash,
-        DisplayImage: displayImage,
+        displayImage: displayImage,
         photo: ipfsObj.photo,
-        photoUrls: { DisplayImage: displayImageUrl },
+        photoUrls: { displayImage: displayImageUrl },
         text: ipfsObj.text,
         urls: ipfsObj.urls,
         name: ipfsObj.name,
@@ -769,12 +765,12 @@ export default function NewRecord(props) {
           nodeName.substring(0, 1).toUpperCase() +
           nodeName.substring(1, nodeName.length).toLowerCase(),
         // eslint-disable-next-line react/prop-types
-        dBIndex: props.assetArr.length,
+        dBIndex: assetArr.length,
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: "51",
         Description: ipfsObj.Description,
-        engraving: ipfsObj,
+        nonMutableStorage: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],
         identiconLG: [<Jdenticon value={idx} key="" />],
       };
@@ -861,7 +857,8 @@ export default function NewRecord(props) {
             }).then(() => {
               //refreshBalances()
               window.location.href = "/#/user/dashboard";
-              window.replaceAssetData.refreshAssets = true
+              window.replaceAssetData.key = pageKey
+              window.replaceAssetData.getAsset = {id: window.web3.utils.soliditySha3(newAsset.id, nodeId)}
               window.dispatchEvent(props.refresh)
             });
           });
@@ -888,22 +885,22 @@ export default function NewRecord(props) {
         ipfs: extendedDataHash,
         PrimaryContent: `https://arweave.net/${dataTransaction}`,
         photo: ipfsObj.photo,
-        photoUrls: { DisplayImage: `https://arweave.net/${dataTransaction}` },
+        photoUrls: { displayImage: `https://arweave.net/${dataTransaction}` },
         text: ipfsObj.text,
         urls: ipfsObj.urls,
         name: ipfsObj.name,
-        DisplayImage: `https://arweave.net/${dataTransaction}`,
+        displayImage: `https://arweave.net/${dataTransaction}`,
         nodeId: nodeId,
         nodeName:
           nodeName.substring(0, 1).toUpperCase() +
           nodeName.substring(1, nodeName.length).toLowerCase(),
         // eslint-disable-next-line react/prop-types
-        dBIndex: props.assetArr.length,
+        dBIndex: assetArr.length,
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: "51",
         Description: ipfsObj.Description,
-        engraving: ipfsObj,
+        nonMutableStorage: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],
         identiconLG: [<Jdenticon value={idx} key="" />],
       };
@@ -942,7 +939,8 @@ export default function NewRecord(props) {
             nodeId,
             "1000000",
             extDataA,
-            extDataB
+            extDataB,
+            dataTransaction
           )
           // eslint-disable-next-line react/prop-types
           .send({ from: props.addr })
@@ -990,11 +988,9 @@ export default function NewRecord(props) {
             }).then(() => {
               //refreshBalances()
               window.location.href = "/#/user/dashboard";
-              /*               window.replaceAssetData = {
-                              key: pageKey,
-                              newAsset: newAsset,
-                            }; */
-              window.replaceAssetData.refreshAssets = true
+      
+              window.replaceAssetData.key = pageKey
+              window.replaceAssetData.getAsset = {id: window.web3.utils.soliditySha3({t: 'bytes32', v: newAsset.id}, {t: 'uint32', v: nodeId})}
               window.dispatchEvent(props.refresh)
             });
           });
@@ -1035,7 +1031,7 @@ export default function NewRecord(props) {
         </Card>
       )}
       {/* eslint-disable-next-line react/prop-types */}
-      {props.prufClient !== undefined && (
+      {props.prufClient !== undefined && !props.nodes &&(
         <Card>
           <CardHeader icon>
             <CardIcon className="headerIconBack">
@@ -1345,7 +1341,7 @@ export default function NewRecord(props) {
                                 <Button
                                   color="danger"
                                   onClick={() => {
-                                    removeDisplayImage();
+                                    removedisplayImage();
                                   }}
                                 >
                                   Remove Content

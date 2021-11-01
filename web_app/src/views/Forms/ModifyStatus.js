@@ -200,8 +200,8 @@ export default function ModifyStatus(props) {
                         window.replaceAssetData.refreshBals = true
                         window.replaceAssetData = {
                             key: pageKey,
-                            dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
+                            assetAction: "mod"
                         }
                         window.dispatchEvent(props.refresh)
                     })
@@ -293,8 +293,8 @@ export default function ModifyStatus(props) {
                         window.location.href = assetInfo.lastRef
                         window.replaceAssetData = {
                             key: pageKey,
-                            dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
+                            assetAction: "mod"
                         }
                         window.replaceAssetData.refreshBals = true
                         window.dispatchEvent(props.refresh)

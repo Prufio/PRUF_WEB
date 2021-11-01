@@ -570,8 +570,7 @@ export default function FinalizeNode(props) {
                     </a>
                     <p>
                       A novel blockchain protocol enabling truly permanent data
-                      storage. NOTE: ADVANCED USERS ONLY. YOU WILL NEED SPIN UP
-                      A LOCAL ARWEAVE NODE.
+                      storage. You will need an arweave web wallet to mint assets using their network.
                     </p>
                   </>
                 )}

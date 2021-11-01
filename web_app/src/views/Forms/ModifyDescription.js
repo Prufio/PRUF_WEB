@@ -158,11 +158,11 @@ export default function ModifyDescription(props) {
       }
 
       // setSelectedImage(
-      //   assetInfo.photo.DisplayImage || Object.values(assetInfo.photo)[0] || ""
+      //   assetInfo.photo.displayImage || Object.values(assetInfo.photo)[0] || ""
       // );
-      setSelectedImage(asset.DisplayImage)
-      if (assetInfo.photo.DisplayImage) {
-        setSelectedKey("DisplayImage");
+      setSelectedImage(asset.displayImage)
+      if (assetInfo.photo.displayImage) {
+        setSelectedKey("displayImage");
       } else if (Object.values(assetInfo.photo)[0] !== undefined) {
         setSelectedKey(Object.keys(assetInfo.photo)[0]);
       } else {
@@ -209,13 +209,13 @@ export default function ModifyDescription(props) {
       delete tempObj.photoUrls[rem];
       //console.log(rem)
       //console.log(tempObj)
-      if (rem === "DisplayImage" && Object.values(tempObj.photo)[0]) {
+      if (rem === "displayImage" && Object.values(tempObj.photo)[0]) {
         setSelectedImage(Object.values(tempObj.photo)[0]);
         setSelectedKey(Object.keys(tempObj.photo)[0]);
-      } else if (rem !== "DisplayImage" && tempObj.photo.DisplayImage) {
-        setSelectedImage(tempObj.photo.DisplayImage);
-        setSelectedKey("DisplayImage");
-      } else if (rem !== "DisplayImage" && Object.values(tempObj.photo)[0]) {
+      } else if (rem !== "displayImage" && tempObj.photo.displayImage) {
+        setSelectedImage(tempObj.photo.displayImage);
+        setSelectedKey("displayImage");
+      } else if (rem !== "displayImage" && Object.values(tempObj.photo)[0]) {
         setSelectedImage(Object.values(tempObj.photo)[0]);
         setSelectedKey(Object.keys(tempObj.photo)[0]);
       } else {
@@ -230,22 +230,22 @@ export default function ModifyDescription(props) {
   const setDisplayImage = (img, key) => {
     console.log("Deleting: ", key);
     let tempObj = JSON.parse(JSON.stringify(newAssetInfo));
-    if (key === "DisplayImage") {
+    if (key === "displayImage") {
       return console.log("Nothing was done. Already set.");
     }
     let newKey = generateNewKey(tempObj);
-    if (tempObj.photo.DisplayImage) {
-      tempObj.photo[newKey] = tempObj.photo.DisplayImage;
-      tempObj.photoUrls[newKey] = tempObj.photoUrls.DisplayImage;
+    if (tempObj.photo.displayImage) {
+      tempObj.photo[newKey] = tempObj.photo.displayImage;
+      tempObj.photoUrls[newKey] = tempObj.photoUrls.displayImage;
     }
-    tempObj.photo.DisplayImage = img;
-    tempObj.photoUrls.DisplayImage = tempObj.photoUrls[key];
+    tempObj.photo.displayImage = img;
+    tempObj.photoUrls.displayImage = tempObj.photoUrls[key];
     delete tempObj.photo[key];
     delete tempObj.photoUrls[key];
     //console.log(tempObj);
     setNewAssetInfo(tempObj);
-    setSelectedImage(tempObj.photo.DisplayImage);
-    setSelectedKey("DisplayImage");
+    setSelectedImage(tempObj.photo.displayImage);
+    setSelectedKey("displayImage");
     return forceUpdate();
   };
 
@@ -373,8 +373,8 @@ export default function ModifyDescription(props) {
           window.location.href = asset.lastRef;
           window.replaceAssetData = {
             key: pageKey,
-            dBIndex: asset.dBIndex,
             newAsset: newAsset,
+            assetAction: "mod"
           };
           window.replaceAssetData.refreshBals = true
         window.dispatchEvent(props.refresh)
@@ -436,7 +436,7 @@ export default function ModifyDescription(props) {
     //console.log("NAI", newAssetInfo)
     if (!mobile) {
       if (
-        newAssetInfo.photo.DisplayImage !== undefined ||
+        newAssetInfo.photo.displayImage !== undefined ||
         Object.values(newAssetInfo.photo).length > 0
       ) {
         console.log(selectedImage)
@@ -456,7 +456,7 @@ export default function ModifyDescription(props) {
           </CardHeader>
         );
       } else if (
-        newAssetInfo.photo.DisplayImage === undefined &&
+        newAssetInfo.photo.displayImage === undefined &&
         Object.values(newAssetInfo.photo).length === 0
       ) {
         return (
@@ -477,7 +477,7 @@ export default function ModifyDescription(props) {
       }
     } else if (mobile) {
       if (
-        newAssetInfo.photo.DisplayImage !== undefined ||
+        newAssetInfo.photo.displayImage !== undefined ||
         Object.values(newAssetInfo.photo).length > 0
       ) {
         return (
@@ -496,7 +496,7 @@ export default function ModifyDescription(props) {
           </CardHeader>
         );
       } else if (
-        newAssetInfo.photo.DisplayImage === undefined &&
+        newAssetInfo.photo.displayImage === undefined &&
         Object.values(newAssetInfo.photo).length === 0
       ) {
         return (
@@ -719,7 +719,7 @@ export default function ModifyDescription(props) {
       switch (value) {
         case "delete":
           if (
-            newAssetInfo.photo.DisplayImage === undefined &&
+            newAssetInfo.photo.displayImage === undefined &&
             Object.values(newAssetInfo.photo).length === 0
           ) {
             return swal("Cannot delete asset identicon.");
@@ -754,7 +754,7 @@ export default function ModifyDescription(props) {
 
         case "default":
           if (
-            newAssetInfo.photo.DisplayImage === undefined &&
+            newAssetInfo.photo.displayImage === undefined &&
             Object.values(newAssetInfo.photo).length === 0
           ) {
             return swal("Cannot set asset identicon as default image.");

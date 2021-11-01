@@ -204,8 +204,8 @@ export default function SetForSale(props) {
                                 window.backIndex = assetInfo.dBIndex
                                 window.replaceAssetData = {
                                     key: pageKey,
-                                    dBIndex: assetInfo.dBIndex,
                                     newAsset: newAsset,
+                                    assetAction: "mod"
                                 }
                                 window.dispatchEvent(props.refresh)
                             })
@@ -352,14 +352,13 @@ export default function SetForSale(props) {
                                             str: 'Transferable',
                                         }
                                         window.location.href = assetInfo.lastRef
-                                        window.backIndex = assetInfo.dBIndex
                                         window.replaceAssetData.refreshBals = true
                                         window.dispatchEvent(props.refresh)
                                         window.costInfo = { price: price, currency: currency }
                                         window.replaceAssetData = {
                                             key: pageKey,
-                                            dBIndex: assetInfo.dBIndex,
                                             newAsset: newAsset,
+                                            assetAction: "mod"
                                         }
                                         window.dispatchEvent(props.refresh)
                                     })
@@ -423,14 +422,13 @@ export default function SetForSale(props) {
                                         button: 'Close',
                                     }).then(() => {
                                         window.location.href = assetInfo.lastRef
-                                        window.backIndex = assetInfo.dBIndex
                                         window.replaceAssetData.refreshBals = true
                                         window.dispatchEvent(props.refresh)
                                         window.costInfo = { price: price, currency: currency }
                                         window.replaceAssetData = {
                                             key: pageKey,
-                                            dBIndex: assetInfo.dBIndex,
                                             newAsset: newAsset,
+                                            assetAction: "mod"
                                         }
                                         window.dispatchEvent(props.refresh)
                                     })
@@ -525,8 +523,8 @@ export default function SetForSale(props) {
                         window.replaceAssetData.refreshBals = true
                         window.replaceAssetData = {
                             key: pageKey,
-                            dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
+                            assetAction: "mod"
                         }
                         window.dispatchEvent(props.refresh)
                     })
@@ -590,8 +588,8 @@ export default function SetForSale(props) {
                         window.dispatchEvent(props.refresh)
                         window.replaceAssetData = {
                             key: pageKey,
-                            dBIndex: assetInfo.dBIndex,
                             newAsset: newAsset,
+                            assetAction: "mod"
                         }
                         window.dispatchEvent(props.refresh)
                     })

@@ -224,8 +224,8 @@ export default function NodeManager(props) {
                             letter.toUpperCase()
                         )
                     tempObj.root = props.nodeExtData[index].root
-                    tempObj.managementType =
-                        props.nodeExtData[index].managementType
+                    tempObj.usesAuth =
+                        props.nodeExtData[index].usesAuth
                     tempObj.storageProvider =
                         props.nodeExtData[index].storageProvider
                     console.log('tempObj', tempObj)
@@ -299,7 +299,7 @@ export default function NodeManager(props) {
             tempObj.id = props.nodeExtData[index].id
             tempObj.name = props.nodeExtData[index].name
             tempObj.custodyType = props.nodeExtData[index].custodyType
-            tempObj.managementType = props.nodeExtData[index].managementType
+            tempObj.usesAuth = props.nodeExtData[index].usesAuth
             tempObj.discount = props.nodeExtData[index].discount
             tempObj.referenceAddress = props.nodeExtData[index].referenceAddress
             tempObj.index = index
@@ -661,8 +661,8 @@ export default function NodeManager(props) {
                                                                         props.nodeExtData[
                                                                             key
                                                                         ]
-                                                                            .managementType ===
-                                                                        '3' && (
+                                                                            .usesAuth ===
+                                                                        true && (
                                                                             <MenuItem
                                                                                 id={`authuser${key}`}
                                                                                 classes={{
