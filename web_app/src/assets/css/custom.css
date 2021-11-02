@@ -27,7 +27,6 @@ body {
     background: linear-gradient(180deg, rgba(0, 83, 128, 0.596), #015f923b) !important;
 } */
 
-
 .assetImage {
     width: 300px !important;
     height: 300px !important;
@@ -1466,10 +1465,6 @@ max-width: 80px !important;
 .clearButton {
   background: transparent !important;
   border: none !important;
-  /* border-radius: 3px; */
-  /* color: black !important; */
-  /* box-shadow: 0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(0, 172, 193,.4);
-  padding: 5px; */
 }
 
 .nodeButton2 {

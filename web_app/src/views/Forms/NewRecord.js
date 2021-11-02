@@ -70,8 +70,8 @@ export default function NewRecord(props) {
 
   // eslint-disable-next-line no-unused-vars
   const [assetName, setAssetName] = React.useState("");
-  const [make, setMake] = React.useState("");
-  const [type, setType] = React.useState("");
+  // const [make, setMake] = React.useState("");
+  // const [type, setType] = React.useState("");
   const [model, setModel] = React.useState("");
   const [serial, setSerial] = React.useState("");
 
@@ -547,11 +547,12 @@ export default function NewRecord(props) {
     //   }
     //   return;
     // }
-    console.log(type, make, model, serial)
+    // console.log(type, make, model, serial)
+    console.log(model, serial)
     props.prufClient.utils.generateRawAssetID(
       {
-        type: type,
-        make: make,
+        // type: type,
+        // make: make,
         model: model,
         serial: serial
       }
@@ -1404,7 +1405,7 @@ export default function NewRecord(props) {
                           )}
                           {!transactionActive && !ipfsActive && (
                             <>
-                              <CustomInput
+                              {/* <CustomInput
                                 success={loginMakeState === "success"}
                                 error={loginMakeState === "error"}
                                 labelText="Make *"
@@ -1423,8 +1424,8 @@ export default function NewRecord(props) {
                                     setloginMake(event.target.value);
                                   },
                                 }}
-                              />
-                              <CustomInput
+                              /> */}
+                              {/* <CustomInput
                                 success={loginTypeState === "success"}
                                 error={loginTypeState === "error"}
                                 labelText="Type *"
@@ -1443,7 +1444,7 @@ export default function NewRecord(props) {
                                     setloginType(event.target.value);
                                   },
                                 }}
-                              />
+                              /> */}
                               <CustomInput
                                 success={loginModelState === "success"}
                                 error={loginModelState === "error"}
@@ -1503,7 +1504,7 @@ export default function NewRecord(props) {
                                   }}
                                 />
                               )}
-                              <CustomInput
+                              {/* <CustomInput
                                 labelText={make}
                                 id="make"
                                 formControlProps={{
@@ -1512,8 +1513,8 @@ export default function NewRecord(props) {
                                 inputProps={{
                                   disabled: true,
                                 }}
-                              />
-                              <CustomInput
+                              /> */}
+                              {/* <CustomInput
                                 labelText={type}
                                 id="type"
                                 formControlProps={{
@@ -1522,7 +1523,7 @@ export default function NewRecord(props) {
                                 inputProps={{
                                   disabled: true,
                                 }}
-                              />
+                              /> */}
                               <CustomInput
                                 labelText={model}
                                 id="model"
@@ -1559,7 +1560,7 @@ export default function NewRecord(props) {
                                   }}
                                 />
                               )}
-                              <CustomInput
+                              {/* <CustomInput
                                 labelText={make}
                                 id="make"
                                 formControlProps={{
@@ -1568,8 +1569,8 @@ export default function NewRecord(props) {
                                 inputProps={{
                                   disabled: true,
                                 }}
-                              />
-                              <CustomInput
+                              /> */}
+                              {/* <CustomInput
                                 labelText={type}
                                 id="type"
                                 formControlProps={{
@@ -1578,7 +1579,7 @@ export default function NewRecord(props) {
                                 inputProps={{
                                   disabled: true,
                                 }}
-                              />
+                              /> */}
                               <CustomInput
                                 labelText={model}
                                 id="model"

@@ -92,8 +92,8 @@ export default function Search(props) {
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
-  const [manufacturer, setManufacturer] = React.useState("");
-  const [type, setType] = React.useState("");
+  // const [manufacturer, setManufacturer] = React.useState("");
+  // const [type, setType] = React.useState("");
   const [model, setModel] = React.useState("");
   const [serial, setSerial] = React.useState("");
   const [IDXRaw, setIDXRaw] = React.useState("");
@@ -1427,8 +1427,8 @@ export default function Search(props) {
       }
 
       id = window.web3.utils.soliditySha3(
-        String(type).replace(/\s/g, ""),
-        String(manufacturer).replace(/\s/g, ""),
+        // String(type).replace(/\s/g, ""),
+        // String(manufacturer).replace(/\s/g, ""),
         String(model).replace(/\s/g, ""),
         String(serial).replace(/\s/g, "")
       );
@@ -2377,7 +2377,7 @@ export default function Search(props) {
                 <form>
                   {IDXRawInput === true && !retrieving && (
                     <>
-                      <CustomInput
+                      {/* <CustomInput
                         success={loginManufacturerState === "success"}
                         error={loginManufacturerState === "error"}
                         labelText="Manufacturer *"
@@ -2396,8 +2396,8 @@ export default function Search(props) {
                             setloginManufacturer(event.target.value);
                           },
                         }}
-                      />
-                      <CustomInput
+                      /> */}
+                      {/* <CustomInput
                         success={loginTypeState === "success"}
                         error={loginTypeState === "error"}
                         labelText="Type *"
@@ -2416,7 +2416,7 @@ export default function Search(props) {
                             setloginType(event.target.value);
                           },
                         }}
-                      />
+                      /> */}
                       <CustomInput
                         success={loginModelState === "success"}
                         error={loginModelState === "error"}
@@ -2464,7 +2464,7 @@ export default function Search(props) {
                   )}
                   {IDXRawInput === true && retrieving && (
                     <>
-                      <CustomInput
+                      {/* <CustomInput
                         labelText={manufacturer}
                         id="manufacturer"
                         formControlProps={{
@@ -2473,8 +2473,8 @@ export default function Search(props) {
                         inputProps={{
                           disabled: true,
                         }}
-                      />
-                      <CustomInput
+                      /> */}
+                      {/* <CustomInput
                         labelText={type}
                         id="type"
                         formControlProps={{
@@ -2483,7 +2483,7 @@ export default function Search(props) {
                         inputProps={{
                           disabled: true,
                         }}
-                      />
+                      /> */}
                       <CustomInput
                         labelText={model}
                         id="model"
