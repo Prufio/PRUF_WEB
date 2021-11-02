@@ -19,6 +19,12 @@ const footerStyle = {
     float: "right!important",
     padding: "15px",
   },
+  rightLogo: {
+    margin: "0",
+    fontSize: "14px",
+    // float: "right!important",
+    // padding: "15px",
+  },
   footer: {
     bottom: "0",
     borderTop: "1px solid " + grayColor[15],
