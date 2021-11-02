@@ -28,10 +28,12 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 import styles from "assets/jss/material-dashboard-pro-react/views/dashboardStyle.js";
 import formStyles from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle";
+import engravingStyles from "../../assets/css/custom";
 import Danger from "components/Typography/Danger";
 
 const useStyles = makeStyles(styles);
 const useFormStyles = makeStyles(formStyles);
+const useEngravingStyles = makeStyles(engravingStyles);
 
 export default function ModifyDescription(props) {
   if(!window.sentPacket) window.sentPacket = {}
@@ -85,6 +87,7 @@ export default function ModifyDescription(props) {
 
   const classes = useStyles();
   const formClasses = useFormStyles();
+  const engravingClasses = useEngravingStyles();
 
   React.useEffect(() => {
     // eslint-disable-next-line react/prop-types
@@ -1136,14 +1139,16 @@ export default function ModifyDescription(props) {
                     </div>
                   </>
                 )} */}
+
+              <br />
               {asset.nonMutableStorage.engraving !== undefined && (
                 <>
                   <br />
                   <TextField
-                    id="outlined-multiline-static"
+                    id="outlined-multiline"
                     label="Engraving"
                     multiline
-                    rows={4}
+                    rows={2}
                     defaultValue={asset.nonMutableStorage.engraving}
                     variant="outlined"
                     fullWidth
@@ -1153,14 +1158,15 @@ export default function ModifyDescription(props) {
               )}
               {asset.nonMutableStorage.engraving === undefined && (
                 <TextField
-                  id="outlined-multiline-static"
+                  // id="outlined-multiline"
                   label="Engraving"
-                  multiline
-                  rows={4}
+                  // multiline
+                  rows={2}
                   defaultValue="None"
                   variant="outlined"
                   fullWidth
                   disabled
+                  className={engravingClasses.engraving}
                 />
               )}
               {/*@dev URLs go here*/}
