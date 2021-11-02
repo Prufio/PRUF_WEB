@@ -74,10 +74,8 @@ export default function NewRecord(props) {
   // const [type, setType] = React.useState("");
   const [model, setModel] = React.useState("");
   const [serial, setSerial] = React.useState("");
-
-  // const [descriptionName, setDescriptionName] = React.useState("");
   const [nameTag, setNameTag] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [engraving, setEngraving] = React.useState("");
   const [displayImage, setDisplayImage] = React.useState("");
   const [displayImageUrl, setDisplayImageUrl] = React.useState("");
   const [fileMetaData, setFileMetaData] = React.useState("");
@@ -88,10 +86,6 @@ export default function NewRecord(props) {
   const [loginType, setloginType] = React.useState("");
   const [loginModel, setloginModel] = React.useState("");
   const [loginSerial, setloginSerial] = React.useState("");
-
-  // const [loginDescriptionName, setloginDescriptionName] = React.useState("");
-  // const [loginDescription, setloginDescription] = React.useState("");
-
   const [loginMakeState, setloginMakeState] = React.useState("");
   const [loginTypeState, setloginTypeState] = React.useState("");
   const [loginModelState, setloginModelState] = React.useState("");
@@ -577,7 +571,7 @@ export default function NewRecord(props) {
           photo: {},
           text: {},
           urls: {},
-          Description: "",
+          engraving: "",
           displayImage: "",
           PrimaryContent: contentUrl,
           ContentType: fileType,
@@ -588,7 +582,7 @@ export default function NewRecord(props) {
           photo: {},
           text: {},
           urls: {},
-          Description: "",
+          engraving: "",
           displayImage: "",
           PrimaryContent: contentUrl,
           ContentType: fileType,
@@ -596,8 +590,8 @@ export default function NewRecord(props) {
         };
       }
 
-      if (description !== "") {
-        ipfsObj.engraving = description;
+      if (engraving !== "") {
+        ipfsObj.engraving = engraving;
       }
 
       if (displayImage !== "") {
@@ -636,7 +630,7 @@ export default function NewRecord(props) {
       } else if (storageProvider === "2") {
         let file = fileMetaData;
         let metaData = {
-          Description: ipfsObj.engraving,
+          engraving: ipfsObj.engraving,
           name: ipfsObj.name,
         };
         metaData["Content-Type"] = file.type;
@@ -771,7 +765,7 @@ export default function NewRecord(props) {
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: "51",
-        Description: ipfsObj.engraving,
+        engraving: ipfsObj.engraving,
         nonMutableStorage: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],
         identiconLG: [<Jdenticon value={idx} key="" />],
@@ -902,7 +896,7 @@ export default function NewRecord(props) {
         countPair: [100000, 100000],
         status: "Transferable",
         statusNum: "51",
-        Description: ipfsObj.engraving,
+        engraving: ipfsObj.engraving,
         nonMutableStorage: ipfsObj,
         identicon: [<Jdenticon value={idx} key="" />],
         identiconLG: [<Jdenticon value={idx} key="" />],
@@ -1361,10 +1355,10 @@ export default function NewRecord(props) {
                             <>
                               <TextField
                                 onChange={(e) => {
-                                  setDescription(e.target.value);
+                                  setEngraving(e.target.value);
                                 }}
                                 id="outlined-multiline-static"
-                                label="Asset Description:"
+                                label="Asset Engraving:"
                                 multiline
                                 rows={4}
                                 variant="outlined"
@@ -1373,14 +1367,14 @@ export default function NewRecord(props) {
                               />
                             </>
                           )}
-                          {transactionActive && description !== "" && (
+                          {transactionActive && engraving !== "" && (
                             <>
                               <TextField
                                 id="outlined-multiline-static"
-                                // label="Asset Description:"
+                                // label="Asset engraving:"
                                 multiline
                                 disabled
-                                placeholder={description}
+                                placeholder={engraving}
                                 rows={4}
                                 variant="outlined"
                                 fullWidth
@@ -1392,10 +1386,10 @@ export default function NewRecord(props) {
                             <>
                               <TextField
                                 id="outlined-multiline-static"
-                                // label="Asset Description:"
+                                // label="Asset engraving:"
                                 multiline
                                 disabled
-                                placeholder={description}
+                                placeholder={engraving}
                                 rows={4}
                                 variant="outlined"
                                 fullWidth

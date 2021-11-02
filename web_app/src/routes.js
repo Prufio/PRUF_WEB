@@ -98,7 +98,7 @@ var dashRoutes = [
   // },
   {
     name: "Update Asset Info",
-    path: "/modify-description",
+    path: "/modify-mutable",
     component: ModifyDescription,
     layout: "/user",
   },

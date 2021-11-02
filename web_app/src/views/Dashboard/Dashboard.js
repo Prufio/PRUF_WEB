@@ -1142,7 +1142,7 @@ export default function Dashboard(props) {
         break;
       }
       case "edit-information": {
-        href = "/#/user/modify-description";
+        href = "/#/user/modify-mutable";
         costId = 8;
         break;
       }
