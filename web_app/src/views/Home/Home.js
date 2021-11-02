@@ -91,8 +91,7 @@ export default function Home(props) {
     }
   }, []);
 
-  const clearPRUFForm = () => {
-  };
+  const clearPRUFForm = () => {};
 
   const purchasePRUF = async () => {
     setPrufTransactionActive(true);
@@ -457,6 +456,19 @@ export default function Home(props) {
                     </Card>
                 </GridItem> */}
       </GridContainer>
+      <Card>
+        <CardHeader color="danger" stats icon>
+          <CardIcon className="headerIconBack">
+            <div className="centerJustifiedIcon">
+            <span class="material-icons">store</span>
+            </div>
+            {/* <h4 className="centerJustifiedTitle"> */}
+            <h4>Marketspace</h4>
+          </CardIcon>
+        </CardHeader>
+        <h3 className="centerJustified">Coming Soon...</h3>
+        <CardFooter stats></CardFooter>
+      </Card>
       {/* <Card>
         <CardHeader color="info" icon>
           <CardIcon className="headerIconBack">
