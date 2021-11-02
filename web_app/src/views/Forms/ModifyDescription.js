@@ -392,12 +392,6 @@ export default function ModifyDescription(props) {
     return forceUpdate();
   };
 
-  const handleName = (e) => {
-    let tempObj = JSON.parse(JSON.stringify(newasset));
-    tempObj.name = e;
-    setNewasset(tempObj);
-  };
-
   const handleDescription = (e) => {
     let tempObj = JSON.parse(JSON.stringify(newasset));
     tempObj.text.Description = e;
