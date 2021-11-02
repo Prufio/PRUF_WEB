@@ -50,8 +50,8 @@ export default function Recycle(props) {
 
   const [IDXRawInput, setIDXRawInput] = React.useState(false);
 
-  const [manufacturer, setManufacturer] = React.useState("");
-  const [type, setType] = React.useState("");
+  // const [manufacturer, setManufacturer] = React.useState("");
+  // const [type, setType] = React.useState("");
   const [model, setModel] = React.useState("");
   const [serial, setSerial] = React.useState("");
   const [IDXRaw, setIDXRaw] = React.useState("");
@@ -229,8 +229,8 @@ export default function Recycle(props) {
 
     if (IDXRawInput === false && QRValue === "") {
       idxHash = await props.prufClient.utils.generateAssetID(
-        type,
-        manufacturer,
+        // type,
+        // manufacturer,
         model,
         serial
       );
@@ -377,7 +377,7 @@ export default function Recycle(props) {
                   <form>
                     {IDXRawInput === false && !recycling && (
                       <>
-                        <CustomInput
+                        {/* <CustomInput
                           success={loginManufacturerState === "success"}
                           error={loginManufacturerState === "error"}
                           labelText="Manufacturer *"
@@ -396,8 +396,8 @@ export default function Recycle(props) {
                               setloginManufacturer(event.target.value);
                             },
                           }}
-                        />
-                        <CustomInput
+                        /> */}
+                        {/* <CustomInput
                           success={loginTypeState === "success"}
                           error={loginTypeState === "error"}
                           labelText="Type *"
@@ -416,7 +416,7 @@ export default function Recycle(props) {
                               setloginType(event.target.value);
                             },
                           }}
-                        />
+                        /> */}
                         <CustomInput
                           success={loginModelState === "success"}
                           error={loginModelState === "error"}
@@ -464,7 +464,7 @@ export default function Recycle(props) {
                     )}
                     {IDXRawInput === false && recycling && (
                       <>
-                        <CustomInput
+                        {/* <CustomInput
                           labelText={manufacturer}
                           id="manufacturer"
                           formControlProps={{
@@ -473,8 +473,8 @@ export default function Recycle(props) {
                           inputProps={{
                             disabled: true,
                           }}
-                        />
-                        <CustomInput
+                        /> */}
+                        {/* <CustomInput
                           labelText={type}
                           id="type"
                           formControlProps={{
@@ -483,7 +483,7 @@ export default function Recycle(props) {
                           inputProps={{
                             disabled: true,
                           }}
-                        />
+                        /> */}
                         <CustomInput
                           labelText={model}
                           id="model"
@@ -508,7 +508,7 @@ export default function Recycle(props) {
                     )}
                     {IDXRawInput === true && (
                       <>
-                        <CustomInput
+                        {/* <CustomInput
                           id="manufacturer"
                           formControlProps={{
                             fullWidth: true,
@@ -517,8 +517,8 @@ export default function Recycle(props) {
                             placeholder: "Disabled",
                             disabled: true,
                           }}
-                        />
-                        <CustomInput
+                        /> */}
+                        {/* <CustomInput
                           id="type"
                           formControlProps={{
                             fullWidth: true,
@@ -527,7 +527,7 @@ export default function Recycle(props) {
                             placeholder: "Disabled",
                             disabled: true,
                           }}
-                        />
+                        /> */}
                         <CustomInput
                           id="model"
                           formControlProps={{

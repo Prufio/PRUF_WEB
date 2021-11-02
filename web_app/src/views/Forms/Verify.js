@@ -38,9 +38,9 @@ export default function Verify(props) {
     const [IDXRawInput, setIDXRawInput] = React.useState(false)
 
     // eslint-disable-next-line no-unused-vars
-    const [manufacturer, setManufacturer] = React.useState('')
+    // const [manufacturer, setManufacturer] = React.useState('')
     // eslint-disable-next-line no-unused-vars
-    const [type, setType] = React.useState('')
+    // const [type, setType] = React.useState('')
     // eslint-disable-next-line no-unused-vars
     const [model, setModel] = React.useState('')
     // eslint-disable-next-line no-unused-vars
