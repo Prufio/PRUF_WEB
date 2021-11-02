@@ -158,6 +158,26 @@ body {
   flex-direction: row;
 }
 
+.centerJustifiedTitle {
+  /* position: absolute; */
+  font-weight: bold;
+  color: #1b1b1b;
+  padding-left: 8% !important;
+  padding-top: -100px !important;
+}
+
+.centerJustified {
+  color: #1b1b1b;
+  margin-top: -2% !important;
+  margin-left: 43%;
+}
+
+.centerJustifiedIcon {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+}
+
 .dashboardFooter {
   background-color: rgba(255, 255, 255, 0.397) !important;
   display: flex !important;
