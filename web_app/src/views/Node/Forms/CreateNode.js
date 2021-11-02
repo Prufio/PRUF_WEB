@@ -200,7 +200,7 @@ export default function CreateNode(props) {
   //     }
   // }
 
-  const handleNewAssetClass = (extendedDataHash) => {
+  const handleNewNode = (extendedDataHash) => {
     // eslint-disable-next-line react/prop-types
 
     window.replaceAssetData.refreshBals = true;
@@ -244,7 +244,7 @@ export default function CreateNode(props) {
     });
   };
 
-  const checkForAC = async () => {
+  const checkForNode = async () => {
     props.prufClient.get.node.isNameAvailable(name).then((e) => {
       if (e) {
         setExtDataUploading(true);
@@ -334,7 +334,7 @@ export default function CreateNode(props) {
           button: "Close",
         }).then(() => {
           //refreshBalances()
-          handleNewAssetClass(extendedDataHash);
+          handleNewNode(extendedDataHash);
         });
       });
   };
@@ -469,7 +469,7 @@ export default function CreateNode(props) {
                   <Button
                     color="info"
                     className="MLBGradient"
-                    onClick={() => checkForAC()}
+                    onClick={() => checkForNode()}
                   >
                     Purchase Node
                   </Button>
