@@ -80,7 +80,7 @@ export default function HeaderLinks(props) {
             {!isMobile && (
                 <div className={wrapper}>
                     <CustomInput
-                        rtlActive={rtlActive}
+                        // rtlActive={rtlActive}
                         formControlProps={{
                             className: classes.top + ' ' + classes.search,
                         }}

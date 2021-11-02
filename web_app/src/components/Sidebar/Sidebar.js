@@ -797,7 +797,7 @@ class Sidebar extends React.Component {
             <SidebarWrapper
               className={sidebarWrapper}
               user={user}
-              headerLinks={<AdminNavbarLinks rtlActive={rtlActive} />}
+              // headerLinks={<AdminNavbarLinks rtlActive={rtlActive} />}
               links={links}
             />
             {image !== undefined ? (
