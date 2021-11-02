@@ -225,6 +225,7 @@ export default function NodeManager(props) {
           tempObj.root = props.nodeExtData[index].root;
           tempObj.usesAuth = props.nodeExtData[index].usesAuth;
           tempObj.storageProvider = props.nodeExtData[index].storageProvider;
+          tempObj.managementType = props.nodeExtData[index].managementType;
           console.log("tempObj", tempObj);
           document.body.style.cursor = "auto";
           swalReact({
